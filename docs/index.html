@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Japan Trip Brochure</title>
+  <style>
+    :root {
+      --paper: #f8f1e5;
+      --paper-strong: #fffaf3;
+      --ink: #19303a;
+      --muted: #5c6d72;
+      --crimson: #9c3d33;
+      --gold: #cd9b45;
+      --sea: #1e5d69;
+      --forest: #375245;
+      --sand: #eadbc1;
+      --line: rgba(25, 48, 58, 0.12);
+      --shadow: 0 18px 50px rgba(25, 48, 58, 0.12);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(205, 155, 69, 0.2), transparent 26%),
+        radial-gradient(circle at top right, rgba(30, 93, 105, 0.14), transparent 24%),
+        linear-gradient(180deg, #fef9f1 0%, #f7eedf 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.28;
+      background-image:
+        linear-gradient(rgba(25, 48, 58, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(25, 48, 58, 0.02) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    a {
+      color: var(--sea);
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 24px auto 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel {
+      background: rgba(255, 250, 243, 0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 24px;
+      padding: 34px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -70px;
+      top: -90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(156, 61, 51, 0.2), transparent 65%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(205, 155, 69, 0.16);
+      color: var(--crimson);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "Baskerville", "Palatino Linotype", "Book Antiqua", serif;
+      margin: 0;
+      line-height: 1.02;
+    }
+
+    h1 {
+      margin-top: 18px;
+      font-size: clamp(2.7rem, 4vw, 4.7rem);
+      max-width: 9ch;
+    }
+
+    .hero p {
+      margin: 18px 0 0;
+      font-size: 1.08rem;
+      line-height: 1.65;
+      max-width: 62ch;
+      color: var(--muted);
+    }
+
+    .hero-notes {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .route-badge {
+      padding: 18px 20px;
+      background: linear-gradient(135deg, rgba(30, 93, 105, 0.95), rgba(55, 82, 69, 0.95));
+      color: white;
+      border-radius: 24px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    }
+
+    .route-badge strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .route-badge span {
+      font-size: 1.08rem;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .mini-card {
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(248, 241, 229, 0.95));
+      border: 1px solid var(--line);
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--crimson);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      font-size: 0.98rem;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+
+    .section {
+      margin-top: 22px;
+      padding: 28px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+
+    .section-header p {
+      margin: 0;
+      max-width: 54ch;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .gallery figure {
+      margin: 0;
+      min-height: 250px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 22px;
+      background: var(--sand);
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.05) contrast(1.03);
+    }
+
+    .gallery figcaption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 18px 16px 14px;
+      color: white;
+      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.72));
+    }
+
+    .gallery strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .gallery span {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .stops {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .stop-card {
+      padding: 22px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 241, 229, 0.96));
+      border: 1px solid var(--line);
+    }
+
+    .stop-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.55rem;
+    }
+
+    .stop-card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(30, 93, 105, 0.1);
+      color: var(--sea);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .day {
+      padding: 18px 16px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 244, 234, 0.98));
+      border: 1px solid var(--line);
+      min-height: 250px;
+      position: relative;
+    }
+
+    .day::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      border-radius: 20px 20px 0 0;
+      background: linear-gradient(90deg, var(--gold), var(--crimson));
+    }
+
+    .day-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(156, 61, 51, 0.1);
+      color: var(--crimson);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .day h3 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+
+    .day ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .day li + li {
+      margin-top: 8px;
+    }
+
+    .route-strip {
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: linear-gradient(90deg, rgba(205, 155, 69, 0.16), rgba(30, 93, 105, 0.12));
+      border: 1px solid rgba(25, 48, 58, 0.08);
+      font-weight: 700;
+      line-height: 1.75;
+    }
+
+    .route-strip span {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .extras {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 16px;
+    }
+
+    .extra-card,
+    .future-card {
+      padding: 24px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(248, 241, 229, 0.98));
+    }
+
+    .extra-card h3,
+    .future-card h3 {
+      margin-bottom: 14px;
+      font-size: 1.55rem;
+    }
+
+    .extra-days {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .extra-days div {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(30, 93, 105, 0.07);
+    }
+
+    .extra-days strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--sea);
+    }
+
+    .future-card p,
+    .extra-card p {
+      margin: 0;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .credits {
+      margin-top: 18px;
+      padding: 22px 24px;
+      border-radius: 20px;
+      background: rgba(25, 48, 58, 0.05);
+      border: 1px solid rgba(25, 48, 58, 0.08);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .credits h3 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .credits ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .credits p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      .hero,
+      .gallery,
+      .stops,
+      .timeline,
+      .extras {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .gallery figure:first-child,
+      .gallery figure:last-child {
+        grid-column: span 2;
+      }
+
+      .timeline .day {
+        min-height: 0;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100% - 20px, 1180px);
+        margin: 10px auto 30px;
+      }
+
+      .hero,
+      .gallery,
+      .stops,
+      .timeline,
+      .extras,
+      .extra-days {
+        grid-template-columns: 1fr;
+      }
+
+      .section,
+      .hero {
+        padding: 22px;
+      }
+
+      .section-header {
+        display: block;
+      }
+
+      .section-header p {
+        margin-top: 10px;
+      }
+
+      h1 {
+        max-width: none;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      body::before {
+        display: none;
+      }
+
+      .page {
+        width: 100%;
+        margin: 0;
+      }
+
+      .panel {
+        box-shadow: none;
+        background: white;
+        border-color: #ddd;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero panel">
+      <div>
+        <span class="eyebrow">7-Day Japan Route</span>
+        <h1>City Nights, Fuji Views, Tokyo Finish</h1>
+        <p>
+          This plan starts in Osaka for atmosphere, food, and nightlife, folds in a full Kyoto cultural day,
+          moves east through Hakone, keeps the Mt. Fuji section flexible for weather, and finishes with a
+          simple Tokyo landing focused on Shibuya.
+        </p>
+      </div>
+      <div class="hero-notes">
+        <div class="route-badge">
+          <strong>Route</strong>
+          <span>Osaka -> Kyoto -> Osaka -> Shin-Osaka -> Odawara -> Hakone -> Mt. Fuji Area -> Tokyo</span>
+        </div>
+        <div class="mini-card">
+          <strong>Trip Style</strong>
+          <p>Keep Osaka relaxed, use Kyoto as a full-day contrast, and avoid overpacking the schedule early.</p>
+        </div>
+        <div class="mini-card">
+          <strong>Transit Anchor</strong>
+          <p>Day 4 is the main transfer day: bullet train from Shin-Osaka to Odawara, then into Hakone for the overnight.</p>
+        </div>
+        <div class="mini-card">
+          <strong>Flex Priority</strong>
+          <p>The Mt. Fuji area works best when the weather stays clear, so leave Day 6 loose enough to adapt.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section panel">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Visual Stops</span>
+          <h2>Trip Moodboard</h2>
+        </div>
+        <p>These images match the main rhythm of the route: neon Osaka, historic Kyoto, Hakone scenery, Fuji viewpoints, and Shibuya at night.</p>
+      </div>
+      <div class="gallery">
+        <figure>
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/Tsutenkaku%2C_Osaka.jpg?width=1200"
+            alt="Tsutenkaku tower rising above Osaka"
+            loading="lazy">
+          <figcaption>
+            <strong>Osaka</strong>
+            <span>Tsutenkaku and Shinsekai energy</span>
+          </figcaption>
+        </figure>
+        <figure>
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/Kiyomizu-dera_Temple.Kyoto._Japan_%2850361443956%29.jpg?width=1200"
+            alt="Kiyomizu-dera temple in Kyoto"
+            loading="lazy">
+          <figcaption>
+            <strong>Kyoto</strong>
+            <span>Historic contrast for the day trip</span>
+          </figcaption>
+        </figure>
+        <figure>
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/Lake_torii_%40_Hakone_Shrine_%2813776519615%29.jpg?width=1200"
+            alt="Hakone shrine torii gate by the lake"
+            loading="lazy">
+          <figcaption>
+            <strong>Hakone</strong>
+            <span>Sightseeing stop and overnight</span>
+          </figcaption>
+        </figure>
+        <figure>
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/Chureito_Pagoda.jpg?width=1200"
+            alt="Chureito Pagoda with Mount Fuji in the distance"
+            loading="lazy">
+          <figcaption>
+            <strong>Mt. Fuji Area</strong>
+            <span>Kawaguchiko, Chureito, Oshino Hakkai</span>
+          </figcaption>
+        </figure>
+        <figure>
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/Shibuya_crossing_%2812214%29.jpg?width=1200"
+            alt="Crowds crossing at Shibuya Crossing in Tokyo"
+            loading="lazy">
+          <figcaption>
+            <strong>Tokyo</strong>
+            <span>Shibuya shopping and skyline finish</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section panel">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Core Stops</span>
+          <h2>What Each Stop Is For</h2>
+        </div>
+        <p>The itinerary stays compact on purpose: fewer cities, stronger contrast, and enough breathing room for food, atmosphere, and transit shifts.</p>
+      </div>
+      <div class="stops">
+        <article class="stop-card">
+          <h3>Osaka</h3>
+          <p>Use Osaka as the starting base. Prioritize city atmosphere, late evenings, street food, Tsutenkaku, Shinsekai, and Osaka Aquarium Kaiyukan.</p>
+          <div class="chip-row">
+            <span class="chip">Nightlife</span>
+            <span class="chip">Food-first pacing</span>
+            <span class="chip">Kaiyukan</span>
+          </div>
+        </article>
+        <article class="stop-card">
+          <h3>Kyoto</h3>
+          <p>Best handled as a full-day trip from Osaka. This is the cultural and historic counterweight to the looser city energy of Osaka.</p>
+          <div class="chip-row">
+            <span class="chip">Day trip</span>
+            <span class="chip">Historic feel</span>
+            <span class="chip">Different pace</span>
+          </div>
+        </article>
+        <article class="stop-card">
+          <h3>Hakone + Fuji</h3>
+          <p>Hakone is the first eastern stop after the bullet train to Odawara. From there, shift toward the Mt. Fuji area for the most scenic stretch of the trip.</p>
+          <div class="chip-row">
+            <span class="chip">Onsen-region feel</span>
+            <span class="chip">Transit pivot</span>
+            <span class="chip">Weather-dependent views</span>
+          </div>
+        </article>
+        <article class="stop-card">
+          <h3>Tokyo</h3>
+          <p>Keep Tokyo simple on the main 7-day version: enter through Shibuya, browse the shopping areas, and end with Shibuya Sky at night.</p>
+          <div class="chip-row">
+            <span class="chip">Shibuya Crossing</span>
+            <span class="chip">Shopping</span>
+            <span class="chip">Night skyline</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section panel">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Day By Day</span>
+          <h2>7-Day Itinerary</h2>
+        </div>
+        <p>Built from your notes with the scenic section left intentionally flexible so the Fuji-area day can respond to weather and transit conditions.</p>
+      </div>
+      <div class="timeline">
+        <article class="day">
+          <div class="day-number">1</div>
+          <h3>Osaka Arrival Mood</h3>
+          <ul>
+            <li>Osaka nightlife</li>
+            <li>Tsutenkaku</li>
+            <li>Shinsekai</li>
+          </ul>
+        </article>
+        <article class="day">
+          <div class="day-number">2</div>
+          <h3>Kyoto Day Trip</h3>
+          <ul>
+            <li>Full day in Kyoto</li>
+            <li>Focus on the cultural and historic side of the trip</li>
+          </ul>
+        </article>
+        <article class="day">
+          <div class="day-number">3</div>
+          <h3>Osaka Reset</h3>
+          <ul>
+            <li>Osaka Aquarium Kaiyukan</li>
+            <li>Flexible Osaka time</li>
+          </ul>
+        </article>
+        <article class="day">
+          <div class="day-number">4</div>
+          <h3>Move To Hakone</h3>
+          <ul>
+            <li>Bullet train: Shin-Osaka to Odawara</li>
+            <li>Hakone sightseeing</li>
+            <li>Hakone overnight stay</li>
+          </ul>
+        </article>
+        <article class="day">
+          <div class="day-number">5</div>
+          <h3>Hakone Morning</h3>
+          <ul>
+            <li>Easy Hakone morning</li>
+            <li>Transfer toward the Mt. Fuji area</li>
+          </ul>
+        </article>
+        <article class="day">
+          <div class="day-number">6</div>
+          <h3>Fuji Scenic Day</h3>
+          <ul>
+            <li>Lake Kawaguchiko</li>
+            <li>Arakurayama Sengen Park / Chureito Pagoda</li>
+            <li>Oshino Hakkai</li>
+          </ul>
+        </article>
+        <article class="day">
+          <div class="day-number">7</div>
+          <h3>Tokyo Finish</h3>
+          <ul>
+            <li>Travel into Tokyo</li>
+            <li>Shibuya Crossing and shopping</li>
+            <li>Shibuya Sky at night</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section panel">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Transit Flow</span>
+          <h2>Route Summary</h2>
+        </div>
+        <p>The trip keeps long transfers concentrated in the middle so the beginning and end can stay lighter and more city-focused.</p>
+      </div>
+      <div class="route-strip">
+        Osaka <span>-></span> Kyoto <span>-></span> Osaka <span>-></span> Shin-Osaka <span>-></span>
+        Odawara <span>-></span> Hakone <span>-></span> Mt. Fuji Area <span>-></span> Tokyo
+      </div>
+    </section>
+
+    <section class="section panel">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">If Time Expands</span>
+          <h2>Extra Tokyo Days + Future Trip</h2>
+        </div>
+        <p>The base 7-day version stays tight. These additions fit cleanly if the schedule opens up later.</p>
+      </div>
+      <div class="extras">
+        <article class="extra-card">
+          <h3>Extra Tokyo Days</h3>
+          <div class="extra-days">
+            <div>
+              <strong>Day 8</strong>
+              Tokyo Skytree<br>
+              Tokyo Solamachi<br>
+              Akihabara
+            </div>
+            <div>
+              <strong>Day 9</strong>
+              Tokyo Imperial Palace<br>
+              Shinjuku
+            </div>
+          </div>
+        </article>
+        <article class="future-card">
+          <h3>Future Trip</h3>
+          <p>Keep Okinawa fully separate. It works better as its own trip instead of being squeezed into this route.</p>
+        </article>
+      </div>
+
+      <div class="credits">
+        <h3>Image Credits</h3>
+        <ul>
+          <li><a href="https://commons.wikimedia.org/wiki/File:Tsutenkaku,_Osaka.jpg">Tsutenkaku, Osaka</a> by Abasaa, CC BY 4.0.</li>
+          <li><a href="https://commons.wikimedia.org/wiki/File:Kiyomizu-dera_Temple.Kyoto._Japan_(50361443956).jpg">Kiyomizu-dera Temple, Kyoto, Japan</a> by Bernard Spragg. NZ, CC0 1.0.</li>
+          <li><a href="https://commons.wikimedia.org/wiki/File:Lake_torii_%40_Hakone_Shrine_(13776519615).jpg">Lake torii @ Hakone Shrine</a> by Guilhem Vellut, CC BY 2.0.</li>
+          <li><a href="https://commons.wikimedia.org/wiki/File:Chureito_Pagoda.jpg">Chureito Pagoda</a> by Balon Greyjoy, CC BY-SA 4.0.</li>
+          <li><a href="https://commons.wikimedia.org/wiki/File:Shibuya_crossing_(12214).jpg">Shibuya crossing</a> by David Kernan, CC0 1.0.</li>
+        </ul>
+        <p>Photos load from Wikimedia Commons, so an internet connection is needed when opening this brochure locally.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
