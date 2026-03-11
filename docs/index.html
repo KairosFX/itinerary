@@ -71,6 +71,17 @@
       background-size: 28px 28px;
     }
 
+    .scroll-progress {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 4px;
+      transform-origin: left;
+      transform: scaleX(var(--scroll-progress, 0));
+      background: linear-gradient(90deg, var(--gold), var(--crimson), var(--sea));
+      z-index: 90;
+      box-shadow: 0 0 24px rgba(156, 61, 51, 0.28);
+    }
+
     a {
       color: var(--sea);
       text-decoration: none;
@@ -265,6 +276,42 @@
       margin-top: 24px;
     }
 
+    .hero-summary-strip {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-width: 820px;
+    }
+
+    .hero-summary-pill {
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(31, 95, 107, 0.1);
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(8px);
+      animation: floaty 7s ease-in-out infinite;
+    }
+
+    .hero-summary-pill:nth-child(2) {
+      animation-delay: 0.7s;
+    }
+
+    .hero-summary-pill strong {
+      display: block;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: 7px;
+    }
+
+    .hero-summary-pill span {
+      display: block;
+      color: var(--muted);
+      line-height: 1.58;
+    }
+
     .button-primary,
     .button-secondary {
       display: inline-flex;
@@ -379,6 +426,92 @@
       background: linear-gradient(90deg, var(--gold), transparent);
       transform-origin: left;
       animation: stretch 3.2s ease-in-out infinite;
+    }
+
+    .guide-map-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .guide-link-tile {
+      position: relative;
+      display: block;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 241, 229, 0.98));
+      overflow: hidden;
+      transition: transform var(--trans-fast), box-shadow var(--trans-fast), border-color var(--trans-fast);
+    }
+
+    .guide-link-tile::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--gold), var(--sea));
+      opacity: 0.9;
+    }
+
+    .guide-link-tile::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.3) 40%, transparent 72%);
+      transform: translateX(-115%);
+      transition: transform 620ms ease;
+      pointer-events: none;
+    }
+
+    .guide-link-tile:hover {
+      transform: translateY(-5px);
+      border-color: rgba(31, 95, 107, 0.24);
+      box-shadow: 0 22px 36px rgba(24, 49, 61, 0.12);
+    }
+
+    .guide-link-tile:hover::after {
+      transform: translateX(110%);
+    }
+
+    .guide-link-tile strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 1.15rem;
+      color: var(--ink);
+    }
+
+    .guide-link-tile span {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.92rem;
+    }
+
+    .guide-link-tile small {
+      display: inline-flex;
+      margin-top: 14px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(31, 95, 107, 0.08);
+      color: var(--sea);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .section-category {
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(31, 95, 107, 0.1), rgba(216, 236, 240, 0.36));
+      border: 1px solid rgba(31, 95, 107, 0.1);
+      color: var(--sea);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
     }
 
     .gallery-grid {
@@ -825,7 +958,8 @@
     .snapshot-grid,
     .daily-focus-grid,
     .carry-grid,
-    .link-grid {
+    .link-grid,
+    .season-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 14px;
@@ -838,7 +972,8 @@
     .snapshot-card,
     .focus-card,
     .carry-card,
-    .link-card {
+    .link-card,
+    .season-card {
       padding: 18px;
       border: 1px solid var(--line);
       border-radius: 20px;
@@ -848,7 +983,8 @@
     .snapshot-card strong,
     .focus-card strong,
     .carry-card strong,
-    .link-card strong {
+    .link-card strong,
+    .season-card strong {
       display: block;
       font-size: 1rem;
     }
@@ -856,7 +992,8 @@
     .snapshot-card span,
     .focus-card span,
     .carry-card span,
-    .link-card span {
+    .link-card span,
+    .season-card span {
       display: block;
       margin-top: 8px;
       color: var(--muted);
@@ -923,6 +1060,45 @@
       font-size: 0.78rem;
       font-weight: 700;
       letter-spacing: 0.03em;
+    }
+
+    .season-grid {
+      margin-top: 18px;
+    }
+
+    .season-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .season-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--gold), var(--crimson));
+      opacity: 0.85;
+    }
+
+    .season-card em {
+      display: inline-flex;
+      margin-top: 12px;
+      font-style: normal;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(156, 61, 51, 0.08);
+      color: var(--crimson);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .summary-toggle-card {
+      margin-top: 18px;
+    }
+
+    .summary-toggle-card .expand-toggle span {
+      max-width: none;
     }
 
     .expand-card {
@@ -1193,13 +1369,15 @@
       }
 
       .gallery-grid,
+      .guide-map-grid,
       .interactive-grid,
       .timeline-grid,
       .food-grid,
       .snapshot-grid,
       .daily-focus-grid,
       .carry-grid,
-      .link-grid {
+      .link-grid,
+      .season-grid {
         grid-template-columns: 1fr 1fr;
       }
 
@@ -1231,7 +1409,12 @@
         justify-content: start;
       }
 
+      .hero-summary-strip {
+        grid-template-columns: 1fr;
+      }
+
       .gallery-grid,
+      .guide-map-grid,
       .interactive-grid,
       .timeline-grid,
       .route-lane,
@@ -1239,7 +1422,8 @@
       .snapshot-grid,
       .daily-focus-grid,
       .carry-grid,
-      .link-grid {
+      .link-grid,
+      .season-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1304,6 +1488,7 @@
   </style>
 </head>
 <body>
+  <div class="scroll-progress" aria-hidden="true"></div>
   <header class="topbar">
     <div class="brand">
       <div class="brand-mark">JE</div>
@@ -1317,11 +1502,12 @@
       <a href="#visual-stops">Visual Stops</a>
       <a href="#core-stops">Core Stops</a>
       <a href="#day-by-day">Day By Day</a>
+      <a href="#transit-flow">Transit Flow</a>
       <a href="#food-guide">Food Guide</a>
       <a href="#traveler-toolkit">Toolkit</a>
-      <a href="#transit-flow">Transit Flow</a>
       <a href="#culture-notes">Culture Notes</a>
       <a href="#if-time-expands">If Time Expands</a>
+      <a href="./quick_snapshot.html">Quick Snapshot</a>
     </nav>
   </header>
 
@@ -1339,6 +1525,17 @@
         <div class="hero-actions">
           <a class="button-primary" href="#visual-stops">Open Visual Stops</a>
           <a class="button-secondary" href="#day-by-day">Explore Day Flow</a>
+          <a class="button-secondary" href="./quick_snapshot.html">Open Essentials Snapshot</a>
+        </div>
+        <div class="hero-summary-strip">
+          <div class="hero-summary-pill">
+            <strong>Trip Vibe</strong>
+            <span>Low-pressure, food-forward, photo-heavy city-to-scenery mix.</span>
+          </div>
+          <div class="hero-summary-pill">
+            <strong>What To Remember</strong>
+            <span>Check Fuji visibility, keep one flexible block, and carry a charger plus snacks on long transfer days.</span>
+          </div>
         </div>
       </div>
       <div class="hero-side">
@@ -1361,7 +1558,47 @@
       </div>
     </section>
 
+    <section id="guide-map" class="section panel reveal">
+      <div class="section-header">
+        <div class="section-copy">
+          <span class="eyebrow">Guide Map</span>
+          <h2>Pick The Layer You Need Fast</h2>
+          <div class="section-divider"></div>
+        </div>
+        <p>The page is now organized by purpose, so you can jump straight to route planning, food, practical travel tools, etiquette, or the condensed mobile snapshot.</p>
+      </div>
+
+      <div class="guide-map-grid">
+        <a class="guide-link-tile" href="#visual-stops">
+          <strong>Trip Planner</strong>
+          <span>Visual stops, stop logic, day cards, and transfer flow.</span>
+          <small>Route first</small>
+        </a>
+        <a class="guide-link-tile" href="#food-guide">
+          <strong>Food Guide</strong>
+          <span>Must-try dishes, city food zones, quick budgets, and late-night backup ideas.</span>
+          <small>Eat smart</small>
+        </a>
+        <a class="guide-link-tile" href="#traveler-toolkit">
+          <strong>Toolkit</strong>
+          <span>Weather, packing, tickets, group sync, and long-transfer essentials.</span>
+          <small>Move cleanly</small>
+        </a>
+        <a class="guide-link-tile" href="#culture-notes">
+          <strong>Culture Notes</strong>
+          <span>Top etiquette tips, phrases, and city photo prompts for first-time visitors.</span>
+          <small>Travel smoother</small>
+        </a>
+        <a class="guide-link-tile" href="./quick_snapshot.html">
+          <strong>Quick Snapshot</strong>
+          <span>A condensed mobile and print-friendly essentials page for station days and fast reference.</span>
+          <small>Portable view</small>
+        </a>
+      </div>
+    </section>
+
     <section id="visual-stops" class="section panel reveal">
+      <div class="section-category">Trip Planner</div>
       <div class="section-header">
         <div class="section-copy">
           <span class="eyebrow">Visual Stops</span>
@@ -1593,15 +1830,95 @@
       </div>
     </section>
 
+    <section id="transit-flow" class="section panel reveal">
+      <div class="section-category">Trip Planner</div>
+      <div class="section-header">
+        <div class="section-copy">
+          <span class="eyebrow">Transit Flow</span>
+          <h2>Click The Route Stages</h2>
+          <div class="section-divider"></div>
+        </div>
+        <p>This section now explains why each move exists, instead of only listing the route. Click the stages to see what each transfer is doing for the overall pacing.</p>
+      </div>
+
+      <div class="route-lane">
+        <button class="route-step" data-route="0" type="button">
+          <strong>Osaka Base</strong>
+          <span>Start loose and absorb city energy without immediate long-haul transfers.</span>
+          <small>Arrival phase</small>
+        </button>
+        <button class="route-step" data-route="1" type="button">
+          <strong>Kyoto Day</strong>
+          <span>Borrow the historic side of Kansai without changing hotels.</span>
+          <small>Contrast phase</small>
+        </button>
+        <button class="route-step" data-route="2" type="button">
+          <strong>Osaka Buffer</strong>
+          <span>Return to base so the itinerary does not become transit-heavy too early.</span>
+          <small>Reset phase</small>
+        </button>
+        <button class="route-step" data-route="3" type="button">
+          <strong>Shinkansen Shift</strong>
+          <span>Shin-Osaka to Odawara is the clean eastbound spine of the trip.</span>
+          <small>Transfer phase</small>
+        </button>
+        <button class="route-step" data-route="4" type="button">
+          <strong>Hakone Stop</strong>
+          <span>Overnight to break the route and add scenery, lake views, and a slower pace.</span>
+          <small>Scenic pivot</small>
+        </button>
+        <button class="route-step" data-route="5" type="button">
+          <strong>Fuji Window</strong>
+          <span>Flexible scenic block built around visibility and the best possible Fuji moments.</span>
+          <small>Weather window</small>
+        </button>
+        <button class="route-step" data-route="6" type="button">
+          <strong>Tokyo Finish</strong>
+          <span>End in one simple district instead of overcomplicating the final day.</span>
+          <small>Finale phase</small>
+        </button>
+      </div>
+
+      <article class="detail-panel" id="route-detail-panel" aria-live="polite"></article>
+    </section>
+
     <section id="food-guide" class="section panel reveal">
+      <div class="section-category">Food Guide</div>
       <div class="section-header">
         <div class="section-copy">
           <span class="eyebrow">Food Guide</span>
-          <h2>More Japanese Foods To Add</h2>
+          <h2>Japan Food Guide</h2>
           <div class="section-divider"></div>
         </div>
         <p>This gives the site a food layer beyond the itinerary itself. Your current list already covers several classics, so this section adds more recognizable dishes people will actually look for while traveling.</p>
       </div>
+
+      <article class="expand-card summary-toggle-card">
+        <button class="expand-toggle" data-expand type="button">
+          <div>
+            <span class="eyebrow">Fast Food Summary</span>
+            <h3>Need The Short Version?</h3>
+            <span>Osaka and Tokyo are your strongest food-run cities, Kyoto is slower and more specialty-driven, Hakone closes earlier, and Fuji food should stay practical so it does not steal scenic time.</span>
+          </div>
+          <div class="expand-icon">+</div>
+        </button>
+        <div class="expand-content">
+          <div class="detail-list">
+            <div class="detail-item">
+              <strong>Best First Night</strong>
+              <span>Osaka for takoyaki, gyoza, okonomiyaki, kushikatsu, and late backup food.</span>
+            </div>
+            <div class="detail-item">
+              <strong>Best Slow Food Day</strong>
+              <span>Kyoto for matcha, sweets, soba, tofu, and a more deliberate sit-down meal.</span>
+            </div>
+            <div class="detail-item">
+              <strong>Cash Buffer</strong>
+              <span>A loose daily food budget of about 3,500 to 7,000 yen per person covers most casual days without forcing constant ATM stops.</span>
+            </div>
+          </div>
+        </div>
+      </article>
 
       <div class="food-intro">
         <p>Already on your list: ramen, takoyaki, sushi, mochi, matcha, yakitori, sashimi, and tonkatsu. These additions round it out with more street food, rice dishes, noodles, grilled foods, and sweets.</p>
@@ -1792,6 +2109,7 @@
     </section>
 
     <section id="traveler-toolkit" class="section panel reveal">
+      <div class="section-category">Travel Toolkit</div>
       <div class="section-header">
         <div class="section-copy">
           <span class="eyebrow">Traveler Toolkit</span>
@@ -1800,6 +2118,33 @@
         </div>
         <p>This is the practical layer: what to wear, what not to overpack, what to book ahead, and how to keep the group coordinated on the heavier travel days.</p>
       </div>
+
+      <article class="expand-card summary-toggle-card">
+        <button class="expand-toggle" data-expand type="button">
+          <div>
+            <span class="eyebrow">Fast Toolkit Summary</span>
+            <h3>Need The Essentials Only?</h3>
+            <span>Bring one warm layer, one rain layer, one IC card, one portable charger, and one clear plan for the Shin-Osaka to Odawara train before Day 4 starts.</span>
+          </div>
+          <div class="expand-icon">+</div>
+        </button>
+        <div class="expand-content">
+          <div class="detail-list">
+            <div class="detail-item">
+              <strong>Book Ahead</strong>
+              <span>Reserve the main shinkansen leg and the skyline slot you care about most.</span>
+            </div>
+            <div class="detail-item">
+              <strong>Carry On The Day</strong>
+              <span>Water, snacks, power bank, screenshots, wallet, and your warm layer should stay in your day bag, not buried in the suitcase.</span>
+            </div>
+            <div class="detail-item">
+              <strong>Fuji Rule</strong>
+              <span>Visibility still beats a fixed sequence. Check conditions first, then decide the order.</span>
+            </div>
+          </div>
+        </div>
+      </article>
 
       <div class="carry-grid">
         <article class="carry-card">
@@ -1817,6 +2162,34 @@
         <article class="carry-card">
           <strong>Do Not Overpack</strong>
           <span>Two pairs of shoes max, rewearable layers, one warmer top for Hakone or Fuji, and laundry over hauling a giant suitcase all week.</span>
+        </article>
+      </div>
+
+      <div class="subsection-header">
+        <strong>All-Year Seasonal Read</strong>
+        <span>These route-wide facts help if you are planning months ahead. They do not replace the day-of visibility check that the Fuji section still depends on.</span>
+      </div>
+
+      <div class="season-grid">
+        <article class="season-card">
+          <strong>Spring</strong>
+          <span>Milder city weather, more flowers, and comfortable walking in Osaka, Kyoto, and Tokyo. Bring light layers and some rain protection because spring can still turn damp.</span>
+          <em>Balanced season</em>
+        </article>
+        <article class="season-card">
+          <strong>Summer</strong>
+          <span>Hotter, more humid city days and a stronger need for breathable clothing, water, and shade breaks. Hakone and Fuji still feel cooler than the cities but not cold-proof.</span>
+          <em>Heat management</em>
+        </article>
+        <article class="season-card">
+          <strong>Autumn</strong>
+          <span>Often the easiest mix for city walking plus scenery, with cooler evenings and good layering weather. One extra layer starts mattering more once the sun drops.</span>
+          <em>Layer-friendly</em>
+        </article>
+        <article class="season-card">
+          <strong>Winter</strong>
+          <span>The clearest Fuji chances often come with the coldest route conditions, especially in Hakone and the Fuji area. Warm layers matter more, but the route can look extra crisp.</span>
+          <em>Best clarity, coldest feel</em>
         </article>
       </div>
 
@@ -1895,7 +2268,7 @@
           <div class="tag-row">
             <span class="tag">SmartEX</span>
             <span class="tag">Book ahead</span>
-            <span class="tag">2 hours-ish</span>
+            <span class="tag">Roughly 2 hours</span>
           </div>
         </button>
 
@@ -1968,7 +2341,7 @@
           <span>Useful if you want the classic Hakone transport bundle. The area-only version is the cleaner fit when you enter from Odawara and continue onward.</span>
           <small>Hakone transit</small>
         </a>
-        <a class="link-card" href="https://www.japan.travel/en/plan/getting-around/ic-cards/" target="_blank" rel="noreferrer">
+        <a class="link-card" href="https://www.japan.travel/en/plan/ic-card/" target="_blank" rel="noreferrer">
           <strong>IC Card Guide</strong>
           <span>Quick official overview of Japan's rechargeable transit cards so the city parts of the route stay simple.</span>
           <small>City transit</small>
@@ -1981,58 +2354,8 @@
       </div>
     </section>
 
-    <section id="transit-flow" class="section panel reveal">
-      <div class="section-header">
-        <div class="section-copy">
-          <span class="eyebrow">Transit Flow</span>
-          <h2>Click The Route Stages</h2>
-          <div class="section-divider"></div>
-        </div>
-        <p>This section now explains why each move exists, instead of only listing the route. Click the stages to see what each transfer is doing for the overall pacing.</p>
-      </div>
-
-      <div class="route-lane">
-        <button class="route-step" data-route="0" type="button">
-          <strong>Osaka Base</strong>
-          <span>Start loose and absorb city energy without immediate long-haul transfers.</span>
-          <small>Arrival phase</small>
-        </button>
-        <button class="route-step" data-route="1" type="button">
-          <strong>Kyoto Day</strong>
-          <span>Borrow the historic side of Kansai without changing hotels.</span>
-          <small>Contrast phase</small>
-        </button>
-        <button class="route-step" data-route="2" type="button">
-          <strong>Osaka Buffer</strong>
-          <span>Return to base so the itinerary does not become transit-heavy too early.</span>
-          <small>Reset phase</small>
-        </button>
-        <button class="route-step" data-route="3" type="button">
-          <strong>Shinkansen Shift</strong>
-          <span>Shin-Osaka to Odawara is the clean eastbound spine of the trip.</span>
-          <small>Transfer phase</small>
-        </button>
-        <button class="route-step" data-route="4" type="button">
-          <strong>Hakone Stop</strong>
-          <span>Overnight to break the route and add scenery, lake views, and a slower pace.</span>
-          <small>Scenic pivot</small>
-        </button>
-        <button class="route-step" data-route="5" type="button">
-          <strong>Fuji Window</strong>
-          <span>Flexible scenic block built around visibility and the best possible Fuji moments.</span>
-          <small>Weather window</small>
-        </button>
-        <button class="route-step" data-route="6" type="button">
-          <strong>Tokyo Finish</strong>
-          <span>End in one simple district instead of overcomplicating the final day.</span>
-          <small>Finale phase</small>
-        </button>
-      </div>
-
-      <article class="detail-panel" id="route-detail-panel" aria-live="polite"></article>
-    </section>
-
     <section id="culture-notes" class="section panel reveal">
+      <div class="section-category">Culture And Safety</div>
       <div class="section-header">
         <div class="section-copy">
           <span class="eyebrow">Culture Notes</span>
@@ -2040,6 +2363,21 @@
           <div class="section-divider"></div>
         </div>
         <p>Keep these short and practical. They are the reminders most useful when someone in the group has never been to Japan before.</p>
+      </div>
+
+      <div class="snapshot-grid">
+        <article class="snapshot-card">
+          <strong>Top Tip 1</strong>
+          <span>Be quieter on trains than you think you need to be, especially on local commuter lines.</span>
+        </article>
+        <article class="snapshot-card">
+          <strong>Top Tip 2</strong>
+          <span>At temples, shrines, and onsen spaces, follow posted signs before assuming normal tourist behavior applies.</span>
+        </article>
+        <article class="snapshot-card">
+          <strong>Top Tip 3</strong>
+          <span>Step aside before checking maps, eating, or stopping for photos so you do not clog narrow paths.</span>
+        </article>
       </div>
 
       <div class="expand-grid">
@@ -2151,6 +2489,7 @@
     </section>
 
     <section id="if-time-expands" class="section panel reveal">
+      <div class="section-category">Optional Add-Ons</div>
       <div class="section-header">
         <div class="section-copy">
           <span class="eyebrow">If Time Expands</span>
@@ -3755,6 +4094,13 @@
       });
     });
 
+    function updateScrollProgress() {
+      const scrollTop = window.scrollY;
+      const scrollRange = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollRange > 0 ? Math.min(scrollTop / scrollRange, 1) : 0;
+      document.documentElement.style.setProperty("--scroll-progress", progress);
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -3767,6 +4113,7 @@
     );
 
     document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+    window.addEventListener("scroll", updateScrollProgress, { passive: true });
 
     showStop("osaka");
     showDay(0);
@@ -3774,6 +4121,7 @@
     showWeather("osaka");
     showToolkit("shinkansen");
     showRoute(0);
+    updateScrollProgress();
     renderCredits();
   </script>
 </body>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Japan Escape Essentials | Quick Snapshot</title>
+  <meta
+    name="description"
+    content="Condensed Osaka, Kyoto, Hakone, Mt. Fuji, and Tokyo quick-reference guide with must-try foods, top activities, transfer reminders, etiquette tips, and a print-friendly layout.">
+  <style>
+    :root {
+      --paper: #fff8ef;
+      --ink: #1b3240;
+      --muted: #566a71;
+      --crimson: #9c3d33;
+      --gold: #cc9b48;
+      --sea: #1f5f6b;
+      --line: rgba(27, 50, 64, 0.12);
+      --shadow: 0 16px 36px rgba(27, 50, 64, 0.1);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(204, 155, 72, 0.16), transparent 24%),
+        linear-gradient(180deg, #fffaf3 0%, #f4ebdc 100%);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Baskerville", "Palatino Linotype", "Book Antiqua", serif;
+      line-height: 1.03;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    a {
+      color: var(--sea);
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(1080px, calc(100% - 24px));
+      margin: 20px auto 40px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 28px;
+      background: rgba(255, 249, 239, 0.94);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: 28px;
+      display: grid;
+      gap: 18px;
+      background:
+        radial-gradient(circle at top right, rgba(156, 61, 51, 0.16), transparent 28%),
+        linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(247, 239, 228, 0.98));
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(204, 155, 72, 0.16);
+      color: var(--crimson);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      max-width: 10ch;
+    }
+
+    .hero p {
+      max-width: 60ch;
+      color: var(--muted);
+      line-height: 1.68;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: rgba(31, 95, 107, 0.1);
+      color: var(--sea);
+      font-weight: 700;
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--crimson), #b55447);
+      color: white;
+    }
+
+    .summary-grid,
+    .city-grid,
+    .tip-grid,
+    .transit-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .summary-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .city-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tip-grid,
+    .transit-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .section {
+      padding: 24px;
+    }
+
+    .section h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      margin-top: 10px;
+    }
+
+    .section-copy {
+      margin-bottom: 18px;
+    }
+
+    .section-copy p {
+      margin-top: 12px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 241, 229, 0.98));
+    }
+
+    .card strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    .card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      line-height: 1.58;
+      font-size: 0.94rem;
+    }
+
+    .city-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .city-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--gold), var(--sea));
+    }
+
+    .city-card h3 {
+      margin-top: 14px;
+      font-size: 1.45rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(31, 95, 107, 0.08);
+      color: var(--sea);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .kicker {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(156, 61, 51, 0.08);
+      color: var(--crimson);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .compact-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.62;
+      display: grid;
+      gap: 8px;
+    }
+
+    .footer-note {
+      padding: 18px 24px 24px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      .city-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100% - 16px, 1080px);
+        margin: 12px auto 24px;
+      }
+
+      .hero,
+      .section {
+        padding: 20px;
+      }
+
+      .summary-grid,
+      .city-grid,
+      .tip-grid,
+      .transit-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .page {
+        width: 100%;
+        margin: 0;
+        gap: 10px;
+      }
+
+      .panel {
+        box-shadow: none;
+        border-color: #ddd;
+        background: white;
+      }
+
+      .button-row {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="panel hero">
+      <span class="eyebrow">Quick Snapshot</span>
+      <h1>Japan Escape Essentials</h1>
+      <p>This is the stripped-down version for mobile use, transfer days, or printing to PDF. It keeps only the route shape, must-try foods, top activity per city, and the most useful practical reminders.</p>
+      <div class="button-row">
+        <a class="button primary" href="./index.html">Back To Full Guide</a>
+        <a class="button" href="#" onclick="window.print(); return false;">Print / Save As PDF</a>
+      </div>
+      <div class="summary-grid">
+        <article class="card">
+          <strong>Trip Vibe</strong>
+          <span>Low-pressure, food-forward, photo-heavy city plus scenery mix.</span>
+        </article>
+        <article class="card">
+          <strong>Remember</strong>
+          <span>Check Fuji visibility, keep one flexible block, and carry a charger plus snacks on long transfer days.</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-copy">
+        <span class="eyebrow">City Cards</span>
+        <h2>One Card Per Stop</h2>
+        <p>Each city card keeps the essentials in one place: top activity, must-try food, cash feel, and the reminder most likely to matter on the day.</p>
+      </div>
+
+      <div class="city-grid">
+        <article class="card city-card">
+          <span class="kicker">Osaka</span>
+          <h3>Neon Start</h3>
+          <span><strong>Top activity:</strong> Shinsekai and Tsutenkaku after dark.</span>
+          <span><strong>Must-try food:</strong> Takoyaki, okonomiyaki, kushikatsu, gyoza.</span>
+          <span><strong>Cash feel:</strong> 3,500 to 6,000 yen covers a casual food-heavy day well.</span>
+          <span><strong>Reminder:</strong> Keep Day 1 compact. Osaka works best when it feels easy.</span>
+          <div class="pill">Best first-night city</div>
+        </article>
+
+        <article class="card city-card">
+          <span class="kicker">Kyoto</span>
+          <h3>Cultural Contrast</h3>
+          <span><strong>Top activity:</strong> One focused temple and old-street cluster.</span>
+          <span><strong>Must-try food:</strong> Matcha sweets, soba, tofu, wagashi.</span>
+          <span><strong>Cash feel:</strong> 3,000 to 6,500 yen depending on how refined the meal gets.</span>
+          <span><strong>Reminder:</strong> One area beats a citywide chase. Wear walking shoes.</span>
+          <div class="pill">Long-walk day</div>
+        </article>
+
+        <article class="card city-card">
+          <span class="kicker">Hakone</span>
+          <h3>Scenic Reset</h3>
+          <span><strong>Top activity:</strong> Ryokan or onsen-region slow-down with one scenic stop.</span>
+          <span><strong>Must-try food:</strong> Ryokan dinner or early station-street snacks.</span>
+          <span><strong>Cash feel:</strong> 2,500 to 5,000 yen outside included lodging meals.</span>
+          <span><strong>Reminder:</strong> Bring one warm layer and buy snacks before things close.</span>
+          <div class="pill">Cooler than the cities</div>
+        </article>
+
+        <article class="card city-card">
+          <span class="kicker">Mt. Fuji Area</span>
+          <h3>Visibility Day</h3>
+          <span><strong>Top activity:</strong> Hit the clearest viewpoint first, then build the rest of Day 6 around it.</span>
+          <span><strong>Must-try food:</strong> Yoshida udon or a quick practical lunch near Kawaguchiko.</span>
+          <span><strong>Cash feel:</strong> 2,500 to 5,500 yen usually covers the day fine.</span>
+          <span><strong>Reminder:</strong> Weather still decides the order. Flexibility is part of the plan.</span>
+          <div class="pill">Coldest stop in the route</div>
+        </article>
+
+        <article class="card city-card">
+          <span class="kicker">Tokyo</span>
+          <h3>Clean Finish</h3>
+          <span><strong>Top activity:</strong> Shibuya shopping and a skyline close at Shibuya Sky.</span>
+          <span><strong>Must-try food:</strong> Sushi, tonkatsu, ramen, gyoza, dessert backup.</span>
+          <span><strong>Cash feel:</strong> 4,000 to 8,000 yen gives enough room for a nice final day.</span>
+          <span><strong>Reminder:</strong> Keep the day district-first so the ending stays sharp.</span>
+          <div class="pill">Easy last-day district</div>
+        </article>
+
+        <article class="card city-card">
+          <span class="kicker">Transfer Days</span>
+          <h3>Move Light</h3>
+          <span><strong>Top activity:</strong> Travel calmly, not ambitiously.</span>
+          <span><strong>Must-bring items:</strong> Charger, snacks, water, tickets, warm layer.</span>
+          <span><strong>Cash feel:</strong> Keep at least 10,000 yen accessible across the group for lockers, quick meals, and edge cases.</span>
+          <span><strong>Reminder:</strong> Agree on one station meet point before anyone splits off.</span>
+          <div class="pill">Day 4 matters most</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-copy">
+        <span class="eyebrow">Transit Cheats</span>
+        <h2>Rushing-To-The-Station Version</h2>
+        <p>This is the fast reference for the route's most useful movement notes.</p>
+      </div>
+
+      <div class="transit-grid">
+        <article class="card">
+          <strong>Shin-Osaka -> Odawara</strong>
+          <span>Reserve the shinkansen ahead if you want a specific train. Budget about 2 hours on board plus station time.</span>
+        </article>
+        <article class="card">
+          <strong>Hakone Handoff</strong>
+          <span>Odawara to Hakone-Yumoto is the clean local switch. Sort bags and snacks early.</span>
+        </article>
+        <article class="card">
+          <strong>IC Card Rule</strong>
+          <span>Use one rechargeable IC card for local transit so Osaka, Kyoto, and Tokyo stay low-friction.</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-copy">
+        <span class="eyebrow">Quick Tips</span>
+        <h2>Top 3 Etiquette And Safety Reminders</h2>
+      </div>
+
+      <div class="tip-grid">
+        <article class="card">
+          <strong>Quiet On Trains</strong>
+          <span>Keep voices low, let people off first, and avoid blocking doors or narrow aisles.</span>
+        </article>
+        <article class="card">
+          <strong>Read The Signs</strong>
+          <span>Temples, shrines, baths, and some food streets each have their own rules. Posted signs win.</span>
+        </article>
+        <article class="card">
+          <strong>Step Aside First</strong>
+          <span>Before checking maps, eating, or taking photos, move out of the main walking line.</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-copy">
+        <span class="eyebrow">Photo Prompts</span>
+        <h2>One Shot To Keep Per City</h2>
+      </div>
+
+      <ul class="compact-list">
+        <li><strong>Osaka:</strong> Upward angle in Shinsekai once the signs turn on.</li>
+        <li><strong>Kyoto:</strong> Early or late on the Higashiyama slope before the crowd flattens the scene.</li>
+        <li><strong>Hakone:</strong> Lakeside torii or shrine approach when the light softens.</li>
+        <li><strong>Mt. Fuji Area:</strong> Get to the best clear viewpoint earlier than feels necessary.</li>
+        <li><strong>Tokyo:</strong> Street energy first, skyline second at Shibuya after lights come on.</li>
+      </ul>
+    </section>
+
+    <div class="footer-note">
+      Built as the portable companion to the full guide in <a href="./index.html">index.html</a>. If you need the interactive day cards, food panels, or planning details, go back to the full version.
+    </div>
+  </main>
+</body>
+</html>
