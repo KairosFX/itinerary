@@ -6,12 +6,12 @@
   <title>Japan Escape | Interactive Osaka, Fuji &amp; Tokyo Guide</title>
   <meta
     name="description"
-    content="An interactive 7-day Japan itinerary with clickable stop details, photo stories, route flow, and day-by-day planning for Osaka, Kyoto, Hakone, the Mt. Fuji area, and Tokyo.">
+    content="An interactive 7-day Japan itinerary with clickable stop details, food ideas, transit notes, packing guidance, photo stories, and day-by-day planning for Osaka, Kyoto, Hakone, the Mt. Fuji area, and Tokyo.">
   <meta name="theme-color" content="#9c3d33">
   <meta property="og:title" content="Japan Escape | Interactive Osaka, Fuji &amp; Tokyo Guide">
   <meta
     property="og:description"
-    content="An interactive 7-day Japan itinerary with clickable stop details, photo stories, route flow, and day-by-day planning for Osaka, Kyoto, Hakone, the Mt. Fuji area, and Tokyo.">
+    content="An interactive 7-day Japan itinerary with clickable stop details, food ideas, transit notes, packing guidance, photo stories, and day-by-day planning for Osaka, Kyoto, Hakone, the Mt. Fuji area, and Tokyo.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Japan Escape">
   <link
@@ -715,8 +715,214 @@
 
     .expand-grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
+    }
+
+    .food-intro {
+      padding: 20px 22px;
+      border-radius: 24px;
+      border: 1px solid rgba(156, 61, 51, 0.12);
+      background: linear-gradient(135deg, rgba(156, 61, 51, 0.08), rgba(204, 155, 72, 0.14));
+    }
+
+    .food-intro p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .food-picked {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .food-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .food-card {
+      position: relative;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 243, 234, 0.98));
+      transition: transform var(--trans-fast), box-shadow var(--trans-fast), border-color var(--trans-fast);
+    }
+
+    .food-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 6px;
+      border-radius: 24px 24px 0 0;
+      background: linear-gradient(90deg, var(--sea), var(--gold));
+      opacity: 0.86;
+    }
+
+    .food-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(31, 95, 107, 0.24);
+      box-shadow: 0 22px 40px rgba(24, 49, 61, 0.12);
+    }
+
+    .food-category {
+      display: inline-flex;
+      margin-top: 16px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(31, 95, 107, 0.08);
+      color: var(--sea);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .food-card h3 {
+      margin-top: 14px;
+      font-size: 1.45rem;
+    }
+
+    .food-card p {
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.62;
+      min-height: 104px;
+    }
+
+    .food-card small {
+      display: block;
+      margin-top: 12px;
+      color: var(--ink);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .subsection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin: 22px 0 14px;
+    }
+
+    .subsection-header strong {
+      font-size: 1.1rem;
+      letter-spacing: 0.03em;
+    }
+
+    .subsection-header span {
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 56ch;
+    }
+
+    .snapshot-grid,
+    .daily-focus-grid,
+    .carry-grid,
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .snapshot-grid {
+      margin-top: 18px;
+    }
+
+    .snapshot-card,
+    .focus-card,
+    .carry-card,
+    .link-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(248, 241, 229, 0.98));
+    }
+
+    .snapshot-card strong,
+    .focus-card strong,
+    .carry-card strong,
+    .link-card strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    .snapshot-card span,
+    .focus-card span,
+    .carry-card span,
+    .link-card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      line-height: 1.58;
+      font-size: 0.92rem;
+    }
+
+    .focus-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .focus-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: linear-gradient(180deg, var(--gold), var(--crimson));
+    }
+
+    .focus-card strong {
+      padding-left: 6px;
+    }
+
+    .focus-card span {
+      padding-left: 6px;
+    }
+
+    .food-note,
+    .toolkit-note {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(31, 95, 107, 0.08);
+      background: rgba(31, 95, 107, 0.07);
+      color: var(--sea);
+      line-height: 1.65;
+    }
+
+    .toolkit-note {
+      background: rgba(156, 61, 51, 0.06);
+      border-color: rgba(156, 61, 51, 0.08);
+      color: var(--ink);
+    }
+
+    .link-card {
+      display: block;
+      transition: transform var(--trans-fast), box-shadow var(--trans-fast), border-color var(--trans-fast);
+    }
+
+    .link-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(31, 95, 107, 0.24);
+      box-shadow: 0 18px 32px rgba(24, 49, 61, 0.1);
+    }
+
+    .link-card small {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(31, 95, 107, 0.08);
+      color: var(--sea);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
     }
 
     .expand-card {
@@ -774,7 +980,7 @@
     }
 
     .expand-card.open .expand-content {
-      max-height: 420px;
+      max-height: 780px;
       margin-top: 18px;
     }
 
@@ -988,7 +1194,12 @@
 
       .gallery-grid,
       .interactive-grid,
-      .timeline-grid {
+      .timeline-grid,
+      .food-grid,
+      .snapshot-grid,
+      .daily-focus-grid,
+      .carry-grid,
+      .link-grid {
         grid-template-columns: 1fr 1fr;
       }
 
@@ -1023,12 +1234,26 @@
       .gallery-grid,
       .interactive-grid,
       .timeline-grid,
-      .route-lane {
+      .route-lane,
+      .food-grid,
+      .snapshot-grid,
+      .daily-focus-grid,
+      .carry-grid,
+      .link-grid {
         grid-template-columns: 1fr;
       }
 
       .section-header {
         display: block;
+      }
+
+      .subsection-header {
+        display: block;
+      }
+
+      .subsection-header span {
+        display: block;
+        margin-top: 8px;
       }
 
       .section-header > p,
@@ -1092,7 +1317,10 @@
       <a href="#visual-stops">Visual Stops</a>
       <a href="#core-stops">Core Stops</a>
       <a href="#day-by-day">Day By Day</a>
+      <a href="#food-guide">Food Guide</a>
+      <a href="#traveler-toolkit">Toolkit</a>
       <a href="#transit-flow">Transit Flow</a>
+      <a href="#culture-notes">Culture Notes</a>
       <a href="#if-time-expands">If Time Expands</a>
     </nav>
   </header>
@@ -1104,8 +1332,9 @@
         <h1>City Nights, Fuji Views, Tokyo Finish</h1>
         <p class="hero-lead">
           This version behaves more like a small travel site than a static flyer. Click the photo cards to open
-          deeper image stories, click the stop cards for richer facts and pacing notes, and click each day card to
-          expand the logic behind the itinerary.
+          deeper image stories, click the stop cards for richer facts and pacing notes, and use the added food,
+          packing, transit, and etiquette sections to turn the route into a practical trip guide rather than only a
+          visual itinerary.
         </p>
         <div class="hero-actions">
           <a class="button-primary" href="#visual-stops">Open Visual Stops</a>
@@ -1278,54 +1507,478 @@
         <button class="day-card" data-day="0" type="button">
           <div class="day-number">1</div>
           <h3>Osaka Arrival Mood</h3>
-          <p>Nightlife, Tsutenkaku, Shinsekai</p>
-          <div class="day-mini">Keep the landing night atmospheric rather than ambitious.</div>
+          <p>Neon streets, first snacks, low-pressure landing</p>
+          <div class="day-mini">Keep Day 1 compact: stretch your legs, eat well, and save energy for the full route.</div>
         </button>
 
         <button class="day-card" data-day="1" type="button">
           <div class="day-number">2</div>
           <h3>Kyoto Full Day</h3>
-          <p>Historic contrast and temple/shrine rhythm</p>
-          <div class="day-mini">One focused Kyoto day is stronger than a rushed scatter.</div>
+          <p>Cultural sights, temple rhythm, one full focused day</p>
+          <div class="day-mini">Best for Kyoto's slower texture. Pick one area cluster and let it breathe.</div>
         </button>
 
         <button class="day-card" data-day="2" type="button">
           <div class="day-number">3</div>
           <h3>Osaka Reset</h3>
-          <p>Kaiyukan plus flexible Osaka time</p>
-          <div class="day-mini">A weather-proof anchor before the major transfer.</div>
+          <p>Kaiyukan anchor plus food and packing reset</p>
+          <div class="day-mini">Use this as the easy buffer day before the longest transfer in the trip.</div>
         </button>
 
         <button class="day-card" data-day="3" type="button">
           <div class="day-number">4</div>
           <h3>Move To Hakone</h3>
-          <p>Shin-Osaka -> Odawara -> Hakone</p>
-          <div class="day-mini">This is the deliberate travel-heavy day.</div>
+          <p>Shin-Osaka -> Odawara -> Hakone transit spine</p>
+          <div class="day-mini">Treat Day 4 as the main travel day and protect the arrival more than the sightseeing volume.</div>
         </button>
 
         <button class="day-card" data-day="4" type="button">
           <div class="day-number">5</div>
           <h3>Hakone Morning</h3>
-          <p>Slow morning and Fuji-area transfer</p>
-          <div class="day-mini">Let the overnight actually breathe before moving on.</div>
+          <p>Slow morning, onsen pace, then Fuji transfer</p>
+          <div class="day-mini">Keep it light. The point is to arrive near Fuji with enough energy for Day 6.</div>
         </button>
 
         <button class="day-card" data-day="5" type="button">
           <div class="day-number">6</div>
           <h3>Fuji Scenic Day</h3>
-          <p>Kawaguchiko, Chureito, Oshino Hakkai</p>
-          <div class="day-mini">Best handled by visibility, not by strict order.</div>
+          <p>Kawaguchiko, Chureito, Oshino Hakkai, weather first</p>
+          <div class="day-mini">Check the sky, use the clearest view first, and do not over-compress photo time.</div>
         </button>
 
         <button class="day-card" data-day="6" type="button">
           <div class="day-number">7</div>
           <h3>Tokyo Finish</h3>
-          <p>Shibuya Crossing, shopping, Shibuya Sky</p>
-          <div class="day-mini">End simple, central, and visually strong.</div>
+          <p>Shibuya shopping, crossing, skyline finish</p>
+          <div class="day-mini">Keep Tokyo centralized so the ending stays sharp instead of transit-heavy.</div>
         </button>
       </div>
 
       <article class="detail-panel" id="day-detail-panel" aria-live="polite"></article>
+
+      <div class="subsection-header">
+        <strong>Quick Daily Focus</strong>
+        <span>These are the short reminders that keep the route breezy on the move. Read them like guardrails, not strict scripts.</span>
+      </div>
+
+      <div class="daily-focus-grid">
+        <article class="focus-card">
+          <strong>Day 1 / Osaka</strong>
+          <span>Land, drop bags, get one strong neon-food walk in. Do not spend your first night proving stamina.</span>
+        </article>
+        <article class="focus-card">
+          <strong>Day 2 / Kyoto</strong>
+          <span>Best for cultural sights and a one-full-day contrast. One cluster beats a frantic citywide chase.</span>
+        </article>
+        <article class="focus-card">
+          <strong>Day 3 / Osaka</strong>
+          <span>Kaiyukan or another easy anchor, then food and loose time. Pack early for the bullet train day.</span>
+        </article>
+        <article class="focus-card">
+          <strong>Day 4 / Hakone Move</strong>
+          <span>Main goal: clean transfer. Anything scenic after check-in counts as bonus value, not a missed checklist.</span>
+        </article>
+        <article class="focus-card">
+          <strong>Day 5 / Hakone -> Fuji</strong>
+          <span>Let the overnight actually reset you. Move onward with energy instead of turning this into another rush day.</span>
+        </article>
+        <article class="focus-card">
+          <strong>Day 6 / Fuji</strong>
+          <span>Visibility decides the order. If the mountain is clear, go to the strongest viewpoint first.</span>
+        </article>
+        <article class="focus-card">
+          <strong>Day 7 / Tokyo</strong>
+          <span>Shibuya shopping, crossing, skyline views. End with a strong district rather than one more giant transport puzzle.</span>
+        </article>
+      </div>
+    </section>
+
+    <section id="food-guide" class="section panel reveal">
+      <div class="section-header">
+        <div class="section-copy">
+          <span class="eyebrow">Food Guide</span>
+          <h2>More Japanese Foods To Add</h2>
+          <div class="section-divider"></div>
+        </div>
+        <p>This gives the site a food layer beyond the itinerary itself. Your current list already covers several classics, so this section adds more recognizable dishes people will actually look for while traveling.</p>
+      </div>
+
+      <div class="food-intro">
+        <p>Already on your list: ramen, takoyaki, sushi, mochi, matcha, yakitori, sashimi, and tonkatsu. These additions round it out with more street food, rice dishes, noodles, grilled foods, and sweets.</p>
+        <div class="food-picked" aria-label="Foods already listed">
+          <span class="tag">Ramen</span>
+          <span class="tag">Takoyaki</span>
+          <span class="tag">Sushi</span>
+          <span class="tag">Mochi</span>
+          <span class="tag">Matcha</span>
+          <span class="tag">Yakitori</span>
+          <span class="tag">Sashimi</span>
+          <span class="tag">Tonkatsu</span>
+        </div>
+      </div>
+
+      <div class="snapshot-grid">
+        <article class="snapshot-card">
+          <strong>Street Snack</strong>
+          <span>Roughly 200 to 800 yen per item for takoyaki, skewers, taiyaki, croquettes, onigiri, or dessert stops.</span>
+        </article>
+        <article class="snapshot-card">
+          <strong>Casual Meal</strong>
+          <span>Roughly 900 to 2,000 yen for ramen, curry rice, udon, soba, gyoza sets, or quick lunch counters.</span>
+        </article>
+        <article class="snapshot-card">
+          <strong>Sit-Down Dinner</strong>
+          <span>Roughly 2,500 to 6,000 yen per person depending on drinks, district, and whether you go izakaya, yakiniku, or kaiseki.</span>
+        </article>
+        <article class="snapshot-card">
+          <strong>Late-Night Backup</strong>
+          <span>Konbini runs keep the trip resilient: onigiri, karaage, egg sandwich, fruit cups, yogurt drinks, and desserts save tired nights.</span>
+        </article>
+      </div>
+
+      <div class="subsection-header">
+        <strong>Food By City</strong>
+        <span>Click a stop to see which dishes, areas, late-night moves, and sit-down ideas fit that part of the route best.</span>
+      </div>
+
+      <div class="interactive-grid">
+        <button class="interactive-card" data-food="osaka" type="button">
+          <h3>Osaka</h3>
+          <p>Best first-night food city for takoyaki, okonomiyaki, kushikatsu, gyoza, and loose wandering around neon districts.</p>
+          <div class="tag-row">
+            <span class="tag">Dotonbori</span>
+            <span class="tag">Shinsekai</span>
+            <span class="tag">Late food</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-food="kyoto" type="button">
+          <h3>Kyoto</h3>
+          <p>Better for tea, sweets, tofu, soba, and slower sit-down meals than for aggressive late-night snacking.</p>
+          <div class="tag-row">
+            <span class="tag">Nishiki</span>
+            <span class="tag">Gion</span>
+            <span class="tag">Matcha</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-food="hakone" type="button">
+          <h3>Hakone</h3>
+          <p>Buy station snacks early, lean into ryokan or onsen-town meals, and do not assume late-night options stay broad.</p>
+          <div class="tag-row">
+            <span class="tag">Hakone-Yumoto</span>
+            <span class="tag">Ryokan dinner</span>
+            <span class="tag">Early close</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-food="fuji" type="button">
+          <h3>Mt. Fuji Area</h3>
+          <p>Use scenic gaps for local noodles, lakeside cafes, and a practical lunch near Shimoyoshida or Kawaguchiko.</p>
+          <div class="tag-row">
+            <span class="tag">Yoshida udon</span>
+            <span class="tag">Kawaguchiko</span>
+            <span class="tag">Photo-day food</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-food="tokyo" type="button">
+          <h3>Tokyo</h3>
+          <p>Shibuya gives you easy access to sushi, tonkatsu, gyoza, ramen, desserts, and strong late-night fallback options.</p>
+          <div class="tag-row">
+            <span class="tag">Shibuya</span>
+            <span class="tag">Late snacks</span>
+            <span class="tag">Sit-down dinner</span>
+          </div>
+        </button>
+      </div>
+
+      <article class="detail-panel" id="food-detail-panel" aria-live="polite"></article>
+
+      <div class="food-note">
+        Best practical rule: use Osaka and Tokyo for high-energy food runs, Kyoto for slower specialty meals and sweets, Hakone for ryokan or station-street snacks, and the Fuji area for quick reliable lunches that do not steal time from visibility.
+      </div>
+
+      <div class="subsection-header">
+        <strong>Dish Shortlist</strong>
+        <span>This keeps the page scannable even if someone only wants a fast list of foods to look up before the trip.</span>
+      </div>
+
+      <div class="food-grid">
+        <article class="food-card">
+          <span class="food-category">Osaka Classic</span>
+          <h3>Okonomiyaki</h3>
+          <p>A savory cabbage pancake cooked on a griddle and layered with sauce, mayo, and toppings. It is one of the easiest additions after takoyaki if you want the site to feel more Osaka-specific.</p>
+          <small>Good fit for Osaka and casual dinner recommendations.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Street Food</span>
+          <h3>Kushikatsu</h3>
+          <p>Deep-fried skewers of meat, seafood, and vegetables. It matches the Shinsekai side of your route well and gives the page another recognizable Osaka food beyond takoyaki.</p>
+          <small>Strong match for Shinsekai, Tsutenkaku, and retro-nightlife copy.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Noodle Staple</span>
+          <h3>Udon</h3>
+          <p>Thick wheat noodles usually served in broth or with simple toppings. Adding udon helps the food list feel broader than ramen alone.</p>
+          <small>Works well as a familiar, beginner-friendly comfort food.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Noodle Staple</span>
+          <h3>Soba</h3>
+          <p>Buckwheat noodles served hot or cold, often with a lighter, cleaner flavor profile than ramen. It gives the list a second classic noodle lane.</p>
+          <small>Useful when you want a quieter, more traditional food option.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Fried Favorite</span>
+          <h3>Karaage</h3>
+          <p>Japanese fried chicken, typically marinated before frying. It is an easy crowd-pleaser and a practical addition because travelers see it everywhere.</p>
+          <small>Easy to tie into convenience stores, food halls, and casual lunch spots.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Small Bite</span>
+          <h3>Gyoza</h3>
+          <p>Pan-fried dumplings with crisp bottoms and juicy filling. This adds a simple, recognizable side dish that pairs naturally with ramen and beer-heavy districts.</p>
+          <small>Good supporting food for Osaka and Tokyo night scenes.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Rice Dish</span>
+          <h3>Curry Rice</h3>
+          <p>Japanese curry is thicker, sweeter, and usually milder than many other curry styles. It adds variety because it feels different from the noodle-heavy part of the list.</p>
+          <small>Good general pick for lunch, station food, or comfort-food callouts.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Grab-And-Go</span>
+          <h3>Onigiri</h3>
+          <p>Rice balls filled with tuna, salmon, pickled plum, and other staples. This gives the site a practical everyday food, not just restaurant dishes.</p>
+          <small>Strong fit for travel-day tips and convenience-store mentions.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Crunchy Classic</span>
+          <h3>Tempura</h3>
+          <p>Lightly battered seafood and vegetables fried until crisp. It adds a classic traditional dish that visitors recognize quickly.</p>
+          <small>Useful if you want one more iconic food beyond sushi and sashimi.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Grill Night</span>
+          <h3>Yakiniku</h3>
+          <p>Grilled meat cooked at the table, often in small shareable rounds. It brings in the social, dinner-focused side of Japanese food culture.</p>
+          <small>Fits late-night Tokyo or Osaka group-dinner energy.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Hot Pot</span>
+          <h3>Shabu-Shabu</h3>
+          <p>Thin slices of meat and vegetables swished through hot broth at the table. This adds a very different texture from fried food and skewers.</p>
+          <small>Best as a cooler-weather or sit-down meal recommendation.</small>
+        </article>
+
+        <article class="food-card">
+          <span class="food-category">Sweet Finish</span>
+          <h3>Taiyaki</h3>
+          <p>Fish-shaped pastry usually filled with red bean paste, custard, or sweet potato. It helps the dessert side of the list feel broader than mochi alone.</p>
+          <small>Good for snack, sweets, or market-stall sections.</small>
+        </article>
+      </div>
+    </section>
+
+    <section id="traveler-toolkit" class="section panel reveal">
+      <div class="section-header">
+        <div class="section-copy">
+          <span class="eyebrow">Traveler Toolkit</span>
+          <h2>Weather, Packing, Tickets, and Long-Transfer Basics</h2>
+          <div class="section-divider"></div>
+        </div>
+        <p>This is the practical layer: what to wear, what not to overpack, what to book ahead, and how to keep the group coordinated on the heavier travel days.</p>
+      </div>
+
+      <div class="carry-grid">
+        <article class="carry-card">
+          <strong>Transfer-Day Kit</strong>
+          <span>Phone charger, power bank, water, snacks, ticket screenshots, coin purse, one easy-access layer, and anything you need before the hotel.</span>
+        </article>
+        <article class="carry-card">
+          <strong>Onsen Kit</strong>
+          <span>Small towel, skin care, hair tie, plastic bag for damp items, and a simple change of clothes so the ryokan stop stays easy.</span>
+        </article>
+        <article class="carry-card">
+          <strong>Rain Kit</strong>
+          <span>Compact umbrella, light shell, quick-dry socks, and a zip pouch for electronics. Hakone and Fuji punish optimistic packing.</span>
+        </article>
+        <article class="carry-card">
+          <strong>Do Not Overpack</strong>
+          <span>Two pairs of shoes max, rewearable layers, one warmer top for Hakone or Fuji, and laundry over hauling a giant suitcase all week.</span>
+        </article>
+      </div>
+
+      <div class="subsection-header">
+        <strong>City Weather And Layering</strong>
+        <span>You did not give a travel month, so these notes focus on each stop's usual packing logic instead of pretending one exact temperature fits every version of the trip.</span>
+      </div>
+
+      <div class="interactive-grid">
+        <button class="interactive-card" data-weather="osaka" type="button">
+          <h3>Osaka</h3>
+          <p>Urban, forgiving, and usually easy to dress for, but humid when warm and occasionally drizzly.</p>
+          <div class="tag-row">
+            <span class="tag">City layers</span>
+            <span class="tag">Night walks</span>
+            <span class="tag">Umbrella</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-weather="kyoto" type="button">
+          <h3>Kyoto</h3>
+          <p>More walking, more exposed temple time, and bigger payoff from breathable clothes or one extra layer depending on season.</p>
+          <div class="tag-row">
+            <span class="tag">Long walks</span>
+            <span class="tag">Temple days</span>
+            <span class="tag">Comfort shoes</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-weather="hakone" type="button">
+          <h3>Hakone</h3>
+          <p>Cooler and more changeable than the big cities, especially if wind, mist, or lake weather rolls in.</p>
+          <div class="tag-row">
+            <span class="tag">Extra layer</span>
+            <span class="tag">Rain shell</span>
+            <span class="tag">Onsen stop</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-weather="fuji" type="button">
+          <h3>Mt. Fuji Area</h3>
+          <p>The coldest and most weather-sensitive stop in the route. Dress like a city trip plus one mountain-minded layer.</p>
+          <div class="tag-row">
+            <span class="tag">Windier</span>
+            <span class="tag">Morning chill</span>
+            <span class="tag">Viewpoint ready</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-weather="tokyo" type="button">
+          <h3>Tokyo</h3>
+          <p>Similar city logic to Osaka, but indoor AC, night plans, and lots of walking still reward a flexible light layer.</p>
+          <div class="tag-row">
+            <span class="tag">City heat</span>
+            <span class="tag">AC swings</span>
+            <span class="tag">Skyline nights</span>
+          </div>
+        </button>
+      </div>
+
+      <article class="detail-panel" id="weather-detail-panel" aria-live="polite"></article>
+
+      <div class="toolkit-note">
+        Universal packing rule for this route: even if Osaka and Tokyo feel mild, Hakone and the Fuji side can make the same outfit feel underprepared. Bring one compact rain layer and one genuinely warm layer that is easy to take off.
+      </div>
+
+      <div class="subsection-header">
+        <strong>Transit, Tickets, And Group Sync</strong>
+        <span>Click the practical cards for the route's most useful transfer notes, booking calls, luggage reminders, and simple role-splitting tricks.</span>
+      </div>
+
+      <div class="interactive-grid">
+        <button class="interactive-card" data-toolkit="shinkansen" type="button">
+          <h3>Shin-Osaka -> Odawara</h3>
+          <p>The main booking day of the trip. Keep it clean, reserved, and early enough to avoid rushing the Hakone arrival.</p>
+          <div class="tag-row">
+            <span class="tag">SmartEX</span>
+            <span class="tag">Book ahead</span>
+            <span class="tag">2 hours-ish</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-toolkit="hakone" type="button">
+          <h3>Hakone Local Transit</h3>
+          <p>Once you reach Odawara, switch into Hakone mode fast so the transfer does not leak energy.</p>
+          <div class="tag-row">
+            <span class="tag">Hakone Freepass</span>
+            <span class="tag">Odawara</span>
+            <span class="tag">Luggage help</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-toolkit="cards" type="button">
+          <h3>IC Cards And Small Fares</h3>
+          <p>Keep local transit friction low with one reloadable card instead of ticket-machine juggling all week.</p>
+          <div class="tag-row">
+            <span class="tag">ICOCA</span>
+            <span class="tag">Suica</span>
+            <span class="tag">PASMO</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-toolkit="kyoto" type="button">
+          <h3>Kyoto Access Moves</h3>
+          <p>Kyoto gets slower when you rely too heavily on buses. Use rail and walking where you can.</p>
+          <div class="tag-row">
+            <span class="tag">Shijo</span>
+            <span class="tag">Kyoto Station</span>
+            <span class="tag">Less bus drag</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-toolkit="tokyo" type="button">
+          <h3>Tokyo Finish Logistics</h3>
+          <p>Shibuya is easy if you keep the day district-first, know your luggage fallback, and book the skyline slot early.</p>
+          <div class="tag-row">
+            <span class="tag">Shibuya</span>
+            <span class="tag">Hachiko side</span>
+            <span class="tag">Shibuya Sky</span>
+          </div>
+        </button>
+
+        <button class="interactive-card" data-toolkit="group" type="button">
+          <h3>Group Sync</h3>
+          <p>Long transfer days get smoother when one person is not silently carrying all the logistics.</p>
+          <div class="tag-row">
+            <span class="tag">Roles</span>
+            <span class="tag">Meet points</span>
+            <span class="tag">Screenshots</span>
+          </div>
+        </button>
+      </div>
+
+      <article class="detail-panel" id="toolkit-detail-panel" aria-live="polite"></article>
+
+      <div class="subsection-header">
+        <strong>Official Booking Links</strong>
+        <span>These are the practical sites worth bookmarking before you travel so the route is easy to manage from your phone.</span>
+      </div>
+
+      <div class="link-grid">
+        <a class="link-card" href="https://smart-ex.jp/en/index.php" target="_blank" rel="noreferrer">
+          <strong>SmartEX</strong>
+          <span>Reserve Tokaido Shinkansen seats online for the Shin-Osaka to Odawara move and any other JR Central legs you lock in early.</span>
+          <small>Bullet train booking</small>
+        </a>
+        <a class="link-card" href="https://www.odakyu.jp/english/passes/hakone/" target="_blank" rel="noreferrer">
+          <strong>Hakone Freepass</strong>
+          <span>Useful if you want the classic Hakone transport bundle. The area-only version is the cleaner fit when you enter from Odawara and continue onward.</span>
+          <small>Hakone transit</small>
+        </a>
+        <a class="link-card" href="https://www.japan.travel/en/plan/getting-around/ic-cards/" target="_blank" rel="noreferrer">
+          <strong>IC Card Guide</strong>
+          <span>Quick official overview of Japan's rechargeable transit cards so the city parts of the route stay simple.</span>
+          <small>City transit</small>
+        </a>
+        <a class="link-card" href="https://www.shibuya-scramble-square.com/sky/ticket/" target="_blank" rel="noreferrer">
+          <strong>Shibuya Sky Tickets</strong>
+          <span>If you care about sunset or evening views, book the skyline slot before the last day gets squeezed by availability.</span>
+          <small>Attraction booking</small>
+        </a>
+      </div>
     </section>
 
     <section id="transit-flow" class="section panel reveal">
@@ -1379,23 +2032,141 @@
       <article class="detail-panel" id="route-detail-panel" aria-live="polite"></article>
     </section>
 
-    <section id="if-time-expands" class="section panel reveal">
+    <section id="culture-notes" class="section panel reveal">
       <div class="section-header">
         <div class="section-copy">
-          <span class="eyebrow">If Time Expands</span>
-          <h2>More Tokyo, Still A Separate Okinawa Trip</h2>
+          <span class="eyebrow">Culture Notes</span>
+          <h2>Etiquette, Safety, Useful Phrases, and Memory Prompts</h2>
           <div class="section-divider"></div>
         </div>
-        <p>The optional section is now expandable too. Open either card for more detail on how the extra days fit without breaking the tone of the main route.</p>
+        <p>Keep these short and practical. They are the reminders most useful when someone in the group has never been to Japan before.</p>
       </div>
 
       <div class="expand-grid">
         <article class="expand-card">
           <button class="expand-toggle" data-expand type="button">
             <div>
-              <span class="eyebrow">Tokyo Add-On</span>
-              <h3>Extra Tokyo Days</h3>
-              <span>Add vertical city views, shopping depth, and a second Tokyo district without turning the trip into a list of boxes to tick.</span>
+              <span class="eyebrow">Etiquette</span>
+              <h3>Quiet Wins Most Of The Time</h3>
+              <span>Short dos and don'ts for temples, trains, onsen areas, and general public behavior.</span>
+            </div>
+            <div class="expand-icon">+</div>
+          </button>
+          <div class="expand-content">
+            <div class="detail-list">
+              <div class="detail-item">
+                <strong>Temples And Shrines</strong>
+                <span>Speak softly, do not block paths for photos, follow shoe-removal signs, and respect no-photo notices especially inside halls or private areas.</span>
+              </div>
+              <div class="detail-item">
+                <strong>Trains</strong>
+                <span>Let people off first, keep bags compact, avoid phone calls on regular trains, and treat commuter cars as quiet shared space. Food is normal on long-distance trains, not on packed commuter rides.</span>
+              </div>
+              <div class="detail-item">
+                <strong>Onsen Areas</strong>
+                <span>Wash before entering the bath, keep towels and hair out of the water, check tattoo policies, and leave phones in the locker room.</span>
+              </div>
+              <div class="detail-item">
+                <strong>General</strong>
+                <span>Carry a tiny trash bag, do not eat while wandering in places that ask you not to, and step aside before opening maps or stopping for photos.</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="expand-card">
+          <button class="expand-toggle" data-expand type="button">
+            <div>
+              <span class="eyebrow">Handy Phrases</span>
+              <h3>Simple Japanese That Actually Helps</h3>
+              <span>Enough to ask for directions, prices, photos, or help without trying to memorize a phrasebook.</span>
+            </div>
+            <div class="expand-icon">+</div>
+          </button>
+          <div class="expand-content">
+            <div class="detail-list">
+              <div class="detail-item">
+                <strong>Sumimasen</strong>
+                <span>Excuse me / sorry. Use it to get attention politely or slip past someone gently.</span>
+              </div>
+              <div class="detail-item">
+                <strong>Arigato gozaimasu</strong>
+                <span>Thank you very much. Safe everywhere.</span>
+              </div>
+              <div class="detail-item">
+                <strong>Kore wa ikura desu ka?</strong>
+                <span>How much is this?</span>
+              </div>
+              <div class="detail-item">
+                <strong>___ wa doko desu ka?</strong>
+                <span>Where is ___?</span>
+              </div>
+              <div class="detail-item">
+                <strong>Shashin o totte mo ii desu ka?</strong>
+                <span>May I take a photo?</span>
+              </div>
+              <div class="detail-item">
+                <strong>Tetsudatte moraemasu ka?</strong>
+                <span>Could you help me?</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="expand-card">
+          <button class="expand-toggle" data-expand type="button">
+            <div>
+              <span class="eyebrow">Memory Prompts</span>
+              <h3>One Shot To Capture In Each City</h3>
+              <span>A tiny prompt list so everyone comes home with a few strong visual memories instead of only random phone clutter.</span>
+            </div>
+            <div class="expand-icon">+</div>
+          </button>
+          <div class="expand-content">
+            <div class="detail-list">
+              <div class="detail-item">
+                <strong>Osaka</strong>
+                <span>Stand in Shinsekai or near Tsutenkaku after sunset and shoot upward once the signs are lit and the street has some movement.</span>
+              </div>
+              <div class="detail-item">
+                <strong>Kyoto</strong>
+                <span>Go early or late near Kiyomizu-dera / Higashiyama and frame the sloped streets before the crowd density flattens the mood.</span>
+              </div>
+              <div class="detail-item">
+                <strong>Hakone</strong>
+                <span>Use the lakeside torii or shrine approach when the light is softer. Mist and cloud actually help the atmosphere here.</span>
+              </div>
+              <div class="detail-item">
+                <strong>Mt. Fuji Area</strong>
+                <span>At Chureito or a clear Kawaguchiko viewpoint, arrive earlier than you think. The best shot is usually the calm window before the crowd fully thickens.</span>
+              </div>
+              <div class="detail-item">
+                <strong>Tokyo</strong>
+                <span>Save one skyline frame for Shibuya Sky after the city lights come on. Get the street energy first, then the panoramic payoff.</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="if-time-expands" class="section panel reveal">
+      <div class="section-header">
+        <div class="section-copy">
+          <span class="eyebrow">If Time Expands</span>
+          <h2>Upgrade The Route Without Breaking Its Shape</h2>
+          <div class="section-divider"></div>
+        </div>
+        <p>These are the easiest extensions if the trip grows. The goal is to add texture, not to destroy the pacing that makes the core seven days work.</p>
+      </div>
+
+      <div class="expand-grid">
+        <article class="expand-card">
+          <button class="expand-toggle" data-expand type="button">
+            <div>
+              <span class="eyebrow">Tokyo East Side</span>
+              <h3>Asakusa, Ueno, And Ameyoko</h3>
+              <span>Good if you want older street texture, market energy, snack lanes, and a different Tokyo mood from the Shibuya-first main route.</span>
             </div>
             <div class="expand-icon">+</div>
           </button>
@@ -1403,15 +2174,42 @@
             <div class="detail-list">
               <div class="detail-item">
                 <strong>Day 8</strong>
-                <span>Tokyo Skytree and Solamachi pair naturally because they are in the same complex. Akihabara works well later in the day when signage and store fronts feel more alive.</span>
+                <span>Asakusa and Nakamise give you temple frontage, souvenirs, and easy street snacks without needing a hyper-complex route.</span>
               </div>
               <div class="detail-item">
-                <strong>Day 9</strong>
-                <span>The Imperial Palace area gives you a calmer morning. Shinjuku then shifts the city mood back to density, towers, and station-scale energy.</span>
+                <strong>Add Ueno / Ameyoko</strong>
+                <span>Ameyoko keeps the energy up with market rhythm, quick eats, and easy browsing, while Ueno adds museum or park flexibility if the group splits.</span>
               </div>
               <div class="detail-item">
-                <strong>Extra Facts</strong>
-                <span>Tokyo Skytree is the tallest structure in Japan, and Solamachi is the large shopping complex at its base. Akihabara and Shinjuku add very different versions of Tokyo after a Shibuya-first main trip.</span>
+                <strong>Why It Is Worth It</strong>
+                <span>This add-on feels distinct from Shibuya rather than redundant, so the extra Tokyo time actually broadens the trip.</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="expand-card">
+          <button class="expand-toggle" data-expand type="button">
+            <div>
+              <span class="eyebrow">Tokyo West Side</span>
+              <h3>Shinjuku, Omoide Yokocho, And More Night Energy</h3>
+              <span>Use this if the group wants more skyline, station-city scale, yakitori alley atmosphere, and a second late-night district.</span>
+            </div>
+            <div class="expand-icon">+</div>
+          </button>
+          <div class="expand-content">
+            <div class="detail-list">
+              <div class="detail-item">
+                <strong>Day 8</strong>
+                <span>Shinjuku gives you tower views, huge station energy, department stores, and a denser after-dark feel than the main Shibuya close.</span>
+              </div>
+              <div class="detail-item">
+                <strong>Late-Night Angle</strong>
+                <span>Omoide Yokocho is worth it if the group wants compact lanes, smoke, signs, skewers, and a more nostalgic food-and-drinks atmosphere.</span>
+              </div>
+              <div class="detail-item">
+                <strong>Why It Is Worth It</strong>
+                <span>This is the easiest way to make the trip feel more city-heavy without reworking the Kansai or Fuji sections.</span>
               </div>
             </div>
           </div>
@@ -1422,7 +2220,7 @@
             <div>
               <span class="eyebrow">Future Trip</span>
               <h3>Keep Okinawa Separate</h3>
-              <span>Okinawa changes the shape of the trip. It works better as its own island-focused route than as an add-on to this Kansai-to-Tokyo flow.</span>
+              <span>Okinawa changes the trip into a flight-plus-islands route. It deserves its own center of gravity.</span>
             </div>
             <div class="expand-icon">+</div>
           </button>
@@ -1712,6 +2510,495 @@
             creditLabel: "Shibuya Night (HDR).jpg",
             creditLink: "https://commons.wikimedia.org/wiki/File:Shibuya_Night_(HDR).jpg",
             creditText: "Guwashi999, CC BY 2.0"
+          }
+        ]
+      }
+    };
+
+    const foodStops = {
+      osaka: {
+        kicker: "Food-first city",
+        title: "Osaka is where the route should lean hardest into eating",
+        description:
+          "This is the easiest stop for spontaneous food momentum. The districts are lively, the signature dishes are recognizable, and the city rewards low-pressure wandering more than overplanning.",
+        details: [
+          {
+            label: "Must-try lineup",
+            text: "Takoyaki, okonomiyaki, kushikatsu, gyoza, yakitori, and a late ramen stop all make sense here."
+          },
+          {
+            label: "Best areas",
+            text: "Dotonbori is the bright evening crawl, Shinsekai and Janjan Yokocho fit kushikatsu energy, and Kuromon works better earlier in the day for market-style grazing."
+          },
+          {
+            label: "Sit-down idea",
+            text: "Use Namba or Ura-Namba for okonomiyaki, izakaya, or yakiniku dinners. Rough spend is often about 1,500 to 4,500 yen per person before drinks."
+          }
+        ],
+        features: [
+          {
+            label: "Late-night save",
+            text: "Osaka is ideal for a ramen, gyoza, or konbini backup after a long walking day."
+          },
+          {
+            label: "Best station logic",
+            text: "Namba keeps Dotonbori easy, while Ebisucho or Dobutsuen-mae make the Shinsekai side simpler."
+          }
+        ]
+      },
+      kyoto: {
+        kicker: "Slow specialty stop",
+        title: "Kyoto is better for tea, sweets, and deliberate meals than for chaotic snack crawling",
+        description:
+          "Kyoto's food strength in this itinerary is not volume. It is the calmer side of the trip: matcha, soba, tofu, sweets, and a more intentional sit-down meal if you want one cultural food moment.",
+        details: [
+          {
+            label: "Must-try lineup",
+            text: "Matcha sweets, wagashi, soba, yudofu or tofu dishes, and a slower cafe stop fit Kyoto best."
+          },
+          {
+            label: "Best areas",
+            text: "Nishiki Market works for browsing, tasting, and gift ideas, while Higashiyama and Gion are better for tea houses, sweets, and a more atmospheric meal."
+          },
+          {
+            label: "Sit-down idea",
+            text: "A soba lunch or tofu-forward dinner in the Gion or Higashiyama side is a good fit. Rough spend runs from about 1,500 yen for simpler meals to 6,000 yen or more for refined dinners."
+          }
+        ],
+        features: [
+          {
+            label: "Late-night note",
+            text: "Kyoto can close earlier than Osaka or Tokyo, so do not count on the same late-night flexibility."
+          },
+          {
+            label: "Walking note",
+            text: "Market or old-street areas work better when you eat where permitted and then keep moving, rather than treating every lane like an open picnic zone."
+          }
+        ]
+      },
+      hakone: {
+        kicker: "Onsen-town food",
+        title: "Hakone is about timely station snacks and a calmer dinner, not endless late-night options",
+        description:
+          "Hakone should simplify the route. Buy what you need before the night gets too late, lean into ryokan or onsen-town food, and do not assume the same all-hours choice you get in Osaka or Tokyo.",
+        details: [
+          {
+            label: "Must-try lineup",
+            text: "Ryokan dinner if it is included, plus Hakone-Yumoto station-street snacks like sweets, fish cake, or quick bakery stops."
+          },
+          {
+            label: "Best areas",
+            text: "Hakone-Yumoto is the most practical food base because it is the first easy station handoff and the best place to buy snacks before going deeper into the region."
+          },
+          {
+            label: "Sit-down idea",
+            text: "If dinner is not included with your stay, an early onsen-town or lakeside meal is the safest approach. Rough spend is often about 1,500 to 4,000 yen depending on where you sit down."
+          }
+        ],
+        features: [
+          {
+            label: "Late-night note",
+            text: "Assume earlier closing times and buy backup snacks or drinks before checking in."
+          },
+          {
+            label: "Best practical move",
+            text: "Drop bags first or use station baggage help, then eat without hauling luggage through the area."
+          }
+        ]
+      },
+      fuji: {
+        kicker: "Scenic-day food",
+        title: "The Fuji area needs reliable food that does not steal time from good visibility",
+        description:
+          "This stop is about timing. You want practical meals that support the photo day instead of swallowing the clear-weather window you were protecting in the first place.",
+        details: [
+          {
+            label: "Must-try lineup",
+            text: "Yoshida udon is the cleanest local callout, and simple lakeside cafes or noodle lunches fit the pace well."
+          },
+          {
+            label: "Best areas",
+            text: "Shimoyoshida works well after the Chureito side, while Kawaguchiko is the easier fallback for station food, convenience items, or a calmer cafe stop."
+          },
+          {
+            label: "Sit-down idea",
+            text: "Use one practical noodle lunch and one scenic cafe stop rather than a long sit-down detour. Rough spend is often about 800 to 2,000 yen per person."
+          }
+        ],
+        features: [
+          {
+            label: "Timing note",
+            text: "If Fuji is clear, eat between viewpoints or after the best photo window instead of before it."
+          },
+          {
+            label: "Late-night note",
+            text: "The area is quieter, so buy backup snacks earlier than you would in a big city."
+          }
+        ]
+      },
+      tokyo: {
+        kicker: "Easy final-city food",
+        title: "Tokyo gives you the broadest choice, but Shibuya is enough for the main route",
+        description:
+          "The best version of the last day keeps the district tight instead of pretending Tokyo needs to be conquered in one shot. Shibuya alone already gives you strong options for classic meals, late snacks, and a skyline finish.",
+        details: [
+          {
+            label: "Must-try lineup",
+            text: "Sushi, tonkatsu, ramen, gyoza, yakiniku, desserts, and a conbini rescue run all fit naturally in the Tokyo finish."
+          },
+          {
+            label: "Best areas",
+            text: "Use Shibuya for the core route. If time expands, Asakusa and Ameyoko add street-food texture, while Omoide Yokocho adds a tighter late-night alley mood."
+          },
+          {
+            label: "Sit-down idea",
+            text: "A Shibuya tonkatsu, sushi, izakaya, or yakiniku dinner works well before or after Shibuya Sky. Rough spend often runs from about 1,500 yen for simpler meals to 6,000 yen or more with drinks."
+          }
+        ],
+        features: [
+          {
+            label: "Late-night save",
+            text: "Tokyo is the easiest final stop for dessert, ramen, gyoza, or a strong convenience-store fallback after a skyline slot."
+          },
+          {
+            label: "Best practical move",
+            text: "Book the skyline first if it matters, then let food orbit around that anchor rather than the other way around."
+          }
+        ]
+      }
+    };
+
+    const weatherCities = {
+      osaka: {
+        kicker: "Urban baseline",
+        title: "Osaka is the easiest city in the route to dress for",
+        description:
+          "Osaka is usually forgiving as long as you can handle walking, humidity in warmer stretches, and occasional rain. The city itself should not force bulky packing unless you are traveling in a colder season.",
+        details: [
+          {
+            label: "Weather vibe",
+            text: "Treat Osaka like a flexible city-weather stop: light urban layers most of the time, with breathable clothes mattering in warmer months and one thin extra layer helping after dark."
+          },
+          {
+            label: "Bring",
+            text: "Comfortable walking shoes, a compact umbrella, and a light overshirt or jacket cover most Osaka scenarios well."
+          },
+          {
+            label: "Packing trap",
+            text: "Do not pack the whole trip around Osaka alone. Hakone and the Fuji side are the stops that change the packing logic."
+          }
+        ],
+        features: [
+          {
+            label: "Best rain fix",
+            text: "Covered arcades, food halls, and Kaiyukan keep a drizzly Osaka day easy to salvage."
+          },
+          {
+            label: "Do not overpack",
+            text: "One solid city shoe and one extra evening layer are usually enough here."
+          }
+        ]
+      },
+      kyoto: {
+        kicker: "Long-walk city",
+        title: "Kyoto rewards comfort more than fashion-first packing",
+        description:
+          "Kyoto's challenge is not only temperature. It is sustained walking, temple grounds, slopes, and periods of exposure where small wardrobe mistakes feel bigger than they do in Osaka or Tokyo.",
+        details: [
+          {
+            label: "Weather vibe",
+            text: "Expect more walking and less spontaneous ducking indoors. A day that feels fine at breakfast can feel very different by mid-afternoon if you packed the wrong shoes or no light layer."
+          },
+          {
+            label: "Bring",
+            text: "Breathable clothes, one thin layer, socks and shoes that are easy to live in all day, and a compact umbrella or shell if rain is possible."
+          },
+          {
+            label: "Packing trap",
+            text: "Kyoto is where people regret fashion shoes, stiff boots, or carrying too much in the day bag."
+          }
+        ],
+        features: [
+          {
+            label: "Best practice",
+            text: "Start the morning slightly layered and expect to peel off a layer once the walking builds up."
+          },
+          {
+            label: "Temple note",
+            text: "If a site asks for shoe removal, easier footwear is noticeably nicer than lace-heavy options."
+          }
+        ]
+      },
+      hakone: {
+        kicker: "Cooler pivot",
+        title: "Hakone is where the route stops acting like a pure city trip",
+        description:
+          "Hakone is cooler, more changeable, and less forgiving than Osaka or Tokyo if you show up with only city-weather assumptions. Lake wind, mist, or hill weather can shift the feel of the day quickly.",
+        details: [
+          {
+            label: "Weather vibe",
+            text: "Treat Hakone like a mild mountain-and-lake stop rather than another city. The air can feel cooler and wetter even when the urban parts of the trip feel easy."
+          },
+          {
+            label: "Bring",
+            text: "One actually warm layer, a light rain shell, quick-dry socks, and a small onsen kit should be easy to reach."
+          },
+          {
+            label: "Packing trap",
+            text: "The classic mistake is burying your warm layer in the main suitcase because Osaka felt mild."
+          }
+        ],
+        features: [
+          {
+            label: "Rain note",
+            text: "A shell works better than relying only on an umbrella if the wind or lake weather picks up."
+          },
+          {
+            label: "Best practice",
+            text: "Keep the extra layer accessible in the day bag on the Hakone transfer day."
+          }
+        ]
+      },
+      fuji: {
+        kicker: "Coldest stop",
+        title: "The Mt. Fuji area is the place most likely to punish optimistic packing",
+        description:
+          "Even when you are not climbing, the scenic side of the Fuji region can feel colder, windier, and more exposed than the cities. Dress for flexibility and assume viewpoint time amplifies discomfort fast.",
+        details: [
+          {
+            label: "Weather vibe",
+            text: "This is the route's coldest and most weather-sensitive segment. Morning chill and exposed viewpoints make a plain city outfit feel thin fast."
+          },
+          {
+            label: "Bring",
+            text: "A warm midlayer, light shell, stable shoes, and a small plan for wind or surprise showers are the core additions here."
+          },
+          {
+            label: "Packing trap",
+            text: "People underpack for Fuji when they assume Tokyo temperatures will translate directly to lakeside or viewpoint conditions."
+          }
+        ],
+        features: [
+          {
+            label: "Best practice",
+            text: "Wear layers you can strip off later, not one bulky piece you will regret once the sun comes out."
+          },
+          {
+            label: "Photo-day note",
+            text: "Protect your phone or camera from light rain and wind so you do not waste the best visibility window fumbling with gear."
+          }
+        ]
+      },
+      tokyo: {
+        kicker: "Urban finish",
+        title: "Tokyo packs like Osaka, but longer city days still reward one flexible layer",
+        description:
+          "Tokyo is straightforward once you remember how much walking, shopping, transit, and indoor AC can stack up across one final day. You do not need mountain gear here, but you do want flexibility.",
+        details: [
+          {
+            label: "Weather vibe",
+            text: "Think city-heat, indoor-cooling swings, and a night finish rather than mountain weather. The final day is long enough that a thin layer still earns its space."
+          },
+          {
+            label: "Bring",
+            text: "Sneakers, one light layer, compact rain backup, and a bag with room left for shopping are the practical Tokyo choices."
+          },
+          {
+            label: "Packing trap",
+            text: "An overstuffed day bag makes the Tokyo finish feel worse, especially if you add shopping or a skyline booking."
+          }
+        ],
+        features: [
+          {
+            label: "Best practice",
+            text: "Shop earlier, skyline later, and leave some luggage space free for purchases rather than squeezing everything from the start."
+          },
+          {
+            label: "Rain note",
+            text: "Tokyo has enough indoor backups that rain changes the route less here than it does around Fuji."
+          }
+        ]
+      }
+    };
+
+    const toolkitTopics = {
+      shinkansen: {
+        kicker: "Main booking day",
+        title: "Lock in the Shin-Osaka to Odawara shinkansen cleanly",
+        description:
+          "This is the route's biggest single transfer. A reserved seat, a clear departure time, and luggage sorted before the platform matter more than trying to squeeze in extra sightseeing around it.",
+        details: [
+          {
+            label: "Approx time",
+            text: "Plan for roughly 2 hours on the Tokaido Shinkansen depending on train type and timetable, plus extra time for finding the platform and moving bags calmly."
+          },
+          {
+            label: "What to book ahead",
+            text: "If you want a specific train, a specific seat, or holiday-week certainty, use SmartEX ahead of time instead of leaving the whole move to the station."
+          },
+          {
+            label: "Oversized baggage",
+            text: "On the Tokaido Shinkansen, bags with total dimensions over 160 cm need an oversized baggage seat reservation rather than a last-second platform improvisation."
+          }
+        ],
+        features: [
+          {
+            label: "Best practice",
+            text: "Screenshot the booking, car number, and seat before travel day so the group is not searching email on the platform."
+          },
+          {
+            label: "Guardrail",
+            text: "Treat Odawara as the Hakone handoff point, not as a bonus wandering stop with full luggage."
+          }
+        ]
+      },
+      hakone: {
+        kicker: "Regional handoff",
+        title: "Odawara to Hakone should feel like one clear switch, not a second complicated travel day",
+        description:
+          "Once the bullet train work is done, the job is to get into Hakone mode fast: local transport, luggage handled, and enough simplicity left to enjoy the overnight instead of managing it.",
+        details: [
+          {
+            label: "Approx time",
+            text: "Odawara to Hakone-Yumoto is a short local transfer, about 15 minutes by train, which is why it works well as the first reset point."
+          },
+          {
+            label: "Pass logic",
+            text: "For this route shape, the Hakone area-only Freepass makes more sense than the round-trip-from-Tokyo version because you are entering from Osaka and continuing onward."
+          },
+          {
+            label: "Luggage help",
+            text: "The Hakone-Yumoto Sightseeing Service Center sits right outside the ticket gate and is the cleanest place to ask about passes or use temporary baggage storage before exploring."
+          }
+        ],
+        features: [
+          {
+            label: "Best practice",
+            text: "Buy snacks before the mountain or lake side of the day if you arrive hungry."
+          },
+          {
+            label: "What to book early",
+            text: "Your ryokan or onsen stay matters more to prebook than the local transit itself."
+          }
+        ]
+      },
+      cards: {
+        kicker: "Low-friction transit",
+        title: "An IC card keeps the city parts of the route simple",
+        description:
+          "For Osaka, Kyoto, and Tokyo local movement, tapping through gates is dramatically better than constantly buying single tickets. It also helps with small convenience-store or vending purchases.",
+        details: [
+          {
+            label: "What works",
+            text: "ICOCA, Suica, and PASMO are the main rechargeable IC card families most travelers think about, and they are broadly interoperable across the big-city parts of the route."
+          },
+          {
+            label: "Best use",
+            text: "Use one card for metros, local trains, buses where accepted, and small purchases instead of switching systems every time you change city."
+          },
+          {
+            label: "Cash backup",
+            text: "Keep some cash even if you use an IC card, because not every rural machine, bus, or edge-case purchase behaves the same way."
+          }
+        ],
+        features: [
+          {
+            label: "Best practical move",
+            text: "Pick one card family, load it once, and stop thinking about local tickets unless a specific pass clearly saves you money."
+          },
+          {
+            label: "Pass note",
+            text: "A full nationwide rail pass is usually not the clean first answer for this exact route unless you add more long-distance rail than the main plan already includes."
+          }
+        ]
+      },
+      kyoto: {
+        kicker: "Less bus drag",
+        title: "Kyoto movement gets better when you simplify the shape of the day",
+        description:
+          "Kyoto punishes overplanning more than Osaka. The fastest fix is to reduce cross-city zigzags and let rail plus walking handle more of the day.",
+        details: [
+          {
+            label: "Osaka to Kyoto",
+            text: "The Osaka to Kyoto day trip is short compared with the later transfer days, which is why Kyoto works well without a hotel move."
+          },
+          {
+            label: "Nishiki move",
+            text: "Kyoto City's own access guidance points to Subway Karasuma Line -> Shijo Station -> roughly a 5-minute walk for Nishiki Market, which is often cleaner than defaulting to a bus."
+          },
+          {
+            label: "Guardrail",
+            text: "Pick one cluster like Higashiyama / Gion or Fushimi Inari plus one nearby follow-up instead of trying to cover the entire city."
+          }
+        ],
+        features: [
+          {
+            label: "Best practice",
+            text: "Rail first, walking second, and bus only when it clearly saves you time."
+          },
+          {
+            label: "Luggage rule",
+            text: "Leave big bags in Osaka or a station locker. Kyoto old streets are not the place to drag your full transfer load."
+          }
+        ]
+      },
+      tokyo: {
+        kicker: "Final-day logistics",
+        title: "Shibuya is easiest when you keep the finish district-first and luggage-light",
+        description:
+          "Tokyo can close the trip cleanly if you stop trying to do the whole city. The best result is one strong district, one skyline booking, and no unnecessary baggage chaos.",
+        details: [
+          {
+            label: "Station side",
+            text: "Use the Hachiko side of Shibuya when the goal is the crossing, Center Gai, and the most instantly recognizable street energy."
+          },
+          {
+            label: "Luggage fallback",
+            text: "JR East's Travel Service Center at Shibuya has ticket help, tourist information, and luggage-related services if you need one more practical stop before roaming."
+          },
+          {
+            label: "Return from Fuji",
+            text: "The Fuji area back into Tokyo usually lands around the 2-hour mark on direct options or highway bus, so plan the final day as a strong district finish rather than a giant city sweep."
+          }
+        ],
+        features: [
+          {
+            label: "What to book early",
+            text: "If sunset or evening skyline views matter, reserve Shibuya Sky before the day itself starts squeezing your options."
+          },
+          {
+            label: "Extra-day logic",
+            text: "If Tokyo expands, add one contrasting district like Asakusa / Ameyoko or Shinjuku instead of five half-finished ones."
+          }
+        ]
+      },
+      group: {
+        kicker: "Keep everyone aligned",
+        title: "Group sync is a real travel tool, not a soft extra",
+        description:
+          "The bigger the group, the more important it is to stop assuming everyone is tracking the same plan. Explicit roles and shared screenshots reduce most avoidable transfer stress.",
+        details: [
+          {
+            label: "Roles",
+            text: "Assign one navigator, one ticket or booking checker, one luggage sweep, and one hotel or check-in lead on the main travel days."
+          },
+          {
+            label: "Meet point rule",
+            text: "Agree on one fallback meet point in each major station before anyone peels off for food, bathrooms, or shopping."
+          },
+          {
+            label: "Night-before prep",
+            text: "Share hotel pins, train numbers, official booking screenshots, and the day's first destination to the whole group the night before."
+          }
+        ],
+        features: [
+          {
+            label: "Best practical move",
+            text: "Do a 60-second bag count before every train boarding and before leaving every platform."
+          },
+          {
+            label: "What keeps pace",
+            text: "Let one person watch the clock while another watches the bags. That single split of responsibility solves a lot."
           }
         ]
       }
@@ -2240,10 +3527,16 @@
 
     const stopButtons = [...document.querySelectorAll("[data-stop]")];
     const dayButtons = [...document.querySelectorAll("[data-day]")];
+    const foodButtons = [...document.querySelectorAll("[data-food]")];
+    const weatherButtons = [...document.querySelectorAll("[data-weather]")];
+    const toolkitButtons = [...document.querySelectorAll("[data-toolkit]")];
     const routeButtons = [...document.querySelectorAll("[data-route]")];
     const galleryButtons = [...document.querySelectorAll("[data-gallery]")];
     const stopPanel = document.getElementById("stop-detail-panel");
     const dayPanel = document.getElementById("day-detail-panel");
+    const foodPanel = document.getElementById("food-detail-panel");
+    const weatherPanel = document.getElementById("weather-detail-panel");
+    const toolkitPanel = document.getElementById("toolkit-detail-panel");
     const routePanel = document.getElementById("route-detail-panel");
     const modal = document.getElementById("gallery-modal");
     const galleryImage = document.getElementById("gallery-image");
@@ -2311,6 +3604,21 @@
       dayButtons.forEach((button) => {
         button.classList.toggle("active", Number(button.dataset.day) === index);
       });
+    }
+
+    function showFood(key) {
+      renderInfoPanel(foodPanel, foodStops[key]);
+      setActive(foodButtons, "food", key);
+    }
+
+    function showWeather(key) {
+      renderInfoPanel(weatherPanel, weatherCities[key]);
+      setActive(weatherButtons, "weather", key);
+    }
+
+    function showToolkit(key) {
+      renderInfoPanel(toolkitPanel, toolkitTopics[key]);
+      setActive(toolkitButtons, "toolkit", key);
     }
 
     function showRoute(index) {
@@ -2411,6 +3719,18 @@
       button.addEventListener("click", () => showDay(Number(button.dataset.day)));
     });
 
+    foodButtons.forEach((button) => {
+      button.addEventListener("click", () => showFood(button.dataset.food));
+    });
+
+    weatherButtons.forEach((button) => {
+      button.addEventListener("click", () => showWeather(button.dataset.weather));
+    });
+
+    toolkitButtons.forEach((button) => {
+      button.addEventListener("click", () => showToolkit(button.dataset.toolkit));
+    });
+
     routeButtons.forEach((button) => {
       button.addEventListener("click", () => showRoute(Number(button.dataset.route)));
     });
@@ -2450,6 +3770,9 @@
 
     showStop("osaka");
     showDay(0);
+    showFood("osaka");
+    showWeather("osaka");
+    showToolkit("shinkansen");
     showRoute(0);
     renderCredits();
   </script>
