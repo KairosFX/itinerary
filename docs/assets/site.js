@@ -959,6 +959,37 @@ const PAGE_JA_TRANSLATIONS = {
       selector: "#route-atlas .section-header > p",
       text: "このセクションは地図ではなく、視覚的な導入レイヤーです。回転するハイライト、季節の判断材料、そして正しいページへの導線をすばやく確認できます。"
     },
+    { selector: "#route-atlas .feature-slide:nth-child(1) .badge", text: "到着ムード" },
+    { selector: "#route-atlas .feature-slide:nth-child(1) h3", text: "大阪は最初の夜を明るく、やさしく始めてくれる" },
+    { selector: "#route-atlas .feature-slide:nth-child(1) p", text: "大阪は最初の勝ち筋です。食べ歩き、強い視覚、遅い時間の選択肢があり、旅がいきなり詰まった感じになりません。" },
+    { selector: "#route-atlas .feature-slide:nth-child(1) .route-spotlight-actions .button-primary", text: "大阪をプレビュー" },
+    { selector: "#route-atlas .feature-slide:nth-child(1) .route-spotlight-actions .button-secondary", text: "旅程を開く" },
+    { selector: "#route-atlas .feature-slide:nth-child(2) .badge", text: "文化の対比" },
+    { selector: "#route-atlas .feature-slide:nth-child(2) h3", text: "京都は散らばるより、1日の集中したレーンが強い" },
+    { selector: "#route-atlas .feature-slide:nth-child(2) p", text: "京都は選び方が大事です。1つの地区をきれいに歩くほうが、1日で全部を消費しようとするより着地が良くなります。" },
+    { selector: "#route-atlas .feature-slide:nth-child(2) .route-spotlight-actions .button-primary", text: "京都をプレビュー" },
+    { selector: "#route-atlas .feature-slide:nth-child(2) .route-spotlight-actions .button-secondary", text: "文化メモを開く" },
+    { selector: "#route-atlas .feature-slide:nth-child(3) .badge", text: "季節の判断" },
+    { selector: "#route-atlas .feature-slide:nth-child(3) h3", text: "富士は今も天気主導の中心です" },
+    { selector: "#route-atlas .feature-slide:nth-child(3) p", text: "視界は順番より大事です。ライブ天気を見て、もっとも抜ける時間帯を優先してください。" },
+    { selector: "#route-atlas .feature-slide:nth-child(3) .route-spotlight-actions .button-primary", text: "天気を見る" },
+    { selector: "#route-atlas .feature-slide:nth-child(3) .route-spotlight-actions .button-secondary", text: "富士プランを開く" },
+    { selector: "#route-atlas .feature-slide:nth-child(4) .badge", text: "季節の軸" },
+    { selector: "#route-atlas .feature-slide:nth-child(4) h3", text: "花の時期は公式の桜予報を軸にする" },
+    { selector: "#route-atlas .feature-slide:nth-child(4) p", text: "日付にまだ余白があるなら、まず開花時期を確認し、その後でルート順を固めるのが安全です。" },
+    { selector: "#route-atlas .feature-slide:nth-child(4) .route-spotlight-actions .button-primary", text: "桜予報を開く" },
+    { selector: "#route-atlas .feature-slide:nth-child(4) .route-spotlight-actions .button-secondary", text: "パンフレットを見る" },
+    { selector: "#route-atlas .highlight-card-copy .badge", text: "季節の時期" },
+    { selector: "#route-atlas .highlight-card-copy strong", text: "桜の時期は後付けではなく、計画レイヤーに置く" },
+    { selector: "#route-atlas .highlight-card-copy span:last-child", text: "桜の季節を狙うなら、最終的な順番を固定する前に公式予報を見てください。" },
+    { selector: "#route-atlas .highlight-mini-card:nth-child(1) strong", text: "食先行のスタート" },
+    { selector: "#route-atlas .highlight-mini-card:nth-child(1) span", text: "大阪は、視覚的で、楽で、圧の低い最初の夜を作れるから強いです。" },
+    { selector: "#route-atlas .highlight-mini-card:nth-child(2) strong", text: "天気主導の準備" },
+    { selector: "#route-atlas .highlight-mini-card:nth-child(2) span", text: "富士と箱根は、当日の確認と軽い持ち物の差で見え方が変わります。" },
+    { selector: "#route-atlas .highlight-mini-card:nth-child(3) strong", text: "高速モバイルの控え" },
+    { selector: "#route-atlas .highlight-mini-card:nth-child(3) span", text: "電波、体力、集中力が薄い時は要点ページを開くのが最短です。" },
+    { selector: "#route-atlas .highlight-mini-card:nth-child(4) strong", text: "より深いビジュアルガイド" },
+    { selector: "#route-atlas .highlight-mini-card:nth-child(4) span", text: "グループが一体型の濃い版を欲しがるなら、完全ガイドへ進みます。" },
     { selector: "#live-map .section-copy .eyebrow", text: "ライブナビ地図" },
     { selector: "#live-map .section-copy h2", text: "GPS、ルートピン、Google マップ連携で本物の地図を使う" },
     {
@@ -977,7 +1008,7 @@ const PAGE_JA_TRANSLATIONS = {
       selector: "#trip-weather .section-header > p",
       text: "5つの主要地点の予報を、旅行中に使える判断へ変換して表示します。富士は視界と霧リスクも別で見ます。"
     },
-    { selector: "#japan-explorer .section-copy .eyebrow", text: "Japan Explorer" },
+    { selector: "#japan-explorer .section-copy .eyebrow", text: "日本探索" },
     { selector: "#japan-explorer .section-copy h2", text: "主要な都市と追加候補を、開きすぎずに比較する" },
     {
       selector: "#japan-explorer .section-header > p",
@@ -1081,6 +1112,54 @@ const PAGE_JA_TRANSLATIONS = {
       selector: ".tool-stack .tool-card:first-child .note-band",
       text: "広告の多い埋め込みウィジェットは使わず、外部検索ページを開きます。空港コードを入れると見やすくなります。"
     },
+    { selector: "#trip-profile .control-card:nth-child(1) .control-label", text: "食の優先度" },
+    { selector: "#trip-profile .control-card:nth-child(1) .control-copy", text: "何を食べたいかを、どれだけ先に計画へ反映するかです。" },
+    { selector: "#trip-profile .control-card:nth-child(1) .range-meta span:first-child", text: "軽め" },
+    { selector: "#trip-profile .control-card:nth-child(1) .range-meta span:last-child", text: "食先行" },
+    { selector: "#trip-profile .control-card:nth-child(2) .control-label", text: "景色と写真の優先度" },
+    { selector: "#trip-profile .control-card:nth-child(2) .control-copy", text: "景色の中盤と写真の時間帯を、どれだけ旅の中心に置くかです。" },
+    { selector: "#trip-profile .control-card:nth-child(2) .range-meta span:first-child", text: "補助的" },
+    { selector: "#trip-profile .control-card:nth-child(2) .range-meta span:last-child", text: "主軸" },
+    { selector: "#trip-profile .control-card:nth-child(3) .control-label", text: "夜の勢い" },
+    { selector: "#trip-profile .control-card:nth-child(3) .control-copy", text: "大阪と東京を、どれだけ明かり、遅い食事、都市の強さに寄せるかです。" },
+    { selector: "#trip-profile .control-card:nth-child(3) .range-meta span:first-child", text: "静かめ" },
+    { selector: "#trip-profile .control-card:nth-child(3) .range-meta span:last-child", text: "夜の街" },
+    { selector: "#trip-profile .control-card:nth-child(4) .control-label", text: "余白の量" },
+    { selector: "#trip-profile .control-card:nth-child(4) .control-copy", text: "移動の合間にどれだけゆとりや、柔らかいペースを残すかです。" },
+    { selector: "#trip-profile .control-card:nth-child(4) .range-meta span:first-child", text: "詰める" },
+    { selector: "#trip-profile .control-card:nth-child(4) .range-meta span:last-child", text: "ゆるめ" },
+    { selector: "#trip-profile .control-card:nth-child(5) .control-label", text: "天気の見通し" },
+    { selector: "#trip-profile .control-card:nth-child(5) .control-copy", text: "富士へどれだけ寄せられるかを、現実的な予報で判断させます。" },
+    { selector: "#trip-profile #weather-mode option[value=\"mixed\"]", text: "混合 / 未確定" },
+    { selector: "#trip-profile #weather-mode option[value=\"clear\"]", text: "概ね晴れ" },
+    { selector: "#trip-profile #weather-mode option[value=\"cloudy\"]", text: "曇り / リスク高め" },
+    { selector: "#trip-profile .control-card:nth-child(6) .control-label", text: "予算の形" },
+    { selector: "#trip-profile .control-card:nth-child(6) .control-copy", text: "コスパ優先と、柔らかい快適さ優先のどちらに寄せるかです。" },
+    { selector: "#trip-profile #budget-mode option[value=\"balanced\"]", text: "バランス型" },
+    { selector: "#trip-profile #budget-mode option[value=\"value\"]", text: "節約寄り" },
+    { selector: "#trip-profile #budget-mode option[value=\"comfort\"]", text: "快適さ寄り" },
+    { selector: "#trip-profile .control-card:nth-child(7) .control-label", text: "同行人数" },
+    { selector: "#trip-profile .control-card:nth-child(7) .control-copy", text: "一人、二人、小グループでは駅や食事の動き方が変わります。" },
+    { selector: "#trip-profile #party-mode option[value=\"couple\"]", text: "二人 / ペア" },
+    { selector: "#trip-profile #party-mode option[value=\"solo\"]", text: "一人" },
+    { selector: "#trip-profile #party-mode option[value=\"group\"]", text: "小グループ" },
+    { selector: "#trip-profile .toggle-chip:nth-child(1) span", text: "温泉や旅館の時間を入れたい" },
+    { selector: "#trip-profile .toggle-chip:nth-child(2) span", text: "買い物の締めを強くしたい" },
+    { selector: "#trip-profile .toggle-chip:nth-child(3) span", text: "乗り換えを簡単にしたい" },
+    { selector: "#trip-profile .toggle-chip:nth-child(4) span", text: "文化の深さを増やしたい" },
+    { selector: "#trip-profile #reset-recommendations", text: "プロフィールをリセット" },
+    { selector: "#trip-profile .engine-actions .button-secondary", text: "要点の控えを開く" },
+    { selector: "#trip-profile .engine-summary-card .eyebrow", text: "プロフィール結果" },
+    { selector: "#trip-profile .engine-stat:nth-child(1) span", text: "先に開く" },
+    { selector: "#trip-profile .engine-stat:nth-child(2) span", text: "天気を見る" },
+    { selector: "#trip-profile .engine-stat:nth-child(3) span", text: "先に共有" },
+    { selector: "#trip-profile .signal-board-copy strong", text: "ルートシグナルボード" },
+    { selector: "#trip-profile .signal-board-copy span", text: "エンジンが再計算するたびに、この重みが動きます。" },
+    { selector: "#trip-profile [data-city-row=\"osaka\"] .signal-label span", text: "到着 + 食事" },
+    { selector: "#trip-profile [data-city-row=\"kyoto\"] .signal-label span", text: "文化の対比" },
+    { selector: "#trip-profile [data-city-row=\"hakone\"] .signal-label span", text: "休息 + 温泉" },
+    { selector: "#trip-profile [data-city-row=\"fuji\"] .signal-label span", text: "景色のリスク" },
+    { selector: "#trip-profile [data-city-row=\"tokyo\"] .signal-label span", text: "買い物 + 締め" },
     { selector: "label[for=\"site-search\"]", text: "旅行ガイドを検索" },
     { selector: "#site-search", placeholder: "富士、新幹線、餃子、温泉、京都、スナップショットで検索" }
   ],
@@ -2613,6 +2692,95 @@ const RECOMMENDATION_ITEMS = [
     mobileFit: 0.9
   }
 ];
+
+const RECOMMENDATION_PAGE_LABELS = {
+  ja: {
+    Itinerary: "旅程",
+    "Food Guide": "食事ガイド",
+    Toolkit: "準備ガイド",
+    "Culture Notes": "文化メモ",
+    "Quick Snapshot": "要点ページ",
+    "Full Guide": "完全ガイド"
+  }
+};
+
+const RECOMMENDATION_ITEM_LOCALES = {
+  "osaka-arrival-lane": {
+    title: "大阪の到着レーン",
+    text: "最初の夜は食事とネオンに任せて、到着直後の判断を軽くします。",
+    tags: ["到着が楽", "食重視", "夜の勢い"]
+  },
+  "kyoto-contrast-day": {
+    title: "京都の対比デー",
+    text: "ホテル移動を増やさずに、1日の集中した文化の対比を入れます。",
+    tags: ["文化重視", "歩く日", "歴史の対比"]
+  },
+  "hakone-reset-night": {
+    title: "箱根のリセット泊",
+    text: "東へ向かう長い移動の途中で、湖と温泉の空気に切り替えます。",
+    tags: ["温泉向き", "景色の継ぎ目", "休息ペース"]
+  },
+  "fuji-visibility-play": {
+    title: "富士の視界プレイブック",
+    text: "景色の日は順番を固定せず、見える時間帯を先に取りにいきます。",
+    tags: ["写真映え", "天気主導", "順番は柔軟"]
+  },
+  "tokyo-finish-burst": {
+    title: "東京フィニッシュ集中型",
+    text: "締めは渋谷に寄せて、買い物、食事、夜景を一地区でまとめます。",
+    tags: ["買い物締め", "夜の見返り", "フィナーレ"]
+  },
+  "osaka-food-radar": {
+    title: "大阪フードレーダー",
+    text: "街歩きの食、遅い時間の保険、気楽な満足感を大阪側で強く取ります。",
+    tags: ["ストリートフード", "コスパ", "遅い時間の保険"]
+  },
+  "hakone-ryokan-layer": {
+    title: "箱根旅館フードレイヤー",
+    text: "旅館の食事と早仕舞い前提で、箱根を驚きの少ない夜にします。",
+    tags: ["旅館の夕食", "温泉街", "実用的な保険"]
+  },
+  "shinkansen-move-day-prep": {
+    title: "新幹線移動日の準備",
+    text: "最も重い移動日に向けて、荷物とスクリーンショットの指示を整理します。",
+    tags: ["移動が楽", "移動日の軸", "先に保存"]
+  },
+  "culture-and-phrases": {
+    title: "文化とフレーズのレイヤー",
+    text: "マナー、温泉の基本、短い表現で現地の摩擦を減らします。",
+    tags: ["マナー", "フレーズ", "旅行を滑らかに"]
+  },
+  "quick-snapshot-backup": {
+    title: "クイックスナップショット",
+    text: "電波が弱い時やグループ共有用に、最も軽い版をすぐ開けます。",
+    tags: ["低電波向け", "共有向け", "高速モバイル"]
+  },
+  "full-interactive-guide": {
+    title: "完全インタラクティブガイド",
+    text: "分割ページではなく、画像も含めた一体型の詳しい版を開きます。",
+    tags: ["深掘り", "画像多め", "全レイヤー"]
+  },
+  "station-shortcuts": {
+    title: "駅の近道とロッカー",
+    text: "東京側の到着、ロッカー、出口選びを散らからないように整理します。",
+    tags: ["出口が楽", "ロッカー", "渋谷側"]
+  }
+};
+
+function getLocalizedRecommendationItem(item, locale = getActiveLocale()) {
+  if (locale !== "ja") {
+    return item;
+  }
+
+  const localized = RECOMMENDATION_ITEM_LOCALES[item.id] ?? {};
+  return {
+    ...item,
+    title: localized.title ?? item.title,
+    text: localized.text ?? item.text,
+    tags: localized.tags ?? item.tags,
+    page: localized.page ?? RECOMMENDATION_PAGE_LABELS.ja[item.page] ?? item.page
+  };
+}
 
 function initReveal() {
   const revealElements = [...document.querySelectorAll(".reveal")];
@@ -5605,46 +5773,47 @@ function getRecommendationProfile(form) {
 }
 
 function scoreRecommendation(item, profile) {
+  const locale = getActiveLocale();
   const weightedReasons = [
     {
       value: item.traits.food * (0.8 + profile.food * 3.2),
-      reason: "Matches a food-heavy version of the trip."
+      reason: locale === "ja" ? "食重視の旅の形に合います。" : "Matches a food-heavy version of the trip."
     },
     {
       value: item.traits.scenery * (0.8 + profile.scenery * 3.1),
-      reason: "Supports the scenery and photo weight you picked."
+      reason: locale === "ja" ? "選んだ景色と写真の重みを支えます。" : "Supports the scenery and photo weight you picked."
     },
     {
       value: item.traits.night * (0.6 + profile.night * 2.8),
-      reason: "Fits the city-energy level you want at night."
+      reason: locale === "ja" ? "夜に欲しい都市の勢いに合います。" : "Fits the city-energy level you want at night."
     },
     {
       value: item.traits.relaxed * (0.6 + profile.relaxed * 2.6),
-      reason: "Keeps more breathing room in the route."
+      reason: locale === "ja" ? "ルートに余白を残せます。" : "Keeps more breathing room in the route."
     },
     {
       value: item.traits.dense * (0.5 + profile.dense * 2),
-      reason: "Still works if you want a tighter schedule."
+      reason: locale === "ja" ? "やや詰めた日程でもまだ機能します。" : "Still works if you want a tighter schedule."
     },
     {
       value: item.traits.photo * (0.5 + profile.photo * 2.4),
-      reason: "Has strong visual payoff."
+      reason: locale === "ja" ? "視覚的な見返りが強いです。" : "Has strong visual payoff."
     },
     {
       value: item.traits.convenience * (profile.easyTransfers ? 2.6 : 0.8),
-      reason: "Reduces transfer friction."
+      reason: locale === "ja" ? "乗り換えの摩擦を減らせます。" : "Reduces transfer friction."
     },
     {
       value: item.traits.shopping * (profile.shopping ? 2.3 : 0.35),
-      reason: "Supports a shopping-heavy finish."
+      reason: locale === "ja" ? "買い物重視の締めを支えます。" : "Supports a shopping-heavy finish."
     },
     {
       value: item.traits.onsen * (profile.onsen ? 2.5 : 0.2),
-      reason: "Covers the onsen or ryokan ask."
+      reason: locale === "ja" ? "温泉や旅館を入れたい希望を拾えます。" : "Covers the onsen or ryokan ask."
     },
     {
       value: item.traits.culture * (profile.culture ? 2.4 : 0.45),
-      reason: "Pushes the trip deeper into culture and etiquette context."
+      reason: locale === "ja" ? "文化やマナーの文脈を深くできます。" : "Pushes the trip deeper into culture and etiquette context."
     }
   ];
 
@@ -5660,7 +5829,7 @@ function scoreRecommendation(item, profile) {
     score += 1.1;
     bonusReasons.push({
       value: 1.1,
-      reason: "Captures your food-plus-nightlife bias right at the start."
+      reason: locale === "ja" ? "旅の始まりから食と夜の好みを強く拾えます。" : "Captures your food-plus-nightlife bias right at the start."
     });
   }
 
@@ -5668,7 +5837,7 @@ function scoreRecommendation(item, profile) {
     score += 1.4;
     bonusReasons.push({
       value: 1.4,
-      reason: "The forecast can support a stronger Fuji gamble."
+      reason: locale === "ja" ? "予報が富士に強く寄せる余地を支えています。" : "The forecast can support a stronger Fuji gamble."
     });
   }
 
@@ -5680,7 +5849,7 @@ function scoreRecommendation(item, profile) {
     score += 0.75;
     bonusReasons.push({
       value: 0.75,
-      reason: "Still holds up if the weather underperforms."
+      reason: locale === "ja" ? "天気が弱くてもまだ崩れにくいです。" : "Still holds up if the weather underperforms."
     });
   }
 
@@ -5688,7 +5857,7 @@ function scoreRecommendation(item, profile) {
     score += 1.05;
     bonusReasons.push({
       value: 1.05,
-      reason: "Fits a softer reset with onsen time."
+      reason: locale === "ja" ? "温泉時間を含む柔らかいリセットに合います。" : "Fits a softer reset with onsen time."
     });
   }
 
@@ -5696,7 +5865,7 @@ function scoreRecommendation(item, profile) {
     score += 0.95;
     bonusReasons.push({
       value: 0.95,
-      reason: "Supports a shopping-heavy city finish."
+      reason: locale === "ja" ? "買い物重視の都市締めを支えます。" : "Supports a shopping-heavy city finish."
     });
   }
 
@@ -5704,7 +5873,7 @@ function scoreRecommendation(item, profile) {
     score += 0.9;
     bonusReasons.push({
       value: 0.9,
-      reason: "Matches the extra culture depth you switched on."
+      reason: locale === "ja" ? "追加した文化重視の深さに合います。" : "Matches the extra culture depth you switched on."
     });
   }
 
@@ -5712,7 +5881,7 @@ function scoreRecommendation(item, profile) {
     score += 0.8;
     bonusReasons.push({
       value: 0.8,
-      reason: "Keeps movement cleaner on the ground."
+      reason: locale === "ja" ? "現地での移動をより整理できます。" : "Keeps movement cleaner on the ground."
     });
   }
 
@@ -5720,7 +5889,7 @@ function scoreRecommendation(item, profile) {
     score += 0.7;
     bonusReasons.push({
       value: 0.7,
-      reason: "Preserves breathing room instead of forcing a packed day."
+      reason: locale === "ja" ? "詰め込みすぎず、余白を守れます。" : "Preserves breathing room instead of forcing a packed day."
     });
   }
 
@@ -5728,7 +5897,7 @@ function scoreRecommendation(item, profile) {
     score += 0.55;
     bonusReasons.push({
       value: 0.55,
-      reason: "Stays efficient for a value-biased plan."
+      reason: locale === "ja" ? "コスパ寄りの計画でも効率を保てます。" : "Stays efficient for a value-biased plan."
     });
   }
 
@@ -5746,81 +5915,102 @@ function scoreRecommendation(item, profile) {
 }
 
 function getModeCopy(profile) {
+  const locale = getActiveLocale();
   if (profile.food > 0.72 && profile.night > 0.62) {
     return {
-      title: "Neon food run",
-      description: "The route should open with Osaka confidence, protect late backups, and end with a strong Shibuya close rather than overthinking daytime density."
+      title: locale === "ja" ? "ネオン食ルート" : "Neon food run",
+      description:
+        locale === "ja"
+          ? "この形なら、大阪を自信を持って始め、遅い時間の保険を守り、昼の密度を考えすぎずに渋谷で強く締めるべきです。"
+          : "The route should open with Osaka confidence, protect late backups, and end with a strong Shibuya close rather than overthinking daytime density."
     };
   }
 
   if (profile.scenery > 0.78 && profile.weather === "clear") {
     return {
-      title: "Clear-sky scenic push",
-      description: "You can lean harder into the scenic middle, but the right version still keeps Fuji flexible until the forecast is actually paying off."
+      title: locale === "ja" ? "快晴寄りの景色プッシュ" : "Clear-sky scenic push",
+      description:
+        locale === "ja"
+          ? "景色の中盤に強く寄せられますが、それでも富士は実際に予報が効くまでは柔軟に残すのが正解です。"
+          : "You can lean harder into the scenic middle, but the right version still keeps Fuji flexible until the forecast is actually paying off."
     };
   }
 
   if (profile.relaxed > 0.7 && profile.onsen) {
     return {
-      title: "Soft-landing onsen profile",
-      description: "This version of the trip should reduce friction, protect slower transitions, and let Hakone do more of the emotional reset work."
+      title: locale === "ja" ? "やわらかい温泉プロファイル" : "Soft-landing onsen profile",
+      description:
+        locale === "ja"
+          ? "この形なら摩擦を減らし、遅めの移動を守り、箱根に気持ちのリセット役を多めに持たせます。"
+          : "This version of the trip should reduce friction, protect slower transitions, and let Hakone do more of the emotional reset work."
     };
   }
 
   if (profile.culture && profile.scenery > 0.5) {
     return {
-      title: "Temple and texture route",
-      description: "Kyoto and the cultural layer matter more here, so the trip should feel deliberate, readable, and less driven by pure city intensity."
+      title: locale === "ja" ? "寺社と質感のルート" : "Temple and texture route",
+      description:
+        locale === "ja"
+          ? "京都と文化レイヤーの比重が高いので、都市の勢いだけで押さず、意図の見える旅にするべきです。"
+          : "Kyoto and the cultural layer matter more here, so the trip should feel deliberate, readable, and less driven by pure city intensity."
     };
   }
 
   if (profile.easyTransfers && profile.food > 0.5) {
     return {
-      title: "Easy-transfer food-first plan",
-      description: "The best version keeps the route forgiving, leans on Osaka and practical guide layers, and makes the hardest move-days easy to screenshot and share."
+      title: locale === "ja" ? "移動が楽な食先行プラン" : "Easy-transfer food-first plan",
+      description:
+        locale === "ja"
+          ? "この形ならルートをやさしく保ち、大阪と実用ガイドに寄せ、重い移動日も保存・共有しやすくできます。"
+          : "The best version keeps the route forgiving, leans on Osaka and practical guide layers, and makes the hardest move-days easy to screenshot and share."
     };
   }
 
   return {
-    title: "Balanced city plus scenery profile",
-    description: "This version keeps Osaka and Tokyo lively, uses Kyoto as contrast, and leaves enough slack for Fuji weather without turning the route rigid."
+    title: locale === "ja" ? "都市と景色のバランス型" : "Balanced city plus scenery profile",
+    description:
+      locale === "ja"
+        ? "大阪と東京の勢いを残し、京都で対比を入れ、富士の天気に対応する余白も守る標準形です。"
+        : "This version keeps Osaka and Tokyo lively, uses Kyoto as contrast, and leaves enough slack for Fuji weather without turning the route rigid."
   };
 }
 
 function getWeatherAdvice(profile) {
+  const locale = getActiveLocale();
   if (profile.weather === "clear" && profile.scenery > 0.65) {
-    return "Cash in on clear Fuji views early.";
+    return locale === "ja" ? "富士の晴れた視界を早めに回収する。" : "Cash in on clear Fuji views early.";
   }
 
   if (profile.weather === "cloudy") {
-    return "Treat Fuji as bonus, not obligation.";
+    return locale === "ja" ? "富士は必須ではなく、見えたら取る前提にする。" : "Treat Fuji as bonus, not obligation.";
   }
 
-  return "Keep Fuji movable and re-check same morning.";
+  return locale === "ja" ? "富士は動かせるままにして、当日朝に再確認する。" : "Keep Fuji movable and re-check same morning.";
 }
 
 function getShareAdvice(profile, topItem) {
+  const locale = getActiveLocale();
   if (topItem.page === "Food Guide" || profile.food > 0.78) {
-    return "Home page + food guide";
+    return locale === "ja" ? "ホーム + 食事ガイド" : "Home page + food guide";
   }
 
   if (profile.easyTransfers) {
-    return "Itinerary + snapshot";
+    return locale === "ja" ? "旅程 + 要点ページ" : "Itinerary + snapshot";
   }
 
   if (profile.culture) {
-    return "Home page + culture notes";
+    return locale === "ja" ? "ホーム + 文化メモ" : "Home page + culture notes";
   }
 
   if (topItem.page === "Toolkit") {
-    return "Toolkit + snapshot";
+    return locale === "ja" ? "準備ガイド + 要点ページ" : "Toolkit + snapshot";
   }
 
   if (topItem.page === "Full Guide") {
-    return "Main page + full guide";
+    return locale === "ja" ? "メインページ + 完全ガイド" : "Main page + full guide";
   }
 
-  return "Main page + itinerary";
+  return locale === "ja" ? "メインページ + 旅程" : "Main page + itinerary";
 }
 
 function getRecommendationImage(item) {
@@ -5863,8 +6053,9 @@ function renderRecommendations(scoredItems, elements) {
   elements.list.innerHTML = topItems
     .map((entry, index) => {
       const match = toMatch(entry.score);
+      const item = getLocalizedRecommendationItem(entry.item, locale);
       const visual = getRecommendationImage(entry.item);
-      const tags = entry.item.tags
+      const tags = item.tags
         .slice(0, 3)
         .map((tag) => `<span class="recommendation-chip">${tag}</span>`)
         .join("");
@@ -5873,25 +6064,22 @@ function renderRecommendations(scoredItems, elements) {
         .join("");
 
       return `
-        <a class="recommendation-card" href="${entry.item.href}">
-          <div class="recommendation-head">
-            <div class="recommendation-title-block">
-              <div class="recommendation-thumb">
-                <img src="${visual.src}" alt="${visual.alt}">
-              </div>
+        <a class="recommendation-card" href="${entry.item.href}" style="--recommendation-image: url('${visual.src}')">
+          <div class="recommendation-visual">
+            <div class="recommendation-head">
               <span class="recommendation-rank"><small>${ui("recommendationTop", {}, locale)}</small><strong>#${index + 1}</strong></span>
-              <div>
-                <strong>${entry.item.title}</strong>
-                <span>${entry.item.page} · ${entry.item.text}</span>
-                <small class="recommendation-page-pill">${entry.item.page}</small>
-              </div>
+              <span class="match-pill">${match}% ${ui("recommendationMatchSuffix", {}, locale)}</span>
             </div>
-            <span class="match-pill">${match}% ${ui("recommendationMatchSuffix", {}, locale)}</span>
+            <div class="recommendation-title-block">
+              <strong>${item.title}</strong>
+              <span>${item.page} · ${item.text}</span>
+              <small class="recommendation-page-pill">${item.page}</small>
+            </div>
           </div>
           <div class="recommendation-tags">${tags}</div>
           <ul class="recommendation-reasons">${reasons}</ul>
           <div class="recommendation-score"><span style="width: ${match}%"></span></div>
-          <span class="recommendation-link">${ui("recommendationOpenPrefix", {}, locale)} ${entry.item.page}</span>
+          <span class="recommendation-link">${ui("recommendationOpenPrefix", {}, locale)} ${item.page}</span>
         </a>
       `;
     })
@@ -5966,16 +6154,20 @@ function initRecommendationEngine() {
   }
 
   const renderEngine = () => {
+    const locale = getActiveLocale();
     const profile = getRecommendationProfile(form);
     const scoredItems = RECOMMENDATION_ITEMS.map((item) => scoreRecommendation(item, profile)).sort(
       (left, right) => right.score - left.score
     );
     const topItem = scoredItems[0]?.item;
+    const localizedTopItem = topItem ? getLocalizedRecommendationItem(topItem, locale) : null;
     const modeCopy = getModeCopy(profile);
 
     mode.textContent = modeCopy.title;
-    description.textContent = `${modeCopy.description} Highest current pull: ${topItem?.title ?? "Route overview"}.`;
-    lead.textContent = topItem?.title ?? "Route overview";
+    description.textContent = locale === "ja"
+      ? `${modeCopy.description} 現在もっとも強い引きは ${localizedTopItem?.title ?? "ルート全体"} です。`
+      : `${modeCopy.description} Highest current pull: ${localizedTopItem?.title ?? "Route overview"}.`;
+    lead.textContent = localizedTopItem?.title ?? (locale === "ja" ? "ルート全体" : "Route overview");
     weather.textContent = getWeatherAdvice(profile);
     share.textContent = getShareAdvice(profile, topItem ?? { page: "Itinerary" });
 
@@ -5997,6 +6189,8 @@ function initRecommendationEngine() {
     updateToggleChips(form);
     renderEngine();
   });
+
+  document.addEventListener("locale:changed", renderEngine);
 
   if (resetButton) {
     resetButton.addEventListener("click", () => {
