@@ -2,8 +2,8 @@ document.documentElement.classList.add("js");
 
 const SEARCH_ITEMS = [
   {
-    title: "Interactive Route Map",
-    text: "Custom Japan route atlas with clickable Osaka, Kyoto, Hakone, Fuji, and Tokyo stop pins.",
+    title: "Visual Trip Highlights",
+    text: "Image-led homepage slider for Osaka, Kyoto, Fuji, and seasonal planning cues.",
     href: "./index.html#route-atlas"
   },
   {
@@ -512,7 +512,7 @@ const UI_COPY = {
     mapLoadingTitle: "Loading interactive map...",
     mapLoadingText: "The map initializes only when this section comes into view so the page stays fast.",
     mapFailTitle: "Interactive map failed to load",
-    mapFailText: "The page still works. Use the route atlas above or open the selected stop directly in Google Maps.",
+    mapFailText: "The page still works. Use the homepage highlights above or open the selected stop directly in Google Maps.",
     mapWeatherFallback: "Live route weather loads in the weather section below.",
     mapGpsUnsupported: "Geolocation is not supported in this browser.",
     mapGpsRequesting: "Requesting location permission...",
@@ -522,8 +522,23 @@ const UI_COPY = {
     mapTrackingSelected: "Tracking live position · {distance} km to selected point",
     mapGpsLiveAt: "GPS live at {lat}, {lon}",
     mapDistanceAway: "{distance} km away",
+    edgeTop: "Top",
+    edgePrevious: "Previous section",
+    edgeNext: "Next section",
+    edgeBottom: "Bottom",
+    footerHelpful: "Helpful links",
+    footerRelated: "Related sites",
+    footerAbout: "About",
+    footerAboutText: "Japan Escape is a visual planning hub for this trip: route flow, weather logic, food reads, and share-ready pages without heavy app clutter.",
+    footerWho: "Who we are",
+    footerContact: "Contact us",
+    footerPrivacy: "Privacy Policy",
+    footerCookie: "Cookie Policy",
+    footerTerms: "Terms of Use",
+    footerSitemap: "Sitemap",
+    footerCopyright: "Copyright © 2026 Japan Escape. All rights reserved.",
     navPreviewTitleHome: "Main hub",
-    navPreviewTextHome: "Recommendation engine, route atlas, live weather, live map, and page routing in one place.",
+    navPreviewTextHome: "Recommendation engine, visual highlights, live weather, live map, and page routing in one place.",
     navPreviewTitleItinerary: "Itinerary",
     navPreviewTextItinerary: "Nightly stays, day flow, transfer logic, and the route order.",
     navPreviewTitleFood: "Food guide",
@@ -576,7 +591,7 @@ const UI_COPY = {
     mapLoadingTitle: "インタラクティブ地図を読み込み中...",
     mapLoadingText: "このセクションが見えた時だけ地図を初期化し、ページ全体の軽さを保ちます。",
     mapFailTitle: "地図を読み込めませんでした",
-    mapFailText: "ページ自体は使えます。上のルート図を使うか、選択中の地点を Google マップで開いてください。",
+    mapFailText: "ページ自体は使えます。上のハイライトを使うか、選択中の地点を Google マップで開いてください。",
     mapWeatherFallback: "ライブ天気は下の天気セクションで読み込まれます。",
     mapGpsUnsupported: "このブラウザでは位置情報が使えません。",
     mapGpsRequesting: "位置情報の許可を確認しています...",
@@ -586,8 +601,23 @@ const UI_COPY = {
     mapTrackingSelected: "現在地を追跡中 · 選択地点まで {distance} km",
     mapGpsLiveAt: "現在地 {lat}, {lon}",
     mapDistanceAway: "{distance} km先",
+    edgeTop: "上へ",
+    edgePrevious: "前のセクション",
+    edgeNext: "次のセクション",
+    edgeBottom: "下へ",
+    footerHelpful: "便利なリンク",
+    footerRelated: "関連サイト",
+    footerAbout: "このサイトについて",
+    footerAboutText: "Japan Escape は、この旅行のための視覚重視の計画ハブです。ルート、天気判断、食事メモ、共有向けページを重いアプリ化なしでまとめています。",
+    footerWho: "私たちについて",
+    footerContact: "お問い合わせ",
+    footerPrivacy: "プライバシーポリシー",
+    footerCookie: "Cookie Policy",
+    footerTerms: "利用規約",
+    footerSitemap: "サイトマップ",
+    footerCopyright: "Copyright © 2026 Japan Escape. All rights reserved.",
     navPreviewTitleHome: "メインハブ",
-    navPreviewTextHome: "おすすめエンジン、ルート図、ライブ天気、ライブ地図、各ページ導線を一か所にまとめています。",
+    navPreviewTextHome: "おすすめエンジン、ハイライト、ライブ天気、ライブ地図、各ページ導線を一か所にまとめています。",
     navPreviewTitleItinerary: "旅程",
     navPreviewTextItinerary: "宿泊順、日ごとの流れ、移動ロジック、ルート順を確認できます。",
     navPreviewTitleFood: "食事ガイド",
@@ -660,13 +690,19 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: ".hero-actions a:nth-child(1)", text: "プランを作る" },
     { selector: ".hero-actions a:nth-child(2)", text: "旅程を開く" },
     { selector: ".hero-actions a:nth-child(3)", text: "完全ガイドを開く" },
-    { selector: ".section-pill[href=\"#route-atlas\"]", text: "ルート図" },
+    { selector: ".section-pill[href=\"#route-atlas\"]", text: "ハイライト" },
     { selector: ".section-pill[href=\"#live-map\"]", text: "ライブ地図" },
     { selector: ".section-pill[href=\"#trip-profile\"]", text: "プロフィール" },
     { selector: ".section-pill[href=\"#trip-weather\"]", text: "ライブ天気" },
     { selector: ".section-pill[href=\"#japan-explorer\"]", text: "探索" },
     { selector: ".section-pill[href=\"#official-watch\"]", text: "記事" },
     { selector: ".section-pill[href=\"#visual-previews\"]", text: "プレビュー" },
+    { selector: "#route-atlas .section-copy .eyebrow", text: "ビジュアルハイライト" },
+    { selector: "#route-atlas .section-copy h2", text: "旅全体を画像中心で、より素早く把握する" },
+    {
+      selector: "#route-atlas .section-header > p",
+      text: "このセクションは地図ではなく、視覚的な導入レイヤーです。回転するハイライト、季節の判断材料、そして正しいページへの導線をすばやく確認できます。"
+    },
     { selector: "#live-map .section-copy .eyebrow", text: "ライブナビ地図" },
     { selector: "#live-map .section-copy h2", text: "GPS、ルートピン、Google マップ連携で本物の地図を使う" },
     {
@@ -2418,53 +2454,75 @@ function initSectionNavs() {
     return;
   }
 
+  const syncers = [];
+
   navs.forEach((nav) => {
-    const links = [...nav.querySelectorAll('a[href*="#"]')].filter(isSameDocumentHashLink);
-    const sections = links
-      .map((link) => getHashTarget(new URL(link.href, window.location.href).hash))
+    const pairs = [...nav.querySelectorAll('a[href*="#"]')]
+      .filter(isSameDocumentHashLink)
+      .map((link) => {
+        const hash = new URL(link.href, window.location.href).hash;
+        const section = getHashTarget(hash);
+        return section ? { link, hash, section } : null;
+      })
       .filter(Boolean);
 
-    if (!links.length || !sections.length) {
+    if (!pairs.length) {
       return;
     }
 
     const setActive = (id) => {
-      links.forEach((link) => {
-        const hash = new URL(link.href, window.location.href).hash;
+      pairs.forEach(({ link, hash }) => {
         link.classList.toggle("is-active", hash === `#${id}`);
       });
+
+      if (nav.dataset.activeSection !== id) {
+        nav.dataset.activeSection = id;
+        document.dispatchEvent(new CustomEvent("sectionnav:changed", { detail: { id } }));
+      }
     };
 
-    const observer = "IntersectionObserver" in window
-      ? new IntersectionObserver(
-          (entries) => {
-            const visibleEntries = entries
-              .filter((entry) => entry.isIntersecting)
-              .sort((left, right) => right.intersectionRatio - left.intersectionRatio);
+    const updateActive = () => {
+      const probe = window.scrollY + Math.max(188, window.innerHeight * 0.24);
+      let activeId = pairs[0].section.id;
 
-            if (visibleEntries[0]) {
-              setActive(visibleEntries[0].target.id);
-            }
-          },
-          {
-            rootMargin: "-30% 0px -52% 0px",
-            threshold: [0.2, 0.4, 0.6, 0.85]
-          }
-        )
-      : null;
+      pairs.forEach(({ section }) => {
+        if (section.offsetTop <= probe) {
+          activeId = section.id;
+        }
+      });
 
-    sections.forEach((section) => observer?.observe(section));
-    links.forEach((link) => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 24) {
+        activeId = pairs[pairs.length - 1].section.id;
+      }
+
+      setActive(activeId);
+    };
+
+    pairs.forEach(({ link, hash }) => {
       link.addEventListener("click", () => {
-        const hash = new URL(link.href, window.location.href).hash;
         if (hash) {
           setActive(hash.replace("#", ""));
+          window.requestAnimationFrame(updateActive);
         }
       });
     });
 
-    setActive((getHashTarget()?.id) || sections[0].id);
+    syncers.push(updateActive);
+    setActive(getHashTarget()?.id || pairs[0].section.id);
   });
+
+  if (!syncers.length) {
+    return;
+  }
+
+  const syncAll = () => {
+    syncers.forEach((sync) => sync());
+  };
+
+  window.addEventListener("scroll", syncAll, { passive: true });
+  window.addEventListener("resize", syncAll);
+  window.addEventListener("hashchange", syncAll);
+  syncAll();
 }
 
 function getWeatherLabel(code, locale = getActiveLocale()) {
@@ -3381,6 +3439,22 @@ function renderDirectoryMedia(item, detail = false) {
 }
 
 function renderDirectoryCard(item, isActive) {
+  if (!item.image) {
+    return `
+      <button class="destination-card is-illustrated${isActive ? " is-active" : ""}" type="button" data-destination-key="${item.key}" aria-pressed="${isActive ? "true" : "false"}">
+        <div class="destination-card-copy">
+          <span class="badge badge-soft">${item.region}</span>
+          <strong>${item.name}</strong>
+          <span>${item.summary}</span>
+          <div class="destination-card-meta">
+            <span class="destination-pill">${item.prefecture}</span>
+            ${item.tags.slice(0, 3).map((tag) => `<span class="destination-pill">${tag}</span>`).join("")}
+          </div>
+        </div>
+      </button>
+    `;
+  }
+
   return `
     <button class="destination-card${isActive ? " is-active" : ""}" type="button" data-destination-key="${item.key}" aria-pressed="${isActive ? "true" : "false"}">
       ${renderDirectoryMedia(item)}
@@ -3505,8 +3579,12 @@ function initDestinationExplorer() {
       };
 
       card.addEventListener("click", activate);
-      card.addEventListener("focus", activate);
-      card.addEventListener("mouseenter", activate);
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          activate();
+        }
+      });
     });
   };
 
@@ -3671,6 +3749,140 @@ function initSliders() {
     renderSlides();
     restartAutoPlay();
   });
+}
+
+function buildSiteFooterMarkup() {
+  const navLabels = NAV_TRANSLATIONS[getActiveLocale()] ?? NAV_TRANSLATIONS.en;
+
+  return `
+    <div class="site-footer-grid">
+      <section class="site-footer-column">
+        <h3>${ui("footerHelpful")}</h3>
+        <div class="site-footer-list">
+          <a href="./itinerary.html">${navLabels["./itinerary.html"]}</a>
+          <a href="./food.html">${navLabels["./food.html"]}</a>
+          <a href="./toolkit.html">${navLabels["./toolkit.html"]}</a>
+          <a href="./japan_trip_brochure.html">${ui("brochureCardTitle")}</a>
+        </div>
+      </section>
+      <section class="site-footer-column">
+        <h3>${ui("footerRelated")}</h3>
+        <div class="site-footer-list">
+          <a href="https://www.japan.travel/en/" target="_blank" rel="noreferrer">Japan Travel</a>
+          <a href="https://smart-ex.jp/en/index.php" target="_blank" rel="noreferrer">SmartEX</a>
+          <a href="https://www.odakyu.jp/english/passes/hakone/" target="_blank" rel="noreferrer">Hakone Freepass</a>
+          <a href="./site_info.html#sitemap">Site map</a>
+        </div>
+      </section>
+      <section class="site-footer-column">
+        <h3>${ui("footerAbout")}</h3>
+        <p>${ui("footerAboutText")}</p>
+        <div class="site-footer-list">
+          <a href="./site_info.html#who-we-are">${ui("footerWho")}</a>
+          <a href="mailto:alex.narb28@gmail.com">${ui("footerContact")}</a>
+        </div>
+      </section>
+    </div>
+    <div class="site-footer-bottom">
+      <div class="site-footer-policies">
+        <a href="./site_info.html#privacy-policy">${ui("footerPrivacy")}</a>
+        <a href="./site_info.html#cookie-policy">${ui("footerCookie")}</a>
+        <a href="./site_info.html#terms-of-use">${ui("footerTerms")}</a>
+        <a href="./site_info.html#sitemap">${ui("footerSitemap")}</a>
+      </div>
+      <div class="site-footer-meta">
+        <small>${ui("footerCopyright")}</small>
+      </div>
+    </div>
+  `;
+}
+
+function initSiteFooter() {
+  const main = document.querySelector(".page-shell");
+  if (!main) {
+    return;
+  }
+
+  let footer = document.querySelector(".site-footer");
+  if (!footer) {
+    footer = document.createElement("footer");
+    footer.className = "site-footer";
+    main.insertAdjacentElement("afterend", footer);
+  }
+
+  const renderFooter = () => {
+    footer.innerHTML = buildSiteFooterMarkup();
+  };
+
+  renderFooter();
+  document.addEventListener("locale:changed", renderFooter);
+}
+
+function initEdgeNavigator() {
+  const nav = document.querySelector("[data-section-nav]");
+  if (!nav || document.querySelector(".edge-nav")) {
+    return;
+  }
+
+  const pairs = [...nav.querySelectorAll('a[href*="#"]')]
+    .filter(isSameDocumentHashLink)
+    .map((link) => {
+      const hash = new URL(link.href, window.location.href).hash;
+      const section = getHashTarget(hash);
+      return section ? { link, section } : null;
+    })
+    .filter(Boolean);
+
+  if (!pairs.length) {
+    return;
+  }
+
+  const edgeNav = document.createElement("div");
+  edgeNav.className = "edge-nav";
+  edgeNav.innerHTML = `
+    <button type="button" data-edge-nav="top" title="${ui("edgeTop")}" aria-label="${ui("edgeTop")}">↑</button>
+    <button type="button" data-edge-nav="prev" title="${ui("edgePrevious")}" aria-label="${ui("edgePrevious")}">←</button>
+    <button type="button" data-edge-nav="next" title="${ui("edgeNext")}" aria-label="${ui("edgeNext")}">→</button>
+    <button type="button" data-edge-nav="bottom" title="${ui("edgeBottom")}" aria-label="${ui("edgeBottom")}">↓</button>
+  `;
+  document.body.append(edgeNav);
+
+  const topButton = edgeNav.querySelector('[data-edge-nav="top"]');
+  const prevButton = edgeNav.querySelector('[data-edge-nav="prev"]');
+  const nextButton = edgeNav.querySelector('[data-edge-nav="next"]');
+  const bottomButton = edgeNav.querySelector('[data-edge-nav="bottom"]');
+
+  const getActiveIndex = () => {
+    const activeIndex = pairs.findIndex(({ link }) => link.classList.contains("is-active"));
+    return activeIndex >= 0 ? activeIndex : 0;
+  };
+
+  const scrollToSection = (index) => {
+    pairs[index]?.section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const syncButtons = () => {
+    const activeIndex = getActiveIndex();
+    prevButton.disabled = activeIndex <= 0;
+    nextButton.disabled = activeIndex >= pairs.length - 1;
+    topButton.title = ui("edgeTop");
+    topButton.setAttribute("aria-label", ui("edgeTop"));
+    prevButton.title = ui("edgePrevious");
+    prevButton.setAttribute("aria-label", ui("edgePrevious"));
+    nextButton.title = ui("edgeNext");
+    nextButton.setAttribute("aria-label", ui("edgeNext"));
+    bottomButton.title = ui("edgeBottom");
+    bottomButton.setAttribute("aria-label", ui("edgeBottom"));
+  };
+
+  topButton.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  bottomButton.addEventListener("click", () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" }));
+  prevButton.addEventListener("click", () => scrollToSection(Math.max(getActiveIndex() - 1, 0)));
+  nextButton.addEventListener("click", () => scrollToSection(Math.min(getActiveIndex() + 1, pairs.length - 1)));
+
+  document.addEventListener("sectionnav:changed", syncButtons);
+  document.addEventListener("locale:changed", syncButtons);
+  syncButtons();
 }
 
 function clamp(value, min, max) {
@@ -4049,7 +4261,7 @@ function renderRecommendations(scoredItems, elements) {
         <article class="recommendation-card">
           <div class="recommendation-head">
             <div class="recommendation-title-block">
-              <span class="recommendation-rank">${String(index + 1).padStart(2, "0")}</span>
+              <span class="recommendation-rank"><small>Top</small><strong>#${index + 1}</strong></span>
               <div>
                 <strong>${entry.item.title}</strong>
                 <span>${entry.item.page} · ${entry.item.text}</span>
@@ -4368,8 +4580,10 @@ window.addEventListener("DOMContentLoaded", () => {
   updateScrollProgress();
   initLocaleSwitch();
   initTopbarPreviews();
+  initSiteFooter();
   initReveal();
   initSectionNavs();
+  initEdgeNavigator();
   initHashHighlights();
   initSearch();
   initTermGroups();

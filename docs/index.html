@@ -137,7 +137,7 @@
 
     <section class="panel section reveal section-nav-panel">
       <nav class="page-section-nav" data-section-nav aria-label="Homepage sections">
-        <a class="section-pill" href="#route-atlas">Route map</a>
+        <a class="section-pill" href="#route-atlas">Highlights</a>
         <a class="section-pill" href="#live-map">Live map</a>
         <a class="section-pill" href="#trip-profile">Trip profile</a>
         <a class="section-pill" href="#trip-weather">Live weather</a>
@@ -150,230 +150,105 @@
     <section class="panel section reveal" id="route-atlas">
       <div class="section-header">
         <div class="section-copy">
-          <span class="eyebrow">Interactive Route Map</span>
-          <h2>See The Whole Trip In One Visual Read</h2>
+          <span class="eyebrow">Visual Highlights</span>
+          <h2>See The Whole Trip In A Cleaner Image-Led Sequence</h2>
           <div class="section-divider"></div>
         </div>
-        <p>The route board is a custom lightweight atlas, not a heavy map embed. Tap each stop to update the spotlight, then open the image preview or jump straight to the matching stop notes.</p>
+        <p>The old route board is gone here. This section now works as a fast visual read: rotating highlights, seasonal timing cues, and clear jump points into the right page before you start scrolling deeper.</p>
       </div>
 
-      <div class="route-map-layout" data-route-module>
-        <div class="route-map-board" data-route-board aria-label="Japan Escape route map">
-          <svg class="route-map-svg" viewBox="0 0 720 540" aria-hidden="true">
-            <defs>
-              <linearGradient id="route-gradient-home" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#cc9b48"></stop>
-                <stop offset="55%" stop-color="#9c3d33"></stop>
-                <stop offset="100%" stop-color="#1f5f6b"></stop>
-              </linearGradient>
-            </defs>
-            <circle class="route-map-glow" cx="520" cy="120" r="140"></circle>
-            <path class="archipelago-shape" d="M522 68c29-9 72 12 77 49 4 24-10 47-34 63-28 19-63 14-83-15-13-18-16-43-5-62 8-16 24-29 45-35Z"></path>
-            <path class="archipelago-shape" d="M430 148c46-16 92 1 112 40 14 26 11 58-7 82-25 34-72 52-117 39-35-10-58-39-59-74-1-38 25-72 71-87Z"></path>
-            <path class="archipelago-shape" d="M336 232c44-21 90-16 126 14 28 24 38 63 24 97-18 42-61 67-112 67-45 0-86-20-106-55-18-31-16-72 6-101 14-19 34-34 62-22Z"></path>
-            <path class="archipelago-shape" d="M224 312c45-18 92-8 120 24 20 23 25 56 12 86-19 43-62 66-112 64-43-2-79-22-96-55-15-29-11-65 12-92 15-17 37-31 64-27Z"></path>
-            <path class="archipelago-shape" d="M114 398c31-17 66-13 90 10 19 18 25 44 16 68-13 34-47 54-87 52-36-2-67-22-79-51-11-27-6-58 14-79 13-14 28-18 46 0Z"></path>
-            <path class="route-track" d="M176 430C213 392 236 362 278 334C319 306 365 270 412 232C459 194 488 176 529 130"></path>
-            <path class="route-progress" d="M176 430C213 392 236 362 278 334C319 306 365 270 412 232C459 194 488 176 529 130" stroke="url(#route-gradient-home)"></path>
-          </svg>
+      <div class="highlight-layout">
+        <div class="feature-slider highlight-slider" data-slider data-slider-interval="5200">
+          <div class="slider-stage">
+            <article class="feature-slide is-active" data-slide>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/D%C5%8Dtonbori_at_night%2C_Osaka_%2819551420339%29.jpg?width=1600" alt="Dotonbori canal at night in Osaka" loading="lazy" decoding="async">
+              <div class="feature-slide-copy">
+                <span class="badge">Arrival mood</span>
+                <h3>Osaka keeps the first nights bright and forgiving</h3>
+                <p>Use Osaka for quick wins: street food, strong visuals, and enough late options that the trip feels open instead of immediately over-scheduled.</p>
+                <div class="route-spotlight-actions">
+                  <button class="button-primary image-preview-trigger" type="button" data-preview-gallery="osaka">Preview Osaka</button>
+                  <a class="button-secondary" href="./itinerary.html#osaka-start">Open itinerary</a>
+                </div>
+              </div>
+            </article>
 
-          <button class="route-pin is-active" type="button" style="--x: 23%; --y: 78%; --delay: 120ms;" data-route-stop="osaka" aria-pressed="true">
-            <span class="route-pin-dot"></span>
-            <span class="route-pin-copy">
-              <strong>Osaka</strong>
-              <small>Nights 1-3</small>
-            </span>
-          </button>
-          <button class="route-pin" type="button" style="--x: 37%; --y: 62%; --delay: 220ms;" data-route-stop="kyoto" aria-pressed="false">
-            <span class="route-pin-dot"></span>
-            <span class="route-pin-copy">
-              <strong>Kyoto</strong>
-              <small>Day 2</small>
-            </span>
-          </button>
-          <button class="route-pin" type="button" style="--x: 54%; --y: 48%; --delay: 320ms;" data-route-stop="hakone" aria-pressed="false">
-            <span class="route-pin-dot"></span>
-            <span class="route-pin-copy">
-              <strong>Hakone</strong>
-              <small>Night 4</small>
-            </span>
-          </button>
-          <button class="route-pin" type="button" style="--x: 66%; --y: 34%; --delay: 420ms;" data-route-stop="fuji" aria-pressed="false">
-            <span class="route-pin-dot"></span>
-            <span class="route-pin-copy">
-              <strong>Fuji</strong>
-              <small>Day 6</small>
-            </span>
-          </button>
-          <button class="route-pin" type="button" style="--x: 77%; --y: 23%; --delay: 520ms;" data-route-stop="tokyo" aria-pressed="false">
-            <span class="route-pin-dot"></span>
-            <span class="route-pin-copy">
-              <strong>Tokyo</strong>
-              <small>Finale</small>
-            </span>
-          </button>
+            <article class="feature-slide" data-slide>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kiyomizu-dera_Temple.Kyoto._Japan_%2850361443956%29.jpg?width=1600" alt="Kiyomizu-dera temple in Kyoto" loading="lazy" decoding="async">
+              <div class="feature-slide-copy">
+                <span class="badge">Culture contrast</span>
+                <h3>Kyoto works best as one focused day, not a scattered chase</h3>
+                <p>Keep Kyoto selective. One district with clean walking rhythm lands better than trying to consume the whole city in a single pass.</p>
+                <div class="route-spotlight-actions">
+                  <button class="button-primary image-preview-trigger" type="button" data-preview-gallery="kyoto">Preview Kyoto</button>
+                  <a class="button-secondary" href="./culture.html#temples">Open culture notes</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="feature-slide" data-slide>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Chureito_Pagoda.jpg?width=1600" alt="Chureito Pagoda with Mount Fuji" loading="lazy" decoding="async">
+              <div class="feature-slide-copy">
+                <span class="badge">Seasonal watch</span>
+                <h3>Fuji is still the weather-led centerpiece of the route</h3>
+                <p>Visibility matters more than strict order. Check the live weather read, chase the clearest window, and let the mountain decide the strongest moment.</p>
+                <div class="route-spotlight-actions">
+                  <a class="button-primary" href="#trip-weather">Open weather read</a>
+                  <a class="button-secondary" href="./itinerary.html#fuji-visibility">Open Fuji plan</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="feature-slide" data-slide>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fushimi_Inari%2C_Kyoto%2C_20240818_1400_4476.jpg?width=1600" alt="Torii gates in Kyoto" loading="lazy" decoding="async">
+              <div class="feature-slide-copy">
+                <span class="badge">Season timing</span>
+                <h3>Use the official blossom forecast as your seasonal planning anchor</h3>
+                <p>When dates are still flexible, start with bloom timing, then fit the route around the strongest regional window instead of guessing too early.</p>
+                <div class="route-spotlight-actions">
+                  <a class="button-primary" href="https://www.japan.travel/en/see-and-do/cherry-blossom-forecast/" target="_blank" rel="noreferrer">Open blossom forecast</a>
+                  <a class="button-secondary" href="./japan_trip_brochure.html">Open brochure pack</a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="slider-controls">
+            <button class="slider-arrow" type="button" data-slider-prev aria-label="Previous highlight">&lt;</button>
+            <div class="slider-dots" data-slider-dots aria-label="Highlight slides"></div>
+            <button class="slider-arrow" type="button" data-slider-next aria-label="Next highlight">&gt;</button>
+          </div>
         </div>
 
-        <aside class="route-spotlight" data-route-spotlight>
-          <div class="route-spotlight-media">
-            <img
-              data-route-image
-              src="https://commons.wikimedia.org/wiki/Special:FilePath/D%C5%8Dtonbori_at_night%2C_Osaka_%2819551420339%29.jpg?width=1280"
-              alt="Dotonbori canal at night in Osaka">
-          </div>
-          <div class="route-spotlight-copy">
-            <span class="eyebrow" data-route-kicker>Arrival base</span>
-            <h3 data-route-title>Osaka sets the opening mood</h3>
-            <p data-route-description>The route starts in Osaka because it turns arrival energy into food, signs, and a low-pressure first-night win instead of immediate logistics friction.</p>
-            <div class="best-for-strip" data-route-badges>
-              <span class="best-for-chip is-food">food</span>
-              <span class="best-for-chip is-night">night</span>
-              <span class="best-for-chip is-easy">easy</span>
+        <aside class="highlight-stack">
+          <article class="highlight-card seasonal-highlight-card">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cherry_blossoms_and_a_train_in_Arashiyama%2C_Kyoto%2C_Japan.jpg?width=1280" alt="Cherry blossoms in Kyoto" loading="lazy" decoding="async">
+            <div class="highlight-card-copy">
+              <span class="badge">Seasonal timing</span>
+              <strong>Cherry blossom timing belongs in the planning layer, not as an afterthought</strong>
+              <span>Use the official forecast before locking the final route order if the trip is meant to land during sakura season.</span>
             </div>
-            <div class="route-spotlight-facts" data-route-facts>
-              <div class="route-fact">
-                <strong>Role in the route</strong>
-                <span>Osaka is the easiest arrival base because the city gives you momentum without demanding precision.</span>
-              </div>
-              <div class="route-fact">
-                <strong>Vibe signal</strong>
-                <span>Neon, food, and forgiving late options make it the softest landing in the whole trip.</span>
-              </div>
-              <div class="route-fact">
-                <strong>Best use</strong>
-                <span>Keep the first night compact and let the city restore confidence before the cultural and scenic layers show up.</span>
-              </div>
-            </div>
-            <div class="route-spotlight-actions">
-              <button class="button-primary" type="button" data-route-preview data-preview-gallery="osaka">Preview Stop</button>
-              <a class="button-secondary" data-route-link href="./itinerary.html#osaka-start">Open stop notes</a>
-            </div>
+          </article>
+
+          <div class="highlight-mini-grid">
+            <a class="highlight-mini-card" href="./food.html#osaka-food">
+              <strong>Food-first start</strong>
+              <span>Osaka works because the first nights are visual, easy, and low pressure.</span>
+            </a>
+            <a class="highlight-mini-card" href="./toolkit.html#weather-packing">
+              <strong>Weather-led toolkit</strong>
+              <span>Fuji and Hakone still benefit from same-day checks and cleaner packing choices.</span>
+            </a>
+            <a class="highlight-mini-card" href="./quick_snapshot.html">
+              <strong>Fast mobile backup</strong>
+              <span>Open the snapshot when signal, energy, or patience gets thin.</span>
+            </a>
+            <a class="highlight-mini-card" href="./guide.html">
+              <strong>Deeper visual guide</strong>
+              <span>Use the full guide if the group needs the richer all-in-one version.</span>
+            </a>
           </div>
         </aside>
-      </div>
-
-      <div class="route-timeline">
-        <a class="timeline-step" href="./itinerary.html#osaka-start">
-          <span class="timeline-day">Day 1</span>
-          <strong>Osaka landing</strong>
-          <span>Neon and food without overloading the arrival.</span>
-          <div class="best-for-strip">
-            <span class="best-for-chip is-food">food</span>
-            <span class="best-for-chip is-easy">easy</span>
-          </div>
-        </a>
-        <a class="timeline-step" href="./itinerary.html#kyoto-day">
-          <span class="timeline-day">Day 2</span>
-          <strong>Kyoto contrast</strong>
-          <span>Historic texture and one focused cultural lane.</span>
-          <div class="best-for-strip">
-            <span class="best-for-chip is-culture">culture</span>
-            <span class="best-for-chip is-photo">photo</span>
-          </div>
-        </a>
-        <a class="timeline-step" href="./itinerary.html#osaka-reset">
-          <span class="timeline-day">Day 3</span>
-          <strong>Osaka reset</strong>
-          <span>Use one easy anchor and protect energy for transit day.</span>
-          <div class="best-for-strip">
-            <span class="best-for-chip is-easy">easy</span>
-            <span class="best-for-chip is-reset">reset</span>
-          </div>
-        </a>
-        <a class="timeline-step" href="./itinerary.html#hakone-move">
-          <span class="timeline-day">Day 4</span>
-          <strong>Hakone handoff</strong>
-          <span>Tickets first, transfer second, scenery only after the move is clean.</span>
-          <div class="best-for-strip">
-            <span class="best-for-chip is-transit">transit</span>
-            <span class="best-for-chip is-easy">easy</span>
-          </div>
-        </a>
-        <a class="timeline-step" href="./itinerary.html#fuji-transfer">
-          <span class="timeline-day">Day 5</span>
-          <strong>Fuji transfer</strong>
-          <span>Leave Hakone with enough energy to protect the scenic window.</span>
-          <div class="best-for-strip">
-            <span class="best-for-chip is-reset">reset</span>
-            <span class="best-for-chip is-photo">photo</span>
-          </div>
-        </a>
-        <a class="timeline-step" href="./itinerary.html#fuji-visibility">
-          <span class="timeline-day">Day 6</span>
-          <strong>Fuji visibility play</strong>
-          <span>Clear view first, strict order second.</span>
-          <div class="best-for-strip">
-            <span class="best-for-chip is-photo">photo</span>
-            <span class="best-for-chip is-weather">weather</span>
-          </div>
-        </a>
-        <a class="timeline-step" href="./itinerary.html#tokyo-finish">
-          <span class="timeline-day">Day 7</span>
-          <strong>Tokyo finale</strong>
-          <span>Shibuya shopping, dinner, and skyline closure.</span>
-          <div class="best-for-strip">
-            <span class="best-for-chip is-night">night</span>
-            <span class="best-for-chip is-shopping">shopping</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="route-photo-strip">
-        <button class="route-photo-card" type="button" data-preview-gallery="osaka">
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tsutenkaku%2C_Osaka.jpg?width=960" alt="Tsutenkaku in Osaka" loading="lazy" decoding="async">
-          <div class="route-photo-copy">
-            <strong>Osaka</strong>
-            <span>Start loose.</span>
-            <div class="best-for-strip">
-              <span class="best-for-chip is-food">food</span>
-              <span class="best-for-chip is-night">night</span>
-            </div>
-          </div>
-        </button>
-        <button class="route-photo-card" type="button" data-preview-gallery="kyoto">
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kiyomizu-dera_Temple.Kyoto._Japan_%2850361443956%29.jpg?width=960" alt="Kiyomizu-dera in Kyoto" loading="lazy" decoding="async">
-          <div class="route-photo-copy">
-            <strong>Kyoto</strong>
-            <span>One strong contrast.</span>
-            <div class="best-for-strip">
-              <span class="best-for-chip is-culture">culture</span>
-              <span class="best-for-chip is-photo">photo</span>
-            </div>
-          </div>
-        </button>
-        <button class="route-photo-card" type="button" data-preview-gallery="hakone">
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lake_torii_%40_Hakone_Shrine_%2813776519615%29.jpg?width=960" alt="Lake torii in Hakone" loading="lazy" decoding="async">
-          <div class="route-photo-copy">
-            <strong>Hakone</strong>
-            <span>Reset overnight.</span>
-            <div class="best-for-strip">
-              <span class="best-for-chip is-reset">reset</span>
-              <span class="best-for-chip is-onsen">onsen</span>
-            </div>
-          </div>
-        </button>
-        <button class="route-photo-card" type="button" data-preview-gallery="fuji">
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Chureito_Pagoda.jpg?width=960" alt="Chureito Pagoda and Mount Fuji" loading="lazy" decoding="async">
-          <div class="route-photo-copy">
-            <strong>Fuji</strong>
-            <span>Visibility pays off.</span>
-            <div class="best-for-strip">
-              <span class="best-for-chip is-photo">photo</span>
-              <span class="best-for-chip is-weather">weather</span>
-            </div>
-          </div>
-        </button>
-        <button class="route-photo-card" type="button" data-preview-gallery="tokyo">
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shibuya_crossing_%2812214%29.jpg?width=960" alt="Shibuya Crossing in Tokyo" loading="lazy" decoding="async">
-          <div class="route-photo-copy">
-            <strong>Tokyo</strong>
-            <span>Finish strong.</span>
-            <div class="best-for-strip">
-              <span class="best-for-chip is-night">night</span>
-              <span class="best-for-chip is-shopping">shopping</span>
-            </div>
-          </div>
-        </button>
       </div>
     </section>
 
