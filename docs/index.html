@@ -138,6 +138,7 @@
     <section class="panel section reveal section-nav-panel">
       <nav class="page-section-nav" data-section-nav aria-label="Homepage sections">
         <a class="section-pill" href="#route-atlas">Route map</a>
+        <a class="section-pill" href="#live-map">Live map</a>
         <a class="section-pill" href="#trip-profile">Trip profile</a>
         <a class="section-pill" href="#trip-weather">Live weather</a>
         <a class="section-pill" href="#japan-explorer">Explorer</a>
@@ -373,6 +374,96 @@
             </div>
           </div>
         </button>
+      </div>
+    </section>
+
+    <section class="panel section reveal" id="live-map">
+      <div class="section-header">
+        <div class="section-copy">
+          <span class="eyebrow">Live Navigation Map</span>
+          <h2>Use A Real Map With GPS, Route Pins, And Google Maps Handoff</h2>
+          <div class="section-divider"></div>
+        </div>
+        <p>This map layer is utility-first: live location, route and category filters, distance awareness, and one-click handoff to Google Maps for actual navigation. The site keeps the original design language instead of copying someone else’s product UI.</p>
+      </div>
+
+      <div class="map-app-layout" data-live-map>
+        <div class="map-app-stage">
+          <div class="map-toolbar">
+            <div class="explorer-filter-strip" aria-label="Map pin filters">
+              <button class="filter-chip is-active" type="button" data-map-filter="all" aria-pressed="true">All pins</button>
+              <button class="filter-chip" type="button" data-map-filter="route" aria-pressed="false">Route</button>
+              <button class="filter-chip" type="button" data-map-filter="food" aria-pressed="false">Food</button>
+              <button class="filter-chip" type="button" data-map-filter="view" aria-pressed="false">Views</button>
+              <button class="filter-chip" type="button" data-map-filter="transit" aria-pressed="false">Transit</button>
+            </div>
+            <div class="map-toolbar-actions">
+              <button class="button-pill" type="button" data-map-locate>Use my location</button>
+              <button class="button-pill" type="button" data-map-reset>Reset map</button>
+            </div>
+          </div>
+
+          <div class="map-canvas-shell">
+            <div class="map-loading-card" data-map-loading>
+              <strong>Loading interactive map...</strong>
+              <span>The map initializes only when this section comes into view so the page stays fast.</span>
+            </div>
+            <div class="map-canvas" id="live-route-map" role="application" aria-label="Interactive Japan route map"></div>
+          </div>
+        </div>
+
+        <aside class="map-info-panel">
+          <span class="eyebrow">GPS + route context</span>
+          <h3 data-map-title>Osaka is the current anchor</h3>
+          <p data-map-description>The live map starts on the core route. Click any marker or use the filters to switch between route anchors, food spots, scenic viewpoints, and major transit handoffs.</p>
+
+          <div class="map-stat-grid">
+            <div class="map-stat">
+              <span>GPS status</span>
+              <strong data-map-gps-status>Location not shared yet</strong>
+            </div>
+            <div class="map-stat">
+              <span>Nearest saved stop</span>
+              <strong data-map-nearest>Osaka</strong>
+            </div>
+            <div class="map-stat">
+              <span>Weather tie-in</span>
+              <strong data-map-weather>Live route weather loads below.</strong>
+            </div>
+          </div>
+
+          <div class="destination-meta" data-map-tags>
+            <span class="destination-pill">route</span>
+            <span class="destination-pill">food</span>
+            <span class="destination-pill">easy</span>
+          </div>
+
+          <div class="destination-facts" data-map-facts>
+            <div class="route-fact">
+              <strong>Best use</strong>
+              <span>Use Osaka to convert travel fatigue into food and momentum before the more precise middle of the route starts.</span>
+            </div>
+            <div class="route-fact">
+              <strong>Google Maps handoff</strong>
+              <span>Once a stop is selected, use the directions button for real-world routing instead of trying to rebuild turn-by-turn logic inside the site.</span>
+            </div>
+          </div>
+
+          <div class="route-spotlight-actions">
+            <a class="button-primary" data-map-primary href="./itinerary.html#osaka-start">Open local guide</a>
+            <a class="button-secondary" data-map-directions href="https://www.google.com/maps/search/?api=1&query=34.6937,135.5023" target="_blank" rel="noreferrer">Open in Google Maps</a>
+          </div>
+
+          <div class="map-nearby-panel">
+            <strong>Closest saved points</strong>
+            <div class="map-nearby-list" data-map-nearby>
+              <div class="map-nearby-item">
+                <strong>Osaka</strong>
+                <span>Route start, food, and low-friction first-night energy.</span>
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
 
@@ -789,6 +880,13 @@
           </div>
 
           <div class="tool-card">
+            <span class="eyebrow">Ad Revenue Readiness</span>
+            <h3>Keep monetization legal and low-risk</h3>
+            <p>I am not auto-enabling a live ad script here without your own approved AdSense publisher ID, privacy review, and site approval. The structure stays ad-friendly, but the site avoids risky placeholder code or low-quality spam blocks.</p>
+            <div class="note-band">Best path: get AdSense approval first, then add the real site-wide head snippet and a real `ads.txt` line with your own publisher ID.</div>
+          </div>
+
+          <div class="tool-card">
             <strong>Planning extras worth opening</strong>
             <ul class="brochure-list">
               <li><a href="https://www.japan.travel/en/" target="_blank" rel="noreferrer">Japan Travel official home</a></li>
@@ -875,7 +973,7 @@
               <span class="badge badge-soft">Arrival mood</span>
             </div>
             <strong>Osaka</strong>
-            <span>Low-pressure arrival, neon streets, easy food wins, and the best first-night flexibility.</span>
+            <span>Low-pressure arrival, neon streets, and the easiest first-night food energy.</span>
           </div>
           <div class="image-card-actions">
             <button class="button-pill image-preview-trigger" type="button" data-preview-gallery="osaka">Preview Images</button>
@@ -892,7 +990,7 @@
               <span class="badge badge-soft">Culture contrast</span>
             </div>
             <strong>Kyoto</strong>
-            <span>Temple rhythm, slower detail, and the cleanest full-day contrast to Osaka.</span>
+            <span>Temple rhythm, slower detail, and a clear cultural contrast to Osaka.</span>
           </div>
           <div class="image-card-actions">
             <button class="button-pill image-preview-trigger" type="button" data-preview-gallery="kyoto">Preview Images</button>
@@ -909,7 +1007,7 @@
               <span class="badge badge-soft">Reset night</span>
             </div>
             <strong>Hakone</strong>
-            <span>Lake air, ryokan energy, and the softer transition that breaks up the move east.</span>
+            <span>Lake air, ryokan energy, and the reset that breaks up the move east.</span>
           </div>
           <div class="image-card-actions">
             <button class="button-pill image-preview-trigger" type="button" data-preview-gallery="hakone">Preview Images</button>
@@ -926,7 +1024,7 @@
               <span class="badge badge-soft">Weather-led</span>
             </div>
             <strong>Mt. Fuji Area</strong>
-            <span>Highest photo payoff, highest weather pressure, and the place where the plan must stay flexible.</span>
+            <span>Highest photo payoff and the one stop where the plan must stay flexible.</span>
           </div>
           <div class="image-card-actions">
             <button class="button-pill image-preview-trigger" type="button" data-preview-gallery="fuji">Preview Images</button>
@@ -943,7 +1041,7 @@
               <span class="badge badge-soft">Finale energy</span>
             </div>
             <strong>Tokyo</strong>
-            <span>Shopping pressure, skyline close, and the clean strong ending after the scenic middle.</span>
+            <span>Shopping pressure, skyline close, and a clean strong ending.</span>
           </div>
           <div class="image-card-actions">
             <button class="button-pill image-preview-trigger" type="button" data-preview-gallery="tokyo">Preview Images</button>

@@ -17,6 +17,11 @@ const SEARCH_ITEMS = [
     href: "./index.html#trip-weather"
   },
   {
+    title: "Live Navigation Map",
+    text: "Interactive travel map with GPS locate, route pins, filters, and Google Maps handoff.",
+    href: "./index.html#live-map"
+  },
+  {
     title: "Fuji Fog And Visibility Index",
     text: "Use the live forecast to see which upcoming day has the best clarity for Mount Fuji.",
     href: "./index.html#trip-weather"
@@ -511,6 +516,8 @@ const WEATHER_STOPS = [
   }
 ];
 
+const WEATHER_CACHE = new Map();
+
 const WEATHER_CODE_LABELS = {
   0: "Clear",
   1: "Mostly clear",
@@ -758,6 +765,230 @@ const DESTINATION_DIRECTORY_ITEMS = [
       entertainment: "Snow festivals, seafood markets, onsen towns, island beaches, and very different weather moods.",
       restaurants: "Seafood in Hokkaido, tonkotsu ramen in Fukuoka, and island food in Okinawa change the trip immediately."
     }
+  }
+];
+
+const MAP_POINTS = [
+  {
+    key: "osaka-route",
+    title: "Osaka Base",
+    category: "route",
+    tags: ["route", "food", "easy"],
+    description: "Primary arrival base with the easiest first-night energy in the route.",
+    lat: 34.6937,
+    lon: 135.5023,
+    weatherKey: "osaka",
+    guideHref: "./itinerary.html#osaka-start",
+    guideLabel: "Open Osaka stop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=34.6937,135.5023",
+    facts: [
+      { label: "Best use", text: "Start here if you want easy food and low-friction arrival energy." },
+      { label: "Map logic", text: "Osaka is the route anchor that turns travel fatigue into momentum." }
+    ]
+  },
+  {
+    key: "dotonbori-food",
+    title: "Dotonbori Food Lane",
+    category: "food",
+    tags: ["food", "night", "osaka"],
+    description: "Best opening food crawl if the group wants signage, easy snacks, and casual movement.",
+    lat: 34.6687,
+    lon: 135.5013,
+    weatherKey: "osaka",
+    guideHref: "./food.html#osaka-food",
+    guideLabel: "Open Osaka food",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Dotonbori%20Osaka",
+    facts: [
+      { label: "Go for", text: "Takoyaki, fast visual payoff, and easy first-night wandering." },
+      { label: "Timing", text: "Best after dark when the canal and signs are carrying the mood." }
+    ]
+  },
+  {
+    key: "kyoto-route",
+    title: "Kyoto Contrast",
+    category: "route",
+    tags: ["route", "culture", "walk"],
+    description: "The cultural contrast day. Better as one focused lane than a citywide checklist.",
+    lat: 35.0116,
+    lon: 135.7681,
+    weatherKey: "kyoto",
+    guideHref: "./itinerary.html#kyoto-day",
+    guideLabel: "Open Kyoto stop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=35.0116,135.7681",
+    facts: [
+      { label: "Best use", text: "Pick one district cluster and keep transit low." },
+      { label: "Timing", text: "Earlier is better because crowd pressure builds fast." }
+    ]
+  },
+  {
+    key: "nishiki-food",
+    title: "Nishiki Market",
+    category: "food",
+    tags: ["food", "market", "kyoto"],
+    description: "Useful for tasting, browsing, and quick food context without overcommitting the day.",
+    lat: 35.0042,
+    lon: 135.7649,
+    weatherKey: "kyoto",
+    guideHref: "./food.html#kyoto-food",
+    guideLabel: "Open Kyoto food",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nishiki%20Market%20Kyoto",
+    facts: [
+      { label: "Go for", text: "Snacks, browsing, and short food context between major walks." },
+      { label: "Risk", text: "Can get dense fast later in the day." }
+    ]
+  },
+  {
+    key: "hakone-route",
+    title: "Hakone Reset",
+    category: "route",
+    tags: ["route", "onsen", "reset"],
+    description: "The scenic overnight that makes the eastbound move feel human.",
+    lat: 35.2323,
+    lon: 139.1069,
+    weatherKey: "hakone",
+    guideHref: "./itinerary.html#hakone-move",
+    guideLabel: "Open Hakone stop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=35.2323,139.1069",
+    facts: [
+      { label: "Best use", text: "Let the transfer finish cleanly before adding sightseeing pressure." },
+      { label: "Timing", text: "Late afternoon is often the right shift into ryokan mode." }
+    ]
+  },
+  {
+    key: "lake-ashi-view",
+    title: "Lake Ashi View",
+    category: "view",
+    tags: ["view", "hakone", "lake"],
+    description: "One of the strongest scenic mood signals in the middle of the route.",
+    lat: 35.2042,
+    lon: 139.0231,
+    weatherKey: "hakone",
+    guideHref: "./itinerary.html#hakone-move",
+    guideLabel: "Open Hakone stop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Lake%20Ashi%20Hakone",
+    facts: [
+      { label: "Go for", text: "Lake atmosphere, shrine framing, and softer terrain after the rail move." },
+      { label: "Risk", text: "Mist can flatten the view, so keep expectations flexible." }
+    ]
+  },
+  {
+    key: "odawara-transit",
+    title: "Odawara Handoff",
+    category: "transit",
+    tags: ["transit", "hakone", "bags"],
+    description: "The key transit switch where the long rail move hands off into Hakone.",
+    lat: 35.2554,
+    lon: 139.1596,
+    weatherKey: "hakone",
+    guideHref: "./toolkit.html#hakone-passes",
+    guideLabel: "Open transit notes",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Odawara%20Station",
+    facts: [
+      { label: "Best use", text: "Handle tickets and bags here before trying to sightsee." },
+      { label: "Map logic", text: "This is the cleanest place to reset the route after the bullet train." }
+    ]
+  },
+  {
+    key: "fuji-route",
+    title: "Fuji Scenic Block",
+    category: "route",
+    tags: ["route", "scenic", "weather"],
+    description: "The scenic centerpiece of the trip and the one section that needs real weather flexibility.",
+    lat: 35.4974,
+    lon: 138.7559,
+    weatherKey: "fuji",
+    guideHref: "./itinerary.html#fuji-visibility",
+    guideLabel: "Open Fuji stop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=35.4974,138.7559",
+    facts: [
+      { label: "Best use", text: "Let the cleanest view decide the order instead of defending a rigid plan." },
+      { label: "Timing", text: "Morning often gives the clearest mountain windows." }
+    ]
+  },
+  {
+    key: "chureito-view",
+    title: "Chureito Viewpoint",
+    category: "view",
+    tags: ["view", "fuji", "photo"],
+    description: "The most iconic Fuji framing on the route when visibility actually cooperates.",
+    lat: 35.5013,
+    lon: 138.7995,
+    weatherKey: "fuji",
+    guideHref: "./itinerary.html#fuji-visibility",
+    guideLabel: "Open Fuji stop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Chureito%20Pagoda",
+    facts: [
+      { label: "Go for", text: "The classic Fuji composition if the sky is clean enough." },
+      { label: "Risk", text: "Do not spend the best visibility window elsewhere if this view is open." }
+    ]
+  },
+  {
+    key: "kawaguchiko-food",
+    title: "Kawaguchiko Food Base",
+    category: "food",
+    tags: ["food", "fuji", "practical"],
+    description: "Reliable lunch and fallback cafes that do not pull the day too far off the scenic mission.",
+    lat: 35.4983,
+    lon: 138.7688,
+    weatherKey: "fuji",
+    guideHref: "./food.html#fuji-food",
+    guideLabel: "Open Fuji food",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Kawaguchiko%20Station",
+    facts: [
+      { label: "Best use", text: "Keep the meal practical so the mountain window stays protected." },
+      { label: "Food logic", text: "This is for reliability, not for turning the day into a long restaurant stop." }
+    ]
+  },
+  {
+    key: "tokyo-route",
+    title: "Tokyo Finale",
+    category: "route",
+    tags: ["route", "night", "shopping"],
+    description: "The clean district-first finish. Keep the last day concentrated and it will feel bigger.",
+    lat: 35.6762,
+    lon: 139.6503,
+    weatherKey: "tokyo",
+    guideHref: "./itinerary.html#tokyo-finish",
+    guideLabel: "Open Tokyo stop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=35.6762,139.6503",
+    facts: [
+      { label: "Best use", text: "Anchor the final day around one skyline slot or one dinner and flex around that." },
+      { label: "Map logic", text: "Tokyo works best here when it stays district-first instead of sprawling." }
+    ]
+  },
+  {
+    key: "shibuya-food",
+    title: "Shibuya Dinner Zone",
+    category: "food",
+    tags: ["food", "tokyo", "dessert"],
+    description: "Strong final dinner and dessert backup without leaving the main final-day district.",
+    lat: 35.6595,
+    lon: 139.7005,
+    weatherKey: "tokyo",
+    guideHref: "./food.html#tokyo-food",
+    guideLabel: "Open Tokyo food",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Shibuya%20Crossing",
+    facts: [
+      { label: "Go for", text: "Dinner, dessert, and strong fallback lanes if plans change late." },
+      { label: "Timing", text: "Late afternoon into night keeps the final-city energy intact." }
+    ]
+  },
+  {
+    key: "shibuya-transit",
+    title: "Shibuya Station",
+    category: "transit",
+    tags: ["transit", "tokyo", "station"],
+    description: "Useful final-day transit anchor, locker point, and meeting baseline.",
+    lat: 35.658,
+    lon: 139.7016,
+    weatherKey: "tokyo",
+    guideHref: "./toolkit.html#station-shortcuts",
+    guideLabel: "Open station notes",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Shibuya%20Station",
+    facts: [
+      { label: "Best use", text: "Use this to reduce confusion, especially if shopping and skyline timing are both in play." },
+      { label: "Map logic", text: "A clean station strategy prevents the last day from dissolving into exits and bag management." }
+    ]
   }
 ];
 
@@ -1855,6 +2086,13 @@ function initWeatherDashboard() {
       };
     });
 
+    WEATHER_CACHE.clear();
+    forecasts.forEach((forecast) => {
+      if (!forecast.error) {
+        WEATHER_CACHE.set(forecast.stop.key, forecast);
+      }
+    });
+
     grid.innerHTML = forecasts.map(renderWeatherCard).join("");
     renderFujiForecast(panel, forecasts.find((forecast) => forecast.stop.key === "fuji"));
 
@@ -1862,11 +2100,392 @@ function initWeatherDashboard() {
       refreshButton.disabled = false;
       refreshButton.textContent = "Refresh live read";
     }
+    document.dispatchEvent(new CustomEvent("weather:updated"));
     isLoading = false;
   };
 
   refreshButton?.addEventListener("click", loadWeather);
   loadWeather();
+}
+
+let leafletLoadPromise = null;
+
+function loadLeafletAssets() {
+  if (window.L) {
+    return Promise.resolve(window.L);
+  }
+
+  if (leafletLoadPromise) {
+    return leafletLoadPromise;
+  }
+
+  leafletLoadPromise = new Promise((resolve, reject) => {
+    const existingScript = document.querySelector('script[data-leaflet-script]');
+    const existingStylesheet = document.querySelector('link[data-leaflet-style]');
+
+    if (!existingStylesheet) {
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      stylesheet.integrity = "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=";
+      stylesheet.crossOrigin = "";
+      stylesheet.dataset.leafletStyle = "true";
+      document.head.append(stylesheet);
+    }
+
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(window.L), { once: true });
+      existingScript.addEventListener("error", () => reject(new Error("Leaflet failed to load.")), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    script.integrity = "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=";
+    script.crossOrigin = "";
+    script.defer = true;
+    script.dataset.leafletScript = "true";
+    script.addEventListener("load", () => resolve(window.L), { once: true });
+    script.addEventListener("error", () => reject(new Error("Leaflet failed to load.")), { once: true });
+    document.head.append(script);
+  });
+
+  return leafletLoadPromise;
+}
+
+function buildGoogleDirectionsUrl(point) {
+  return `https://www.google.com/maps/dir/?api=1&destination=${point.lat},${point.lon}&travelmode=transit`;
+}
+
+function toRadians(value) {
+  return (value * Math.PI) / 180;
+}
+
+function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+  const earthRadius = 6371;
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
+  const a =
+    (Math.sin(dLat / 2) ** 2) +
+    Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * (Math.sin(dLon / 2) ** 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return earthRadius * c;
+}
+
+function createMapIcon(L, category) {
+  return L.divIcon({
+    className: "",
+    html: `<span class="map-marker-chip is-${category}"></span>`,
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
+    popupAnchor: [0, -8]
+  });
+}
+
+function createMapPopup(point) {
+  return `
+    <div class="map-popup">
+      <strong>${point.title}</strong>
+      <span>${point.description}</span>
+      <a href="${point.guideHref}"${point.guideHref.startsWith("http") ? ' target="_blank" rel="noreferrer"' : ""}>${point.guideLabel}</a>
+    </div>
+  `;
+}
+
+function initLiveMap() {
+  const module = document.querySelector("[data-live-map]");
+  const mapElement = document.getElementById("live-route-map");
+  const loadingCard = module?.querySelector("[data-map-loading]");
+  const locateButton = module?.querySelector("[data-map-locate]");
+  const resetButton = module?.querySelector("[data-map-reset]");
+  const filterButtons = [...document.querySelectorAll("[data-map-filter]")];
+  const title = module?.querySelector("[data-map-title]");
+  const description = module?.querySelector("[data-map-description]");
+  const gpsStatus = module?.querySelector("[data-map-gps-status]");
+  const nearest = module?.querySelector("[data-map-nearest]");
+  const weather = module?.querySelector("[data-map-weather]");
+  const tags = module?.querySelector("[data-map-tags]");
+  const facts = module?.querySelector("[data-map-facts]");
+  const primary = module?.querySelector("[data-map-primary]");
+  const directions = module?.querySelector("[data-map-directions]");
+  const nearby = module?.querySelector("[data-map-nearby]");
+
+  if (
+    !module ||
+    !mapElement ||
+    !locateButton ||
+    !resetButton ||
+    !filterButtons.length ||
+    !title ||
+    !description ||
+    !gpsStatus ||
+    !nearest ||
+    !weather ||
+    !tags ||
+    !facts ||
+    !primary ||
+    !directions ||
+    !nearby
+  ) {
+    return;
+  }
+
+  let activeFilter = "all";
+  let activePointKey = "osaka-route";
+  let mapInstance = null;
+  let markerLayer = null;
+  let polyline = null;
+  let userMarker = null;
+  let watchId = null;
+  let initialized = false;
+  let lastUserPosition = null;
+
+  const getFilteredPoints = () => MAP_POINTS.filter((point) => activeFilter === "all" || point.category === activeFilter);
+  const getPointByKey = (key) => MAP_POINTS.find((point) => point.key === key) ?? MAP_POINTS[0];
+
+  const updateNearbyList = (userPosition = null) => {
+    const visiblePoints = getFilteredPoints();
+    const rankedPoints = userPosition
+      ? [...visiblePoints]
+          .map((point) => ({
+            point,
+            distance: calculateDistanceKm(userPosition.lat, userPosition.lon, point.lat, point.lon)
+          }))
+          .sort((left, right) => left.distance - right.distance)
+      : visiblePoints.slice(0, 4).map((point, index) => ({ point, distance: index + 1 }));
+
+    const shortlist = rankedPoints.slice(0, 4);
+    nearby.innerHTML = shortlist
+      .map(({ point, distance }) => {
+        const distanceLabel = userPosition ? `${distance.toFixed(distance < 10 ? 1 : 0)} km away` : point.tags.slice(0, 2).join(" · ");
+        return `
+          <div class="map-nearby-item">
+            <strong>${point.title}</strong>
+            <span>${distanceLabel} - ${point.description}</span>
+          </div>
+        `;
+      })
+      .join("");
+
+    if (shortlist[0]) {
+      nearest.textContent = shortlist[0].point.title;
+    }
+  };
+
+  const updatePointDetails = (point, userPosition = null) => {
+    const forecast = WEATHER_CACHE.get(point.weatherKey);
+    title.textContent = point.title;
+    description.textContent = point.description;
+    weather.textContent = forecast
+      ? `${forecast.condition}. ${forecast.routeAdvice}`
+      : "Live route weather loads in the weather section below.";
+    tags.innerHTML = point.tags.map((tag) => `<span class="destination-pill">${tag}</span>`).join("");
+    facts.innerHTML = point.facts
+      .map(
+        (fact) => `
+          <div class="route-fact">
+            <strong>${fact.label}</strong>
+            <span>${fact.text}</span>
+          </div>
+        `
+      )
+      .join("");
+    primary.href = point.guideHref;
+    primary.textContent = point.guideLabel;
+    if (point.guideHref.startsWith("http")) {
+      primary.target = "_blank";
+      primary.rel = "noreferrer";
+    } else {
+      primary.removeAttribute("target");
+      primary.removeAttribute("rel");
+    }
+    directions.href = buildGoogleDirectionsUrl(point);
+
+    if (userPosition) {
+      const distance = calculateDistanceKm(userPosition.lat, userPosition.lon, point.lat, point.lon);
+      gpsStatus.textContent = `Tracking live position · ${distance.toFixed(distance < 10 ? 1 : 0)} km to selected point`;
+    }
+  };
+
+  const renderMarkers = (L, userPosition = null) => {
+    if (!mapInstance || !markerLayer) {
+      return;
+    }
+
+    markerLayer.clearLayers();
+    const visiblePoints = getFilteredPoints();
+
+    visiblePoints.forEach((point) => {
+      const marker = L.marker([point.lat, point.lon], { icon: createMapIcon(L, point.category) });
+      marker.bindPopup(createMapPopup(point));
+      marker.on("click", () => {
+        activePointKey = point.key;
+        updatePointDetails(point, userPosition);
+        updateNearbyList(userPosition);
+      });
+      marker.addTo(markerLayer);
+    });
+
+    if (polyline) {
+      polyline.remove();
+    }
+
+    const routePoints = MAP_POINTS.filter((point) => point.category === "route").map((point) => [point.lat, point.lon]);
+    polyline = L.polyline(routePoints, {
+      color: "#9c3d33",
+      weight: 4,
+      opacity: 0.75,
+      dashArray: "10 8"
+    }).addTo(mapInstance);
+
+    const activePoint = visiblePoints.find((point) => point.key === activePointKey) ?? visiblePoints[0] ?? MAP_POINTS[0];
+    activePointKey = activePoint.key;
+    updatePointDetails(activePoint, userPosition);
+  };
+
+  const setUserPosition = (L, position) => {
+    const userLatLng = {
+      lat: position.coords.latitude,
+      lon: position.coords.longitude
+    };
+    lastUserPosition = userLatLng;
+
+    if (!userMarker) {
+      userMarker = L.circleMarker([userLatLng.lat, userLatLng.lon], {
+        radius: 9,
+        color: "#1f5f6b",
+        weight: 3,
+        fillColor: "#ffffff",
+        fillOpacity: 0.92
+      }).addTo(mapInstance);
+    } else {
+      userMarker.setLatLng([userLatLng.lat, userLatLng.lon]);
+    }
+
+    gpsStatus.textContent = `GPS live at ${userLatLng.lat.toFixed(3)}, ${userLatLng.lon.toFixed(3)}`;
+    updateNearbyList(userLatLng);
+    updatePointDetails(getPointByKey(activePointKey), userLatLng);
+  };
+
+  const attachControls = (L) => {
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.mapFilter;
+        filterButtons.forEach((candidate) => {
+          const isActive = candidate === button;
+          candidate.classList.toggle("is-active", isActive);
+          candidate.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+        renderMarkers(L, lastUserPosition);
+        updateNearbyList(lastUserPosition);
+      });
+    });
+
+    locateButton.addEventListener("click", () => {
+      if (!navigator.geolocation) {
+        gpsStatus.textContent = "Geolocation is not supported in this browser.";
+        return;
+      }
+
+      gpsStatus.textContent = "Requesting location permission...";
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserPosition(L, position);
+          mapInstance.flyTo([position.coords.latitude, position.coords.longitude], 7, { duration: 1.2 });
+
+          if (watchId === null) {
+            watchId = navigator.geolocation.watchPosition(
+              (nextPosition) => setUserPosition(L, nextPosition),
+              () => {
+                gpsStatus.textContent = "Location shared once. Live tracking update failed.";
+              },
+              { enableHighAccuracy: true, maximumAge: 30000, timeout: 10000 }
+            );
+          }
+        },
+        () => {
+          gpsStatus.textContent = "Location permission denied. Use the saved route pins instead.";
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+      );
+    });
+
+    resetButton.addEventListener("click", () => {
+      mapInstance.setView([35.3, 137.8], 6);
+      activeFilter = "all";
+      filterButtons.forEach((button) => {
+        const isActive = button.dataset.mapFilter === "all";
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
+      renderMarkers(L, lastUserPosition);
+      updateNearbyList(lastUserPosition);
+      gpsStatus.textContent = lastUserPosition ? gpsStatus.textContent : "Location not shared yet";
+    });
+  };
+
+  const createMap = async () => {
+    if (initialized) {
+      return;
+    }
+
+    initialized = true;
+    try {
+      const L = await loadLeafletAssets();
+      mapInstance = L.map(mapElement, {
+        zoomControl: true,
+        scrollWheelZoom: false
+      }).setView([35.3, 137.8], 6);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
+        maxZoom: 18
+      }).addTo(mapInstance);
+
+      markerLayer = L.layerGroup().addTo(mapInstance);
+      renderMarkers(L);
+      updateNearbyList();
+      attachControls(L);
+
+      loadingCard?.classList.add("is-hidden");
+      mapElement.classList.add("is-ready");
+      window.setTimeout(() => mapInstance.invalidateSize(), 120);
+    } catch {
+      if (loadingCard) {
+        loadingCard.innerHTML = `
+          <strong>Interactive map failed to load</strong>
+          <span>The page still works. Use the route atlas above or open the selected stop directly in Google Maps.</span>
+        `;
+      }
+    }
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries, instance) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            createMap();
+            instance.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(module);
+  } else {
+    createMap();
+  }
+
+  window.addEventListener("beforeunload", () => {
+    if (watchId !== null && navigator.geolocation) {
+      navigator.geolocation.clearWatch(watchId);
+    }
+  });
+
+  document.addEventListener("weather:updated", () => {
+    updatePointDetails(getPointByKey(activePointKey), lastUserPosition);
+  });
 }
 
 function renderDirectoryMedia(item, detail = false) {
@@ -2886,6 +3505,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initTermGroups();
   initRouteModules();
   initRecommendationEngine();
+  initLiveMap();
   initWeatherDashboard();
   initDestinationExplorer();
   initFlightForms();
