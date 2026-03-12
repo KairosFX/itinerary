@@ -525,6 +525,8 @@ const UI_COPY = {
     recommendationTop: "Top",
     recommendationMatchSuffix: "match",
     recommendationOpenPrefix: "Open",
+    themeLight: "Light",
+    themeDark: "Dark",
     footerHelpful: "Helpful links",
     footerRelated: "Related sites",
     footerAbout: "About",
@@ -604,6 +606,8 @@ const UI_COPY = {
     recommendationTop: "おすすめ",
     recommendationMatchSuffix: "一致",
     recommendationOpenPrefix: "開く",
+    themeLight: "ライト",
+    themeDark: "ダーク",
     footerHelpful: "便利なリンク",
     footerRelated: "関連サイト",
     footerAbout: "このサイトについて",
@@ -690,6 +694,22 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: ".hero-actions a:nth-child(1)", text: "プランを作る" },
     { selector: ".hero-actions a:nth-child(2)", text: "旅程を開く" },
     { selector: ".hero-actions a:nth-child(3)", text: "完全ガイドを開く" },
+    { selector: ".hero .hero-status-strip .status-pill:nth-child(1) strong", text: "7日" },
+    { selector: ".hero .hero-status-strip .status-pill:nth-child(1) span", text: "都市を増やしすぎない、集中型のルートです。" },
+    { selector: ".hero .hero-status-strip .status-pill:nth-child(2) strong", text: "柔軟ルール 1つ" },
+    { selector: ".hero .hero-status-strip .status-pill:nth-child(2) span", text: "富士は固定順ではなく、見え方優先です。" },
+    { selector: ".hero .hero-status-strip .status-pill:nth-child(3) strong", text: "主要停止点 5つ" },
+    { selector: ".hero .hero-status-strip .status-pill:nth-child(3) span", text: "大阪、京都、箱根、富士、東京。" },
+    { selector: ".hero .glance-card:nth-child(1) strong", text: "旅の雰囲気" },
+    { selector: ".hero .glance-card:nth-child(1) span", text: "食中心の夜、1日の文化対比、景色の継ぎ目、そして東京で締めます。" },
+    { selector: ".hero .glance-card:nth-child(2) strong", text: "計画ルール" },
+    { selector: ".hero .glance-card:nth-child(2) span", text: "大阪は気楽に始め、富士は天気に合わせて順番を動かします。" },
+    { selector: ".hero-canvas-copy .kicker", text: "ライブ旅程の骨格" },
+    { selector: ".hero-canvas-copy strong", text: "ネオンの到着、寺社の対比、景色の継ぎ目、渋谷フィニッシュ。" },
+    { selector: ".hero-canvas-copy span:last-child", text: "下のボードは、食、景色、移動のしやすさ、天気の圧力という基本ロジックをそのまま反映しています。" },
+    { selector: ".atmospheric-card strong", text: "共有する前に" },
+    { selector: ".atmospheric-card span", text: "まずプレビューカードで視覚的に納得してもらい、その後で必要なページだけを送るほうが、長いガイド全文を投げるより伝わります。" },
+    { selector: ".section-pill[href=\"#smart-guide\"]", text: "使い方" },
     { selector: ".section-pill[href=\"#route-atlas\"]", text: "ハイライト" },
     { selector: ".section-pill[href=\"#live-map\"]", text: "ライブ地図" },
     { selector: ".section-pill[href=\"#trip-profile\"]", text: "プロフィール" },
@@ -698,6 +718,21 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: ".section-pill[href=\"#official-watch\"]", text: "記事" },
     { selector: ".section-pill[href=\"#visual-previews\"]", text: "プレビュー" },
     { selector: "#route-atlas .section-copy .eyebrow", text: "ビジュアルハイライト" },
+    { selector: "#smart-guide .section-copy .eyebrow", text: "スマートガイド" },
+    { selector: "#smart-guide .section-copy h2", text: "サイトを正しい順番で使う" },
+    { selector: "#smart-guide .section-header > p", text: "まず旅の論理を作り、次に天気を確認し、画像で雰囲気を共有してから、必要なページだけを送るのが最短です。" },
+    { selector: "#smart-guide .smart-step-card:nth-child(1) .smart-step-count", text: "手順 01" },
+    { selector: "#smart-guide .smart-step-card:nth-child(1) strong", text: "まず旅の骨格を決める" },
+    { selector: "#smart-guide .smart-step-card:nth-child(1) span", text: "おすすめエンジンで、食・景色・夜・移動のしやすさのどれを軸にするかを先に決めます。" },
+    { selector: "#smart-guide .smart-step-card:nth-child(2) .smart-step-count", text: "手順 02" },
+    { selector: "#smart-guide .smart-step-card:nth-child(2) strong", text: "ライブ天気で整える" },
+    { selector: "#smart-guide .smart-step-card:nth-child(2) span", text: "富士を動かすべきか、箱根に防寒が要るか、今日どこを先に確定してよいかを見ます。" },
+    { selector: "#smart-guide .smart-step-card:nth-child(3) .smart-step-count", text: "手順 03" },
+    { selector: "#smart-guide .smart-step-card:nth-child(3) strong", text: "画像で空気を共有する" },
+    { selector: "#smart-guide .smart-step-card:nth-child(3) span", text: "プレビューを開いて、長い説明ではなく都市の雰囲気から納得してもらいます。" },
+    { selector: "#smart-guide .smart-step-card:nth-child(4) .smart-step-count", text: "手順 04" },
+    { selector: "#smart-guide .smart-step-card:nth-child(4) strong", text: "必要な深さだけ送る" },
+    { selector: "#smart-guide .smart-step-card:nth-child(4) span", text: "要点ページは最小限、分割ページは局所的、完全ガイドは深掘り用です。" },
     { selector: "#route-atlas .section-copy h2", text: "旅全体を画像中心で、より素早く把握する" },
     {
       selector: "#route-atlas .section-header > p",
@@ -765,11 +800,19 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: "#route-atlas [data-route-stop=\"tokyo\"] strong", text: "東京" },
     { selector: "#route-atlas [data-route-stop=\"tokyo\"] small", text: "最終日" },
     { selector: "#official-watch .section-copy .eyebrow", text: "公式リンク" },
-    { selector: "#official-watch .section-copy h2", text: "記事、季節情報、パンフレット、航空券検索" },
+    { selector: "#official-watch .section-copy h2", text: "公式記事、季節情報、パンフレット、航空券検索" },
     {
       selector: "#official-watch .section-header > p",
       text: "ここにあるリンクは軽量で信頼できるものだけです。時期確認、地域調査、旅行準備を、重い埋め込みなしで使えます。"
     },
+    { selector: "#official-watch .feature-slide:nth-child(1) h3", text: "公式の桜予報で、花の時期を先に確認する" },
+    { selector: "#official-watch .feature-slide:nth-child(1) p", text: "日程にまだ調整の余地があるなら、まずこの予報から入り、そこからルート順を固めるのが安全です。" },
+    { selector: "#official-watch .feature-slide:nth-child(2) h3", text: "公式の目的地ハブで、ルートを広げすぎないよう比較する" },
+    { selector: "#official-watch .feature-slide:nth-child(2) p", text: "関西、関東、中部などを比較したい時の、いちばん軽くて信頼できる入口です。" },
+    { selector: "#official-watch .feature-slide:nth-child(3) h3", text: "広い計画情報は JNTO の旅行計画ハブで補う" },
+    { selector: "#official-watch .feature-slide:nth-child(3) p", text: "このルートの外まで質問が広がったときは、まずここで公式の基本レイヤーを確認します。" },
+    { selector: "#official-watch .feature-slide:nth-child(4) h3", text: "印刷や保存用には公式パンフレット棚を使う" },
+    { selector: "#official-watch .feature-slide:nth-child(4) p", text: "地域ごとのダウンロード資料が必要なときに、最も扱いやすい公式の入り口です。" },
     { selector: "#visual-previews .section-copy .eyebrow", text: "プレビューデッキ" },
     { selector: "#visual-previews .section-copy h2", text: "決め切る前に、画像で各都市の空気をつかむ" },
     {
@@ -851,8 +894,9 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: ".hero-actions a:nth-child(2)", text: "都市別フードへ" },
     { selector: ".section-pill[href=\"#food-carousel\"]", text: "フードスライダー" },
     { selector: ".section-pill[href=\"#city-foods\"]", text: "都市別フード" },
+    { selector: ".section-pill[href=\"#food-watch\"]", text: "公式ウォッチ" },
     { selector: ".section-pill[href=\"#food-links\"]", text: "公式リンク" },
-    { selector: ".section-pill[href=\"#dish-shortlist\"]", text: "料理一覧" },
+    { selector: ".section-pill[href=\"#dish-shortlist\"]", text: "料理メニュー" },
     { selector: ".hero .glance-card:nth-of-type(1) strong", text: "強い食の街" },
     { selector: ".hero .glance-card:nth-of-type(1) span", text: "大阪と東京が、遅い時間までの食の勢いを最も持っています。" },
     { selector: ".hero .glance-card:nth-of-type(2) strong", text: "予算感" },
@@ -863,9 +907,11 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: "#city-foods .section-copy .eyebrow", text: "都市別フード" },
     { selector: "#city-foods .section-copy h2", text: "食べ物を、正しい都市と一緒に見る" },
     { selector: "#city-foods .section-header > p", text: "このカード群は速く使うための並びです。大阪で何を食べるか、箱根ではどれだけ実用的に保つかがすぐ見えます。" },
-    { selector: "#food-links .section-copy .eyebrow", text: "公式フード情報" },
-    { selector: "#food-links .section-copy h2", text: "さらに食の背景を読む" },
-    { selector: "#food-links .section-header > p", text: "食事の細かい決め打ちの前に、公式の地域情報を見たいときに使ってください。" },
+    { selector: "#food-watch .section-copy .eyebrow", text: "公式フードウォッチ" },
+    { selector: "#food-watch .section-copy h2", text: "食事レイヤーを固める前に、公式の読み物を開く" },
+    { selector: "#food-links .section-copy .eyebrow", text: "公式フードリンク" },
+    { selector: "#food-links .section-copy h2", text: "強い外部フード参照を手元に置く" },
+    { selector: "#food-links .section-header > p", text: "食事を細かく決める前に、公式の地域文脈を確認したい時のリンクです。" },
     { selector: "#food-links .link-card:nth-child(1) strong", text: "JNTO 食と飲み物" },
     { selector: "#food-links .link-card:nth-child(2) strong", text: "大阪公式観光" },
     { selector: "#food-links .link-card:nth-child(3) strong", text: "大阪公式読み物" },
@@ -878,9 +924,17 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: "#food-visuals .section-copy .eyebrow", text: "フード画像" },
     { selector: "#food-visuals .section-copy h2", text: "都市ごとの食の空気感" },
     { selector: "#food-visuals .section-header > p", text: "どの街でどんな食の気分になるかを、画像で先に確認するためのブロックです。" },
-    { selector: "#dish-shortlist .section-copy .eyebrow", text: "料理一覧" },
-    { selector: "#dish-shortlist .section-copy h2", text: "覚えておきたい料理" },
-    { selector: "#dish-shortlist .section-header > p", text: "長い説明より検索語が欲しい人向けの短い一覧です。" }
+    { selector: "#dish-shortlist .section-copy .eyebrow", text: "料理メニュー" },
+    { selector: "#dish-shortlist .section-copy h2", text: "覚えておきたい主な料理" },
+    { selector: "#dish-shortlist .section-header > p", text: "料理名、合う都市、代替案をひと目で思い出すためのビジュアルメニューです。" },
+    { selector: "#dish-shortlist .menu-card:nth-child(1) strong", text: "たこ焼き" },
+    { selector: "#dish-shortlist .menu-card:nth-child(2) strong", text: "お好み焼き" },
+    { selector: "#dish-shortlist .menu-card:nth-child(3) strong", text: "串カツ" },
+    { selector: "#dish-shortlist .menu-card:nth-child(4) strong", text: "餃子" },
+    { selector: "#dish-shortlist .menu-card:nth-child(5) strong", text: "ラーメン" },
+    { selector: "#dish-shortlist .menu-card:nth-child(6) strong", text: "抹茶スイーツ" },
+    { selector: "#dish-shortlist .menu-card:nth-child(7) strong", text: "吉田うどん" },
+    { selector: "#dish-shortlist .menu-card:nth-child(8) strong", text: "おにぎり" }
   ],
   "toolkit.html": [
     { selector: ".hero .eyebrow", text: "準備ガイド" },
@@ -899,9 +953,9 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: "#shinkansen .section-copy .eyebrow", text: "移動" },
     { selector: "#shinkansen .section-copy h2", text: "切符、パス、移動日の早見表" },
     { selector: "#shinkansen .section-header > p", text: "このブロックは、移動しながらでも読める速さを優先しています。" },
-    { selector: "#official-links .section-copy .eyebrow", text: "クイックリンク" },
-    { selector: "#official-links .section-copy h2", text: "公式予約と情報リンク" },
-    { selector: "#official-links .section-header > p", text: "移動が重い日より前に、スマホへ入れておきたいリンクです。" }
+    { selector: "#official-links .section-copy .eyebrow", text: "公式プランニングウォッチ" },
+    { selector: "#official-links .section-copy h2", text: "主要な公式予約・準備情報を手元に置く" },
+    { selector: "#official-links .section-header > p", text: "移動が重い日より前に、スマホへ入れておきたい公式リンクと計画読み物です。" }
   ],
   "culture.html": [
     { selector: ".hero .eyebrow", text: "文化メモ" },
@@ -915,6 +969,9 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: "#quick-ref .section-copy .eyebrow", text: "クイック参照" },
     { selector: "#quick-ref .section-copy h2", text: "まず覚える4つのこと" },
     { selector: "#quick-ref .section-header > p", text: "開いて10秒で答えが欲しい人向けの最短ブロックです。" },
+    { selector: "#culture-watch .section-copy .eyebrow", text: "公式カルチャーウォッチ" },
+    { selector: "#culture-watch .section-copy h2", text: "本当のルールが必要な時は、公式の文化ガイドを開く" },
+    { selector: "#culture-watch .section-header > p", text: "細かいマナー判断が必要になった時のために、JNTO の公式読み物をまとめています。" },
     { selector: "#guide-images .section-copy .eyebrow", text: "ガイド画像" },
     { selector: "#guide-images .section-copy h2", text: "視覚で覚える短いヒント" },
     { selector: "#guide-images .section-header > p", text: "段落よりも1枚の視覚合図のほうが早い時のための画像です。" },
@@ -936,6 +993,43 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: "#photo-prompts .section-copy .eyebrow", text: "写真のヒント" },
     { selector: "#photo-prompts .section-copy h2", text: "都市ごとに1枚の記憶写真" },
     { selector: "#photo-prompts .section-header > p", text: "本格的な撮影計画ではなく、誰でも1枚きれいに残せるための短い合図です。" }
+  ],
+  "quick_snapshot.html": [
+    { selector: ".hero .eyebrow", text: "要点ページ" },
+    { selector: ".hero h1", text: "Japan Escape 要点" },
+    { selector: ".hero > p", text: "モバイル、移動日、PDF 保存向けの簡潔版です。ルートの形、主要料理、都市ごとの核、実用メモだけを残しています。" },
+    { selector: ".button-row .button.primary", text: "メインハブ" },
+    { selector: ".button-row .button:nth-child(2)", text: "完全ガイドを開く" },
+    { selector: ".button-row .button:nth-child(3)", text: "印刷 / PDF 保存" },
+    { selector: ".hero .summary-grid .card:nth-child(1) strong", text: "旅の雰囲気" },
+    { selector: ".hero .summary-grid .card:nth-child(2) strong", text: "覚えておくこと" },
+    { selector: ".hero .summary-grid .card:nth-child(2) span", text: "富士の見え方を確認し、1つ柔軟な時間帯を残し、長い移動日は充電器と軽食を持つこと。" },
+    { selector: "#route-notes .section-copy .eyebrow", text: "旅のメモ" },
+    { selector: "#route-notes .section-copy h2", text: "旅の要点を一度で読む" },
+    { selector: "#route-notes .section-copy p", text: "各都市の役割と、どこを柔軟に扱うべきかを簡潔にまとめた要約です。" },
+    { selector: "#snapshot-days .section-copy .eyebrow", text: "7日旅程" },
+    { selector: "#snapshot-days .section-copy h2", text: "日ごとの要点" },
+    { selector: "#snapshot-days .section-copy p", text: "グループが最小枚数で全体像を見たいときのためのカードです。" },
+    { selector: "#visual-route .section-copy .eyebrow", text: "ビジュアルルート" },
+    { selector: "#visual-route .section-copy h2", text: "5つの画で旅をつかむ" },
+    { selector: "#city-cards .section-copy .eyebrow", text: "都市カード" },
+    { selector: "#city-cards .section-copy h2", text: "停止点ごとの1枚カード" },
+    { selector: "#transit-cheats .section-copy .eyebrow", text: "移動の要点" },
+    { selector: "#transit-cheats .section-copy h2", text: "急いで駅へ向かう時の版" },
+    { selector: "#quick-tips .section-copy .eyebrow", text: "クイックヒント" },
+    { selector: "#quick-tips .section-copy h2", text: "上位3つのマナーと安全メモ" },
+    { selector: "#photo-prompts .section-copy .eyebrow", text: "写真のヒント" },
+    { selector: "#photo-prompts .section-copy h2", text: "都市ごとに残したい1枚" }
+  ],
+  "guide.html": [
+    { selector: "#route-hero .eyebrow", text: "7日間の日本ルート" },
+    { selector: "#route-hero h1", text: "都市の夜、富士の景色、東京フィニッシュ" },
+    { selector: "#route-hero .hero-actions a:nth-child(1)", text: "ビジュアル停止点へ" },
+    { selector: "#route-hero .hero-actions a:nth-child(2)", text: "日ごとの流れへ" },
+    { selector: "#route-hero .hero-actions a:nth-child(3)", text: "要点ページを開く" },
+    { selector: "#guide-map .section-copy .eyebrow", text: "ガイドマップ" },
+    { selector: "#guide-map .section-copy h2", text: "必要なレイヤーをすぐ選ぶ" },
+    { selector: "#guide-map .section-header > p", text: "このページは目的ごとに分かれています。旅程、食事、準備、文化、要点ページへすぐ移動できます。" }
   ],
   "japan_trip_brochure.html": [
     { selector: ".hero .eyebrow", text: "パンフレット" },
@@ -1265,6 +1359,31 @@ function applyPageLocaleContent(locale, pageFile) {
         );
       }
     });
+  });
+
+  document.querySelectorAll("[data-i18n-en][data-i18n-ja]").forEach((element) => {
+    element.textContent = locale === "ja" ? element.dataset.i18nJa ?? "" : element.dataset.i18nEn ?? "";
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder-en][data-i18n-placeholder-ja]").forEach((element) => {
+    element.setAttribute(
+      "placeholder",
+      locale === "ja" ? element.dataset.i18nPlaceholderJa ?? "" : element.dataset.i18nPlaceholderEn ?? ""
+    );
+  });
+
+  document.querySelectorAll("[data-i18n-aria-label-en][data-i18n-aria-label-ja]").forEach((element) => {
+    element.setAttribute(
+      "aria-label",
+      locale === "ja" ? element.dataset.i18nAriaLabelJa ?? "" : element.dataset.i18nAriaLabelEn ?? ""
+    );
+  });
+
+  document.querySelectorAll("[data-i18n-title-en][data-i18n-title-ja]").forEach((element) => {
+    element.setAttribute(
+      "title",
+      locale === "ja" ? element.dataset.i18nTitleJa ?? "" : element.dataset.i18nTitleEn ?? ""
+    );
   });
 }
 
@@ -2388,6 +2507,82 @@ function getCurrentPageFile() {
   return file || "index.html";
 }
 
+function getOrCreateTopbarUtility(topbar) {
+  let utility = topbar.querySelector(".topbar-utility");
+  if (!utility) {
+    utility = document.createElement("div");
+    utility.className = "topbar-utility";
+    topbar.append(utility);
+  }
+  return utility;
+}
+
+function getSavedTheme() {
+  const stored = safeStorageGet("japan-escape-theme");
+  if (stored === "light" || stored === "dark") {
+    return stored;
+  }
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyTheme(theme) {
+  const resolved = theme === "dark" ? "dark" : "light";
+  document.documentElement.dataset.theme = resolved;
+  safeStorageSet("japan-escape-theme", resolved);
+
+  document.querySelectorAll("[data-theme-button]").forEach((button) => {
+    const isActive = button.dataset.themeButton === resolved;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+
+  document.dispatchEvent(new CustomEvent("theme:changed", { detail: { theme: resolved } }));
+}
+
+function initThemeToggle() {
+  const topbars = [...document.querySelectorAll(".topbar")];
+  if (!topbars.length) {
+    return;
+  }
+
+  topbars.forEach((topbar) => {
+    if (topbar.querySelector(".theme-toggle")) {
+      return;
+    }
+
+    const toggle = document.createElement("div");
+    toggle.className = "theme-toggle";
+    toggle.innerHTML = `
+      <button class="theme-button" type="button" data-theme-button="light" aria-pressed="false">
+        <span aria-hidden="true">☀️</span>
+        <strong>${ui("themeLight", {}, "en")}</strong>
+      </button>
+      <button class="theme-button" type="button" data-theme-button="dark" aria-pressed="false">
+        <span aria-hidden="true">🌙</span>
+        <strong>${ui("themeDark", {}, "en")}</strong>
+      </button>
+    `;
+
+    toggle.querySelectorAll("[data-theme-button]").forEach((button) => {
+      button.addEventListener("click", () => applyTheme(button.dataset.themeButton));
+    });
+
+    getOrCreateTopbarUtility(topbar).append(toggle);
+  });
+
+  document.addEventListener("locale:changed", () => {
+    const locale = getActiveLocale();
+    document.querySelectorAll("[data-theme-button='light'] strong").forEach((label) => {
+      label.textContent = ui("themeLight", {}, locale);
+    });
+    document.querySelectorAll("[data-theme-button='dark'] strong").forEach((label) => {
+      label.textContent = ui("themeDark", {}, locale);
+    });
+  });
+
+  applyTheme(getSavedTheme());
+}
+
 function initLocaleSwitch() {
   const topbars = [...document.querySelectorAll(".topbar")];
   if (!topbars.length) {
@@ -2447,7 +2642,7 @@ function initLocaleSwitch() {
       button.addEventListener("click", () => applyLocale(button.dataset.localeButton));
     });
 
-    topbar.append(switcher);
+    getOrCreateTopbarUtility(topbar).prepend(switcher);
   });
 
   applyLocale(safeStorageGet("japan-escape-locale") || "en");
@@ -3916,6 +4111,48 @@ function initFlightForms() {
   });
 }
 
+function initBrochureBrowser() {
+  const root = document.querySelector("[data-brochure-browser]");
+  if (!root) {
+    return;
+  }
+
+  const searchInput = root.querySelector("[data-brochure-search]");
+  const categorySelect = root.querySelector("[data-brochure-category]");
+  const cards = [...root.querySelectorAll("[data-resource-card]")];
+  const emptyState = root.querySelector("[data-brochure-empty]");
+
+  if (!(searchInput instanceof HTMLInputElement) || !(categorySelect instanceof HTMLSelectElement) || !cards.length) {
+    return;
+  }
+
+  const render = () => {
+    const query = searchInput.value.trim().toLowerCase();
+    const category = categorySelect.value;
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const keywords = `${card.dataset.resourceTitle || ""} ${card.dataset.resourceKeywords || ""}`.toLowerCase();
+      const categories = String(card.dataset.resourceCategory || "").split(/\s+/).filter(Boolean);
+      const matchesQuery = !query || keywords.includes(query);
+      const matchesCategory = category === "all" || categories.includes(category);
+      const isVisible = matchesQuery && matchesCategory;
+      card.hidden = !isVisible;
+      if (isVisible) {
+        visibleCount += 1;
+      }
+    });
+
+    if (emptyState) {
+      emptyState.hidden = visibleCount > 0;
+    }
+  };
+
+  searchInput.addEventListener("input", render);
+  categorySelect.addEventListener("change", render);
+  render();
+}
+
 function initSliders() {
   const sliders = [...document.querySelectorAll("[data-slider]")];
   if (!sliders.length) {
@@ -4799,6 +5036,7 @@ function initPreviewModal() {
 window.addEventListener("scroll", updateScrollProgress, { passive: true });
 window.addEventListener("DOMContentLoaded", () => {
   updateScrollProgress();
+  initThemeToggle();
   initLocaleSwitch();
   initTopbarPreviews();
   initSiteFooter();
@@ -4813,6 +5051,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initWeatherDashboard();
   initDestinationExplorer();
   initFlightForms();
+  initBrochureBrowser();
   initSliders();
   initStoryCardLoops();
   initPreviewModal();

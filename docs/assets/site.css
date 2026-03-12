@@ -21,6 +21,24 @@
   --trans-slow: 620ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: rgba(18, 28, 34, 0.92);
+  --paper-strong: #15242c;
+  --ink: #edf3f5;
+  --muted: #aac0c7;
+  --crimson: #d87a67;
+  --gold: #ddb15a;
+  --sea: #79b9c6;
+  --forest: #7a9483;
+  --sky: #132d36;
+  --line: rgba(237, 243, 245, 0.12);
+  --line-strong: rgba(237, 243, 245, 0.22);
+  --shadow: 0 20px 48px rgba(0, 0, 0, 0.34);
+  --shadow-soft: 0 14px 28px rgba(0, 0, 0, 0.24);
+  --shadow-lift: 0 26px 48px rgba(0, 0, 0, 0.34);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -54,6 +72,13 @@ body {
     linear-gradient(180deg, #fff8ef 0%, #f3eadb 100%);
 }
 
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(221, 177, 90, 0.12), transparent 24%),
+    radial-gradient(circle at 88% 12%, rgba(121, 185, 198, 0.14), transparent 22%),
+    linear-gradient(180deg, #0f181d 0%, #15252c 100%);
+}
+
 body::after {
   content: "";
   position: fixed;
@@ -69,6 +94,10 @@ body::after {
   animation: ambient-gradient 24s ease-in-out infinite alternate;
 }
 
+html[data-theme="dark"] body::after {
+  opacity: 0.34;
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -78,6 +107,13 @@ body::before {
   opacity: 0.24;
   background:
     linear-gradient(180deg, rgba(255, 248, 239, 0.64), rgba(243, 234, 219, 0.72)),
+    url("https://commons.wikimedia.org/wiki/Special:FilePath/Chureito_Pagoda.jpg?width=1920") center center / cover no-repeat;
+}
+
+html[data-theme="dark"] body::before {
+  opacity: 0.14;
+  background:
+    linear-gradient(180deg, rgba(10, 16, 20, 0.84), rgba(17, 28, 34, 0.82)),
     url("https://commons.wikimedia.org/wiki/Special:FilePath/Chureito_Pagoda.jpg?width=1920") center center / cover no-repeat;
 }
 
@@ -187,6 +223,11 @@ main section[id] {
   transition: box-shadow var(--trans-fast), background var(--trans-fast), border-color var(--trans-fast);
 }
 
+html[data-theme="dark"] .topbar {
+  border-color: rgba(121, 185, 198, 0.18);
+  background: rgba(15, 24, 29, 0.84);
+}
+
 .topbar::after {
   display: none;
   content: "";
@@ -225,6 +266,14 @@ main section[id] {
   min-width: 0;
 }
 
+.topbar-utility {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-left: auto;
+}
+
 .nav-links {
   display: flex;
   flex-wrap: wrap;
@@ -257,6 +306,13 @@ main section[id] {
   background: rgba(255, 250, 243, 0.94);
   box-shadow: 0 16px 38px rgba(24, 49, 61, 0.12);
   border-color: rgba(255, 255, 255, 1);
+}
+
+html[data-theme="dark"] .topbar:hover,
+html[data-theme="dark"] .topbar:focus-within {
+  background: rgba(15, 24, 29, 0.92);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28);
+  border-color: rgba(121, 185, 198, 0.2);
 }
 
 .nav-preview {
@@ -352,6 +408,31 @@ main section[id] {
   grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.9fr);
   gap: 28px;
   align-items: start;
+}
+
+.hero-home {
+  background:
+    linear-gradient(96deg, rgba(255, 250, 243, 0.96) 0%, rgba(255, 248, 239, 0.92) 42%, rgba(255, 250, 243, 0.72) 64%, rgba(18, 28, 34, 0.18) 100%),
+    url("https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Fuji_from_Lake_Kawaguchi_s2.jpg?width=1920") center center / cover no-repeat;
+}
+
+.hero-home .hero-canvas,
+.hero-home .atmospheric-card {
+  background: rgba(255, 250, 243, 0.78);
+  border-color: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px);
+}
+
+html[data-theme="dark"] .hero-home {
+  background:
+    linear-gradient(96deg, rgba(12, 18, 22, 0.94) 0%, rgba(15, 24, 29, 0.9) 44%, rgba(15, 24, 29, 0.7) 66%, rgba(12, 18, 22, 0.42) 100%),
+    url("https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Fuji_from_Lake_Kawaguchi_s2.jpg?width=1920") center center / cover no-repeat;
+}
+
+html[data-theme="dark"] .hero-home .hero-canvas,
+html[data-theme="dark"] .hero-home .atmospheric-card {
+  background: rgba(15, 24, 29, 0.76);
+  border-color: rgba(121, 185, 198, 0.14);
 }
 
 .hero::before {
@@ -450,6 +531,13 @@ h1 {
   border: 1px solid rgba(31, 95, 107, 0.08);
 }
 
+html[data-theme="dark"] .button-secondary,
+html[data-theme="dark"] .button-pill {
+  background: rgba(121, 185, 198, 0.14);
+  border-color: rgba(121, 185, 198, 0.12);
+  color: var(--sea);
+}
+
 .button-primary:hover,
 .button-secondary:hover,
 .button-pill:hover {
@@ -463,7 +551,10 @@ h1 {
 .image-grid,
 .tip-grid,
 .link-grid,
-.metric-grid {
+.metric-grid,
+.resource-grid,
+.faq-grid,
+.browser-control-grid {
   display: grid;
   gap: 16px;
 }
@@ -471,6 +562,190 @@ h1 {
 .glance-strip {
   grid-template-columns: repeat(2, 1fr);
   margin-top: 22px;
+}
+
+.smart-guide-grid,
+.menu-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.smart-guide-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.smart-step-card {
+  display: grid;
+  gap: 14px;
+  min-height: 100%;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(248, 241, 229, 0.98));
+  transition: transform var(--trans-fast), box-shadow var(--trans-fast), border-color var(--trans-fast);
+}
+
+.smart-step-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(31, 95, 107, 0.22);
+  box-shadow: var(--shadow-lift);
+}
+
+.smart-step-count {
+  display: inline-flex;
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(31, 95, 107, 0.08);
+  color: var(--sea);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.smart-step-card strong {
+  display: block;
+  font-size: 1.12rem;
+  line-height: 1.2;
+}
+
+.smart-step-card span {
+  display: block;
+  color: var(--muted);
+  line-height: 1.62;
+  font-size: 0.94rem;
+}
+
+html[data-theme="dark"] .smart-step-card {
+  border-color: rgba(237, 243, 245, 0.12);
+  background: linear-gradient(180deg, rgba(19, 31, 37, 0.98), rgba(13, 22, 27, 0.96));
+}
+
+.menu-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.resource-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.faq-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.browser-control-grid {
+  grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
+  margin-bottom: 20px;
+}
+
+.menu-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 241, 229, 0.98));
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--trans-fast), box-shadow var(--trans-fast), border-color var(--trans-fast);
+}
+
+.menu-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(31, 95, 107, 0.22);
+  box-shadow: var(--shadow-lift);
+}
+
+.menu-card-media {
+  height: 190px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(31, 95, 107, 0.08);
+  background: #13232a;
+}
+
+.menu-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 520ms ease, filter 520ms ease;
+  filter: saturate(1.08) contrast(1.03);
+}
+
+.menu-card:hover .menu-card-media img {
+  transform: scale(1.04);
+}
+
+.menu-card-copy {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+
+.menu-card-copy strong {
+  display: block;
+  font-size: 1.18rem;
+}
+
+.menu-card-copy p {
+  color: var(--muted);
+  line-height: 1.58;
+  font-size: 0.94rem;
+}
+
+.menu-card-note {
+  display: inline-flex;
+  width: fit-content;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(204, 155, 72, 0.15);
+  color: var(--crimson);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+html[data-theme="dark"] .menu-card {
+  border-color: rgba(237, 243, 245, 0.12);
+  background: linear-gradient(180deg, rgba(19, 31, 37, 0.98), rgba(13, 22, 27, 0.96));
+}
+
+.faq-card {
+  display: grid;
+  gap: 10px;
+  min-height: 100%;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(248, 241, 229, 0.98));
+  box-shadow: var(--shadow-soft);
+}
+
+.faq-card strong {
+  display: block;
+  font-size: 1.08rem;
+  line-height: 1.28;
+}
+
+.faq-card p {
+  color: var(--muted);
+  line-height: 1.64;
+}
+
+.browser-empty {
+  padding: 18px 20px;
+  border: 1px dashed rgba(31, 95, 107, 0.2);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.browser-empty strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.browser-empty span {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.58;
 }
 
 .summary-grid {
@@ -506,6 +781,41 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 22px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(248, 241, 229, 0.98));
+}
+
+html[data-theme="dark"] .glance-card,
+html[data-theme="dark"] .info-card,
+html[data-theme="dark"] .metric-card,
+html[data-theme="dark"] .sticky-glance,
+html[data-theme="dark"] .search-panel,
+html[data-theme="dark"] .quick-callout,
+html[data-theme="dark"] .page-card,
+html[data-theme="dark"] .link-card,
+html[data-theme="dark"] .weather-callout,
+html[data-theme="dark"] .weather-focus-panel,
+html[data-theme="dark"] .tool-card,
+html[data-theme="dark"] .destination-detail,
+html[data-theme="dark"] .destination-category,
+html[data-theme="dark"] .weather-card,
+html[data-theme="dark"] .term-panel,
+html[data-theme="dark"] .recommendation-card,
+html[data-theme="dark"] .engine-summary-card,
+html[data-theme="dark"] .route-fact,
+html[data-theme="dark"] .search-result {
+  border-color: rgba(237, 243, 245, 0.12);
+  background: linear-gradient(180deg, rgba(19, 31, 37, 0.98), rgba(13, 22, 27, 0.96));
+  box-shadow: var(--shadow-soft);
+}
+
+html[data-theme="dark"] .destination-category {
+  background: rgba(19, 31, 37, 0.88);
+}
+
+html[data-theme="dark"] .faq-card,
+html[data-theme="dark"] .browser-empty {
+  border-color: rgba(237, 243, 245, 0.12);
+  background: linear-gradient(180deg, rgba(19, 31, 37, 0.98), rgba(13, 22, 27, 0.96));
+  box-shadow: var(--shadow-soft);
 }
 
 .info-card,
@@ -581,6 +891,38 @@ h1 {
   padding: 22px 44px 22px 22px;
 }
 
+.resource-card {
+  padding: 0;
+}
+
+.resource-card .resource-card-media {
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(31, 95, 107, 0.08);
+  background: #13232a;
+}
+
+.resource-card .resource-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 520ms ease, filter 520ms ease;
+  filter: saturate(1.06) contrast(1.03);
+}
+
+.resource-card:hover .resource-card-media img {
+  transform: scale(1.04);
+}
+
+.resource-card-copy {
+  display: grid;
+  gap: 10px;
+  flex: 1 1 auto;
+  width: 100%;
+  padding: 18px 44px 20px 20px;
+}
+
 .page-card:hover,
 .image-card:hover,
 .link-card:hover {
@@ -613,6 +955,10 @@ h1 {
   font-size: 1.2rem;
   color: var(--ink);
   line-height: 1.18;
+}
+
+.resource-card-copy strong {
+  margin-top: 0;
 }
 
 .page-card span,
@@ -653,6 +999,10 @@ h1 {
   left: auto;
   bottom: auto;
   margin-top: 18px;
+}
+
+.resource-card-copy small {
+  margin-top: 10px;
 }
 
 a.page-card::after,
@@ -1481,7 +1831,27 @@ html.js .route-map-board.is-live .route-pin {
   background: rgba(255, 255, 255, 0.78);
 }
 
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(31, 95, 107, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
 .locale-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  color: var(--muted);
+  transition: transform var(--trans-fast), background var(--trans-fast), color var(--trans-fast);
+}
+
+.theme-button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1496,11 +1866,29 @@ html.js .route-map-board.is-live .route-pin {
   letter-spacing: 0.04em;
 }
 
+.theme-button strong {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
 .locale-button:hover,
 .locale-button.is-active {
   transform: translateY(-1px);
   background: rgba(31, 95, 107, 0.1);
   color: var(--sea);
+}
+
+.theme-button:hover,
+.theme-button.is-active {
+  transform: translateY(-1px);
+  background: rgba(31, 95, 107, 0.1);
+  color: var(--sea);
+}
+
+html[data-theme="dark"] .locale-switch,
+html[data-theme="dark"] .theme-toggle {
+  border-color: rgba(121, 185, 198, 0.14);
+  background: rgba(15, 24, 29, 0.86);
 }
 
 .weather-layout,
@@ -2045,6 +2433,14 @@ html.js .route-map-board.is-live .route-pin {
   background: rgba(255, 255, 255, 0.98);
 }
 
+html[data-theme="dark"] .flight-form input,
+html[data-theme="dark"] .flight-form select,
+html[data-theme="dark"] .search-panel input {
+  border-color: rgba(237, 243, 245, 0.16);
+  background: rgba(9, 16, 20, 0.88);
+  color: var(--ink);
+}
+
 .flight-form .button-primary {
   grid-column: 1 / -1;
   width: 100%;
@@ -2065,6 +2461,10 @@ html.js .route-map-board.is-live .route-pin {
 .feature-slider {
   display: grid;
   gap: 16px;
+}
+
+.article-slider .slider-stage {
+  min-height: 400px;
 }
 
 .slider-stage {
@@ -2098,6 +2498,23 @@ html.js .route-map-board.is-live .route-pin {
   max-width: 56ch;
   color: rgba(255, 255, 255, 0.92);
   line-height: 1.62;
+}
+
+.article-slide-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.article-slide-meta span {
+  display: inline-flex;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
 .slider-controls {
@@ -3745,7 +4162,8 @@ a.recommendation-card:hover {
   .highlight-mini-card:hover,
   .filter-chip:hover,
   .slider-arrow:hover,
-  .locale-button:hover {
+  .locale-button:hover,
+  .theme-button:hover {
     transform: none;
     box-shadow: none;
   }
@@ -3791,7 +4209,12 @@ a.recommendation-card:hover {
   .city-grid,
   .card-grid,
   .tip-grid,
-  .metric-grid {
+  .metric-grid,
+  .smart-guide-grid,
+  .menu-grid,
+  .resource-grid,
+  .faq-grid,
+  .browser-control-grid {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -3892,6 +4315,11 @@ a.recommendation-card:hover {
   .route-photo-strip,
   .tip-grid,
   .metric-grid,
+  .smart-guide-grid,
+  .menu-grid,
+  .resource-grid,
+  .faq-grid,
+  .browser-control-grid,
   .highlight-mini-grid,
   .site-footer-grid {
     grid-template-columns: 1fr;
@@ -4005,6 +4433,12 @@ a.recommendation-card:hover {
   }
 
   .locale-switch {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .theme-toggle,
+  .topbar-utility {
     width: 100%;
     justify-content: center;
   }

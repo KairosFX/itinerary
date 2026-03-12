@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720" role="img" aria-labelledby="title desc">
+  <title id="title">Step aside first guide</title>
+  <desc id="desc">A walkway illustration showing traffic lanes and a side pocket for stopping.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#18313d"/>
+      <stop offset="100%" stop-color="#365346"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="720" rx="42" fill="url(#bg)"/>
+  <rect x="108" y="170" width="744" height="260" rx="40" fill="#f7efe4"/>
+  <rect x="636" y="170" width="216" height="260" rx="40" fill="#eadbc1"/>
+  <path d="M180 302h414" fill="none" stroke="#b8c9ce" stroke-dasharray="22 18" stroke-linecap="round" stroke-width="14"/>
+  <path d="M580 302l-36-28m36 28-36 28" fill="none" stroke="#1f5f6b" stroke-linecap="round" stroke-linejoin="round" stroke-width="18"/>
+  <circle cx="256" cy="304" r="34" fill="#9c3d33"/>
+  <circle cx="386" cy="304" r="34" fill="#9c3d33"/>
+  <circle cx="516" cy="304" r="34" fill="#9c3d33"/>
+  <circle cx="742" cy="304" r="34" fill="#1f5f6b"/>
+  <rect x="684" y="250" width="116" height="108" rx="24" fill="#fff8ef"/>
+  <text x="116" y="618" fill="#fff8ef" font-family="Arial, sans-serif" font-size="54" font-weight="700">Step Aside First</text>
+  <text x="116" y="664" fill="#c9dbe0" font-family="Arial, sans-serif" font-size="28">Maps, photos, and snacks work better off the lane.</text>
+</svg>

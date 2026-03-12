@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720" role="img" aria-labelledby="title desc">
+  <title id="title">Quiet on trains guide</title>
+  <desc id="desc">A simplified train carriage illustration with calm sound bars and seated riders.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#204f5f"/>
+      <stop offset="100%" stop-color="#10242d"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="720" rx="42" fill="url(#bg)"/>
+  <rect x="120" y="112" width="720" height="464" rx="34" fill="#f7efe4" opacity=".92"/>
+  <rect x="178" y="170" width="604" height="72" rx="18" fill="#d9ebee"/>
+  <rect x="208" y="196" width="120" height="20" rx="10" fill="#1f5f6b" opacity=".3"/>
+  <rect x="384" y="196" width="192" height="20" rx="10" fill="#1f5f6b" opacity=".2"/>
+  <rect x="634" y="196" width="108" height="20" rx="10" fill="#1f5f6b" opacity=".26"/>
+  <rect x="186" y="286" width="166" height="192" rx="20" fill="#eadbc1"/>
+  <rect x="398" y="286" width="166" height="192" rx="20" fill="#eadbc1"/>
+  <rect x="610" y="286" width="166" height="192" rx="20" fill="#eadbc1"/>
+  <circle cx="270" cy="328" r="30" fill="#1b3240"/>
+  <circle cx="482" cy="328" r="30" fill="#1b3240"/>
+  <circle cx="694" cy="328" r="30" fill="#1b3240"/>
+  <path d="M234 422c18-48 58-48 72 0" fill="none" stroke="#1b3240" stroke-linecap="round" stroke-width="22"/>
+  <path d="M446 422c18-48 58-48 72 0" fill="none" stroke="#1b3240" stroke-linecap="round" stroke-width="22"/>
+  <path d="M658 422c18-48 58-48 72 0" fill="none" stroke="#1b3240" stroke-linecap="round" stroke-width="22"/>
+  <circle cx="164" cy="150" r="36" fill="#b55447"/>
+  <rect x="146" y="138" width="36" height="10" rx="5" fill="#fff8ef"/>
+  <rect x="163" y="120" width="10" height="46" rx="5" fill="#fff8ef"/>
+  <text x="120" y="640" fill="#fff8ef" font-family="Arial, sans-serif" font-size="56" font-weight="700">Quiet On Trains</text>
+  <text x="120" y="682" fill="#c9dbe0" font-family="Arial, sans-serif" font-size="28">Low voices, small movements, shared calm.</text>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720" role="img" aria-labelledby="title desc">
+  <title id="title">Carry a small trash bag guide</title>
+  <desc id="desc">A small reusable bag illustration with wrappers and a tidy travel setup.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#365346"/>
+      <stop offset="100%" stop-color="#18313d"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="720" rx="42" fill="url(#bg)"/>
+  <circle cx="734" cy="184" r="88" fill="#fff8ef" opacity=".12"/>
+  <path d="M394 232c10-62 164-62 174 0" fill="none" stroke="#fff8ef" stroke-linecap="round" stroke-width="22"/>
+  <path d="M334 268h294l-24 286c-4 46-36 82-82 82H440c-46 0-78-36-82-82l-24-286Z" fill="#f7efe4"/>
+  <path d="M374 346h214M390 412h182M416 480h128" fill="none" stroke="#d0dce0" stroke-linecap="round" stroke-width="18"/>
+  <rect x="170" y="474" width="96" height="62" rx="16" fill="#eadbc1"/>
+  <rect x="208" y="444" width="22" height="30" rx="11" fill="#eadbc1"/>
+  <rect x="714" y="460" width="84" height="86" rx="18" fill="#d9ebee"/>
+  <path d="M734 470h44l-10 20h-24Z" fill="#1f5f6b"/>
+  <text x="112" y="628" fill="#fff8ef" font-family="Arial, sans-serif" font-size="54" font-weight="700">Carry A Small Trash Bag</text>
+  <text x="112" y="672" fill="#d3e1e4" font-family="Arial, sans-serif" font-size="28">Bins are limited, so wrappers need their own place.</text>
+</svg>

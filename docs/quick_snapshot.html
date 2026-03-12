@@ -14,6 +14,7 @@
     rel="icon"
     type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23fff7ec'/%3E%3Ccircle cx='45' cy='18' r='9' fill='%239c3d33'/%3E%3Cpath d='M11 43c7-12 15-19 21-19s13 7 21 19H11z' fill='%231e5d69'/%3E%3Cpath d='M19 46h26v4H19zm4-9h4v13h-4zm14 0h4v13h-4zm-18-5h26v3H19zm-3-5h32v3H16z' fill='%239c3d33'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./assets/site.css">
   <style>
     :root {
       --paper: #fff8ef;
@@ -25,6 +26,21 @@
       --line: rgba(27, 50, 64, 0.12);
       --shadow: 0 16px 36px rgba(27, 50, 64, 0.1);
       --radius: 24px;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+    }
+
+    html[data-theme="dark"] {
+      --paper: #102028;
+      --ink: #edf3f5;
+      --muted: #a8bcc3;
+      --crimson: #d87a67;
+      --gold: #ddb15a;
+      --sea: #79b9c6;
+      --line: rgba(237, 243, 245, 0.12);
+      --shadow: 0 18px 36px rgba(0, 0, 0, 0.26);
     }
 
     * {
@@ -43,6 +59,12 @@
       background:
         radial-gradient(circle at top left, rgba(204, 155, 72, 0.16), transparent 24%),
         linear-gradient(180deg, #fffaf3 0%, #f4ebdc 100%);
+    }
+
+    html[data-theme="dark"] body {
+      background:
+        radial-gradient(circle at top left, rgba(221, 177, 90, 0.1), transparent 24%),
+        linear-gradient(180deg, #0f181d 0%, #16262d 100%);
     }
 
     h1,
@@ -81,7 +103,7 @@
 
     .page {
       width: min(1080px, calc(100% - 24px));
-      margin: 20px auto 40px;
+      margin: 96px auto 40px;
       display: grid;
       gap: 18px;
     }
@@ -92,6 +114,12 @@
       background: rgba(255, 249, 239, 0.94);
       box-shadow: var(--shadow);
       overflow: hidden;
+    }
+
+    html[data-theme="dark"] .panel,
+    html[data-theme="dark"] .card {
+      border-color: rgba(237, 243, 245, 0.12);
+      background: rgba(16, 32, 40, 0.9);
     }
 
     .hero {
@@ -336,7 +364,7 @@
     @media (max-width: 760px) {
       .page {
         width: min(100% - 16px, 1080px);
-        margin: 12px auto 24px;
+        margin: 18px auto 24px;
       }
 
       .hero,
@@ -374,6 +402,12 @@
         display: none;
       }
 
+      .topbar,
+      .site-footer,
+      .scroll-progress {
+        display: none;
+      }
+
       .skip-link {
         display: none;
       }
@@ -382,7 +416,28 @@
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <main class="page" id="main-content">
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">JE</div>
+      <div class="brand-copy">
+        <strong>Japan Escape</strong>
+        <span>Quick snapshot</span>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a href="./index.html">Home</a>
+      <a href="./itinerary.html">Itinerary</a>
+      <a href="./food.html">Food</a>
+      <a href="./toolkit.html">Toolkit</a>
+      <a href="./culture.html">Culture</a>
+      <a class="current" aria-current="page" href="./quick_snapshot.html">Snapshot</a>
+      <a href="./guide.html">Full Guide</a>
+    </nav>
+  </header>
+
+  <main class="page page-shell" id="main-content">
     <section class="panel hero">
       <span class="eyebrow">Quick Snapshot</span>
       <h1>Japan Escape Essentials</h1>
@@ -404,7 +459,107 @@
       </div>
     </section>
 
-    <section class="panel section">
+    <section class="panel section" id="route-notes">
+      <div class="section-copy">
+        <span class="eyebrow">Route Notes</span>
+        <h2>Japan Trip Notes In One Read</h2>
+        <p>This is the simplified version of the route logic: where each city fits, what it should carry, and which parts of the trip deserve flexibility.</p>
+      </div>
+
+      <div class="city-grid">
+        <article class="card city-card">
+          <span class="kicker">Osaka</span>
+          <h3>Arrival Base</h3>
+          <span>Start the trip here and let city atmosphere, food, and nightlife do the work before the heavier transfer days begin.</span>
+          <span><strong>Main highlights:</strong> Tsutenkaku, Shinsekai, and Osaka Aquarium Kaiyukan.</span>
+          <div class="pill">Keep it easy first</div>
+        </article>
+        <article class="card city-card">
+          <span class="kicker">Kyoto</span>
+          <h3>Full-Day Contrast</h3>
+          <span>Best used as a full-day trip from Osaka so the cultural side of the route feels distinct without adding another hotel move.</span>
+          <span><strong>Trip role:</strong> Historic and slower than Osaka, with a much stronger old-street and temple mood.</span>
+          <div class="pill">Day trip lane</div>
+        </article>
+        <article class="card city-card">
+          <span class="kicker">Hakone</span>
+          <h3>Eastbound Pivot</h3>
+          <span>The first major eastern stop after the bullet train from Shin-Osaka to Odawara, then the calmer overnight reset.</span>
+          <span><strong>Trip role:</strong> Sightseeing plus one softer overnight before the mountain side.</span>
+          <div class="pill">Scenic reset</div>
+        </article>
+        <article class="card city-card">
+          <span class="kicker">Mt. Fuji Area</span>
+          <h3>Scenic Section</h3>
+          <span>Lake Kawaguchiko, Arakurayama Sengen Park / Chureito Pagoda, and Oshino Hakkai are the core visual layer.</span>
+          <span><strong>Main rule:</strong> Keep this part flexible because weather and transit can change the value of the day fast.</span>
+          <div class="pill">Visibility-led</div>
+        </article>
+        <article class="card city-card">
+          <span class="kicker">Tokyo</span>
+          <h3>District-First Finish</h3>
+          <span>End the route simply: Shibuya Crossing, Shibuya shopping, and Shibuya Sky at night without forcing every Tokyo district in.</span>
+          <span><strong>Extra-day add-ons:</strong> Akihabara, Shinjuku, Tokyo Skytree, Tokyo Solamachi, and the Imperial Palace.</span>
+          <div class="pill">Clean finale</div>
+        </article>
+        <article class="card city-card">
+          <span class="kicker">Future Trip</span>
+          <h3>Okinawa Stays Separate</h3>
+          <span>Do not squeeze Okinawa into this run. It reads better as a completely different trip with its own energy and timing.</span>
+          <span><strong>Route summary:</strong> Osaka -&gt; Kyoto -&gt; Osaka -&gt; Shin-Osaka -&gt; Odawara -&gt; Hakone -&gt; Mt. Fuji area -&gt; Tokyo.</span>
+          <div class="pill">Separate future lane</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel section" id="snapshot-days">
+      <div class="section-copy">
+        <span class="eyebrow">7-Day Itinerary</span>
+        <h2>Day-By-Day Snapshot</h2>
+        <p>Use this when the group wants the whole trip in the fewest possible cards.</p>
+      </div>
+
+      <div class="tip-grid">
+        <article class="card">
+          <strong>Day 1</strong>
+          <span>Osaka nightlife, Tsutenkaku, and Shinsekai.</span>
+        </article>
+        <article class="card">
+          <strong>Day 2</strong>
+          <span>Kyoto full day with one focused cultural lane.</span>
+        </article>
+        <article class="card">
+          <strong>Day 3</strong>
+          <span>Osaka Aquarium Kaiyukan plus flexible Osaka time.</span>
+        </article>
+        <article class="card">
+          <strong>Day 4</strong>
+          <span>Bullet train: Shin-Osaka to Odawara, then Hakone sightseeing and overnight.</span>
+        </article>
+        <article class="card">
+          <strong>Day 5</strong>
+          <span>Hakone morning and transfer toward the Mt. Fuji area.</span>
+        </article>
+        <article class="card">
+          <strong>Day 6</strong>
+          <span>Lake Kawaguchiko, Arakurayama Sengen Park / Chureito Pagoda, and Oshino Hakkai.</span>
+        </article>
+        <article class="card">
+          <strong>Day 7</strong>
+          <span>Travel into Tokyo, then Shibuya Crossing, shopping, and Shibuya Sky at night.</span>
+        </article>
+        <article class="card">
+          <strong>If Extra Days Open</strong>
+          <span>Day 8: Tokyo Skytree, Tokyo Solamachi, Akihabara. Day 9: Tokyo Imperial Palace and Shinjuku.</span>
+        </article>
+        <article class="card">
+          <strong>One Planning Rule</strong>
+          <span>Fuji still outranks stubborn scheduling. If weather improves, let the scenic day move with it.</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel section" id="visual-route">
       <div class="section-copy">
         <span class="eyebrow">Visual Route</span>
         <h2>Five Frames, One Trip</h2>
@@ -450,7 +605,7 @@
       </div>
     </section>
 
-    <section class="panel section">
+    <section class="panel section" id="city-cards">
       <div class="section-copy">
         <span class="eyebrow">City Cards</span>
         <h2>One Card Per Stop</h2>
@@ -520,7 +675,7 @@
       </div>
     </section>
 
-    <section class="panel section">
+    <section class="panel section" id="transit-cheats">
       <div class="section-copy">
         <span class="eyebrow">Transit Cheats</span>
         <h2>Rushing-To-The-Station Version</h2>
@@ -543,7 +698,7 @@
       </div>
     </section>
 
-    <section class="panel section">
+    <section class="panel section" id="quick-tips">
       <div class="section-copy">
         <span class="eyebrow">Quick Tips</span>
         <h2>Top 3 Etiquette And Safety Reminders</h2>
@@ -565,7 +720,7 @@
       </div>
     </section>
 
-    <section class="panel section">
+    <section class="panel section" id="photo-prompts">
       <div class="section-copy">
         <span class="eyebrow">Photo Prompts</span>
         <h2>One Shot To Keep Per City</h2>
@@ -614,5 +769,6 @@
       Built as the portable companion to <a href="./index.html">the main hub</a> and <a href="./guide.html">the full interactive guide</a>. If you need the richer day cards, food panels, or planning details, jump back there.
     </div>
   </main>
+  <script src="./assets/site.js" defer></script>
 </body>
 </html>

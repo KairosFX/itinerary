@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720" role="img" aria-labelledby="title desc">
+  <title id="title">Queue cleanly guide</title>
+  <desc id="desc">A platform queue illustration with marked lanes and a train door.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#10242d"/>
+      <stop offset="100%" stop-color="#9c3d33"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="720" rx="42" fill="url(#bg)"/>
+  <rect x="118" y="144" width="724" height="432" rx="34" fill="#f7efe4"/>
+  <rect x="644" y="196" width="126" height="328" rx="24" fill="#d9ebee"/>
+  <rect x="676" y="240" width="62" height="240" rx="16" fill="#fff8ef"/>
+  <path d="M232 312h316" fill="none" stroke="#1f5f6b" stroke-dasharray="18 16" stroke-linecap="round" stroke-width="14"/>
+  <path d="M232 412h316" fill="none" stroke="#1f5f6b" stroke-dasharray="18 16" stroke-linecap="round" stroke-width="14"/>
+  <circle cx="272" cy="312" r="24" fill="#9c3d33"/>
+  <circle cx="350" cy="312" r="24" fill="#9c3d33"/>
+  <circle cx="428" cy="312" r="24" fill="#9c3d33"/>
+  <circle cx="272" cy="412" r="24" fill="#365346"/>
+  <circle cx="350" cy="412" r="24" fill="#365346"/>
+  <circle cx="428" cy="412" r="24" fill="#365346"/>
+  <text x="112" y="628" fill="#fff8ef" font-family="Arial, sans-serif" font-size="54" font-weight="700">Queue Cleanly</text>
+  <text x="112" y="672" fill="#d7e3e6" font-family="Arial, sans-serif" font-size="28">Let people off first and keep the line visible.</text>
+</svg>

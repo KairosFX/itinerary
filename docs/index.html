@@ -40,7 +40,7 @@
   </header>
 
   <main class="page-shell" id="main-content">
-    <section class="panel hero reveal">
+    <section class="panel hero hero-home reveal">
       <div class="hero-copy">
         <span class="eyebrow">Main Page</span>
         <h1>Japan Escape Guide Hub</h1>
@@ -137,6 +137,7 @@
 
     <section class="panel section reveal section-nav-panel">
       <nav class="page-section-nav" data-section-nav aria-label="Homepage sections">
+        <a class="section-pill" href="#smart-guide">Guide path</a>
         <a class="section-pill" href="#route-atlas">Highlights</a>
         <a class="section-pill" href="#live-map">Live map</a>
         <a class="section-pill" href="#trip-profile">Trip profile</a>
@@ -145,6 +146,40 @@
         <a class="section-pill" href="#official-watch">Articles</a>
         <a class="section-pill" href="#visual-previews">Previews</a>
       </nav>
+    </section>
+
+    <section class="panel section reveal" id="smart-guide">
+      <div class="section-header">
+        <div class="section-copy">
+          <span class="eyebrow">Smart Guide</span>
+          <h2>Use The Site In The Right Order</h2>
+          <div class="section-divider"></div>
+        </div>
+        <p>This is the fastest route through the site: set the trip logic, sanity-check the weather, use visual previews for buy-in, then send only the page the group actually needs.</p>
+      </div>
+
+      <div class="smart-guide-grid">
+        <a class="smart-step-card" href="#trip-profile">
+          <span class="smart-step-count">Step 01</span>
+          <strong>Build the plan shape first</strong>
+          <span>Use the recommendation engine to decide whether food, scenery, nightlife, or transfer ease should drive the trip.</span>
+        </a>
+        <a class="smart-step-card" href="#trip-weather">
+          <span class="smart-step-count">Step 02</span>
+          <strong>Check the live weather logic</strong>
+          <span>Confirm if Fuji should stay flexible, whether Hakone needs extra layers, and which stop is easiest to commit to today.</span>
+        </a>
+        <a class="smart-step-card" href="#visual-previews">
+          <span class="smart-step-count">Step 03</span>
+          <strong>Use image previews for quick buy-in</strong>
+          <span>Open the city previews before sending links into the group chat so everyone sees the mood instead of only reading logistics.</span>
+        </a>
+        <a class="smart-step-card" href="./quick_snapshot.html">
+          <span class="smart-step-count">Step 04</span>
+          <strong>Send the right level of detail</strong>
+          <span>Use Snapshot for essentials, the split pages for focused answers, and Full Guide only when people want the deeper all-in-one version.</span>
+        </a>
+      </div>
     </section>
 
     <section class="panel section reveal" id="route-atlas">
@@ -683,18 +718,87 @@
 
       <div class="official-layout">
         <div class="official-feature-stack">
-          <article class="article-feature-card">
-            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fushimi_Inari%2C_Kyoto%2C_20240818_1400_4476.jpg?width=1280" alt="Fushimi Inari in Kyoto" loading="lazy" decoding="async">
-            <div class="article-feature-copy">
-              <span class="badge">Official seasonal watch</span>
-              <strong>Track bloom timing with the JNTO cherry blossom forecast</strong>
-              <span>Use this for seasonal timing when trip dates are still moving and you want one reliable starting point before the route gets locked.</span>
-              <div class="route-spotlight-actions">
-                <a class="button-primary" href="https://www.japan.travel/en/see-and-do/cherry-blossom-forecast/" target="_blank" rel="noreferrer">Open JNTO forecast</a>
-                <a class="button-secondary" href="./toolkit.html#weather-packing">Open site weather notes</a>
-              </div>
+          <div class="feature-slider article-slider" data-slider data-slider-interval="5600">
+            <div class="slider-stage">
+              <article class="feature-slide is-active" data-slide>
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cherry_blossoms_and_a_train_in_Arashiyama%2C_Kyoto%2C_Japan.jpg?width=1600" alt="Cherry blossoms in Kyoto" loading="lazy" decoding="async">
+                <div class="feature-slide-copy">
+                  <span class="badge">Official seasonal watch</span>
+                  <h3>Track bloom timing with the official JNTO sakura forecast</h3>
+                  <p>Use this when the trip dates still have movement and you want one official starting point before the route order gets locked.</p>
+                  <div class="article-slide-meta">
+                    <span>JNTO</span>
+                    <span>Seasonal timing</span>
+                    <span>Forecast</span>
+                  </div>
+                  <div class="route-spotlight-actions">
+                    <a class="button-primary" href="https://www.japan.travel/en/see-and-do/cherry-blossom-forecast/" target="_blank" rel="noreferrer">Open forecast</a>
+                    <a class="button-secondary" href="./toolkit.html#weather-packing">Open site weather notes</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="feature-slide" data-slide>
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shibuya_crossing_%2812214%29.jpg?width=1600" alt="Shibuya Crossing in Tokyo" loading="lazy" decoding="async">
+                <div class="feature-slide-copy">
+                  <span class="badge">Official destination read</span>
+                  <h3>Use the JNTO destination hub when the route starts expanding</h3>
+                  <p>Good for comparing Kansai, Kanto, Chubu, and the bigger Japan layout before adding side ideas that dilute the core trip.</p>
+                  <div class="article-slide-meta">
+                    <span>JNTO</span>
+                    <span>Destinations</span>
+                    <span>Planning</span>
+                  </div>
+                  <div class="route-spotlight-actions">
+                    <a class="button-primary" href="https://www.japan.travel/en/destinations/" target="_blank" rel="noreferrer">Open destinations</a>
+                    <a class="button-secondary" href="#japan-explorer">Stay in the site explorer</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="feature-slide" data-slide>
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lake_torii_%40_Hakone_Shrine_%2813776519615%29.jpg?width=1600" alt="Hakone shrine torii" loading="lazy" decoding="async">
+                <div class="feature-slide-copy">
+                  <span class="badge">Official planning read</span>
+                  <h3>Use the plan-your-trip hub for the broad official planning layer</h3>
+                  <p>Keep this as the official fallback when the group starts asking about basics outside the core route, passes, or broad travel structure.</p>
+                  <div class="article-slide-meta">
+                    <span>JNTO</span>
+                    <span>Trip planning</span>
+                    <span>Travel basics</span>
+                  </div>
+                  <div class="route-spotlight-actions">
+                    <a class="button-primary" href="https://www.japan.travel/en/plan/" target="_blank" rel="noreferrer">Open planning hub</a>
+                    <a class="button-secondary" href="./toolkit.html">Open toolkit</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="feature-slide" data-slide>
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kiyomizu-dera_Temple.Kyoto._Japan_%2850361443956%29.jpg?width=1600" alt="Kyoto temple" loading="lazy" decoding="async">
+                <div class="feature-slide-copy">
+                  <span class="badge">Official brochure shelf</span>
+                  <h3>Keep brochure packs ready for the route when someone wants printable material</h3>
+                  <p>The official brochure shelf is still the cleanest backup when you want downloadable region guides without heavy widgets or account friction.</p>
+                  <div class="article-slide-meta">
+                    <span>Official</span>
+                    <span>Brochures</span>
+                    <span>Downloads</span>
+                  </div>
+                  <div class="route-spotlight-actions">
+                    <a class="button-primary" href="https://www.japan.travel/brochures/eng/" target="_blank" rel="noreferrer">Open brochure shelf</a>
+                    <a class="button-secondary" href="./japan_trip_brochure.html">Open local brochure pack</a>
+                  </div>
+                </div>
+              </article>
             </div>
-          </article>
+
+            <div class="slider-controls">
+              <button class="slider-arrow" type="button" data-slider-prev aria-label="Previous official read">&lt;</button>
+              <div class="slider-dots" data-slider-dots aria-label="Official read slides"></div>
+              <button class="slider-arrow" type="button" data-slider-next aria-label="Next official read">&gt;</button>
+            </div>
+          </div>
 
           <div class="link-grid official-link-grid">
             <a class="link-card" href="https://www.japan.travel/en/destinations/kanto/" target="_blank" rel="noreferrer">
