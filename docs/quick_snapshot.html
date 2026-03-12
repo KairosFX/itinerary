@@ -8,6 +8,8 @@
     name="description"
     content="Condensed Osaka, Kyoto, Hakone, Mt. Fuji, and Tokyo quick-reference guide with must-try foods, top activities, transfer reminders, etiquette tips, and a print-friendly layout.">
   <meta name="theme-color" content="#9c3d33">
+  <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
+  <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
   <link
     rel="icon"
     type="image/svg+xml"
@@ -150,7 +152,8 @@
     .summary-grid,
     .city-grid,
     .tip-grid,
-    .transit-grid {
+    .transit-grid,
+    .visual-grid {
       display: grid;
       gap: 14px;
     }
@@ -166,6 +169,10 @@
     .tip-grid,
     .transit-grid {
       grid-template-columns: repeat(3, 1fr);
+    }
+
+    .visual-grid {
+      grid-template-columns: repeat(5, 1fr);
     }
 
     .section {
@@ -258,6 +265,60 @@
       gap: 8px;
     }
 
+    .visual-card {
+      position: relative;
+      min-height: 250px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #e6ddd0;
+      color: white;
+      isolation: isolate;
+    }
+
+    .visual-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(14, 24, 32, 0.06), rgba(14, 24, 32, 0.68));
+      z-index: 1;
+    }
+
+    .visual-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 320ms ease;
+    }
+
+    .visual-card:hover img {
+      transform: scale(1.04);
+    }
+
+    .visual-card-copy {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      align-content: end;
+      min-height: 100%;
+      padding: 18px;
+    }
+
+    .visual-card-copy strong {
+      display: block;
+      font-size: 1.18rem;
+    }
+
+    .visual-card-copy span {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.56;
+      font-size: 0.92rem;
+    }
+
     .footer-note {
       padding: 18px 24px 24px;
       color: var(--muted);
@@ -266,7 +327,8 @@
     }
 
     @media (max-width: 980px) {
-      .city-grid {
+      .city-grid,
+      .visual-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
@@ -285,7 +347,8 @@
       .summary-grid,
       .city-grid,
       .tip-grid,
-      .transit-grid {
+      .transit-grid,
+      .visual-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -338,6 +401,52 @@
           <strong>Remember</strong>
           <span>Check Fuji visibility, keep one flexible block, and carry a charger plus snacks on long transfer days.</span>
         </article>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-copy">
+        <span class="eyebrow">Visual Route</span>
+        <h2>Five Frames, One Trip</h2>
+        <p>Use this when you want the trip shape immediately: city energy first, scenic reset in the middle, mountain payoff, then a clean Tokyo finish.</p>
+      </div>
+
+      <div class="visual-grid">
+        <a class="visual-card" href="./index.html#route-atlas">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tsutenkaku%2C_Osaka.jpg?width=960" alt="Tsutenkaku in Osaka" loading="lazy" decoding="async">
+          <div class="visual-card-copy">
+            <strong>Osaka Start</strong>
+            <span>Loose first-night food energy and easy walking.</span>
+          </div>
+        </a>
+        <a class="visual-card" href="./itinerary.html#kyoto-day">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kiyomizu-dera_Temple.Kyoto._Japan_%2850361443956%29.jpg?width=960" alt="Kiyomizu-dera in Kyoto" loading="lazy" decoding="async">
+          <div class="visual-card-copy">
+            <strong>Kyoto Contrast</strong>
+            <span>Historic lanes, temple rhythm, and the long-walk day.</span>
+          </div>
+        </a>
+        <a class="visual-card" href="./itinerary.html#hakone-move">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hakone_Ashi_Lake_Torii.jpg?width=960" alt="Lake Ashi torii in Hakone" loading="lazy" decoding="async">
+          <div class="visual-card-copy">
+            <strong>Hakone Pivot</strong>
+            <span>The reset night that softens the route.</span>
+          </div>
+        </a>
+        <a class="visual-card" href="./itinerary.html#fuji-visibility">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Chureito_Pagoda.jpg?width=960" alt="Chureito Pagoda and Mount Fuji" loading="lazy" decoding="async">
+          <div class="visual-card-copy">
+            <strong>Fuji Window</strong>
+            <span>Weather-led scenic payoff with the clearest-view rule.</span>
+          </div>
+        </a>
+        <a class="visual-card" href="./itinerary.html#tokyo-finish">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shibuya_Night_%28HDR%29.jpg?width=960" alt="Shibuya at night" loading="lazy" decoding="async">
+          <div class="visual-card-copy">
+            <strong>Tokyo Finish</strong>
+            <span>District-first close with skyline and shopping energy.</span>
+          </div>
+        </a>
       </div>
     </section>
 
@@ -462,13 +571,43 @@
         <h2>One Shot To Keep Per City</h2>
       </div>
 
-      <ul class="compact-list">
-        <li><strong>Osaka:</strong> Upward angle in Shinsekai once the signs turn on.</li>
-        <li><strong>Kyoto:</strong> Early or late on the Higashiyama slope before the crowd flattens the scene.</li>
-        <li><strong>Hakone:</strong> Lakeside torii or shrine approach when the light softens.</li>
-        <li><strong>Mt. Fuji Area:</strong> Get to the best clear viewpoint earlier than feels necessary.</li>
-        <li><strong>Tokyo:</strong> Street energy first, skyline second at Shibuya after lights come on.</li>
-      </ul>
+      <div class="visual-grid">
+        <a class="visual-card" href="./itinerary.html#osaka-start">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/D%C5%8Dtonbori_at_night%2C_Osaka_%2819551420339%29.jpg?width=960" alt="Dotonbori at night in Osaka" loading="lazy" decoding="async">
+          <div class="visual-card-copy">
+            <strong>Osaka</strong>
+            <span>Go upward in Shinsekai or Dotonbori once the signs are fully on.</span>
+          </div>
+        </a>
+        <a class="visual-card" href="./itinerary.html#kyoto-day">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fushimi_Inari%2C_Kyoto%2C_20240818_1400_4476.jpg?width=960" alt="Fushimi Inari in Kyoto" loading="lazy" decoding="async">
+          <div class="visual-card-copy">
+            <strong>Kyoto</strong>
+            <span>Use early or late light before the older streets flatten out.</span>
+          </div>
+        </a>
+        <a class="visual-card" href="./itinerary.html#hakone-move">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lake_torii_%40_Hakone_Shrine_%2813776519615%29.jpg?width=960" alt="Hakone shrine gate by the lake" loading="lazy" decoding="async">
+          <div class="visual-card-copy">
+            <strong>Hakone</strong>
+            <span>Catch the softer lakeside light instead of harsh midday glare.</span>
+          </div>
+        </a>
+        <a class="visual-card" href="./itinerary.html#fuji-visibility">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Fuji_from_Lake_Kawaguchi_s2.jpg?width=960" alt="Mount Fuji from Lake Kawaguchi" loading="lazy" decoding="async">
+          <div class="visual-card-copy">
+            <strong>Mt. Fuji Area</strong>
+            <span>Arrive earlier than feels necessary and secure the clean view first.</span>
+          </div>
+        </a>
+        <a class="visual-card" href="./itinerary.html#tokyo-finish">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shibuya_crossing_%2812214%29.jpg?width=960" alt="Shibuya Crossing in Tokyo" loading="lazy" decoding="async">
+          <div class="visual-card-copy">
+            <strong>Tokyo</strong>
+            <span>Street energy first, skyline second once the lights settle in.</span>
+          </div>
+        </a>
+      </div>
     </section>
 
     <div class="footer-note">

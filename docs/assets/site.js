@@ -517,6 +517,7 @@ const WEATHER_STOPS = [
 ];
 
 const WEATHER_CACHE = new Map();
+const WEATHER_STORAGE_KEY = "japan-escape-weather-cache-v1";
 
 const WEATHER_CODE_LABELS = {
   0: "Clear",
@@ -1922,8 +1923,48 @@ function buildWeatherUrl(stop) {
   return `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
 }
 
-async function fetchStopWeather(stop) {
-  const response = await fetch(buildWeatherUrl(stop), { cache: "no-store" });
+function wait(ms) {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+function readStoredWeatherCache() {
+  try {
+    const raw = window.localStorage.getItem(WEATHER_STORAGE_KEY);
+    if (!raw) {
+      return new Map();
+    }
+
+    const payload = JSON.parse(raw);
+    if (!Array.isArray(payload?.forecasts)) {
+      return new Map();
+    }
+
+    return new Map(
+      payload.forecasts
+        .filter((forecast) => forecast?.stop?.key)
+        .map((forecast) => [forecast.stop.key, forecast])
+    );
+  } catch {
+    return new Map();
+  }
+}
+
+function writeStoredWeatherCache(forecasts) {
+  try {
+    window.localStorage.setItem(
+      WEATHER_STORAGE_KEY,
+      JSON.stringify({
+        savedAt: new Date().toISOString(),
+        forecasts: forecasts.filter((forecast) => forecast?.stop?.key && !forecast.error)
+      })
+    );
+  } catch {
+    // Ignore storage failures. Live fetch remains the primary path.
+  }
+}
+
+async function fetchStopWeather(stop, signal) {
+  const response = await fetch(buildWeatherUrl(stop), { cache: "no-store", signal });
   if (!response.ok) {
     throw new Error(`Weather request failed for ${stop.name}`);
   }
@@ -1949,6 +1990,36 @@ async function fetchStopWeather(stop) {
   forecast.fuji = stop.key === "fuji" ? analyzeFujiForecast(data) : null;
 
   return forecast;
+}
+
+async function fetchStopWeatherWithRetry(stop, fallbackForecast = null, maxAttempts = 3) {
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    const controller = "AbortController" in window ? new AbortController() : null;
+    const timeoutId = controller ? window.setTimeout(() => controller.abort(), 8000) : null;
+
+    try {
+      return await fetchStopWeather(stop, controller?.signal);
+    } catch (error) {
+      if (attempt === maxAttempts - 1) {
+        if (fallbackForecast) {
+          return { ...fallbackForecast, stop, stale: true };
+        }
+        throw error;
+      }
+
+      await wait(360 * (attempt + 1));
+    } finally {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+    }
+  }
+
+  if (fallbackForecast) {
+    return { ...fallbackForecast, stop, stale: true };
+  }
+
+  throw new Error(`Weather retry loop exhausted for ${stop.name}`);
 }
 
 function renderWeatherLoadingState() {
@@ -1991,6 +2062,7 @@ function renderWeatherCard(forecast) {
         <span class="weather-chip">High ${forecast.high}&deg;</span>
         <span class="weather-chip">Low ${forecast.low}&deg;</span>
         <span class="weather-chip">Rain ${forecast.rain}%</span>
+        ${forecast.stale ? '<span class="weather-chip">Saved read</span>' : ""}
       </div>
       <p>${forecast.packing}</p>
       <div class="weather-meta">
@@ -2067,6 +2139,8 @@ function initWeatherDashboard() {
       return;
     }
 
+    const previousCache = new Map(WEATHER_CACHE);
+    const storedCache = readStoredWeatherCache();
     isLoading = true;
     grid.innerHTML = renderWeatherLoadingState();
     if (refreshButton) {
@@ -2074,7 +2148,11 @@ function initWeatherDashboard() {
       refreshButton.textContent = "Refreshing...";
     }
 
-    const results = await Promise.allSettled(WEATHER_STOPS.map((stop) => fetchStopWeather(stop)));
+    const results = await Promise.allSettled(
+      WEATHER_STOPS.map((stop) =>
+        fetchStopWeatherWithRetry(stop, previousCache.get(stop.key) ?? storedCache.get(stop.key) ?? null)
+      )
+    );
     const forecasts = results.map((result, index) => {
       if (result.status === "fulfilled") {
         return result.value;
@@ -2092,6 +2170,7 @@ function initWeatherDashboard() {
         WEATHER_CACHE.set(forecast.stop.key, forecast);
       }
     });
+    writeStoredWeatherCache(forecasts);
 
     grid.innerHTML = forecasts.map(renderWeatherCard).join("");
     renderFujiForecast(panel, forecasts.find((forecast) => forecast.stop.key === "fuji"));
@@ -2833,20 +2912,6 @@ function initRouteModules() {
     return;
   }
 
-  const boardObserver = "IntersectionObserver" in window
-    ? new IntersectionObserver(
-        (entries, observer) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-live");
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.3 }
-      )
-    : null;
-
   modules.forEach((module) => {
     const board = module.querySelector("[data-route-board]");
     const pins = [...module.querySelectorAll("[data-route-stop]")];
@@ -2902,12 +2967,7 @@ function initRouteModules() {
 
     const initialKey = pins.find((pin) => pin.classList.contains("is-active"))?.dataset.routeStop ?? pins[0].dataset.routeStop;
     renderStop(initialKey);
-
-    if (boardObserver) {
-      boardObserver.observe(board);
-    } else {
-      board.classList.add("is-live");
-    }
+    window.requestAnimationFrame(() => board.classList.add("is-live"));
   });
 }
 
