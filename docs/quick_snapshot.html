@@ -7,6 +7,11 @@
   <meta
     name="description"
     content="Condensed Osaka, Kyoto, Hakone, Mt. Fuji, and Tokyo quick-reference guide with must-try foods, top activities, transfer reminders, etiquette tips, and a print-friendly layout.">
+  <meta name="theme-color" content="#9c3d33">
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23fff7ec'/%3E%3Ccircle cx='45' cy='18' r='9' fill='%239c3d33'/%3E%3Cpath d='M11 43c7-12 15-19 21-19s13 7 21 19H11z' fill='%231e5d69'/%3E%3Cpath d='M19 46h26v4H19zm4-9h4v13h-4zm14 0h4v13h-4zm-18-5h26v3H19zm-3-5h32v3H16z' fill='%239c3d33'/%3E%3C/svg%3E">
   <style>
     :root {
       --paper: #fff8ef;
@@ -24,10 +29,15 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
       color: var(--ink);
+      text-rendering: optimizeLegibility;
       background:
         radial-gradient(circle at top left, rgba(204, 155, 72, 0.16), transparent 24%),
         linear-gradient(180deg, #fffaf3 0%, #f4ebdc 100%);
@@ -48,6 +58,23 @@
     a {
       color: var(--sea);
       text-decoration: none;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      z-index: 30;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: white;
+      transform: translate(-50%, -140%);
+      transition: transform 220ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translate(-50%, 0);
     }
 
     .page {
@@ -283,11 +310,16 @@
       .button-row {
         display: none;
       }
+
+      .skip-link {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <main class="page" id="main-content">
     <section class="panel hero">
       <span class="eyebrow">Quick Snapshot</span>
       <h1>Japan Escape Essentials</h1>

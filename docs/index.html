@@ -6,10 +6,18 @@
   <title>Japan Escape | Main Guide Hub</title>
   <meta
     name="description"
-    content="Main hub for the Japan Escape trip guide with separate itinerary, food, toolkit, culture, full guide, and quick snapshot pages plus a built-in search panel.">
+    content="Main hub for the Japan Escape trip guide with a built-in recommendation engine, interactive city image previews, and separate itinerary, food, toolkit, culture, snapshot, and full guide pages.">
+  <meta name="theme-color" content="#9c3d33">
+  <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
+  <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23fff7ec'/%3E%3Ccircle cx='45' cy='18' r='9' fill='%239c3d33'/%3E%3Cpath d='M11 43c7-12 15-19 21-19s13 7 21 19H11z' fill='%231e5d69'/%3E%3Cpath d='M19 46h26v4H19zm4-9h4v13h-4zm14 0h4v13h-4zm-18-5h26v3H19zm-3-5h32v3H16z' fill='%239c3d33'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./assets/site.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <header class="topbar">
@@ -21,7 +29,7 @@
       </div>
     </div>
     <nav class="nav-links">
-      <a class="current" href="./index.html">Home</a>
+      <a class="current" aria-current="page" href="./index.html">Home</a>
       <a href="./itinerary.html">Itinerary</a>
       <a href="./food.html">Food</a>
       <a href="./toolkit.html">Toolkit</a>
@@ -31,47 +39,287 @@
     </nav>
   </header>
 
-  <main class="page-shell">
+  <main class="page-shell" id="main-content">
     <section class="panel hero reveal">
       <div class="hero-copy">
         <span class="eyebrow">Main Page</span>
         <h1>Japan Escape Guide Hub</h1>
         <p class="hero-lead">
-          This is the cleaner starting point for the trip. The route, food, toolkit, and culture notes now live on separate pages so you can get the right layer fast instead of hunting through one giant document.
+          The site is now built to help people choose a trip style fast. You can search the guide, rank route pieces with the recommendation engine, and open preview images before committing to the day flow.
         </p>
+        <div class="hero-status-strip">
+          <div class="status-pill">
+            <strong>7 Days</strong>
+            <span>Focused route instead of city overload.</span>
+          </div>
+          <div class="status-pill">
+            <strong>1 Flex Rule</strong>
+            <span>Fuji stays visibility-led, not strict-order-led.</span>
+          </div>
+          <div class="status-pill">
+            <strong>5 Anchor Stops</strong>
+            <span>Osaka, Kyoto, Hakone, Fuji, Tokyo.</span>
+          </div>
+        </div>
         <div class="quick-callout">
           <strong>Start Here</strong>
-          <span>On arrival, check the weather, pick your first Osaka food stop, and screenshot the next transfer if you are landing tired.</span>
+          <span>Build the profile first, then use the preview cards to see which city mood fits the group before sharing pages out.</span>
         </div>
         <div class="hero-actions">
-          <a class="button-primary" href="./itinerary.html">Open Itinerary</a>
-          <a class="button-secondary" href="./food.html">Open Food Guide</a>
-          <a class="button-secondary" href="./quick_snapshot.html">Open Quick Snapshot</a>
+          <a class="button-primary" href="#trip-profile">Build My Plan</a>
+          <a class="button-secondary" href="./itinerary.html">Open Itinerary</a>
+          <a class="button-secondary" href="./guide.html">Open Full Guide</a>
         </div>
         <div class="glance-strip">
           <div class="glance-card">
             <strong>Trip Vibe</strong>
-            <span>Low-pressure, food-forward, photo-heavy city plus scenery mix.</span>
+            <span>Food-forward city nights, one cultural contrast day, then a scenic hinge before the Tokyo finish.</span>
           </div>
           <div class="glance-card">
-            <strong>Remember</strong>
-            <span>Check Fuji visibility, keep one flexible afternoon, and carry a charger on long transfer days.</span>
+            <strong>Planning Rule</strong>
+            <span>Front-load easy wins in Osaka, protect the Hakone handoff, and let the Fuji window move around weather.</span>
           </div>
         </div>
       </div>
       <div class="hero-side">
-        <div class="glance-card">
-          <strong>Do First On Arrival</strong>
-          <span>Drop bags, confirm the weather, choose one easy Osaka food zone, and keep the landing night loose.</span>
+        <div class="hero-canvas">
+          <div class="hero-canvas-copy">
+            <span class="kicker">Live Trip Shape</span>
+            <strong>Neon arrival, temple contrast, scenic hinge, Shibuya finish.</strong>
+            <span>The board below mirrors the same logic the recommendation engine uses: food pull, scenery pull, transfer simplicity, weather pressure, and what the group wants most.</span>
+          </div>
+          <div class="route-ribbon" aria-label="Trip route overview">
+            <div class="route-stop is-strong">
+              <span>Osaka</span>
+              <small>Nights 1-3</small>
+            </div>
+            <div class="route-stop">
+              <span>Kyoto</span>
+              <small>Day trip</small>
+            </div>
+            <div class="route-stop">
+              <span>Hakone</span>
+              <small>Reset night</small>
+            </div>
+            <div class="route-stop is-photo">
+              <span>Fuji</span>
+              <small>Visibility-led</small>
+            </div>
+            <div class="route-stop">
+              <span>Tokyo</span>
+              <small>Finale</small>
+            </div>
+          </div>
+          <div class="hero-metric-stack">
+            <div class="hero-metric">
+              <span>Weather-sensitive block</span>
+              <strong>Fuji day</strong>
+              <div class="mini-bar"><span style="width: 72%"></span></div>
+            </div>
+            <div class="hero-metric">
+              <span>Food pressure</span>
+              <strong>Osaka + Tokyo</strong>
+              <div class="mini-bar"><span style="width: 84%"></span></div>
+            </div>
+            <div class="hero-metric">
+              <span>Reset potential</span>
+              <strong>Hakone overnight</strong>
+              <div class="mini-bar"><span style="width: 63%"></span></div>
+            </div>
+          </div>
         </div>
-        <div class="glance-card">
-          <strong>Before Day 6</strong>
-          <span>If the sky looks cloudy, do not force a rigid Fuji order. Re-check visibility in the morning and let the strongest view go first.</span>
+        <div class="glance-card atmospheric-card">
+          <strong>Before You Share The Plan</strong>
+          <span>Use the preview cards for quick visual buy-in, then send the page that matches the strongest recommendation instead of dumping the whole guide into the group chat.</span>
         </div>
-        <div class="glance-card">
-          <strong>Offline Plan</strong>
-          <span>Screenshot Day 4 transfer notes, hotel pins, and one line that Day 6 is visibility-led, not strict-order-led, before weak-signal moments happen.</span>
+      </div>
+    </section>
+
+    <section class="panel section reveal" id="trip-profile">
+      <div class="section-header">
+        <div class="section-copy">
+          <span class="eyebrow">Recommendation Engine</span>
+          <h2>Rank The Trip Around Your Actual Priorities</h2>
+          <div class="section-divider"></div>
         </div>
+        <p>The engine scores route stops and guide pages against food weight, scenery weight, nightlife, pace, budget, weather, group shape, and opt-in extras like onsen, culture depth, shopping, and easier transfers.</p>
+      </div>
+
+      <div class="engine-layout">
+        <form class="engine-form" id="recommendation-form">
+          <div class="engine-grid">
+            <label class="control-card control-range" for="food-priority">
+              <span class="control-label">Food Priority</span>
+              <span class="control-copy">How much the plan should be driven by what you want to eat first.</span>
+              <input id="food-priority" name="food-priority" type="range" min="1" max="5" value="5" data-range-output="food-priority-output">
+              <div class="range-meta">
+                <span>Light</span>
+                <output id="food-priority-output" for="food-priority">5</output>
+                <span>Food-led</span>
+              </div>
+            </label>
+
+            <label class="control-card control-range" for="scenery-priority">
+              <span class="control-label">Scenery + Photo Priority</span>
+              <span class="control-copy">How strongly the scenic middle and photo windows should influence the trip.</span>
+              <input id="scenery-priority" name="scenery-priority" type="range" min="1" max="5" value="4" data-range-output="scenery-priority-output">
+              <div class="range-meta">
+                <span>Secondary</span>
+                <output id="scenery-priority-output" for="scenery-priority">4</output>
+                <span>Main driver</span>
+              </div>
+            </label>
+
+            <label class="control-card control-range" for="night-priority">
+              <span class="control-label">Night Energy</span>
+              <span class="control-copy">How much Osaka and Tokyo should lean toward lights, late dinners, and stronger city energy.</span>
+              <input id="night-priority" name="night-priority" type="range" min="1" max="5" value="4" data-range-output="night-priority-output">
+              <div class="range-meta">
+                <span>Low-key</span>
+                <output id="night-priority-output" for="night-priority">4</output>
+                <span>Late city</span>
+              </div>
+            </label>
+
+            <label class="control-card control-range" for="relaxed-priority">
+              <span class="control-label">Breathing Room</span>
+              <span class="control-copy">How much you want slack, slow transitions, and a softer pace built into the route.</span>
+              <input id="relaxed-priority" name="relaxed-priority" type="range" min="1" max="5" value="3" data-range-output="relaxed-priority-output">
+              <div class="range-meta">
+                <span>Tight</span>
+                <output id="relaxed-priority-output" for="relaxed-priority">3</output>
+                <span>Loose</span>
+              </div>
+            </label>
+
+            <label class="control-card" for="weather-mode">
+              <span class="control-label">Weather Outlook</span>
+              <span class="control-copy">Use the most realistic forecast so the engine knows how hard to lean on Fuji.</span>
+              <select id="weather-mode" name="weather-mode">
+                <option value="mixed" selected>Mixed / uncertain</option>
+                <option value="clear">Mostly clear</option>
+                <option value="cloudy">Cloudy / risky</option>
+              </select>
+            </label>
+
+            <label class="control-card" for="budget-mode">
+              <span class="control-label">Budget Shape</span>
+              <span class="control-copy">This affects how strongly the engine favors easy value wins versus flexible comfort choices.</span>
+              <select id="budget-mode" name="budget-mode">
+                <option value="balanced" selected>Balanced</option>
+                <option value="value">Value-conscious</option>
+                <option value="comfort">Comfort-led</option>
+              </select>
+            </label>
+
+            <label class="control-card" for="party-mode">
+              <span class="control-label">Travel Party</span>
+              <span class="control-copy">Solo, couples, and small groups do not move through stations and meal decisions the same way.</span>
+              <select id="party-mode" name="party-mode">
+                <option value="couple" selected>Couple / pair</option>
+                <option value="solo">Solo</option>
+                <option value="group">Small group</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="toggle-strip" aria-label="Extra priorities">
+            <label class="toggle-chip" for="pref-onsen">
+              <input id="pref-onsen" name="pref-onsen" type="checkbox" checked>
+              <span>Need an onsen or ryokan window</span>
+            </label>
+            <label class="toggle-chip" for="pref-shopping">
+              <input id="pref-shopping" name="pref-shopping" type="checkbox" checked>
+              <span>Want a stronger shopping finish</span>
+            </label>
+            <label class="toggle-chip" for="pref-easy">
+              <input id="pref-easy" name="pref-easy" type="checkbox" checked>
+              <span>Keep transfers simple</span>
+            </label>
+            <label class="toggle-chip" for="pref-culture">
+              <input id="pref-culture" name="pref-culture" type="checkbox">
+              <span>Lean harder into culture depth</span>
+            </label>
+          </div>
+
+          <div class="engine-actions">
+            <button class="button-primary" id="reset-recommendations" type="button">Reset Profile</button>
+            <a class="button-secondary" href="./quick_snapshot.html">Open Snapshot Backup</a>
+          </div>
+        </form>
+
+        <aside class="engine-results">
+          <div class="engine-summary-card">
+            <span class="eyebrow">Profile Result</span>
+            <h3 id="recommendation-mode">Food-first soft landing</h3>
+            <p id="recommendation-description">A balanced route that starts easy in Osaka, keeps the Fuji block flexible, and lets food and night energy carry the city side of the trip.</p>
+            <div class="engine-stat-grid">
+              <div class="engine-stat">
+                <span>Lead With</span>
+                <strong id="recommendation-lead">Osaka arrival lane</strong>
+              </div>
+              <div class="engine-stat">
+                <span>Weather Watch</span>
+                <strong id="recommendation-weather">Keep Fuji flexible</strong>
+              </div>
+              <div class="engine-stat">
+                <span>Share First</span>
+                <strong id="recommendation-share">Main page + itinerary</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="signal-board">
+            <div class="signal-board-copy">
+              <strong>Route Signal Board</strong>
+              <span>These weights move as the engine re-ranks the plan.</span>
+            </div>
+            <div class="signal-stack">
+              <div class="signal-row" data-city-row="osaka">
+                <div class="signal-label">
+                  <strong>Osaka</strong>
+                  <span>Arrival + food</span>
+                </div>
+                <div class="signal-bar"><span data-city-fill="osaka"></span></div>
+                <strong class="signal-score" data-city-score="osaka">0</strong>
+              </div>
+              <div class="signal-row" data-city-row="kyoto">
+                <div class="signal-label">
+                  <strong>Kyoto</strong>
+                  <span>Culture contrast</span>
+                </div>
+                <div class="signal-bar"><span data-city-fill="kyoto"></span></div>
+                <strong class="signal-score" data-city-score="kyoto">0</strong>
+              </div>
+              <div class="signal-row" data-city-row="hakone">
+                <div class="signal-label">
+                  <strong>Hakone</strong>
+                  <span>Reset + onsen</span>
+                </div>
+                <div class="signal-bar"><span data-city-fill="hakone"></span></div>
+                <strong class="signal-score" data-city-score="hakone">0</strong>
+              </div>
+              <div class="signal-row" data-city-row="fuji">
+                <div class="signal-label">
+                  <strong>Fuji</strong>
+                  <span>Scenery risk</span>
+                </div>
+                <div class="signal-bar"><span data-city-fill="fuji"></span></div>
+                <strong class="signal-score" data-city-score="fuji">0</strong>
+              </div>
+              <div class="signal-row" data-city-row="tokyo">
+                <div class="signal-label">
+                  <strong>Tokyo</strong>
+                  <span>Shopping + finish</span>
+                </div>
+                <div class="signal-bar"><span data-city-fill="tokyo"></span></div>
+                <strong class="signal-score" data-city-score="tokyo">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="recommendation-list" id="recommendation-list" aria-live="polite"></div>
+        </aside>
       </div>
     </section>
 
@@ -82,7 +330,7 @@
           <h2>Search The Guide Fast</h2>
           <div class="section-divider"></div>
         </div>
-        <p>The search panel covers the route, food picks, transit, packing, etiquette, and the condensed snapshot page.</p>
+        <p>The search panel still works as the direct lookup layer when you already know the question and do not need the engine to rank the full route logic.</p>
       </div>
 
       <div class="two-column">
@@ -129,52 +377,101 @@
       </div>
     </section>
 
-    <section class="panel section reveal">
+    <section class="panel section reveal" id="visual-previews">
       <div class="section-header">
         <div class="section-copy">
-          <span class="eyebrow">Cities</span>
-          <h2>See The Route In One Scroll</h2>
+          <span class="eyebrow">Preview Deck</span>
+          <h2>Open Image Previews Before You Commit</h2>
           <div class="section-divider"></div>
         </div>
-        <p>These image cards keep the city-to-scenery pacing obvious even if you only glance at the site for a few seconds on your phone.</p>
+        <p>Each city card now opens a richer preview modal with multiple images, context notes, and a direct jump into the guide section that matches the stop.</p>
       </div>
 
-      <div class="city-grid">
-        <a class="image-card" href="./itinerary.html#osaka-start">
+      <div class="city-grid preview-grid">
+        <article class="image-story-card" data-preview-city="osaka">
           <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tsutenkaku%2C_Osaka.jpg?width=960" alt="Tsutenkaku in Osaka" loading="lazy" decoding="async" fetchpriority="low">
+          <div class="story-gradient"></div>
           <div class="image-card-copy">
+            <div class="story-topline">
+              <span class="badge">3-photo preview</span>
+              <span class="badge badge-soft">Arrival mood</span>
+            </div>
             <strong>Osaka</strong>
-            <span>Low-pressure arrival, neon streets, easy food wins.</span>
+            <span>Low-pressure arrival, neon streets, easy food wins, and the best first-night flexibility.</span>
           </div>
-        </a>
-        <a class="image-card" href="./itinerary.html#kyoto-day">
+          <div class="image-card-actions">
+            <button class="button-pill image-preview-trigger" type="button" data-preview-gallery="osaka">Preview Images</button>
+            <a class="button-pill button-pill-light" href="./itinerary.html#osaka-start">Open stop</a>
+          </div>
+        </article>
+
+        <article class="image-story-card" data-preview-city="kyoto">
           <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kiyomizu-dera_Temple.Kyoto._Japan_%2850361443956%29.jpg?width=960" alt="Kiyomizu-dera in Kyoto" loading="lazy" decoding="async" fetchpriority="low">
+          <div class="story-gradient"></div>
           <div class="image-card-copy">
+            <div class="story-topline">
+              <span class="badge">2-photo preview</span>
+              <span class="badge badge-soft">Culture contrast</span>
+            </div>
             <strong>Kyoto</strong>
-            <span>Cultural contrast, temple rhythm, one focused full day.</span>
+            <span>Temple rhythm, slower detail, and the cleanest full-day contrast to Osaka.</span>
           </div>
-        </a>
-        <a class="image-card" href="./itinerary.html#hakone-move">
+          <div class="image-card-actions">
+            <button class="button-pill image-preview-trigger" type="button" data-preview-gallery="kyoto">Preview Images</button>
+            <a class="button-pill button-pill-light" href="./itinerary.html#kyoto-day">Open stop</a>
+          </div>
+        </article>
+
+        <article class="image-story-card" data-preview-city="hakone">
           <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lake_torii_%40_Hakone_Shrine_%2813776519615%29.jpg?width=960" alt="Lake torii in Hakone" loading="lazy" decoding="async" fetchpriority="low">
+          <div class="story-gradient"></div>
           <div class="image-card-copy">
+            <div class="story-topline">
+              <span class="badge">3-photo preview</span>
+              <span class="badge badge-soft">Reset night</span>
+            </div>
             <strong>Hakone</strong>
-            <span>Overnight reset, lake air, and the calm handoff east.</span>
+            <span>Lake air, ryokan energy, and the softer transition that breaks up the move east.</span>
           </div>
-        </a>
-        <a class="image-card" href="./itinerary.html#fuji-visibility">
+          <div class="image-card-actions">
+            <button class="button-pill image-preview-trigger" type="button" data-preview-gallery="hakone">Preview Images</button>
+            <a class="button-pill button-pill-light" href="./itinerary.html#hakone-move">Open stop</a>
+          </div>
+        </article>
+
+        <article class="image-story-card" data-preview-city="fuji">
           <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Chureito_Pagoda.jpg?width=960" alt="Chureito Pagoda and Mount Fuji" loading="lazy" decoding="async" fetchpriority="low">
+          <div class="story-gradient"></div>
           <div class="image-card-copy">
+            <div class="story-topline">
+              <span class="badge">3-photo preview</span>
+              <span class="badge badge-soft">Weather-led</span>
+            </div>
             <strong>Mt. Fuji Area</strong>
-            <span>Visibility-led day, photo priority, weather-sensitive pace.</span>
+            <span>Highest photo payoff, highest weather pressure, and the place where the plan must stay flexible.</span>
           </div>
-        </a>
-        <a class="image-card" href="./itinerary.html#tokyo-finish">
+          <div class="image-card-actions">
+            <button class="button-pill image-preview-trigger" type="button" data-preview-gallery="fuji">Preview Images</button>
+            <a class="button-pill button-pill-light" href="./itinerary.html#fuji-visibility">Open stop</a>
+          </div>
+        </article>
+
+        <article class="image-story-card" data-preview-city="tokyo">
           <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shibuya_crossing_%2812214%29.jpg?width=960" alt="Shibuya Crossing in Tokyo" loading="lazy" decoding="async" fetchpriority="low">
+          <div class="story-gradient"></div>
           <div class="image-card-copy">
+            <div class="story-topline">
+              <span class="badge">3-photo preview</span>
+              <span class="badge badge-soft">Finale energy</span>
+            </div>
             <strong>Tokyo</strong>
-            <span>Shibuya finish, shopping, dinner, skyline close.</span>
+            <span>Shopping pressure, skyline close, and the clean strong ending after the scenic middle.</span>
           </div>
-        </a>
+          <div class="image-card-actions">
+            <button class="button-pill image-preview-trigger" type="button" data-preview-gallery="tokyo">Preview Images</button>
+            <a class="button-pill button-pill-light" href="./itinerary.html#tokyo-finish">Open stop</a>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -185,7 +482,7 @@
           <h2>Open The Right Page For The Moment</h2>
           <div class="section-divider"></div>
         </div>
-        <p>The split pages keep fast-scrolling mobile use cleaner. Each page focuses on one job instead of asking you to unpack everything at once.</p>
+        <p>The split pages still keep fast-scrolling mobile use cleaner. Use the engine to decide where to start, then open the layer that matches the moment.</p>
       </div>
 
       <div class="card-grid">
@@ -229,33 +526,57 @@
           <h2>What To Send The Group</h2>
           <div class="section-divider"></div>
         </div>
-        <p>If people are busy or new to the trip, send them the landing page first, then the snapshot page, then the page that matches what they need most.</p>
+        <p>If people are busy or indecisive, use the homepage and engine first, then send only the pages that support the highest-ranked plan.</p>
       </div>
 
       <div class="metric-grid">
         <div class="metric-card">
           <strong>For Everyone</strong>
-          <span>Send this main page first. It explains where each layer lives.</span>
+          <span>Send this main page first. It now explains the route, the tool, and the preview deck in one place.</span>
+        </div>
+        <div class="metric-card">
+          <strong>For Group Debate</strong>
+          <span>Use the recommendation engine live, then send the top page instead of arguing abstractly about cities.</span>
         </div>
         <div class="metric-card">
           <strong>For Move Days</strong>
           <span>Send the itinerary page and snapshot page together.</span>
         </div>
         <div class="metric-card">
-          <strong>For Hungry People</strong>
-          <span>Open the food guide. The city pairings and budget notes are clearer there.</span>
-        </div>
-        <div class="metric-card">
           <strong>For Weak Signal</strong>
-          <span>Use the snapshot page and screenshot the key transfer notes before heading out.</span>
+          <span>Use the snapshot page, screenshot the transfer notes, and open the city preview modal before heading out.</span>
         </div>
       </div>
     </section>
 
     <div class="footer-note">
-      Lightweight animations stay limited to reveal fades, gentle card motion, and the scroll progress bar so the site still feels fast on mobile and does not bury the useful information under effects.
+      The upgraded homepage keeps the shared static setup, but now adds a profile-driven recommendation engine, richer cards, and multi-image preview modals without turning the site into a heavy app.
     </div>
   </main>
+
+  <div class="preview-modal" id="preview-modal" hidden>
+    <div class="preview-backdrop" data-close-preview></div>
+    <div class="preview-panel" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+      <div class="preview-media">
+        <div class="preview-stage">
+          <img id="preview-image" alt="">
+        </div>
+        <div class="preview-thumbs" id="preview-thumbs"></div>
+      </div>
+      <div class="preview-copy">
+        <button class="preview-close" type="button" data-close-preview aria-label="Close preview">x</button>
+        <span class="eyebrow" id="preview-eyebrow">City Preview</span>
+        <h3 id="preview-title"></h3>
+        <p id="preview-description"></p>
+        <div class="preview-meta" id="preview-meta"></div>
+        <div class="preview-facts" id="preview-facts"></div>
+        <div class="preview-actions">
+          <a class="button-secondary" id="preview-link" href="./guide.html">Open related guide section</a>
+        </div>
+        <div class="preview-credit" id="preview-credit"></div>
+      </div>
+    </div>
+  </div>
 
   <script src="./assets/site.js" defer></script>
 </body>

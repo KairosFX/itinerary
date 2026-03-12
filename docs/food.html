@@ -7,9 +7,17 @@
   <meta
     name="description"
     content="Japan Escape food guide with city-by-city food picks, must-try dishes, rough price levels, late-night backups, and practical eating notes for Osaka, Kyoto, Hakone, Fuji, and Tokyo.">
+  <meta name="theme-color" content="#9c3d33">
+  <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
+  <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23fff7ec'/%3E%3Ccircle cx='45' cy='18' r='9' fill='%239c3d33'/%3E%3Cpath d='M11 43c7-12 15-19 21-19s13 7 21 19H11z' fill='%231e5d69'/%3E%3Cpath d='M19 46h26v4H19zm4-9h4v13h-4zm14 0h4v13h-4zm-18-5h26v3H19zm-3-5h32v3H16z' fill='%239c3d33'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./assets/site.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <header class="topbar">
@@ -23,7 +31,7 @@
     <nav class="nav-links">
       <a href="./index.html">Home</a>
       <a href="./itinerary.html">Itinerary</a>
-      <a class="current" href="./food.html">Food</a>
+      <a class="current" aria-current="page" href="./food.html">Food</a>
       <a href="./toolkit.html">Toolkit</a>
       <a href="./culture.html">Culture</a>
       <a href="./quick_snapshot.html">Snapshot</a>
@@ -31,7 +39,7 @@
     </nav>
   </header>
 
-  <main class="page-shell">
+  <main class="page-shell" id="main-content">
     <section class="panel hero reveal">
       <div class="hero-copy">
         <span class="eyebrow">Food Guide</span>
@@ -55,9 +63,13 @@
         </div>
       </div>
       <div class="hero-side">
-        <div class="glance-card">
-          <strong>One Must-Try Per Stop</strong>
-          <span>Osaka takoyaki, Kyoto matcha sweets, Hakone ryokan meal, Fuji Yoshida udon, Tokyo gyoza or a strong final dinner.</span>
+        <div class="hero-visual-card">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/D%C5%8Dtonbori_at_night%2C_Osaka_%2819551420339%29.jpg?width=1280" alt="Dotonbori at night in Osaka" loading="eager" decoding="async" fetchpriority="high">
+          <div class="hero-visual-copy">
+            <span class="badge badge-soft">One Must-Try Per Stop</span>
+            <strong>Osaka takoyaki, Kyoto matcha sweets, Hakone ryokan dinner, Fuji Yoshida udon, Tokyo gyoza or one strong final meal.</strong>
+            <span>The food layer stays paired to the city so decisions happen fast when the group is tired.</span>
+          </div>
         </div>
         <div class="glance-card">
           <strong>Late-Night Rule</strong>
