@@ -4,131 +4,183 @@ const SEARCH_ITEMS = [
   {
     title: "Visual Trip Highlights",
     text: "Image-led homepage slider for Osaka, Kyoto, Fuji, and seasonal planning cues.",
+    titleJa: "ビジュアル旅ハイライト",
+    textJa: "大阪、京都、富士、季節の判断材料を画像中心で読むホームのスライダーです。",
     href: "./index.html#route-atlas"
   },
   {
     title: "Recommendation Engine",
     text: "Rank the route around food, scenery, nightlife, budget, weather, and transfer tolerance.",
+    titleJa: "おすすめエンジン",
+    textJa: "食事、景色、夜、予算、天気、移動のしやすさでルートを並べ替えます。",
     href: "./index.html#trip-profile"
   },
   {
     title: "Live Route Weather",
     text: "Check current conditions, packing cues, and same-day timing for Osaka, Kyoto, Hakone, Fuji, and Tokyo.",
+    titleJa: "ライブ旅程天気",
+    textJa: "大阪、京都、箱根、富士、東京の現在の天気、服装、当日の動き方を確認できます。",
     href: "./index.html#trip-weather"
   },
   {
     title: "Live Navigation Map",
     text: "Interactive travel map with GPS locate, route pins, filters, and Google Maps handoff.",
+    titleJa: "ライブ地図",
+    textJa: "GPS、ルートピン、フィルター、Google マップ連携を備えた地図です。",
     href: "./index.html#live-map"
   },
   {
     title: "Fuji Fog And Visibility Index",
     text: "Use the live forecast to see which upcoming day has the best clarity for Mount Fuji.",
+    titleJa: "富士山の霧と視界指数",
+    textJa: "ライブ予報から、どの日がもっとも富士山を見やすいかを確認できます。",
     href: "./index.html#trip-weather"
   },
   {
     title: "Japan Explorer",
     text: "Search major route hubs and regional add-ons with interactive filters and category notes.",
+    titleJa: "日本探索",
+    textJa: "主要都市と地域別の追加候補を、検索とフィルターで比較できます。",
     href: "./index.html#japan-explorer"
   },
   {
     title: "Official Reads And Brochures",
     text: "Open JNTO articles, travel brochures, and a lightweight flight launcher.",
+    titleJa: "公式記事とパンフレット",
+    textJa: "JNTO の記事、旅行パンフレット、軽量な航空券検索を開けます。",
     href: "./japan_trip_brochure.html"
   },
   {
     title: "City Preview Deck",
     text: "Open preview images for Osaka, Kyoto, Hakone, Fuji, and Tokyo before locking in the route.",
+    titleJa: "都市プレビューデッキ",
+    textJa: "ルートを固定する前に、大阪、京都、箱根、富士、東京の画像プレビューを開けます。",
     href: "./index.html#visual-previews"
   },
   {
     title: "Itinerary Overview",
     text: "Where you stay each night, day flow, and route pacing.",
+    titleJa: "旅程概要",
+    textJa: "各日の宿泊先、日ごとの流れ、ルートのペースを確認できます。",
     href: "./itinerary.html#day-flow"
   },
   {
     title: "Osaka Food Picks",
     text: "Takoyaki, okonomiyaki, kushikatsu, gyoza, and neon-night areas.",
+    titleJa: "大阪フード候補",
+    textJa: "たこ焼き、お好み焼き、串カツ、餃子と夜の食べ歩きエリアです。",
     href: "./food.html#osaka-food"
   },
   {
     title: "Kyoto Food Picks",
     text: "Matcha sweets, soba, tofu, and slower food stops.",
+    titleJa: "京都フード候補",
+    textJa: "抹茶スイーツ、そば、豆腐、ゆっくりした食事どころです。",
     href: "./food.html#kyoto-food"
   },
   {
     title: "Hakone Food And Early Close Note",
     text: "Ryokan meals, station snacks, and why you buy backup food early.",
+    titleJa: "箱根フードと早仕舞いメモ",
+    textJa: "旅館の食事、駅前の軽食、早めに食べ物を買う理由をまとめています。",
     href: "./food.html#hakone-food"
   },
   {
     title: "Fuji Visibility Rule",
     text: "Day 6 stays weather-led. Clear view first, strict order second.",
+    titleJa: "富士の視界ルール",
+    textJa: "6日目は天気優先です。順番より先に、見える場所を確保します。",
     href: "./itinerary.html#fuji-visibility"
   },
   {
     title: "Tokyo Finish",
     text: "Shibuya shopping, dinner, and skyline close.",
+    titleJa: "東京フィニッシュ",
+    textJa: "渋谷の買い物、食事、夜景で締める最終レイヤーです。",
     href: "./itinerary.html#tokyo-finish"
   },
   {
     title: "Shin-Osaka To Odawara",
     text: "Main shinkansen booking day, luggage note, and timing.",
+    titleJa: "新大阪から小田原",
+    textJa: "主要な新幹線予約日で、荷物と時間の注意点を確認できます。",
     href: "./toolkit.html#shinkansen"
   },
   {
     title: "Hakone Freepass",
     text: "When the area pass helps and how Odawara hands off into Hakone.",
+    titleJa: "箱根フリーパス",
+    textJa: "エリアパスが役立つ場面と、小田原から箱根へのつなぎ方です。",
     href: "./toolkit.html#hakone-passes"
   },
   {
     title: "IC Cards",
     text: "Low-friction local transit for Osaka, Kyoto, and Tokyo.",
+    titleJa: "ICカード",
+    textJa: "大阪、京都、東京のローカル移動を楽にする交通カードです。",
     href: "./toolkit.html#ic-cards"
   },
   {
     title: "Packing And Weather",
     text: "All-year seasonal facts, city weather notes, and what layers to bring.",
+    titleJa: "天気と持ち物",
+    textJa: "季節の基本、都市別の天気メモ、持っていく服装をまとめています。",
     href: "./toolkit.html#weather-packing"
   },
   {
     title: "Station Shortcuts And Luggage",
     text: "Shibuya Hachiko side, major lockers, and what to book before transfer days.",
+    titleJa: "駅の近道と荷物",
+    textJa: "渋谷ハチ公側、主要ロッカー、移動日前に予約すべきものを整理しています。",
     href: "./toolkit.html#station-shortcuts"
   },
   {
     title: "Safety Quick Ref",
     text: "Top etiquette and safety reminders in one short skim block.",
+    titleJa: "安全クイック参照",
+    textJa: "短時間で確認できる主要なマナーと安全メモです。",
     href: "./culture.html#quick-ref"
   },
   {
     title: "Onsen Etiquette",
     text: "Quiet bath basics, towel rule, and photo-free spaces.",
+    titleJa: "温泉マナー",
+    textJa: "静かな入浴の基本、タオルのルール、写真を撮らない場所の説明です。",
     href: "./culture.html#onsen-etiquette"
   },
   {
     title: "Temple And Train Etiquette",
     text: "Short practical do and do not notes for first-time visitors.",
+    titleJa: "寺社と電車のマナー",
+    textJa: "初めての人向けの短く実用的な注意点です。",
     href: "./culture.html#etiquette"
   },
   {
     title: "Helpful Japanese Phrases",
     text: "Directions, prices, photos, and asking for help.",
+    titleJa: "役立つ日本語フレーズ",
+    textJa: "道順、値段、写真、助けを求める時の短い表現です。",
     href: "./culture.html#phrases"
   },
   {
     title: "Photo Prompts",
     text: "Where to stand and when to shoot in Osaka, Kyoto, Hakone, Fuji, and Tokyo.",
+    titleJa: "写真のヒント",
+    textJa: "大阪、京都、箱根、富士、東京で、どこに立っていつ撮るかの目安です。",
     href: "./culture.html#photo-prompts"
   },
   {
     title: "Quick Snapshot",
     text: "Portable mobile or printable essentials page.",
+    titleJa: "要点ページ",
+    textJa: "モバイルで見やすく、印刷にも向く要点版です。",
     href: "./quick_snapshot.html"
   },
   {
     title: "Full Interactive Guide",
     text: "The full all-in-one page with cards, galleries, and deeper notes.",
+    titleJa: "完全インタラクティブガイド",
+    textJa: "カード、ギャラリー、詳しいメモをまとめた長い一体型ページです。",
     href: "./guide.html"
   }
 ];
@@ -545,6 +597,8 @@ const UI_COPY = {
     searchSmartGuide: "Open smart guide",
     searchSnapshot: "Open snapshot",
     searchPrint: "Print page",
+    searchSeeMore: "See more",
+    searchSeeLess: "Show less",
     footerHelpful: "Helpful links",
     footerRelated: "Related sites",
     footerAbout: "About",
@@ -644,6 +698,8 @@ const UI_COPY = {
     searchSmartGuide: "スマートガイドへ",
     searchSnapshot: "要点ページへ",
     searchPrint: "このページを印刷",
+    searchSeeMore: "もっと見る",
+    searchSeeLess: "閉じる",
     footerHelpful: "便利なリンク",
     footerRelated: "関連サイト",
     footerAbout: "このサイトについて",
@@ -836,19 +892,19 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: "#route-atlas [data-route-stop=\"tokyo\"] strong", text: "東京" },
     { selector: "#route-atlas [data-route-stop=\"tokyo\"] small", text: "最終日" },
     { selector: "#official-watch .section-copy .eyebrow", text: "公式リンク" },
-    { selector: "#official-watch .section-copy h2", text: "公式記事、季節情報、パンフレット、航空券検索" },
+    { selector: "#official-watch .section-copy h2", text: "全国・地域アップデート、パンフレット、計画リンク" },
     {
       selector: "#official-watch .section-header > p",
-      text: "ここにあるリンクは軽量で信頼できるものだけです。時期確認、地域調査、旅行準備を、重い埋め込みなしで使えます。"
+      text: "重い埋め込みを使わずに、全国または都市単位の公式情報を確認したい時の入口です。"
     },
     { selector: "#official-watch .feature-slide:nth-child(1) h3", text: "公式の桜予報で、花の時期を先に確認する" },
     { selector: "#official-watch .feature-slide:nth-child(1) p", text: "日程にまだ調整の余地があるなら、まずこの予報から入り、そこからルート順を固めるのが安全です。" },
-    { selector: "#official-watch .feature-slide:nth-child(2) h3", text: "公式の目的地ハブで、ルートを広げすぎないよう比較する" },
-    { selector: "#official-watch .feature-slide:nth-child(2) p", text: "関西、関東、中部などを比較したい時の、いちばん軽くて信頼できる入口です。" },
-    { selector: "#official-watch .feature-slide:nth-child(3) h3", text: "広い計画情報は JNTO の旅行計画ハブで補う" },
-    { selector: "#official-watch .feature-slide:nth-child(3) p", text: "このルートの外まで質問が広がったときは、まずここで公式の基本レイヤーを確認します。" },
-    { selector: "#official-watch .feature-slide:nth-child(4) h3", text: "印刷や保存用には公式パンフレット棚を使う" },
-    { selector: "#official-watch .feature-slide:nth-child(4) p", text: "地域ごとのダウンロード資料が必要なときに、最も扱いやすい公式の入り口です。" },
+    { selector: "#official-watch .feature-slide:nth-child(2) h3", text: "全国規模の更新は JNTO ニュースで確認する" },
+    { selector: "#official-watch .feature-slide:nth-child(2) p", text: "旅行の変更、目的地の更新、広い日本全体の動きを公式に確認したい時の全国レイヤーです。" },
+    { selector: "#official-watch .feature-slide:nth-child(3) h3", text: "東京側の新着は GO TOKYO で読む" },
+    { selector: "#official-watch .feature-slide:nth-child(3) p", text: "東京で何が新しいか、現地寄りの更新を見たい時にいちばん軽い公式入口です。" },
+    { selector: "#official-watch .feature-slide:nth-child(4) h3", text: "京都の更新は Kyoto Travel News で先に確認する" },
+    { selector: "#official-watch .feature-slide:nth-child(4) p", text: "文化の日の前に、京都側の地域ニュースや運営情報を読んでおきたい時に向いています。" },
     { selector: "#visual-previews .section-copy .eyebrow", text: "プレビューデッキ" },
     { selector: "#visual-previews .section-copy h2", text: "決め切る前に、画像で各都市の空気をつかむ" },
     {
@@ -1036,8 +1092,9 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: ".hero > p", text: "モバイル、移動日、PDF 保存向けの簡潔版です。ルートの形、主要料理、都市ごとの核、実用メモだけを残しています。" },
     { selector: ".button-row .button.primary", text: "メインハブ" },
     { selector: ".button-row .button:nth-child(2)", text: "完全ガイドを開く" },
-    { selector: ".button-row .button:nth-child(3)", text: "印刷 / PDF 保存" },
+    { selector: ".button-row .button:nth-child(3)", text: "要点ページ全体を印刷" },
     { selector: ".hero .summary-grid .card:nth-child(1) strong", text: "旅の雰囲気" },
+    { selector: ".hero .summary-grid .card:nth-child(1) span", text: "気楽な都市夜、食事中心、写真映えする景色、そして東京締めの組み合わせです。" },
     { selector: ".hero .summary-grid .card:nth-child(2) strong", text: "覚えておくこと" },
     { selector: ".hero .summary-grid .card:nth-child(2) span", text: "富士の見え方を確認し、1つ柔軟な時間帯を残し、長い移動日は充電器と軽食を持つこと。" },
     { selector: "#route-notes .section-copy .eyebrow", text: "旅のメモ" },
@@ -2502,7 +2559,14 @@ function getSearchCategoryLabel(category, locale = getActiveLocale()) {
   return ui(key, {}, locale);
 }
 
-function getSearchScore(item, query) {
+function getLocalizedSearchItem(item, locale = getActiveLocale()) {
+  return {
+    title: locale === "ja" ? item.titleJa ?? item.title : item.title,
+    text: locale === "ja" ? item.textJa ?? item.text : item.text
+  };
+}
+
+function getSearchScore(item, query, locale = getActiveLocale()) {
   if (!query) {
     return 1;
   }
@@ -2517,10 +2581,15 @@ function getSearchScore(item, query) {
     return 1;
   }
 
-  const title = item.title.toLowerCase();
-  const text = item.text.toLowerCase();
+  const localized = getLocalizedSearchItem(item, locale);
+  const alternate = getLocalizedSearchItem(item, locale === "ja" ? "en" : "ja");
+  const title = localized.title.toLowerCase();
+  const text = localized.text.toLowerCase();
+  const alternateTitle = alternate.title.toLowerCase();
+  const alternateText = alternate.text.toLowerCase();
   const href = (item.href || "").toLowerCase();
-  const haystack = `${title} ${text} ${href}`.toLowerCase();
+  const keywords = `${item.keywords ?? ""} ${item.keywordsJa ?? ""}`.toLowerCase();
+  const haystack = `${title} ${text} ${alternateTitle} ${alternateText} ${href} ${keywords}`.toLowerCase();
   let score = 0;
   let matchedTerms = 0;
 
@@ -2529,11 +2598,20 @@ function getSearchScore(item, query) {
     if (title.includes(term)) {
       termScore += title.startsWith(term) ? 8 : 6;
     }
+    if (alternateTitle.includes(term)) {
+      termScore += alternateTitle.startsWith(term) ? 5 : 4;
+    }
     if (text.includes(term)) {
       termScore += 4;
     }
+    if (alternateText.includes(term)) {
+      termScore += 3;
+    }
     if (href.includes(term)) {
       termScore += 2;
+    }
+    if (keywords.includes(term)) {
+      termScore += 4;
     }
     if (haystack.includes(term)) {
       termScore += 1;
@@ -2551,38 +2629,51 @@ function getSearchScore(item, query) {
 
   if (title.includes(query)) {
     score += 6;
+  } else if (alternateTitle.includes(query)) {
+    score += 4;
   } else if (text.includes(query)) {
     score += 3;
+  } else if (alternateText.includes(query)) {
+    score += 2;
   }
 
   return score;
 }
 
-function renderSearchResults(items, resultsElement, locale = getActiveLocale()) {
-  resultsElement.innerHTML = items
+function buildSearchResultsMarkup(items, locale = getActiveLocale()) {
+  return items
     .map(
-      (item) => `
+      (item) => {
+        const copy = getLocalizedSearchItem(item, locale);
+        return `
         <a class="search-result" href="${item.href}">
-          <strong>${item.title}</strong>
-          <span>${item.text}</span>
+          <strong>${copy.title}</strong>
+          <span>${copy.text}</span>
           <small class="search-result-meta">${getSearchCategoryLabel(getSearchCategory(item), locale)}</small>
         </a>
-      `
+      `;
+      }
     )
     .join("");
 }
 
-function bindSearchPanel({ input, categorySelect, resultsElement, initialCount = 6 }) {
+function renderSearchResults(items, resultsElement, locale = getActiveLocale()) {
+  resultsElement.innerHTML = buildSearchResultsMarkup(items, locale);
+}
+
+function bindSearchPanel({ input, categorySelect, resultsElement, initialCount = 6, expandedCount = 12 }) {
   if (!(input instanceof HTMLInputElement) || !resultsElement) {
     return;
   }
+
+  let expanded = false;
 
   const render = () => {
     const query = input.value.trim().toLowerCase();
     const category = categorySelect instanceof HTMLSelectElement ? categorySelect.value : "all";
     const locale = getActiveLocale();
-    const filtered = SEARCH_ITEMS
-      .map((item, index) => ({ item, score: getSearchScore(item, query), index }))
+    const matches = SEARCH_ITEMS
+      .map((item, index) => ({ item, score: getSearchScore(item, query, locale), index }))
       .filter(({ item, score }) => {
         const matchesQuery = !query || score > 0;
         const matchesCategory = category === "all" || getSearchCategory(item) === category;
@@ -2594,10 +2685,9 @@ function bindSearchPanel({ input, categorySelect, resultsElement, initialCount =
         }
         return left.index - right.index;
       })
-      .slice(0, query ? 8 : initialCount)
       .map(({ item }) => item);
 
-    if (!filtered.length) {
+    if (!matches.length) {
       resultsElement.innerHTML = `
         <div class="search-result">
           <strong>${ui("searchNoMatchTitle", {}, locale)}</strong>
@@ -2607,12 +2697,47 @@ function bindSearchPanel({ input, categorySelect, resultsElement, initialCount =
       return;
     }
 
-    renderSearchResults(filtered, resultsElement, locale);
+    const collapsedCount = query ? Math.max(4, Math.min(6, initialCount)) : initialCount;
+    const visibleLimit = expanded ? expandedCount : collapsedCount;
+    const visible = matches.slice(0, visibleLimit);
+    const needsToggle = matches.length > collapsedCount;
+
+    resultsElement.innerHTML = buildSearchResultsMarkup(visible, locale);
+
+    if (needsToggle) {
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "search-results-more";
+      toggle.dataset.searchResultsMore = "true";
+      toggle.textContent = ui(expanded ? "searchSeeLess" : "searchSeeMore", {}, locale);
+      resultsElement.append(toggle);
+    }
   };
 
-  input.addEventListener("input", render);
-  categorySelect?.addEventListener("change", render);
-  document.addEventListener("locale:changed", render);
+  input.addEventListener("input", () => {
+    expanded = false;
+    render();
+  });
+
+  categorySelect?.addEventListener("change", () => {
+    expanded = false;
+    render();
+  });
+
+  resultsElement.addEventListener("click", (event) => {
+    const toggle = event.target.closest("[data-search-results-more]");
+    if (!toggle) {
+      return;
+    }
+
+    expanded = !expanded;
+    render();
+  });
+
+  document.addEventListener("locale:changed", () => {
+    expanded = false;
+    render();
+  });
   render();
 }
 
@@ -2718,11 +2843,20 @@ function initTopbarSearch() {
     const category = wrapper.querySelector("[data-topbar-search-category]");
     const results = wrapper.querySelector("[data-topbar-search-results]");
     const print = wrapper.querySelector("[data-topbar-print]");
+    let closeTimer = null;
+
+    const clearCloseTimer = () => {
+      if (closeTimer) {
+        window.clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+    };
 
     const closePanel = () => {
       if (!(toggle instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) {
         return;
       }
+      clearCloseTimer();
       toggle.classList.remove("is-active");
       toggle.setAttribute("aria-expanded", "false");
       panel.hidden = true;
@@ -2740,6 +2874,7 @@ function initTopbarSearch() {
 
     if (toggle instanceof HTMLButtonElement) {
       toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-haspopup", "dialog");
       toggle.addEventListener("click", () => {
         if (panel instanceof HTMLElement && panel.hidden) {
           openPanel();
@@ -2761,8 +2896,21 @@ function initTopbarSearch() {
       }
     });
 
+    wrapper.addEventListener("pointerenter", clearCloseTimer);
+    wrapper.addEventListener("pointerleave", () => {
+      if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        return;
+      }
+      clearCloseTimer();
+      closeTimer = window.setTimeout(() => {
+        if (!wrapper.matches(":focus-within")) {
+          closePanel();
+        }
+      }, 180);
+    });
+
     print?.addEventListener("click", () => window.print());
-    bindSearchPanel({ input, categorySelect: category, resultsElement: results, initialCount: 5 });
+    bindSearchPanel({ input, categorySelect: category, resultsElement: results, initialCount: 4, expandedCount: 10 });
     updateLocale(wrapper);
     document.addEventListener("locale:changed", () => updateLocale(wrapper));
   });
@@ -2780,7 +2928,8 @@ function initSearch() {
     input,
     categorySelect: category,
     resultsElement,
-    initialCount: 6
+    initialCount: 6,
+    expandedCount: 14
   });
 }
 
@@ -3313,6 +3462,45 @@ function initSectionNavs() {
   window.addEventListener("resize", syncAll);
   window.addEventListener("hashchange", syncAll);
   syncAll();
+}
+
+function initHorizontalRails() {
+  const rails = [...document.querySelectorAll(".nav-links, .page-section-nav")];
+  if (!rails.length) {
+    return;
+  }
+
+  rails.forEach((rail) => {
+    if (rail.dataset.horizontalRailBound === "true") {
+      return;
+    }
+    rail.dataset.horizontalRailBound = "true";
+
+    const syncRail = () => {
+      rail.classList.toggle("is-scrollable", rail.scrollWidth > rail.clientWidth + 8);
+    };
+
+    syncRail();
+    window.addEventListener("resize", syncRail);
+    document.addEventListener("locale:changed", syncRail);
+
+    rail.addEventListener(
+      "wheel",
+      (event) => {
+        if (!rail.classList.contains("is-scrollable")) {
+          return;
+        }
+
+        if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) {
+          return;
+        }
+
+        rail.scrollLeft += event.deltaY;
+        event.preventDefault();
+      },
+      { passive: false }
+    );
+  });
 }
 
 function getWeatherLabel(code, locale = getActiveLocale()) {
@@ -4449,6 +4637,54 @@ function initFlightForms() {
   });
 }
 
+function initSnapshotPrintControls() {
+  const root = document.querySelector("[data-snapshot-print-controls]");
+  const hero = document.querySelector(".page .hero");
+  const select = root?.querySelector("[data-snapshot-print-select]");
+  const printSelected = root?.querySelector("[data-snapshot-print-button]");
+  const printFull = root?.querySelector("[data-snapshot-print-full]");
+  const sections = [...document.querySelectorAll(".page > .panel.section[id]")];
+
+  if (!root || !(select instanceof HTMLSelectElement) || !(printSelected instanceof HTMLButtonElement) || !hero || !sections.length) {
+    return;
+  }
+
+  const clearTargets = () => {
+    document.body.classList.remove("snapshot-print-single");
+    hero.classList.remove("is-print-target");
+    sections.forEach((section) => section.classList.remove("is-print-target"));
+  };
+
+  const applyTarget = () => {
+    clearTargets();
+    const value = select.value;
+    if (!value || value === "all") {
+      return;
+    }
+
+    const target = document.getElementById(value);
+    if (!target) {
+      return;
+    }
+
+    document.body.classList.add("snapshot-print-single");
+    hero.classList.add("is-print-target");
+    target.classList.add("is-print-target");
+  };
+
+  printSelected.addEventListener("click", () => {
+    applyTarget();
+    window.print();
+  });
+
+  printFull?.addEventListener("click", () => {
+    clearTargets();
+    window.print();
+  });
+
+  window.addEventListener("afterprint", clearTargets);
+}
+
 function initBrochureBrowser() {
   const root = document.querySelector("[data-brochure-browser]");
   if (!root) {
@@ -5410,6 +5646,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initSiteFooter();
   initReveal();
   initSectionNavs();
+  initHorizontalRails();
   initHashHighlights();
   initSearch();
   initTermGroups();
@@ -5419,6 +5656,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initWeatherDashboard();
   initDestinationExplorer();
   initFlightForms();
+  initSnapshotPrintControls();
   initBrochureBrowser();
   initSliders();
   initStoryCardLoops();

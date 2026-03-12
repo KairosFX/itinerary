@@ -180,8 +180,8 @@
       max-width: none;
       margin: 0;
       padding: 14px 18px;
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
       gap: 16px;
       border: 1px solid rgba(255, 255, 255, 0.92);
@@ -233,13 +233,23 @@
 
     .nav-links {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: end;
+      flex-wrap: nowrap;
+      justify-content: start;
       gap: 8px;
-      max-width: 980px;
+      max-width: 100%;
+      min-width: 0;
       opacity: 1;
-      overflow: visible;
+      overflow-x: auto;
+      overflow-y: hidden;
       pointer-events: auto;
+      scroll-snap-type: x proximity;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 2px;
+    }
+
+    .nav-links::-webkit-scrollbar {
+      display: none;
     }
 
     .nav-links a {
@@ -247,6 +257,8 @@
       border-radius: 999px;
       color: var(--muted);
       font-size: 0.9rem;
+      white-space: nowrap;
+      scroll-snap-align: start;
       transition: transform var(--trans-fast), background var(--trans-fast), color var(--trans-fast);
     }
 
@@ -1770,6 +1782,7 @@
 
     @media (hover: none), (pointer: coarse) {
       .topbar {
+        grid-template-columns: 1fr;
         position: static;
         width: min(1220px, calc(100% - 20px));
         max-width: none;
@@ -1787,9 +1800,10 @@
       .nav-links {
         max-width: none;
         opacity: 1;
-        overflow: visible;
+        overflow-x: auto;
+        overflow-y: hidden;
         pointer-events: auto;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
       }
 
       .page {
@@ -1873,6 +1887,7 @@
 
     @media (max-width: 760px) {
       .topbar {
+        grid-template-columns: 1fr;
         position: static;
         width: min(1220px, calc(100% - 20px));
         max-width: none;
@@ -1906,9 +1921,10 @@
       .nav-links {
         max-width: none;
         opacity: 1;
-        overflow: visible;
+        overflow-x: auto;
+        overflow-y: hidden;
         pointer-events: auto;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
       }
 
       .hero-summary-strip {

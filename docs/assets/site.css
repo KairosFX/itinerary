@@ -211,8 +211,8 @@ main section[id] {
   max-width: none;
   margin: 0;
   padding: 14px 18px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 16px;
   border: 1px solid rgba(255, 255, 255, 0.92);
@@ -269,13 +269,17 @@ html[data-theme="dark"] .topbar {
 .topbar-utility {
   display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 10px;
   margin-left: auto;
+  justify-self: end;
+  white-space: nowrap;
+  min-width: max-content;
 }
 
 .topbar-search {
   position: relative;
+  flex-shrink: 0;
 }
 
 .topbar-action-button {
@@ -304,7 +308,7 @@ html[data-theme="dark"] .topbar {
   position: absolute;
   top: calc(100% + 14px);
   right: 0;
-  width: min(760px, calc(100vw - 40px));
+  width: min(680px, calc(100vw - 40px));
   padding: 18px;
   border: 1px solid rgba(255, 255, 255, 0.92);
   border-radius: 28px;
@@ -319,7 +323,7 @@ html[data-theme="dark"] .topbar {
 
 .topbar-search-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 240px);
   gap: 14px;
   align-items: start;
 }
@@ -341,14 +345,27 @@ html[data-theme="dark"] .topbar {
 
 .nav-links {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: end;
+  flex-wrap: nowrap;
+  justify-content: start;
   gap: 8px;
-  max-width: 980px;
+  max-width: 100%;
+  min-width: 0;
   opacity: 1;
-  overflow: visible;
+  overflow-x: auto;
+  overflow-y: hidden;
   pointer-events: auto;
   position: relative;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 2px;
+}
+
+.nav-links::-webkit-scrollbar,
+.page-section-nav::-webkit-scrollbar,
+.search-results::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-links a {
@@ -356,6 +373,8 @@ html[data-theme="dark"] .topbar {
   border-radius: 999px;
   color: var(--muted);
   font-size: 0.9rem;
+  white-space: nowrap;
+  scroll-snap-align: start;
   transition: transform var(--trans-fast), background var(--trans-fast), color var(--trans-fast);
 }
 
@@ -409,6 +428,12 @@ html[data-theme="dark"] .topbar:focus-within {
   backdrop-filter: blur(14px);
 }
 
+html[data-theme="dark"] .nav-preview-card {
+  border-color: rgba(121, 185, 198, 0.18);
+  background: rgba(15, 24, 29, 0.96);
+  box-shadow: 0 20px 34px rgba(0, 0, 0, 0.28);
+}
+
 .nav-preview-image {
   width: 100%;
   height: 96px;
@@ -437,6 +462,14 @@ html[data-theme="dark"] .topbar:focus-within {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+html[data-theme="dark"] .nav-preview-copy strong {
+  color: var(--ink);
+}
+
+html[data-theme="dark"] .nav-preview-copy span {
+  color: var(--muted);
 }
 
 .page-shell {
@@ -1848,6 +1881,9 @@ html.js .route-map-board.is-live .route-pin {
 .search-results {
   display: grid;
   gap: 10px;
+  max-height: min(50vh, 404px);
+  overflow: auto;
+  padding-right: 4px;
 }
 
 .search-result {
@@ -1862,6 +1898,11 @@ html.js .route-map-board.is-live .route-pin {
   transform: translateY(-2px);
   border-color: rgba(31, 95, 107, 0.16);
   background: rgba(255, 255, 255, 0.9);
+}
+
+html[data-theme="dark"] .search-result:hover {
+  border-color: rgba(121, 185, 198, 0.22);
+  background: linear-gradient(180deg, rgba(24, 38, 45, 0.98), rgba(15, 24, 29, 0.96));
 }
 
 .search-result strong {
@@ -1900,8 +1941,15 @@ html.js .route-map-board.is-live .route-pin {
 
 .page-section-nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 2px;
 }
 
 .section-pill {
@@ -1914,6 +1962,8 @@ html.js .route-map-board.is-live .route-pin {
   color: var(--muted);
   font-size: 0.9rem;
   font-weight: 700;
+  white-space: nowrap;
+  scroll-snap-align: start;
   transition: transform var(--trans-fast), border-color var(--trans-fast), background var(--trans-fast), color var(--trans-fast), box-shadow var(--trans-fast);
 }
 
@@ -1929,6 +1979,59 @@ html.js .route-map-board.is-live .route-pin {
 .section-pill.is-active {
   background: linear-gradient(135deg, rgba(156, 61, 51, 0.14), rgba(255, 255, 255, 0.92));
   color: var(--crimson);
+}
+
+html[data-theme="dark"] .section-pill {
+  border-color: rgba(121, 185, 198, 0.16);
+  background: rgba(18, 30, 36, 0.9);
+  color: var(--muted);
+}
+
+html[data-theme="dark"] .section-pill:hover,
+html[data-theme="dark"] .section-pill.is-active {
+  border-color: rgba(121, 185, 198, 0.24);
+  background: rgba(121, 185, 198, 0.12);
+  color: var(--sea);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+}
+
+html[data-theme="dark"] .section-pill.is-active {
+  background: linear-gradient(135deg, rgba(216, 122, 103, 0.22), rgba(20, 35, 42, 0.96));
+  color: var(--crimson);
+}
+
+.search-results-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-top: 2px;
+  padding: 10px 14px;
+  border: 1px solid rgba(31, 95, 107, 0.12);
+  border-radius: 999px;
+  background: rgba(31, 95, 107, 0.08);
+  color: var(--sea);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--trans-fast), border-color var(--trans-fast), background var(--trans-fast), color var(--trans-fast);
+}
+
+.search-results-more:hover {
+  transform: translateY(-1px);
+  border-color: rgba(31, 95, 107, 0.2);
+  background: rgba(31, 95, 107, 0.14);
+}
+
+html[data-theme="dark"] .search-results-more {
+  border-color: rgba(121, 185, 198, 0.16);
+  background: rgba(121, 185, 198, 0.12);
+  color: var(--sea);
+}
+
+html[data-theme="dark"] .search-results-more:hover {
+  border-color: rgba(121, 185, 198, 0.24);
+  background: rgba(121, 185, 198, 0.18);
 }
 
 .panel.section:target,
@@ -2582,6 +2685,15 @@ html[data-theme="dark"] .search-panel select {
   border-color: rgba(237, 243, 245, 0.16);
   background: rgba(9, 16, 20, 0.88);
   color: var(--ink);
+}
+
+html[data-theme="dark"] .flight-form input:focus,
+html[data-theme="dark"] .flight-form select:focus,
+html[data-theme="dark"] .search-panel input:focus,
+html[data-theme="dark"] .search-panel select:focus {
+  border-color: rgba(121, 185, 198, 0.28);
+  box-shadow: 0 0 0 5px rgba(121, 185, 198, 0.08);
+  background: rgba(9, 16, 20, 0.96);
 }
 
 .flight-form .button-primary {
@@ -4218,7 +4330,7 @@ a.recommendation-card:hover {
 
   .map-toolbar-actions,
   .page-section-nav {
-    display: grid;
+    display: flex;
   }
 
   .map-canvas-shell,
@@ -4337,9 +4449,10 @@ a.recommendation-card:hover {
   .nav-links {
     max-width: none;
     opacity: 1;
-    overflow: visible;
+    overflow-x: auto;
+    overflow-y: hidden;
     pointer-events: auto;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   .page-shell {
@@ -4472,6 +4585,7 @@ a.recommendation-card:hover {
 
 @media (max-width: 760px) {
   .topbar {
+    grid-template-columns: 1fr;
     position: static;
     width: min(1240px, calc(100% - 20px));
     max-width: none;
