@@ -34,7 +34,7 @@ const SEARCH_ITEMS = [
   {
     title: "Official Reads And Brochures",
     text: "Open JNTO articles, travel brochures, and a lightweight flight launcher.",
-    href: "./index.html#official-watch"
+    href: "./japan_trip_brochure.html"
   },
   {
     title: "City Preview Deck",
@@ -460,7 +460,8 @@ const PAGE_SUBTITLE_TRANSLATIONS = {
     "toolkit.html": "Toolkit",
     "culture.html": "Culture notes",
     "quick_snapshot.html": "Snapshot",
-    "guide.html": "Full guide"
+    "guide.html": "Full guide",
+    "japan_trip_brochure.html": "Brochure pack"
   },
   ja: {
     "index.html": "メイントリップ",
@@ -469,9 +470,625 @@ const PAGE_SUBTITLE_TRANSLATIONS = {
     "toolkit.html": "準備ガイド",
     "culture.html": "文化メモ",
     "quick_snapshot.html": "要点ページ",
-    "guide.html": "完全ガイド"
+    "guide.html": "完全ガイド",
+    "japan_trip_brochure.html": "パンフレット"
   }
 };
+
+const UI_COPY = {
+  en: {
+    weatherLoadingTitle: "Loading live read...",
+    weatherLoadingText: "Checking current conditions and next-step advice.",
+    weatherUnavailableTitle: "Live data unavailable",
+    weatherUnavailableText: "Use the static trip rule for now:",
+    weatherFallbackLabel: "Fallback:",
+    weatherFallbackFuji: "Keep Fuji flexible.",
+    weatherFallbackDefault: "Dress in layers and re-check later.",
+    weatherSavedRead: "Saved read",
+    weatherHigh: "High",
+    weatherLow: "Low",
+    weatherRain: "Rain",
+    weatherFeelsLike: "Feels like",
+    weatherRightMove: "Right move:",
+    weatherTiming: "Timing:",
+    weatherRefresh: "Refresh live read",
+    weatherRefreshing: "Refreshing...",
+    weatherCalloutTitle: "What This Is Doing",
+    weatherFujiEyebrow: "Fuji visibility index",
+    weatherFujiUnavailableTitle: "Forecast unavailable right now",
+    weatherFujiUnavailableText:
+      "The live Fuji read could not load. Default back to the site rule: do not lock the order until the same-day mountain view is clear.",
+    weatherFujiFallbackTitle: "Fallback move",
+    weatherFujiFallbackText: "Keep the Fuji block movable and re-check in the morning.",
+    weatherFujiBestWindow: "Best window",
+    weatherFujiClarity: "clarity",
+    weatherFujiFogRisk: "fog risk",
+    weatherFujiBestDaySuffix: "is the current strongest Fuji window",
+    weatherFujiIntro:
+      "The index blends forecast visibility, cloud cover, and rain pressure. Lower fog risk and higher clarity mean the mountain is more likely to pay off cleanly.",
+    weatherFujiAimAround: "Aim around",
+    weatherFujiIfSky: "if the sky is cooperating.",
+    mapPopupOpen: "Open local guide",
+    mapLoadingTitle: "Loading interactive map...",
+    mapLoadingText: "The map initializes only when this section comes into view so the page stays fast.",
+    mapFailTitle: "Interactive map failed to load",
+    mapFailText: "The page still works. Use the route atlas above or open the selected stop directly in Google Maps.",
+    mapWeatherFallback: "Live route weather loads in the weather section below.",
+    mapGpsUnsupported: "Geolocation is not supported in this browser.",
+    mapGpsRequesting: "Requesting location permission...",
+    mapGpsDenied: "Location permission denied. Use the saved route pins instead.",
+    mapGpsTrackingFailed: "Location shared once. Live tracking update failed.",
+    mapLocationNotShared: "Location not shared yet",
+    mapTrackingSelected: "Tracking live position · {distance} km to selected point",
+    mapGpsLiveAt: "GPS live at {lat}, {lon}",
+    mapDistanceAway: "{distance} km away",
+    navPreviewTitleHome: "Main hub",
+    navPreviewTextHome: "Recommendation engine, route atlas, live weather, live map, and page routing in one place.",
+    navPreviewTitleItinerary: "Itinerary",
+    navPreviewTextItinerary: "Nightly stays, day flow, transfer logic, and the route order.",
+    navPreviewTitleFood: "Food guide",
+    navPreviewTextFood: "City-by-city dishes, late backups, and fast visual food browsing.",
+    navPreviewTitleToolkit: "Toolkit",
+    navPreviewTextToolkit: "Weather, packing, tickets, luggage logic, and move-day shortcuts.",
+    navPreviewTitleCulture: "Culture notes",
+    navPreviewTextCulture: "Etiquette, onsen basics, useful phrases, and photo prompts.",
+    navPreviewTitleSnapshot: "Quick snapshot",
+    navPreviewTextSnapshot: "Portable mobile and print view with only the essentials.",
+    navPreviewTitleGuide: "Full guide",
+    navPreviewTextGuide: "All-in-one long-scroll guide with richer interactive sections.",
+    brochureCardTitle: "Travel Brochures",
+    brochureCardText: "Open the local brochure pack with printable route summaries, fast links, and share-ready pages.",
+    brochureCardLabel: "Local brochures"
+  },
+  ja: {
+    weatherLoadingTitle: "ライブ情報を読み込み中...",
+    weatherLoadingText: "現在の天気と次の動き方を確認しています。",
+    weatherUnavailableTitle: "ライブ情報を取得できません",
+    weatherUnavailableText: "いまは固定ルールを使ってください:",
+    weatherFallbackLabel: "代替:",
+    weatherFallbackFuji: "富士は固定せず柔軟に。",
+    weatherFallbackDefault: "重ね着で対応し、あとで再確認してください。",
+    weatherSavedRead: "保存済み情報",
+    weatherHigh: "最高",
+    weatherLow: "最低",
+    weatherRain: "雨",
+    weatherFeelsLike: "体感",
+    weatherRightMove: "おすすめ:",
+    weatherTiming: "時間帯:",
+    weatherRefresh: "ライブ情報を更新",
+    weatherRefreshing: "更新中...",
+    weatherCalloutTitle: "この機能について",
+    weatherFujiEyebrow: "富士山の視界指数",
+    weatherFujiUnavailableTitle: "予報を取得できません",
+    weatherFujiUnavailableText:
+      "富士のライブ判定を取得できませんでした。サイトの基本ルールどおり、当日の見え方が良いと確認できるまで順番を固定しないでください。",
+    weatherFujiFallbackTitle: "代替プラン",
+    weatherFujiFallbackText: "富士ブロックは動かせる状態にして、朝に再確認してください。",
+    weatherFujiBestWindow: "最良時間",
+    weatherFujiClarity: "視界",
+    weatherFujiFogRisk: "霧リスク",
+    weatherFujiBestDaySuffix: "が現在もっとも強い富士山チャンスです",
+    weatherFujiIntro:
+      "この指数は視界、雲量、雨の圧力を合わせて判定します。霧リスクが低く、視界が高いほど、富士山がきれいに見える可能性が高くなります。",
+    weatherFujiAimAround: "目安は",
+    weatherFujiIfSky: "空の状態が良ければ狙い目です。",
+    mapPopupOpen: "ガイドを開く",
+    mapLoadingTitle: "インタラクティブ地図を読み込み中...",
+    mapLoadingText: "このセクションが見えた時だけ地図を初期化し、ページ全体の軽さを保ちます。",
+    mapFailTitle: "地図を読み込めませんでした",
+    mapFailText: "ページ自体は使えます。上のルート図を使うか、選択中の地点を Google マップで開いてください。",
+    mapWeatherFallback: "ライブ天気は下の天気セクションで読み込まれます。",
+    mapGpsUnsupported: "このブラウザでは位置情報が使えません。",
+    mapGpsRequesting: "位置情報の許可を確認しています...",
+    mapGpsDenied: "位置情報の共有が拒否されました。保存済みピンを使ってください。",
+    mapGpsTrackingFailed: "位置は一度取得しましたが、ライブ追跡の更新に失敗しました。",
+    mapLocationNotShared: "位置情報はまだ共有されていません",
+    mapTrackingSelected: "現在地を追跡中 · 選択地点まで {distance} km",
+    mapGpsLiveAt: "現在地 {lat}, {lon}",
+    mapDistanceAway: "{distance} km先",
+    navPreviewTitleHome: "メインハブ",
+    navPreviewTextHome: "おすすめエンジン、ルート図、ライブ天気、ライブ地図、各ページ導線を一か所にまとめています。",
+    navPreviewTitleItinerary: "旅程",
+    navPreviewTextItinerary: "宿泊順、日ごとの流れ、移動ロジック、ルート順を確認できます。",
+    navPreviewTitleFood: "食事ガイド",
+    navPreviewTextFood: "都市ごとの名物、夜の保険、画像中心の食べ方ガイドです。",
+    navPreviewTitleToolkit: "準備ガイド",
+    navPreviewTextToolkit: "天気、持ち物、切符、荷物、移動日のショートカットをまとめています。",
+    navPreviewTitleCulture: "文化メモ",
+    navPreviewTextCulture: "マナー、温泉ルール、役立つ表現、写真のヒントです。",
+    navPreviewTitleSnapshot: "要点ページ",
+    navPreviewTextSnapshot: "必要最低限だけを見たいときのモバイル・印刷向け表示です。",
+    navPreviewTitleGuide: "完全ガイド",
+    navPreviewTextGuide: "長い1ページに情報をまとめた、より深いインタラクティブ版です。",
+    brochureCardTitle: "トラベルパンフレット",
+    brochureCardText: "印刷しやすい要約、すぐ開けるリンク、共有向けページをまとめたローカルのパンフレット集を開きます。",
+    brochureCardLabel: "ローカルパンフ"
+  }
+};
+
+const NAV_PREVIEW_CONTENT = {
+  "./index.html": {
+    image: PREVIEW_GALLERIES.osaka.images[1].src,
+    titleKey: "navPreviewTitleHome",
+    textKey: "navPreviewTextHome"
+  },
+  "./itinerary.html": {
+    image: PREVIEW_GALLERIES.hakone.images[0].src,
+    titleKey: "navPreviewTitleItinerary",
+    textKey: "navPreviewTextItinerary"
+  },
+  "./food.html": {
+    image: PREVIEW_GALLERIES.osaka.images[0].src,
+    titleKey: "navPreviewTitleFood",
+    textKey: "navPreviewTextFood"
+  },
+  "./toolkit.html": {
+    image: PREVIEW_GALLERIES.fuji.images[0].src,
+    titleKey: "navPreviewTitleToolkit",
+    textKey: "navPreviewTextToolkit"
+  },
+  "./culture.html": {
+    image: PREVIEW_GALLERIES.kyoto.images[0].src,
+    titleKey: "navPreviewTitleCulture",
+    textKey: "navPreviewTextCulture"
+  },
+  "./quick_snapshot.html": {
+    image: PREVIEW_GALLERIES.tokyo.images[1].src,
+    titleKey: "navPreviewTitleSnapshot",
+    textKey: "navPreviewTextSnapshot"
+  },
+  "./guide.html": {
+    image: PREVIEW_GALLERIES.tokyo.images[0].src,
+    titleKey: "navPreviewTitleGuide",
+    textKey: "navPreviewTextGuide"
+  }
+};
+
+const PAGE_JA_TRANSLATIONS = {
+  "index.html": [
+    { selector: ".hero .eyebrow", text: "メインページ" },
+    { selector: ".hero h1", text: "Japan Escape ガイドハブ" },
+    {
+      selector: ".hero .hero-lead",
+      text: "このサイトは、旅行スタイルをすばやく決められるように設計されています。ガイド検索、おすすめエンジン、プレビュー画像を使って、日程を固定する前に方向性を決められます。"
+    },
+    { selector: ".hero .quick-callout strong", text: "ここから開始" },
+    {
+      selector: ".hero .quick-callout span",
+      text: "まずプロフィールを作成し、その後プレビューカードでグループに合う都市の雰囲気を確認してからページを共有してください。"
+    },
+    { selector: ".hero-actions a:nth-child(1)", text: "プランを作る" },
+    { selector: ".hero-actions a:nth-child(2)", text: "旅程を開く" },
+    { selector: ".hero-actions a:nth-child(3)", text: "完全ガイドを開く" },
+    { selector: ".section-pill[href=\"#route-atlas\"]", text: "ルート図" },
+    { selector: ".section-pill[href=\"#live-map\"]", text: "ライブ地図" },
+    { selector: ".section-pill[href=\"#trip-profile\"]", text: "プロフィール" },
+    { selector: ".section-pill[href=\"#trip-weather\"]", text: "ライブ天気" },
+    { selector: ".section-pill[href=\"#japan-explorer\"]", text: "探索" },
+    { selector: ".section-pill[href=\"#official-watch\"]", text: "記事" },
+    { selector: ".section-pill[href=\"#visual-previews\"]", text: "プレビュー" },
+    { selector: "#live-map .section-copy .eyebrow", text: "ライブナビ地図" },
+    { selector: "#live-map .section-copy h2", text: "GPS、ルートピン、Google マップ連携で本物の地図を使う" },
+    {
+      selector: "#live-map .section-header > p",
+      text: "この地図レイヤーは実用重視です。現在地、ルート・カテゴリの切り替え、距離の把握、そして実際のナビ用に Google マップへ1クリックで渡せます。"
+    },
+    { selector: "[data-map-filter=\"all\"]", text: "すべて" },
+    { selector: "[data-map-filter=\"route\"]", text: "ルート" },
+    { selector: "[data-map-filter=\"food\"]", text: "食事" },
+    { selector: "[data-map-filter=\"view\"]", text: "景色" },
+    { selector: "[data-map-filter=\"transit\"]", text: "移動" },
+    { selector: "[data-map-locate]", text: "現在地を使う" },
+    { selector: "[data-map-reset]", text: "地図をリセット" },
+    { selector: "[data-map-loading] strong", text: "インタラクティブ地図を読み込み中..." },
+    {
+      selector: "[data-map-loading] span",
+      text: "このセクションが見えた時だけ地図を初期化し、ページ全体の軽さを保ちます。"
+    },
+    { selector: ".map-info-panel > .eyebrow", text: "GPS + ルート文脈" },
+    { selector: "[data-map-title]", text: "大阪が現在のアンカーです" },
+    {
+      selector: "[data-map-description]",
+      text: "ライブ地図は主要ルートから始まります。マーカーをクリックするかフィルターを使って、ルート地点、食事スポット、景色の見どころ、主要乗り継ぎへ切り替えてください。"
+    },
+    { selector: ".map-stat:nth-child(1) span", text: "GPS 状態" },
+    { selector: ".map-stat:nth-child(2) span", text: "最寄りの保存地点" },
+    { selector: ".map-stat:nth-child(3) span", text: "天気連動" },
+    { selector: ".map-nearby-panel > strong", text: "近い保存地点" },
+    { selector: "[data-map-gps-status]", text: "位置情報はまだ共有されていません" },
+    { selector: "[data-map-nearest]", text: "大阪" },
+    { selector: "[data-map-weather]", text: "ライブ天気は下の天気セクションで読み込まれます。" },
+    { selector: "[data-map-primary]", text: "ローカルガイドを開く" },
+    { selector: "[data-map-directions]", text: "Google マップで開く" },
+    { selector: "#route-atlas [data-route-stop=\"osaka\"] strong", text: "大阪" },
+    { selector: "#route-atlas [data-route-stop=\"osaka\"] small", text: "1-3泊" },
+    { selector: "#route-atlas [data-route-stop=\"kyoto\"] strong", text: "京都" },
+    { selector: "#route-atlas [data-route-stop=\"kyoto\"] small", text: "2日目" },
+    { selector: "#route-atlas [data-route-stop=\"hakone\"] strong", text: "箱根" },
+    { selector: "#route-atlas [data-route-stop=\"hakone\"] small", text: "4泊目" },
+    { selector: "#route-atlas [data-route-stop=\"fuji\"] strong", text: "富士" },
+    { selector: "#route-atlas [data-route-stop=\"fuji\"] small", text: "6日目" },
+    { selector: "#route-atlas [data-route-stop=\"tokyo\"] strong", text: "東京" },
+    { selector: "#route-atlas [data-route-stop=\"tokyo\"] small", text: "最終日" },
+    { selector: "#official-watch .section-copy .eyebrow", text: "公式リンク" },
+    { selector: "#official-watch .section-copy h2", text: "記事、季節情報、パンフレット、航空券検索" },
+    {
+      selector: "#official-watch .section-header > p",
+      text: "ここにあるリンクは軽量で信頼できるものだけです。時期確認、地域調査、旅行準備を、重い埋め込みなしで使えます。"
+    },
+    { selector: ".official-link-grid a:last-child strong", text: "トラベルパンフレット" },
+    {
+      selector: ".official-link-grid a:last-child span",
+      text: "印刷しやすい要約、共有用のリンク、地域別の準備ページを集めたローカルのパンフレット集です。"
+    },
+    { selector: ".official-link-grid a:last-child small", text: "ローカルパンフ" },
+    { selector: ".tool-stack .tool-card:first-child .eyebrow", text: "無料フライト起点" },
+    { selector: ".tool-stack .tool-card:first-child h3", text: "重い埋め込みなしで航空券検索を開く" },
+    {
+      selector: ".tool-stack .tool-card:first-child p",
+      text: "出発空港コードを入れ、日本側の到着空港を選ぶと、軽量な外部検索を新しいタブで開きます。"
+    },
+    { selector: "label[for=\"flight-from\"] > span", text: "出発空港コード" },
+    { selector: "label[for=\"flight-to\"] > span", text: "日本側の空港" },
+    { selector: "label[for=\"flight-depart\"] > span", text: "出発日" },
+    { selector: "label[for=\"flight-return\"] > span", text: "帰着日" },
+    { selector: ".flight-form button[type=\"submit\"]", text: "航空券を検索" },
+    {
+      selector: ".tool-stack .tool-card:first-child .note-band",
+      text: "広告の多い埋め込みウィジェットは使わず、外部検索ページを開きます。空港コードを入れると見やすくなります。"
+    }
+  ],
+  "itinerary.html": [
+    { selector: ".hero .eyebrow", text: "旅の設計" },
+    { selector: ".hero h1", text: "旅程とルートの考え方" },
+    {
+      selector: ".hero .hero-lead",
+      text: "このページはルート自体を整理して見せます。どこに泊まるか、各日が何を目指すか、移動が多い区間をどう崩さずに組むかを確認できます。"
+    },
+    { selector: ".hero-actions a:nth-child(1)", text: "日ごとの流れへ" },
+    { selector: ".hero-actions a:nth-child(2)", text: "移動日へ" },
+    { selector: "#route-atlas [data-route-stop=\"osaka\"] strong", text: "大阪" },
+    { selector: "#route-atlas [data-route-stop=\"osaka\"] small", text: "1-3泊" },
+    { selector: "#route-atlas [data-route-stop=\"kyoto\"] strong", text: "京都" },
+    { selector: "#route-atlas [data-route-stop=\"kyoto\"] small", text: "2日目" },
+    { selector: "#route-atlas [data-route-stop=\"hakone\"] strong", text: "箱根" },
+    { selector: "#route-atlas [data-route-stop=\"hakone\"] small", text: "4泊目" },
+    { selector: "#route-atlas [data-route-stop=\"fuji\"] strong", text: "富士" },
+    { selector: "#route-atlas [data-route-stop=\"fuji\"] small", text: "6日目" },
+    { selector: "#route-atlas [data-route-stop=\"tokyo\"] strong", text: "東京" },
+    { selector: "#route-atlas [data-route-stop=\"tokyo\"] small", text: "最終日" }
+  ],
+  "food.html": [
+    { selector: ".hero .eyebrow", text: "食事ガイド" },
+    { selector: ".hero h1", text: "何を食べるか、どこで食べるか" },
+    {
+      selector: ".hero .hero-lead",
+      text: "このページは食べ物を都市ごとに結びつけ、何を食べるか、どこで合うか、だいたいどのくらい使うかをすばやく判断できるようにしています。"
+    },
+    { selector: ".hero-actions a:nth-child(1)", text: "フードスライダーへ" },
+    { selector: ".hero-actions a:nth-child(2)", text: "都市別フードへ" },
+    { selector: ".section-pill[href=\"#food-carousel\"]", text: "フードスライダー" },
+    { selector: ".section-pill[href=\"#city-foods\"]", text: "都市別フード" },
+    { selector: ".section-pill[href=\"#dish-shortlist\"]", text: "料理一覧" }
+  ],
+  "toolkit.html": [
+    { selector: ".hero .eyebrow", text: "準備ガイド" },
+    { selector: ".hero h1", text: "天気、持ち物、切符、移動日のメモ" },
+    {
+      selector: ".hero .hero-lead",
+      text: "何を着るか、現金をどれくらい持つか、何を事前予約するか、長い移動日をどう崩さず乗り切るかを確認するページです。"
+    },
+    { selector: ".hero-actions a:nth-child(1)", text: "天気と持ち物へ" },
+    { selector: ".hero-actions a:nth-child(2)", text: "移動メモへ" }
+  ],
+  "culture.html": [
+    { selector: ".hero .eyebrow", text: "文化メモ" },
+    { selector: ".hero h1", text: "マナー、安全、表現、写真のヒント" },
+    {
+      selector: ".hero .hero-lead",
+      text: "初めての人向けの大事なポイントを短く実用的にまとめています。気持ちよく動くためのマナー、温泉や寺社で気をつけること、役立つ表現、写真の立ち位置です。"
+    },
+    { selector: ".hero-actions a:nth-child(1)", text: "クイック参照へ" },
+    { selector: ".hero-actions a:nth-child(2)", text: "写真ヒントへ" }
+  ],
+  "japan_trip_brochure.html": [
+    { selector: ".hero .eyebrow", text: "パンフレット" },
+    { selector: ".hero h1", text: "Japan Escape パンフレットパック" },
+    {
+      selector: ".hero .hero-lead",
+      text: "共有しやすく、印刷しやすい導線を一か所に集めたローカルのパンフレットページです。"
+    }
+  ]
+};
+
+const WEATHER_STOP_LOCALES = {
+  ja: {
+    osaka: { name: "大阪", timing: "食べ歩きとゆるい夜歩きは日が落ちてからが最適です。" },
+    kyoto: { name: "京都", timing: "歩きやすく涼しい朝のほうが使いやすいです。" },
+    hakone: { name: "箱根", timing: "空気が湿ってきたら、午後遅めは旅館と休息の時間に回すのが自然です。" },
+    fuji: { name: "富士山エリア", timing: "昼食時間よりも、朝の澄んだ視界を優先してください。" },
+    tokyo: { name: "東京", timing: "東京の見返りがもっともきれいなのは、夕方から夜にかけてです。" }
+  }
+};
+
+const ROUTE_ATLAS_LOCALES = {
+  ja: {
+    osaka: {
+      kicker: "到着ベース",
+      title: "大阪が旅の始まりの空気を決める",
+      description: "大阪から始めることで、到着の疲れを食事と街の勢いに変え、いきなり細かい移動で消耗しません。",
+      previewLabel: "大阪をプレビュー",
+      badges: ["食", "夜", "気楽"],
+      facts: [
+        { label: "役割", text: "大阪は旅の出だしを安定させ、後半の景色パートを急ぎ足にしないための土台です。" },
+        { label: "空気感", text: "ネオンと食べ物、遅い時間の選択肢があるため、いちばん柔らかい着地になります。" },
+        { label: "最適な動き", text: "初日は小さくまとめ、本当のペースは翌朝から始めるのが良いです。" }
+      ]
+    },
+    kyoto: {
+      kicker: "対比の日",
+      title: "京都はホテルを変えずに旅の質感を変える",
+      description: "京都は意図的なコントラストです。ホテル移動を増やさずに、1日だけ文化の濃さで空気を変えます。",
+      previewLabel: "京都をプレビュー",
+      badges: ["文化", "写真", "歩く"],
+      facts: [
+        { label: "役割", text: "京都は雰囲気を変えるための一日であり、大阪ベースを置き換える場所ではありません。" },
+        { label: "空気感", text: "静かな寺社、細い路地、そして1エリア集中のほうが強い都市です。" },
+        { label: "最適な動き", text: "街全体を追いかけず、1つのエリアに集中すると旅の質が上がります。" }
+      ]
+    },
+    hakone: {
+      kicker: "景色の継ぎ目",
+      title: "箱根がいちばん重い移動日に呼吸を戻す",
+      description: "箱根の一泊が、ルートを単なる長距離移動ではなく、景色でつながる旅に変えます。",
+      previewLabel: "箱根をプレビュー",
+      badges: ["休息", "温泉", "景色"],
+      facts: [
+        { label: "役割", text: "西から東への長い移動を、人間的なリズムに戻すための継ぎ目です。" },
+        { label: "空気感", text: "街の勢いではなく、空気、湖、旅館の時間に価値がある地点です。" },
+        { label: "最適な動き", text: "移動をきれいに終えてから景色を足し、詰め込みすぎないことです。" }
+      ]
+    },
+    fuji: {
+      kicker: "天気主導",
+      title: "富士は唯一、本当に柔軟性が必要なパート",
+      description: "富士ブロックは景色の中心である一方、視界に従う必要があります。順番を守るより、見える時間を守るほうが重要です。",
+      previewLabel: "富士をプレビュー",
+      badges: ["景色", "天気", "柔軟"],
+      facts: [
+        { label: "役割", text: "旅全体のいちばん大きい景色の見返りですが、固定順では弱くなります。" },
+        { label: "空気感", text: "視界が開けば一気に価値が跳ね上がり、閉じれば別の動きが必要になります。" },
+        { label: "最適な動き", text: "空を確認し、最もきれいな視界を最初に回収してください。" }
+      ]
+    },
+    tokyo: {
+      kicker: "締めの街",
+      title: "東京は最後に集中させるほど大きく感じる",
+      description: "東京は最後に1地区へ集中すると、買い物、夜景、食事がばらけず強い終わり方になります。",
+      previewLabel: "東京をプレビュー",
+      badges: ["夜", "買い物", "締め"],
+      facts: [
+        { label: "役割", text: "最後の一日をだらけさせず、強く閉じるための最終アンカーです。" },
+        { label: "空気感", text: "渋谷の密度、夜景、最後の食事が終盤の勢いをまとめます。" },
+        { label: "最適な動き", text: "街全体に広げず、1地区中心で組むと一番きれいに締まります。" }
+      ]
+    }
+  }
+};
+
+const MAP_POINT_LOCALES = {
+  ja: {
+    "osaka-route": {
+      title: "大阪ベース",
+      tags: ["ルート", "食", "気楽"],
+      description: "到着日にもっとも入りやすい、ルートの最初のベースです。",
+      guideLabel: "大阪ガイドを開く",
+      facts: [
+        { label: "向いている使い方", text: "食事と楽な街歩きで、到着の疲れをやわらげたい時です。" },
+        { label: "地図ロジック", text: "大阪は旅の疲れを勢いに変えるアンカーです。" }
+      ]
+    },
+    "dotonbori-food": {
+      title: "道頓堀フードレーン",
+      tags: ["食", "夜", "大阪"],
+      description: "看板、つまみ食い、気軽な移動が揃う、最初の食べ歩きに最適な場所です。",
+      guideLabel: "大阪フードを開く",
+      facts: [
+        { label: "狙いどころ", text: "たこ焼き、視覚的な盛り上がり、最初の夜のゆるい散策です。" },
+        { label: "時間帯", text: "川沿いと看板が効く夜がもっとも合います。" }
+      ]
+    },
+    "kyoto-route": {
+      title: "京都コントラスト",
+      tags: ["ルート", "文化", "徒歩"],
+      description: "文化の対比になる一日。街全体より1エリア集中のほうが強いです。",
+      guideLabel: "京都ガイドを開く",
+      facts: [
+        { label: "向いている使い方", text: "地区を1つに絞り、移動を少なくすることです。" },
+        { label: "時間帯", text: "混雑が早く強まるので、早い時間のほうが有利です。" }
+      ]
+    },
+    "nishiki-food": {
+      title: "錦市場",
+      tags: ["食", "市場", "京都"],
+      description: "食べ歩きと観察に向く、京都の軽いフード文脈づくりです。",
+      guideLabel: "京都フードを開く",
+      facts: [
+        { label: "狙いどころ", text: "軽い試食、のぞき歩き、大きな散策の合間の補助です。" },
+        { label: "注意点", text: "時間が遅くなるほど混みやすいです。" }
+      ]
+    },
+    "hakone-route": {
+      title: "箱根リセット",
+      tags: ["ルート", "温泉", "休息"],
+      description: "東への移動を人間的なリズムに戻してくれる景色の一泊です。",
+      guideLabel: "箱根ガイドを開く",
+      facts: [
+        { label: "向いている使い方", text: "移動を先に整え、その後で観光圧を足さないことです。" },
+        { label: "時間帯", text: "午後遅めに旅館モードへ切り替えるのが自然です。" }
+      ]
+    },
+    "lake-ashi-view": {
+      title: "芦ノ湖ビュー",
+      tags: ["景色", "箱根", "湖"],
+      description: "旅の中盤で一番わかりやすい景色のムードシグナルです。",
+      guideLabel: "箱根ガイドを開く",
+      facts: [
+        { label: "狙いどころ", text: "湖の空気、神社の構図、鉄道移動後のやわらかい景色です。" },
+        { label: "注意点", text: "霧が出ると見え方が平坦になりやすいです。" }
+      ]
+    },
+    "odawara-transit": {
+      title: "小田原ハンドオフ",
+      tags: ["移動", "箱根", "荷物"],
+      description: "長い鉄道移動から箱根へ切り替わる、最重要の乗り継ぎ地点です。",
+      guideLabel: "移動メモを開く",
+      facts: [
+        { label: "向いている使い方", text: "観光前に切符と荷物をここで整理することです。" },
+        { label: "地図ロジック", text: "新幹線のあとに旅を整え直す、いちばん自然な場所です。" }
+      ]
+    },
+    "fuji-route": {
+      title: "富士ブロック",
+      tags: ["ルート", "景色", "天気"],
+      description: "旅の景色の中心であり、本当に天気へ柔軟であるべき区間です。",
+      guideLabel: "富士ガイドを開く",
+      facts: [
+        { label: "向いている使い方", text: "固定計画を守るより、最もきれいな視界に順番を合わせます。" },
+        { label: "時間帯", text: "山の見え方は朝のほうが強いことが多いです。" }
+      ]
+    },
+    "chureito-view": {
+      title: "忠霊塔ビューポイント",
+      tags: ["景色", "富士", "写真"],
+      description: "視界が良い時にもっとも象徴的な富士の構図が撮れる場所です。",
+      guideLabel: "富士ガイドを開く",
+      facts: [
+        { label: "狙いどころ", text: "空がきれいに開いた時の定番構図です。" },
+        { label: "注意点", text: "ここが開いているのに他へ時間を使うと、ベスト窓を逃しやすいです。" }
+      ]
+    },
+    "kawaguchiko-food": {
+      title: "河口湖フードベース",
+      tags: ["食", "富士", "実用"],
+      description: "景色のミッションを壊さない、実用的な昼食とカフェの拠点です。",
+      guideLabel: "富士フードを開く",
+      facts: [
+        { label: "向いている使い方", text: "食事を手早く済ませ、山の見え方を優先することです。" },
+        { label: "食事ロジック", text: "長いレストラン時間ではなく、安定性のための地点です。" }
+      ]
+    },
+    "tokyo-route": {
+      title: "東京フィナーレ",
+      tags: ["ルート", "夜", "買い物"],
+      description: "最後の日を1地区に絞ると、東京はより大きく感じられます。",
+      guideLabel: "東京ガイドを開く",
+      facts: [
+        { label: "向いている使い方", text: "夜景枠か夕食枠を先に決め、その周りを柔軟に組むことです。" },
+        { label: "地図ロジック", text: "東京は広げすぎず、地区集中にすると強く締まります。" }
+      ]
+    },
+    "shibuya-food": {
+      title: "渋谷ディナーゾーン",
+      tags: ["食", "東京", "デザート"],
+      description: "最後の日のメイン地区を離れずに、夕食とデザートの保険が取れる場所です。",
+      guideLabel: "東京フードを開く",
+      facts: [
+        { label: "狙いどころ", text: "夕食、デザート、そして遅い時間の予備プランです。" },
+        { label: "時間帯", text: "夕方から夜にかけて、最終都市の勢いを保てます。" }
+      ]
+    },
+    "shibuya-transit": {
+      title: "渋谷駅",
+      tags: ["移動", "東京", "駅"],
+      description: "最後の日の合流、ロッカー、動線整理に向く基準点です。",
+      guideLabel: "駅メモを開く",
+      facts: [
+        { label: "向いている使い方", text: "買い物と夜景の両方が絡む時に混乱を減らせます。" },
+        { label: "地図ロジック", text: "出口と荷物で崩れないための、駅中心の戦略です。" }
+      ]
+    }
+  }
+};
+
+function getActiveLocale() {
+  return document.documentElement.dataset.locale === "ja" ? "ja" : "en";
+}
+
+function ui(key, replacements = {}, locale = getActiveLocale()) {
+  const value = UI_COPY[locale]?.[key] ?? UI_COPY.en[key] ?? "";
+  return Object.entries(replacements).reduce(
+    (result, [name, replacement]) => result.replaceAll(`{${name}}`, String(replacement)),
+    value
+  );
+}
+
+function getLocalizedWeatherStop(stop, locale = getActiveLocale()) {
+  return {
+    ...stop,
+    ...(WEATHER_STOP_LOCALES[locale]?.[stop.key] ?? {})
+  };
+}
+
+function getLocalizedRouteAtlasItem(key, locale = getActiveLocale()) {
+  const item = ROUTE_ATLAS_ITEMS[key];
+  if (!item) {
+    return null;
+  }
+
+  const localized = ROUTE_ATLAS_LOCALES[locale]?.[key];
+  if (!localized) {
+    return item;
+  }
+
+  return {
+    ...item,
+    ...localized,
+    badges: localized.badges
+      ? localized.badges.map((label, index) => ({
+          label,
+          tone: item.badges[index]?.tone ?? "easy"
+        }))
+      : item.badges,
+    facts: localized.facts ?? item.facts
+  };
+}
+
+function getLocalizedMapPoint(point, locale = getActiveLocale()) {
+  return {
+    ...point,
+    ...(MAP_POINT_LOCALES[locale]?.[point.key] ?? {})
+  };
+}
+
+function applyPageLocaleContent(locale, pageFile) {
+  const entries = PAGE_JA_TRANSLATIONS[pageFile] ?? [];
+  entries.forEach((entry) => {
+    const elements = [...document.querySelectorAll(entry.selector)];
+    elements.forEach((element) => {
+      if (!element) {
+        return;
+      }
+
+      if ("text" in entry) {
+        if (!element.dataset.i18nOriginalText) {
+          element.dataset.i18nOriginalText = element.textContent ?? "";
+        }
+        element.textContent = locale === "ja" ? entry.text : element.dataset.i18nOriginalText;
+      }
+
+      if ("placeholder" in entry) {
+        if (!element.dataset.i18nOriginalPlaceholder) {
+          element.dataset.i18nOriginalPlaceholder = element.getAttribute("placeholder") ?? "";
+        }
+        element.setAttribute(
+          "placeholder",
+          locale === "ja" ? entry.placeholder : element.dataset.i18nOriginalPlaceholder
+        );
+      }
+    });
+  });
+}
 
 const WEATHER_STOPS = [
   {
@@ -757,9 +1374,9 @@ const DESTINATION_DIRECTORY_ITEMS = [
     bestTime: "Best when the trip is being redesigned around climate, food, or island energy instead of just adding one more stop.",
     crowd: "Season and flight timing matter much more here than on the core Osaka-Tokyo route.",
     guideHref: "https://www.japan.travel/en/destinations/",
-    secondaryHref: "https://brochure.japan.travel/en/",
+    secondaryHref: "./japan_trip_brochure.html",
     primaryLabel: "Open JNTO destination hub",
-    secondaryLabel: "Open brochure library",
+    secondaryLabel: "Open brochure pack",
     categories: {
       hotels: "Choose one strong base city first: Sapporo for Hokkaido, Fukuoka for Kyushu, Naha for Okinawa.",
       shopping: "Fukuoka and Sapporo are easiest for city shopping; Okinawa is stronger for resort and beach rhythm.",
@@ -1626,6 +2243,8 @@ function initLocaleSwitch() {
     document.documentElement.lang = locale === "ja" ? "ja" : "en";
     document.documentElement.dataset.locale = locale;
     safeStorageSet("japan-escape-locale", locale);
+    applyPageLocaleContent(locale, pageFile);
+    document.dispatchEvent(new CustomEvent("locale:changed", { detail: { locale, pageFile } }));
   };
 
   topbars.forEach((topbar) => {
@@ -1654,6 +2273,79 @@ function initLocaleSwitch() {
   });
 
   applyLocale(safeStorageGet("japan-escape-locale") || "en");
+}
+
+function initTopbarPreviews() {
+  const topbars = [...document.querySelectorAll(".topbar")];
+  if (!topbars.length) {
+    return;
+  }
+
+  topbars.forEach((topbar) => {
+    const nav = topbar.querySelector(".nav-links");
+    if (!nav || topbar.querySelector(".nav-preview")) {
+      return;
+    }
+
+    const preview = document.createElement("div");
+    preview.className = "nav-preview";
+    preview.innerHTML = `
+      <div class="nav-preview-card">
+        <img class="nav-preview-image" alt="">
+        <div class="nav-preview-copy">
+          <strong></strong>
+          <span></span>
+        </div>
+      </div>
+    `;
+
+    const image = preview.querySelector(".nav-preview-image");
+    const title = preview.querySelector(".nav-preview-copy strong");
+    const text = preview.querySelector(".nav-preview-copy span");
+
+    const showPreview = (href) => {
+      const item = NAV_PREVIEW_CONTENT[href];
+      if (!item || !image || !title || !text) {
+        preview.classList.remove("is-visible");
+        return;
+      }
+
+      const locale = getActiveLocale();
+      image.src = item.image;
+      image.alt = `${ui(item.titleKey, {}, locale)} preview image`;
+      title.textContent = ui(item.titleKey, {}, locale);
+      text.textContent = ui(item.textKey, {}, locale);
+      preview.classList.add("is-visible");
+    };
+
+    nav.querySelectorAll("a").forEach((link) => {
+      const href = link.getAttribute("href");
+      if (!href || !NAV_PREVIEW_CONTENT[href]) {
+        return;
+      }
+
+      link.addEventListener("pointerenter", () => showPreview(href));
+      link.addEventListener("focus", () => showPreview(href));
+    });
+
+    topbar.addEventListener("pointerleave", () => preview.classList.remove("is-visible"));
+    topbar.addEventListener("focusout", () => {
+      window.setTimeout(() => {
+        if (!topbar.contains(document.activeElement)) {
+          preview.classList.remove("is-visible");
+        }
+      }, 0);
+    });
+
+    document.addEventListener("locale:changed", () => {
+      const activeLink = nav.querySelector("a:hover, a:focus");
+      if (activeLink) {
+        showPreview(activeLink.getAttribute("href"));
+      }
+    });
+
+    topbar.append(preview);
+  });
 }
 
 function isSameDocumentHashLink(anchor) {
@@ -1775,70 +2467,103 @@ function initSectionNavs() {
   });
 }
 
-function getWeatherLabel(code) {
+function getWeatherLabel(code, locale = getActiveLocale()) {
+  if (locale === "ja") {
+    const labels = {
+      0: "快晴",
+      1: "ほぼ晴れ",
+      2: "一部くもり",
+      3: "くもり",
+      45: "霧",
+      48: "着氷霧",
+      51: "弱い霧雨",
+      53: "霧雨",
+      55: "強い霧雨",
+      61: "弱い雨",
+      63: "雨",
+      65: "強い雨",
+      71: "弱い雪",
+      73: "雪",
+      75: "強い雪",
+      80: "にわか雨",
+      81: "雨のにわか",
+      82: "強いにわか雨",
+      95: "雷雨"
+    };
+    return labels[code] ?? "変わりやすい天気";
+  }
+
   return WEATHER_CODE_LABELS[code] ?? "Mixed conditions";
 }
 
 function formatShortDateLabel(value) {
   if (!value) {
-    return "Unknown day";
+    return getActiveLocale() === "ja" ? "不明な日" : "Unknown day";
   }
 
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat(getActiveLocale() === "ja" ? "ja-JP" : "en-US", {
     weekday: "short",
     month: "short",
     day: "numeric"
   }).format(new Date(`${value}T12:00:00`));
 }
 
-function formatHourLabel(hour) {
+function formatHourLabel(hour, locale = getActiveLocale()) {
+  if (locale === "ja") {
+    return `${hour}時`;
+  }
+
   const suffix = hour >= 12 ? "pm" : "am";
   const normalized = hour % 12 || 12;
   return `${normalized}${suffix}`;
 }
 
-function getPackingAdvice(temperature, rainChance, windSpeed) {
+function getPackingAdvice(temperature, rainChance, windSpeed, locale = getActiveLocale()) {
   if (rainChance >= 55) {
-    return "Bring an umbrella and a light shell.";
+    return locale === "ja" ? "折りたたみ傘と軽いシェルを持ってください。" : "Bring an umbrella and a light shell.";
   }
 
   if (temperature <= 8) {
-    return "Use a real warm layer, not just a thin overshirt.";
+    return locale === "ja"
+      ? "薄い上着だけでなく、しっかり暖かいレイヤーを使ってください。"
+      : "Use a real warm layer, not just a thin overshirt.";
   }
 
   if (temperature <= 16 || windSpeed >= 22) {
-    return "Bring a light jacket or overshirt.";
+    return locale === "ja" ? "軽いジャケットか羽織りを持ってください。" : "Bring a light jacket or overshirt.";
   }
 
   if (temperature >= 28) {
-    return "Dress light and keep water easy to reach.";
+    return locale === "ja" ? "軽装にして、水をすぐ取れるようにしてください。" : "Dress light and keep water easy to reach.";
   }
 
-  return "Light layers are enough.";
+  return locale === "ja" ? "軽い重ね着で十分です。" : "Light layers are enough.";
 }
 
-function getWeatherRouteAdvice(stop, forecast) {
+function getWeatherRouteAdvice(stop, forecast, locale = getActiveLocale()) {
   if (stop.key === "fuji") {
-    return "Let the clearest visibility window win.";
+    return locale === "ja" ? "いちばん澄んだ視界の時間帯を優先してください。" : "Let the clearest visibility window win.";
   }
 
   if (forecast.rain >= 55) {
-    return "Shift toward indoor anchors or tighter districts.";
+    return locale === "ja"
+      ? "屋内アンカーか、範囲を絞った地区行動へ寄せてください。"
+      : "Shift toward indoor anchors or tighter districts.";
   }
 
   if (stop.key === "hakone") {
-    return "Keep the ryokan pace intact if mist builds later.";
+    return locale === "ja" ? "午後に霧が出たら、旅館ペースを崩さないのが正解です。" : "Keep the ryokan pace intact if mist builds later.";
   }
 
   if (stop.key === "kyoto") {
-    return "Start earlier so the walking lanes stay easier.";
+    return locale === "ja" ? "歩きやすさを保つため、京都は早めに始めてください。" : "Start earlier so the walking lanes stay easier.";
   }
 
   if (stop.key === "tokyo") {
-    return "Tokyo still pays off later in the day.";
+    return locale === "ja" ? "東京は夕方から夜にかけてのほうが見返りが強いです。" : "Tokyo still pays off later in the day.";
   }
 
-  return "This stop can stay loose unless the rain spikes.";
+  return locale === "ja" ? "強い雨にならない限り、この地点はゆるく動いて大丈夫です。" : "This stop can stay loose unless the rain spikes.";
 }
 
 function analyzeFujiForecast(data) {
@@ -1901,7 +2626,18 @@ function analyzeFujiForecast(data) {
         clarity,
         fogRisk,
         bestHour,
-        note: fogRisk <= 34 ? "Low fog risk" : fogRisk <= 58 ? "Moderate fog risk" : "High fog risk"
+        note:
+          getActiveLocale() === "ja"
+            ? fogRisk <= 34
+              ? "霧リスクは低め"
+              : fogRisk <= 58
+                ? "霧リスクは中程度"
+                : "霧リスクは高め"
+            : fogRisk <= 34
+              ? "Low fog risk"
+              : fogRisk <= 58
+                ? "Moderate fog risk"
+                : "High fog risk"
       };
     });
 
@@ -1972,11 +2708,13 @@ async function fetchStopWeather(stop, signal) {
   const data = await response.json();
   const current = data.current ?? {};
   const daily = data.daily ?? {};
+  const weatherCode = current.weather_code ?? daily.weather_code?.[0] ?? 0;
   const forecast = {
     stop,
+    weatherCode,
     currentTemp: Math.round(current.temperature_2m ?? 0),
     apparentTemp: Math.round(current.apparent_temperature ?? current.temperature_2m ?? 0),
-    condition: getWeatherLabel(current.weather_code ?? daily.weather_code?.[0]),
+    condition: getWeatherLabel(weatherCode),
     high: Math.round(daily.temperature_2m_max?.[0] ?? current.temperature_2m ?? 0),
     low: Math.round(daily.temperature_2m_min?.[0] ?? current.temperature_2m ?? 0),
     rain: Math.round(daily.precipitation_probability_max?.[0] ?? 0),
@@ -2027,9 +2765,9 @@ function renderWeatherLoadingState() {
     .map(
       (stop) => `
         <article class="weather-card">
-          <span class="weather-stop-label">${stop.name}</span>
-          <strong>Loading live read...</strong>
-          <p>Checking current conditions and next-step advice.</p>
+          <span class="weather-stop-label">${getLocalizedWeatherStop(stop).name}</span>
+          <strong>${ui("weatherLoadingTitle")}</strong>
+          <p>${ui("weatherLoadingText")}</p>
         </article>
       `
     )
@@ -2037,14 +2775,18 @@ function renderWeatherLoadingState() {
 }
 
 function renderWeatherCard(forecast) {
+  const stop = getLocalizedWeatherStop(forecast.stop);
+  const packing = getPackingAdvice(forecast.apparentTemp, forecast.rain, forecast.wind);
+  const routeAdvice = getWeatherRouteAdvice(forecast.stop, forecast);
+
   if (forecast.error) {
     return `
       <article class="weather-card">
-        <span class="weather-stop-label">${forecast.stop.name}</span>
-        <strong>Live data unavailable</strong>
-        <p>Use the static trip rule for now: ${forecast.stop.timing}</p>
+        <span class="weather-stop-label">${stop.name}</span>
+        <strong>${ui("weatherUnavailableTitle")}</strong>
+        <p>${ui("weatherUnavailableText")} ${stop.timing}</p>
         <div class="weather-meta">
-          <span><strong>Fallback:</strong> ${forecast.stop.key === "fuji" ? "Keep Fuji flexible." : "Dress in layers and re-check later."}</span>
+          <span><strong>${ui("weatherFallbackLabel")}</strong> ${forecast.stop.key === "fuji" ? ui("weatherFallbackFuji") : ui("weatherFallbackDefault")}</span>
         </div>
       </article>
     `;
@@ -2052,22 +2794,22 @@ function renderWeatherCard(forecast) {
 
   return `
     <article class="weather-card">
-      <span class="weather-stop-label">${forecast.stop.name}</span>
-      <strong>${forecast.condition}</strong>
+      <span class="weather-stop-label">${stop.name}</span>
+      <strong>${getWeatherLabel(forecast.weatherCode)}</strong>
       <div class="weather-temp-line">
         <span class="weather-temp">${forecast.currentTemp}&deg;</span>
-        <span class="weather-condition">Feels like ${forecast.apparentTemp}&deg;</span>
+        <span class="weather-condition">${ui("weatherFeelsLike")} ${forecast.apparentTemp}&deg;</span>
       </div>
       <div class="weather-chip-row">
-        <span class="weather-chip">High ${forecast.high}&deg;</span>
-        <span class="weather-chip">Low ${forecast.low}&deg;</span>
-        <span class="weather-chip">Rain ${forecast.rain}%</span>
-        ${forecast.stale ? '<span class="weather-chip">Saved read</span>' : ""}
+        <span class="weather-chip">${ui("weatherHigh")} ${forecast.high}&deg;</span>
+        <span class="weather-chip">${ui("weatherLow")} ${forecast.low}&deg;</span>
+        <span class="weather-chip">${ui("weatherRain")} ${forecast.rain}%</span>
+        ${forecast.stale ? `<span class="weather-chip">${ui("weatherSavedRead")}</span>` : ""}
       </div>
-      <p>${forecast.packing}</p>
+      <p>${packing}</p>
       <div class="weather-meta">
-        <span><strong>Right move:</strong> ${forecast.routeAdvice}</span>
-        <span><strong>Timing:</strong> ${forecast.timing}</span>
+        <span><strong>${ui("weatherRightMove")}</strong> ${routeAdvice}</span>
+        <span><strong>${ui("weatherTiming")}</strong> ${stop.timing}</span>
       </div>
     </article>
   `;
@@ -2081,13 +2823,13 @@ function renderFujiForecast(panel, forecast) {
   const planner = forecast?.fuji;
   if (!planner?.bestDay) {
     panel.innerHTML = `
-      <span class="eyebrow">Fuji visibility index</span>
-      <h3>Forecast unavailable right now</h3>
-      <p>The live Fuji read could not load. Default back to the site rule: do not lock the order until the same-day mountain view is clear.</p>
+      <span class="eyebrow">${ui("weatherFujiEyebrow")}</span>
+      <h3>${ui("weatherFujiUnavailableTitle")}</h3>
+      <p>${ui("weatherFujiUnavailableText")}</p>
       <div class="fuji-forecast-list">
         <div class="fuji-day-card">
-          <strong>Fallback move</strong>
-          <span>Keep the Fuji block movable and re-check in the morning.</span>
+          <strong>${ui("weatherFujiFallbackTitle")}</strong>
+          <span>${ui("weatherFujiFallbackText")}</span>
         </div>
       </div>
     `;
@@ -2095,25 +2837,37 @@ function renderFujiForecast(panel, forecast) {
   }
 
   panel.innerHTML = `
-    <span class="eyebrow">Fuji visibility index</span>
-    <h3>${planner.bestDay.label} is the current strongest Fuji window</h3>
-    <p>The index blends forecast visibility, cloud cover, and rain pressure. Lower fog risk and higher clarity mean the mountain is more likely to pay off cleanly.</p>
+    <span class="eyebrow">${ui("weatherFujiEyebrow")}</span>
+    <h3>${formatShortDateLabel(planner.bestDay.date)} ${ui("weatherFujiBestDaySuffix")}</h3>
+    <p>${ui("weatherFujiIntro")}</p>
     <div class="fuji-index-meter"><span style="width: ${planner.bestDay.clarity}%"></span></div>
     <div class="fuji-score-line">
-      <span class="fuji-score-pill">${planner.bestDay.clarity}% clarity</span>
-      <span class="fuji-score-pill">${planner.bestDay.fogRisk}% fog risk</span>
-      <span class="fuji-score-pill">Best window ${formatHourLabel(planner.bestDay.bestHour)}</span>
+      <span class="fuji-score-pill">${planner.bestDay.clarity}% ${ui("weatherFujiClarity")}</span>
+      <span class="fuji-score-pill">${planner.bestDay.fogRisk}% ${ui("weatherFujiFogRisk")}</span>
+      <span class="fuji-score-pill">${ui("weatherFujiBestWindow")} ${formatHourLabel(planner.bestDay.bestHour)}</span>
     </div>
     <div class="fuji-forecast-list">
       ${planner.days
         .map(
           (day) => `
             <div class="fuji-day-card">
-              <strong>${day.label}</strong>
-              <span>${day.note}. Aim around ${formatHourLabel(day.bestHour)} if the sky is cooperating.</span>
+              <strong>${formatShortDateLabel(day.date)}</strong>
+              <span>${
+                day.fogRisk <= 34
+                  ? getActiveLocale() === "ja"
+                    ? "霧リスクは低め"
+                    : "Low fog risk"
+                  : day.fogRisk <= 58
+                    ? getActiveLocale() === "ja"
+                      ? "霧リスクは中程度"
+                      : "Moderate fog risk"
+                    : getActiveLocale() === "ja"
+                      ? "霧リスクは高め"
+                      : "High fog risk"
+              }. ${ui("weatherFujiAimAround")} ${formatHourLabel(day.bestHour)} ${ui("weatherFujiIfSky")}</span>
               <div class="fuji-score-line">
-                <span class="fuji-score-pill">${day.clarity}% clarity</span>
-                <span class="fuji-score-pill">${day.fogRisk}% fog risk</span>
+                <span class="fuji-score-pill">${day.clarity}% ${ui("weatherFujiClarity")}</span>
+                <span class="fuji-score-pill">${day.fogRisk}% ${ui("weatherFujiFogRisk")}</span>
               </div>
             </div>
           `
@@ -2133,6 +2887,21 @@ function initWeatherDashboard() {
   }
 
   let isLoading = false;
+  let lastForecasts = [];
+
+  const rerenderWeather = () => {
+    if (!lastForecasts.length) {
+      grid.innerHTML = renderWeatherLoadingState();
+      renderFujiForecast(panel, null);
+    } else {
+      grid.innerHTML = lastForecasts.map(renderWeatherCard).join("");
+      renderFujiForecast(panel, lastForecasts.find((forecast) => forecast.stop.key === "fuji"));
+    }
+
+    if (refreshButton) {
+      refreshButton.textContent = ui("weatherRefresh");
+    }
+  };
 
   const loadWeather = async () => {
     if (isLoading) {
@@ -2145,7 +2914,7 @@ function initWeatherDashboard() {
     grid.innerHTML = renderWeatherLoadingState();
     if (refreshButton) {
       refreshButton.disabled = true;
-      refreshButton.textContent = "Refreshing...";
+      refreshButton.textContent = ui("weatherRefreshing");
     }
 
     const results = await Promise.allSettled(
@@ -2171,19 +2940,20 @@ function initWeatherDashboard() {
       }
     });
     writeStoredWeatherCache(forecasts);
+    lastForecasts = forecasts;
 
-    grid.innerHTML = forecasts.map(renderWeatherCard).join("");
-    renderFujiForecast(panel, forecasts.find((forecast) => forecast.stop.key === "fuji"));
+    rerenderWeather();
 
     if (refreshButton) {
       refreshButton.disabled = false;
-      refreshButton.textContent = "Refresh live read";
+      refreshButton.textContent = ui("weatherRefresh");
     }
     document.dispatchEvent(new CustomEvent("weather:updated"));
     isLoading = false;
   };
 
   refreshButton?.addEventListener("click", loadWeather);
+  document.addEventListener("locale:changed", rerenderWeather);
   loadWeather();
 }
 
@@ -2262,11 +3032,12 @@ function createMapIcon(L, category) {
 }
 
 function createMapPopup(point) {
+  const localizedPoint = getLocalizedMapPoint(point);
   return `
     <div class="map-popup">
-      <strong>${point.title}</strong>
-      <span>${point.description}</span>
-      <a href="${point.guideHref}"${point.guideHref.startsWith("http") ? ' target="_blank" rel="noreferrer"' : ""}>${point.guideLabel}</a>
+      <strong>${localizedPoint.title}</strong>
+      <span>${localizedPoint.description}</span>
+      <a href="${localizedPoint.guideHref}"${localizedPoint.guideHref.startsWith("http") ? ' target="_blank" rel="noreferrer"' : ""}>${localizedPoint.guideLabel}</a>
     </div>
   `;
 }
@@ -2336,30 +3107,35 @@ function initLiveMap() {
     const shortlist = rankedPoints.slice(0, 4);
     nearby.innerHTML = shortlist
       .map(({ point, distance }) => {
-        const distanceLabel = userPosition ? `${distance.toFixed(distance < 10 ? 1 : 0)} km away` : point.tags.slice(0, 2).join(" · ");
+        const localizedPoint = getLocalizedMapPoint(point);
+        const distanceLabel = userPosition
+          ? ui("mapDistanceAway", { distance: distance.toFixed(distance < 10 ? 1 : 0) })
+          : localizedPoint.tags.slice(0, 2).join(" · ");
         return `
           <div class="map-nearby-item">
-            <strong>${point.title}</strong>
-            <span>${distanceLabel} - ${point.description}</span>
+            <strong>${localizedPoint.title}</strong>
+            <span>${distanceLabel} - ${localizedPoint.description}</span>
           </div>
         `;
       })
       .join("");
 
     if (shortlist[0]) {
-      nearest.textContent = shortlist[0].point.title;
+      nearest.textContent = getLocalizedMapPoint(shortlist[0].point).title;
     }
   };
 
   const updatePointDetails = (point, userPosition = null) => {
+    const localizedPoint = getLocalizedMapPoint(point);
     const forecast = WEATHER_CACHE.get(point.weatherKey);
-    title.textContent = point.title;
-    description.textContent = point.description;
+    const relatedStop = WEATHER_STOPS.find((stop) => stop.key === point.weatherKey) ?? forecast?.stop ?? WEATHER_STOPS[0];
+    title.textContent = localizedPoint.title;
+    description.textContent = localizedPoint.description;
     weather.textContent = forecast
-      ? `${forecast.condition}. ${forecast.routeAdvice}`
-      : "Live route weather loads in the weather section below.";
-    tags.innerHTML = point.tags.map((tag) => `<span class="destination-pill">${tag}</span>`).join("");
-    facts.innerHTML = point.facts
+      ? `${getWeatherLabel(forecast.weatherCode)}. ${getWeatherRouteAdvice(relatedStop, forecast)}`
+      : ui("mapWeatherFallback");
+    tags.innerHTML = localizedPoint.tags.map((tag) => `<span class="destination-pill">${tag}</span>`).join("");
+    facts.innerHTML = localizedPoint.facts
       .map(
         (fact) => `
           <div class="route-fact">
@@ -2369,9 +3145,9 @@ function initLiveMap() {
         `
       )
       .join("");
-    primary.href = point.guideHref;
-    primary.textContent = point.guideLabel;
-    if (point.guideHref.startsWith("http")) {
+    primary.href = localizedPoint.guideHref;
+    primary.textContent = localizedPoint.guideLabel;
+    if (localizedPoint.guideHref.startsWith("http")) {
       primary.target = "_blank";
       primary.rel = "noreferrer";
     } else {
@@ -2382,7 +3158,7 @@ function initLiveMap() {
 
     if (userPosition) {
       const distance = calculateDistanceKm(userPosition.lat, userPosition.lon, point.lat, point.lon);
-      gpsStatus.textContent = `Tracking live position · ${distance.toFixed(distance < 10 ? 1 : 0)} km to selected point`;
+      gpsStatus.textContent = ui("mapTrackingSelected", { distance: distance.toFixed(distance < 10 ? 1 : 0) });
     }
   };
 
@@ -2441,7 +3217,10 @@ function initLiveMap() {
       userMarker.setLatLng([userLatLng.lat, userLatLng.lon]);
     }
 
-    gpsStatus.textContent = `GPS live at ${userLatLng.lat.toFixed(3)}, ${userLatLng.lon.toFixed(3)}`;
+    gpsStatus.textContent = ui("mapGpsLiveAt", {
+      lat: userLatLng.lat.toFixed(3),
+      lon: userLatLng.lon.toFixed(3)
+    });
     updateNearbyList(userLatLng);
     updatePointDetails(getPointByKey(activePointKey), userLatLng);
   };
@@ -2462,11 +3241,11 @@ function initLiveMap() {
 
     locateButton.addEventListener("click", () => {
       if (!navigator.geolocation) {
-        gpsStatus.textContent = "Geolocation is not supported in this browser.";
+        gpsStatus.textContent = ui("mapGpsUnsupported");
         return;
       }
 
-      gpsStatus.textContent = "Requesting location permission...";
+      gpsStatus.textContent = ui("mapGpsRequesting");
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setUserPosition(L, position);
@@ -2476,14 +3255,14 @@ function initLiveMap() {
             watchId = navigator.geolocation.watchPosition(
               (nextPosition) => setUserPosition(L, nextPosition),
               () => {
-                gpsStatus.textContent = "Location shared once. Live tracking update failed.";
+                gpsStatus.textContent = ui("mapGpsTrackingFailed");
               },
               { enableHighAccuracy: true, maximumAge: 30000, timeout: 10000 }
             );
           }
         },
         () => {
-          gpsStatus.textContent = "Location permission denied. Use the saved route pins instead.";
+          gpsStatus.textContent = ui("mapGpsDenied");
         },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
       );
@@ -2499,7 +3278,7 @@ function initLiveMap() {
       });
       renderMarkers(L, lastUserPosition);
       updateNearbyList(lastUserPosition);
-      gpsStatus.textContent = lastUserPosition ? gpsStatus.textContent : "Location not shared yet";
+      gpsStatus.textContent = lastUserPosition ? gpsStatus.textContent : ui("mapLocationNotShared");
     });
   };
 
@@ -2532,8 +3311,8 @@ function initLiveMap() {
     } catch {
       if (loadingCard) {
         loadingCard.innerHTML = `
-          <strong>Interactive map failed to load</strong>
-          <span>The page still works. Use the route atlas above or open the selected stop directly in Google Maps.</span>
+          <strong>${ui("mapFailTitle")}</strong>
+          <span>${ui("mapFailText")}</span>
         `;
       }
     }
@@ -2563,6 +3342,24 @@ function initLiveMap() {
   });
 
   document.addEventListener("weather:updated", () => {
+    updatePointDetails(getPointByKey(activePointKey), lastUserPosition);
+  });
+
+  document.addEventListener("locale:changed", () => {
+    if (!initialized) {
+      if (loadingCard) {
+        loadingCard.innerHTML = `
+          <strong>${ui("mapLoadingTitle")}</strong>
+          <span>${ui("mapLoadingText")}</span>
+        `;
+      }
+      return;
+    }
+
+    if (window.L) {
+      renderMarkers(window.L, lastUserPosition);
+    }
+    updateNearbyList(lastUserPosition);
     updatePointDetails(getPointByKey(activePointKey), lastUserPosition);
   });
 }
@@ -2929,7 +3726,7 @@ function initRouteModules() {
     }
 
     const renderStop = (key) => {
-      const item = ROUTE_ATLAS_ITEMS[key];
+      const item = getLocalizedRouteAtlasItem(key);
       if (!item) {
         return;
       }
@@ -2959,6 +3756,7 @@ function initRouteModules() {
       previewButton.dataset.previewGallery = key;
       previewButton.textContent = item.previewLabel;
       link.href = item.href;
+      module.dataset.activeRouteStop = key;
     };
 
     pins.forEach((pin) => {
@@ -2968,6 +3766,17 @@ function initRouteModules() {
     const initialKey = pins.find((pin) => pin.classList.contains("is-active"))?.dataset.routeStop ?? pins[0].dataset.routeStop;
     renderStop(initialKey);
     window.requestAnimationFrame(() => board.classList.add("is-live"));
+  });
+
+  document.addEventListener("locale:changed", () => {
+    modules.forEach((module) => {
+      const activeKey = module.dataset.activeRouteStop || module.querySelector("[data-route-stop].is-active")?.dataset.routeStop;
+      const board = module.querySelector("[data-route-board]");
+      if (board && activeKey) {
+        const pin = module.querySelector(`[data-route-stop="${activeKey}"]`);
+        pin?.click();
+      }
+    });
   });
 }
 
@@ -3558,6 +4367,7 @@ window.addEventListener("scroll", updateScrollProgress, { passive: true });
 window.addEventListener("DOMContentLoaded", () => {
   updateScrollProgress();
   initLocaleSwitch();
+  initTopbarPreviews();
   initReveal();
   initSectionNavs();
   initHashHighlights();
