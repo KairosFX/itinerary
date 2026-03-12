@@ -173,36 +173,28 @@
     .topbar {
       position: fixed;
       top: 12px;
-      z-index: 25;
-      right: 16px;
-      width: auto;
-      max-width: calc(100% - 24px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 40;
+      width: min(1240px, calc(100% - 32px));
+      max-width: none;
       margin: 0;
-      padding: 12px 14px;
+      padding: 14px 18px;
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
       gap: 16px;
       border: 1px solid rgba(255, 255, 255, 0.92);
       border-radius: 999px;
-      background: rgba(255, 250, 243, 0.78);
+      background: rgba(255, 250, 243, 0.88);
       backdrop-filter: blur(16px);
       box-shadow: 0 12px 28px rgba(24, 49, 61, 0.08);
-      transition: padding var(--trans-fast), background var(--trans-fast), box-shadow var(--trans-fast);
+      transition: background var(--trans-fast), box-shadow var(--trans-fast), border-color var(--trans-fast);
     }
 
     .topbar::after {
-      content: "Open Guide";
-      display: inline-flex;
-      align-items: center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(31, 95, 107, 0.08);
-      color: var(--sea);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      display: none;
+      content: "";
     }
 
     .brand {
@@ -241,14 +233,13 @@
 
     .nav-links {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       justify-content: end;
       gap: 8px;
-      max-width: 0;
-      opacity: 0;
-      overflow: hidden;
-      pointer-events: none;
-      transition: max-width var(--trans-fast), opacity var(--trans-fast);
+      max-width: 980px;
+      opacity: 1;
+      overflow: visible;
+      pointer-events: auto;
     }
 
     .nav-links a {
@@ -259,7 +250,8 @@
       transition: transform var(--trans-fast), background var(--trans-fast), color var(--trans-fast);
     }
 
-    .nav-links a:hover {
+    .nav-links a:hover,
+    .nav-links a.current {
       transform: translateY(-2px);
       background: rgba(31, 95, 107, 0.09);
       color: var(--sea);
@@ -267,22 +259,21 @@
 
     .topbar:hover,
     .topbar:focus-within {
-      padding: 14px 18px;
       background: rgba(255, 250, 243, 0.94);
       box-shadow: 0 16px 36px rgba(24, 49, 61, 0.12);
+      border-color: rgba(255, 255, 255, 1);
     }
 
-    .topbar:hover::after,
-    .topbar:focus-within::after {
-      content: "";
-      padding: 0;
+    html[data-theme="dark"] .topbar {
+      border-color: rgba(121, 185, 198, 0.18);
+      background: rgba(15, 24, 29, 0.84);
     }
 
-    .topbar:hover .nav-links,
-    .topbar:focus-within .nav-links {
-      max-width: 980px;
-      opacity: 1;
-      pointer-events: auto;
+    html[data-theme="dark"] .topbar:hover,
+    html[data-theme="dark"] .topbar:focus-within {
+      background: rgba(15, 24, 29, 0.92);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28);
+      border-color: rgba(121, 185, 198, 0.2);
     }
 
     .page {
@@ -320,6 +311,15 @@
       grid-template-columns: 1.45fr 1fr;
       gap: 28px;
       padding: 38px;
+      background:
+        linear-gradient(98deg, rgba(255, 250, 243, 0.96) 0%, rgba(255, 248, 239, 0.92) 46%, rgba(255, 250, 243, 0.76) 68%, rgba(18, 28, 34, 0.18) 100%),
+        url("https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Fuji_from_Lake_Kawaguchi_s2.jpg?width=1920") center center / cover no-repeat;
+    }
+
+    html[data-theme="dark"] .hero {
+      background:
+        linear-gradient(98deg, rgba(12, 18, 22, 0.94) 0%, rgba(15, 24, 29, 0.9) 46%, rgba(15, 24, 29, 0.76) 68%, rgba(12, 18, 22, 0.42) 100%),
+        url("https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Fuji_from_Lake_Kawaguchi_s2.jpg?width=1920") center center / cover no-repeat;
     }
 
     .hero::before {
@@ -526,6 +526,52 @@
     }
 
     .hero-note span {
+      color: var(--ink);
+    }
+
+    html[data-theme="dark"] .hero-note,
+    html[data-theme="dark"] .route-progress-step,
+    html[data-theme="dark"] .hero-summary-pill,
+    html[data-theme="dark"] .guide-link-tile,
+    html[data-theme="dark"] .interactive-card,
+    html[data-theme="dark"] .compare-item,
+    html[data-theme="dark"] .detail-panel,
+    html[data-theme="dark"] .detail-item,
+    html[data-theme="dark"] .feature-item,
+    html[data-theme="dark"] .day-card,
+    html[data-theme="dark"] .route-rail,
+    html[data-theme="dark"] .route-step,
+    html[data-theme="dark"] .food-intro,
+    html[data-theme="dark"] .food-card,
+    html[data-theme="dark"] .snapshot-card,
+    html[data-theme="dark"] .focus-card,
+    html[data-theme="dark"] .carry-card,
+    html[data-theme="dark"] .link-card,
+    html[data-theme="dark"] .season-card,
+    html[data-theme="dark"] .expand-card,
+    html[data-theme="dark"] .gallery-footnote,
+    html[data-theme="dark"] .food-note,
+    html[data-theme="dark"] .toolkit-note {
+      border-color: rgba(237, 243, 245, 0.12);
+      background:
+        radial-gradient(circle at top right, rgba(204, 155, 72, 0.12), transparent 34%),
+        linear-gradient(180deg, rgba(19, 31, 37, 0.98), rgba(13, 22, 27, 0.96));
+      box-shadow: var(--shadow);
+    }
+
+    html[data-theme="dark"] .hero-summary-pill strong,
+    html[data-theme="dark"] .compare-item strong,
+    html[data-theme="dark"] .day-number,
+    html[data-theme="dark"] .detail-kicker {
+      color: var(--gold);
+    }
+
+    html[data-theme="dark"] .modal-panel {
+      background: linear-gradient(180deg, rgba(19, 31, 37, 0.99), rgba(13, 22, 27, 0.97));
+    }
+
+    html[data-theme="dark"] .modal-close {
+      background: rgba(237, 243, 245, 0.08);
       color: var(--ink);
     }
 
@@ -1727,7 +1773,9 @@
         position: static;
         width: min(1220px, calc(100% - 20px));
         max-width: none;
+        left: auto;
         right: auto;
+        transform: none;
         border-radius: 24px;
         padding: 14px 18px;
       }
@@ -1828,7 +1876,9 @@
         position: static;
         width: min(1220px, calc(100% - 20px));
         max-width: none;
+        left: auto;
         right: auto;
+        transform: none;
         border-radius: 24px;
         padding: 14px 18px;
       }

@@ -527,6 +527,24 @@ const UI_COPY = {
     recommendationOpenPrefix: "Open",
     themeLight: "Light",
     themeDark: "Dark",
+    searchOpen: "Search",
+    searchLabel: "Search the site",
+    searchPlaceholder: "Try Fuji, shinkansen, ramen, onsen, Kyoto, or snapshot",
+    searchCategoryLabel: "Select category",
+    searchCategoryAll: "All sections",
+    searchCategoryHome: "Home",
+    searchCategoryItinerary: "Itinerary",
+    searchCategoryFood: "Food",
+    searchCategoryToolkit: "Toolkit",
+    searchCategoryCulture: "Culture",
+    searchCategorySnapshot: "Snapshot",
+    searchCategoryGuide: "Full guide",
+    searchCategoryBrochure: "Brochures",
+    searchNoMatchTitle: "No direct match",
+    searchNoMatchText: "Try broader terms like Fuji, shinkansen, ramen, onsen, Kyoto, or snapshot.",
+    searchSmartGuide: "Open smart guide",
+    searchSnapshot: "Open snapshot",
+    searchPrint: "Print page",
     footerHelpful: "Helpful links",
     footerRelated: "Related sites",
     footerAbout: "About",
@@ -608,6 +626,24 @@ const UI_COPY = {
     recommendationOpenPrefix: "開く",
     themeLight: "ライト",
     themeDark: "ダーク",
+    searchOpen: "検索",
+    searchLabel: "サイトを検索",
+    searchPlaceholder: "富士、新幹線、ラーメン、温泉、京都、要点で検索",
+    searchCategoryLabel: "カテゴリを選ぶ",
+    searchCategoryAll: "すべてのセクション",
+    searchCategoryHome: "ホーム",
+    searchCategoryItinerary: "旅程",
+    searchCategoryFood: "食事",
+    searchCategoryToolkit: "準備",
+    searchCategoryCulture: "文化",
+    searchCategorySnapshot: "要点",
+    searchCategoryGuide: "完全ガイド",
+    searchCategoryBrochure: "パンフレット",
+    searchNoMatchTitle: "一致する項目がありません",
+    searchNoMatchText: "富士、新幹線、ラーメン、温泉、京都、要点など広めの言葉で試してください。",
+    searchSmartGuide: "スマートガイドへ",
+    searchSnapshot: "要点ページへ",
+    searchPrint: "このページを印刷",
     footerHelpful: "便利なリンク",
     footerRelated: "関連サイト",
     footerAbout: "このサイトについて",
@@ -931,7 +967,7 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: "#dish-shortlist .menu-card:nth-child(2) strong", text: "お好み焼き" },
     { selector: "#dish-shortlist .menu-card:nth-child(3) strong", text: "串カツ" },
     { selector: "#dish-shortlist .menu-card:nth-child(4) strong", text: "餃子" },
-    { selector: "#dish-shortlist .menu-card:nth-child(5) strong", text: "ラーメン" },
+    { selector: "#dish-shortlist .menu-card:nth-child(5) strong", text: "ラーメンセット" },
     { selector: "#dish-shortlist .menu-card:nth-child(6) strong", text: "抹茶スイーツ" },
     { selector: "#dish-shortlist .menu-card:nth-child(7) strong", text: "吉田うどん" },
     { selector: "#dish-shortlist .menu-card:nth-child(8) strong", text: "おにぎり" }
@@ -1027,6 +1063,28 @@ const PAGE_JA_TRANSLATIONS = {
     { selector: "#route-hero .hero-actions a:nth-child(1)", text: "ビジュアル停止点へ" },
     { selector: "#route-hero .hero-actions a:nth-child(2)", text: "日ごとの流れへ" },
     { selector: "#route-hero .hero-actions a:nth-child(3)", text: "要点ページを開く" },
+    { selector: "#route-hero .route-progress-step:nth-child(1) strong", text: "大阪" },
+    { selector: "#route-hero .route-progress-step:nth-child(1) span", text: "到着、食事、ゆるい最初の夜のペース。" },
+    { selector: "#route-hero .route-progress-step:nth-child(2) strong", text: "京都" },
+    { selector: "#route-hero .route-progress-step:nth-child(2) span", text: "ホテルを動かさずに文化の対比を入れる1日。" },
+    { selector: "#route-hero .route-progress-step:nth-child(3) strong", text: "箱根" },
+    { selector: "#route-hero .route-progress-step:nth-child(3) span", text: "大きな移動のあとに入れる景色と休息の夜。" },
+    { selector: "#route-hero .route-progress-step:nth-child(4) strong", text: "富士" },
+    { selector: "#route-hero .route-progress-step:nth-child(4) span", text: "順番を固定せず、視界を優先する景色の日。" },
+    { selector: "#route-hero .route-progress-step:nth-child(5) strong", text: "東京" },
+    { selector: "#route-hero .route-progress-step:nth-child(5) span", text: "地区を絞って締める最終日。" },
+    { selector: "#route-hero .hero-summary-pill:nth-child(1) strong", text: "旅の雰囲気" },
+    { selector: "#route-hero .hero-summary-pill:nth-child(1) span", text: "気楽に始まり、食事を軸に進み、写真映えする景色で折り返して東京で締める流れです。" },
+    { selector: "#route-hero .hero-summary-pill:nth-child(2) strong", text: "覚えておくこと" },
+    { selector: "#route-hero .hero-summary-pill:nth-child(2) span", text: "富士の見え方を確認し、1つ柔軟な時間帯を残し、長い移動日は充電器と軽食を持つこと。" },
+    { selector: "#route-hero .hero-route strong", text: "ルート" },
+    { selector: "#route-hero .hero-route span", text: "大阪 -> 京都 -> 大阪 -> 新大阪 -> 小田原 -> 箱根 -> 富士山エリア -> 東京" },
+    { selector: "#route-hero .hero-side > .hero-note:nth-child(2) strong", text: "旅のスタイル" },
+    { selector: "#route-hero .hero-side > .hero-note:nth-child(2) span", text: "前半は気楽に空気をつかみ、中盤で景色の重みを乗せる形がいちばん自然です。" },
+    { selector: "#route-hero .hero-side > .hero-note:nth-child(3) strong", text: "柔軟にする優先点" },
+    { selector: "#route-hero .hero-side > .hero-note:nth-child(3) span", text: "富士山エリアは晴れ方に左右されるので、6日目は固定よりも調整前提で見るのが最適です。" },
+    { selector: "#route-hero .hero-side > .hero-note:nth-child(4) strong", text: "このページの使い方" },
+    { selector: "#route-hero .hero-side > .hero-note:nth-child(4) span", text: "各セクションを開いて使ってください。長い壁の文章ではなく、写真・説明・補足を画面の奥に分けています。" },
     { selector: "#guide-map .section-copy .eyebrow", text: "ガイドマップ" },
     { selector: "#guide-map .section-copy h2", text: "必要なレイヤーをすぐ選ぶ" },
     { selector: "#guide-map .section-header > p", text: "このページは目的ごとに分かれています。旅程、食事、準備、文化、要点ページへすぐ移動できます。" }
@@ -2398,51 +2456,331 @@ function updateScrollProgress() {
   document.documentElement.style.setProperty("--scroll-progress", progress);
 }
 
-function renderSearchResults(items, resultsElement) {
+function getSearchCategory(item) {
+  if (item.category) {
+    return item.category;
+  }
+
+  const href = item.href || "";
+  if (href.includes("itinerary")) {
+    return "itinerary";
+  }
+  if (href.includes("food")) {
+    return "food";
+  }
+  if (href.includes("toolkit")) {
+    return "toolkit";
+  }
+  if (href.includes("culture")) {
+    return "culture";
+  }
+  if (href.includes("quick_snapshot")) {
+    return "snapshot";
+  }
+  if (href.includes("guide.html")) {
+    return "guide";
+  }
+  if (href.includes("brochure")) {
+    return "brochure";
+  }
+  return "home";
+}
+
+function getSearchCategoryLabel(category, locale = getActiveLocale()) {
+  const key = {
+    all: "searchCategoryAll",
+    home: "searchCategoryHome",
+    itinerary: "searchCategoryItinerary",
+    food: "searchCategoryFood",
+    toolkit: "searchCategoryToolkit",
+    culture: "searchCategoryCulture",
+    snapshot: "searchCategorySnapshot",
+    guide: "searchCategoryGuide",
+    brochure: "searchCategoryBrochure"
+  }[category] || "searchCategoryAll";
+
+  return ui(key, {}, locale);
+}
+
+function getSearchScore(item, query) {
+  if (!query) {
+    return 1;
+  }
+
+  const terms = query
+    .toLowerCase()
+    .split(/\s+/)
+    .map((term) => term.trim())
+    .filter(Boolean);
+
+  if (!terms.length) {
+    return 1;
+  }
+
+  const title = item.title.toLowerCase();
+  const text = item.text.toLowerCase();
+  const href = (item.href || "").toLowerCase();
+  const haystack = `${title} ${text} ${href}`.toLowerCase();
+  let score = 0;
+  let matchedTerms = 0;
+
+  terms.forEach((term) => {
+    let termScore = 0;
+    if (title.includes(term)) {
+      termScore += title.startsWith(term) ? 8 : 6;
+    }
+    if (text.includes(term)) {
+      termScore += 4;
+    }
+    if (href.includes(term)) {
+      termScore += 2;
+    }
+    if (haystack.includes(term)) {
+      termScore += 1;
+    }
+
+    if (termScore > 0) {
+      matchedTerms += 1;
+      score += termScore;
+    }
+  });
+
+  if (matchedTerms !== terms.length) {
+    return 0;
+  }
+
+  if (title.includes(query)) {
+    score += 6;
+  } else if (text.includes(query)) {
+    score += 3;
+  }
+
+  return score;
+}
+
+function renderSearchResults(items, resultsElement, locale = getActiveLocale()) {
   resultsElement.innerHTML = items
     .map(
       (item) => `
         <a class="search-result" href="${item.href}">
           <strong>${item.title}</strong>
           <span>${item.text}</span>
+          <small class="search-result-meta">${getSearchCategoryLabel(getSearchCategory(item), locale)}</small>
         </a>
       `
     )
     .join("");
 }
 
-function initSearch() {
-  const input = document.getElementById("site-search");
-  const resultsElement = document.getElementById("site-search-results");
-  if (!input || !resultsElement) {
+function bindSearchPanel({ input, categorySelect, resultsElement, initialCount = 6 }) {
+  if (!(input instanceof HTMLInputElement) || !resultsElement) {
     return;
   }
 
-  renderSearchResults(SEARCH_ITEMS.slice(0, 6), resultsElement);
-
-  input.addEventListener("input", () => {
+  const render = () => {
     const query = input.value.trim().toLowerCase();
-    if (!query) {
-      renderSearchResults(SEARCH_ITEMS.slice(0, 6), resultsElement);
-      return;
-    }
-
-    const filtered = SEARCH_ITEMS.filter((item) => {
-      const haystack = `${item.title} ${item.text}`.toLowerCase();
-      return haystack.includes(query);
-    }).slice(0, 8);
+    const category = categorySelect instanceof HTMLSelectElement ? categorySelect.value : "all";
+    const locale = getActiveLocale();
+    const filtered = SEARCH_ITEMS
+      .map((item, index) => ({ item, score: getSearchScore(item, query), index }))
+      .filter(({ item, score }) => {
+        const matchesQuery = !query || score > 0;
+        const matchesCategory = category === "all" || getSearchCategory(item) === category;
+        return matchesQuery && matchesCategory;
+      })
+      .sort((left, right) => {
+        if (query) {
+          return right.score - left.score;
+        }
+        return left.index - right.index;
+      })
+      .slice(0, query ? 8 : initialCount)
+      .map(({ item }) => item);
 
     if (!filtered.length) {
       resultsElement.innerHTML = `
         <div class="search-result">
-          <strong>No direct match</strong>
-          <span>Try terms like Fuji, shinkansen, gyoza, onsen, Kyoto, or quick snapshot.</span>
+          <strong>${ui("searchNoMatchTitle", {}, locale)}</strong>
+          <span>${ui("searchNoMatchText", {}, locale)}</span>
         </div>
       `;
       return;
     }
 
-    renderSearchResults(filtered, resultsElement);
+    renderSearchResults(filtered, resultsElement, locale);
+  };
+
+  input.addEventListener("input", render);
+  categorySelect?.addEventListener("change", render);
+  document.addEventListener("locale:changed", render);
+  render();
+}
+
+function initTopbarSearch() {
+  const topbars = [...document.querySelectorAll(".topbar")];
+  if (!topbars.length) {
+    return;
+  }
+
+  const updateLocale = (root) => {
+    if (!root) {
+      return;
+    }
+
+    const locale = getActiveLocale();
+    const toggle = root.querySelector("[data-topbar-search-toggle]");
+    const label = root.querySelector("[data-topbar-search-label]");
+    const input = root.querySelector("[data-topbar-search-input]");
+    const categoryLabel = root.querySelector("[data-topbar-search-category-label]");
+    const categorySelect = root.querySelector("[data-topbar-search-category]");
+    const smartGuide = root.querySelector("[data-topbar-smart-guide]");
+    const snapshot = root.querySelector("[data-topbar-snapshot]");
+    const print = root.querySelector("[data-topbar-print]");
+
+    if (toggle) {
+      toggle.textContent = ui("searchOpen", {}, locale);
+    }
+    if (label) {
+      label.textContent = ui("searchLabel", {}, locale);
+    }
+    if (input) {
+      input.setAttribute("placeholder", ui("searchPlaceholder", {}, locale));
+    }
+    if (categoryLabel) {
+      categoryLabel.textContent = ui("searchCategoryLabel", {}, locale);
+    }
+    if (categorySelect instanceof HTMLSelectElement) {
+      [...categorySelect.options].forEach((option) => {
+        option.textContent = getSearchCategoryLabel(option.value, locale);
+      });
+    }
+    if (smartGuide) {
+      smartGuide.textContent = ui("searchSmartGuide", {}, locale);
+    }
+    if (snapshot) {
+      snapshot.textContent = ui("searchSnapshot", {}, locale);
+    }
+    if (print) {
+      print.textContent = ui("searchPrint", {}, locale);
+    }
+  };
+
+  topbars.forEach((topbar) => {
+    if (topbar.querySelector(".topbar-search")) {
+      return;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "topbar-search";
+    wrapper.innerHTML = `
+      <button class="topbar-action-button" type="button" data-topbar-search-toggle>${ui("searchOpen", {}, "en")}</button>
+      <div class="topbar-search-panel" hidden data-topbar-search-panel>
+        <div class="topbar-search-grid">
+          <label class="search-panel">
+            <span data-topbar-search-label>${ui("searchLabel", {}, "en")}</span>
+            <input
+              type="search"
+              autocomplete="off"
+              data-topbar-search-input
+              placeholder="${ui("searchPlaceholder", {}, "en")}">
+            <div class="search-results" data-topbar-search-results aria-live="polite"></div>
+          </label>
+          <div>
+            <label class="search-panel">
+              <span data-topbar-search-category-label>${ui("searchCategoryLabel", {}, "en")}</span>
+              <select data-topbar-search-category>
+                <option value="all">${ui("searchCategoryAll", {}, "en")}</option>
+                <option value="home">${ui("searchCategoryHome", {}, "en")}</option>
+                <option value="itinerary">${ui("searchCategoryItinerary", {}, "en")}</option>
+                <option value="food">${ui("searchCategoryFood", {}, "en")}</option>
+                <option value="toolkit">${ui("searchCategoryToolkit", {}, "en")}</option>
+                <option value="culture">${ui("searchCategoryCulture", {}, "en")}</option>
+                <option value="snapshot">${ui("searchCategorySnapshot", {}, "en")}</option>
+                <option value="guide">${ui("searchCategoryGuide", {}, "en")}</option>
+                <option value="brochure">${ui("searchCategoryBrochure", {}, "en")}</option>
+              </select>
+            </label>
+            <div class="topbar-search-actions">
+              <a class="button-pill" href="./index.html#smart-guide" data-topbar-smart-guide>${ui("searchSmartGuide", {}, "en")}</a>
+              <a class="button-pill" href="./quick_snapshot.html" data-topbar-snapshot>${ui("searchSnapshot", {}, "en")}</a>
+              <button class="button-pill" type="button" data-topbar-print>${ui("searchPrint", {}, "en")}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    getOrCreateTopbarUtility(topbar).prepend(wrapper);
+
+    const toggle = wrapper.querySelector("[data-topbar-search-toggle]");
+    const panel = wrapper.querySelector("[data-topbar-search-panel]");
+    const input = wrapper.querySelector("[data-topbar-search-input]");
+    const category = wrapper.querySelector("[data-topbar-search-category]");
+    const results = wrapper.querySelector("[data-topbar-search-results]");
+    const print = wrapper.querySelector("[data-topbar-print]");
+
+    const closePanel = () => {
+      if (!(toggle instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) {
+        return;
+      }
+      toggle.classList.remove("is-active");
+      toggle.setAttribute("aria-expanded", "false");
+      panel.hidden = true;
+    };
+
+    const openPanel = () => {
+      if (!(toggle instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) {
+        return;
+      }
+      toggle.classList.add("is-active");
+      toggle.setAttribute("aria-expanded", "true");
+      panel.hidden = false;
+      input?.focus();
+    };
+
+    if (toggle instanceof HTMLButtonElement) {
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.addEventListener("click", () => {
+        if (panel instanceof HTMLElement && panel.hidden) {
+          openPanel();
+        } else {
+          closePanel();
+        }
+      });
+    }
+
+    document.addEventListener("click", (event) => {
+      if (!wrapper.contains(event.target)) {
+        closePanel();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closePanel();
+      }
+    });
+
+    print?.addEventListener("click", () => window.print());
+    bindSearchPanel({ input, categorySelect: category, resultsElement: results, initialCount: 5 });
+    updateLocale(wrapper);
+    document.addEventListener("locale:changed", () => updateLocale(wrapper));
+  });
+}
+
+function initSearch() {
+  const input = document.getElementById("site-search");
+  const category = document.getElementById("site-search-category");
+  const resultsElement = document.getElementById("site-search-results");
+  if (!input || !resultsElement) {
+    return;
+  }
+
+  bindSearchPanel({
+    input,
+    categorySelect: category,
+    resultsElement,
+    initialCount: 6
   });
 }
 
@@ -4691,6 +5029,30 @@ function getShareAdvice(profile, topItem) {
   return "Main page + itinerary";
 }
 
+function getRecommendationImage(item) {
+  if (item.city && PREVIEW_GALLERIES[item.city]?.images?.[0]) {
+    return PREVIEW_GALLERIES[item.city].images[0];
+  }
+
+  if (item.page === "Toolkit") {
+    return PREVIEW_GALLERIES.fuji.images[0];
+  }
+
+  if (item.page === "Culture Notes") {
+    return PREVIEW_GALLERIES.kyoto.images[0];
+  }
+
+  if (item.page === "Quick Snapshot") {
+    return PREVIEW_GALLERIES.tokyo.images[1];
+  }
+
+  if (item.page === "Full Guide") {
+    return PREVIEW_GALLERIES.tokyo.images[0];
+  }
+
+  return PREVIEW_GALLERIES.osaka.images[0];
+}
+
 function buildMatchScale(scoredItems) {
   const maxScore = scoredItems[0]?.score ?? 1;
   const minScore = scoredItems[scoredItems.length - 1]?.score ?? 0;
@@ -4707,6 +5069,7 @@ function renderRecommendations(scoredItems, elements) {
   elements.list.innerHTML = topItems
     .map((entry, index) => {
       const match = toMatch(entry.score);
+      const visual = getRecommendationImage(entry.item);
       const tags = entry.item.tags
         .slice(0, 3)
         .map((tag) => `<span class="recommendation-chip">${tag}</span>`)
@@ -4719,10 +5082,14 @@ function renderRecommendations(scoredItems, elements) {
         <a class="recommendation-card" href="${entry.item.href}">
           <div class="recommendation-head">
             <div class="recommendation-title-block">
+              <div class="recommendation-thumb">
+                <img src="${visual.src}" alt="${visual.alt}">
+              </div>
               <span class="recommendation-rank"><small>${ui("recommendationTop", {}, locale)}</small><strong>#${index + 1}</strong></span>
               <div>
                 <strong>${entry.item.title}</strong>
                 <span>${entry.item.page} · ${entry.item.text}</span>
+                <small class="recommendation-page-pill">${entry.item.page}</small>
               </div>
             </div>
             <span class="match-pill">${match}% ${ui("recommendationMatchSuffix", {}, locale)}</span>
@@ -5038,6 +5405,7 @@ window.addEventListener("DOMContentLoaded", () => {
   updateScrollProgress();
   initThemeToggle();
   initLocaleSwitch();
+  initTopbarSearch();
   initTopbarPreviews();
   initSiteFooter();
   initReveal();
