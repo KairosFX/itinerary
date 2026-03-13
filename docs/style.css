@@ -330,6 +330,13 @@ h3 {
   font-size: 0.96rem;
 }
 
+.route-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(17rem, 0.95fr);
+  gap: 1rem;
+  align-items: start;
+}
+
 .day-grid,
 .notes-grid {
   display: grid;
@@ -442,6 +449,7 @@ h3 {
   background:
     linear-gradient(135deg, rgba(181, 65, 49, 0.08), rgba(255, 255, 255, 0.7)),
     var(--surface);
+  height: 100%;
 }
 
 .route-flow {
@@ -491,6 +499,10 @@ h3 {
   }
 
   .hero-panel__body {
+    grid-template-columns: 1fr;
+  }
+
+  .route-layout {
     grid-template-columns: 1fr;
   }
 
