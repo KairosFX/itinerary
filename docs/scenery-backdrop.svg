@@ -1,90 +1,61 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-label="Stylized Japanese landscape background">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-label="Soft background with a faded map of Japan and Mt. Fuji scenery">
   <defs>
-    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#6d8383"/>
-      <stop offset="38%" stop-color="#97aaa5"/>
-      <stop offset="72%" stop-color="#d6d2c4"/>
-      <stop offset="100%" stop-color="#f2eadf"/>
+    <filter id="blurSoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+    <linearGradient id="mist" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.74"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
     <radialGradient id="sun" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#f7d8c7" stop-opacity="0.95"/>
-      <stop offset="60%" stop-color="#f3d1be" stop-opacity="0.56"/>
-      <stop offset="100%" stop-color="#f3d1be" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#d96a5e" stop-opacity="0.2"/>
+      <stop offset="70%" stop-color="#d96a5e" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#d96a5e" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="mountainRear" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#49605e"/>
-      <stop offset="100%" stop-color="#314746"/>
+    <linearGradient id="fujiBase" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dce3dd" stop-opacity="0.56"/>
+      <stop offset="100%" stop-color="#c9d5ce" stop-opacity="0.44"/>
     </linearGradient>
-    <linearGradient id="mountainMid" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#5d736d"/>
-      <stop offset="100%" stop-color="#425853"/>
+    <linearGradient id="hills" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e7ece7" stop-opacity="0.62"/>
+      <stop offset="100%" stop-color="#d9e0da" stop-opacity="0.44"/>
     </linearGradient>
-    <linearGradient id="mountainFront" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2f403d"/>
-      <stop offset="100%" stop-color="#1d2b2b"/>
-    </linearGradient>
-    <linearGradient id="mist" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#f3eee7" stop-opacity="0.86"/>
-      <stop offset="60%" stop-color="#f3eee7" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#f3eee7" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="temple" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#433734"/>
-      <stop offset="100%" stop-color="#231f21"/>
-    </linearGradient>
-    <linearGradient id="roof" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8f4e41"/>
-      <stop offset="100%" stop-color="#5f332d"/>
-    </linearGradient>
-    <radialGradient id="lantern" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#f5ccb1" stop-opacity="0.9"/>
-      <stop offset="100%" stop-color="#f5ccb1" stop-opacity="0"/>
-    </radialGradient>
   </defs>
 
-  <rect width="1600" height="1200" fill="url(#sky)"/>
-  <circle cx="1190" cy="248" r="180" fill="url(#sun)"/>
+  <circle cx="1188" cy="214" r="186" fill="url(#sun)"/>
 
-  <path d="M0 468C126 374 256 330 406 352C510 366 620 426 724 420C816 414 878 366 972 332C1118 278 1308 278 1600 384V1200H0Z" fill="url(#mountainRear)" opacity="0.88"/>
-  <path d="M0 602C158 496 292 446 446 470C566 488 672 568 804 560C914 554 1012 472 1118 438C1262 390 1424 420 1600 522V1200H0Z" fill="url(#mountainMid)" opacity="0.94"/>
-  <path d="M0 760C152 648 292 602 454 620C600 636 708 742 872 728C1008 716 1102 626 1236 606C1368 586 1488 628 1600 718V1200H0Z" fill="url(#mountainFront)"/>
-
-  <ellipse cx="408" cy="660" rx="430" ry="92" fill="url(#mist)"/>
-  <ellipse cx="1114" cy="732" rx="520" ry="110" fill="url(#mist)" opacity="0.72"/>
-
-  <path d="M936 846C1072 790 1216 798 1348 858C1448 904 1520 918 1600 886V1200H936Z" fill="#9cb7b4" opacity="0.5"/>
-  <path d="M0 878C168 810 318 830 428 902C510 956 598 992 760 1010V1200H0Z" fill="#9ab1b4" opacity="0.46"/>
-
-  <g transform="translate(148 688)">
-    <path d="M0 182H208L182 136H28Z" fill="url(#roof)"/>
-    <path d="M24 134H184L158 98H50Z" fill="url(#roof)"/>
-    <path d="M54 96H154L132 62H76Z" fill="url(#roof)"/>
-    <rect x="72" y="182" width="64" height="120" rx="3" fill="url(#temple)"/>
-    <rect x="54" y="206" width="22" height="96" fill="#2a2527"/>
-    <rect x="132" y="206" width="22" height="96" fill="#2a2527"/>
-    <rect x="0" y="302" width="210" height="18" rx="9" fill="#221d1e"/>
+  <g opacity="0.34" filter="url(#blurSoft)" transform="translate(820 174)">
+    <path d="M422 26C460 14 506 26 530 60C550 90 548 126 524 150C494 180 438 180 404 150C374 122 372 74 394 46C402 34 410 30 422 26Z" fill="#d8d9d4"/>
+    <path d="M328 180C354 160 386 170 400 198C414 224 404 250 380 264C360 276 330 274 314 258C300 244 298 216 312 194C316 188 322 184 328 180Z" fill="#d8d9d4"/>
+    <path d="M256 224C288 212 326 224 354 250C382 276 398 306 408 340C418 376 438 396 470 406C492 414 500 434 490 452C476 478 432 488 384 474C334 458 286 422 250 378C214 334 194 284 198 254C200 238 224 230 256 224Z" fill="#d8d9d4"/>
+    <path d="M182 474C216 456 258 466 286 494C306 512 312 542 298 562C286 578 264 584 236 578C204 570 176 550 162 524C152 504 158 486 182 474Z" fill="#d8d9d4"/>
+    <path d="M106 536C122 530 140 536 152 550C164 564 164 582 152 592C138 604 114 602 96 588C82 576 78 560 86 548C90 542 98 538 106 536Z" fill="#d8d9d4"/>
+    <circle cx="34" cy="630" r="10" fill="#d8d9d4"/>
+    <circle cx="64" cy="646" r="7" fill="#d8d9d4"/>
+    <circle cx="86" cy="664" r="5" fill="#d8d9d4"/>
   </g>
 
-  <path d="M70 136C156 170 212 236 260 352" fill="none" stroke="#5b3a35" stroke-width="18" stroke-linecap="round"/>
-  <path d="M122 188C192 204 270 252 336 342" fill="none" stroke="#6b433c" stroke-width="10" stroke-linecap="round"/>
-
-  <g fill="#f2d7da">
-    <circle cx="152" cy="206" r="24"/>
-    <circle cx="182" cy="222" r="20"/>
-    <circle cx="216" cy="250" r="18"/>
-    <circle cx="250" cy="276" r="20"/>
-    <circle cx="278" cy="314" r="18"/>
-    <circle cx="112" cy="172" r="22"/>
-    <circle cx="204" cy="190" r="16"/>
-    <circle cx="316" cy="346" r="16"/>
+  <g opacity="0.32">
+    <path d="M0 876C158 808 312 798 470 832C588 856 700 908 842 900C992 890 1108 824 1238 804C1368 784 1488 806 1600 860V1200H0Z" fill="url(#hills)"/>
+    <path d="M0 948C154 906 320 906 492 944C658 980 816 992 986 962C1114 940 1266 922 1600 970V1200H0Z" fill="#eef2ed" opacity="0.7"/>
   </g>
 
-  <g fill="#efd3d5" opacity="0.82">
-    <circle cx="1402" cy="222" r="74"/>
-    <circle cx="1312" cy="286" r="54"/>
-    <circle cx="1456" cy="340" r="44"/>
+  <g transform="translate(238 676)" opacity="0.56">
+    <path d="M0 212L112 92L224 212Z" fill="url(#fujiBase)"/>
+    <path d="M62 150L112 92L162 150Z" fill="#ffffff" fill-opacity="0.82"/>
+    <ellipse cx="112" cy="228" rx="194" ry="36" fill="url(#mist)" opacity="0.8"/>
   </g>
 
-  <circle cx="1314" cy="246" r="110" fill="url(#lantern)"/>
-  <circle cx="1444" cy="332" r="90" fill="url(#lantern)"/>
+  <g opacity="0.32">
+    <path d="M122 186C170 204 212 244 248 306" fill="none" stroke="#cb8d82" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="138" cy="192" r="18" fill="#eed5d7"/>
+    <circle cx="164" cy="210" r="14" fill="#f2dfe0"/>
+    <circle cx="192" cy="232" r="16" fill="#eed5d7"/>
+    <circle cx="220" cy="258" r="13" fill="#f2dfe0"/>
+    <circle cx="246" cy="290" r="12" fill="#eed5d7"/>
+  </g>
+
+  <ellipse cx="364" cy="786" rx="420" ry="84" fill="url(#mist)" opacity="0.74"/>
+  <ellipse cx="1118" cy="676" rx="360" ry="74" fill="url(#mist)" opacity="0.52"/>
 </svg>

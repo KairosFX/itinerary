@@ -11,8 +11,8 @@
       <stop offset="100%" stop-color="#f1e9df"/>
     </linearGradient>
     <linearGradient id="trackTint" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#c85a44"/>
-      <stop offset="100%" stop-color="#cf6d53"/>
+      <stop offset="0%" stop-color="#ab4a3b"/>
+      <stop offset="100%" stop-color="#ba5849"/>
     </linearGradient>
     <clipPath id="panelClip">
       <rect x="86" y="84" width="1028" height="392" rx="26"/>
@@ -62,7 +62,7 @@
 
       .interactive:hover .node,
       .interactive:active .node {
-        fill: #b54131;
+        fill: #8e352b;
         transform: scale(1.12);
       }
 
@@ -80,7 +80,7 @@
 
       .branch-cluster:hover .branch-line,
       .branch-cluster:active .branch-line {
-        stroke: #b54131;
+        stroke: #8e352b;
         opacity: 1;
       }
 
@@ -90,8 +90,8 @@
       .branch-cluster:active .fuji-node,
       .branch-cluster:active .fuji-label,
       .branch-cluster:active .fuji-icon {
-        stroke: #b54131;
-        fill: #b54131;
+        stroke: #8e352b;
+        fill: #8e352b;
       }
 
       .branch-cluster:hover .fuji-icon,
@@ -103,7 +103,7 @@
 
       .branch-cluster:hover .fuji-label,
       .branch-cluster:active .fuji-label {
-        fill: #b54131;
+        fill: #8e352b;
       }
     </style>
   </defs>
@@ -128,20 +128,20 @@
   </g>
 
   <g class="route-static" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">
-    <text x="126" y="126" fill="#c85a44" font-size="18" font-weight="700" letter-spacing="2.4">移動ルート</text>
-    <text x="248" y="126" fill="#c85a44" font-size="20" font-weight="700">→</text>
-    <text x="188" y="152" text-anchor="middle" fill="#c85a44" font-size="15" font-weight="700" letter-spacing="1.8">出発</text>
-    <text x="1008" y="152" text-anchor="middle" fill="#c85a44" font-size="15" font-weight="700" letter-spacing="1.8">到着</text>
+    <text x="126" y="126" fill="#ab4a3b" font-size="18" font-weight="700" letter-spacing="2.4">移動ルート</text>
+    <text x="248" y="126" fill="#ab4a3b" font-size="20" font-weight="700">→</text>
+    <text x="188" y="152" text-anchor="middle" fill="#ab4a3b" font-size="15" font-weight="700" letter-spacing="1.8">出発</text>
+    <text x="1008" y="152" text-anchor="middle" fill="#ab4a3b" font-size="15" font-weight="700" letter-spacing="1.8">到着</text>
   </g>
 
   <g class="route-static" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path d="M176 320H1020" stroke="#b79d90" stroke-width="16" opacity="0.14"/>
     <path d="M176 320H1020" stroke="url(#trackTint)" stroke-width="8"/>
     <path d="M176 320H1020" stroke="#eb9a84" stroke-width="2.4" opacity="0.42"/>
-    <path d="M277 311L287 320L277 329" stroke="#b54131" stroke-width="3.8"/>
-    <path d="M481 311L491 320L481 329" stroke="#b54131" stroke-width="3.8"/>
-    <path d="M685 311L695 320L685 329" stroke="#b54131" stroke-width="3.8"/>
-    <path d="M889 311L899 320L889 329" stroke="#b54131" stroke-width="3.8"/>
+    <path d="M277 311L287 320L277 329" stroke="#8e352b" stroke-width="3.8"/>
+    <path d="M481 311L491 320L481 329" stroke="#8e352b" stroke-width="3.8"/>
+    <path d="M685 311L695 320L685 329" stroke="#8e352b" stroke-width="3.8"/>
+    <path d="M889 311L899 320L889 329" stroke="#8e352b" stroke-width="3.8"/>
   </g>
 
   <g class="interactive" transform="translate(188 320)">
@@ -153,8 +153,8 @@
         <text x="48" y="26" text-anchor="middle" fill="#2b2f31" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif" font-size="16" font-weight="600">大阪</text>
       </g>
     </g>
-    <circle class="node-halo" r="22" fill="#c85a44"/>
-    <circle class="node" r="11.5" fill="#cb5e47" stroke="#fffdfa" stroke-width="4"/>
+    <circle class="node-halo" r="22" fill="#ab4a3b"/>
+    <circle class="node" r="11.5" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
   </g>
 
   <g class="interactive" transform="translate(392 320)">
@@ -166,8 +166,8 @@
         <text x="48" y="26" text-anchor="middle" fill="#2b2f31" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif" font-size="16" font-weight="600">京都</text>
       </g>
     </g>
-    <circle class="node-halo" r="22" fill="#c85a44"/>
-    <circle class="node" r="11.5" fill="#cb5e47" stroke="#fffdfa" stroke-width="4"/>
+    <circle class="node-halo" r="22" fill="#ab4a3b"/>
+    <circle class="node" r="11.5" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
   </g>
 
   <g class="interactive" transform="translate(596 320)">
@@ -179,12 +179,12 @@
         <text x="58" y="26" text-anchor="middle" fill="#2b2f31" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif" font-size="16" font-weight="600">小田原</text>
       </g>
     </g>
-    <circle class="node-halo" r="22" fill="#c85a44"/>
-    <circle class="node" r="11.5" fill="#cb5e47" stroke="#fffdfa" stroke-width="4"/>
+    <circle class="node-halo" r="22" fill="#ab4a3b"/>
+    <circle class="node" r="11.5" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
   </g>
 
   <g class="branch-cluster">
-    <path class="branch-line" d="M800 332C804 364 834 388 878 398" fill="none" stroke="#d59a86" stroke-width="3" stroke-dasharray="6 8" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
+    <path class="branch-line" d="M800 332C804 364 834 388 878 398" fill="none" stroke="#d0a08f" stroke-width="3" stroke-dasharray="6 8" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
 
     <g class="interactive" transform="translate(800 320)">
       <circle class="hit-area" r="40"/>
@@ -195,15 +195,15 @@
           <text x="48" y="26" text-anchor="middle" fill="#2b2f31" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif" font-size="16" font-weight="600">箱根</text>
         </g>
       </g>
-      <circle class="node-halo" r="22" fill="#c85a44"/>
-      <circle class="node" r="11.5" fill="#cb5e47" stroke="#fffdfa" stroke-width="4"/>
+      <circle class="node-halo" r="22" fill="#ab4a3b"/>
+      <circle class="node" r="11.5" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
     </g>
 
     <g class="interactive fuji-group" transform="translate(878 398)">
       <circle class="hit-area" r="38"/>
-      <circle class="node-halo" r="20" fill="#d59a86"/>
-      <circle class="fuji-node" r="10.5" fill="#d59a86" stroke="#fffdfa" stroke-width="4"/>
-      <g class="fuji-icon" fill="none" stroke="#be725d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 26)">
+      <circle class="node-halo" r="20" fill="#d0a08f"/>
+      <circle class="fuji-node" r="10.5" fill="#d0a08f" stroke="#fffdfa" stroke-width="4"/>
+      <g class="fuji-icon" fill="none" stroke="#ad6a58" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 26)">
         <path d="M-15 11L0 -9L15 11"/>
         <path d="M-5 -3L4 -9L12 2"/>
       </g>
@@ -220,7 +220,7 @@
         <text x="48" y="26" text-anchor="middle" fill="#2b2f31" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif" font-size="16" font-weight="600">東京</text>
       </g>
     </g>
-    <circle class="node-halo" r="22" fill="#c85a44"/>
-    <circle class="node" r="11.5" fill="#cb5e47" stroke="#fffdfa" stroke-width="4"/>
+    <circle class="node-halo" r="22" fill="#ab4a3b"/>
+    <circle class="node" r="11.5" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
   </g>
 </svg>
