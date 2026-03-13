@@ -1,119 +1,104 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
-  <title id="title">Japan trip route map</title>
-  <desc id="desc">Map-style route graphic showing the actual path from Osaka to Kyoto, back to Osaka, then Shin-Osaka, Odawara, Hakone, Mount Fuji area, and Tokyo.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">Line route reference for Japan trip</title>
+  <desc id="desc">A minimalist line route showing Osaka, Kyoto, Osaka, Shin-Osaka, Odawara, Hakone, Mount Fuji area, and Tokyo.</desc>
   <defs>
-    <linearGradient id="paper" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#fffaf5"/>
-      <stop offset="100%" stop-color="#f1e5d8"/>
+      <stop offset="100%" stop-color="#f2e7da"/>
     </linearGradient>
-    <linearGradient id="route" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="line" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#b54131"/>
       <stop offset="100%" stop-color="#3f5a4b"/>
     </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#5c3b27" flood-opacity="0.12"/>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#5c3b27" flood-opacity="0.1"/>
     </filter>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-      <path d="M0 0L10 5L0 10Z" fill="#b54131"/>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto">
+      <path d="M0 0L12 6L0 12Z" fill="#3f5a4b"/>
     </marker>
   </defs>
 
-  <rect width="1200" height="720" rx="40" fill="url(#paper)"/>
-  <circle cx="1025" cy="120" r="86" fill="#f8e7e1"/>
-  <circle cx="190" cy="585" r="96" fill="#e5efe9"/>
+  <rect width="1200" height="560" rx="36" fill="url(#bg)"/>
+  <circle cx="1010" cy="102" r="76" fill="#f6e3dd"/>
+  <circle cx="154" cy="462" r="86" fill="#e2ece8"/>
 
-  <g transform="translate(78 74)">
-    <text x="0" y="0" fill="#b54131" font-size="18" font-weight="700" font-family="'Avenir Next', Arial, sans-serif" letter-spacing="3">ROUTE MAP</text>
-    <text x="0" y="40" fill="#1f2527" font-size="38" font-weight="700" font-family="'Iowan Old Style', Georgia, serif">Japan Trip</text>
-    <text x="0" y="74" fill="#5e6768" font-size="20" font-family="'Avenir Next', Arial, sans-serif">Actual travel path</text>
+  <g transform="translate(72 72)">
+    <text x="0" y="0" fill="#b54131" font-size="18" font-weight="700" font-family="'Avenir Next', Arial, sans-serif" letter-spacing="3">ROUTE REFERENCE</text>
+    <text x="0" y="38" fill="#1f2527" font-size="38" font-weight="700" font-family="'Iowan Old Style', Georgia, serif">Japan Trip</text>
+    <text x="0" y="70" fill="#5e6768" font-size="19" font-family="'Avenir Next', Arial, sans-serif">Minimal travel path</text>
   </g>
 
   <g filter="url(#shadow)">
-    <path
-      d="M150 540C198 500 244 461 324 421C394 387 467 362 556 348C622 338 686 343 752 327C822 310 887 275 951 228C999 192 1039 158 1088 149C1107 145 1126 154 1131 172C1137 194 1126 221 1102 246C1066 283 1021 318 956 354C888 392 805 423 719 450C623 480 526 503 408 524C314 540 240 550 183 551C152 552 128 547 121 534C116 524 124 514 150 540Z"
-      fill="#fffaf4"
-      stroke="#e6d6c8"
-      stroke-width="2"/>
+    <rect x="52" y="52" width="1096" height="456" rx="28" fill="rgba(255,255,255,0.28)" stroke="rgba(255,255,255,0.4)"/>
   </g>
 
   <path
-    d="M248 466Q282 438 318 420Q293 448 266 478Q283 468 305 457C440 425 608 383 776 290Q796 278 819 269Q852 256 884 247Q950 230 1010 198"
+    d="M280 126V250L190 360H1000"
     fill="none"
-    stroke="url(#route)"
+    stroke="url(#line)"
     stroke-width="10"
     stroke-linecap="round"
     stroke-linejoin="round"
     marker-end="url(#arrow)"/>
 
-  <g stroke="#ffffff" stroke-width="5" font-family="'Avenir Next', Arial, sans-serif" text-anchor="middle">
-    <g transform="translate(248 466)">
-      <circle r="18" fill="#b54131"/>
-      <text y="6" fill="#ffffff" font-size="14" font-weight="700">1</text>
+  <g font-family="'Avenir Next', Arial, sans-serif" text-anchor="middle">
+    <g transform="translate(280 126)">
+      <circle r="17" fill="#b54131" stroke="#ffffff" stroke-width="5"/>
+      <text y="5" fill="#ffffff" font-size="13" font-weight="700">1</text>
     </g>
-    <g transform="translate(318 420)">
-      <circle r="16" fill="#b54131"/>
+    <g transform="translate(280 250)">
+      <circle r="17" fill="#b54131" stroke="#ffffff" stroke-width="5"/>
       <text y="5" fill="#ffffff" font-size="13" font-weight="700">2</text>
     </g>
-    <g transform="translate(266 478)">
-      <circle r="16" fill="#b54131"/>
+    <g transform="translate(190 360)">
+      <circle r="17" fill="#b54131" stroke="#ffffff" stroke-width="5"/>
       <text y="5" fill="#ffffff" font-size="13" font-weight="700">3</text>
     </g>
-    <g transform="translate(305 457)">
-      <circle r="16" fill="#b54131"/>
+    <g transform="translate(340 360)">
+      <circle r="17" fill="#b54131" stroke="#ffffff" stroke-width="5"/>
       <text y="5" fill="#ffffff" font-size="13" font-weight="700">4</text>
     </g>
-    <g transform="translate(776 290)">
-      <circle r="16" fill="#3f5a4b"/>
+    <g transform="translate(520 360)">
+      <circle r="17" fill="#3f5a4b" stroke="#ffffff" stroke-width="5"/>
       <text y="5" fill="#ffffff" font-size="13" font-weight="700">5</text>
     </g>
-    <g transform="translate(819 269)">
-      <circle r="16" fill="#3f5a4b"/>
+    <g transform="translate(660 360)">
+      <circle r="17" fill="#3f5a4b" stroke="#ffffff" stroke-width="5"/>
       <text y="5" fill="#ffffff" font-size="13" font-weight="700">6</text>
     </g>
-    <g transform="translate(884 247)">
-      <circle r="16" fill="#3f5a4b"/>
+    <g transform="translate(820 360)">
+      <circle r="17" fill="#3f5a4b" stroke="#ffffff" stroke-width="5"/>
       <text y="5" fill="#ffffff" font-size="13" font-weight="700">7</text>
     </g>
-    <g transform="translate(1010 198)">
-      <circle r="20" fill="#3f5a4b"/>
-      <text y="7" fill="#ffffff" font-size="15" font-weight="700">8</text>
+    <g transform="translate(1000 360)">
+      <circle r="19" fill="#3f5a4b" stroke="#ffffff" stroke-width="5"/>
+      <text y="6" fill="#ffffff" font-size="14" font-weight="700">8</text>
     </g>
   </g>
 
-  <g font-family="'Avenir Next', Arial, sans-serif" fill="#1f2527">
-    <path d="M210 458H156" stroke="#ccb6a7" stroke-width="2"/>
-    <text x="88" y="448" font-size="22" font-weight="700">Osaka</text>
-    <text x="88" y="474" font-size="15" fill="#5e6768">1, 3</text>
+  <g fill="#1f2527" font-family="'Avenir Next', Arial, sans-serif">
+    <text x="314" y="116" font-size="24" font-weight="700">Osaka</text>
+    <text x="314" y="142" font-size="15" fill="#5e6768">Start</text>
 
-    <path d="M320 404L320 350H258" stroke="#ccb6a7" stroke-width="2"/>
-    <text x="170" y="340" font-size="22" font-weight="700">Kyoto</text>
-    <text x="170" y="366" font-size="15" fill="#5e6768">2</text>
+    <text x="308" y="240" font-size="24" font-weight="700">Kyoto</text>
+    <text x="308" y="266" font-size="15" fill="#5e6768">Day trip</text>
 
-    <path d="M324 457H404" stroke="#ccb6a7" stroke-width="2"/>
-    <text x="430" y="448" font-size="21" font-weight="700">Shin-Osaka</text>
-    <text x="430" y="474" font-size="15" fill="#5e6768">4</text>
+    <text x="112" y="398" font-size="24" font-weight="700">Osaka</text>
+    <text x="112" y="424" font-size="15" fill="#5e6768">Return</text>
 
-    <path d="M774 274L748 228" stroke="#ccb6a7" stroke-width="2"/>
-    <text x="650" y="212" font-size="21" font-weight="700">Odawara</text>
-    <text x="650" y="238" font-size="15" fill="#5e6768">5</text>
+    <text x="340" y="330" text-anchor="middle" font-size="22" font-weight="700">Shin-Osaka</text>
+    <text x="340" y="304" text-anchor="middle" font-size="15" fill="#5e6768">Bullet train</text>
 
-    <path d="M826 256L842 214" stroke="#ccb6a7" stroke-width="2"/>
-    <text x="848" y="200" font-size="21" font-weight="700">Hakone</text>
-    <text x="848" y="226" font-size="15" fill="#5e6768">6</text>
+    <text x="520" y="330" text-anchor="middle" font-size="22" font-weight="700">Odawara</text>
+    <text x="520" y="304" text-anchor="middle" font-size="15" fill="#5e6768">Transfer</text>
 
-    <path d="M884 231L884 172" stroke="#ccb6a7" stroke-width="2"/>
-    <text x="884" y="156" font-size="20" font-weight="700" text-anchor="middle">Mt. Fuji area</text>
-    <text x="884" y="182" font-size="15" fill="#5e6768" text-anchor="middle">7</text>
+    <text x="660" y="330" text-anchor="middle" font-size="22" font-weight="700">Hakone</text>
+    <text x="660" y="304" text-anchor="middle" font-size="15" fill="#5e6768">Stay</text>
 
-    <path d="M1022 192L1080 178" stroke="#ccb6a7" stroke-width="2"/>
-    <text x="1090" y="172" font-size="23" font-weight="700">Tokyo</text>
-    <text x="1090" y="198" font-size="15" fill="#5e6768">8</text>
-  </g>
+    <text x="820" y="330" text-anchor="middle" font-size="22" font-weight="700">Mt. Fuji area</text>
+    <text x="820" y="304" text-anchor="middle" font-size="15" fill="#5e6768">Scenic stop</text>
 
-  <g filter="url(#shadow)">
-    <rect x="820" y="520" width="290" height="98" rx="22" fill="#fffdf9" stroke="#ead9ca"/>
-    <text x="850" y="556" fill="#b54131" font-size="17" font-weight="700" font-family="'Avenir Next', Arial, sans-serif">Travel path</text>
-    <text x="850" y="584" fill="#5e6768" font-size="17" font-family="'Avenir Next', Arial, sans-serif">Osaka → Kyoto → Osaka → Shin-Osaka</text>
-    <text x="850" y="609" fill="#5e6768" font-size="17" font-family="'Avenir Next', Arial, sans-serif">→ Odawara → Hakone → Mt. Fuji area → Tokyo</text>
+    <text x="1000" y="330" text-anchor="middle" font-size="24" font-weight="700">Tokyo</text>
+    <text x="1000" y="304" text-anchor="middle" font-size="15" fill="#5e6768">Finish</text>
   </g>
 </svg>
