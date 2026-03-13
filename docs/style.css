@@ -341,6 +341,7 @@ h3 {
   color: var(--text);
   font-weight: 600;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .day-grid,
@@ -495,10 +496,28 @@ h3 {
     padding-top: 1.4rem;
   }
 
-  .section-nav a,
-  .language-button {
+  .header-inner {
+    width: min(calc(100% - 1rem), var(--content-width));
+    padding: 0.85rem 0 1rem;
+    gap: 1rem;
+  }
+
+  .brand-block {
+    max-width: none;
+  }
+
+  .section-nav {
     width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .section-nav a {
+    width: auto;
     text-align: center;
+    padding: 0.58rem 0.4rem;
+    font-size: 0.85rem;
   }
 
   .language-switcher {
@@ -507,9 +526,57 @@ h3 {
     grid-template-columns: 1fr 1fr;
   }
 
+  .language-button {
+    width: auto;
+    text-align: center;
+  }
+
+  .hero-panel__body {
+    padding: 1.2rem;
+  }
+
+  .overview-card,
+  .day-card,
+  .note-card {
+    padding: 1rem;
+  }
+
+  .route-reference {
+    padding: 0.8rem;
+  }
+
   .day-card__header {
     flex-direction: column;
     align-items: start;
+  }
+}
+
+@media (max-width: 520px) {
+  body::before {
+    inset: auto auto 2rem 1rem;
+    width: 8rem;
+    height: 8rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  .page-shell {
+    width: min(calc(100% - 0.8rem), var(--content-width));
+    padding-top: 1rem;
+  }
+
+  .check-item {
+    padding: 0.72rem 0.74rem;
+  }
+
+  .route-reference img {
+    border-radius: 14px;
   }
 }
 
