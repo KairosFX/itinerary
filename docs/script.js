@@ -3,7 +3,8 @@ const localizedNodes = document.querySelectorAll("[data-language]");
 const ariaLabelNodes = document.querySelectorAll("[data-aria-label-en][data-aria-label-ja]");
 const altTextNodes = document.querySelectorAll("[data-alt-en][data-alt-ja]");
 const sourceNodes = document.querySelectorAll("[data-src-en][data-src-ja]");
-const sectionLinks = document.querySelectorAll(".section-nav a");
+const sectionTabs = document.querySelectorAll("[data-panel-target]");
+const contentPanels = document.querySelectorAll("[data-panel]");
 const siteHeader = document.querySelector(".site-header");
 const welcomeOverlay = document.querySelector(".welcome-overlay");
 const root = document.documentElement;
@@ -15,6 +16,8 @@ const storageKey = "japan-trip-language";
 const welcomeStorageKey = "japan-trip-welcome-seen";
 let reservedHeaderHeight = 0;
 let headerLockUntil = 0;
+let lastScrollY = window.scrollY;
+let scrollTicking = false;
 
 function readStoredLanguage() {
   try {
@@ -69,6 +72,18 @@ function lockHeaderState(duration = 420) {
   lastScrollY = window.scrollY;
 }
 
+function preserveScrollPosition(callback) {
+  const scrollX = window.scrollX;
+  const scrollY = window.scrollY;
+  callback();
+  window.requestAnimationFrame(() => {
+    window.scrollTo(scrollX, scrollY);
+    window.requestAnimationFrame(() => {
+      window.scrollTo(scrollX, scrollY);
+    });
+  });
+}
+
 function setLanguage(language) {
   const nextLanguage = language === "ja" ? "ja" : "en";
 
@@ -100,20 +115,7 @@ function setLanguage(language) {
       node.setAttribute(sourceAttribute, nextSource);
     }
   });
-
-  window.requestAnimationFrame(() => {
-    if (window.scrollY <= 36) {
-      syncReservedHeaderHeight(true);
-      return;
-    }
-
-    const wasCondensed = siteHeader?.classList.contains("is-condensed");
-    siteHeader?.classList.remove("is-condensed");
-    syncReservedHeaderHeight(true);
-    if (wasCondensed) {
-      siteHeader?.classList.add("is-condensed");
-    }
-  });
+  window.requestAnimationFrame(() => syncReservedHeaderHeight(false));
 
   languageButtons.forEach((button) => {
     const isActive = button.dataset.setLanguage === nextLanguage;
@@ -126,7 +128,29 @@ function setLanguage(language) {
 
 function handleLanguageButtonClick(button) {
   lockHeaderState(280);
-  setLanguage(button.dataset.setLanguage);
+  preserveScrollPosition(() => {
+    setLanguage(button.dataset.setLanguage);
+  });
+}
+
+function setActivePanel(panelId) {
+  let hasMatch = false;
+
+  contentPanels.forEach((panel) => {
+    const isActive = panel.dataset.panel === panelId;
+    panel.classList.toggle("is-active", isActive);
+    panel.setAttribute("aria-hidden", String(!isActive));
+    panel.toggleAttribute("inert", !isActive);
+    hasMatch ||= isActive;
+  });
+
+  sectionTabs.forEach((tab) => {
+    const isActive = tab.dataset.panelTarget === panelId;
+    tab.classList.toggle("is-active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
+  });
+
+  return hasMatch;
 }
 
 languageButtons.forEach((button) => {
@@ -137,23 +161,23 @@ languageButtons.forEach((button) => {
 
 setLanguage(readStoredLanguage());
 
-sectionLinks.forEach((link) => {
-  link.addEventListener("click", () => {
-    siteHeader?.classList.remove("is-condensed");
-    syncReservedHeaderHeight(true);
+setActivePanel("checklist");
+
+sectionTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
     lockHeaderState(520);
+    preserveScrollPosition(() => {
+      setActivePanel(tab.dataset.panelTarget);
+    });
   });
 });
 
-if (document.documentElement.classList.contains("is-welcoming")) {
+if (root.classList.contains("is-welcoming")) {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   window.setTimeout(finishWelcome, prefersReducedMotion ? 60 : 2600);
 } else if (welcomeOverlay) {
   welcomeOverlay.setAttribute("hidden", "");
 }
-
-let lastScrollY = window.scrollY;
-let scrollTicking = false;
 
 function syncHeaderState() {
   if (!siteHeader) {

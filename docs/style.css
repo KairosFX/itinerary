@@ -121,6 +121,7 @@ input:focus-visible {
   padding-top: 0.4rem;
   width: 100%;
   overflow-x: clip;
+  overflow-anchor: none;
   backdrop-filter: blur(18px);
   background: linear-gradient(180deg, rgba(249, 245, 240, 0.74), rgba(249, 245, 240, 0.56));
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -223,7 +224,7 @@ h3 {
   justify-content: flex-end;
 }
 
-.section-nav a,
+.section-tab,
 .language-button {
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -236,19 +237,26 @@ h3 {
     background-color 180ms ease;
 }
 
-.section-nav a {
+.section-tab {
   padding: 0.5rem 0.78rem;
   font-size: 0.9rem;
   color: var(--muted);
 }
 
-.section-nav a:hover,
-.section-nav a:focus-visible,
+.section-tab:hover,
+.section-tab:focus-visible,
 .language-button:hover,
 .language-button:focus-visible {
   transform: translateY(-1px);
   box-shadow: 0 12px 22px rgba(55, 35, 22, 0.08);
   border-color: var(--line-strong);
+}
+
+.section-tab.is-active,
+.section-tab[aria-selected="true"] {
+  border-color: rgba(181, 65, 49, 0.2);
+  background: rgba(181, 65, 49, 0.12);
+  color: var(--accent-deep);
 }
 
 .language-switcher {
@@ -334,10 +342,31 @@ h3 {
   color: var(--text);
 }
 
+.content-panels {
+  display: grid;
+  margin-top: 2.4rem;
+  overflow-anchor: none;
+}
+
 .content-section {
   display: grid;
   gap: 1.4rem;
-  margin-top: 2.4rem;
+  margin-top: 0;
+}
+
+.content-panel {
+  grid-area: 1 / 1;
+  align-self: start;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.content-panel.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .section-heading {
@@ -653,7 +682,7 @@ h3 {
   justify-content: center;
 }
 
-.site-header.is-condensed .section-nav a {
+.site-header.is-condensed .section-tab {
   padding: 0.44rem 0.72rem;
   font-size: 0.86rem;
 }
@@ -768,7 +797,7 @@ h3 {
     gap: 0.45rem;
   }
 
-  .section-nav a {
+  .section-tab {
     width: auto;
     text-align: center;
     padding: 0.52rem 0.4rem;
@@ -822,7 +851,7 @@ h3 {
     gap: 0.4rem;
   }
 
-  .site-header.is-condensed .section-nav a {
+  .site-header.is-condensed .section-tab {
     padding: 0.44rem 0.35rem;
     font-size: 0.8rem;
   }

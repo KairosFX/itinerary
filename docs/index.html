@@ -56,21 +56,40 @@
       <div class="header-actions">
         <nav
           class="section-nav"
+          role="tablist"
           aria-label="Page sections"
           data-aria-label-en="Page sections"
           data-aria-label-ja="ページ内セクション">
-          <a href="#checklist">
+          <button
+            class="section-tab is-active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="checklist"
+            data-panel-target="checklist">
             <span data-language="en">Checklist</span>
             <span data-language="ja" hidden>チェックリスト</span>
-          </a>
-          <a href="#notes">
+          </button>
+          <button
+            class="section-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="notes"
+            data-panel-target="notes">
             <span data-language="en">Notes</span>
             <span data-language="ja" hidden>メモ</span>
-          </a>
-          <a href="#route">
+          </button>
+          <button
+            class="section-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="route"
+            data-panel-target="route">
             <span data-language="en">Routes</span>
             <span data-language="ja" hidden>ルート</span>
-          </a>
+          </button>
         </nav>
 
         <div
@@ -107,7 +126,8 @@
       </div>
     </section>
 
-    <section class="content-section" id="checklist" aria-labelledby="checklist-title">
+    <div class="content-panels" data-content-panels>
+    <section class="content-section content-panel is-active" id="checklist" data-panel="checklist" role="tabpanel" aria-labelledby="checklist-title" aria-hidden="false">
       <div class="section-heading">
         <p class="section-tag">
           <span data-language="en">Checklist</span>
@@ -442,7 +462,7 @@
       </div>
     </section>
 
-    <section class="content-section" id="notes" aria-labelledby="notes-title">
+    <section class="content-section content-panel" id="notes" data-panel="notes" role="tabpanel" aria-labelledby="notes-title" aria-hidden="true" inert>
       <div class="section-heading">
         <p class="section-tag">
           <span data-language="en">Notes</span>
@@ -538,7 +558,7 @@
       </div>
     </section>
 
-    <section class="content-section" id="route" aria-labelledby="route-title">
+    <section class="content-section content-panel" id="route" data-panel="route" role="tabpanel" aria-labelledby="route-title" aria-hidden="true" inert>
       <div class="section-heading">
         <p class="section-tag">
           <span data-language="en">Route</span>
@@ -581,6 +601,7 @@
         </figcaption>
       </figure>
     </section>
+    </div>
   </main>
 
   <footer class="site-footer">
