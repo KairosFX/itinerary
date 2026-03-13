@@ -4,8 +4,8 @@ const ariaLabelNodes = document.querySelectorAll("[data-aria-label-en][data-aria
 const altTextNodes = document.querySelectorAll("[data-alt-en][data-alt-ja]");
 const sourceNodes = document.querySelectorAll("[data-src-en][data-src-ja]");
 const pageTitles = {
-  en: "Japan Trip | Checklist & Notes",
-  ja: "日本旅行 | チェックリストとメモ"
+  en: "Japan Trip | Itinerary",
+  ja: "日本旅行 | 旅程"
 };
 const storageKey = "japan-trip-language";
 

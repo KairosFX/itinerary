@@ -16,32 +16,32 @@
   <circle cx="170" cy="438" r="92" fill="#e7efeb" opacity="0.8"/>
 
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M140 312H1060" stroke="#d6c7bb" stroke-width="4"/>
+    <path d="M198 312H1082" stroke="#d6c7bb" stroke-width="4"/>
 
-    <path d="M214 296L236 312L214 328" stroke="#c55443" stroke-width="6"/>
-    <path d="M388 296L410 312L388 328" stroke="#c55443" stroke-width="6"/>
-    <path d="M598 296L620 312L598 328" stroke="#c55443" stroke-width="6"/>
-    <path d="M790 296L812 312L790 328" stroke="#c55443" stroke-width="6"/>
-    <path d="M970 296L992 312L970 328" stroke="#c55443" stroke-width="6"/>
+    <path d="M272 296L294 312L272 328" stroke="#c55443" stroke-width="6"/>
+    <path d="M446 296L468 312L446 328" stroke="#c55443" stroke-width="6"/>
+    <path d="M656 296L678 312L656 328" stroke="#c55443" stroke-width="6"/>
+    <path d="M848 296L870 312L848 328" stroke="#c55443" stroke-width="6"/>
+    <path d="M1028 296L1050 312L1028 328" stroke="#c55443" stroke-width="6"/>
 
-    <circle cx="260" cy="312" r="5" fill="#fffdfa" stroke="#c55443" stroke-width="3"/>
-    <circle cx="462" cy="312" r="5" fill="#fffdfa" stroke="#c55443" stroke-width="3"/>
-    <circle cx="672" cy="312" r="5" fill="#fffdfa" stroke="#c55443" stroke-width="3"/>
-    <circle cx="858" cy="312" r="5" fill="#fffdfa" stroke="#c55443" stroke-width="3"/>
+    <circle cx="318" cy="312" r="5" fill="#fffdfa" stroke="#c55443" stroke-width="3"/>
+    <circle cx="520" cy="312" r="5" fill="#fffdfa" stroke="#c55443" stroke-width="3"/>
+    <circle cx="730" cy="312" r="5" fill="#fffdfa" stroke="#c55443" stroke-width="3"/>
+    <circle cx="916" cy="312" r="5" fill="#fffdfa" stroke="#c55443" stroke-width="3"/>
   </g>
 
   <g fill="#24282b">
-    <text x="126" y="322" text-anchor="end" font-size="50" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">大阪</text>
+    <text x="178" y="322" text-anchor="end" font-size="50" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">大阪</text>
 
-    <text x="250" y="250" text-anchor="middle" font-size="42" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">京都</text>
-    <text x="486" y="250" text-anchor="middle" font-size="42" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">新大阪</text>
-    <text x="676" y="250" text-anchor="middle" font-size="42" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">小田原</text>
-    <text x="860" y="250" text-anchor="middle" font-size="42" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">箱根</text>
-    <text x="1040" y="250" text-anchor="middle" font-size="42" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">東京</text>
+    <text x="304" y="250" text-anchor="middle" font-size="42" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">京都</text>
+    <text x="526" y="250" text-anchor="middle" font-size="42" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">新大阪</text>
+    <text x="758" y="250" text-anchor="middle" font-size="42" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">小田原</text>
+    <text x="928" y="250" text-anchor="middle" font-size="42" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">箱根</text>
+    <text x="1098" y="250" text-anchor="middle" font-size="42" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">東京</text>
   </g>
 
   <g>
-    <rect x="800" y="352" width="186" height="58" rx="29" fill="#f1e6db" stroke="#e3d3c5" stroke-width="2"/>
-    <text x="893" y="389" text-anchor="middle" fill="#3d4748" font-size="32" font-weight="600" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">富士山エリア</text>
+    <rect x="846" y="352" width="186" height="58" rx="29" fill="#f1e6db" stroke="#e3d3c5" stroke-width="2"/>
+    <text x="939" y="389" text-anchor="middle" fill="#3d4748" font-size="32" font-weight="600" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">富士山エリア</text>
   </g>
 </svg>
