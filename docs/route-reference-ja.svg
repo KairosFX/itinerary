@@ -1,103 +1,140 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
-  <title id="title">日本旅行の見やすいルート参考図</title>
-  <desc id="desc">大阪、京都、大阪、新大阪、小田原、箱根、富士山エリア、東京を、1本の分かりやすい線でつないだルート図。</desc>
+  <title id="title">日本旅行の地図風ルート参考図</title>
+  <desc id="desc">Googleマップ風のルート参考図。大阪から京都へ行って大阪に戻り、新大阪、小田原、箱根、河口湖と忍野八海を含む富士山エリア、そして東京へ進みます。</desc>
   <defs>
-    <linearGradient id="path" x1="20%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#c55443"/>
-      <stop offset="100%" stop-color="#415e4d"/>
-    </linearGradient>
-    <filter id="panelShadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#6c4c37" flood-opacity="0.08"/>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#5f6368" flood-opacity="0.12"/>
     </filter>
   </defs>
 
   <rect width="1200" height="560" rx="36" fill="#f7f0e6"/>
-  <g filter="url(#panelShadow)">
-    <rect x="44" y="44" width="1112" height="472" rx="28" fill="#fffdfa" stroke="#eaded0" stroke-width="2"/>
+  <g filter="url(#cardShadow)">
+    <rect x="44" y="44" width="1112" height="472" rx="28" fill="#eef3ef" stroke="#dde3e7" stroke-width="2"/>
   </g>
 
-  <g transform="translate(96 90)">
-    <text x="0" y="0" fill="#c55443" font-size="17" font-weight="700" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif" letter-spacing="2">ルートマップ</text>
-    <text x="0" y="40" fill="#1d2426" font-size="42" font-weight="700" font-family="'Yu Mincho', 'Hiragino Mincho ProN', serif">日本旅行</text>
-    <text x="0" y="74" fill="#667172" font-size="20" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">移動順がひと目で分かるルート</text>
+  <g>
+    <path d="M52 410C132 372 208 398 260 430C318 466 366 488 470 500H52Z" fill="#cfe3f3"/>
+    <path d="M810 430C874 402 930 402 1006 424C1070 444 1110 430 1148 404V516H810Z" fill="#d9e8f8"/>
+    <path d="M40 84C146 42 254 56 328 122C252 176 164 194 72 160C44 146 36 116 40 84Z" fill="#d9edd7"/>
+    <path d="M512 56C636 28 770 52 842 128C800 182 720 206 614 186C552 176 506 132 512 56Z" fill="#d6ead2"/>
+    <path d="M760 74C900 40 1040 66 1148 136V42H760Z" fill="#dcedd7"/>
   </g>
 
-  <path
-    d="M390 160V244L250 338H1030"
-    fill="none"
-    stroke="url(#path)"
-    stroke-width="10"
-    stroke-linecap="round"
-    stroke-linejoin="round"/>
+  <g fill="#ffffff" opacity="0.92">
+    <rect x="72" y="72" width="236" height="42" rx="21"/>
+    <rect x="324" y="72" width="80" height="34" rx="17"/>
+    <rect x="416" y="72" width="124" height="34" rx="17"/>
+    <rect x="552" y="72" width="94" height="34" rx="17"/>
+  </g>
+  <g font-family="'Hiragino Sans', 'Yu Gothic', sans-serif" fill="#5f6368">
+    <text x="108" y="98" font-size="15">ルート内を検索...</text>
+    <text x="350" y="93" font-size="14" font-weight="600">ガソリン</text>
+    <text x="439" y="93" font-size="14" font-weight="600">充電</text>
+    <text x="583" y="93" font-size="14" font-weight="600">ホテル</text>
+  </g>
 
-  <g fill="none" stroke="#d9c8b7" stroke-width="2" stroke-linecap="round">
-    <path d="M390 110V146"/>
-    <path d="M420 214H460"/>
-    <path d="M214 338H178"/>
-    <path d="M580 338V292"/>
-    <path d="M720 338V372"/>
-    <path d="M880 338V292"/>
-    <path d="M1030 338V292"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M88 378C176 340 250 332 338 340C474 352 604 384 758 390C920 396 1046 372 1128 336" stroke="#ffffff" stroke-width="10" opacity="0.95"/>
+    <path d="M118 164C204 202 294 234 374 242C502 256 620 244 738 226C876 204 986 188 1120 168" stroke="#ffffff" stroke-width="10" opacity="0.95"/>
+    <path d="M214 120C232 184 234 256 228 396" stroke="#ffffff" stroke-width="8" opacity="0.95"/>
+    <path d="M642 146C676 196 704 250 704 338" stroke="#ffffff" stroke-width="8" opacity="0.95"/>
+    <path d="M888 116C932 172 960 234 980 314" stroke="#ffffff" stroke-width="8" opacity="0.95"/>
+
+    <path d="M88 378C176 340 250 332 338 340C474 352 604 384 758 390C920 396 1046 372 1128 336" stroke="#d4d9de" stroke-width="3"/>
+    <path d="M118 164C204 202 294 234 374 242C502 256 620 244 738 226C876 204 986 188 1120 168" stroke="#d4d9de" stroke-width="3"/>
+    <path d="M214 120C232 184 234 256 228 396" stroke="#d4d9de" stroke-width="2.5"/>
+    <path d="M642 146C676 196 704 250 704 338" stroke="#d4d9de" stroke-width="2.5"/>
+    <path d="M888 116C932 172 960 234 980 314" stroke="#d4d9de" stroke-width="2.5"/>
+
+    <path d="M110 390C220 362 324 344 446 334C558 326 636 330 738 336" stroke="#f4cf66" stroke-width="4" opacity="0.9"/>
+    <path d="M720 338C784 324 844 288 914 236C954 206 996 182 1042 160" stroke="#f4cf66" stroke-width="4" opacity="0.9"/>
+  </g>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path
+      d="M176 392C216 352 256 312 310 250"
+      stroke="#8ab4f8"
+      stroke-width="6"
+      opacity="0.65"/>
+    <path
+      d="M232 400C284 372 334 350 430 338C516 328 592 332 694 360"
+      stroke="#8ab4f8"
+      stroke-width="6"
+      opacity="0.65"/>
+    <path
+      d="M620 326C670 290 726 248 822 214C900 188 962 178 1024 174"
+      stroke="#8ab4f8"
+      stroke-width="6"
+      opacity="0.65"/>
+
+    <path
+      d="M176 392C220 350 258 308 316 252C290 312 266 350 232 400C260 386 292 372 344 350C474 324 570 326 698 360C676 348 652 336 622 326C676 282 730 246 838 214C902 192 960 180 1006 176"
+      stroke="#174ea6"
+      stroke-width="14"/>
+    <path
+      d="M176 392C220 350 258 308 316 252C290 312 266 350 232 400C260 386 292 372 344 350C474 324 570 326 698 360C676 348 652 336 622 326C676 282 730 246 838 214C902 192 960 180 1006 176"
+      stroke="#4285f4"
+      stroke-width="8"/>
   </g>
 
   <g font-family="'Avenir Next', Arial, sans-serif" text-anchor="middle">
-    <g transform="translate(390 160)">
-      <circle r="18" fill="#c55443" stroke="#fffdfa" stroke-width="5"/>
-      <text y="5" fill="#ffffff" font-size="13" font-weight="700">1</text>
+    <g transform="translate(176 392)">
+      <circle r="15" fill="#ffffff" stroke="#1a73e8" stroke-width="4"/>
+      <text y="5" font-size="12" font-weight="700" fill="#1a73e8">1</text>
     </g>
-    <g transform="translate(390 244)">
-      <circle r="18" fill="#c55443" stroke="#fffdfa" stroke-width="5"/>
-      <text y="5" fill="#ffffff" font-size="13" font-weight="700">2</text>
+    <g transform="translate(316 252)">
+      <circle r="15" fill="#ffffff" stroke="#1a73e8" stroke-width="4"/>
+      <text y="5" font-size="12" font-weight="700" fill="#1a73e8">2</text>
     </g>
-    <g transform="translate(250 338)">
-      <circle r="18" fill="#c55443" stroke="#fffdfa" stroke-width="5"/>
-      <text y="5" fill="#ffffff" font-size="13" font-weight="700">3</text>
+    <g transform="translate(232 400)">
+      <circle r="15" fill="#ffffff" stroke="#1a73e8" stroke-width="4"/>
+      <text y="5" font-size="12" font-weight="700" fill="#1a73e8">3</text>
     </g>
-    <g transform="translate(420 338)">
-      <circle r="18" fill="#c55443" stroke="#fffdfa" stroke-width="5"/>
-      <text y="5" fill="#ffffff" font-size="13" font-weight="700">4</text>
+    <g transform="translate(344 350)">
+      <circle r="15" fill="#ffffff" stroke="#1a73e8" stroke-width="4"/>
+      <text y="5" font-size="12" font-weight="700" fill="#1a73e8">4</text>
     </g>
-    <g transform="translate(580 338)">
-      <circle r="18" fill="#556f60" stroke="#fffdfa" stroke-width="5"/>
-      <text y="5" fill="#ffffff" font-size="13" font-weight="700">5</text>
+    <g transform="translate(698 360)">
+      <circle r="15" fill="#ffffff" stroke="#1a73e8" stroke-width="4"/>
+      <text y="5" font-size="12" font-weight="700" fill="#1a73e8">5</text>
     </g>
-    <g transform="translate(720 338)">
-      <circle r="18" fill="#556f60" stroke="#fffdfa" stroke-width="5"/>
-      <text y="5" fill="#ffffff" font-size="13" font-weight="700">6</text>
+    <g transform="translate(622 326)">
+      <circle r="15" fill="#ffffff" stroke="#1a73e8" stroke-width="4"/>
+      <text y="5" font-size="12" font-weight="700" fill="#1a73e8">6</text>
     </g>
-    <g transform="translate(880 338)">
-      <circle r="18" fill="#556f60" stroke="#fffdfa" stroke-width="5"/>
-      <text y="5" fill="#ffffff" font-size="13" font-weight="700">7</text>
+    <g transform="translate(838 214)">
+      <circle r="15" fill="#ffffff" stroke="#1a73e8" stroke-width="4"/>
+      <text y="5" font-size="12" font-weight="700" fill="#1a73e8">7</text>
     </g>
-    <g transform="translate(1030 338)">
-      <circle r="20" fill="#415e4d" stroke="#fffdfa" stroke-width="5"/>
-      <text y="6" fill="#ffffff" font-size="14" font-weight="700">8</text>
+    <g transform="translate(1006 176)">
+      <circle r="16" fill="#ffffff" stroke="#1a73e8" stroke-width="4"/>
+      <text y="6" font-size="12" font-weight="700" fill="#1a73e8">8</text>
     </g>
   </g>
 
-  <g fill="#1d2426" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">
-    <text x="420" y="104" font-size="26" font-weight="700">大阪</text>
-    <text x="420" y="129" font-size="15" fill="#667172">1日目</text>
+  <g fill="#202124" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">
+    <text x="112" y="382" font-size="25" font-weight="700">大阪</text>
+    <text x="112" y="406" font-size="15" fill="#5f6368">1日目</text>
 
-    <text x="474" y="232" font-size="26" font-weight="700">京都</text>
-    <text x="474" y="257" font-size="15" fill="#667172">2日目</text>
+    <text x="338" y="238" font-size="25" font-weight="700">京都</text>
+    <text x="338" y="262" font-size="15" fill="#5f6368">2日目</text>
 
-    <text x="126" y="330" font-size="26" font-weight="700">大阪</text>
-    <text x="126" y="355" font-size="15" fill="#667172">3日目</text>
+    <text x="232" y="462" text-anchor="middle" font-size="25" font-weight="700">大阪</text>
+    <text x="232" y="486" text-anchor="middle" font-size="15" fill="#5f6368">3日目</text>
 
-    <text x="420" y="386" text-anchor="middle" font-size="24" font-weight="700">新大阪</text>
-    <text x="420" y="409" text-anchor="middle" font-size="15" fill="#667172">4日目</text>
+    <text x="344" y="332" text-anchor="middle" font-size="24" font-weight="700">新大阪</text>
+    <text x="344" y="312" text-anchor="middle" font-size="15" fill="#5f6368">4日目</text>
 
-    <text x="580" y="282" text-anchor="middle" font-size="24" font-weight="700">小田原</text>
-    <text x="580" y="305" text-anchor="middle" font-size="15" fill="#667172">5日目</text>
+    <text x="698" y="394" text-anchor="middle" font-size="24" font-weight="700">小田原</text>
+    <text x="698" y="418" text-anchor="middle" font-size="15" fill="#5f6368">5日目</text>
 
-    <text x="720" y="408" text-anchor="middle" font-size="24" font-weight="700">箱根</text>
-    <text x="720" y="431" text-anchor="middle" font-size="15" fill="#667172">5日目</text>
+    <text x="622" y="308" text-anchor="middle" font-size="24" font-weight="700">箱根</text>
+    <text x="622" y="288" text-anchor="middle" font-size="15" fill="#5f6368">5日目</text>
 
-    <text x="880" y="282" text-anchor="middle" font-size="24" font-weight="700">富士山エリア</text>
-    <text x="880" y="305" text-anchor="middle" font-size="15" fill="#667172">6日目</text>
+    <text x="838" y="176" text-anchor="middle" font-size="24" font-weight="700">富士山エリア</text>
+    <text x="838" y="198" text-anchor="middle" font-size="15" fill="#5f6368">河口湖・忍野八海</text>
 
-    <text x="1030" y="282" text-anchor="middle" font-size="26" font-weight="700">東京</text>
-    <text x="1030" y="305" text-anchor="middle" font-size="15" fill="#667172">7日目以降</text>
+    <text x="1006" y="132" text-anchor="middle" font-size="26" font-weight="700">東京</text>
+    <text x="1006" y="156" text-anchor="middle" font-size="15" fill="#5f6368">7日目以降</text>
   </g>
 </svg>
