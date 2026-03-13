@@ -25,7 +25,6 @@
       .route-node--fuji,
       .route-label--hakone,
       .route-label--fuji,
-      .route-note--fuji,
       .route-icon--hakone,
       .route-icon--fuji {
         transition:
@@ -54,11 +53,6 @@
       .route-hit-area--hakone:hover ~ .route-branch-label .route-label--fuji,
       .route-hit-area--fuji:hover ~ .route-branch-label .route-label--fuji {
         fill: #b54131;
-      }
-
-      .route-hit-area--hakone:hover ~ .route-branch-label .route-note--fuji,
-      .route-hit-area--fuji:hover ~ .route-branch-label .route-note--fuji {
-        fill: #8f2e22;
       }
 
       .route-hit-area--hakone:hover ~ .route-icons .route-icon--hakone,
@@ -165,6 +159,5 @@
 
   <g class="route-branch-label" fill="#262b2d" text-anchor="middle" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif">
     <text class="route-label--fuji" x="936" y="478" font-size="30" font-weight="700">富士山エリア</text>
-    <text class="route-note--fuji" x="936" y="508" font-size="18" font-weight="500" fill="#677173">任意の立ち寄り</text>
   </g>
 </svg>
