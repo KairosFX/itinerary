@@ -867,6 +867,57 @@
           Route diagram
         </object>
       </figure>
+
+      <section class="route-map card" aria-labelledby="route-map-title">
+        <div class="route-map__header">
+          <div class="route-map__copy">
+            <p class="section-tag section-tag--route">
+              <span data-language="en">Map View</span>
+              <span data-language="ja" hidden>地図表示</span>
+            </p>
+            <h3 id="route-map-title">
+              <span data-language="en">Secondary geographic reference</span>
+              <span data-language="ja" hidden>地理の参考マップ</span>
+            </h3>
+            <p>
+              <span data-language="en">A compact route map using MapLibre GL JS, OpenStreetMap tiles, and OSRM route geometry.</span>
+              <span data-language="ja" hidden>MapLibre GL JS、OpenStreetMap タイル、OSRM のルート形状を使った、コンパクトな補助地図です。</span>
+            </p>
+          </div>
+
+          <button
+            class="route-map__toggle"
+            type="button"
+            data-route-map-toggle
+            data-route-map-label-open-en="View map"
+            data-route-map-label-open-ja="地図を見る"
+            data-route-map-label-close-en="Hide map"
+            data-route-map-label-close-ja="地図を閉じる"
+            aria-expanded="false"
+            aria-controls="route-map-panel">
+            View map
+          </button>
+        </div>
+
+        <div class="route-map__panel" id="route-map-panel" hidden>
+          <div class="route-map__surface">
+            <div
+              class="route-map__canvas"
+              id="route-map-canvas"
+              role="region"
+              aria-live="polite"
+              data-aria-label-en="Interactive route map"
+              data-aria-label-ja="インタラクティブなルートマップ"
+              aria-label="Interactive route map"></div>
+            <div class="route-map__status" data-route-map-status hidden aria-live="polite">Loading map...</div>
+          </div>
+
+          <p class="route-map__meta">
+            <span data-language="en">A compact geographic reference under the route card. Live map attribution remains visible inside the panel.</span>
+            <span data-language="ja" hidden>ルートカードの下に置く、小さな地理の参考マップです。ライブ地図の帰属表示はパネル内にそのまま残ります。</span>
+          </p>
+        </div>
+      </section>
     </section>
     </div>
   </main>

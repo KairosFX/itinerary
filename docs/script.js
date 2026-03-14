@@ -9,6 +9,10 @@ const siteHeader = document.querySelector(".site-header");
 const welcomeOverlay = document.querySelector(".welcome-overlay");
 const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const routeMedia = document.querySelector(".route-reference__media");
+const routeMapToggle = document.querySelector("[data-route-map-toggle]");
+const routeMapPanel = document.getElementById("route-map-panel");
+const routeMapCanvas = document.getElementById("route-map-canvas");
+const routeMapStatus = document.querySelector("[data-route-map-status]");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
 const checklistInputs = Array.from(document.querySelectorAll('.day-card input[type="checkbox"]'));
 const progressItems = Array.from(document.querySelectorAll("[data-progress-item]"));
@@ -39,6 +43,49 @@ const welcomeStorageKey = "japan-trip-welcome-seen";
 const checklistStorageKey = "japan-trip-checklist-state";
 const completedHistoryStorageKey = "japan-trip-completed-history";
 const optionalDaysUnlockedStorageKey = "japan-trip-optional-days-unlocked";
+const routeMapAssetUrls = {
+  css: "https://unpkg.com/maplibre-gl@5.18.0/dist/maplibre-gl.css",
+  js: "https://unpkg.com/maplibre-gl@5.18.0/dist/maplibre-gl.js"
+};
+const routeMapStops = {
+  osaka: {
+    coordinates: [135.5023, 34.6937],
+    title: { en: "Osaka", ja: "大阪" },
+    subtitle: { en: "Days 1 & 3 · City base", ja: "1日目・3日目 · 旅の拠点" }
+  },
+  kyoto: {
+    coordinates: [135.7681, 35.0116],
+    title: { en: "Kyoto", ja: "京都" },
+    subtitle: { en: "Day 2 · Culture and temples", ja: "2日目 · 文化と寺社" }
+  },
+  odawara: {
+    coordinates: [139.1544, 35.2556],
+    title: { en: "Odawara", ja: "小田原" },
+    subtitle: { en: "Day 4 · Eastbound transfer", ja: "4日目 · 東へ向かう乗り換え" }
+  },
+  hakone: {
+    coordinates: [139.1039, 35.2323],
+    title: { en: "Hakone", ja: "箱根" },
+    subtitle: { en: "Days 4 & 5 · Scenic stay", ja: "4日目・5日目 · 景色を楽しむ滞在" }
+  },
+  fuji: {
+    coordinates: [138.7598, 35.4894],
+    title: { en: "Mt. Fuji area", ja: "富士山エリア" },
+    subtitle: { en: "Day 6 · Scenic side trip", ja: "6日目 · 景色を楽しむ寄り道" }
+  },
+  tokyo: {
+    coordinates: [139.6917, 35.6895],
+    title: { en: "Tokyo", ja: "東京" },
+    subtitle: { en: "Day 7 onward · Final stop", ja: "7日目以降 · 最後の都市" }
+  }
+};
+const routeMapSegmentDefinitions = [
+  { id: "segment-osaka-kyoto", from: "osaka", to: "kyoto", day: "2", kind: "main" },
+  { id: "segment-kyoto-odawara", from: "kyoto", to: "odawara", day: "4", kind: "main" },
+  { id: "segment-odawara-hakone", from: "odawara", to: "hakone", day: "4", kind: "main" },
+  { id: "segment-hakone-tokyo", from: "hakone", to: "tokyo", day: "7", kind: "main" },
+  { id: "segment-hakone-fuji", from: "hakone", to: "fuji", day: "6", kind: "branch" }
+];
 const routeStopProgressConfig = {
   osaka: { stopId: "route-stop-osaka", days: ["1", "3"] },
   kyoto: { stopId: "route-stop-kyoto", days: ["2"] },
@@ -80,6 +127,12 @@ let sequenceNoticeTimer = 0;
 let lastTimelineFocusDay = null;
 let optionalDaysUnlocked = false;
 let optionalPromptIsCompact = false;
+let routeMapInstance = null;
+let routeMapLibraryPromise = null;
+let routeMapInitializationPromise = null;
+let routeMapSegments = [];
+let routeMapMarkers = new Map();
+let routeMapStatusMode = null;
 
 function getOrderedDayNumbers() {
   return dayCards
@@ -476,6 +529,624 @@ function updateProgressOverview() {
   });
 }
 
+function getRouteMapMessage(key) {
+  const language = root.lang === "ja" ? "ja" : "en";
+  const messages = {
+    en: {
+      open: "View map",
+      close: "Hide map",
+      loading: "Loading live map…",
+      fallback: "Live routing is unavailable right now. Showing a simplified path.",
+      error: "Map could not load right now."
+    },
+    ja: {
+      open: "地図を見る",
+      close: "地図を閉じる",
+      loading: "ライブ地図を読み込み中…",
+      fallback: "ライブの経路を取得できないため、簡易ルートを表示しています。",
+      error: "現在は地図を読み込めません。"
+    }
+  };
+
+  return messages[language][key];
+}
+
+function updateRouteMapToggleLabel() {
+  if (!routeMapToggle) {
+    return;
+  }
+
+  const isExpanded = routeMapToggle.getAttribute("aria-expanded") === "true";
+  const nextLabel = isExpanded ? getRouteMapMessage("close") : getRouteMapMessage("open");
+  routeMapToggle.textContent = nextLabel;
+}
+
+function renderRouteMapStatus() {
+  if (!routeMapStatus) {
+    return;
+  }
+
+  if (!routeMapStatusMode) {
+    routeMapStatus.hidden = true;
+    routeMapStatus.textContent = "";
+    return;
+  }
+
+  routeMapStatus.hidden = false;
+  routeMapStatus.textContent = getRouteMapMessage(routeMapStatusMode);
+}
+
+function setRouteMapOpen(nextOpen) {
+  if (!routeMapPanel || !routeMapToggle) {
+    return;
+  }
+
+  const isOpen = Boolean(nextOpen);
+  routeMapPanel.hidden = !isOpen;
+  routeMapToggle.setAttribute("aria-expanded", String(isOpen));
+  updateRouteMapToggleLabel();
+
+  if (!isOpen) {
+    return;
+  }
+
+  initializeRouteMap()
+    .then(() => {
+      if (!routeMapInstance) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => {
+        routeMapInstance.resize();
+        fitRouteMapBounds();
+        syncRouteMapState();
+      });
+    })
+    .catch(() => {
+      routeMapStatusMode = "error";
+      renderRouteMapStatus();
+    });
+}
+
+function ensureRouteMapAssets() {
+  if (window.maplibregl) {
+    return Promise.resolve(window.maplibregl);
+  }
+
+  if (routeMapLibraryPromise) {
+    return routeMapLibraryPromise;
+  }
+
+  routeMapLibraryPromise = new Promise((resolve, reject) => {
+    let script = document.querySelector("script[data-route-maplibre='script']");
+    const existingLink = document.querySelector("link[data-route-maplibre='css']");
+
+    if (!existingLink) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = routeMapAssetUrls.css;
+      link.dataset.routeMaplibre = "css";
+      document.head.append(link);
+    }
+
+    if (!script) {
+      script = document.createElement("script");
+      script.src = routeMapAssetUrls.js;
+      script.async = true;
+      script.dataset.routeMaplibre = "script";
+      document.head.append(script);
+    }
+
+    const resolveLibrary = () => {
+      if (window.maplibregl) {
+        resolve(window.maplibregl);
+      } else {
+        reject(new Error("MapLibre library failed to initialize."));
+      }
+    };
+
+    script.addEventListener("load", resolveLibrary, { once: true });
+    script.addEventListener(
+      "error",
+      () => {
+        routeMapLibraryPromise = null;
+        reject(new Error("MapLibre library failed to load."));
+      },
+      { once: true }
+    );
+
+    if (window.maplibregl) {
+      resolve(window.maplibregl);
+    }
+  });
+
+  return routeMapLibraryPromise;
+}
+
+function buildRouteMapStyle() {
+  return {
+    version: 8,
+    sources: {
+      osmRaster: {
+        type: "raster",
+        tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+        tileSize: 256,
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>'
+      }
+    },
+    layers: [
+      {
+        id: "route-map-background",
+        type: "background",
+        paint: {
+          "background-color": "#14171b"
+        }
+      },
+      {
+        id: "route-map-raster",
+        type: "raster",
+        source: "osmRaster",
+        paint: {
+          "raster-opacity": 0.54,
+          "raster-saturation": -0.72,
+          "raster-contrast": 0.18,
+          "raster-brightness-min": 0.18,
+          "raster-brightness-max": 0.88
+        }
+      }
+    ]
+  };
+}
+
+function buildFallbackGeometry(fromCoordinates, toCoordinates) {
+  return {
+    type: "LineString",
+    coordinates: [fromCoordinates, toCoordinates]
+  };
+}
+
+async function fetchRouteMapGeometry(fromCoordinates, toCoordinates) {
+  const [fromLng, fromLat] = fromCoordinates;
+  const [toLng, toLat] = toCoordinates;
+  const url =
+    `https://router.project-osrm.org/route/v1/driving/${fromLng},${fromLat};${toLng},${toLat}` +
+    "?overview=full&geometries=geojson";
+
+  const response = await window.fetch(url);
+  if (!response.ok) {
+    throw new Error(`OSRM route request failed with status ${response.status}.`);
+  }
+
+  const data = await response.json();
+  const geometry = data.routes?.[0]?.geometry;
+  if (!geometry || geometry.type !== "LineString") {
+    throw new Error("OSRM route response did not include a GeoJSON line.");
+  }
+
+  return geometry;
+}
+
+async function loadRouteMapSegments() {
+  const segments = await Promise.all(
+    routeMapSegmentDefinitions.map(async (segment) => {
+      const fromCoordinates = routeMapStops[segment.from].coordinates;
+      const toCoordinates = routeMapStops[segment.to].coordinates;
+
+      try {
+        const geometry = await fetchRouteMapGeometry(fromCoordinates, toCoordinates);
+        return {
+          ...segment,
+          geometry,
+          usesFallback: false
+        };
+      } catch (error) {
+        return {
+          ...segment,
+          geometry: buildFallbackGeometry(fromCoordinates, toCoordinates),
+          usesFallback: true
+        };
+      }
+    })
+  );
+
+  routeMapStatusMode = segments.some((segment) => segment.usesFallback) ? "fallback" : null;
+  return segments;
+}
+
+function getRouteMapSegmentState(dayKey) {
+  if (warningDays.has(dayKey)) {
+    return "warning";
+  }
+
+  if (completedDays.has(dayKey)) {
+    return "complete";
+  }
+
+  if (String(currentProgressDay) === dayKey && unlockedDays.has(dayKey)) {
+    return "current";
+  }
+
+  if (unlockedDays.has(dayKey)) {
+    return "available";
+  }
+
+  return "locked";
+}
+
+function buildRouteMapFeatureCollection() {
+  return {
+    type: "FeatureCollection",
+    features: routeMapSegments.map((segment) => ({
+      type: "Feature",
+      properties: {
+        id: segment.id,
+        kind: segment.kind,
+        state: getRouteMapSegmentState(segment.day)
+      },
+      geometry: segment.geometry
+    }))
+  };
+}
+
+function addRouteMapLayers() {
+  if (!routeMapInstance || routeMapInstance.getSource("route-map-segments")) {
+    return;
+  }
+
+  routeMapInstance.addSource("route-map-segments", {
+    type: "geojson",
+    data: buildRouteMapFeatureCollection()
+  });
+
+  const segmentColorExpression = [
+    "match",
+    ["get", "state"],
+    "complete",
+    "#d7745f",
+    "current",
+    "#f0c1b4",
+    "warning",
+    "#d09d59",
+    "available",
+    "#a77466",
+    "#524844"
+  ];
+  const segmentOpacityExpression = [
+    "match",
+    ["get", "state"],
+    "complete",
+    0.98,
+    "current",
+    0.94,
+    "warning",
+    0.9,
+    "available",
+    0.58,
+    0
+  ];
+
+  routeMapInstance.addLayer({
+    id: "route-map-main-base",
+    type: "line",
+    source: "route-map-segments",
+    filter: ["==", ["get", "kind"], "main"],
+    layout: {
+      "line-cap": "round",
+      "line-join": "round"
+    },
+    paint: {
+      "line-color": "rgba(255, 243, 235, 0.24)",
+      "line-width": ["interpolate", ["linear"], ["zoom"], 4, 3.4, 7, 5.4],
+      "line-opacity": 0.5
+    }
+  });
+
+  routeMapInstance.addLayer({
+    id: "route-map-main-glow",
+    type: "line",
+    source: "route-map-segments",
+    filter: ["==", ["get", "kind"], "main"],
+    layout: {
+      "line-cap": "round",
+      "line-join": "round"
+    },
+    paint: {
+      "line-color": segmentColorExpression,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 4, 7.6, 7, 11.4],
+      "line-opacity": ["*", segmentOpacityExpression, 0.28],
+      "line-blur": 8
+    }
+  });
+
+  routeMapInstance.addLayer({
+    id: "route-map-main-active",
+    type: "line",
+    source: "route-map-segments",
+    filter: ["==", ["get", "kind"], "main"],
+    layout: {
+      "line-cap": "round",
+      "line-join": "round"
+    },
+    paint: {
+      "line-color": segmentColorExpression,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 4, 3.8, 7, 5.8],
+      "line-opacity": segmentOpacityExpression
+    }
+  });
+
+  routeMapInstance.addLayer({
+    id: "route-map-branch-base",
+    type: "line",
+    source: "route-map-segments",
+    filter: ["==", ["get", "kind"], "branch"],
+    layout: {
+      "line-cap": "round",
+      "line-join": "round"
+    },
+    paint: {
+      "line-color": "rgba(255, 243, 235, 0.18)",
+      "line-width": ["interpolate", ["linear"], ["zoom"], 4, 2.2, 7, 3.4],
+      "line-opacity": 0.52,
+      "line-dasharray": [0.4, 1.7]
+    }
+  });
+
+  routeMapInstance.addLayer({
+    id: "route-map-branch-active",
+    type: "line",
+    source: "route-map-segments",
+    filter: ["==", ["get", "kind"], "branch"],
+    layout: {
+      "line-cap": "round",
+      "line-join": "round"
+    },
+    paint: {
+      "line-color": segmentColorExpression,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 4, 2.7, 7, 3.9],
+      "line-opacity": ["*", segmentOpacityExpression, 0.94],
+      "line-dasharray": [0.35, 1.75]
+    }
+  });
+}
+
+function buildRouteMapPopupContent(stopKey) {
+  const language = root.lang === "ja" ? "ja" : "en";
+  const stop = routeMapStops[stopKey];
+
+  return `
+    <p class="route-map__popup-title">${stop.title[language]}</p>
+    <p class="route-map__popup-meta">${stop.subtitle[language]}</p>
+  `;
+}
+
+function getPreferredDayForStop(stopKey) {
+  const config = routeStopProgressConfig[stopKey];
+  if (!config) {
+    return 1;
+  }
+
+  const relevantDays = config.days.filter((day) => optionalDaysUnlocked || Number(day) <= 7);
+  const incompleteUnlockedDay = relevantDays.find(
+    (day) => unlockedDays.has(day) && !completedDays.has(day)
+  );
+  if (incompleteUnlockedDay) {
+    return Number(incompleteUnlockedDay);
+  }
+
+  const currentDay = relevantDays.find((day) => day === String(currentProgressDay));
+  if (currentDay) {
+    return Number(currentDay);
+  }
+
+  const latestUnlockedDay = [...relevantDays].reverse().find((day) => unlockedDays.has(day));
+  return Number(latestUnlockedDay || relevantDays[0] || 1);
+}
+
+function getRouteMapStopState(stopKey) {
+  const config = routeStopProgressConfig[stopKey];
+  const relevantDays = config.days.filter((day) => optionalDaysUnlocked || Number(day) <= 7);
+  const isComplete = relevantDays.length > 0 && relevantDays.every((day) => completedDays.has(day));
+  const isCurrent = stopKey === routeDayToStopKey[getCurrentProgressDay()];
+  const isWarning = relevantDays.some((day) => warningDays.has(day));
+  const isUnlocked = relevantDays.some((day) => unlockedDays.has(day));
+  const hasProgress = relevantDays.some((day) => {
+    const dayCard = dayCardMap.get(day);
+    return dayCard ? getDayCompletionRatio(dayCard) > 0 : false;
+  });
+
+  return {
+    isComplete,
+    isCurrent,
+    isWarning,
+    isUnlocked,
+    hasProgress
+  };
+}
+
+function createRouteMapMarkers(maplibregl) {
+  if (!routeMapInstance) {
+    return;
+  }
+
+  routeMapMarkers.forEach(({ marker }) => marker.remove());
+  routeMapMarkers = new Map();
+
+  Object.entries(routeMapStops).forEach(([stopKey, stop]) => {
+    const markerElement = document.createElement("button");
+    markerElement.type = "button";
+    markerElement.className = "route-map__marker";
+    markerElement.setAttribute("aria-label", stop.title[root.lang === "ja" ? "ja" : "en"]);
+
+    const popup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 18,
+      className: "route-map__popup"
+    });
+
+    const marker = new maplibregl.Marker({
+      element: markerElement,
+      anchor: "center"
+    })
+      .setLngLat(stop.coordinates)
+      .addTo(routeMapInstance);
+
+    const showPopup = () => {
+      markerElement.classList.add("is-hovered");
+      popup
+        .setLngLat(stop.coordinates)
+        .setHTML(buildRouteMapPopupContent(stopKey))
+        .addTo(routeMapInstance);
+    };
+
+    const hidePopup = () => {
+      markerElement.classList.remove("is-hovered");
+      popup.remove();
+    };
+
+    markerElement.addEventListener("mouseenter", showPopup);
+    markerElement.addEventListener("mouseleave", hidePopup);
+    markerElement.addEventListener("focus", showPopup);
+    markerElement.addEventListener("blur", hidePopup);
+    markerElement.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const targetDay = getPreferredDayForStop(stopKey);
+      if (targetDay > accessibleDay || !unlockedDays.has(String(targetDay))) {
+        showSequenceNotice(accessibleDay);
+        return;
+      }
+
+      hidePopup();
+      scrollToChecklistDay(targetDay);
+    });
+
+    markerElement.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        markerElement.click();
+      }
+    });
+
+    routeMapMarkers.set(stopKey, { marker, markerElement, popup });
+  });
+}
+
+function fitRouteMapBounds() {
+  if (!routeMapInstance || !window.maplibregl) {
+    return;
+  }
+
+  const bounds = new window.maplibregl.LngLatBounds();
+  Object.values(routeMapStops).forEach((stop) => bounds.extend(stop.coordinates));
+
+  routeMapInstance.fitBounds(bounds, {
+    padding: { top: 36, right: 34, bottom: 40, left: 34 },
+    duration: 0,
+    maxZoom: 6.25
+  });
+}
+
+function syncRouteMapState() {
+  if (!routeMapInstance) {
+    updateRouteMapToggleLabel();
+    renderRouteMapStatus();
+    return;
+  }
+
+  const source = routeMapInstance.getSource("route-map-segments");
+  if (source) {
+    source.setData(buildRouteMapFeatureCollection());
+  }
+
+  routeMapMarkers.forEach(({ markerElement, popup }, stopKey) => {
+    const { isComplete, isCurrent, isWarning, isUnlocked, hasProgress } = getRouteMapStopState(stopKey);
+    const language = root.lang === "ja" ? "ja" : "en";
+    const stop = routeMapStops[stopKey];
+
+    markerElement.classList.toggle("is-complete", isComplete);
+    markerElement.classList.toggle("is-current", isCurrent);
+    markerElement.classList.toggle("is-warning", isWarning);
+    markerElement.classList.toggle("is-locked", !isUnlocked);
+    markerElement.classList.toggle("is-progress", hasProgress && !isComplete && !isWarning);
+    markerElement.setAttribute("aria-label", stop.title[language]);
+
+    if (popup.isOpen()) {
+      popup.setHTML(buildRouteMapPopupContent(stopKey));
+    }
+  });
+
+  updateRouteMapToggleLabel();
+  renderRouteMapStatus();
+}
+
+async function initializeRouteMap() {
+  if (!routeMapCanvas) {
+    return null;
+  }
+
+  if (routeMapInstance) {
+    return routeMapInstance;
+  }
+
+  if (routeMapInitializationPromise) {
+    return routeMapInitializationPromise;
+  }
+
+  routeMapStatusMode = "loading";
+  renderRouteMapStatus();
+
+  routeMapInitializationPromise = ensureRouteMapAssets()
+    .then((maplibregl) => new Promise((resolve, reject) => {
+      routeMapInstance = new maplibregl.Map({
+        container: routeMapCanvas,
+        style: buildRouteMapStyle(),
+        center: [137.52, 35.21],
+        zoom: 5.25,
+        minZoom: 4.65,
+        maxZoom: 9,
+        attributionControl: false,
+        dragRotate: false,
+        touchZoomRotate: false,
+        scrollZoom: false,
+        preserveDrawingBuffer: false
+      });
+
+      routeMapInstance.addControl(
+        new maplibregl.AttributionControl({ compact: true }),
+        "bottom-right"
+      );
+      routeMapInstance.dragRotate.disable();
+      routeMapInstance.touchZoomRotate.disableRotation();
+
+      routeMapInstance.on("load", async () => {
+        try {
+          routeMapSegments = await loadRouteMapSegments();
+          addRouteMapLayers();
+          createRouteMapMarkers(maplibregl);
+          fitRouteMapBounds();
+          syncRouteMapState();
+          resolve(routeMapInstance);
+        } catch (error) {
+          routeMapStatusMode = "error";
+          renderRouteMapStatus();
+          reject(error);
+        }
+      });
+    }))
+    .catch((error) => {
+      routeMapInitializationPromise = null;
+      routeMapInstance = null;
+      routeMapStatusMode = "error";
+      renderRouteMapStatus();
+      throw error;
+    });
+
+  return routeMapInitializationPromise;
+}
+
 function syncOptionalDaysUI() {
   const canOfferOptionalDays = completedHistoryDays.has("7");
 
@@ -711,6 +1382,7 @@ function refreshChecklistProgressState() {
   accessibleDay = nextAccessibleDay;
   currentProgressDay = nextCurrentDay;
   updateRouteProgress();
+  syncRouteMapState();
 }
 
 function celebrateCompletedDay(day) {
@@ -895,6 +1567,7 @@ function setLanguage(language) {
   storeLanguage(nextLanguage);
   refreshChecklistProgressState();
   syncProgressTimeline();
+  syncRouteMapState();
 }
 
 function handleLanguageButtonClick(button) {
@@ -924,6 +1597,16 @@ function setActivePanel(panelId) {
   if (hasMatch) {
     refreshRevealPanel(panelId);
     syncProgressTimeline();
+    if (
+      panelId === "route" &&
+      routeMapInstance &&
+      routeMapToggle?.getAttribute("aria-expanded") === "true"
+    ) {
+      window.requestAnimationFrame(() => {
+        routeMapInstance.resize();
+        fitRouteMapBounds();
+      });
+    }
   }
 
   return hasMatch;
@@ -970,7 +1653,7 @@ function syncParallax() {
 function registerRevealBlocks() {
   const revealBlocks = Array.from(
     document.querySelectorAll(
-      ".hero-panel, .trip-stats, .progress-card, .section-heading, .day-card, .note-card, .route-reference, .site-footer__lead, .site-footer__links"
+      ".hero-panel, .trip-stats, .progress-card, .section-heading, .day-card, .note-card, .route-reference, .route-map, .site-footer__lead, .site-footer__links"
     )
   );
 
@@ -1042,6 +1725,8 @@ setActivePanel("checklist");
 setActiveProgressItem(getCurrentProgressDay());
 syncParallax();
 syncProgressTimeline();
+updateRouteMapToggleLabel();
+renderRouteMapStatus();
 
 dayCards.forEach((card) => {
   card.addEventListener("click", (event) => {
@@ -1098,6 +1783,13 @@ sectionTabs.forEach((tab) => {
     scrollToPanelStart(tab.dataset.panelTarget);
   });
 });
+
+if (routeMapToggle) {
+  routeMapToggle.addEventListener("click", () => {
+    const nextOpen = routeMapToggle.getAttribute("aria-expanded") !== "true";
+    setRouteMapOpen(nextOpen);
+  });
+}
 
 if (jumpCurrentDayButton) {
   jumpCurrentDayButton.addEventListener("click", () => {
