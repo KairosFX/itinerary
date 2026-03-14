@@ -22,9 +22,9 @@
     </linearGradient>
   </defs>
 
-  <g opacity="0.88">
+  <g opacity="0.3">
     <circle cx="1192" cy="198" r="178" fill="url(#sunGlow)"/>
-    <circle cx="1114" cy="276" r="88" fill="#cb5a4d" opacity="0.05" filter="url(#softBlur)"/>
+    <circle cx="1114" cy="276" r="88" fill="#cb5a4d" opacity="0.03" filter="url(#softBlur)"/>
   </g>
 
   <g filter="url(#mistBlur)" opacity="0.72">
@@ -38,13 +38,13 @@
     <path d="M0 954C190 910 370 912 568 960C756 1006 948 1018 1130 984C1298 952 1430 944 1600 982V1200H0Z" fill="#edf1ec" opacity="0.52"/>
   </g>
 
-  <g transform="translate(248 694)" opacity="0.26">
+  <g transform="translate(248 694)" opacity="0.14">
     <path d="M0 204C54 204 88 172 116 130C142 90 170 44 214 18C264 46 292 92 320 136C348 180 386 206 438 206" fill="none" stroke="#9ba59e" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M156 78C176 56 196 36 214 18C232 36 252 56 272 78" fill="none" stroke="#ffffff" stroke-opacity="0.54" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M-34 222C72 202 174 198 282 218C380 236 462 234 544 214" fill="none" stroke="#ffffff" stroke-opacity="0.32" stroke-width="6" stroke-linecap="round"/>
   </g>
 
-  <g opacity="0.18">
+  <g opacity="0.12">
     <path d="M118 182C160 196 196 232 228 286" fill="none" stroke="#c47a70" stroke-width="8" stroke-linecap="round"/>
     <circle cx="132" cy="188" r="15" fill="#efd7d3"/>
     <circle cx="156" cy="204" r="12" fill="#f4e4df"/>
@@ -53,7 +53,7 @@
     <circle cx="226" cy="282" r="10" fill="#efd7d3"/>
   </g>
 
-  <g opacity="0.14" stroke="#d4c5b8" stroke-width="5.5" stroke-linecap="round" fill="none">
+  <g opacity="0.08" stroke="#d4c5b8" stroke-width="5.5" stroke-linecap="round" fill="none">
     <path d="M960 204C1028 178 1102 184 1174 212"/>
     <path d="M910 252C998 224 1086 230 1170 258"/>
   </g>

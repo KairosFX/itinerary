@@ -66,13 +66,13 @@
       .progress-segment {
         opacity: 0;
         stroke: #8e352b;
-        stroke-width: 9;
+        stroke-width: 7.6;
         stroke-linecap: round;
         stroke-linejoin: round;
       }
 
       .progress-segment--branch {
-        stroke-width: 4;
+        stroke-width: 3.3;
         stroke-dasharray: 6 8;
       }
 
@@ -347,14 +347,14 @@
 
   <g clip-path="url(#panelClip)" class="scene">
     <rect x="86" y="84" width="1028" height="392" rx="26" fill="url(#panelSky)"/>
-    <circle cx="994" cy="136" r="66" fill="#f1dcd3" opacity="0.22"/>
+    <circle cx="1008" cy="134" r="72" fill="#f1dcd3" opacity="0.16"/>
     <path d="M86 444C222 404 364 406 506 438C664 474 840 480 1114 430V476H86Z" fill="#ebf0e8"/>
     <path d="M86 454C224 426 374 428 542 456C724 486 906 488 1114 444V476H86Z" fill="#e2e9e2"/>
-    <path d="M104 184C130 196 148 214 170 246" fill="none" stroke="#d5b7ae" stroke-width="8" stroke-linecap="round" opacity="0.28"/>
-    <circle cx="116" cy="192" r="11" fill="#f6e1db" opacity="0.66"/>
-    <circle cx="138" cy="208" r="9" fill="#f8e9e3" opacity="0.74"/>
-    <circle cx="158" cy="226" r="10" fill="#f6e1db" opacity="0.64"/>
-    <circle cx="178" cy="246" r="8" fill="#f8e9e3" opacity="0.72"/>
+    <path d="M104 184C130 196 148 214 170 246" fill="none" stroke="#d5b7ae" stroke-width="8" stroke-linecap="round" opacity="0.18"/>
+    <circle cx="116" cy="192" r="11" fill="#f6e1db" opacity="0.48"/>
+    <circle cx="138" cy="208" r="9" fill="#f8e9e3" opacity="0.56"/>
+    <circle cx="158" cy="226" r="10" fill="#f6e1db" opacity="0.44"/>
+    <circle cx="178" cy="246" r="8" fill="#f8e9e3" opacity="0.52"/>
     <path d="M746 186C792 172 844 174 890 188" fill="none" stroke="#ebe1d6" stroke-width="10" stroke-linecap="round" opacity="0.36"/>
     <path d="M704 214C758 198 824 200 884 216" fill="none" stroke="#ebe1d6" stroke-width="8" stroke-linecap="round" opacity="0.28"/>
   </g>
@@ -363,25 +363,25 @@
     <text x="126" y="126" fill="#ab4a3b" font-size="18" font-weight="700" letter-spacing="2.4">移動ルート</text>
     <text x="248" y="126" fill="#ab4a3b" font-size="20" font-weight="700">→</text>
     <text x="188" y="152" text-anchor="middle" fill="#ab4a3b" font-size="15" font-weight="700" letter-spacing="1.8">出発</text>
-    <text x="1008" y="152" text-anchor="middle" fill="#ab4a3b" font-size="15" font-weight="700" letter-spacing="1.8">到着</text>
+    <text x="1044" y="152" text-anchor="middle" fill="#ab4a3b" font-size="15" font-weight="700" letter-spacing="1.8">到着</text>
   </g>
 
   <g class="route-static" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M176 320H1020" stroke="#b79d90" stroke-width="16" opacity="0.14"/>
-    <path class="route-main-animated" d="M176 320H1020" stroke="url(#trackTint)" stroke-width="8"/>
-    <path class="route-main-animated" d="M176 320H1020" stroke="#eb9a84" stroke-width="2.4" opacity="0.42"/>
-    <path id="route-progress-kyoto" class="progress-segment" d="M188 320H392"/>
-    <path id="route-progress-odawara" class="progress-segment" d="M392 320H596"/>
-    <path id="route-progress-hakone" class="progress-segment" d="M596 320H800"/>
-    <path id="route-progress-tokyo" class="progress-segment" d="M800 320H1008"/>
-    <path class="route-arrow route-arrow--1" d="M277 311L287 320L277 329" stroke="#8e352b" stroke-width="3.8"/>
-    <path class="route-arrow route-arrow--2" d="M481 311L491 320L481 329" stroke="#8e352b" stroke-width="3.8"/>
-    <path class="route-arrow route-arrow--3" d="M685 311L695 320L685 329" stroke="#8e352b" stroke-width="3.8"/>
-    <path class="route-arrow route-arrow--4" d="M889 311L899 320L889 329" stroke="#8e352b" stroke-width="3.8"/>
+    <path d="M176 320H1044" stroke="#b79d90" stroke-width="13.5" opacity="0.12"/>
+    <path class="route-main-animated" d="M176 320H1044" stroke="url(#trackTint)" stroke-width="6.8"/>
+    <path class="route-main-animated" d="M176 320H1044" stroke="#eb9a84" stroke-width="2.1" opacity="0.36"/>
+    <path id="route-progress-kyoto" class="progress-segment" d="M188 320H402"/>
+    <path id="route-progress-odawara" class="progress-segment" d="M402 320H616"/>
+    <path id="route-progress-hakone" class="progress-segment" d="M616 320H830"/>
+    <path id="route-progress-tokyo" class="progress-segment" d="M830 320H1044"/>
+    <path class="route-arrow route-arrow--1" d="M285 312L294 320L285 328" stroke="#8e352b" stroke-width="3.4"/>
+    <path class="route-arrow route-arrow--2" d="M499 312L508 320L499 328" stroke="#8e352b" stroke-width="3.4"/>
+    <path class="route-arrow route-arrow--3" d="M713 312L722 320L713 328" stroke="#8e352b" stroke-width="3.4"/>
+    <path class="route-arrow route-arrow--4" d="M927 312L936 320L927 328" stroke="#8e352b" stroke-width="3.4"/>
   </g>
 
   <g class="interactive route-stop" id="route-stop-osaka" data-scroll-day="1" tabindex="0" role="link" aria-label="1日目のチェックリストを開く" transform="translate(188 320)">
-    <circle class="hit-area" r="38"/>
+    <circle class="hit-area" r="40"/>
     <g transform="translate(-88 -112)">
       <g class="tooltip-ui tooltip">
         <rect x="0" y="0" width="176" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
@@ -392,12 +392,12 @@
     </g>
     <circle class="node-progress-track" r="18"/>
     <circle class="node-progress" r="18" data-circumference="113.097" stroke-dasharray="113.097" stroke-dashoffset="113.097" transform="rotate(-90)"/>
-    <circle class="node-halo" r="22" fill="#ab4a3b"/>
-    <circle class="node node--1" r="11.5" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
+    <circle class="node-halo" r="23.5" fill="#ab4a3b"/>
+    <circle class="node node--1" r="12.7" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
   </g>
 
-  <g class="interactive route-stop" id="route-stop-kyoto" data-scroll-day="2" tabindex="0" role="link" aria-label="2日目のチェックリストを開く" transform="translate(392 320)">
-    <circle class="hit-area" r="38"/>
+  <g class="interactive route-stop" id="route-stop-kyoto" data-scroll-day="2" tabindex="0" role="link" aria-label="2日目のチェックリストを開く" transform="translate(402 320)">
+    <circle class="hit-area" r="40"/>
     <g transform="translate(-94 -112)">
       <g class="tooltip-ui tooltip">
         <rect x="0" y="0" width="188" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
@@ -408,11 +408,11 @@
     </g>
     <circle class="node-progress-track" r="18"/>
     <circle class="node-progress" r="18" data-circumference="113.097" stroke-dasharray="113.097" stroke-dashoffset="113.097" transform="rotate(-90)"/>
-    <circle class="node-halo" r="22" fill="#ab4a3b"/>
-    <circle class="node node--2" r="11.5" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
+    <circle class="node-halo" r="23" fill="#ab4a3b"/>
+    <circle class="node node--2" r="12.4" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
   </g>
 
-  <g class="interactive route-stop" id="route-stop-odawara" data-scroll-day="4" tabindex="0" role="link" aria-label="4日目のチェックリストを開く" transform="translate(596 320)">
+  <g class="interactive route-stop" id="route-stop-odawara" data-scroll-day="4" tabindex="0" role="link" aria-label="4日目のチェックリストを開く" transform="translate(616 320)">
     <circle class="hit-area" r="38"/>
     <g transform="translate(-88 -112)">
       <g class="tooltip-ui tooltip">
@@ -424,16 +424,16 @@
     </g>
     <circle class="node-progress-track" r="18"/>
     <circle class="node-progress" r="18" data-circumference="113.097" stroke-dasharray="113.097" stroke-dashoffset="113.097" transform="rotate(-90)"/>
-    <circle class="node-halo" r="22" fill="#ab4a3b"/>
-    <circle class="node node--3" r="11.5" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
+    <circle class="node-halo" r="21" fill="#ab4a3b"/>
+    <circle class="node node--3" r="10.9" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
   </g>
 
   <g class="branch-cluster">
-    <path class="branch-line" d="M800 332C806 376 838 402 878 410" fill="none" stroke="#d0a08f" stroke-width="3.1" stroke-dasharray="6 8" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
-    <path id="route-progress-fuji" class="progress-segment progress-segment--branch" d="M800 332C806 376 838 402 878 410"/>
+    <path class="branch-line" d="M830 332C836 378 868 404 914 420" fill="none" stroke="#d0a08f" stroke-width="3.1" stroke-dasharray="6 8" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
+    <path id="route-progress-fuji" class="progress-segment progress-segment--branch" d="M830 332C836 378 868 404 914 420"/>
 
-    <g class="interactive route-stop" id="route-stop-hakone" data-scroll-day="4" tabindex="0" role="link" aria-label="4日目のチェックリストを開く" transform="translate(800 320)">
-      <circle class="hit-area" r="40"/>
+    <g class="interactive route-stop" id="route-stop-hakone" data-scroll-day="4" tabindex="0" role="link" aria-label="4日目のチェックリストを開く" transform="translate(830 320)">
+      <circle class="hit-area" r="41"/>
       <g transform="translate(-98 -112)">
         <g class="tooltip-ui tooltip">
           <rect x="0" y="0" width="196" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
@@ -444,12 +444,12 @@
       </g>
       <circle class="node-progress-track" r="18"/>
       <circle class="node-progress" r="18" data-circumference="113.097" stroke-dasharray="113.097" stroke-dashoffset="113.097" transform="rotate(-90)"/>
-      <circle class="node-halo" r="22" fill="#ab4a3b"/>
-      <circle class="node node--4" r="11.5" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
+      <circle class="node-halo" r="22.5" fill="#ab4a3b"/>
+      <circle class="node node--4" r="12.1" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
     </g>
 
-    <g class="interactive route-stop fuji-group" id="route-stop-fuji" data-scroll-day="6" tabindex="0" role="link" aria-label="6日目のチェックリストを開く" transform="translate(878 410)">
-      <circle class="hit-area" r="38"/>
+    <g class="interactive route-stop fuji-group" id="route-stop-fuji" data-scroll-day="6" tabindex="0" role="link" aria-label="6日目のチェックリストを開く" transform="translate(914 420)">
+      <circle class="hit-area" r="40"/>
       <g transform="translate(-88 -110)">
         <g class="tooltip-ui tooltip">
           <rect x="0" y="0" width="176" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
@@ -458,16 +458,16 @@
           <text x="88" y="42" text-anchor="middle" fill="#6b7374" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif" font-size="12.5" font-weight="600">6日目・景色の寄り道</text>
         </g>
       </g>
-      <circle class="node-progress-track" r="17"/>
-      <circle class="node-progress" r="17" data-circumference="106.814" stroke-dasharray="106.814" stroke-dashoffset="106.814" transform="rotate(-90)"/>
-      <circle class="node-halo" r="21" fill="#d0a08f"/>
-      <circle class="fuji-node node--fuji" r="11.5" fill="#d0a08f" stroke="#fffdfa" stroke-width="4"/>
+      <circle class="node-progress-track" r="18"/>
+      <circle class="node-progress" r="18" data-circumference="113.097" stroke-dasharray="113.097" stroke-dashoffset="113.097" transform="rotate(-90)"/>
+      <circle class="node-halo" r="23" fill="#d0a08f"/>
+      <circle class="fuji-node node--fuji" r="12.4" fill="#d0a08f" stroke="#fffdfa" stroke-width="4"/>
       <text class="fuji-label" x="0" y="62" text-anchor="middle" fill="#404548" font-family="'Hiragino Sans', 'Yu Gothic', sans-serif" font-size="21" font-weight="600">富士山</text>
     </g>
   </g>
 
-  <g class="interactive route-stop" id="route-stop-tokyo" data-scroll-day="7" tabindex="0" role="link" aria-label="7日目のチェックリストを開く" transform="translate(1008 320)">
-    <circle class="hit-area" r="38"/>
+  <g class="interactive route-stop" id="route-stop-tokyo" data-scroll-day="7" tabindex="0" role="link" aria-label="7日目のチェックリストを開く" transform="translate(1044 320)">
+    <circle class="hit-area" r="40"/>
     <g transform="translate(-94 -112)">
       <g class="tooltip-ui tooltip">
         <rect x="0" y="0" width="188" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
@@ -478,7 +478,7 @@
     </g>
     <circle class="node-progress-track" r="18"/>
     <circle class="node-progress" r="18" data-circumference="113.097" stroke-dasharray="113.097" stroke-dashoffset="113.097" transform="rotate(-90)"/>
-    <circle class="node-halo" r="22" fill="#ab4a3b"/>
-    <circle class="node node--5" r="11.5" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
+    <circle class="node-halo" r="23.5" fill="#ab4a3b"/>
+    <circle class="node node--5" r="12.8" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
   </g>
 </svg>

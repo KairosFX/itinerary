@@ -1734,7 +1734,13 @@ function syncProgressTimeline() {
 
 function syncParallax() {
   const shift = Math.min(window.scrollY * 0.085, 60);
+  const sunShift = Math.min(window.scrollY * 0.032, 28);
+  const mistShift = Math.min(window.scrollY * 0.022, 20);
+  const fujiShift = Math.min(window.scrollY * 0.014, 14);
   root.style.setProperty("--parallax-shift", `${shift}px`);
+  root.style.setProperty("--sun-shift", `${sunShift}px`);
+  root.style.setProperty("--mist-shift", `${mistShift}px`);
+  root.style.setProperty("--fuji-shift", `${fujiShift}px`);
 }
 
 function registerRevealBlocks() {
