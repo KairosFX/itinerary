@@ -107,6 +107,24 @@
         fill: #8e352b;
       }
 
+      .route-stop.is-warning .node,
+      .route-stop.is-warning .fuji-node {
+        fill: #c28a43;
+      }
+
+      .route-stop.is-warning .node-progress {
+        stroke: #c28a43;
+      }
+
+      .route-stop.is-locked .node,
+      .route-stop.is-locked .fuji-node {
+        fill: #d7cbc2;
+      }
+
+      .route-stop.is-locked .node-progress-track {
+        opacity: 0.24;
+      }
+
       .route-stop.is-current .node-halo {
         opacity: 0.12;
         transform: scale(1.16);

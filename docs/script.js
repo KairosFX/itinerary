@@ -22,6 +22,7 @@ const pageTitles = {
 const storageKey = "japan-trip-language";
 const welcomeStorageKey = "japan-trip-welcome-seen";
 const checklistStorageKey = "japan-trip-checklist-state";
+const completedHistoryStorageKey = "japan-trip-completed-history";
 const routeStopProgressConfig = {
   osaka: { stopId: "route-stop-osaka", days: ["1", "3"] },
   kyoto: { stopId: "route-stop-kyoto", days: ["2"] },
@@ -54,7 +55,11 @@ let lastScrollY = window.scrollY;
 let scrollTicking = false;
 let revealObserver = null;
 let completedDays = new Set();
+let completedHistoryDays = new Set();
+let unlockedDays = new Set();
+let warningDays = new Set();
 let accessibleDay = 1;
+let currentProgressDay = 1;
 let sequenceNoticeTimer = 0;
 
 function getOrderedDayNumbers() {
@@ -64,9 +69,46 @@ function getOrderedDayNumbers() {
     .sort((left, right) => left - right);
 }
 
+function readStoredDaySet(key) {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(key) || "[]");
+    if (!Array.isArray(parsed)) {
+      return new Set();
+    }
+
+    return new Set(parsed.map((value) => String(value)));
+  } catch (error) {
+    return new Set();
+  }
+}
+
+function storeDaySet(key, daySet) {
+  try {
+    const sortedDays = Array.from(daySet).sort((left, right) => Number(left) - Number(right));
+    window.localStorage.setItem(key, JSON.stringify(sortedDays));
+  } catch (error) {
+    // Ignore storage failures and keep the page usable.
+  }
+}
+
+function setsMatch(left, right) {
+  if (left.size !== right.size) {
+    return false;
+  }
+
+  for (const value of left) {
+    if (!right.has(value)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function getJourneyState() {
   const orderedDays = getOrderedDayNumbers();
   const rawCompleted = new Set();
+  const validDays = new Set(orderedDays.map((day) => String(day)));
 
   dayCards.forEach((card) => {
     if (isDayComplete(card)) {
@@ -74,31 +116,58 @@ function getJourneyState() {
     }
   });
 
-  const sequentialCompleted = new Set();
-  let nextAccessibleDay = orderedDays[0] || 1;
+  const completedHistory = new Set(
+    Array.from(completedHistoryDays).filter((day) => validDays.has(day))
+  );
+  rawCompleted.forEach((day) => {
+    completedHistory.add(day);
+  });
 
-  for (const day of orderedDays) {
-    if (rawCompleted.has(String(day))) {
-      sequentialCompleted.add(String(day));
-      nextAccessibleDay = day + 1;
-      continue;
+  const nextUnlockedDays = new Set();
+  if (orderedDays.length) {
+    nextUnlockedDays.add(String(orderedDays[0]));
+  }
+
+  completedHistory.forEach((day) => {
+    if (validDays.has(day)) {
+      nextUnlockedDays.add(day);
     }
+  });
 
-    nextAccessibleDay = day;
-    break;
+  orderedDays.forEach((day, index) => {
+    const nextDay = orderedDays[index + 1];
+    if (completedHistory.has(String(day)) && nextDay) {
+      nextUnlockedDays.add(String(nextDay));
+    }
+  });
+
+  let highestUnlockedDay = orderedDays[0] || 1;
+  for (const day of orderedDays) {
+    if (nextUnlockedDays.has(String(day))) {
+      highestUnlockedDay = day;
+    }
   }
 
-  const highestDay = orderedDays[orderedDays.length - 1] || 1;
-  if (sequentialCompleted.size === orderedDays.length) {
-    nextAccessibleDay = highestDay;
-  } else {
-    nextAccessibleDay = Math.min(nextAccessibleDay, highestDay);
+  let nextCurrentDay = highestUnlockedDay;
+  for (const day of orderedDays) {
+    const dayKey = String(day);
+    if (nextUnlockedDays.has(dayKey) && !rawCompleted.has(dayKey)) {
+      nextCurrentDay = day;
+      break;
+    }
   }
+
+  const nextWarningDays = new Set(
+    Array.from(completedHistory).filter((day) => !rawCompleted.has(day))
+  );
 
   return {
     rawCompleted,
-    sequentialCompleted,
-    accessibleDay: nextAccessibleDay
+    completedHistory,
+    unlockedDays: nextUnlockedDays,
+    warningDays: nextWarningDays,
+    accessibleDay: highestUnlockedDay,
+    currentDay: nextCurrentDay
   };
 }
 
@@ -219,6 +288,51 @@ function restoreChecklistState() {
   });
 }
 
+function decorateProgressTimeline() {
+  progressItems.forEach((item) => {
+    if (item.querySelector(".progress-item__body")) {
+      return;
+    }
+
+    const step = item.querySelector(".progress-item__step");
+    const place = item.querySelector(".progress-item__place");
+    if (!step || !place) {
+      return;
+    }
+
+    const body = document.createElement("div");
+    body.className = "progress-item__body";
+
+    const text = document.createElement("div");
+    text.className = "progress-item__text";
+    text.append(step, place);
+
+    const meter = document.createElement("span");
+    meter.className = "progress-item__meter";
+    meter.setAttribute("aria-hidden", "true");
+
+    const meterFill = document.createElement("span");
+    meterFill.className = "progress-item__meter-fill";
+    meter.append(meterFill);
+
+    const meta = document.createElement("div");
+    meta.className = "progress-item__meta";
+
+    const ratio = document.createElement("span");
+    ratio.className = "progress-item__ratio";
+    ratio.textContent = "0%";
+
+    const notice = document.createElement("span");
+    notice.className = "progress-item__notice";
+    notice.hidden = true;
+
+    meta.append(ratio, notice);
+    body.append(text, meter, meta);
+
+    item.append(body);
+  });
+}
+
 function getScrollBehavior() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 }
@@ -256,8 +370,8 @@ function showSequenceNotice(requiredDay) {
 
   sequenceNotice.textContent =
     root.lang === "ja"
-      ? `${requiredDay}日目を完了すると次へ進めます。`
-      : `Complete Day ${requiredDay} first to continue.`;
+      ? `${requiredDay}日目を完了すると次の行程へ進めます。`
+      : `Complete Day ${requiredDay} to unlock the next step of your trip.`;
 
   sequenceNotice.hidden = false;
   sequenceNotice.classList.remove("is-visible");
@@ -276,7 +390,7 @@ function showSequenceNotice(requiredDay) {
 }
 
 function getCurrentProgressDay() {
-  return String(accessibleDay);
+  return String(currentProgressDay);
 }
 
 function updateRouteProgress() {
@@ -299,13 +413,17 @@ function updateRouteProgress() {
     const progressRing = stop.querySelector(".node-progress");
     const progressTrack = stop.querySelector(".node-progress-track");
     const circumference = Number(progressRing?.dataset.circumference || "0");
+    const isUnlocked = relevantDays.some((day) => unlockedDays.has(day));
+    const isWarning = relevantDays.some((day) => warningDays.has(day));
 
     stop.classList.toggle("has-progress", ratio > 0);
     stop.classList.toggle("is-complete", ratio >= 1);
     stop.classList.toggle("is-current", stopKey === currentStopKey);
+    stop.classList.toggle("is-locked", !isUnlocked);
+    stop.classList.toggle("is-warning", isWarning);
 
     if (progressTrack) {
-      progressTrack.style.opacity = ratio > 0 || stopKey === currentStopKey ? "1" : "0.42";
+      progressTrack.style.opacity = ratio > 0 || stopKey === currentStopKey || isUnlocked ? "1" : "0.28";
     }
 
     if (progressRing && circumference) {
@@ -326,17 +444,29 @@ function updateRouteProgress() {
 }
 
 function refreshChecklistProgressState() {
-  const { rawCompleted, sequentialCompleted, accessibleDay: nextAccessibleDay } = getJourneyState();
+  const {
+    rawCompleted,
+    completedHistory,
+    unlockedDays: nextUnlockedDays,
+    warningDays: nextWarningDays,
+    accessibleDay: nextAccessibleDay,
+    currentDay: nextCurrentDay
+  } = getJourneyState();
 
   dayCards.forEach((card) => {
     const progressRatio = getDayCompletionRatio(card);
+    const dayKey = card.dataset.day;
     const day = Number(card.dataset.day);
-    const isComplete = rawCompleted.has(card.dataset.day);
-    const isLocked = day > nextAccessibleDay;
+    const isComplete = rawCompleted.has(dayKey);
+    const isLocked = !nextUnlockedDays.has(dayKey);
+    const isWarning = nextWarningDays.has(dayKey);
+    const isCurrent = dayKey === String(nextCurrentDay);
 
     card.style.setProperty("--day-progress", String(progressRatio));
     card.setAttribute("data-day-progress", String(Math.round(progressRatio * 100)));
     card.classList.toggle("is-complete", isComplete);
+    card.classList.toggle("is-warning-day", isWarning);
+    card.classList.toggle("is-current-day", isCurrent && !isComplete);
     card.classList.toggle("is-locked-day", isLocked);
     card.setAttribute("aria-disabled", String(isLocked));
     getDayInputs(card).forEach((input) => {
@@ -345,31 +475,116 @@ function refreshChecklistProgressState() {
   });
 
   progressItems.forEach((item) => {
+    const dayKey = item.dataset.progressItem;
     const day = Number(item.dataset.progressItem);
-    const isLocked = day > nextAccessibleDay;
-    const isComplete = sequentialCompleted.has(String(day));
+    const card = dayCardMap.get(dayKey);
+    const progressRatio = card ? getDayCompletionRatio(card) : 0;
+    const isLocked = !nextUnlockedDays.has(dayKey);
+    const isComplete = rawCompleted.has(dayKey);
+    const isWarning = nextWarningDays.has(dayKey);
+    const isActive = dayKey === String(nextCurrentDay) && !isLocked;
+    const ratioNode = item.querySelector(".progress-item__ratio");
+    const noticeNode = item.querySelector(".progress-item__notice");
 
+    item.style.setProperty("--timeline-progress", String(progressRatio));
     item.classList.toggle("is-locked", isLocked);
-    item.classList.toggle("is-unlocked", day <= nextAccessibleDay);
+    item.classList.toggle("is-unlocked", !isLocked);
     item.classList.toggle("is-complete", !isLocked && isComplete);
+    item.classList.toggle("is-warning", isWarning);
+    item.classList.toggle("is-partial", progressRatio > 0 && progressRatio < 1 && !isWarning);
+    item.classList.toggle("is-active", isActive);
     item.setAttribute("aria-disabled", String(isLocked));
+    if (isActive) {
+      item.setAttribute("aria-current", "step");
+    } else {
+      item.removeAttribute("aria-current");
+    }
+
+    if (ratioNode) {
+      ratioNode.textContent = `${Math.round(progressRatio * 100)}%`;
+    }
+
+    if (noticeNode) {
+      if (isWarning) {
+        noticeNode.hidden = false;
+        noticeNode.textContent = root.lang === "ja" ? "要確認" : "Needs attention";
+      } else if (isLocked) {
+        noticeNode.hidden = false;
+        noticeNode.textContent = root.lang === "ja" ? "未解放" : "Locked";
+      } else {
+        noticeNode.hidden = true;
+        noticeNode.textContent = "";
+      }
+    }
   });
 
-  completedDays = sequentialCompleted;
+  if (!setsMatch(completedHistoryDays, completedHistory)) {
+    completedHistoryDays = completedHistory;
+    storeDaySet(completedHistoryStorageKey, completedHistoryDays);
+  } else {
+    completedHistoryDays = completedHistory;
+  }
+
+  completedDays = rawCompleted;
+  unlockedDays = nextUnlockedDays;
+  warningDays = nextWarningDays;
   accessibleDay = nextAccessibleDay;
+  currentProgressDay = nextCurrentDay;
   updateRouteProgress();
 }
 
 function celebrateCompletedDay(day) {
+  animateCompletion(dayCardMap.get(String(day)));
   animateCompletion(progressItemMap.get(String(day)));
+  animateRouteTargets(day);
 
   if (Number(day) === 7) {
     animateUnlock(progressItemMap.get("8"));
+    animateUnlock(dayCardMap.get("8"));
   }
 
   if (Number(day) === 8) {
     animateUnlock(progressItemMap.get("9"));
+    animateUnlock(dayCardMap.get("9"));
   }
+}
+
+function animateRouteTargets(day) {
+  const routeDoc = routeMedia?.contentDocument;
+  if (!routeDoc) {
+    return;
+  }
+
+  const stopKey = routeDayToStopKey[Number(day)];
+  if (stopKey) {
+    const routeStop = routeDoc.getElementById(routeStopProgressConfig[stopKey]?.stopId || "");
+    if (routeStop) {
+      routeStop.classList.remove("is-celebrating");
+      void routeStop.getBoundingClientRect();
+      routeStop.classList.add("is-celebrating");
+      window.setTimeout(() => {
+        routeStop.classList.remove("is-celebrating");
+      }, 920);
+    }
+  }
+
+  Object.entries(routeSegmentConfig).forEach(([segmentId, requiredDays]) => {
+    if (!requiredDays.includes(String(day))) {
+      return;
+    }
+
+    const segment = routeDoc.getElementById(segmentId);
+    if (!segment) {
+      return;
+    }
+
+    segment.classList.remove("is-celebrating");
+    void segment.getBoundingClientRect();
+    segment.classList.add("is-celebrating");
+    window.setTimeout(() => {
+      segment.classList.remove("is-celebrating");
+    }, 920);
+  });
 }
 
 function scrollToChecklistDay(day) {
@@ -478,6 +693,8 @@ function setLanguage(language) {
   });
 
   storeLanguage(nextLanguage);
+  refreshChecklistProgressState();
+  syncProgressTimeline();
 }
 
 function handleLanguageButtonClick(button) {
@@ -607,6 +824,8 @@ languageButtons.forEach((button) => {
   });
 });
 
+decorateProgressTimeline();
+completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
 setLanguage(readStoredLanguage());
 restoreChecklistState();
 refreshChecklistProgressState();
