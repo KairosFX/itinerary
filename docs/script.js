@@ -22,7 +22,7 @@ const progressTotalDaysNode = document.querySelector("[data-progress-total-days]
 const progressOverviewFill = document.querySelector("[data-progress-overview-fill]");
 const progressOverviewCaptions = document.querySelectorAll(".progress-overview__caption [data-language]");
 const jumpCurrentDayButton = document.querySelector("[data-jump-current-day]");
-const backToTopButton = document.querySelector("[data-back-to-top]");
+const backToTopButtons = document.querySelectorAll("[data-back-to-top]");
 const optionalPrompt = document.querySelector("[data-optional-prompt]");
 const optionalPromptExpanded = document.querySelector("[data-optional-prompt-expanded]");
 const optionalPromptCompact = document.querySelector("[data-optional-prompt-compact]");
@@ -1746,7 +1746,7 @@ function syncParallax() {
 function registerRevealBlocks() {
   const revealBlocks = Array.from(
     document.querySelectorAll(
-      ".hero-panel, .trip-stats, .progress-card, .section-heading, .day-card, .note-card, .route-reference, .route-map, .site-footer__lead, .site-footer__links"
+      ".hero-panel, .trip-stats, .progress-card, .section-heading, .day-card, .note-card, .route-reference, .route-map, .journey-close, .site-footer__lead, .site-footer__links, .site-footer__credit"
     )
   );
 
@@ -1890,14 +1890,14 @@ if (jumpCurrentDayButton) {
   });
 }
 
-if (backToTopButton) {
-  backToTopButton.addEventListener("click", () => {
+backToTopButtons.forEach((button) => {
+  button.addEventListener("click", () => {
     window.scrollTo({
       top: 0,
       behavior: getScrollBehavior()
     });
   });
-}
+});
 
 optionalUnlockButtons.forEach((button) => {
   button.addEventListener("click", () => {

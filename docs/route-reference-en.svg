@@ -66,13 +66,13 @@
       .progress-segment {
         opacity: 0;
         stroke: #8e352b;
-        stroke-width: 7.6;
+        stroke-width: 7.2;
         stroke-linecap: round;
         stroke-linejoin: round;
       }
 
       .progress-segment--branch {
-        stroke-width: 3.3;
+        stroke-width: 3;
         stroke-dasharray: 6 8;
       }
 
@@ -194,25 +194,29 @@
 
       .tooltip-ui {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(8px) scale(0.98);
+        filter: drop-shadow(0 14px 20px rgba(53, 35, 28, 0.12));
       }
 
       .interactive:hover .node,
-      .interactive:active .node {
+      .interactive:active .node,
+      .interactive:focus .node {
         fill: #8e352b;
         transform: scale(1.12);
       }
 
       .interactive:hover .node-halo,
-      .interactive:active .node-halo {
+      .interactive:active .node-halo,
+      .interactive:focus .node-halo {
         opacity: 0.18;
         transform: scale(1.28);
       }
 
       .interactive:hover .tooltip-ui,
-      .interactive:active .tooltip-ui {
+      .interactive:active .tooltip-ui,
+      .interactive:focus .tooltip-ui {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
       }
 
       .branch-cluster:hover .branch-line,
@@ -368,20 +372,20 @@
 
   <g class="route-static" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path d="M176 320H1044" stroke="#b79d90" stroke-width="13.5" opacity="0.12"/>
-    <path class="route-main-animated" d="M176 320H1044" stroke="url(#trackTint)" stroke-width="6.8"/>
-    <path class="route-main-animated" d="M176 320H1044" stroke="#eb9a84" stroke-width="2.1" opacity="0.36"/>
+    <path class="route-main-animated" d="M176 320H1044" stroke="url(#trackTint)" stroke-width="6.4"/>
+    <path class="route-main-animated" d="M176 320H1044" stroke="#eb9a84" stroke-width="1.9" opacity="0.36"/>
     <path id="route-progress-kyoto" class="progress-segment" d="M188 320H402"/>
     <path id="route-progress-odawara" class="progress-segment" d="M402 320H616"/>
     <path id="route-progress-hakone" class="progress-segment" d="M616 320H830"/>
     <path id="route-progress-tokyo" class="progress-segment" d="M830 320H1044"/>
-    <path class="route-arrow route-arrow--1" d="M285 312L294 320L285 328" stroke="#8e352b" stroke-width="3.4"/>
-    <path class="route-arrow route-arrow--2" d="M499 312L508 320L499 328" stroke="#8e352b" stroke-width="3.4"/>
-    <path class="route-arrow route-arrow--3" d="M713 312L722 320L713 328" stroke="#8e352b" stroke-width="3.4"/>
-    <path class="route-arrow route-arrow--4" d="M927 312L936 320L927 328" stroke="#8e352b" stroke-width="3.4"/>
+    <path class="route-arrow route-arrow--1" d="M286 313L294 320L286 327" stroke="#8e352b" stroke-width="3.1"/>
+    <path class="route-arrow route-arrow--2" d="M500 313L508 320L500 327" stroke="#8e352b" stroke-width="3.1"/>
+    <path class="route-arrow route-arrow--3" d="M714 313L722 320L714 327" stroke="#8e352b" stroke-width="3.1"/>
+    <path class="route-arrow route-arrow--4" d="M928 313L936 320L928 327" stroke="#8e352b" stroke-width="3.1"/>
   </g>
 
   <g class="interactive route-stop" id="route-stop-osaka" data-scroll-day="1" tabindex="0" role="link" aria-label="Open Day 1 checklist" transform="translate(188 320)">
-    <circle class="hit-area" r="40"/>
+    <circle class="hit-area" r="46"/>
     <g transform="translate(-81 -112)">
       <g class="tooltip-ui tooltip">
         <rect x="0" y="0" width="162" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
@@ -397,7 +401,7 @@
   </g>
 
   <g class="interactive route-stop" id="route-stop-kyoto" data-scroll-day="2" tabindex="0" role="link" aria-label="Open Day 2 checklist" transform="translate(402 320)">
-    <circle class="hit-area" r="40"/>
+    <circle class="hit-area" r="46"/>
     <g transform="translate(-85 -112)">
       <g class="tooltip-ui tooltip">
         <rect x="0" y="0" width="170" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
@@ -413,7 +417,7 @@
   </g>
 
   <g class="interactive route-stop" id="route-stop-odawara" data-scroll-day="4" tabindex="0" role="link" aria-label="Open Day 4 checklist" transform="translate(616 320)">
-    <circle class="hit-area" r="38"/>
+    <circle class="hit-area" r="42"/>
     <g transform="translate(-85 -112)">
       <g class="tooltip-ui tooltip">
         <rect x="0" y="0" width="170" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
@@ -429,11 +433,11 @@
   </g>
 
   <g class="branch-cluster">
-    <path class="branch-line" d="M830 332C836 378 868 404 914 420" fill="none" stroke="#d0a08f" stroke-width="3.1" stroke-dasharray="6 8" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
-    <path id="route-progress-fuji" class="progress-segment progress-segment--branch" d="M830 332C836 378 868 404 914 420"/>
+    <path class="branch-line" d="M830 332C840 382 882 414 930 432" fill="none" stroke="#d0a08f" stroke-width="2.9" stroke-dasharray="6 8" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
+    <path id="route-progress-fuji" class="progress-segment progress-segment--branch" d="M830 332C840 382 882 414 930 432"/>
 
     <g class="interactive route-stop" id="route-stop-hakone" data-scroll-day="4" tabindex="0" role="link" aria-label="Open Day 4 checklist" transform="translate(830 320)">
-      <circle class="hit-area" r="41"/>
+      <circle class="hit-area" r="46"/>
       <g transform="translate(-93 -112)">
         <g class="tooltip-ui tooltip">
           <rect x="0" y="0" width="186" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
@@ -448,26 +452,26 @@
       <circle class="node node--4" r="12.1" fill="#b25041" stroke="#fffdfa" stroke-width="4"/>
     </g>
 
-    <g class="interactive route-stop fuji-group" id="route-stop-fuji" data-scroll-day="6" tabindex="0" role="link" aria-label="Open Day 6 checklist" transform="translate(914 420)">
-      <circle class="hit-area" r="40"/>
-      <g transform="translate(-88 -110)">
+    <g class="interactive route-stop fuji-group" id="route-stop-fuji" data-scroll-day="6" tabindex="0" role="link" aria-label="Open Day 6 checklist" transform="translate(930 432)">
+      <circle class="hit-area" r="44"/>
+      <g transform="translate(-94 -114)">
         <g class="tooltip-ui tooltip">
-          <rect x="0" y="0" width="176" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
-          <path d="M82 58L88 66L94 58Z" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4" stroke-linejoin="round"/>
-          <text x="88" y="24" text-anchor="middle" fill="#2b2f31" font-family="'Avenir Next', 'Hiragino Sans', sans-serif" font-size="18" font-weight="600">Mt. Fuji</text>
-          <text x="88" y="42" text-anchor="middle" fill="#6b7374" font-family="'Avenir Next', 'Hiragino Sans', sans-serif" font-size="12.5" font-weight="600">Day 6 · scenic branch</text>
+          <rect x="0" y="0" width="188" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
+          <path d="M88 58L94 66L100 58Z" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4" stroke-linejoin="round"/>
+          <text x="94" y="24" text-anchor="middle" fill="#2b2f31" font-family="'Avenir Next', 'Hiragino Sans', sans-serif" font-size="18" font-weight="600">Mt. Fuji</text>
+          <text x="94" y="42" text-anchor="middle" fill="#6b7374" font-family="'Avenir Next', 'Hiragino Sans', sans-serif" font-size="12.5" font-weight="600">Day 6 · scenic highlight</text>
         </g>
       </g>
-      <circle class="node-progress-track" r="18"/>
-      <circle class="node-progress" r="18" data-circumference="113.097" stroke-dasharray="113.097" stroke-dashoffset="113.097" transform="rotate(-90)"/>
-      <circle class="node-halo" r="23" fill="#d0a08f"/>
-      <circle class="fuji-node node--fuji" r="12.4" fill="#d0a08f" stroke="#fffdfa" stroke-width="4"/>
-      <text class="fuji-label" x="0" y="62" text-anchor="middle" fill="#404548" font-family="'Avenir Next', 'Hiragino Sans', sans-serif" font-size="21" font-weight="600">Mt. Fuji</text>
+      <circle class="node-progress-track" r="19"/>
+      <circle class="node-progress" r="19" data-circumference="119.381" stroke-dasharray="119.381" stroke-dashoffset="119.381" transform="rotate(-90)"/>
+      <circle class="node-halo" r="25.5" fill="#d0a08f"/>
+      <circle class="fuji-node node--fuji" r="14.2" fill="#d0a08f" stroke="#fffdfa" stroke-width="4"/>
+      <text class="fuji-label" x="0" y="68" text-anchor="middle" fill="#404548" font-family="'Avenir Next', 'Hiragino Sans', sans-serif" font-size="22" font-weight="600">Mt. Fuji</text>
     </g>
   </g>
 
   <g class="interactive route-stop" id="route-stop-tokyo" data-scroll-day="7" tabindex="0" role="link" aria-label="Open Day 7 checklist" transform="translate(1044 320)">
-    <circle class="hit-area" r="40"/>
+    <circle class="hit-area" r="46"/>
     <g transform="translate(-88 -112)">
       <g class="tooltip-ui tooltip">
         <rect x="0" y="0" width="176" height="58" rx="18" fill="#fff8f3" stroke="#e2c6b8" stroke-width="1.4"/>
