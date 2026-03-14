@@ -14,8 +14,19 @@ const checklistInputs = Array.from(document.querySelectorAll('.day-card input[ty
 const progressItems = Array.from(document.querySelectorAll("[data-progress-item]"));
 const progressTimeline = document.querySelector("[data-progress-timeline]");
 const progressCurrentDayNode = document.querySelector("[data-progress-current-day]");
+const progressTotalDaysNode = document.querySelector("[data-progress-total-days]");
 const progressOverviewFill = document.querySelector("[data-progress-overview-fill]");
 const progressOverviewCaptions = document.querySelectorAll(".progress-overview__caption [data-language]");
+const jumpCurrentDayButton = document.querySelector("[data-jump-current-day]");
+const optionalPrompt = document.querySelector("[data-optional-prompt]");
+const optionalPromptExpanded = document.querySelector("[data-optional-prompt-expanded]");
+const optionalPromptCompact = document.querySelector("[data-optional-prompt-compact]");
+const optionalUnlockButtons = document.querySelectorAll("[data-optional-unlock]");
+const optionalSkipButton = document.querySelector("[data-optional-skip]");
+const optionalSectionNodes = document.querySelectorAll("[data-optional-section]");
+const optionalProgressItems = Array.from(
+  document.querySelectorAll("[data-progress-item][data-progress-optional='true']")
+);
 const dayCardMap = new Map(dayCards.map((card) => [card.dataset.day, card]));
 const progressItemMap = new Map(progressItems.map((item) => [item.dataset.progressItem, item]));
 const root = document.documentElement;
@@ -27,6 +38,7 @@ const storageKey = "japan-trip-language";
 const welcomeStorageKey = "japan-trip-welcome-seen";
 const checklistStorageKey = "japan-trip-checklist-state";
 const completedHistoryStorageKey = "japan-trip-completed-history";
+const optionalDaysUnlockedStorageKey = "japan-trip-optional-days-unlocked";
 const routeStopProgressConfig = {
   osaka: { stopId: "route-stop-osaka", days: ["1", "3"] },
   kyoto: { stopId: "route-stop-kyoto", days: ["2"] },
@@ -66,12 +78,18 @@ let accessibleDay = 1;
 let currentProgressDay = 1;
 let sequenceNoticeTimer = 0;
 let lastTimelineFocusDay = null;
+let optionalDaysUnlocked = false;
+let optionalPromptIsCompact = false;
 
 function getOrderedDayNumbers() {
   return dayCards
     .map((card) => Number(card.dataset.day))
     .filter((day) => !Number.isNaN(day))
     .sort((left, right) => left - right);
+}
+
+function getTrackedDayNumbers() {
+  return getOrderedDayNumbers().filter((day) => optionalDaysUnlocked || day <= 7);
 }
 
 function readStoredDaySet(key) {
@@ -96,6 +114,27 @@ function storeDaySet(key, daySet) {
   }
 }
 
+function readStoredBoolean(key) {
+  try {
+    return window.localStorage.getItem(key) === "1";
+  } catch (error) {
+    return false;
+  }
+}
+
+function storeBoolean(key, value) {
+  try {
+    if (value) {
+      window.localStorage.setItem(key, "1");
+      return;
+    }
+
+    window.localStorage.removeItem(key);
+  } catch (error) {
+    // Ignore storage failures and keep the page usable.
+  }
+}
+
 function setsMatch(left, right) {
   if (left.size !== right.size) {
     return false;
@@ -111,7 +150,7 @@ function setsMatch(left, right) {
 }
 
 function getJourneyState() {
-  const orderedDays = getOrderedDayNumbers();
+  const orderedDays = getTrackedDayNumbers();
   const rawCompleted = new Set();
   const validDays = new Set(orderedDays.map((day) => String(day)));
 
@@ -284,7 +323,7 @@ function isDayComplete(dayCard) {
 }
 
 function areOptionalDaysUnlocked() {
-  return accessibleDay >= 8;
+  return optionalDaysUnlocked;
 }
 
 function restoreChecklistState() {
@@ -400,7 +439,7 @@ function getCurrentProgressDay() {
 }
 
 function getProgressOverviewState() {
-  const totalDays = 9;
+  const totalDays = areOptionalDaysUnlocked() ? 9 : 7;
   const completedCount = completedDays.size;
   const activeDay = Math.min(Number(getCurrentProgressDay()) || 1, totalDays);
 
@@ -419,6 +458,10 @@ function updateProgressOverview() {
     progressCurrentDayNode.textContent = String(activeDay);
   }
 
+  if (progressTotalDaysNode) {
+    progressTotalDaysNode.textContent = String(totalDays);
+  }
+
   if (progressOverviewFill) {
     progressOverviewFill.style.setProperty("--overview-progress", String(ratio));
     progressOverviewFill.parentElement?.style.setProperty("--overview-progress", String(ratio));
@@ -426,10 +469,55 @@ function updateProgressOverview() {
 
   progressOverviewCaptions.forEach((node) => {
     if (node.dataset.language === "ja") {
-      node.textContent = `完了した日程は${completedCount}日です`;
+      node.textContent = `${totalDays}日中${completedCount}日を完了しました`;
     } else {
-      node.textContent = `${completedCount} full day${completedCount === 1 ? "" : "s"} completed`;
+      node.textContent = `${completedCount} of ${totalDays} full day${totalDays === 1 ? "" : "s"} completed`;
     }
+  });
+}
+
+function syncOptionalDaysUI() {
+  const canOfferOptionalDays = completedHistoryDays.has("7");
+
+  optionalProgressItems.forEach((item) => {
+    item.hidden = !optionalDaysUnlocked;
+  });
+
+  optionalSectionNodes.forEach((node) => {
+    node.hidden = !optionalDaysUnlocked;
+  });
+
+  if (!optionalPrompt) {
+    return;
+  }
+
+  const showPrompt = canOfferOptionalDays && !optionalDaysUnlocked;
+  optionalPrompt.hidden = !showPrompt;
+
+  if (!showPrompt) {
+    optionalPromptIsCompact = false;
+  }
+
+  if (optionalPromptExpanded) {
+    optionalPromptExpanded.hidden = !showPrompt || optionalPromptIsCompact;
+  }
+
+  if (optionalPromptCompact) {
+    optionalPromptCompact.hidden = !showPrompt || !optionalPromptIsCompact;
+  }
+}
+
+function unlockOptionalDays() {
+  optionalDaysUnlocked = true;
+  optionalPromptIsCompact = false;
+  storeBoolean(optionalDaysUnlockedStorageKey, true);
+  syncOptionalDaysUI();
+  refreshChecklistProgressState();
+  syncProgressTimeline();
+  animateUnlock(progressItemMap.get("8"));
+  animateUnlock(dayCardMap.get("8"));
+  window.requestAnimationFrame(() => {
+    scrollProgressTimelineToActive(true);
   });
 }
 
@@ -498,7 +586,7 @@ function updateRouteProgress() {
       return;
     }
 
-    const relevantDays = config.days;
+    const relevantDays = config.days.filter((day) => optionalDaysUnlocked || Number(day) <= 7);
     const completedCount = relevantDays.filter((day) => completedDays.has(day)).length;
     const ratio = relevantDays.length ? completedCount / relevantDays.length : 0;
     const progressRing = stop.querySelector(".node-progress");
@@ -616,6 +704,7 @@ function refreshChecklistProgressState() {
     completedHistoryDays = completedHistory;
   }
 
+  syncOptionalDaysUI();
   completedDays = rawCompleted;
   unlockedDays = nextUnlockedDays;
   warningDays = nextWarningDays;
@@ -703,6 +792,26 @@ function scrollToChecklistDay(day) {
       window.setTimeout(() => {
         targetCard.classList.remove("is-route-target");
       }, 1400);
+    });
+  });
+}
+
+function scrollToPanelStart(panelId) {
+  const panel = Array.from(contentPanels).find((node) => node.dataset.panel === panelId);
+  if (!panel) {
+    return;
+  }
+
+  const anchor = panel.querySelector(".section-heading") || panel;
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      const targetTop =
+        anchor.getBoundingClientRect().top + window.scrollY - reservedHeaderHeight - 20;
+
+      window.scrollTo({
+        top: Math.max(targetTop, 0),
+        behavior: getScrollBehavior()
+      });
     });
   });
 }
@@ -922,6 +1031,8 @@ languageButtons.forEach((button) => {
 
 decorateProgressTimeline();
 completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
+optionalDaysUnlocked = readStoredBoolean(optionalDaysUnlockedStorageKey);
+syncOptionalDaysUI();
 setLanguage(readStoredLanguage());
 restoreChecklistState();
 refreshChecklistProgressState();
@@ -983,11 +1094,29 @@ checklistInputs.forEach((input) => {
 sectionTabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     lockHeaderState(520);
-    preserveScrollPosition(() => {
-      setActivePanel(tab.dataset.panelTarget);
-    });
+    setActivePanel(tab.dataset.panelTarget);
+    scrollToPanelStart(tab.dataset.panelTarget);
   });
 });
+
+if (jumpCurrentDayButton) {
+  jumpCurrentDayButton.addEventListener("click", () => {
+    scrollToChecklistDay(getCurrentProgressDay());
+  });
+}
+
+optionalUnlockButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    unlockOptionalDays();
+  });
+});
+
+if (optionalSkipButton) {
+  optionalSkipButton.addEventListener("click", () => {
+    optionalPromptIsCompact = true;
+    syncOptionalDaysUI();
+  });
+}
 
 if (root.classList.contains("is-welcoming")) {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

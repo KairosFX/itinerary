@@ -470,6 +470,11 @@ h3 {
   font-size: 0.92rem;
 }
 
+.progress-overview__actions {
+  display: grid;
+  gap: 0.7rem;
+}
+
 .progress-overview__bar {
   position: relative;
   height: 0.52rem;
@@ -485,6 +490,28 @@ h3 {
   border-radius: inherit;
   background: linear-gradient(90deg, rgba(214, 120, 99, 0.94), rgba(133, 47, 38, 1));
   transition: width 260ms ease;
+}
+
+.progress-overview__jump {
+  justify-self: start;
+  padding: 0.56rem 0.92rem;
+  border: 1px solid rgba(171, 74, 59, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--accent-deep);
+  box-shadow: 0 10px 22px rgba(55, 35, 22, 0.05);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.progress-overview__jump:hover,
+.progress-overview__jump:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(171, 74, 59, 0.24);
+  box-shadow: 0 12px 24px rgba(55, 35, 22, 0.08);
 }
 
 .progress-timeline {
@@ -810,6 +837,67 @@ h3 {
 
 .progress-item.is-unlocked {
   border-color: rgba(171, 74, 59, 0.14);
+}
+
+.optional-unlock {
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.6rem;
+  padding: 1.2rem;
+  border: 1px solid rgba(171, 74, 59, 0.12);
+  background: linear-gradient(180deg, rgba(255, 252, 248, 0.95), rgba(255, 247, 240, 0.88));
+}
+
+.optional-unlock p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.optional-unlock__expanded,
+.optional-unlock__compact {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.optional-unlock__compact {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.optional-unlock__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.optional-unlock__button {
+  padding: 0.64rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(171, 74, 59, 0.14);
+  box-shadow: 0 10px 22px rgba(55, 35, 22, 0.05);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.optional-unlock__button:hover,
+.optional-unlock__button:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(55, 35, 22, 0.08);
+}
+
+.optional-unlock__button--primary {
+  background: var(--accent);
+  border-color: rgba(171, 74, 59, 0.22);
+  color: #fffdfa;
+}
+
+.optional-unlock__button--secondary {
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--accent-deep);
 }
 
 .overview-grid {
@@ -1555,6 +1643,15 @@ h3 {
     padding: 0.86rem 0.92rem 0.9rem;
   }
 
+  .optional-unlock {
+    padding: 1rem;
+  }
+
+  .optional-unlock__compact {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
   .progress-timeline {
     max-height: min(32rem, 62vh);
   }
@@ -1734,6 +1831,10 @@ h3 {
 
   .progress-overview__day {
     font-size: 1.2rem;
+  }
+
+  .progress-overview__actions {
+    gap: 0.58rem;
   }
 
   .progress-timeline {
