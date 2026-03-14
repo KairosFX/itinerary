@@ -1409,12 +1409,9 @@ function confirmOptionalDaysUnlock() {
   }
 
   optionalPromptDeferred = false;
-  setOptionalPromptButtonsDisabled(true);
-  setOptionalPromptFeedback(true);
-
-  window.setTimeout(() => {
-    unlockOptionalDays();
-  }, 640);
+  setOptionalPromptButtonsDisabled(false);
+  setOptionalPromptFeedback(false);
+  unlockOptionalDays();
 }
 
 function setResetModalOpen(isOpen) {
