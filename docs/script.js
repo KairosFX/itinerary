@@ -22,6 +22,43 @@ const pageTitles = {
 const storageKey = "japan-trip-language";
 const welcomeStorageKey = "japan-trip-welcome-seen";
 const checklistStorageKey = "japan-trip-checklist-state";
+const routeStopProgressConfig = {
+  osaka: { stopId: "route-stop-osaka", days: ["1", "3"] },
+  kyoto: { stopId: "route-stop-kyoto", days: ["2"] },
+  odawara: { stopId: "route-stop-odawara", days: ["4"] },
+  hakone: { stopId: "route-stop-hakone", days: ["4", "5"] },
+  fuji: { stopId: "route-stop-fuji", days: ["6"] },
+  tokyo: { stopId: "route-stop-tokyo", days: ["7", "8", "9"] }
+};
+const routeSegmentConfig = {
+  "route-progress-kyoto": ["2"],
+  "route-progress-odawara": ["4"],
+  "route-progress-hakone": ["4"],
+  "route-progress-fuji": ["6"],
+  "route-progress-tokyo": ["7"]
+};
+const routeDayToStopKey = {
+  1: "osaka",
+  2: "kyoto",
+  3: "osaka",
+  4: "hakone",
+  5: "hakone",
+  6: "fuji",
+  7: "tokyo",
+  8: "tokyo",
+  9: "tokyo"
+};
+const routeDayCelebrationTargets = {
+  1: ["route-stop-osaka"],
+  2: ["route-progress-kyoto", "route-stop-kyoto"],
+  3: ["route-stop-osaka"],
+  4: ["route-progress-odawara", "route-stop-odawara", "route-progress-hakone", "route-stop-hakone"],
+  5: ["route-stop-hakone"],
+  6: ["route-progress-fuji", "route-stop-fuji"],
+  7: ["route-progress-tokyo", "route-stop-tokyo"],
+  8: ["route-stop-tokyo"],
+  9: ["route-stop-tokyo"]
+};
 let reservedHeaderHeight = 0;
 let headerLockUntil = 0;
 let lastScrollY = window.scrollY;
@@ -120,6 +157,16 @@ function getDayInputs(dayCard) {
   return Array.from(dayCard.querySelectorAll('input[type="checkbox"]'));
 }
 
+function getDayCompletionRatio(dayCard) {
+  const inputs = getDayInputs(dayCard);
+  if (!inputs.length) {
+    return 0;
+  }
+
+  const checkedCount = inputs.filter((input) => input.checked).length;
+  return checkedCount / inputs.length;
+}
+
 function isDayComplete(dayCard) {
   const inputs = getDayInputs(dayCard);
   return inputs.length > 0 && inputs.every((input) => input.checked);
@@ -167,13 +214,97 @@ function animateUnlock(target) {
   }, 1200);
 }
 
+function animateRouteTargets(targetIds) {
+  const routeDoc = routeMedia?.contentDocument;
+  if (!routeDoc || !Array.isArray(targetIds)) {
+    return;
+  }
+
+  targetIds.forEach((targetId) => {
+    const target = routeDoc.getElementById(targetId);
+    if (!target) {
+      return;
+    }
+
+    target.classList.remove("is-celebrating");
+    void target.getBoundingClientRect();
+    target.classList.add("is-celebrating");
+
+    window.setTimeout(() => {
+      target.classList.remove("is-celebrating");
+    }, 940);
+  });
+}
+
+function getCurrentProgressDay() {
+  const maxVisibleDay = areOptionalDaysUnlocked() ? 9 : 7;
+  const eligibleCards = dayCards.filter((card) => Number(card.dataset.day) <= maxVisibleDay);
+  const firstIncompleteCard = eligibleCards.find((card) => !isDayComplete(card));
+
+  return firstIncompleteCard?.dataset.day || String(maxVisibleDay);
+}
+
+function updateRouteProgress() {
+  const routeDoc = routeMedia?.contentDocument;
+  if (!routeDoc) {
+    return;
+  }
+
+  const optionalUnlocked = areOptionalDaysUnlocked();
+  const currentStopKey = routeDayToStopKey[getCurrentProgressDay()];
+
+  Object.entries(routeStopProgressConfig).forEach(([stopKey, config]) => {
+    const stop = routeDoc.getElementById(config.stopId);
+    if (!stop) {
+      return;
+    }
+
+    const relevantDays = config.days.filter(
+      (day) => Number(day) <= 7 || optionalUnlocked
+    );
+    const completedCount = relevantDays.filter((day) => completedDays.has(day)).length;
+    const ratio = relevantDays.length ? completedCount / relevantDays.length : 0;
+    const progressRing = stop.querySelector(".node-progress");
+    const progressTrack = stop.querySelector(".node-progress-track");
+    const circumference = Number(progressRing?.dataset.circumference || "0");
+
+    stop.classList.toggle("has-progress", ratio > 0);
+    stop.classList.toggle("is-complete", ratio >= 1);
+    stop.classList.toggle("is-current", stopKey === currentStopKey);
+
+    if (progressTrack) {
+      progressTrack.style.opacity = ratio > 0 || stopKey === currentStopKey ? "1" : "0.42";
+    }
+
+    if (progressRing && circumference) {
+      progressRing.style.opacity = ratio > 0 ? "1" : "0";
+      progressRing.style.strokeDashoffset = `${circumference * (1 - ratio)}`;
+    }
+  });
+
+  Object.entries(routeSegmentConfig).forEach(([segmentId, requiredDays]) => {
+    const segment = routeDoc.getElementById(segmentId);
+    if (!segment) {
+      return;
+    }
+
+    const isComplete = requiredDays.every((day) => completedDays.has(day));
+    segment.classList.toggle("is-complete", isComplete);
+  });
+}
+
 function refreshChecklistProgressState() {
   const optionalUnlocked = areOptionalDaysUnlocked();
   const nextCompletedDays = new Set();
 
   dayCards.forEach((card) => {
+    const progressRatio = getDayCompletionRatio(card);
     const isComplete = isDayComplete(card);
+
+    card.style.setProperty("--day-progress", String(progressRatio));
+    card.setAttribute("data-day-progress", String(Math.round(progressRatio * 100)));
     card.classList.toggle("is-complete", isComplete);
+
     if (isComplete) {
       nextCompletedDays.add(card.dataset.day);
     }
@@ -191,11 +322,13 @@ function refreshChecklistProgressState() {
   });
 
   completedDays = nextCompletedDays;
+  updateRouteProgress();
 }
 
 function celebrateCompletedDay(day) {
   animateCompletion(dayCardMap.get(String(day)));
   animateCompletion(progressItemMap.get(String(day)));
+  animateRouteTargets(routeDayCelebrationTargets[Number(day)]);
 
   if (Number(day) === 7) {
     animateUnlock(progressItemMap.get("8"));
@@ -228,8 +361,6 @@ function scrollToChecklistDay(day) {
       window.setTimeout(() => {
         targetCard.classList.remove("is-route-target");
       }, 1400);
-
-      setActiveProgressItem(day);
     });
   });
 }
@@ -260,6 +391,8 @@ function bindRouteInteractions() {
       }
     });
   });
+
+  updateRouteProgress();
 }
 
 function setLanguage(language) {
@@ -357,24 +490,11 @@ function setActiveProgressItem(day) {
 }
 
 function syncProgressTimeline() {
-  if (!checklistPanel || !checklistPanel.classList.contains("is-active") || !dayCards.length) {
+  if (!dayCards.length) {
     return;
   }
 
-  const headerOffset = reservedHeaderHeight + 28;
-  const maxVisibleDay = areOptionalDaysUnlocked() ? 9 : 7;
-  const eligibleCards = dayCards.filter((card) => Number(card.dataset.day) <= maxVisibleDay);
-  const visibleCards = eligibleCards
-    .map((card) => ({ card, rect: card.getBoundingClientRect() }))
-    .filter(({ rect }) => rect.bottom > headerOffset + 24 && rect.top < window.innerHeight * 0.78);
-
-  const currentCard =
-    visibleCards.sort(
-      (left, right) =>
-        Math.abs(left.rect.top - headerOffset) - Math.abs(right.rect.top - headerOffset)
-    )[0]?.card || eligibleCards[0];
-
-  setActiveProgressItem(currentCard.dataset.day);
+  setActiveProgressItem(getCurrentProgressDay());
 }
 
 function syncParallax() {
@@ -523,7 +643,6 @@ function syncHeaderState() {
 
 function runScrollEffects() {
   syncHeaderState();
-  syncProgressTimeline();
   syncParallax();
   scrollTicking = false;
 }
@@ -565,7 +684,6 @@ if (siteHeader) {
     if (wasCondensed && window.scrollY > 150) {
       siteHeader.classList.add("is-condensed");
     }
-    syncProgressTimeline();
     syncParallax();
     lockHeaderState(220);
   });
