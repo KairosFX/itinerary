@@ -25,6 +25,7 @@ const jumpCurrentDayButton = document.querySelector("[data-jump-current-day]");
 const optionalPrompt = document.querySelector("[data-optional-prompt]");
 const optionalPromptExpanded = document.querySelector("[data-optional-prompt-expanded]");
 const optionalPromptCompact = document.querySelector("[data-optional-prompt-compact]");
+const optionalPromptFeedback = document.querySelector("[data-optional-feedback]");
 const optionalUnlockButtons = document.querySelectorAll("[data-optional-unlock]");
 const optionalSkipButton = document.querySelector("[data-optional-skip]");
 const optionalSectionNodes = document.querySelectorAll("[data-optional-section]");
@@ -127,6 +128,7 @@ let sequenceNoticeTimer = 0;
 let lastTimelineFocusDay = null;
 let optionalDaysUnlocked = false;
 let optionalPromptIsCompact = false;
+let optionalPromptDeferred = false;
 let routeMapInstance = null;
 let routeMapLibraryPromise = null;
 let routeMapInitializationPromise = null;
@@ -527,6 +529,34 @@ function updateProgressOverview() {
       node.textContent = `${completedCount} of ${totalDays} full day${totalDays === 1 ? "" : "s"} completed`;
     }
   });
+}
+
+function setOptionalPromptFeedback(isVisible) {
+  if (!optionalPromptFeedback) {
+    return;
+  }
+
+  if (!isVisible) {
+    optionalPromptFeedback.hidden = true;
+    optionalPromptFeedback.textContent = "";
+    optionalPrompt?.classList.remove("is-confirmed");
+    return;
+  }
+
+  optionalPromptFeedback.hidden = false;
+  optionalPromptFeedback.textContent =
+    root.lang === "ja" ? "追加日程を追加しました" : "Optional days added";
+  optionalPrompt?.classList.add("is-confirmed");
+}
+
+function setOptionalPromptButtonsDisabled(isDisabled) {
+  optionalUnlockButtons.forEach((button) => {
+    button.disabled = isDisabled;
+  });
+
+  if (optionalSkipButton) {
+    optionalSkipButton.disabled = isDisabled;
+  }
 }
 
 function getRouteMapMessage(key) {
@@ -1162,26 +1192,31 @@ function syncOptionalDaysUI() {
     return;
   }
 
-  const showPrompt = canOfferOptionalDays && !optionalDaysUnlocked;
+  const showPrompt = canOfferOptionalDays && !optionalDaysUnlocked && !optionalPromptDeferred;
   optionalPrompt.hidden = !showPrompt;
 
   if (!showPrompt) {
     optionalPromptIsCompact = false;
+    setOptionalPromptFeedback(false);
+    setOptionalPromptButtonsDisabled(false);
   }
 
   if (optionalPromptExpanded) {
-    optionalPromptExpanded.hidden = !showPrompt || optionalPromptIsCompact;
+    optionalPromptExpanded.hidden = !showPrompt;
   }
 
   if (optionalPromptCompact) {
-    optionalPromptCompact.hidden = !showPrompt || !optionalPromptIsCompact;
+    optionalPromptCompact.hidden = true;
   }
 }
 
 function unlockOptionalDays() {
   optionalDaysUnlocked = true;
   optionalPromptIsCompact = false;
+  optionalPromptDeferred = false;
   storeBoolean(optionalDaysUnlockedStorageKey, true);
+  setOptionalPromptButtonsDisabled(false);
+  setOptionalPromptFeedback(false);
   syncOptionalDaysUI();
   refreshChecklistProgressState();
   syncProgressTimeline();
@@ -1190,6 +1225,37 @@ function unlockOptionalDays() {
   window.requestAnimationFrame(() => {
     scrollProgressTimelineToActive(true);
   });
+}
+
+function confirmOptionalDaysUnlock() {
+  if (optionalDaysUnlocked) {
+    return;
+  }
+
+  optionalPromptDeferred = false;
+  setOptionalPromptButtonsDisabled(true);
+  setOptionalPromptFeedback(true);
+
+  window.setTimeout(() => {
+    unlockOptionalDays();
+  }, 880);
+}
+
+function resolveLengthValue(value, rootFontSize) {
+  const trimmedValue = String(value || "").trim();
+  if (!trimmedValue) {
+    return 0;
+  }
+
+  if (trimmedValue.endsWith("rem")) {
+    return Number.parseFloat(trimmedValue) * rootFontSize;
+  }
+
+  if (trimmedValue.endsWith("px")) {
+    return Number.parseFloat(trimmedValue);
+  }
+
+  return Number.parseFloat(trimmedValue) || 0;
 }
 
 function updateTimelineSpine() {
@@ -1207,9 +1273,18 @@ function updateTimelineSpine() {
     return;
   }
 
-  const rootFontSize = Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize || "16") || 16;
-  const nodeCenter = anchorItem.offsetTop + (1.08 + 0.71) * rootFontSize;
-  progressTimeline.style.setProperty("--timeline-spine-fill", `${Math.max(nodeCenter - 1.18 * rootFontSize, 0)}px`);
+  const rootFontSize =
+    Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize || "16") || 16;
+  const timelineStyles = window.getComputedStyle(progressTimeline);
+  const nodeTop = resolveLengthValue(timelineStyles.getPropertyValue("--timeline-node-top"), rootFontSize);
+  const nodeSize = resolveLengthValue(
+    timelineStyles.getPropertyValue("--timeline-node-size"),
+    rootFontSize
+  );
+  const nodeCenterOffset = nodeTop + nodeSize / 2;
+  const fillHeight = Math.max(anchorItem.offsetTop + nodeCenterOffset - nodeCenterOffset, 2);
+
+  progressTimeline.style.setProperty("--timeline-spine-fill", `${fillHeight}px`);
 }
 
 function scrollProgressTimelineToActive(force = false) {
@@ -1568,6 +1643,7 @@ function setLanguage(language) {
   refreshChecklistProgressState();
   syncProgressTimeline();
   syncRouteMapState();
+  setOptionalPromptFeedback(false);
 }
 
 function handleLanguageButtonClick(button) {
@@ -1595,6 +1671,16 @@ function setActivePanel(panelId) {
   });
 
   if (hasMatch) {
+    if (
+      panelId === "checklist" &&
+      optionalPromptDeferred &&
+      completedHistoryDays.has("7") &&
+      !optionalDaysUnlocked
+    ) {
+      optionalPromptDeferred = false;
+      syncOptionalDaysUI();
+    }
+
     refreshRevealPanel(panelId);
     syncProgressTimeline();
     if (
@@ -1799,13 +1885,14 @@ if (jumpCurrentDayButton) {
 
 optionalUnlockButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    unlockOptionalDays();
+    confirmOptionalDaysUnlock();
   });
 });
 
 if (optionalSkipButton) {
   optionalSkipButton.addEventListener("click", () => {
-    optionalPromptIsCompact = true;
+    optionalPromptDeferred = true;
+    optionalPromptIsCompact = false;
     syncOptionalDaysUI();
   });
 }
@@ -1891,6 +1978,11 @@ if (siteHeader) {
       siteHeader.classList.add("is-condensed");
     }
     syncParallax();
+    syncProgressTimeline();
+    if (routeMapInstance && routeMapToggle?.getAttribute("aria-expanded") === "true") {
+      routeMapInstance.resize();
+      fitRouteMapBounds();
+    }
     lockHeaderState(220);
   });
 }
