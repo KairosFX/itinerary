@@ -924,6 +924,24 @@
 
         <div class="route-map__panel" id="route-map-panel" hidden>
           <div class="route-map__surface">
+            <div class="route-map__interaction-gate" data-route-map-gate>
+              <p class="route-map__interaction-title">
+                <span data-language="en">Map interaction is off</span>
+                <span data-language="ja" hidden>地図操作はオフです</span>
+              </p>
+              <p class="route-map__interaction-copy">
+                <span data-language="en">Scroll the page normally, then activate the map only when you want to pan or zoom.</span>
+                <span data-language="ja" hidden>通常はページをスクロールし、地図を動かしたいときだけ操作を有効にできます。</span>
+              </p>
+              <button class="route-map__interaction-button" type="button" data-route-map-activate>
+                <span data-language="en">Activate map</span>
+                <span data-language="ja" hidden>地図を操作する</span>
+              </button>
+            </div>
+            <button class="route-map__interaction-exit" type="button" data-route-map-deactivate hidden>
+              <span data-language="en">Exit map interaction</span>
+              <span data-language="ja" hidden>地図操作を終了</span>
+            </button>
             <div
               class="route-map__canvas"
               id="route-map-canvas"

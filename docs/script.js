@@ -13,8 +13,12 @@ const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const routeMedia = document.querySelector(".route-reference__media");
 const routeMapToggle = document.querySelector("[data-route-map-toggle]");
 const routeMapPanel = document.getElementById("route-map-panel");
+const routeMapSurface = document.querySelector(".route-map__surface");
 const routeMapCanvas = document.getElementById("route-map-canvas");
 const routeMapStatus = document.querySelector("[data-route-map-status]");
+const routeMapGate = document.querySelector("[data-route-map-gate]");
+const routeMapActivateButton = document.querySelector("[data-route-map-activate]");
+const routeMapDeactivateButton = document.querySelector("[data-route-map-deactivate]");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
 const checklistInputs = Array.from(document.querySelectorAll('.day-card input[type="checkbox"]'));
 const progressItems = Array.from(document.querySelectorAll("[data-progress-item]"));
@@ -143,6 +147,7 @@ let routeMapInitializationPromise = null;
 let routeMapSegments = [];
 let routeMapMarkers = new Map();
 let routeMapStatusMode = null;
+let routeMapInteractive = false;
 
 function getSystemTheme() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -680,6 +685,7 @@ function setRouteMapOpen(nextOpen) {
   updateRouteMapToggleLabel();
 
   if (!isOpen) {
+    setRouteMapInteractive(false);
     return;
   }
 
@@ -692,6 +698,7 @@ function setRouteMapOpen(nextOpen) {
       window.requestAnimationFrame(() => {
         routeMapInstance.resize();
         fitRouteMapBounds();
+        setRouteMapInteractive(false);
         syncRouteMapState();
       });
     })
@@ -1179,6 +1186,43 @@ function fitRouteMapBounds(animate = false) {
   });
 }
 
+function setRouteMapInteractive(isInteractive) {
+  routeMapInteractive = Boolean(isInteractive);
+
+  routeMapSurface?.classList.toggle("is-interactive", routeMapInteractive);
+  routeMapPanel?.parentElement?.classList.toggle("is-map-interactive", routeMapInteractive);
+
+  if (routeMapGate) {
+    routeMapGate.hidden = routeMapInteractive;
+  }
+
+  if (routeMapDeactivateButton) {
+    routeMapDeactivateButton.hidden = !routeMapInteractive;
+  }
+
+  if (!routeMapInstance) {
+    return;
+  }
+
+  if (routeMapInteractive) {
+    routeMapInstance.scrollZoom.enable();
+    routeMapInstance.dragPan.enable();
+    routeMapInstance.boxZoom.enable();
+    routeMapInstance.doubleClickZoom.enable();
+    routeMapInstance.keyboard.enable();
+    routeMapInstance.touchZoomRotate.enable();
+    routeMapInstance.touchZoomRotate.disableRotation();
+    return;
+  }
+
+  routeMapInstance.scrollZoom.disable();
+  routeMapInstance.dragPan.disable();
+  routeMapInstance.boxZoom.disable();
+  routeMapInstance.doubleClickZoom.disable();
+  routeMapInstance.keyboard.disable();
+  routeMapInstance.touchZoomRotate.disable();
+}
+
 function syncRouteMapState() {
   if (!routeMapInstance) {
     updateRouteMapToggleLabel();
@@ -1280,6 +1324,7 @@ async function initializeRouteMap() {
       );
       routeMapInstance.dragRotate.disable();
       routeMapInstance.touchZoomRotate.disableRotation();
+      setRouteMapInteractive(false);
 
       routeMapInstance.on("load", async () => {
         try {
@@ -2107,6 +2152,18 @@ if (routeMapToggle) {
   });
 }
 
+if (routeMapActivateButton) {
+  routeMapActivateButton.addEventListener("click", () => {
+    setRouteMapInteractive(true);
+  });
+}
+
+if (routeMapDeactivateButton) {
+  routeMapDeactivateButton.addEventListener("click", () => {
+    setRouteMapInteractive(false);
+  });
+}
+
 if (jumpCurrentDayButton) {
   jumpCurrentDayButton.addEventListener("click", () => {
     scrollToChecklistDay(getCurrentProgressDay());
@@ -2165,8 +2222,23 @@ if (resetProgressModal) {
 }
 
 window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && routeMapInteractive) {
+    setRouteMapInteractive(false);
+    return;
+  }
+
   if (event.key === "Escape" && resetProgressModal && !resetProgressModal.hidden) {
     setResetModalOpen(false);
+  }
+});
+
+document.addEventListener("pointerdown", (event) => {
+  if (!routeMapInteractive || !routeMapSurface) {
+    return;
+  }
+
+  if (!routeMapSurface.contains(event.target)) {
+    setRouteMapInteractive(false);
   }
 });
 

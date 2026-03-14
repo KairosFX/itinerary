@@ -803,7 +803,7 @@ h3 {
 .progress-item::before {
   content: "";
   position: absolute;
-  left: var(--timeline-node-left);
+  left: calc(var(--timeline-axis-x) - (var(--timeline-node-size) / 2));
   top: var(--timeline-node-top);
   width: var(--timeline-node-size);
   height: var(--timeline-node-size);
@@ -823,7 +823,7 @@ h3 {
 .progress-item::after {
   content: "";
   position: absolute;
-  left: var(--timeline-node-left);
+  left: calc(var(--timeline-axis-x) - (var(--timeline-node-size) / 2));
   top: var(--timeline-node-top);
   width: var(--timeline-node-size);
   height: var(--timeline-node-size);
@@ -1365,6 +1365,10 @@ h3 {
     0 24px 42px rgba(7, 8, 9, 0.36);
 }
 
+.route-map__surface:not(.is-interactive) {
+  cursor: pointer;
+}
+
 .route-map__surface::before {
   content: "";
   position: absolute;
@@ -1374,6 +1378,70 @@ h3 {
     linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0));
   pointer-events: none;
   z-index: 2;
+}
+
+.route-map__interaction-gate {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  align-content: end;
+  justify-items: start;
+  gap: 0.45rem;
+  padding: 1rem;
+  background:
+    linear-gradient(180deg, rgba(12, 14, 18, 0.04), rgba(12, 14, 18, 0.2) 52%, rgba(12, 14, 18, 0.58) 100%);
+}
+
+.route-map__interaction-title,
+.route-map__interaction-copy {
+  margin: 0;
+}
+
+.route-map__interaction-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff6ee;
+}
+
+.route-map__interaction-copy {
+  max-width: 30rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: rgba(247, 238, 228, 0.76);
+}
+
+.route-map__interaction-button,
+.route-map__interaction-exit {
+  padding: 0.58rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 248, 241, 0.14);
+  background: rgba(14, 16, 18, 0.84);
+  color: #fff8f1;
+  box-shadow: 0 12px 24px rgba(5, 6, 7, 0.24);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+
+.route-map__interaction-button:hover,
+.route-map__interaction-button:focus-visible,
+.route-map__interaction-exit:hover,
+.route-map__interaction-exit:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(171, 74, 59, 0.18);
+  border-color: rgba(214, 120, 99, 0.28);
+  box-shadow: 0 16px 26px rgba(5, 6, 7, 0.28);
+}
+
+.route-map__interaction-exit {
+  position: absolute;
+  z-index: 5;
+  top: 0.72rem;
+  left: 0.72rem;
+  font-size: 0.82rem;
 }
 
 .route-map__canvas {
@@ -1395,6 +1463,11 @@ h3 {
     radial-gradient(circle at 50% 120%, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
   pointer-events: none;
   z-index: 1;
+}
+
+.route-map:not(.is-map-interactive) .maplibregl-ctrl-top-right,
+.route-map:not(.is-map-interactive) .maplibregl-ctrl-bottom-right {
+  opacity: 0.34;
 }
 
 .route-map__status {
@@ -1962,7 +2035,11 @@ html.has-modal-open body {
 }
 
 .footer-link--backtop::after {
-  content: "↑";
+  content: none;
+}
+
+.footer-link--backtop {
+  justify-content: center;
 }
 
 .footer-link:hover,
@@ -2944,6 +3021,12 @@ html[data-theme="dark"] .route-map__surface,
 html[data-theme="dark"] .route-map__canvas,
 html[data-theme="dark"] .route-map__status {
   color: #efe6da;
+}
+
+html[data-theme="dark"] .route-map__interaction-button,
+html[data-theme="dark"] .route-map__interaction-exit {
+  background: rgba(13, 15, 18, 0.88);
+  border-color: rgba(248, 239, 228, 0.1);
 }
 
 html[data-theme="dark"] .route-map .maplibregl-ctrl-group {
