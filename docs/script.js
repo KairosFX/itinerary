@@ -12,6 +12,10 @@ const routeMedia = document.querySelector(".route-reference__media");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
 const checklistInputs = Array.from(document.querySelectorAll('.day-card input[type="checkbox"]'));
 const progressItems = Array.from(document.querySelectorAll("[data-progress-item]"));
+const progressTimeline = document.querySelector("[data-progress-timeline]");
+const progressCurrentDayNode = document.querySelector("[data-progress-current-day]");
+const progressOverviewFill = document.querySelector("[data-progress-overview-fill]");
+const progressOverviewCaptions = document.querySelectorAll(".progress-overview__caption [data-language]");
 const dayCardMap = new Map(dayCards.map((card) => [card.dataset.day, card]));
 const progressItemMap = new Map(progressItems.map((item) => [item.dataset.progressItem, item]));
 const root = document.documentElement;
@@ -61,6 +65,7 @@ let warningDays = new Set();
 let accessibleDay = 1;
 let currentProgressDay = 1;
 let sequenceNoticeTimer = 0;
+let lastTimelineFocusDay = null;
 
 function getOrderedDayNumbers() {
   return dayCards
@@ -149,7 +154,8 @@ function getJourneyState() {
   }
 
   let nextCurrentDay = highestUnlockedDay;
-  for (const day of orderedDays) {
+  for (let index = orderedDays.length - 1; index >= 0; index -= 1) {
+    const day = orderedDays[index];
     const dayKey = String(day);
     if (nextUnlockedDays.has(dayKey) && !rawCompleted.has(dayKey)) {
       nextCurrentDay = day;
@@ -391,6 +397,91 @@ function showSequenceNotice(requiredDay) {
 
 function getCurrentProgressDay() {
   return String(currentProgressDay);
+}
+
+function getProgressOverviewState() {
+  const totalDays = 9;
+  const completedCount = completedDays.size;
+  const activeDay = Math.min(Number(getCurrentProgressDay()) || 1, totalDays);
+
+  return {
+    totalDays,
+    completedCount,
+    activeDay,
+    ratio: totalDays ? completedCount / totalDays : 0
+  };
+}
+
+function updateProgressOverview() {
+  const { totalDays, completedCount, activeDay, ratio } = getProgressOverviewState();
+
+  if (progressCurrentDayNode) {
+    progressCurrentDayNode.textContent = String(activeDay);
+  }
+
+  if (progressOverviewFill) {
+    progressOverviewFill.style.setProperty("--overview-progress", String(ratio));
+    progressOverviewFill.parentElement?.style.setProperty("--overview-progress", String(ratio));
+  }
+
+  progressOverviewCaptions.forEach((node) => {
+    if (node.dataset.language === "ja") {
+      node.textContent = `完了した日程は${completedCount}日です`;
+    } else {
+      node.textContent = `${completedCount} full day${completedCount === 1 ? "" : "s"} completed`;
+    }
+  });
+}
+
+function updateTimelineSpine() {
+  if (!progressTimeline) {
+    return;
+  }
+
+  const anchorItem =
+    progressTimeline.querySelector(".progress-item.is-active") ||
+    progressTimeline.querySelector(".progress-item.is-complete:last-of-type") ||
+    progressTimeline.querySelector(".progress-item");
+
+  if (!anchorItem) {
+    progressTimeline.style.setProperty("--timeline-spine-fill", "0px");
+    return;
+  }
+
+  const rootFontSize = Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize || "16") || 16;
+  const nodeCenter = anchorItem.offsetTop + (1.08 + 0.71) * rootFontSize;
+  progressTimeline.style.setProperty("--timeline-spine-fill", `${Math.max(nodeCenter - 1.18 * rootFontSize, 0)}px`);
+}
+
+function scrollProgressTimelineToActive(force = false) {
+  if (!progressTimeline) {
+    return;
+  }
+
+  const activeItem = progressTimeline.querySelector(".progress-item.is-active");
+  if (!activeItem) {
+    return;
+  }
+
+  const activeDay = activeItem.dataset.progressItem;
+  if (!force && lastTimelineFocusDay === activeDay) {
+    return;
+  }
+
+  lastTimelineFocusDay = activeDay;
+
+  if (progressTimeline.scrollHeight <= progressTimeline.clientHeight + 8) {
+    progressTimeline.scrollTop = 0;
+    return;
+  }
+
+  const nextTop =
+    activeItem.offsetTop - progressTimeline.clientHeight * 0.28 + activeItem.offsetHeight * 0.5;
+
+  progressTimeline.scrollTo({
+    top: Math.max(nextTop, 0),
+    behavior: getScrollBehavior()
+  });
 }
 
 function updateRouteProgress() {
@@ -755,6 +846,11 @@ function syncProgressTimeline() {
   }
 
   setActiveProgressItem(getCurrentProgressDay());
+  updateProgressOverview();
+  window.requestAnimationFrame(() => {
+    updateTimelineSpine();
+    scrollProgressTimelineToActive();
+  });
 }
 
 function syncParallax() {
@@ -832,7 +928,7 @@ refreshChecklistProgressState();
 
 registerRevealBlocks();
 setActivePanel("checklist");
-setActiveProgressItem(1);
+setActiveProgressItem(getCurrentProgressDay());
 syncParallax();
 syncProgressTimeline();
 
@@ -854,10 +950,25 @@ checklistInputs.forEach((input) => {
     const dayCard = input.closest(".day-card[data-day]");
     const day = dayCard?.dataset.day;
     const wasComplete = day ? completedDays.has(day) : false;
+    const previousUnlockedDays = new Set(unlockedDays);
+    const previousCurrentDay = String(currentProgressDay);
 
     storeChecklistState();
     refreshChecklistProgressState();
     syncProgressTimeline();
+
+    Array.from(unlockedDays)
+      .filter((unlockedDay) => !previousUnlockedDays.has(unlockedDay))
+      .forEach((unlockedDay) => {
+        animateUnlock(progressItemMap.get(unlockedDay));
+        animateUnlock(dayCardMap.get(unlockedDay));
+      });
+
+    if (String(currentProgressDay) !== previousCurrentDay) {
+      window.requestAnimationFrame(() => {
+        scrollProgressTimelineToActive(true);
+      });
+    }
 
     if (
       day &&

@@ -214,6 +214,30 @@
           </p>
         </div>
 
+        <div class="progress-overview" aria-live="polite">
+          <div class="progress-overview__copy">
+            <p class="progress-overview__label">
+              <span data-language="en">Trip Progress</span>
+              <span data-language="ja" hidden>旅の進み具合</span>
+            </p>
+            <strong class="progress-overview__day">
+              <span data-language="en">Day </span>
+              <span data-language="ja" hidden></span>
+              <span data-progress-current-day>1</span>
+              <span data-language="en"> of 9</span>
+              <span data-language="ja" hidden> / 9日</span>
+            </strong>
+            <p class="progress-overview__caption">
+              <span data-language="en">0 full days completed</span>
+              <span data-language="ja" hidden>完了した日程は0日です</span>
+            </p>
+          </div>
+
+          <div class="progress-overview__bar" aria-hidden="true">
+            <span class="progress-overview__bar-fill" data-progress-overview-fill></span>
+          </div>
+        </div>
+
         <ol class="progress-timeline" data-progress-timeline>
           <li class="progress-item is-active" data-progress-item="1">
             <span class="progress-item__step">

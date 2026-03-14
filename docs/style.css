@@ -435,13 +435,71 @@ h3 {
   gap: 0.45rem;
 }
 
+.progress-overview {
+  display: grid;
+  gap: 0.78rem;
+  margin: 0 0 1rem;
+  padding: 0.9rem 1rem 0.92rem;
+  border: 1px solid rgba(171, 74, 59, 0.1);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255, 252, 248, 0.92), rgba(255, 248, 242, 0.86));
+}
+
+.progress-overview__copy {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.progress-overview__label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.progress-overview__day {
+  font-size: clamp(1.2rem, 1rem + 0.6vw, 1.5rem);
+  color: var(--accent-deep);
+}
+
+.progress-overview__caption {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.progress-overview__bar {
+  position: relative;
+  height: 0.52rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(171, 74, 59, 0.1);
+}
+
+.progress-overview__bar-fill {
+  display: block;
+  width: calc(var(--overview-progress, 0) * 100%);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(214, 120, 99, 0.94), rgba(133, 47, 38, 1));
+  transition: width 260ms ease;
+}
+
 .progress-timeline {
+  --timeline-spine-fill: 0px;
   list-style: none;
   margin: 0;
   padding: 0 0 0 0.2rem;
   display: grid;
   gap: 0.82rem;
   position: relative;
+  max-height: min(35rem, 70vh);
+  overflow-y: auto;
+  padding-right: 0.28rem;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
 }
 
 .progress-timeline::before {
@@ -453,6 +511,20 @@ h3 {
   width: 2px;
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(171, 74, 59, 0.22), rgba(171, 74, 59, 0.08));
+}
+
+.progress-timeline::after {
+  content: "";
+  position: absolute;
+  left: 1.15rem;
+  top: 1.18rem;
+  width: 2px;
+  height: var(--timeline-spine-fill);
+  max-height: calc(100% - 2.36rem);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(171, 74, 59, 0.84), rgba(171, 74, 59, 0.28));
+  box-shadow: 0 0 0 1px rgba(255, 250, 245, 0.22);
+  transition: height 340ms cubic-bezier(0.22, 1, 0.36, 1), background-color 220ms ease;
 }
 
 .progress-item {
@@ -601,9 +673,11 @@ h3 {
 
 .progress-item.is-active {
   border-color: rgba(171, 74, 59, 0.22);
-  background: rgba(255, 250, 247, 0.92);
-  transform: translateY(-2px);
-  box-shadow: 0 16px 32px rgba(39, 27, 20, 0.08);
+  background: rgba(255, 250, 247, 0.96);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 0 0 2px rgba(171, 74, 59, 0.1),
+    0 18px 34px rgba(39, 27, 20, 0.1);
 }
 
 .progress-item.is-active::before {
@@ -618,9 +692,22 @@ h3 {
   color: var(--accent-deep);
 }
 
+.progress-item.is-active::after {
+  content: "▶";
+  opacity: 1;
+  transform: scale(1);
+  color: var(--accent-deep);
+  background: rgba(255, 248, 243, 0.96);
+}
+
+.progress-item.is-active .progress-item__ratio {
+  color: var(--accent-deep);
+}
+
 .progress-item.is-complete {
   border-color: rgba(171, 74, 59, 0.2);
-  background: rgba(255, 251, 247, 0.94);
+  background: rgba(255, 251, 247, 0.9);
+  opacity: 0.86;
 }
 
 .progress-item.is-complete::before {
@@ -638,6 +725,11 @@ h3 {
 
 .progress-item.is-complete .progress-item__ratio {
   color: var(--accent-deep);
+}
+
+.progress-item.is-complete:not(.is-active) .progress-item__place,
+.progress-item.is-complete:not(.is-active) .progress-item__step {
+  color: rgba(58, 63, 64, 0.82);
 }
 
 .progress-item.is-partial {
@@ -674,6 +766,10 @@ h3 {
 .progress-item.is-warning .progress-item__ratio,
 .progress-item.is-warning .progress-item__place {
   color: #8a6030;
+}
+
+.progress-item.is-warning .progress-item__step {
+  color: #b07938;
 }
 
 .progress-item.is-locked {
@@ -983,7 +1079,9 @@ h3 {
 .day-card.is-current-day {
   box-shadow:
     0 0 0 2px rgba(171, 74, 59, 0.12),
-    0 18px 36px rgba(55, 35, 22, 0.12);
+    0 18px 36px rgba(55, 35, 22, 0.14);
+  border-color: rgba(171, 74, 59, 0.18);
+  transform: translateY(-2px);
 }
 
 .day-card.is-locked-day {
@@ -1007,6 +1105,10 @@ h3 {
 
 .day-card.is-celebrating {
   animation: completionPulse 880ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.day-card.is-unlocking {
+  animation: unlockPulse 1100ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .note-card {
@@ -1449,6 +1551,14 @@ h3 {
     justify-items: start;
   }
 
+  .progress-overview {
+    padding: 0.86rem 0.92rem 0.9rem;
+  }
+
+  .progress-timeline {
+    max-height: min(32rem, 62vh);
+  }
+
   .section-nav {
     justify-content: flex-start;
   }
@@ -1620,6 +1730,14 @@ h3 {
 
   .day-card {
     padding-left: 1.28rem;
+  }
+
+  .progress-overview__day {
+    font-size: 1.2rem;
+  }
+
+  .progress-timeline {
+    max-height: min(27rem, 58vh);
   }
 
   .progress-item {
