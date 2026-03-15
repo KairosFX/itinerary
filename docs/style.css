@@ -1726,7 +1726,7 @@ html.has-modal-open body {
 }
 
 .essentials-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   align-items: start;
 }
 
@@ -1758,6 +1758,10 @@ html.has-modal-open body {
   min-width: 0;
   padding: var(--content-box-padding-block) var(--content-box-padding-inline);
   transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.essentials-card {
+  gap: var(--content-box-item-gap);
 }
 
 .essentials-card,
@@ -2016,6 +2020,35 @@ html.has-modal-open body {
   height: 0.55rem;
   border-radius: 50%;
   background: var(--accent);
+}
+
+.essentials-card h5,
+.essentials-card h6,
+.essentials-card p {
+  margin: 0;
+}
+
+.essentials-card h5 {
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.essentials-card h6 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.essentials-card p {
+  min-width: 0;
+  font-size: var(--content-body-size);
+  line-height: 1.68;
+  color: var(--muted);
+  overflow-wrap: anywhere;
 }
 
 .essentials-list,
@@ -2600,10 +2633,6 @@ html.has-modal-open body {
     --content-grid-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .essentials-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .header-inner {
     flex-direction: column;
   }
@@ -2723,10 +2752,6 @@ html.has-modal-open body {
 
   .trip-stats,
   .progress-timeline {
-    grid-template-columns: 1fr;
-  }
-
-  .essentials-grid {
     grid-template-columns: 1fr;
   }
 
