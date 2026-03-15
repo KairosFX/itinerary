@@ -1712,6 +1712,7 @@ html.has-modal-open body {
   --card-header-min-block: 4.4rem;
   display: grid;
   grid-template-columns: var(--content-grid-columns);
+  grid-auto-rows: 1fr;
   gap: var(--content-box-gap);
   align-items: stretch;
 }
@@ -1719,6 +1720,7 @@ html.has-modal-open body {
 .day-grid--optional {
   display: grid;
   grid-template-columns: var(--content-grid-columns);
+  grid-auto-rows: 1fr;
   gap: var(--content-box-gap);
   align-items: stretch;
 }
