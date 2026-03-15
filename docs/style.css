@@ -1745,8 +1745,9 @@ html.has-modal-open body {
 }
 
 .notes-grid {
+  --note-card-title-lines: 2;
   grid-template-columns: var(--content-grid-columns);
-  align-items: start;
+  align-items: stretch;
 }
 
 .day-grid--optional {
@@ -1778,6 +1779,11 @@ html.has-modal-open body {
   position: relative;
   padding-left: var(--content-box-gutter);
   border-top: 4px solid var(--accent-soft);
+}
+
+.note-card {
+  grid-template-rows: auto 1fr;
+  height: 100%;
 }
 
 .day-card {
@@ -1991,7 +1997,7 @@ html.has-modal-open body {
   align-items: start;
   align-content: start;
   column-gap: 0;
-  min-block-size: var(--card-header-min-block);
+  min-block-size: calc(var(--note-card-title-lines) * 1.18em + var(--content-box-title-gap));
   margin: 0 0 var(--content-box-title-gap);
   padding-bottom: var(--content-box-title-gap);
   font-size: var(--content-card-title-size);
@@ -2707,6 +2713,10 @@ html.has-modal-open body {
     --content-box-padding-block: 1rem;
     --content-box-padding-inline: 1rem;
     --content-box-gutter: 1.35rem;
+  }
+
+  .notes-grid {
+    --note-card-title-lines: 1;
   }
 
   .page-shell {
