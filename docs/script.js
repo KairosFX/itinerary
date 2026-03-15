@@ -1445,7 +1445,29 @@ function unlockOptionalDays() {
   syncProgressTimeline();
   animateUnlock(progressItemMap.get("8"));
   animateUnlock(dayCardMap.get("8"));
+
+  optionalSectionNodes.forEach((node, index) => {
+    if (!node.classList.contains("reveal-block")) {
+      return;
+    }
+
+    node.classList.remove("is-visible");
+    node.style.setProperty("--reveal-delay", `${index * 70}ms`);
+  });
+
   window.requestAnimationFrame(() => {
+    optionalSectionNodes.forEach((node) => {
+      if (!node.classList.contains("reveal-block")) {
+        return;
+      }
+
+      node.classList.add("is-visible");
+
+      if (revealObserver) {
+        revealObserver.observe(node);
+      }
+    });
+
     scrollProgressTimelineToActive(true);
   });
 }
@@ -2060,7 +2082,7 @@ function syncParallax() {
 function registerRevealBlocks() {
   const revealBlocks = Array.from(
     document.querySelectorAll(
-      ".hero-panel, .trip-stats, .progress-card, .section-heading, .day-card, .note-card, .route-map, .journey-close, .site-footer__lead, .site-footer__links, .site-footer__credit"
+      ".hero-panel, .trip-stats, .progress-card, .content-section .section-heading, .day-grid, .notes-grid, [data-optional-section], .route-map, .journey-close, .site-footer__lead, .site-footer__links, .site-footer__credit"
     )
   );
 
