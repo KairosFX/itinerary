@@ -2191,7 +2191,7 @@ restoreChecklistState();
 refreshChecklistProgressState();
 
 registerRevealBlocks();
-setActivePanel("checklist");
+setActivePanel("overview");
 setActiveProgressItem(getCurrentProgressDay());
 syncParallax();
 syncProgressTimeline();

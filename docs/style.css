@@ -46,6 +46,7 @@
   --icon-checklist: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='4' width='16' height='16' rx='3'/%3E%3Cpath d='M8.2 12.1l2.3 2.4 5.3-6'/%3E%3C/svg%3E");
   --icon-notes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 7h12M6 12h12M6 17h8'/%3E%3C/svg%3E");
   --icon-route: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Cpath d='M15.5 8.5l-2.2 6-6 2.2 2.2-6z'/%3E%3C/svg%3E");
+  --icon-essentials: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='7' width='16' height='12' rx='2.6'/%3E%3Cpath d='M9 7V5.8A1.8 1.8 0 0 1 10.8 4h2.4A1.8 1.8 0 0 1 15 5.8V7'/%3E%3Cpath d='M10.5 12h3'/%3E%3C/svg%3E");
 }
 
 * {
@@ -366,6 +367,10 @@ input:focus-visible {
   --section-icon: var(--icon-route);
 }
 
+.section-tag--essentials {
+  --section-icon: var(--icon-essentials);
+}
+
 .eyebrow::before {
   content: "";
   width: 0.72rem;
@@ -418,7 +423,7 @@ h3 {
 .header-actions {
   display: grid;
   grid-template-columns: auto auto;
-  gap: 0.46rem;
+  gap: 0.38rem;
   align-items: center;
   justify-content: end;
   justify-items: end;
@@ -432,8 +437,9 @@ h3 {
   grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3rem;
+  gap: 0.24rem;
   justify-content: flex-end;
+  max-width: 100%;
 }
 
 .section-tab,
@@ -450,9 +456,10 @@ h3 {
 }
 
 .section-tab {
-  padding: 0.46rem 0.74rem;
-  font-size: 0.86rem;
+  padding: 0.42rem 0.68rem;
+  font-size: 0.84rem;
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .section-tab:hover,
@@ -1726,8 +1733,9 @@ html.has-modal-open body {
 }
 
 .essentials-grid {
-  grid-template-columns: 1fr;
-  align-items: start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  align-items: stretch;
 }
 
 .day-grid {
@@ -1762,6 +1770,7 @@ html.has-modal-open body {
 
 .essentials-card {
   gap: var(--content-box-item-gap);
+  height: 100%;
 }
 
 .essentials-card,
@@ -2003,6 +2012,7 @@ html.has-modal-open body {
 .essentials-card h4 {
   position: relative;
   margin: 0;
+  min-block-size: 3.5rem;
   padding-bottom: var(--content-box-title-gap);
   border-bottom: 1px solid var(--line);
   font-family: var(--font-serif);
@@ -2659,6 +2669,10 @@ html.has-modal-open body {
     padding: 0.86rem 0.92rem 0.9rem;
   }
 
+  .essentials-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .optional-unlock__compact {
     grid-template-columns: 1fr;
     justify-items: start;
@@ -2720,8 +2734,8 @@ html.has-modal-open body {
   .section-tab {
     width: auto;
     text-align: center;
-    padding: 0.46rem 0.38rem;
-    font-size: 0.8rem;
+    padding: 0.44rem 0.32rem;
+    font-size: 0.78rem;
   }
 
   .language-switcher {
@@ -2797,6 +2811,11 @@ html.has-modal-open body {
   .notes-grid,
   .essentials-grid {
     --card-header-min-block: 4rem;
+  }
+
+  .essentials-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
   }
 
   .welcome-overlay {

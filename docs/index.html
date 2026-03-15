@@ -6,7 +6,7 @@
   <title>Japan Trip | Travel Guide</title>
   <meta
     name="description"
-    content="Simple bilingual Japan trip website for GitHub Pages with a checklist, notes, and a route map from Osaka to Tokyo.">
+    content="Simple bilingual Japan trip website for GitHub Pages with overview, checklist, notes, essentials, and a route map from Osaka to Tokyo.">
   <meta name="theme-color" content="#ab4a3b">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,8 +87,8 @@
           <span data-language="ja" hidden>旅行ガイド</span>
         </h1>
         <p class="hero-copy">
-          <span data-language="en">A simple website for this trip, organized as checklist, notes, and routes.</span>
-          <span data-language="ja" hidden>このウェブサイトは、チェックリスト、メモ、ルートの順で見やすく整理しています。</span>
+          <span data-language="en">A simple website for this trip, organized as overview, checklist, notes, routes, and essentials.</span>
+          <span data-language="ja" hidden>このウェブサイトは、概要、チェックリスト、メモ、ルート、準備の順で見やすく整理しています。</span>
         </p>
       </div>
 
@@ -104,6 +104,16 @@
             type="button"
             role="tab"
             aria-selected="true"
+            aria-controls="overview"
+            data-panel-target="overview">
+            <span data-language="en">Overview</span>
+            <span data-language="ja" hidden>概要</span>
+          </button>
+          <button
+            class="section-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
             aria-controls="checklist"
             data-panel-target="checklist">
             <span data-language="en">Checklist</span>
@@ -128,6 +138,16 @@
             data-panel-target="route">
             <span data-language="en">Routes</span>
             <span data-language="ja" hidden>ルート</span>
+          </button>
+          <button
+            class="section-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="essentials"
+            data-panel-target="essentials">
+            <span data-language="en">Essentials</span>
+            <span data-language="ja" hidden>準備</span>
           </button>
         </nav>
 
@@ -163,7 +183,8 @@
   <div class="sequence-notice-toast" data-sequence-notice hidden role="status" aria-live="polite"></div>
 
   <main class="page-shell" id="main-content">
-    <section class="hero-panel card" aria-labelledby="overview-title">
+    <section class="content-section content-panel is-active" id="overview" data-panel="overview" role="tabpanel" aria-labelledby="overview-title" aria-hidden="false">
+      <section class="hero-panel card" aria-labelledby="overview-title">
       <div class="hero-panel__body">
         <div class="hero-panel__copy">
           <p class="section-tag section-tag--overview">
@@ -395,9 +416,10 @@
         </ol>
       </section>
     </section>
+    </section>
 
     <div class="content-panels" data-content-panels>
-    <section class="content-section content-panel is-active" id="checklist" data-panel="checklist" role="tabpanel" aria-labelledby="checklist-title" aria-hidden="false">
+    <section class="content-section content-panel" id="checklist" data-panel="checklist" role="tabpanel" aria-labelledby="checklist-title" aria-hidden="true" inert>
       <div class="section-heading">
         <p class="section-tag section-tag--checklist">
           <span data-language="en">Checklist</span>
@@ -412,560 +434,6 @@
           <span data-language="ja" hidden>元の予定順に沿って確認できる、日ごとのチェックリストです。</span>
         </p>
       </div>
-
-      <section class="essentials-section" aria-labelledby="essentials-title">
-        <div class="section-heading section-heading--compact">
-          <p class="section-tag section-tag--checklist">Essentials</p>
-          <h3 id="essentials-title">Essentials</h3>
-        </div>
-
-        <div class="essentials-grid">
-          <article class="essentials-card card">
-            <h4>Pack for heat first</h4>
-            <ul class="essentials-list">
-              <li>Lightweight, breathable clothes</li>
-              <li>2 pairs of very comfortable walking shoes or 1 main pair plus sandals</li>
-              <li>Hat, sunglasses, sunscreen</li>
-              <li>Small towel or cooling towel</li>
-              <li>Refillable water bottle</li>
-              <li>Portable fan / neck fan</li>
-              <li>Electrolyte packets</li>
-              <li>Compact umbrella, because summer showers still happen even after rainy season fades out</li>
-            </ul>
-            <h5>For your itinerary specifically</h5>
-            <ul class="essentials-list">
-              <li>Kyoto (Day 2) will feel the hottest because it is a long outdoor day with lots of walking and less breeze.</li>
-              <li>Hakone and Kawaguchiko may be a little more comfortable than Osaka/Tokyo, but still warm in the daytime; bring one light layer for mornings, evenings, buses, trains, and indoor AC. JNTO specifically points out that mountain areas are cooler than cities in summer.</li>
-              <li>Shibuya Sky is still worth booking, but be ready for weather restrictions. The official site says tickets can sell out, large bags are not allowed on the rooftop, and the roof may close for weather or abnormal heat conditions.</li>
-            </ul>
-            <h5>Book earlier than you would in cooler months</h5>
-            <ul class="essentials-list">
-              <li>Shibuya Sky: book in advance</li>
-              <li>Hakone hotel/ryokan: definitely reserve early for late July</li>
-              <li>Shin-Osaka → Odawara Shinkansen: reserve if you want a specific departure or have large luggage</li>
-              <li>Kaiyukan: advance ticket is still a good idea</li>
-            </ul>
-            <p>For your train day, SmartEX says bags with total dimensions 160 cm to 250 cm need a seat reservation with oversized baggage space.</p>
-            <h5>Your best luggage strategy</h5>
-            <p>Because your route has Osaka → Hakone → Fuji area → Tokyo, I would avoid hauling a huge suitcase through every transfer. Either:</p>
-            <ul class="essentials-list">
-              <li>travel with one medium suitcase + one daypack, or</li>
-              <li>send luggage ahead and carry a small overnight bag for Hakone/Fuji</li>
-            </ul>
-            <h5>Hakone prep</h5>
-            <p>Since you are entering Hakone from Odawara, the Odawara version of the Hakone Freepass is the better fit for your route, not the Shinjuku version. The official pass page specifically describes the Odawara option for travelers coming from Kansai and then continuing onward.</p>
-            <h5>What I would add to your checklist for these dates</h5>
-            <ul class="essentials-checklist">
-              <li>Cooling towel / handheld fan</li>
-              <li>Sunscreen + hat</li>
-              <li>Light breathable outfits for each day</li>
-              <li>One thin long-sleeve layer</li>
-              <li>Portable charger</li>
-              <li>Small daypack</li>
-              <li>Backup socks</li>
-              <li>Blister bandages</li>
-              <li>Coin purse / small cash</li>
-              <li>Booked Shibuya Sky</li>
-              <li>Booked Shinkansen</li>
-              <li>Hakone lodging confirmed</li>
-              <li>Plan for luggage forwarding or lighter packing</li>
-            </ul>
-            <h5>Best clothing mix</h5>
-            <p>For July 26 to August 3, I’d bring:</p>
-            <ul class="essentials-list">
-              <li>5 to 7 light tops</li>
-              <li>3 to 4 bottoms</li>
-              <li>7 to 8 pairs of socks/underwear</li>
-              <li>1 light cardigan or overshirt</li>
-              <li>1 compact rain layer</li>
-              <li>1 nicer casual outfit for Tokyo night / photos</li>
-            </ul>
-          </article>
-
-          <article class="essentials-card card">
-            <h4>Before the trip</h4>
-            <p>Book or set up these first:</p>
-            <ul class="essentials-list">
-              <li>Shin-Osaka → Odawara Shinkansen</li>
-              <li>Hakone hotel/ryokan</li>
-              <li>Shibuya Sky</li>
-              <li>Osaka Aquarium Kaiyukan</li>
-              <li>Mobile data: eSIM or pocket Wi-Fi</li>
-              <li>Decide whether you are doing luggage forwarding or traveling with one manageable suitcase</li>
-            </ul>
-            <p>If your suitcase is 160 cm to 250 cm total dimensions, SmartEX says you need a seat reservation with oversized baggage space on the Shinkansen.</p>
-            <h5>What to pack for this exact trip</h5>
-            <h6>Clothes</h6>
-            <ul class="essentials-list">
-              <li>5 to 7 lightweight tops</li>
-              <li>3 to 4 bottoms</li>
-              <li>7 to 8 pairs of underwear/socks</li>
-              <li>1 thin long-sleeve layer or light cardigan</li>
-              <li>1 light rain layer</li>
-              <li>1 nicer casual outfit for Tokyo night photos</li>
-            </ul>
-            <h6>Shoes</h6>
-            <ul class="essentials-list">
-              <li>1 very comfortable walking pair</li>
-              <li>1 backup pair or sandals</li>
-            </ul>
-            <h6>Summer essentials</h6>
-            <ul class="essentials-list">
-              <li>Hat</li>
-              <li>Sunglasses</li>
-              <li>Sunscreen</li>
-              <li>Small towel or cooling towel</li>
-              <li>Portable fan</li>
-              <li>Water bottle</li>
-              <li>Electrolyte packets</li>
-              <li>Portable charger</li>
-              <li>Blister bandages</li>
-            </ul>
-            <h6>Bags</h6>
-            <ul class="essentials-list">
-              <li>Small daypack</li>
-              <li>Small overnight bag for Hakone if you do luggage forwarding</li>
-            </ul>
-          </article>
-
-          <article class="essentials-card card">
-            <h4>Day-by-day</h4>
-            <h5>Day 1 — Osaka / Dotonbori / nightlife</h5>
-            <h6>Wear</h6>
-            <ul class="essentials-list">
-              <li>Light shirt</li>
-              <li>Breathable bottoms</li>
-              <li>Walking shoes</li>
-              <li>Small bag only</li>
-            </ul>
-            <h6>Bring</h6>
-            <ul class="essentials-list">
-              <li>Portable charger</li>
-              <li>Coin purse/cash</li>
-              <li>Water bottle</li>
-              <li>Cooling towel</li>
-            </ul>
-            <h6>Prep</h6>
-            <ul class="essentials-list">
-              <li>Keep this day easy because arrival + summer heat can drain you fast</li>
-              <li>Good night for casual street-food clothes, not heavy layers</li>
-            </ul>
-            <h5>Day 2 — Kyoto full day / Arashiyama / Nanzen-ji</h5>
-            <p>This is probably your hottest and most tiring day because it is a long outdoor sightseeing day.</p>
-            <h6>Wear</h6>
-            <ul class="essentials-list">
-              <li>Lightest outfit of the trip</li>
-              <li>Best walking shoes</li>
-              <li>Hat</li>
-            </ul>
-            <h6>Bring</h6>
-            <ul class="essentials-list">
-              <li>Sunscreen</li>
-              <li>Portable fan</li>
-              <li>Extra water</li>
-              <li>Electrolytes</li>
-              <li>Towel</li>
-              <li>Blister pads</li>
-            </ul>
-            <h6>Prep</h6>
-            <ul class="essentials-list">
-              <li>Start early</li>
-              <li>Take indoor/cafe breaks in the afternoon</li>
-              <li>Do not overpack this day</li>
-            </ul>
-            <h5>Day 3 — Osaka Aquarium + flexible Osaka</h5>
-            <h6>Wear</h6>
-            <ul class="essentials-list">
-              <li>Light casual clothes</li>
-              <li>Comfortable shoes</li>
-            </ul>
-            <h6>Bring</h6>
-            <ul class="essentials-list">
-              <li>Light layer for indoor AC</li>
-              <li>Small bag</li>
-              <li>Charger</li>
-            </ul>
-            <h6>Prep</h6>
-            <ul class="essentials-list">
-              <li>Have your aquarium ticket ready if you book ahead</li>
-              <li>Good day to do laundry or reorganize luggage before transfer day</li>
-            </ul>
-            <h5>Day 4 — Shin-Osaka → Odawara → Hakone</h5>
-            <p>This is your big transfer day.</p>
-            <h6>Wear</h6>
-            <ul class="essentials-list">
-              <li>Travel outfit with pockets</li>
-              <li>Comfortable shoes</li>
-              <li>Light layer for train AC</li>
-            </ul>
-            <h6>Bring</h6>
-            <ul class="essentials-list">
-              <li>Passport</li>
-              <li>Tickets/QR codes</li>
-              <li>Snacks</li>
-              <li>Charger</li>
-              <li>Small overnight kit if your main bag is forwarded</li>
-            </ul>
-            <h6>Prep</h6>
-            <ul class="essentials-list">
-              <li>Reserve Shinkansen in advance</li>
-              <li>Check baggage size before you go</li>
-              <li>Since you’re entering from Kansai, the Odawara version of the Hakone Freepass fits your route better than the Shinjuku version. Official Odakyu guidance specifically frames the Odawara option for travelers coming from Kansai and continuing onward.</li>
-            </ul>
-            <h5>Day 5 — Hakone morning → transfer to Mt. Fuji area</h5>
-            <p>This is your most logistically sensitive day.</p>
-            <h6>Wear</h6>
-            <ul class="essentials-list">
-              <li>Light clothes</li>
-              <li>Walking shoes</li>
-              <li>One thin layer for transport or evening</li>
-            </ul>
-            <h6>Bring</h6>
-            <ul class="essentials-list">
-              <li>Water</li>
-              <li>Power bank</li>
-              <li>Snacks</li>
-              <li>Small day bag</li>
-            </ul>
-            <h6>Prep</h6>
-            <ul class="essentials-list">
-              <li>Keep plans flexible</li>
-              <li>Screenshot transport details the night before</li>
-              <li>Don’t overload the day with too many Hakone stops before the transfer</li>
-            </ul>
-            <h5>Day 6 — Kawaguchiko / Oshino Hakkai / Chureito optional</h5>
-            <p>This is your photo day.</p>
-            <h6>Wear</h6>
-            <ul class="essentials-list">
-              <li>Light outfit</li>
-              <li>Walking shoes</li>
-              <li>Hat</li>
-              <li>Optional light layer for early morning/evening</li>
-            </ul>
-            <h6>Bring</h6>
-            <ul class="essentials-list">
-              <li>Camera/phone charger</li>
-              <li>Water</li>
-              <li>Sunscreen</li>
-              <li>Towel</li>
-            </ul>
-            <h6>Prep</h6>
-            <ul class="essentials-list">
-              <li>Make this day weather-flexible for Fuji views</li>
-              <li>If visibility is good, prioritize the best viewpoints early</li>
-              <li>If you do Chureito, pack light</li>
-            </ul>
-            <h5>Day 7 — Tokyo / Shibuya / Shibuya Sky at night</h5>
-            <h6>Wear</h6>
-            <ul class="essentials-list">
-              <li>Light city outfit</li>
-              <li>Nicer casual look if you want photos</li>
-              <li>Comfortable shoes</li>
-            </ul>
-            <h6>Bring</h6>
-            <ul class="essentials-list">
-              <li>Small bag only</li>
-              <li>Charger</li>
-              <li>Light layer for evening wind / indoor AC</li>
-            </ul>
-            <h6>Prep</h6>
-            <ul class="essentials-list">
-              <li>Book Shibuya Sky ahead</li>
-              <li>The official site says weather can affect rooftop access, and large bags are not allowed on the rooftop.</li>
-            </ul>
-            <h5>If you add Day 8 — Skytree / Solamachi / Akihabara</h5>
-            <h6>Best prep</h6>
-            <ul class="essentials-list">
-              <li>Light clothes</li>
-              <li>Good shoes</li>
-              <li>Extra charger</li>
-              <li>Shopping room in your luggage</li>
-            </ul>
-            <p>This is a good day to wear your second pair of shoes if your main pair needs a break.</p>
-            <h5>If you add Day 9 — Imperial Palace / Shinjuku</h5>
-            <h6>Best prep</h6>
-            <ul class="essentials-list">
-              <li>Lighter sightseeing outfit for daytime</li>
-              <li>Option to switch to slightly nicer clothes for Shinjuku evening</li>
-            </ul>
-            <h5>Best luggage strategy for your route</h5>
-            <p>For Osaka → Hakone → Fuji area → Tokyo, I’d strongly recommend one of these:</p>
-            <ul class="essentials-list">
-              <li>1 medium suitcase + 1 daypack</li>
-              <li>Luggage forwarding + small overnight bag for Hakone/Fuji</li>
-            </ul>
-            <p>That route is much less stressful if you are not dragging a huge suitcase through multiple stations and buses.</p>
-          </article>
-
-          <article class="essentials-card card">
-            <h4>1. Heat-safety prep</h4>
-            <p>Late July to early August is the part I would take most seriously. JNTO says Japan is hot and humid in July/August, and Japan’s Ministry of the Environment has a dedicated heat-illness site for travelers with WBGT heat-risk guidance.</p>
-            <p>What to add:</p>
-            <ul class="essentials-list">
-              <li>electrolyte packets</li>
-              <li>cooling towel / portable fan</li>
-              <li>strict water plan</li>
-              <li>lighter clothes than you think you need</li>
-              <li>afternoon breaks on Kyoto/Fuji walking days</li>
-            </ul>
-            <h5>2. Weather/emergency prep</h5>
-            <p>Japan’s official safe-travel guidance recommends using safety information tools for weather, warnings, and emergencies. That matters in summer because heavy rain, heat alerts, and transit disruption can happen.</p>
-            <p>Add:</p>
-            <ul class="essentials-list">
-              <li>a weather app</li>
-              <li>screenshots of hotel addresses in English/Japanese</li>
-              <li>offline maps</li>
-              <li>emergency contact info</li>
-              <li>travel insurance</li>
-            </ul>
-            <h5>3. Arrival setup</h5>
-            <p>You should still do Visit Japan Web before departure so entry goes more smoothly.</p>
-            <p>Also have:</p>
-            <ul class="essentials-list">
-              <li>passport validity checked</li>
-              <li>hotel confirmations</li>
-              <li>return/onward flight info</li>
-              <li>first hotel address ready for immigration/customs if needed</li>
-            </ul>
-            <h5>4. IC card + payment plan</h5>
-            <p>You need a clearer money/transport setup, not just “bring cash.”</p>
-            <p>Decide whether you’ll use Welcome Suica / mobile IC for local transit in Tokyo and interoperable systems elsewhere. JR East’s Welcome Suica is valid for 180 days and can be used for transit and shopping.</p>
-            <p>Bring a card that works abroad</p>
-            <p>Bring backup cash</p>
-            <p>Tell your bank you’re traveling if your bank tends to flag foreign charges</p>
-            <h5>5. Luggage plan</h5>
-            <p>This is the other major missing piece for your route.</p>
-            <p>For Osaka → Hakone → Fuji area → Tokyo, decide now:</p>
-            <ul class="essentials-list">
-              <li>one medium suitcase only, or</li>
-              <li>luggage forwarding + small overnight bag</li>
-            </ul>
-            <p>And if your Shinkansen bag is oversized, reserve the proper baggage seat space.</p>
-            <h5>6. Etiquette prep</h5>
-            <p>A few Japan-specific habits are worth knowing before you go. JNTO’s etiquette guidance highlights things like indoor shoe removal, public behavior expectations, and general social customs.</p>
-            <p>Useful to remember:</p>
-            <ul class="essentials-list">
-              <li>speak quietly on trains</li>
-              <li>line up carefully</li>
-              <li>carry a small bag for trash</li>
-              <li>expect shoe removal at some places</li>
-              <li>don’t assume tipping is standard</li>
-            </ul>
-            <h5>7. Reservation timing</h5>
-            <p>For your dates, I would not leave the popular items too late.</p>
-            <p>Shibuya Sky tickets are sold online, can sell out, and the rooftop can close due to weather or abnormal heat. The official site also says you can be denied entry if you miss your time slot, and bags are not allowed on the rooftop.</p>
-            <p>Hakone stay should be booked early</p>
-            <p>Shinkansen should be reserved if you want a specific time</p>
-            <p>Kaiyukan ahead of time is still smart</p>
-          </article>
-
-          <article class="essentials-card card">
-            <h4>Must do before flying</h4>
-            <p>Check your passport validity and keep digital copies of passport, flight, hotel bookings, and insurance.</p>
-            <p>Complete Visit Japan Web before departure for immigration/customs. Japan’s Digital Agency says it lets you register the information needed for arrival procedures online.</p>
-            <p>Set up data: eSIM or pocket Wi-Fi.</p>
-            <h5>Download:</h5>
-            <ul class="essentials-list">
-              <li>Google Maps offline area</li>
-              <li>translation app</li>
-              <li>weather app</li>
-            </ul>
-            <p>Save your hotel names/addresses in both English and Japanese screenshots.</p>
-            <p>Tell your bank you’re traveling if needed.</p>
-            <p>Buy travel insurance.</p>
-            <h5>Book now</h5>
-            <p>Hakone hotel/ryokan: late July is busy, so book this first.</p>
-            <p>Shin-Osaka → Odawara Shinkansen: reserve if you want a specific departure or have large luggage.</p>
-            <p>Shibuya Sky: book ahead. The official ticket page says:</p>
-            <ul class="essentials-list">
-              <li>tickets are sold online up to 2 weeks ahead</li>
-              <li>popular times can sell out</li>
-              <li>entry may be refused if you miss your time</li>
-              <li>the rooftop can close for strong wind, rain, lightning, or abnormally high heat</li>
-              <li>large bags are not allowed on the rooftop.</li>
-            </ul>
-            <p>Osaka Aquarium Kaiyukan: book ahead. Kaiyukan says visitor numbers are adjusted every 15 minutes and same-day entry can mean a long wait; e-tickets with time selection are recommended.</p>
-            <h5>Heat plan</h5>
-            <p>Late July in Japan is hot and humid, and JNTO specifically warns summer travelers to prepare for the heat.</p>
-            <p>Bring:</p>
-            <ul class="essentials-list">
-              <li>portable fan</li>
-              <li>cooling towel</li>
-              <li>sunscreen</li>
-              <li>hat</li>
-              <li>sunglasses</li>
-              <li>refillable water bottle</li>
-              <li>electrolyte packets</li>
-              <li>light, breathable clothing</li>
-              <li>one thin layer for train AC / evenings</li>
-            </ul>
-            <p>Daily rule:</p>
-            <ul class="essentials-list">
-              <li>start early</li>
-              <li>slow down from roughly midday to late afternoon</li>
-              <li>drink before you feel thirsty</li>
-              <li>plan indoor breaks on Kyoto and Fuji area days</li>
-            </ul>
-            <h5>Payment / IC card plan</h5>
-            <p>Use one IC card for local trains/buses and convenience-store purchases.</p>
-            <p>Welcome Suica Mobile works on iPhone and JR East says it can be used for trains, buses, shopping, and is valid for 180 days.</p>
-            <p>The physical Welcome Suica is also an option; JR East says it is valid for 28 days.</p>
-            <p>Bring:</p>
-            <ul class="essentials-list">
-              <li>one main credit card</li>
-              <li>one backup card</li>
-              <li>some cash for smaller purchases / rural areas</li>
-            </ul>
-            <p>Best simple setup:</p>
-            <ul class="essentials-list">
-              <li>mobile IC if your phone supports it</li>
-              <li>otherwise buy a tourist IC card after arrival</li>
-            </ul>
-            <h5>Luggage strategy</h5>
-            <p>Your route is the kind that gets annoying with a giant suitcase:</p>
-            <p>Osaka → Hakone → Fuji area → Tokyo</p>
-            <p>Best choice:</p>
-            <ul class="essentials-list">
-              <li>1 medium suitcase + 1 daypack, or</li>
-              <li>forward your larger luggage and carry a small overnight bag through Hakone/Fuji</li>
-            </ul>
-            <p>For the Shinkansen:</p>
-            <p>SmartEX says baggage with total dimensions 160 cm to 250 cm needs a reservation for a seat with oversized baggage area.</p>
-            <p>If you bring oversized baggage without the reservation, there is a fee.</p>
-            <h5>Transit plan</h5>
-            <p>For Hakone, the Odawara version of the Hakone Freepass fits your route best.</p>
-            <p>Odakyu’s official page specifically notes that the Odawara version is the better fit for travelers coming from the Kansai area and then continuing onward, while the Shinjuku version includes the round trip from Tokyo instead.</p>
-            <p>What to prep:</p>
-            <ul class="essentials-list">
-              <li>Shinkansen booking</li>
-              <li>local IC card</li>
-              <li>Hakone Freepass decision</li>
-              <li>screenshots of Day 5 transfer details the night before</li>
-            </ul>
-            <h5>Emergency / weather backup</h5>
-            <p>Use JNTO’s Safe Travel Information site during the trip for weather warnings and transport disruption updates. JNTO says it provides weather advisories and transportation information, and its warning pages explain what to do in emergencies.</p>
-            <p>Keep:</p>
-            <ul class="essentials-list">
-              <li>hotel phone numbers</li>
-              <li>emergency contact</li>
-              <li>insurance details</li>
-              <li>offline screenshots of bookings</li>
-            </ul>
-            <p>If bad weather affects Hakone/Fuji, keep that section flexible and swap viewpoints around.</p>
-            <h5>Basic etiquette</h5>
-            <ul class="essentials-list">
-              <li>Speak quietly on trains.</li>
-              <li>Queue carefully.</li>
-              <li>Carry a small bag for your own trash.</li>
-              <li>Be ready to remove shoes in some places.</li>
-              <li>Do not tip in normal situations.</li>
-              <li>Be respectful with photos in temples/shrines and follow posted signs.</li>
-              <li>At onsen/ryokan, follow house rules closely.</li>
-            </ul>
-            <h5>Pack</h5>
-            <h6>Clothes:</h6>
-            <ul class="essentials-list">
-              <li>5 to 7 light tops</li>
-              <li>3 to 4 bottoms</li>
-              <li>7 to 8 pairs socks/underwear</li>
-              <li>1 thin long-sleeve layer</li>
-              <li>1 light rain layer</li>
-              <li>1 nicer casual outfit for Tokyo night</li>
-            </ul>
-            <h6>Shoes:</h6>
-            <ul class="essentials-list">
-              <li>1 main walking pair</li>
-              <li>1 backup pair / sandals</li>
-            </ul>
-            <h6>Essentials:</h6>
-            <ul class="essentials-list">
-              <li>passport</li>
-              <li>cards + cash</li>
-              <li>charger + power bank</li>
-              <li>fan</li>
-              <li>cooling towel</li>
-              <li>sunscreen</li>
-              <li>hat</li>
-              <li>sunglasses</li>
-              <li>meds</li>
-              <li>blister bandages</li>
-              <li>small daypack</li>
-              <li>refillable bottle</li>
-            </ul>
-            <h5>Day-by-day</h5>
-            <h6>Day 1 Osaka</h6>
-            <p>Keep it easy</p>
-            <p>Light clothes, charger, water, small bag</p>
-            <h6>Day 2 Kyoto</h6>
-            <p>Hottest walking day</p>
-            <p>Use your best shoes, hat, sunscreen, fan, electrolytes</p>
-            <h6>Day 3 Osaka Aquarium</h6>
-            <p>Good lighter day</p>
-            <p>Repack and prepare for transfer day</p>
-            <h6>Day 4 Shin-Osaka to Odawara to Hakone</h6>
-            <p>Travel outfit, thin layer, tickets ready</p>
-            <p>Keep luggage simple</p>
-            <h6>Day 5 Hakone to Fuji area</h6>
-            <p>Most transfer-sensitive day</p>
-            <p>Keep schedule loose</p>
-            <p>Screenshot buses/trains the night before</p>
-            <h6>Day 6 Kawaguchiko / Oshino Hakkai / Chureito</h6>
-            <p>Photo day</p>
-            <p>Start early if Fuji is visible</p>
-            <p>Pack light</p>
-            <h6>Day 7 Tokyo / Shibuya / Shibuya Sky</h6>
-            <p>Small bag only</p>
-            <p>Be on time for entry</p>
-            <p>Avoid bringing bulky items to Shibuya Sky</p>
-            <h6>Extra Day 8</h6>
-            <p>Shopping room in luggage for Akihabara/Solamachi</p>
-            <h6>Extra Day 9</h6>
-            <p>Lighter sightseeing day, optional nicer clothes for Shinjuku evening</p>
-            <h5>Final “don’t forget” list</h5>
-            <ul class="essentials-checklist">
-              <li>Visit Japan Web</li>
-              <li>Shinkansen booked</li>
-              <li>Hakone stay booked</li>
-              <li>Shibuya Sky booked</li>
-              <li>Kaiyukan booked</li>
-              <li>IC card plan decided</li>
-              <li>oversized luggage checked</li>
-              <li>heat kit packed</li>
-              <li>backup cash packed</li>
-              <li>emergency/weather links saved</li>
-            </ul>
-          </article>
-
-          <article class="essentials-card card">
-            <h4>Final extras I’d add are the “easy to forget” items:</h4>
-            <ul class="essentials-list">
-              <li>Prescription meds in original packaging, plus a small basic medicine kit.</li>
-              <li>Travel-size laundry plan if you want to pack lighter.</li>
-              <li>Small coin purse for cash/coins.</li>
-              <li>Hand towel and tissues, since some public restrooms may not provide paper towels. JNTO’s etiquette guidance notes carrying a hand towel is common and useful.</li>
-              <li>Portable trash pouch, since public trash cans can be limited in Japan. JNTO also notes travelers often need to carry their trash until they find a bin.</li>
-              <li>Temple/shrine respect: modest behavior, quiet voices, and checking photo rules before shooting. JNTO advises following posted etiquette and local customs at religious and cultural sites.</li>
-              <li>Onsen check if your Hakone stay includes one, especially for tattoo policy and bath rules. JNTO notes policies vary by facility.</li>
-            </ul>
-            <p>So the full list is basically complete now.</p>
-            <p>Your trip prep is down to these three decisions:</p>
-            <ul class="essentials-list">
-              <li>whether you’re bringing a large suitcase or medium one,</li>
-              <li>whether you’ll use mobile IC / Welcome Suica,</li>
-              <li>whether you want to forward luggage between cities.</li>
-            </ul>
-            <h5>Add these too</h5>
-            <ul class="essentials-list">
-              <li>a small hand towel</li>
-              <li>a small trash pouch/plastic bag</li>
-              <li>a basic meds kit</li>
-              <li>checking tattoo rules if your Hakone stay includes onsen</li>
-              <li>deciding whether to use Welcome Suica/mobile IC or another IC card</li>
-            </ul>
-            <p>Those are useful because JNTO’s etiquette guidance notes it’s normal to carry your trash until you find a bin, and a hand towel is commonly useful while out. JNTO also notes many onsen still restrict tattoos, though some are becoming more flexible. JR East says Welcome Suica can be used for travel and shopping and is valid for 28 days from purchase.</p>
-          </article>
-        </div>
-      </section>
 
       <div class="day-grid">
         <article class="day-card card" data-day="1">
@@ -1483,6 +951,184 @@
           </div>
         </div>
       </section>
+    </section>
+
+    <section class="content-section content-panel" id="essentials" data-panel="essentials" role="tabpanel" aria-labelledby="essentials-title" aria-hidden="true" inert>
+      <div class="section-heading">
+        <p class="section-tag section-tag--essentials">
+          <span data-language="en">Essentials</span>
+          <span data-language="ja" hidden>準備</span>
+        </p>
+        <h2 id="essentials-title">
+          <span data-language="en">Essentials</span>
+          <span data-language="ja" hidden>準備ガイド</span>
+        </h2>
+        <p class="section-intro">
+          <span data-language="en">Helpful preparation tips before and during your Japan trip.</span>
+          <span data-language="ja" hidden>日本旅行の前と移動中に役立つ、実用的な準備メモです。</span>
+        </p>
+      </div>
+
+      <div class="essentials-grid">
+        <article class="essentials-card card">
+          <h4>
+            <span data-language="en">Packing for Summer Weather</span>
+            <span data-language="ja" hidden>夏の暑さ向けの荷造り</span>
+          </h4>
+          <p>
+            <span data-language="en">Build your bag around heat first, then style.</span>
+            <span data-language="ja" hidden>まずは暑さ対策を優先して荷造りし、そのあとで見た目を整えるくらいがちょうどいいです。</span>
+          </p>
+          <h5>
+            <span data-language="en">Core items</span>
+            <span data-language="ja" hidden>基本アイテム</span>
+          </h5>
+          <ul class="essentials-list">
+            <li><span data-language="en">Lightweight, breathable tops and bottoms for each day.</span><span data-language="ja" hidden>毎日使いやすい、軽くて通気性の高いトップスとボトムス。</span></li>
+            <li><span data-language="en">One main walking pair of shoes, plus a backup pair or sandals.</span><span data-language="ja" hidden>歩きやすい主力の靴を1足、できれば予備の靴かサンダルも用意。</span></li>
+            <li><span data-language="en">Hat, sunglasses, sunscreen, a cooling towel, and a portable fan.</span><span data-language="ja" hidden>帽子、サングラス、日焼け止め、冷感タオル、携帯ファン。</span></li>
+            <li><span data-language="en">Refillable water bottle, electrolyte packets, power bank, and blister bandages.</span><span data-language="ja" hidden>給水しやすいボトル、電解質パウダー、モバイルバッテリー、靴ずれ用バンド。</span></li>
+            <li><span data-language="en">A thin long-sleeve layer and a compact umbrella or light rain shell.</span><span data-language="ja" hidden>薄手の長袖と、折りたたみ傘または軽いレインシェル。</span></li>
+          </ul>
+          <h5>
+            <span data-language="en">For this route</span>
+            <span data-language="ja" hidden>この旅向けの補足</span>
+          </h5>
+          <ul class="essentials-list">
+            <li><span data-language="en">Kyoto on Day 2 will likely feel the hottest because it is the longest outdoor walking day.</span><span data-language="ja" hidden>2日目の京都は屋外を長く歩くので、この旅でいちばん暑く感じやすい日です。</span></li>
+            <li><span data-language="en">Hakone and Kawaguchiko can feel cooler in the morning, evening, or on transport, so keep one light layer ready.</span><span data-language="ja" hidden>箱根と河口湖は朝夕や乗り物内が少し涼しく感じやすいので、薄手の羽織りをすぐ出せるようにしておくと楽です。</span></li>
+            <li><span data-language="en">Bring only a small bag to Shibuya Sky and avoid bulky luggage.</span><span data-language="ja" hidden>渋谷スカイには小さめのバッグだけで行き、大きな荷物は持ち込まない前提で考えるのが安心です。</span></li>
+          </ul>
+        </article>
+
+        <article class="essentials-card card">
+          <h4>
+            <span data-language="en">Trip Planning Basics</span>
+            <span data-language="ja" hidden>旅の基本準備</span>
+          </h4>
+          <p>
+            <span data-language="en">Sort bookings, transport, and luggage strategy before the trip gets close.</span>
+            <span data-language="ja" hidden>予約、移動、荷物の方針は、出発直前ではなく早めに固めておくと全体が安定します。</span>
+          </p>
+          <h5>
+            <span data-language="en">Book first</span>
+            <span data-language="ja" hidden>先に予約するもの</span>
+          </h5>
+          <ul class="essentials-list">
+            <li><span data-language="en">Hakone hotel or ryokan, especially for a late-July stay.</span><span data-language="ja" hidden>箱根のホテルまたは旅館。特に7月後半なら早めの確保が必要です。</span></li>
+            <li><span data-language="en">Shin-Osaka to Odawara Shinkansen if you want a specific departure time.</span><span data-language="ja" hidden>時間を固定したいなら、新大阪から小田原までの新幹線。</span></li>
+            <li><span data-language="en">Shibuya Sky and Osaka Aquarium Kaiyukan before the popular slots fill up.</span><span data-language="ja" hidden>人気時間帯が埋まる前の渋谷スカイと海遊館。</span></li>
+            <li><span data-language="en">Mobile data before arrival: eSIM or pocket Wi-Fi.</span><span data-language="ja" hidden>到着前の通信手段として、eSIMまたはポケットWi-Fi。</span></li>
+          </ul>
+          <h5>
+            <span data-language="en">Transit and luggage</span>
+            <span data-language="ja" hidden>交通と荷物</span>
+          </h5>
+          <ul class="essentials-list">
+            <li><span data-language="en">Use one IC card plan for city travel and small purchases, plus a separate Shinkansen reservation.</span><span data-language="ja" hidden>都市移動と少額決済はICカード中心、新幹線は別予約という形にすると整理しやすいです。</span></li>
+            <li><span data-language="en">Choose the Odawara version of the Hakone Freepass because you enter Hakone from Kansai and continue east afterward.</span><span data-language="ja" hidden>関西側から箱根に入り、そのまま東へ抜ける流れなので、箱根フリーパスは小田原版のほうが合います。</span></li>
+            <li><span data-language="en">If your suitcase totals 160 cm to 250 cm, reserve oversized baggage space on the Shinkansen.</span><span data-language="ja" hidden>スーツケースの三辺合計が160cmから250cmなら、新幹線の特大荷物スペース付き座席を予約しておきます。</span></li>
+            <li><span data-language="en">For Osaka to Hakone to Fuji area to Tokyo, either travel with one medium suitcase and a daypack or forward luggage and carry a small overnight bag.</span><span data-language="ja" hidden>大阪から箱根、富士エリア、東京へ進む流れなら、中型スーツケースとデイパックに絞るか、荷物配送で箱根用の小さな一泊バッグに分けるのが現実的です。</span></li>
+          </ul>
+        </article>
+
+        <article class="essentials-card card">
+          <h4>
+            <span data-language="en">Preparing Each Day</span>
+            <span data-language="ja" hidden>日ごとの準備</span>
+          </h4>
+          <p>
+            <span data-language="en">Keep each day light, practical, and matched to the route.</span>
+            <span data-language="ja" hidden>各日は詰め込みすぎず、その日の移動と暑さに合わせて準備を変えるのがいちばん楽です。</span>
+          </p>
+          <ul class="essentials-list">
+            <li><span data-language="en">Day 1 Osaka: keep arrival night easy with light clothes, water, charger, and a small bag.</span><span data-language="ja" hidden>1日目の大阪は、軽い服装、水、充電手段、小さなバッグだけで無理をしない到着日にします。</span></li>
+            <li><span data-language="en">Day 2 Kyoto: wear the lightest outfit, use your best shoes, and plan fan, sunscreen, extra water, and indoor breaks.</span><span data-language="ja" hidden>2日目の京都は、いちばん軽い服装と歩きやすい靴を選び、ファン、日焼け止め、追加の水分、屋内休憩を前提に動きます。</span></li>
+            <li><span data-language="en">Day 3 Osaka: keep it lighter, carry one thin layer for air-conditioning, and reorganize luggage before transfer day.</span><span data-language="ja" hidden>3日目の大阪は少し軽めにして、冷房対策の薄手を1枚持ち、移動日に向けて荷物を整えます。</span></li>
+            <li><span data-language="en">Day 4 transfer: keep passport and tickets ready, travel with simple luggage, and use the Odawara Hakone Freepass option.</span><span data-language="ja" hidden>4日目の移動日は、パスポートとチケットをすぐ出せる状態にし、荷物を簡潔にして、小田原版の箱根フリーパス前提で動きます。</span></li>
+            <li><span data-language="en">Day 5 Hakone to Fuji area: keep the schedule flexible and screenshot bus or train details the night before.</span><span data-language="ja" hidden>5日目の箱根から富士エリア移動は、予定を詰め込みすぎず、前夜のうちにバスや電車の情報を保存しておきます。</span></li>
+            <li><span data-language="en">Day 6 Fuji views: start early if visibility is good, pack light, and expect stairs if you add Chureito.</span><span data-language="ja" hidden>6日目の富士山ビューは、見えそうなら早めに動き、荷物は軽くし、忠霊塔まで行くなら階段を見込んでおきます。</span></li>
+            <li><span data-language="en">Day 7 Tokyo night: arrive on time for Shibuya Sky, carry only a small bag, and keep one light layer for evening wind or indoor AC.</span><span data-language="ja" hidden>7日目の東京夜景は、渋谷スカイの時間に遅れず、小さなバッグだけで動き、夜風や冷房に備えて薄手を1枚持ちます。</span></li>
+            <li><span data-language="en">Extra Days 8 and 9: leave room for shopping on Day 8 and keep Day 9 flexible if you want a slightly nicer Shinjuku evening look.</span><span data-language="ja" hidden>追加の8日目と9日目は、8日目に買い物の余白を残し、9日目は新宿の夜用に少しきれいめへ切り替えられる余裕を持たせます。</span></li>
+          </ul>
+        </article>
+
+        <article class="essentials-card card">
+          <h4>
+            <span data-language="en">Heat &amp; Safety Tips</span>
+            <span data-language="ja" hidden>暑さと安全のヒント</span>
+          </h4>
+          <p>
+            <span data-language="en">Use the trip rhythm to protect energy, hydration, and flexibility.</span>
+            <span data-language="ja" hidden>暑い時期は、持ち物だけでなく動き方そのものを整えるとかなり楽になります。</span>
+          </p>
+          <h5>
+            <span data-language="en">Summer rhythm</span>
+            <span data-language="ja" hidden>夏の動き方</span>
+          </h5>
+          <ul class="essentials-list">
+            <li><span data-language="en">Start early, slow down around midday, and drink before you feel thirsty.</span><span data-language="ja" hidden>朝は早めに動き、昼前後はペースを落とし、喉が渇く前に飲む流れを徹底します。</span></li>
+            <li><span data-language="en">Plan cafe or indoor breaks on Kyoto days and Fuji walking days.</span><span data-language="ja" hidden>京都の日や富士エリアを歩く日は、カフェや屋内休憩を最初から入れておきます。</span></li>
+            <li><span data-language="en">Keep Hakone and Fuji flexible because weather, heat, and visibility can change the best plan quickly.</span><span data-language="ja" hidden>箱根と富士エリアは天気、暑さ、視界で最適解が変わりやすいので、柔軟な予定のほうが合います。</span></li>
+          </ul>
+          <h5>
+            <span data-language="en">Backup tools</span>
+            <span data-language="ja" hidden>バックアップ手段</span>
+          </h5>
+          <ul class="essentials-list">
+            <li><span data-language="en">Keep a weather app, offline maps, hotel address screenshots, insurance details, and emergency contacts saved.</span><span data-language="ja" hidden>天気アプリ、オフライン地図、ホテル住所の画像、保険情報、緊急連絡先は保存しておきます。</span></li>
+            <li><span data-language="en">Screenshot transfer details before Day 5 so a weak signal does not derail the move to the Fuji area.</span><span data-language="ja" hidden>5日目の移動前には乗り継ぎ情報を画像保存して、通信が弱くても富士エリアへの移動が止まらないようにします。</span></li>
+          </ul>
+          <h5>
+            <span data-language="en">Local etiquette</span>
+            <span data-language="ja" hidden>現地マナー</span>
+          </h5>
+          <ul class="essentials-list">
+            <li><span data-language="en">Speak quietly on trains, line up carefully, and be ready to remove shoes when asked.</span><span data-language="ja" hidden>電車内では静かにし、列にきちんと並び、必要なら靴を脱ぐ前提で動きます。</span></li>
+            <li><span data-language="en">Carry a small trash pouch, do not expect tipping, and check photo rules at temples and shrines.</span><span data-language="ja" hidden>小さなゴミ袋を持ち歩き、チップ文化を前提にせず、寺社では撮影ルールを必ず確認します。</span></li>
+          </ul>
+        </article>
+
+        <article class="essentials-card card">
+          <h4>
+            <span data-language="en">Before Departure</span>
+            <span data-language="ja" hidden>出発前の確認</span>
+          </h4>
+          <p>
+            <span data-language="en">Finish the admin pieces before you leave home.</span>
+            <span data-language="ja" hidden>出発後に慌てないよう、事務系の準備は家にいるうちに終わらせておきます。</span>
+          </p>
+          <ul class="essentials-checklist">
+            <li><span data-language="en">Passport validity checked and digital copies of passport, flights, hotels, and insurance saved.</span><span data-language="ja" hidden>パスポートの有効期限を確認し、パスポート、航空券、ホテル、保険のデータを保存済みにする。</span></li>
+            <li><span data-language="en">Visit Japan Web completed before departure.</span><span data-language="ja" hidden>Visit Japan Web を出発前に完了しておく。</span></li>
+            <li><span data-language="en">eSIM or pocket Wi-Fi set up before landing.</span><span data-language="ja" hidden>到着前に eSIM またはポケットWi-Fi を準備する。</span></li>
+            <li><span data-language="en">First hotel address, confirmations, and return or onward flight details ready to show if needed.</span><span data-language="ja" hidden>最初のホテル住所、予約確認、帰国便または次の便の情報をすぐ見せられるようにする。</span></li>
+            <li><span data-language="en">Google Maps offline area, translation app, and weather app downloaded.</span><span data-language="ja" hidden>Google マップのオフライン、翻訳アプリ、天気アプリを入れておく。</span></li>
+            <li><span data-language="en">Main card, backup card, and some cash prepared, with bank travel notices handled if needed.</span><span data-language="ja" hidden>メインカード、予備カード、現金を用意し、必要なら銀行の渡航連絡も済ませる。</span></li>
+            <li><span data-language="en">Shinkansen, Hakone stay, Shibuya Sky, and Kaiyukan confirmed.</span><span data-language="ja" hidden>新幹線、箱根の宿、渋谷スカイ、海遊館の予約確認を済ませる。</span></li>
+          </ul>
+        </article>
+
+        <article class="essentials-card card">
+          <h4>
+            <span data-language="en">Easy-to-Forget Items</span>
+            <span data-language="ja" hidden>忘れやすい小物</span>
+          </h4>
+          <p>
+            <span data-language="en">These are the small things that save stress once the trip starts.</span>
+            <span data-language="ja" hidden>旅が始まってから地味に助かるのは、こういう細かい準備です。</span>
+          </p>
+          <ul class="essentials-checklist">
+            <li><span data-language="en">Prescription medicine in original packaging and a small basic medicine kit.</span><span data-language="ja" hidden>元の包装の処方薬と、小さな常備薬セット。</span></li>
+            <li><span data-language="en">Backup socks, travel-size laundry plan, and blister care for hot walking days.</span><span data-language="ja" hidden>替えの靴下、軽い洗濯プラン、暑い日に歩くための靴ずれ対策。</span></li>
+            <li><span data-language="en">Hand towel, tissues, coin purse, and a small trash pouch.</span><span data-language="ja" hidden>ハンドタオル、ティッシュ、小銭入れ、小さなゴミ袋。</span></li>
+            <li><span data-language="en">Small daypack and a compact overnight bag if you forward the main suitcase.</span><span data-language="ja" hidden>日中用の小さなバッグと、メイン荷物を送るなら箱根用の小さな一泊バッグ。</span></li>
+            <li><span data-language="en">Onsen tattoo policy and bath rules checked if your Hakone stay includes one.</span><span data-language="ja" hidden>箱根の宿に温泉があるなら、タトゥー可否と入浴ルールを事前確認。</span></li>
+            <li><span data-language="en">Mobile IC or Welcome Suica plan decided before you arrive.</span><span data-language="ja" hidden>モバイルICか Welcome Suica など、現地で使うICカード方針を先に決めておく。</span></li>
+            <li><span data-language="en">Final heat kit packed: sunscreen, hat, cooling towel, fan, electrolytes, and charger.</span><span data-language="ja" hidden>最後に、日焼け止め、帽子、冷感タオル、ファン、電解質、充電手段の暑さ対策セットを確認する。</span></li>
+          </ul>
+        </article>
+      </div>
     </section>
     </div>
 
