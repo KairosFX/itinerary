@@ -2093,7 +2093,28 @@ html.has-modal-open body {
   max-width: 44rem;
 }
 
+.journey-close__snapshot,
+.journey-close__reflection {
+  margin: 0;
+}
+
+.journey-close__snapshot {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.journey-close__reflection {
+  color: var(--muted);
+  max-width: 34rem;
+}
+
 .journey-close__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.62rem;
   margin-top: 0.12rem;
 }
 

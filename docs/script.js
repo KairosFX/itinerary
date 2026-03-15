@@ -25,7 +25,7 @@ const progressTotalDaysNode = document.querySelector("[data-progress-total-days]
 const progressOverviewFill = document.querySelector("[data-progress-overview-fill]");
 const progressOverviewCaptions = document.querySelectorAll(".progress-overview__caption [data-language]");
 const jumpCurrentDayButton = document.querySelector("[data-jump-current-day]");
-const resetProgressOpenButton = document.querySelector("[data-reset-progress-open]");
+const resetProgressOpenButtons = Array.from(document.querySelectorAll("[data-reset-progress-open]"));
 const resetProgressModal = document.querySelector("[data-reset-progress-modal]");
 const resetProgressCancelButton = document.querySelector("[data-reset-progress-cancel]");
 const resetProgressConfirmButton = document.querySelector("[data-reset-progress-confirm]");
@@ -163,6 +163,7 @@ let routeMapStatusMode = null;
 let routeMapInteractive = false;
 let routeMapDragArmed = false;
 let routeMapDragPointerId = null;
+let lastResetTrigger = null;
 
 function getSystemTheme() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -1473,7 +1474,7 @@ function setResetModalOpen(isOpen) {
       resetProgressCancelButton?.focus();
     });
   } else {
-    resetProgressOpenButton?.focus();
+    lastResetTrigger?.focus();
   }
 }
 
@@ -2251,11 +2252,12 @@ if (jumpCurrentDayButton) {
   });
 }
 
-if (resetProgressOpenButton) {
-  resetProgressOpenButton.addEventListener("click", () => {
+resetProgressOpenButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    lastResetTrigger = button;
     setResetModalOpen(true);
   });
-}
+});
 
 if (resetProgressCancelButton) {
   resetProgressCancelButton.addEventListener("click", () => {
