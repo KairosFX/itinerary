@@ -20,6 +20,17 @@
   --radius-md: 16px;
   --radius-sm: 12px;
   --content-width: 1120px;
+  --section-gap: 2.4rem;
+  --section-content-gap: 1.32rem;
+  --content-box-min: 240px;
+  --content-box-gap: 1.08rem;
+  --content-box-padding-block: 1.42rem;
+  --content-box-padding-inline: 1.42rem;
+  --content-box-gutter: 1.68rem;
+  --content-box-title-gap: 0.9rem;
+  --content-box-item-gap: 0.72rem;
+  --content-card-title-size: clamp(1.16rem, 1.02rem + 0.34vw, 1.3rem);
+  --content-body-size: 0.97rem;
   --measure: 40rem;
   --font-sans: "Inter", "Avenir Next", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
   --font-serif: "Playfair Display", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Yu Mincho", "Hiragino Mincho ProN", serif;
@@ -525,6 +536,8 @@ h3 {
 .page-shell {
   width: min(calc(100% - 2rem), var(--content-width));
   margin: 0 auto;
+  display: grid;
+  gap: var(--section-gap);
   padding: 1.45rem 0 4rem;
 }
 
@@ -550,7 +563,7 @@ h3 {
 .hero-panel {
   position: relative;
   overflow: hidden;
-  margin-bottom: 2.6rem;
+  margin: 0;
   border-color: rgba(255, 244, 238, 0.42);
 }
 
@@ -578,8 +591,8 @@ h3 {
 
 .trip-meta {
   display: grid;
-  gap: 1rem;
-  margin-bottom: 2.6rem;
+  gap: var(--section-content-gap);
+  margin: 0;
 }
 
 .trip-stats {
@@ -610,8 +623,8 @@ h3 {
 
 .progress-card {
   display: grid;
-  gap: 1rem;
-  padding: 1.42rem 1.44rem;
+  gap: var(--section-content-gap);
+  padding: var(--content-box-padding-block) var(--content-box-padding-inline);
 }
 
 .progress-card__heading {
@@ -743,7 +756,7 @@ h3 {
 .progress-timeline {
   --timeline-gutter: 2.5rem;
   --timeline-node-size: 1.42rem;
-  --timeline-node-top: 1.08rem;
+  --timeline-node-top: 1.36rem;
   --timeline-axis-x: calc(var(--timeline-gutter) / 2);
   --timeline-node-center: calc(var(--timeline-node-top) + (var(--timeline-node-size) / 2));
   --timeline-link-overlap: 1px;
@@ -1084,9 +1097,9 @@ h3 {
 
 .optional-unlock {
   display: grid;
-  gap: 1rem;
-  margin-top: 0.6rem;
-  padding: 1.32rem;
+  gap: var(--section-content-gap);
+  margin-top: 0;
+  padding: var(--content-box-padding-block) var(--content-box-padding-inline);
   border: 1px solid rgba(171, 74, 59, 0.12);
   background: linear-gradient(180deg, rgba(255, 252, 248, 0.95), rgba(255, 247, 240, 0.88));
 }
@@ -1216,13 +1229,13 @@ h3 {
 
 .content-panels {
   display: block;
-  margin-top: 2.4rem;
+  margin-top: 0;
   overflow-anchor: none;
 }
 
 .content-section {
   display: grid;
-  gap: 1.4rem;
+  gap: var(--section-content-gap);
   margin-top: 0;
 }
 
@@ -1697,13 +1710,13 @@ html.has-modal-open body {
 .notes-grid {
   --card-header-min-block: 4.4rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.08rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--content-box-min)), 1fr));
+  gap: var(--content-box-gap);
   align-items: start;
 }
 
 .day-grid--optional {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--content-box-min)), 1fr));
 }
 
 .day-card,
@@ -1711,19 +1724,20 @@ html.has-modal-open body {
   display: grid;
   align-content: start;
   gap: 0;
-  padding: 1.42rem;
+  padding: var(--content-box-padding-block) var(--content-box-padding-inline);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .day-card {
   position: relative;
   overflow: hidden;
-  padding-left: 1.68rem;
+  padding-left: var(--content-box-gutter);
   --day-progress: 0;
 }
 
 .note-card {
-  padding-left: 1.68rem;
+  position: relative;
+  padding-left: var(--content-box-gutter);
   border-top: 4px solid var(--accent-soft);
 }
 
@@ -1777,13 +1791,13 @@ html.has-modal-open body {
 
 .day-card__header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
   align-content: start;
-  gap: 0.35rem 1rem;
+  gap: 0.28rem;
   min-block-size: var(--card-header-min-block);
-  padding-bottom: 0.9rem;
-  margin-bottom: 0.9rem;
+  padding-bottom: var(--content-box-title-gap);
+  margin-bottom: var(--content-box-title-gap);
   border-bottom: 1px solid var(--line);
 }
 
@@ -1794,8 +1808,10 @@ html.has-modal-open body {
 }
 
 .day-region {
-  font-size: 0.92rem;
-  color: var(--accent);
+  font-family: var(--font-serif);
+  font-size: var(--content-card-title-size);
+  line-height: 1.18;
+  color: var(--text);
   font-weight: 600;
 }
 
@@ -1804,7 +1820,7 @@ html.has-modal-open body {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.72rem;
+  gap: var(--content-box-item-gap);
 }
 
 .check-item {
@@ -1835,11 +1851,12 @@ html.has-modal-open body {
 }
 
 .check-copy {
+  font-size: var(--content-body-size);
   color: var(--text);
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
-  line-height: 1.5;
+  line-height: 1.58;
 }
 
 .check-item input:checked ~ .check-copy {
@@ -1911,29 +1928,33 @@ html.has-modal-open body {
 
 .note-card p {
   max-width: none;
-  line-height: 1.72;
+  font-size: var(--content-body-size);
+  line-height: 1.68;
 }
 
 .note-card h3 {
+  position: relative;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
   align-content: start;
-  column-gap: 0.55rem;
+  column-gap: 0;
   min-block-size: var(--card-header-min-block);
-  margin: 0 0 0.9rem;
-  padding-bottom: 0.9rem;
+  margin: 0 0 var(--content-box-title-gap);
+  padding-bottom: var(--content-box-title-gap);
+  font-size: var(--content-card-title-size);
   border-bottom: 1px solid var(--line);
 }
 
 .note-card h3::before {
   content: "";
+  position: absolute;
+  left: -0.86rem;
+  top: 0.42rem;
   width: 0.55rem;
   height: 0.55rem;
-  margin-top: 0.32rem;
   border-radius: 50%;
   background: var(--accent);
-  flex: none;
 }
 
 .site-footer {
@@ -2029,9 +2050,8 @@ html.has-modal-open body {
 }
 
 .journey-close {
-  margin-top: 2.8rem;
-  margin-bottom: 2.4rem;
-  padding: 1.45rem;
+  margin: 0;
+  padding: var(--content-box-padding-block) var(--content-box-padding-inline);
   overflow: hidden;
 }
 
@@ -2428,6 +2448,11 @@ html.has-modal-open body {
 }
 
 @media (max-width: 920px) {
+  :root {
+    --section-gap: 2rem;
+    --section-content-gap: 1.16rem;
+  }
+
   .header-inner {
     flex-direction: column;
   }
@@ -2452,10 +2477,6 @@ html.has-modal-open body {
 
   .progress-overview {
     padding: 0.86rem 0.92rem 0.9rem;
-  }
-
-  .optional-unlock {
-    padding: 1rem;
   }
 
   .optional-unlock__compact {
@@ -2484,6 +2505,15 @@ html.has-modal-open body {
 }
 
 @media (max-width: 720px) {
+  :root {
+    --section-gap: 1.72rem;
+    --section-content-gap: 1rem;
+    --content-box-gap: 0.92rem;
+    --content-box-padding-block: 1rem;
+    --content-box-padding-inline: 1rem;
+    --content-box-gutter: 1.35rem;
+  }
+
   .page-shell {
     padding-top: 1.4rem;
   }
@@ -2544,20 +2574,6 @@ html.has-modal-open body {
     grid-template-columns: 1fr;
   }
 
-  .day-card,
-  .note-card,
-  .site-footer__inner {
-    padding: 1rem;
-  }
-
-  .journey-close {
-    padding: 1.18rem;
-  }
-
-  .day-card {
-    padding-left: 1.35rem;
-  }
-
   .route-reference {
     padding: 0.8rem;
   }
@@ -2601,7 +2617,9 @@ html.has-modal-open body {
     --card-header-min-block: 4rem;
   }
 
-  .day-card__header {
+  .day-grid,
+  .day-grid--optional,
+  .notes-grid {
     grid-template-columns: 1fr;
   }
 
@@ -2660,6 +2678,13 @@ html.has-modal-open body {
 }
 
 @media (max-width: 520px) {
+  :root {
+    --section-gap: 1.5rem;
+    --content-box-padding-block: 0.96rem;
+    --content-box-padding-inline: 0.96rem;
+    --content-box-gutter: 1.28rem;
+  }
+
   body::before {
     inset: auto auto 2rem 1rem;
     width: 8rem;
@@ -2687,10 +2712,6 @@ html.has-modal-open body {
 
   .check-item {
     padding: 0.72rem 0.74rem;
-  }
-
-  .day-card {
-    padding-left: 1.28rem;
   }
 
   .progress-overview__day {
