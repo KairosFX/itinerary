@@ -16,7 +16,6 @@ const routeMapPanel = document.getElementById("route-map-panel");
 const routeMapSurface = document.querySelector(".route-map__surface");
 const routeMapCanvas = document.getElementById("route-map-canvas");
 const routeMapStatus = document.querySelector("[data-route-map-status]");
-const routeMapGate = document.querySelector("[data-route-map-gate]");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
 const checklistInputs = Array.from(document.querySelectorAll('.day-card input[type="checkbox"]'));
 const progressItems = Array.from(document.querySelectorAll("[data-progress-item]"));
@@ -162,6 +161,8 @@ let routeMapSegments = [];
 let routeMapMarkers = new Map();
 let routeMapStatusMode = null;
 let routeMapInteractive = false;
+let routeMapDragArmed = false;
+let routeMapDragPointerId = null;
 
 function getSystemTheme() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -1202,6 +1203,8 @@ function fitRouteMapBounds(animate = false) {
 
 function setRouteMapInteractive(isInteractive) {
   routeMapInteractive = Boolean(isInteractive);
+  routeMapDragArmed = false;
+  routeMapDragPointerId = null;
 
   routeMapSurface?.classList.toggle("is-interactive", routeMapInteractive);
   routeMapPanel?.parentElement?.classList.toggle("is-map-interactive", routeMapInteractive);
@@ -1226,6 +1229,39 @@ function setRouteMapInteractive(isInteractive) {
   routeMapInstance.boxZoom.disable();
   routeMapInstance.doubleClickZoom.disable();
   routeMapInstance.keyboard.disable();
+  routeMapInstance.touchZoomRotate.disable();
+}
+
+function armRouteMapDrag(pointerId = null) {
+  routeMapDragArmed = true;
+  routeMapDragPointerId = pointerId;
+
+  if (!routeMapInstance || routeMapInteractive) {
+    return;
+  }
+
+  routeMapInstance.dragPan.enable();
+  routeMapInstance.touchZoomRotate.enable();
+  routeMapInstance.touchZoomRotate.disableRotation();
+}
+
+function disarmRouteMapDrag(pointerId = null) {
+  if (!routeMapDragArmed) {
+    return;
+  }
+
+  if (pointerId !== null && routeMapDragPointerId !== null && routeMapDragPointerId !== pointerId) {
+    return;
+  }
+
+  routeMapDragArmed = false;
+  routeMapDragPointerId = null;
+
+  if (!routeMapInstance || routeMapInteractive) {
+    return;
+  }
+
+  routeMapInstance.dragPan.disable();
   routeMapInstance.touchZoomRotate.disable();
 }
 
@@ -1331,6 +1367,11 @@ async function initializeRouteMap() {
       routeMapInstance.dragRotate.disable();
       routeMapInstance.touchZoomRotate.disableRotation();
       setRouteMapInteractive(false);
+      routeMapInstance.on("dragstart", () => {
+        if (!routeMapInteractive) {
+          setRouteMapInteractive(true);
+        }
+      });
 
       routeMapInstance.on("load", async () => {
         try {
@@ -1515,8 +1556,13 @@ function updateTimelineSpine() {
     timelineStyles.getPropertyValue("--timeline-node-size"),
     rootFontSize
   );
-  const nodeCenterOffset = nodeTop + nodeSize / 2;
-  const fillHeight = Math.max(anchorItem.offsetTop + nodeCenterOffset - nodeCenterOffset, 2);
+  const linkOverlap = resolveLengthValue(
+    timelineStyles.getPropertyValue("--timeline-link-overlap"),
+    rootFontSize
+  );
+  const fillStart = nodeTop + nodeSize - linkOverlap;
+  const fillEnd = anchorItem.offsetTop + nodeTop + linkOverlap;
+  const fillHeight = Math.max(fillEnd - fillStart, 0);
 
   progressTimeline.style.setProperty("--timeline-spine-fill", `${fillHeight}px`);
 }
@@ -2161,20 +2207,41 @@ if (routeMapToggle) {
 if (routeMapSurface) {
   routeMapSurface.addEventListener(
     "pointerdown",
-    () => {
-      if (!routeMapInteractive) {
-        setRouteMapInteractive(true);
+    (event) => {
+      if (event.button !== 0 || !event.isPrimary || routeMapInteractive) {
+        return;
       }
+
+      armRouteMapDrag(event.pointerId);
     },
     { capture: true }
   );
 
+  routeMapSurface.addEventListener("pointerup", (event) => {
+    if (!routeMapInteractive) {
+      disarmRouteMapDrag(event.pointerId);
+    }
+  });
+
+  routeMapSurface.addEventListener("pointercancel", (event) => {
+    if (!routeMapInteractive) {
+      disarmRouteMapDrag(event.pointerId);
+    }
+  });
+
   routeMapSurface.addEventListener("pointerleave", (event) => {
-    if (!routeMapInteractive || event.buttons !== 0) {
+    if (routeMapInteractive) {
+      if (event.buttons !== 0) {
+        return;
+      }
+
+      setRouteMapInteractive(false);
       return;
     }
 
-    setRouteMapInteractive(false);
+    if (event.buttons === 0) {
+      disarmRouteMapDrag();
+    }
   });
 }
 
@@ -2253,6 +2320,28 @@ document.addEventListener("pointerdown", (event) => {
 
   if (!routeMapSurface.contains(event.target)) {
     setRouteMapInteractive(false);
+  }
+});
+
+document.addEventListener("pointerup", (event) => {
+  if (routeMapInteractive && routeMapSurface && !routeMapSurface.contains(event.target)) {
+    setRouteMapInteractive(false);
+    return;
+  }
+
+  if (!routeMapInteractive) {
+    disarmRouteMapDrag(event.pointerId);
+  }
+});
+
+document.addEventListener("pointercancel", (event) => {
+  if (routeMapInteractive) {
+    setRouteMapInteractive(false);
+    return;
+  }
+
+  if (!routeMapInteractive) {
+    disarmRouteMapDrag(event.pointerId);
   }
 });
 

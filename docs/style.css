@@ -746,6 +746,7 @@ h3 {
   --timeline-node-top: 1.08rem;
   --timeline-axis-x: calc(var(--timeline-gutter) / 2);
   --timeline-node-center: calc(var(--timeline-node-top) + (var(--timeline-node-size) / 2));
+  --timeline-link-overlap: 1px;
   --timeline-spine-fill: 0px;
   list-style: none;
   margin: 0;
@@ -774,11 +775,11 @@ h3 {
   content: "";
   position: absolute;
   left: var(--timeline-axis-x);
-  top: var(--timeline-node-center);
+  top: calc(var(--timeline-node-top) + var(--timeline-node-size) - var(--timeline-link-overlap));
   width: 2.5px;
   transform: translateX(-50%);
   height: var(--timeline-spine-fill);
-  max-height: calc(100% - (var(--timeline-node-center) * 2));
+  max-height: calc(100% - (var(--timeline-node-top) * 2) - var(--timeline-node-size));
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(171, 74, 59, 0.84), rgba(171, 74, 59, 0.28));
   box-shadow: 0 0 0 1px rgba(255, 250, 245, 0.22);
@@ -1395,39 +1396,6 @@ h3 {
   z-index: 2;
 }
 
-.route-map__interaction-gate {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  display: grid;
-  align-content: end;
-  justify-items: start;
-  gap: 0.45rem;
-  padding: 1rem;
-  background:
-    linear-gradient(180deg, rgba(12, 14, 18, 0.04), rgba(12, 14, 18, 0.2) 52%, rgba(12, 14, 18, 0.58) 100%);
-  cursor: pointer;
-  touch-action: pan-y;
-}
-
-.route-map__interaction-title,
-.route-map__interaction-copy {
-  margin: 0;
-}
-
-.route-map__interaction-title {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #fff6ee;
-}
-
-.route-map__interaction-copy {
-  max-width: 30rem;
-  font-size: 0.88rem;
-  line-height: 1.5;
-  color: rgba(247, 238, 228, 0.76);
-}
-
 .route-map__canvas {
   position: relative;
   width: 100%;
@@ -1727,6 +1695,7 @@ html.has-modal-open body {
 
 .day-grid,
 .notes-grid {
+  --card-header-min-block: 4.4rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.08rem;
@@ -1739,6 +1708,9 @@ html.has-modal-open body {
 
 .day-card,
 .note-card {
+  display: grid;
+  align-content: start;
+  gap: 0;
   padding: 1.42rem;
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
@@ -1752,6 +1724,7 @@ html.has-modal-open body {
 
 .note-card {
   padding-left: 1.68rem;
+  border-top: 4px solid var(--accent-soft);
 }
 
 .day-card::before,
@@ -1803,10 +1776,12 @@ html.has-modal-open body {
 }
 
 .day-card__header {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: baseline;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  align-content: start;
+  gap: 0.35rem 1rem;
+  min-block-size: var(--card-header-min-block);
   padding-bottom: 0.9rem;
   margin-bottom: 0.9rem;
   border-bottom: 1px solid var(--line);
@@ -1934,28 +1909,28 @@ html.has-modal-open body {
   animation: unlockPulse 1100ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.note-card {
-  display: grid;
-  align-content: start;
-  gap: 0.8rem;
-  border-top: 4px solid var(--accent-soft);
-}
-
 .note-card p {
   max-width: none;
   line-height: 1.72;
 }
 
 .note-card h3 {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  align-content: start;
+  column-gap: 0.55rem;
+  min-block-size: var(--card-header-min-block);
+  margin: 0 0 0.9rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .note-card h3::before {
   content: "";
   width: 0.55rem;
   height: 0.55rem;
+  margin-top: 0.32rem;
   border-radius: 50%;
   background: var(--accent);
   flex: none;
@@ -2621,9 +2596,13 @@ html.has-modal-open body {
     right: 0.45rem;
   }
 
+  .day-grid,
+  .notes-grid {
+    --card-header-min-block: 4rem;
+  }
+
   .day-card__header {
-    flex-direction: column;
-    align-items: start;
+    grid-template-columns: 1fr;
   }
 
   .welcome-overlay {
@@ -2981,11 +2960,6 @@ html[data-theme="dark"] .route-map__surface,
 html[data-theme="dark"] .route-map__canvas,
 html[data-theme="dark"] .route-map__status {
   color: #efe6da;
-}
-
-html[data-theme="dark"] .route-map__interaction-gate {
-  background:
-    linear-gradient(180deg, rgba(7, 9, 12, 0.08), rgba(7, 9, 12, 0.24) 52%, rgba(7, 9, 12, 0.62) 100%);
 }
 
 html[data-theme="dark"] .route-map .maplibregl-ctrl-group {
