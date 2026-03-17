@@ -211,7 +211,7 @@ function updateThemeColorMeta(theme) {
     return;
   }
 
-  themeColorMeta.content = theme === "dark" ? "#14161a" : "#ab4a3b";
+  themeColorMeta.content = theme === "dark" ? "#111315" : "#9b3c33";
 }
 
 function applyRouteTheme() {
@@ -1484,7 +1484,7 @@ function syncDayCardRowHeights() {
     const rows = [];
 
     visibleCards.forEach((card) => {
-      const top = Math.round(card.getBoundingClientRect().top);
+      const top = card.offsetTop;
       const matchingRow = rows.find((row) => Math.abs(row.top - top) <= 4);
 
       if (matchingRow) {
@@ -2464,7 +2464,7 @@ document.addEventListener("pointercancel", (event) => {
 
 if (root.classList.contains("is-welcoming")) {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  window.setTimeout(finishWelcome, prefersReducedMotion ? 60 : 1900);
+  window.setTimeout(finishWelcome, prefersReducedMotion ? 60 : 2100);
 } else if (welcomeOverlay) {
   welcomeOverlay.setAttribute("hidden", "");
 }

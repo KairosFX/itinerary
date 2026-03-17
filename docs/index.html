@@ -7,17 +7,17 @@
   <meta
     name="description"
     content="Simple bilingual Japan trip website for GitHub Pages with overview, checklist, notes, essentials, and a route map from Osaka to Tokyo.">
-  <meta name="theme-color" content="#ab4a3b">
+  <meta name="theme-color" content="#9b3c33">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
   <script>
     try {
       const storedTheme = window.localStorage.getItem("japan-trip-theme");
       const initialTheme =
         storedTheme === "light" || storedTheme === "dark"
           ? storedTheme
-          : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          : "light";
       document.documentElement.dataset.theme = initialTheme;
       document.documentElement.style.colorScheme = initialTheme;
 
@@ -49,7 +49,16 @@
 
   <div class="welcome-overlay" aria-hidden="true">
     <div class="welcome-overlay__scene">
+      <div class="welcome-overlay__ink"></div>
       <div class="welcome-overlay__sun"></div>
+      <div class="welcome-overlay__petals" aria-hidden="true">
+        <span class="welcome-overlay__petal"></span>
+        <span class="welcome-overlay__petal"></span>
+        <span class="welcome-overlay__petal"></span>
+        <span class="welcome-overlay__petal"></span>
+        <span class="welcome-overlay__petal"></span>
+        <span class="welcome-overlay__petal"></span>
+      </div>
       <div class="welcome-overlay__fuji">
         <div class="welcome-overlay__fuji-cap"></div>
       </div>
@@ -658,29 +667,29 @@
             <li>
               <label class="check-item" for="day5-morning">
                 <input id="day5-morning" type="checkbox">
-                <span class="check-copy" data-language="en">Slow morning / onsen</span>
-                <span class="check-copy" data-language="ja" hidden>ゆっくりした朝 / 温泉</span>
+                <span class="check-copy" data-language="en">Onsen morning</span>
+                <span class="check-copy" data-language="ja" hidden>朝の温泉</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day5-ashi">
                 <input id="day5-ashi" type="checkbox">
-                <span class="check-copy" data-language="en">Transfer via Gotemba</span>
-                <span class="check-copy" data-language="ja" hidden>御殿場経由で移動</span>
+                <span class="check-copy" data-language="en">Bus via Gotemba</span>
+                <span class="check-copy" data-language="ja" hidden>御殿場経由のバス</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day5-shrine">
                 <input id="day5-shrine" type="checkbox">
-                <span class="check-copy" data-language="en">Kawaguchiko arrival views</span>
-                <span class="check-copy" data-language="ja" hidden>河口湖に着いたら景色を見る</span>
+                <span class="check-copy" data-language="en">Lake arrival views</span>
+                <span class="check-copy" data-language="ja" hidden>到着後に湖畔の景色</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day5-transfer">
                 <input id="day5-transfer" type="checkbox">
-                <span class="check-copy" data-language="en">Sunset / light evening</span>
-                <span class="check-copy" data-language="ja" hidden>夕景 / 軽い夜時間</span>
+                <span class="check-copy" data-language="en">Quiet sunset</span>
+                <span class="check-copy" data-language="ja" hidden>静かな夕景</span>
               </label>
             </li>
           </ul>
@@ -701,13 +710,20 @@
             <li>
               <label class="check-item" for="day6-chureito">
                 <input id="day6-chureito" type="checkbox">
-                <span class="check-copy" data-language="en">Chureito first if Fuji is visible</span>
-                <span class="check-copy" data-language="ja" hidden>富士山が見えるなら最初に忠霊塔</span>
+                <span class="check-copy" data-language="en">Fuji check at dawn</span>
+                <span class="check-copy" data-language="ja" hidden>朝に富士山を確認</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day6-kawaguchiko">
                 <input id="day6-kawaguchiko" type="checkbox">
+                <span class="check-copy" data-language="en">Chureito if clear</span>
+                <span class="check-copy" data-language="ja" hidden>晴れていれば忠霊塔</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item" for="day6-lake">
+                <input id="day6-lake" type="checkbox">
                 <span class="check-copy" data-language="en">Lake Kawaguchiko</span>
                 <span class="check-copy" data-language="ja" hidden>河口湖</span>
               </label>
@@ -737,7 +753,7 @@
             <li>
               <label class="check-item" for="day7-tokyo">
                 <input id="day7-tokyo" type="checkbox">
-                <span class="check-copy" data-language="en">Travel into Tokyo</span>
+                <span class="check-copy" data-language="en">Train to Tokyo</span>
                 <span class="check-copy" data-language="ja" hidden>東京へ移動</span>
               </label>
             </li>
@@ -751,15 +767,15 @@
             <li>
               <label class="check-item" for="day7-sightseeing">
                 <input id="day7-sightseeing" type="checkbox">
-                <span class="check-copy" data-language="en">Shibuya wandering / food</span>
-                <span class="check-copy" data-language="ja" hidden>渋谷を歩く / 食事</span>
+                <span class="check-copy" data-language="en">Shibuya food walk</span>
+                <span class="check-copy" data-language="ja" hidden>渋谷で食べ歩き</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day7-sky">
                 <input id="day7-sky" type="checkbox">
-                <span class="check-copy" data-language="en">Shibuya Sky at night</span>
-                <span class="check-copy" data-language="ja" hidden>夜の渋谷スカイ</span>
+                <span class="check-copy" data-language="en">Shibuya Sky</span>
+                <span class="check-copy" data-language="ja" hidden>渋谷スカイ</span>
               </label>
             </li>
           </ul>
