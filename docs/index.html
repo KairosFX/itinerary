@@ -430,8 +430,8 @@
           <span data-language="ja" hidden>7日間の旅程</span>
         </h2>
         <p class="section-intro">
-          <span data-language="en">A day-by-day checklist following the original plan order.</span>
-          <span data-language="ja" hidden>元の予定順に沿って確認できる、日ごとのチェックリストです。</span>
+          <span data-language="en">A day-by-day checklist optimized around geographic clustering and cleaner transfers.</span>
+          <span data-language="ja" hidden>地理的なまとまりと移動のしやすさを優先して組み直した、日ごとのチェックリストです。</span>
         </p>
       </div>
 
@@ -451,15 +451,29 @@
             <li>
               <label class="check-item" for="day1-nightlife">
                 <input id="day1-nightlife" type="checkbox">
-                <span class="check-copy" data-language="en">Osaka nightlife</span>
-                <span class="check-copy" data-language="ja" hidden>大阪の夜散策</span>
+                <span class="check-copy" data-language="en">Dotonbori</span>
+                <span class="check-copy" data-language="ja" hidden>道頓堀</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item" for="day1-shinsaibashi">
+                <input id="day1-shinsaibashi" type="checkbox">
+                <span class="check-copy" data-language="en">Shinsaibashi</span>
+                <span class="check-copy" data-language="ja" hidden>心斎橋</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item" for="day1-dinner">
+                <input id="day1-dinner" type="checkbox">
+                <span class="check-copy" data-language="en">Dinner in Minami</span>
+                <span class="check-copy" data-language="ja" hidden>ミナミで夕食</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day1-dotonbori">
                 <input id="day1-dotonbori" type="checkbox">
-                <span class="check-copy" data-language="en">Dotonbori</span>
-                <span class="check-copy" data-language="ja" hidden>道頓堀</span>
+                <span class="check-copy" data-language="en">Nightlife</span>
+                <span class="check-copy" data-language="ja" hidden>夜の街歩き</span>
               </label>
             </li>
           </ul>
@@ -472,32 +486,11 @@
               <span data-language="ja" hidden>2日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">Kyoto</span>
-              <span data-language="ja" hidden>京都</span>
+              <span data-language="en">Kyoto East</span>
+              <span data-language="ja" hidden>京都東側</span>
             </p>
           </div>
           <ul class="checklist-list">
-            <li>
-              <label class="check-item" for="day2-kyoto">
-                <input id="day2-kyoto" type="checkbox">
-                <span class="check-copy" data-language="en">Kyoto full day</span>
-                <span class="check-copy" data-language="ja" hidden>京都を1日観光</span>
-              </label>
-            </li>
-            <li>
-              <label class="check-item" for="day2-arashiyama">
-                <input id="day2-arashiyama" type="checkbox">
-                <span class="check-copy" data-language="en">Arashiyama</span>
-                <span class="check-copy" data-language="ja" hidden>嵐山</span>
-              </label>
-            </li>
-            <li>
-              <label class="check-item" for="day2-nanzenji">
-                <input id="day2-nanzenji" type="checkbox">
-                <span class="check-copy" data-language="en">Nanzen-ji Temple</span>
-                <span class="check-copy" data-language="ja" hidden>南禅寺</span>
-              </label>
-            </li>
             <li>
               <label class="check-item" for="day2-kiyomizu">
                 <input id="day2-kiyomizu" type="checkbox">
@@ -519,6 +512,20 @@
                 <span class="check-copy" data-language="ja" hidden>八坂の塔</span>
               </label>
             </li>
+            <li>
+              <label class="check-item" for="day2-gion">
+                <input id="day2-gion" type="checkbox">
+                <span class="check-copy" data-language="en">Gion</span>
+                <span class="check-copy" data-language="ja" hidden>祇園</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item" for="day2-nanzenji">
+                <input id="day2-nanzenji" type="checkbox">
+                <span class="check-copy" data-language="en">Nanzen-ji</span>
+                <span class="check-copy" data-language="ja" hidden>南禅寺</span>
+              </label>
+            </li>
           </ul>
         </article>
 
@@ -529,30 +536,37 @@
               <span data-language="ja" hidden>3日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">Osaka</span>
-              <span data-language="ja" hidden>大阪</span>
+              <span data-language="en">Kyoto -&gt; Osaka</span>
+              <span data-language="ja" hidden>京都 -&gt; 大阪</span>
             </p>
           </div>
           <ul class="checklist-list">
             <li>
-              <label class="check-item" for="day3-kaiyukan">
-                <input id="day3-kaiyukan" type="checkbox">
-                <span class="check-copy" data-language="en">Osaka Aquarium Kaiyukan</span>
-                <span class="check-copy" data-language="ja" hidden>海遊館</span>
+              <label class="check-item" for="day3-castle">
+                <input id="day3-castle" type="checkbox">
+                <span class="check-copy" data-language="en">Arashiyama early</span>
+                <span class="check-copy" data-language="ja" hidden>嵐山を朝に回る</span>
               </label>
             </li>
             <li>
-              <label class="check-item" for="day3-castle">
-                <input id="day3-castle" type="checkbox">
-                <span class="check-copy" data-language="en">Osaka Castle</span>
-                <span class="check-copy" data-language="ja" hidden>大阪城</span>
+              <label class="check-item" for="day3-return">
+                <input id="day3-return" type="checkbox">
+                <span class="check-copy" data-language="en">Return to Osaka</span>
+                <span class="check-copy" data-language="ja" hidden>大阪へ戻る</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item" for="day3-kaiyukan">
+                <input id="day3-kaiyukan" type="checkbox">
+                <span class="check-copy" data-language="en">Kaiyukan / Tempozan</span>
+                <span class="check-copy" data-language="ja" hidden>海遊館 / 天保山</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day3-flex">
                 <input id="day3-flex" type="checkbox">
-                <span class="check-copy" data-language="en">Flexible Osaka time</span>
-                <span class="check-copy" data-language="ja" hidden>大阪で自由時間</span>
+                <span class="check-copy" data-language="en">Final Osaka night</span>
+                <span class="check-copy" data-language="ja" hidden>最後の大阪の夜</span>
               </label>
             </li>
           </ul>
@@ -565,8 +579,8 @@
               <span data-language="ja" hidden>4日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">Shin-Osaka -&gt; Hakone</span>
-              <span data-language="ja" hidden>新大阪 -&gt; 箱根</span>
+              <span data-language="en">Hakone Loop</span>
+              <span data-language="ja" hidden>箱根周遊</span>
             </p>
           </div>
           <ul class="checklist-list">
@@ -580,29 +594,50 @@
             <li>
               <label class="check-item" for="day4-hakone">
                 <input id="day4-hakone" type="checkbox">
-                <span class="check-copy" data-language="en">Transfer into Hakone</span>
-                <span class="check-copy" data-language="ja" hidden>箱根へ移動</span>
+                <span class="check-copy" data-language="en">Gora / Sounzan</span>
+                <span class="check-copy" data-language="ja" hidden>強羅 / 早雲山</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day4-ropeway">
                 <input id="day4-ropeway" type="checkbox">
-                <span class="check-copy" data-language="en">Hakone Ropeway (Owakudani)</span>
-                <span class="check-copy" data-language="ja" hidden>箱根ロープウェイ（大涌谷）</span>
+                <span class="check-copy" data-language="en">Ropeway</span>
+                <span class="check-copy" data-language="ja" hidden>ロープウェイ</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day4-onsen">
                 <input id="day4-onsen" type="checkbox">
-                <span class="check-copy" data-language="en">Onsen / ryokan area (hot spring)</span>
-                <span class="check-copy" data-language="ja" hidden>温泉・旅館エリア</span>
+                <span class="check-copy" data-language="en">Owakudani</span>
+                <span class="check-copy" data-language="ja" hidden>大涌谷</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day4-overnight">
                 <input id="day4-overnight" type="checkbox">
-                <span class="check-copy" data-language="en">Hakone overnight</span>
-                <span class="check-copy" data-language="ja" hidden>箱根泊</span>
+                <span class="check-copy" data-language="en">Togendai</span>
+                <span class="check-copy" data-language="ja" hidden>桃源台</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item" for="day4-ashi">
+                <input id="day4-ashi" type="checkbox">
+                <span class="check-copy" data-language="en">Lake Ashi cruise</span>
+                <span class="check-copy" data-language="ja" hidden>芦ノ湖クルーズ</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item" for="day4-shrine">
+                <input id="day4-shrine" type="checkbox">
+                <span class="check-copy" data-language="en">Hakone Shrine / Moto-Hakone</span>
+                <span class="check-copy" data-language="ja" hidden>箱根神社 / 元箱根</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item" for="day4-ryokan">
+                <input id="day4-ryokan" type="checkbox">
+                <span class="check-copy" data-language="en">Ryokan</span>
+                <span class="check-copy" data-language="ja" hidden>旅館</span>
               </label>
             </li>
           </ul>
@@ -615,37 +650,37 @@
               <span data-language="ja" hidden>5日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">Hakone -&gt; Mt. Fuji Area</span>
-              <span data-language="ja" hidden>箱根 -&gt; 富士山エリア</span>
+              <span data-language="en">Hakone -&gt; Kawaguchiko</span>
+              <span data-language="ja" hidden>箱根 -&gt; 河口湖</span>
             </p>
           </div>
           <ul class="checklist-list">
             <li>
               <label class="check-item" for="day5-morning">
                 <input id="day5-morning" type="checkbox">
-                <span class="check-copy" data-language="en">Hakone morning</span>
-                <span class="check-copy" data-language="ja" hidden>箱根の朝</span>
+                <span class="check-copy" data-language="en">Slow morning / onsen</span>
+                <span class="check-copy" data-language="ja" hidden>ゆっくりした朝 / 温泉</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day5-ashi">
                 <input id="day5-ashi" type="checkbox">
-                <span class="check-copy" data-language="en">Lake Ashi</span>
-                <span class="check-copy" data-language="ja" hidden>芦ノ湖</span>
+                <span class="check-copy" data-language="en">Transfer via Gotemba</span>
+                <span class="check-copy" data-language="ja" hidden>御殿場経由で移動</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day5-shrine">
                 <input id="day5-shrine" type="checkbox">
-                <span class="check-copy" data-language="en">Hakone Shrine</span>
-                <span class="check-copy" data-language="ja" hidden>箱根神社</span>
+                <span class="check-copy" data-language="en">Kawaguchiko arrival views</span>
+                <span class="check-copy" data-language="ja" hidden>河口湖に着いたら景色を見る</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day5-transfer">
                 <input id="day5-transfer" type="checkbox">
-                <span class="check-copy" data-language="en">Transfer toward Mt. Fuji area</span>
-                <span class="check-copy" data-language="ja" hidden>富士山エリアへ移動</span>
+                <span class="check-copy" data-language="en">Sunset / light evening</span>
+                <span class="check-copy" data-language="ja" hidden>夕景 / 軽い夜時間</span>
               </label>
             </li>
           </ul>
@@ -658,11 +693,18 @@
               <span data-language="ja" hidden>6日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">Mt. Fuji Area</span>
-              <span data-language="ja" hidden>富士山エリア</span>
+              <span data-language="en">Fuji Area</span>
+              <span data-language="ja" hidden>富士エリア</span>
             </p>
           </div>
           <ul class="checklist-list">
+            <li>
+              <label class="check-item" for="day6-chureito">
+                <input id="day6-chureito" type="checkbox">
+                <span class="check-copy" data-language="en">Chureito first if Fuji is visible</span>
+                <span class="check-copy" data-language="ja" hidden>富士山が見えるなら最初に忠霊塔</span>
+              </label>
+            </li>
             <li>
               <label class="check-item" for="day6-kawaguchiko">
                 <input id="day6-kawaguchiko" type="checkbox">
@@ -677,13 +719,6 @@
                 <span class="check-copy" data-language="ja" hidden>忍野八海</span>
               </label>
             </li>
-            <li>
-              <label class="check-item" for="day6-chureito">
-                <input id="day6-chureito" type="checkbox">
-                <span class="check-copy" data-language="en">Arakurayama Sengen Park / Chureito Pagoda (optional)</span>
-                <span class="check-copy" data-language="ja" hidden>新倉山浅間公園 / 忠霊塔（任意）</span>
-              </label>
-            </li>
           </ul>
         </article>
 
@@ -694,8 +729,8 @@
               <span data-language="ja" hidden>7日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">Tokyo</span>
-              <span data-language="ja" hidden>東京</span>
+              <span data-language="en">Tokyo / Shibuya</span>
+              <span data-language="ja" hidden>東京 / 渋谷</span>
             </p>
           </div>
           <ul class="checklist-list">
@@ -716,8 +751,8 @@
             <li>
               <label class="check-item" for="day7-sightseeing">
                 <input id="day7-sightseeing" type="checkbox">
-                <span class="check-copy" data-language="en">Shibuya sightseeing</span>
-                <span class="check-copy" data-language="ja" hidden>渋谷観光</span>
+                <span class="check-copy" data-language="en">Shibuya wandering / food</span>
+                <span class="check-copy" data-language="ja" hidden>渋谷を歩く / 食事</span>
               </label>
             </li>
             <li>
@@ -857,90 +892,90 @@
           <span data-language="ja" hidden>メモ</span>
         </p>
         <h2 id="notes-title">
-          <span data-language="en">Trip Notes</span>
-          <span data-language="ja" hidden>旅のメモ</span>
+          <span data-language="en">Optimized Route Notes</span>
+          <span data-language="ja" hidden>最適化した旅程メモ</span>
         </h2>
         <p class="section-intro">
-          <span data-language="en">Short notes explaining each stop on the trip.</span>
-          <span data-language="ja" hidden>旅の各立ち寄り先を短くまとめたメモです。</span>
+          <span data-language="en">The original plan was not missing another destination; it was missing geographic clustering. These notes explain the cleaner east-Kyoto split, the Hakone loop, the Kawaguchiko transfer logic, and two practical upgrades: forward your main suitcase from Osaka to Tokyo and check Hakone transport status shortly before Day 4.</span>
+          <span data-language="ja" hidden>元の案に足りなかったのは新しい目的地ではなく、地理的なまとまりでした。ここでは、東側に寄せた京都、箱根の一筆書きルート、河口湖への移動ロジック、そして実用的な2つの改善点として、大阪から東京への荷物転送と4日目直前の箱根交通状況確認をまとめています。</span>
         </p>
       </div>
 
       <div class="notes-grid">
         <article class="note-card card">
           <h3>
-            <span data-language="en">Osaka</span>
-            <span data-language="ja" hidden>大阪</span>
+            <span data-language="en">Day 1 - Osaka</span>
+            <span data-language="ja" hidden>1日目・大阪</span>
           </h3>
           <p>
-            <span data-language="en">Starting base of the trip and the introduction to Japan’s food and nightlife culture. The focus here is on atmosphere, street food, and exploring the city rather than packing in too many attractions. Dotonbori is the main highlight and can be enjoyed both during the day and at night. During the day it is good for exploring street food stalls, walking along the canal, and visiting nearby Shinsaibashi shopping street, while nighttime is when the area becomes especially lively with neon lights, crowds, and nightlife. Osaka Aquarium Kaiyukan, scheduled for Day 3, is one of the largest aquariums in the world and offers a slower sightseeing experience before leaving Osaka. Osaka Castle also adds a historic landmark to the Osaka portion of the trip and provides a contrast to the city’s more modern streets and entertainment areas. The remaining time in the city can be kept flexible for additional food exploration, shopping, or revisiting Dotonbori.</span>
-            <span data-language="ja" hidden>旅の出発地点で、日本の食文化とナイトライフに触れる最初の街です。ここでは観光地を詰め込みすぎず、街の雰囲気、食べ歩き、街歩きを楽しむことを重視します。主な見どころは道頓堀で、昼も夜も楽しめます。昼は食べ歩きや川沿いの散策、近くの心斎橋商店街を回るのに向いており、夜になるとネオンや人の賑わいで特に活気が増します。3日目に予定している海遊館は世界最大級の水族館の一つで、大阪を離れる前にゆったり観光できるスポットです。大阪城は大阪パートに歴史的なランドマークを加え、現代的な街並みや娯楽エリアとの対比も作ってくれます。残りの時間は、さらに食べ歩きをしたり、買い物をしたり、もう一度道頓堀を訪れたりと柔軟に使えます。</span>
+            <span data-language="en">Keep arrival day easy: Dotonbori, Shinsaibashi, dinner, and nightlife. Those are natural neighbors in Osaka's Minami area, so this is the cleanest first-night plan.</span>
+            <span data-language="ja" hidden>到着日は無理をせず、道頓堀、心斎橋、夕食、夜の街歩きに絞るのが最もきれいです。これらは大阪ミナミで自然につながる近いエリアなので、初日の動きとしてまとまりが良いです。</span>
           </p>
         </article>
 
         <article class="note-card card">
           <h3>
-            <span data-language="en">Kyoto</span>
-            <span data-language="ja" hidden>京都</span>
+            <span data-language="en">Day 2 - Kyoto East</span>
+            <span data-language="ja" hidden>2日目・京都東側</span>
           </h3>
           <p>
-            <span data-language="en">Planned as a full-day trip from Osaka, Kyoto represents the cultural and historic portion of the trip and provides a strong contrast to Osaka’s modern nightlife atmosphere. The main areas planned are Arashiyama, known for its bamboo grove, scenic river, and mountain views, and Nanzen-ji Temple, a large Zen temple complex with quiet gardens and historic architecture. Ninenzaka adds a classic Kyoto atmosphere, with preserved stone lanes, traditional buildings, and a more historic streetscape that fits well with the temple and old-town experience, while Kiyomizu-dera and Yasaka Pagoda strengthen the Higashiyama portion of the day with two of Kyoto’s most recognizable historic landmarks. Kyoto is dense with temples and shrines, so the focus here is on a few major areas rather than trying to see everything in one day. The evening can be spent in the Higashiyama or Gion area, where the lantern-lit streets, shops, and traditional architecture make for a strong finish before returning to Osaka.</span>
-            <span data-language="ja" hidden>大阪からの日帰りの終日観光として計画しており、京都は旅の中で文化と歴史を感じるパートとして、大阪の現代的なナイトライフの雰囲気と強い対比を作ります。主な予定地は、竹林、川沿いの景色、山の眺めで知られる嵐山と、静かな庭園や歴史ある建築を持つ大きな禅寺の南禅寺です。二年坂は、保存された石畳の小道、伝統的な建物、そして寺社や旧市街の体験によく合う、より歴史を感じる街並みで、京都らしい空気を加えてくれます。さらに清水寺と八坂の塔が東山エリアを強め、京都を代表する歴史的ランドマークをしっかり入れられます。京都は寺社が非常に多いため、1日で全てを見ようとせず、主要なエリアをいくつかに絞って回る想定です。夕方以降は東山や祇園で過ごすこともでき、提灯に照らされた通り、店並み、伝統的な建築が、大阪へ戻る前の締めとしてよく合います。</span>
+            <span data-language="en">Do Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, Gion, and Nanzen-ji as one east-side day. Kiyomizu and Higashiyama work best early, and Nanzen-ji still fits the same eastern hills logic instead of forcing a west-east zigzag.</span>
+            <span data-language="ja" hidden>清水寺、二年坂、八坂の塔、祇園、南禅寺をひとつの東側の日としてまとめます。清水寺と東山は朝のほうが動きやすく、南禅寺も同じ東側の流れに乗るので、西と東を行き来する無理がなくなります。</span>
           </p>
         </article>
 
         <article class="note-card card">
           <h3>
-            <span data-language="en">Hakone</span>
-            <span data-language="ja" hidden>箱根</span>
+            <span data-language="en">Day 3 - Arashiyama, Then Osaka</span>
+            <span data-language="ja" hidden>3日目・嵐山のあと大阪</span>
           </h3>
           <p>
-            <span data-language="en">First major stop when heading east. Travel from Shin-Osaka to Odawara by bullet train, then continue into Hakone for sightseeing and an overnight stay. Hakone is known for its mountain scenery, hot springs, and potential views of Mt. Fuji on clear days, making it a good transition from the city portion of the trip into a slower, more scenic part of the itinerary. Since the area is spread out, it makes more sense to divide the sightseeing across the arrival day and the following morning rather than trying to fit everything in at once. The Hakone Ropeway works well on Day 4, as it adds one of the area’s most scenic experiences and includes views of Owakudani, Hakone’s well-known volcanic valley. Day 5 can then focus on the Lake Ashi side, including Hakone Shrine, which gives the stop a more relaxed and balanced pace before continuing toward the Mt. Fuji area. The overall experience is less about rushing through attractions and more about enjoying the landscape, atmosphere, and slower rhythm of Hakone.</span>
-            <span data-language="ja" hidden>東へ向かう最初の大きな立ち寄り先です。新大阪から小田原まで新幹線で移動し、その後は箱根へ入って観光し、一泊します。箱根は山の景色、温泉、晴れた日の富士山の眺めで知られており、都市中心の旅程から、よりゆったりした景色重視の流れへ移るのにちょうどよい場所です。エリアが広いため、全部を一度に詰め込むより、到着日と翌朝に分けて見るほうが自然です。4日目は箱根ロープウェイに乗って大涌谷まで行く流れが合いやすく、箱根らしい景色を入れやすくなります。5日目は芦ノ湖側と箱根神社を中心にしてから富士山エリアへ向かうと、全体のペースがより落ち着いてバランスよくまとまります。ここで大事なのは観光地を急いで消化することではなく、箱根の景色、空気感、そしてゆっくりしたリズムを楽しむことです。</span>
+            <span data-language="en">Move Arashiyama here instead of forcing it into Day 2. Saga and Arashiyama work better as their own area, then Osaka Aquarium Kaiyukan and Tempozan pair neatly on the return. If you need one cut, Osaka Castle is the cut.</span>
+            <span data-language="ja" hidden>嵐山は2日目に無理に入れず、3日目へ移します。嵯峨・嵐山はそれだけでまとまりのあるエリアで、戻ってから海遊館と天保山を組み合わせると流れがきれいです。もしひとつ削るなら、大阪城が削り候補です。</span>
           </p>
         </article>
 
         <article class="note-card card">
           <h3>
-            <span data-language="en">Mt. Fuji Area</span>
-            <span data-language="ja" hidden>富士山エリア</span>
+            <span data-language="en">Day 4 - Shin-Osaka To Hakone</span>
+            <span data-language="ja" hidden>4日目・新大阪から箱根</span>
           </h3>
           <p>
-            <span data-language="en">This portion of the trip focuses on scenery and classic views of Mount Fuji. The main base is around Lake Kawaguchiko, one of the best viewing locations for the mountain. Planned stops include Oshino Hakkai, a small village known for its clear spring-fed ponds and traditional atmosphere, as well as Arakurayama Sengen Park, home to the famous Chureito Pagoda viewpoint that overlooks Mt. Fuji and the surrounding town. Because Fuji visibility depends heavily on weather conditions, this part of the itinerary should remain flexible so the best viewpoints can be prioritized if the mountain is visible.</span>
-            <span data-language="ja" hidden>この区間は、富士山の景色と定番の眺望を楽しむためのパートです。主な拠点は河口湖周辺で、富士山を見るのに特に人気の高い場所のひとつです。予定している立ち寄り先は、湧水池と昔ながらの雰囲気で知られる忍野八海と、富士山と町並みを見渡せる有名な忠霊塔の展望で知られる新倉山浅間公園です。富士山の見え方は天候に大きく左右されるため、この部分は柔軟にして、見えているときに最も良い展望地を優先できるようにするのがおすすめです。</span>
+            <span data-language="en">Treat Hakone as one loop: Shin-Osaka to Odawara, then Gora or Sounzan, Ropeway, Owakudani, Togendai, Lake Ashi cruise, Hakone Shrine or Moto-Hakone, then ryokan. Stay near Lake Ashi, Togendai, or Sengokuhara rather than Hakone-Yumoto so the Fuji transfer stays cleaner.</span>
+            <span data-language="ja" hidden>箱根は一筆書きで回します。新大阪から小田原へ行き、強羅または早雲山、ロープウェイ、大涌谷、桃源台、芦ノ湖クルーズ、箱根神社または元箱根、そして旅館という流れです。富士側への移動をきれいにするため、箱根湯本より芦ノ湖、桃源台、仙石原寄りに泊まるほうが合います。</span>
           </p>
         </article>
 
         <article class="note-card card">
           <h3>
-            <span data-language="en">Tokyo</span>
-            <span data-language="ja" hidden>東京</span>
+            <span data-language="en">Day 5 - Hakone To Kawaguchiko</span>
+            <span data-language="ja" hidden>5日目・箱根から河口湖</span>
           </h3>
           <p>
-            <span data-language="en">Final city stop of the trip and the most urban portion of the itinerary. The focus is kept simple to avoid overloading the schedule. The main area explored is Shibuya, which includes the famous Shibuya Crossing, surrounding shopping and entertainment streets, and Shibuya Sky, a rooftop observation deck that provides wide views of Tokyo and is especially impressive at night. This stop serves as a lively conclusion to the trip after the scenic Fuji portion.</span>
-            <span data-language="ja" hidden>旅の最後の都市で、最も都会的なパートです。予定を詰め込みすぎないよう、内容はシンプルにしています。主に回るのは渋谷で、有名な渋谷スクランブル交差点、その周辺の買い物・娯楽エリア、そして東京を広く見渡せる屋上展望台の渋谷スカイが中心です。特に夜の景色が印象的で、景色重視だった富士山パートのあとを締めくくるにぎやかな終着点になります。</span>
+            <span data-language="en">Make this a lighter transfer-and-scenery day: slow morning, onsen, then move toward Kawaguchiko via Gotemba. Use the day for arrival views and sunset instead of cramming in more Hakone.</span>
+            <span data-language="ja" hidden>この日は移動と景色を軽く入れる日にします。朝はゆっくりして温泉を使い、そのあと御殿場経由で河口湖へ向かいます。さらに箱根を詰め込むより、到着後の景色と夕景に使うほうがきれいです。</span>
           </p>
         </article>
 
         <article class="note-card card">
           <h3>
-            <span data-language="en">Extra Tokyo Days</span>
-            <span data-language="ja" hidden>東京の追加日程</span>
+            <span data-language="en">Day 6 - Fuji Weather Flex</span>
+            <span data-language="ja" hidden>6日目・富士の天気優先日</span>
           </h3>
           <p>
-            <span data-language="en">If additional days are added, the itinerary expands to include other major Tokyo districts. Tokyo Skytree and the nearby Tokyo Solamachi complex provide another observation point and a large shopping and dining area. Akihabara offers a completely different atmosphere focused on anime, gaming, electronics, and pop culture. Shinjuku provides dense city views, nightlife, and major transportation hubs, while the Tokyo Imperial Palace area offers a quieter historic landmark surrounded by large gardens in the center of the city.</span>
-            <span data-language="ja" hidden>日数を追加できる場合は、東京の他の主要エリアも回る想定です。東京スカイツリーと隣接する東京ソラマチは、別の展望スポットと大きな商業・飲食エリアとして楽しめます。秋葉原はアニメ、ゲーム、家電、ポップカルチャーを中心にしたまったく違う雰囲気があり、新宿は高密度な都市景観、ナイトライフ、大きな交通拠点が魅力です。皇居周辺は、都心にありながら広い庭園に囲まれた落ち着いた歴史的ランドマークとして加えられます。</span>
+            <span data-language="en">Use this as the weather-flex day: Chureito first if Fuji is visible, then Lake Kawaguchiko, then Oshino Hakkai. Arakurayama Sengen Park is one of the signature Fuji viewpoints, so it works best as the priority stop rather than a leftover add-on.</span>
+            <span data-language="ja" hidden>この日は天気優先日にします。富士山が見えるなら最初に忠霊塔、そのあと河口湖、最後に忍野八海です。新倉山浅間公園は富士の代表的な展望地のひとつなので、余り物ではなく最優先で置くほうが合います。</span>
           </p>
         </article>
 
         <article class="note-card card">
           <h3>
-            <span data-language="en">Future Trip</span>
-            <span data-language="ja" hidden>次回の旅</span>
+            <span data-language="en">Day 7 - Tokyo</span>
+            <span data-language="ja" hidden>7日目・東京</span>
           </h3>
           <p>
-            <span data-language="en">Okinawa is kept separate for a future visit. Its tropical island environment, beaches, and relaxed pace make it very different from the mainland cities and mountain regions included in this itinerary.</span>
-            <span data-language="ja" hidden>沖縄は今後の別旅行として分けて考えます。亜熱帯の島の雰囲気、ビーチ、ゆったりした空気感は、本行程に含まれる本州の都市や山岳エリアとは大きく異なるためです。</span>
+            <span data-language="en">Keep Tokyo focused on Shibuya only: Crossing, wandering, food, and Shibuya Sky at night. Fuji Excursion into Shinjuku or highway buses are the clean options from Kawaguchiko, and Shibuya Sky is worth prebooking because entry is timed, rooftop closures happen in bad weather, and large bags are not allowed.</span>
+            <span data-language="ja" hidden>東京は渋谷だけに絞ります。交差点、街歩き、食事、そして夜の渋谷スカイです。河口湖からは富士回遊の新宿直通か高速バスがきれいな選択肢で、渋谷スカイは時間指定制、悪天候で屋上閉鎖もあり、大きい荷物も不可なので事前予約の価値があります。</span>
           </p>
         </article>
       </div>
