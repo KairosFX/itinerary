@@ -31,6 +31,7 @@ const resetProgressModal = document.querySelector("[data-reset-progress-modal]")
 const resetProgressCancelButton = document.querySelector("[data-reset-progress-cancel]");
 const resetProgressConfirmButton = document.querySelector("[data-reset-progress-confirm]");
 const backToTopButtons = document.querySelectorAll("[data-back-to-top]");
+const footerPanelButtons = document.querySelectorAll("[data-footer-panel-target]");
 const optionalPrompt = document.querySelector("[data-optional-prompt]");
 const optionalPromptExpanded = document.querySelector("[data-optional-prompt-expanded]");
 const optionalPromptCompact = document.querySelector("[data-optional-prompt-compact]");
@@ -50,7 +51,6 @@ const pageTitles = {
 };
 const storageKey = "japan-trip-language";
 const themeStorageKey = "japan-trip-theme";
-const welcomeStorageKey = "japan-trip-welcome-seen";
 const checklistStorageKey = "japan-trip-checklist-state";
 const completedHistoryStorageKey = "japan-trip-completed-history";
 const optionalDaysUnlockedStorageKey = "japan-trip-optional-days-unlocked";
@@ -396,21 +396,12 @@ function storeLanguage(language) {
   }
 }
 
-function storeWelcomeSeen() {
-  try {
-    window.localStorage.setItem(welcomeStorageKey, "1");
-  } catch (error) {
-    // Ignore storage failures and keep the page usable.
-  }
-}
-
 function finishWelcome() {
   root.classList.remove("is-welcoming");
   root.classList.add("has-seen-welcome");
   if (welcomeOverlay) {
     welcomeOverlay.setAttribute("hidden", "");
   }
-  storeWelcomeSeen();
 }
 
 function syncReservedHeaderHeight(forceReset = false) {
@@ -2310,6 +2301,16 @@ sectionTabs.forEach((tab) => {
     lockHeaderState(520);
     setActivePanel(tab.dataset.panelTarget);
     scrollToPanelStart(tab.dataset.panelTarget);
+  });
+});
+
+footerPanelButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const panelId = button.dataset.footerPanelTarget;
+    lockHeaderState(520);
+    if (setActivePanel(panelId)) {
+      scrollToPanelStart(panelId);
+    }
   });
 });
 

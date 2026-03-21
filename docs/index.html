@@ -20,9 +20,7 @@
           : "light";
       document.documentElement.dataset.theme = initialTheme;
       document.documentElement.style.colorScheme = initialTheme;
-
-      const hasSeenWelcome = window.localStorage.getItem("japan-trip-welcome-seen") === "1";
-      document.documentElement.classList.add(hasSeenWelcome ? "has-seen-welcome" : "is-welcoming");
+      document.documentElement.classList.add("is-welcoming");
     } catch (error) {
       document.documentElement.dataset.theme = "light";
       document.documentElement.style.colorScheme = "light";
@@ -1278,30 +1276,31 @@
           <span data-language="ja" hidden>出発前に、ルート、荷造り、鉄道の実務メモをまとめて確認できるようにしています。</span>
         </p>
       </div>
-
-      <nav class="site-footer__links" aria-label="Travel resources">
-        <a class="footer-link" href="./guide.html">
-          <span data-language="en">Travel resources</span>
-          <span data-language="ja" hidden>旅行リソース</span>
-        </a>
-        <a class="footer-link" href="./toolkit.html#weather-packing">
-          <span data-language="en">Packing list</span>
-          <span data-language="ja" hidden>荷造りメモ</span>
-        </a>
-        <a class="footer-link" href="./toolkit.html#shinkansen">
-          <span data-language="en">Japan rail info</span>
-          <span data-language="ja" hidden>鉄道情報</span>
-        </a>
-        <button class="footer-link footer-link--button footer-link--backtop" type="button" data-back-to-top>
-          <span data-language="en">Back to top</span>
-          <span data-language="ja" hidden>ページ上部へ戻る</span>
-        </button>
-      </nav>
+      <div class="site-footer__aside">
+        <nav class="site-footer__links" aria-label="Travel resources">
+          <button class="footer-link footer-link--button" type="button" data-footer-panel-target="notes">
+            <span data-language="en">Travel resources</span>
+            <span data-language="ja" hidden>旅行リソース</span>
+          </button>
+          <button class="footer-link footer-link--button" type="button" data-footer-panel-target="essentials">
+            <span data-language="en">Packing list</span>
+            <span data-language="ja" hidden>荷造りメモ</span>
+          </button>
+          <button class="footer-link footer-link--button" type="button" data-footer-panel-target="route">
+            <span data-language="en">Japan rail info</span>
+            <span data-language="ja" hidden>鉄道情報</span>
+          </button>
+          <button class="footer-link footer-link--button footer-link--backtop" type="button" data-back-to-top>
+            <span data-language="en">Back to top</span>
+            <span data-language="ja" hidden>ページ上部へ戻る</span>
+          </button>
+        </nav>
+        <p class="site-footer__credit">
+          <span data-language="en">Built as a lightweight Japan travel journal for GitHub Pages.</span>
+          <span data-language="ja" hidden>GitHub Pages で使える、軽量な日本旅ジャーナルとしてまとめています。</span>
+        </p>
+      </div>
     </div>
-    <p class="site-footer__credit">
-      <span data-language="en">Built as a lightweight Japan travel journal for GitHub Pages.</span>
-      <span data-language="ja" hidden>GitHub Pages で使える、軽量な日本旅ジャーナルとしてまとめています。</span>
-    </p>
   </footer>
 </body>
 </html>

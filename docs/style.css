@@ -2195,8 +2195,15 @@ html.has-modal-open body {
   color: var(--muted);
 }
 
+.site-footer__aside {
+  display: grid;
+  gap: 0.95rem;
+  align-content: start;
+}
+
 .site-footer__links {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
   align-content: start;
 }
@@ -2235,6 +2242,7 @@ html.has-modal-open body {
 }
 
 .footer-link--backtop {
+  grid-column: 1 / -1;
   justify-content: center;
 }
 
@@ -2247,8 +2255,9 @@ html.has-modal-open body {
 }
 
 .site-footer__credit {
-  margin: 1rem 0 0;
-  text-align: center;
+  margin: 0;
+  padding-top: 0.2rem;
+  text-align: left;
   font-size: 0.82rem;
   color: rgba(94, 103, 104, 0.86);
   letter-spacing: 0.01em;
@@ -2828,6 +2837,14 @@ html.has-modal-open body {
   .trip-stats,
   .site-footer__inner {
     grid-template-columns: 1fr;
+  }
+
+  .site-footer__links {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-link--backtop {
+    grid-column: auto;
   }
 
   .header-inner {
