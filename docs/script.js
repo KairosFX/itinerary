@@ -31,7 +31,6 @@ const resetProgressModal = document.querySelector("[data-reset-progress-modal]")
 const resetProgressCancelButton = document.querySelector("[data-reset-progress-cancel]");
 const resetProgressConfirmButton = document.querySelector("[data-reset-progress-confirm]");
 const backToTopButtons = document.querySelectorAll("[data-back-to-top]");
-const footerPanelButtons = document.querySelectorAll("[data-footer-panel-target]");
 const optionalPrompt = document.querySelector("[data-optional-prompt]");
 const optionalPromptExpanded = document.querySelector("[data-optional-prompt-expanded]");
 const optionalPromptCompact = document.querySelector("[data-optional-prompt-compact]");
@@ -2301,16 +2300,6 @@ sectionTabs.forEach((tab) => {
     lockHeaderState(520);
     setActivePanel(tab.dataset.panelTarget);
     scrollToPanelStart(tab.dataset.panelTarget);
-  });
-});
-
-footerPanelButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const panelId = button.dataset.footerPanelTarget;
-    lockHeaderState(520);
-    if (setActivePanel(panelId)) {
-      scrollToPanelStart(panelId);
-    }
   });
 });
 
