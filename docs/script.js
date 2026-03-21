@@ -1,9 +1,5 @@
 const languageButtons = document.querySelectorAll("[data-set-language]");
 const themeButtons = document.querySelectorAll("[data-set-theme]");
-const localizedNodes = document.querySelectorAll("[data-language]");
-const ariaLabelNodes = document.querySelectorAll("[data-aria-label-en][data-aria-label-ja]");
-const altTextNodes = document.querySelectorAll("[data-alt-en][data-alt-ja]");
-const sourceNodes = document.querySelectorAll("[data-src-en][data-src-ja]");
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 const sectionTabs = document.querySelectorAll("[data-panel-target]");
 const contentPanels = document.querySelectorAll("[data-panel]");
@@ -31,11 +27,11 @@ const resetProgressModal = document.querySelector("[data-reset-progress-modal]")
 const resetProgressCancelButton = document.querySelector("[data-reset-progress-cancel]");
 const resetProgressConfirmButton = document.querySelector("[data-reset-progress-confirm]");
 const backToTopButtons = document.querySelectorAll("[data-back-to-top]");
-const scrollSwipeTargets = Array.from(
-  document.querySelectorAll(
-    ".card, .progress-overview, .progress-item, .section-heading, .route-reference, .route-map__surface, .route-map__status, .site-footer__lead, .site-footer__aside, .site-footer__credit"
-  )
-);
+const scrollSwipeTargetSelector =
+  ".card, .booking-item, .progress-overview, .progress-item, .section-heading, .route-reference, .route-map__surface, .route-map__status, .site-footer__lead, .site-footer__aside, .site-footer__credit";
+const bookingTransitRoot = document.querySelector("[data-booking-transit]");
+const bookingTransitGroupsRoot = document.querySelector("[data-booking-transit-groups]");
+const bookingTransitEmptyState = document.querySelector("[data-booking-empty]");
 const optionalPrompt = document.querySelector("[data-optional-prompt]");
 const optionalPromptExpanded = document.querySelector("[data-optional-prompt-expanded]");
 const optionalPromptCompact = document.querySelector("[data-optional-prompt-compact]");
@@ -58,6 +54,216 @@ const themeStorageKey = "japan-trip-theme";
 const checklistStorageKey = "japan-trip-checklist-state";
 const completedHistoryStorageKey = "japan-trip-completed-history";
 const optionalDaysUnlockedStorageKey = "japan-trip-optional-days-unlocked";
+const bookingTransitStorageKey = "japan-trip-bookings-transit-state";
+const bookingTransitGroupDefinitions = [
+  {
+    id: "tickets",
+    title: { en: "Tickets / passes", ja: "チケット・パス" }
+  },
+  {
+    id: "transit",
+    title: { en: "Transport info", ja: "移動情報" }
+  },
+  {
+    id: "attractions",
+    title: { en: "Attraction bookings", ja: "施設予約" }
+  }
+];
+const bookingTransitItems = [
+  {
+    id: "ic-card",
+    group: "tickets",
+    filters: ["to-book", "transit"],
+    kind: "prep",
+    tone: { en: "Setup prep", ja: "事前準備" },
+    defaultStatus: { en: "Ready", ja: "準備OK" },
+    doneStatus: { en: "Ready", ja: "準備済み" },
+    toggleDefault: { en: "Mark ready", ja: "準備完了にする" },
+    toggleDone: { en: "Ready", ja: "準備済み" },
+    title: { en: "IC card setup", ja: "ICカードの準備" },
+    summary: {
+      en: "Choose ICOCA, Suica, PASMO, or mobile IC before landing.",
+      ja: "到着前にICOCA、Suica、PASMO、またはモバイルICを決めておく。"
+    },
+    details: {
+      en: "Keep one reloadable tap card or wallet setup ready for city trains, subways, and convenience-store stops. Mobile IC is the lightest option if your phone supports it.",
+      ja: "都市部の電車、地下鉄、コンビニ利用のために、チャージ式ICカードかモバイルICを一つ準備しておくと動きやすいです。対応端末ならモバイルICが最も身軽です。"
+    },
+    action: {
+      href: "https://example.com/japan/ic-card-setup",
+      label: { en: "Open setup guide", ja: "設定ガイドを開く" }
+    }
+  },
+  {
+    id: "shin-osaka-odawara",
+    group: "tickets",
+    filters: ["to-book", "transit"],
+    kind: "booking",
+    tone: { en: "Reserve ahead", ja: "事前予約" },
+    defaultStatus: { en: "Not booked", ja: "未予約" },
+    doneStatus: { en: "Booked", ja: "予約済み" },
+    toggleDefault: { en: "Mark booked", ja: "予約済みにする" },
+    toggleDone: { en: "Booked", ja: "予約済み" },
+    title: { en: "Shin-Osaka -> Odawara shinkansen", ja: "新大阪 -> 小田原 新幹線" },
+    summary: {
+      en: "Treat this as the fixed rail booking that anchors the Hakone transfer day.",
+      ja: "箱根移動日の軸になる固定予約として扱う。"
+    },
+    details: {
+      en: "Reserve this once the transfer day is locked. A reserved seat keeps the Osaka to Hakone handoff cleaner, especially if you are carrying luggage.",
+      ja: "移動日が固まったら予約しておくと安心です。荷物がある場合は指定席にしておくと、大阪から箱根への乗り継ぎがかなり楽になります。"
+    },
+    action: {
+      href: "https://example.com/japan/shin-osaka-odawara",
+      label: { en: "Book now", ja: "予約する" }
+    }
+  },
+  {
+    id: "hakone-freepass",
+    group: "tickets",
+    filters: ["to-book", "transit"],
+    kind: "prep",
+    tone: { en: "Pass option", ja: "パス候補" },
+    defaultStatus: { en: "Optional", ja: "任意" },
+    doneStatus: { en: "Saved", ja: "保存済み" },
+    toggleDefault: { en: "Save pass", ja: "パスを保存する" },
+    toggleDone: { en: "Saved", ja: "保存済み" },
+    title: { en: "Hakone Freepass", ja: "箱根フリーパス" },
+    summary: {
+      en: "Keep the Odawara version handy as the default pass to compare against single fares.",
+      ja: "このルートでは小田原版を基準にして、単発運賃と比較できるようにしておく。"
+    },
+    details: {
+      en: "Save the pass page so you can check current pricing and coverage before Day 4. It is useful when the Hakone loop stays compact and you want one reference page for the area.",
+      ja: "4日目の前に、料金と対象区間を確認できるようパスページを保存しておくと便利です。箱根の移動をまとめる時に、エリア全体の基準ページとして使えます。"
+    },
+    action: {
+      href: "https://example.com/japan/hakone-freepass",
+      label: { en: "Open pass page", ja: "パスページを開く" }
+    }
+  },
+  {
+    id: "hakone-status",
+    group: "transit",
+    filters: ["transit"],
+    kind: "reference",
+    tone: { en: "Live updates", ja: "運行確認" },
+    defaultStatus: { en: "Ready", ja: "準備OK" },
+    doneStatus: { en: "Saved", ja: "保存済み" },
+    toggleDefault: { en: "Save page", ja: "ページを保存する" },
+    toggleDone: { en: "Saved", ja: "保存済み" },
+    title: { en: "Hakone transport status page", ja: "箱根の運行状況ページ" },
+    summary: {
+      en: "Use this for same-day checks on ropeway, cable car, and lake transport conditions.",
+      ja: "ロープウェイ、ケーブルカー、湖の移動状況を当日確認するためのページ。"
+    },
+    details: {
+      en: "This is a reference link, not a reservation. Save it where you can reach it quickly in case weather or maintenance changes the Hakone loop plan.",
+      ja: "予約ではなく、当日確認用の参照ページです。天候や点検で箱根の周遊順が変わる場合にすぐ見られるよう保存しておきます。"
+    },
+    action: {
+      href: "https://example.com/japan/hakone-status",
+      label: { en: "Open status page", ja: "運行ページを開く" }
+    }
+  },
+  {
+    id: "hakone-kawaguchiko",
+    group: "transit",
+    filters: ["transit"],
+    kind: "reference",
+    tone: { en: "Save route", ja: "経路保存" },
+    defaultStatus: { en: "Ready", ja: "準備OK" },
+    doneStatus: { en: "Saved", ja: "保存済み" },
+    toggleDefault: { en: "Save route", ja: "経路を保存する" },
+    toggleDone: { en: "Saved", ja: "保存済み" },
+    title: { en: "Hakone -> Kawaguchiko via Gotemba", ja: "箱根 -> 御殿場経由で河口湖" },
+    summary: {
+      en: "Keep the transfer chain ready so Day 5 stays light and weather-flexible.",
+      ja: "5日目を軽く保つため、乗り継ぎの流れを事前に保存しておく。"
+    },
+    details: {
+      en: "This is the reference route for moving from Hakone toward the Fuji side. Save the route details rather than memorizing them so you can adjust if departure times shift.",
+      ja: "箱根から富士側へ抜ける時の基準ルートです。時刻変更に対応できるよう、暗記するより経路情報を保存しておく方が実用的です。"
+    },
+    action: {
+      href: "https://example.com/japan/hakone-kawaguchiko",
+      label: { en: "View route", ja: "経路を見る" }
+    }
+  },
+  {
+    id: "kawaguchiko-tokyo",
+    group: "transit",
+    filters: ["transit"],
+    kind: "reference",
+    tone: { en: "Save route", ja: "経路保存" },
+    defaultStatus: { en: "Ready", ja: "準備OK" },
+    doneStatus: { en: "Saved", ja: "保存済み" },
+    toggleDefault: { en: "Save route", ja: "経路を保存する" },
+    toggleDone: { en: "Saved", ja: "保存済み" },
+    title: { en: "Kawaguchiko -> Tokyo", ja: "河口湖 -> 東京" },
+    summary: {
+      en: "Keep the Tokyo return options nearby, especially Fuji Excursion and bus fallback details.",
+      ja: "東京へ戻る選択肢、特に富士回遊とバスの代替案をすぐ見られるようにしておく。"
+    },
+    details: {
+      en: "Use this as the saved return reference for the final move into Tokyo. It works best when you keep one rail option and one fallback option ready.",
+      ja: "東京へ入る最後の移動のために保存しておく参照ルートです。鉄道案と代替案を一つずつ持っておくと動きやすいです。"
+    },
+    action: {
+      href: "https://example.com/japan/kawaguchiko-tokyo",
+      label: { en: "View route", ja: "経路を見る" }
+    }
+  },
+  {
+    id: "kaiyukan",
+    group: "attractions",
+    filters: ["to-book"],
+    kind: "booking",
+    tone: { en: "Reserve ahead", ja: "事前予約" },
+    defaultStatus: { en: "Not booked", ja: "未予約" },
+    doneStatus: { en: "Booked", ja: "予約済み" },
+    toggleDefault: { en: "Mark booked", ja: "予約済みにする" },
+    toggleDone: { en: "Booked", ja: "予約済み" },
+    title: { en: "Kaiyukan booking", ja: "海遊館の予約" },
+    summary: {
+      en: "Treat this as an ahead-of-time attraction reservation for the Osaka waterfront day.",
+      ja: "大阪ベイエリアの日に向けた事前予約枠として扱う。"
+    },
+    details: {
+      en: "Use a placeholder booking link here for now. This should feel like a reserve-ahead item rather than a route reference, so keep the ticket page ready before Day 3.",
+      ja: "今は仮の予約リンクで構いません。これは移動メモではなく事前予約枠として扱い、3日目の前にチケットページをすぐ開けるようにしておきます。"
+    },
+    action: {
+      href: "https://example.com/japan/kaiyukan",
+      label: { en: "Book now", ja: "予約する" }
+    }
+  },
+  {
+    id: "shibuya-sky",
+    group: "attractions",
+    filters: ["to-book"],
+    kind: "booking",
+    tone: { en: "Reserve ahead", ja: "事前予約" },
+    defaultStatus: { en: "Not booked", ja: "未予約" },
+    doneStatus: { en: "Booked", ja: "予約済み" },
+    toggleDefault: { en: "Mark booked", ja: "予約済みにする" },
+    toggleDone: { en: "Booked", ja: "予約済み" },
+    title: { en: "Shibuya Sky booking", ja: "渋谷スカイの予約" },
+    summary: {
+      en: "Keep the timed-entry booking ready because night slots and weather changes matter here.",
+      ja: "夜の時間帯や天候変更の影響があるので、時間指定予約をすぐ開けるようにしておく。"
+    },
+    details: {
+      en: "This is the highest-priority Tokyo reservation in the guide. Keep the booking page handy and remember that rooftop access and bag rules can change the plan.",
+      ja: "このガイド内では東京で最優先の予約項目です。予約ページをすぐ見られるようにして、屋上開放や荷物ルールの変化も意識しておきます。"
+    },
+    action: {
+      href: "https://example.com/japan/shibuya-sky",
+      label: { en: "Book now", ja: "予約する" }
+    }
+  }
+];
+const bookingTransitItemMap = new Map(bookingTransitItems.map((item) => [item.id, item]));
 const routeMapAssetUrls = {
   css: "https://unpkg.com/maplibre-gl@5.18.0/dist/maplibre-gl.css",
   js: "https://unpkg.com/maplibre-gl@5.18.0/dist/maplibre-gl.js"
@@ -174,13 +380,17 @@ let dayCardRowEqualizeFrame = 0;
 let backToTopMotionResetTimer = 0;
 let boxSwipeMotionResetTimer = 0;
 let activePanelId = Array.from(sectionTabs).find((tab) => tab.classList.contains("is-active"))?.dataset.panelTarget ?? null;
+let bookingTransitState = { filter: "all", items: {} };
 
-scrollSwipeTargets.forEach((target) => {
-  target.classList.add("scroll-swipe-target");
-});
+function markScrollSwipeTargets() {
+  document.querySelectorAll(scrollSwipeTargetSelector).forEach((target) => {
+    target.classList.add("scroll-swipe-target");
+  });
+}
 
 function getVisibleScrollSwipeTargets() {
-  return scrollSwipeTargets.filter((target) => {
+  markScrollSwipeTargets();
+  return Array.from(document.querySelectorAll(scrollSwipeTargetSelector)).filter((target) => {
     const panel = target.closest("[data-panel]");
     return !panel || panel.classList.contains("is-active");
   });
@@ -465,6 +675,305 @@ function storeChecklistState() {
     window.localStorage.setItem(checklistStorageKey, JSON.stringify(nextState));
   } catch (error) {
     // Ignore storage failures and keep the checklist usable.
+  }
+}
+
+function readStoredBookingTransitState() {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(bookingTransitStorageKey) || "{}");
+    const nextFilter =
+      parsed?.filter === "to-book" || parsed?.filter === "transit" || parsed?.filter === "done"
+        ? parsed.filter
+        : "all";
+
+    return {
+      filter: nextFilter,
+      items: typeof parsed?.items === "object" && parsed.items ? parsed.items : {}
+    };
+  } catch (error) {
+    return { filter: "all", items: {} };
+  }
+}
+
+function storeBookingTransitState() {
+  try {
+    if (
+      bookingTransitState.filter === "all" &&
+      Object.keys(bookingTransitState.items).length === 0
+    ) {
+      window.localStorage.removeItem(bookingTransitStorageKey);
+      return;
+    }
+
+    window.localStorage.setItem(bookingTransitStorageKey, JSON.stringify(bookingTransitState));
+  } catch (error) {
+    // Ignore storage failures and keep the booking board usable.
+  }
+}
+
+function getBookingTransitItemState(itemId) {
+  const state = bookingTransitState.items[itemId];
+  return {
+    done: Boolean(state?.done),
+    expanded: Boolean(state?.expanded)
+  };
+}
+
+function updateStoredBookingTransitItemState(itemId, nextState) {
+  const mergedState = {
+    ...getBookingTransitItemState(itemId),
+    ...nextState
+  };
+
+  if (!mergedState.done && !mergedState.expanded) {
+    delete bookingTransitState.items[itemId];
+  } else {
+    bookingTransitState.items[itemId] = mergedState;
+  }
+
+  storeBookingTransitState();
+}
+
+function renderLocalizedContent(content) {
+  return `<span data-language="en">${content.en}</span><span data-language="ja" hidden>${content.ja}</span>`;
+}
+
+function renderBookingTransitItem(item) {
+  const state = getBookingTransitItemState(item.id);
+
+  return `
+    <details
+      class="booking-item"
+      data-booking-item
+      data-booking-id="${item.id}"
+      data-booking-group="${item.group}"
+      data-booking-kind="${item.kind}"
+      data-booking-state="${state.done ? "done" : "pending"}"
+      ${state.expanded ? "open" : ""}>
+      <summary>
+        <span class="booking-item__meta">
+          <span class="booking-item__tone">${renderLocalizedContent(item.tone)}</span>
+          <span class="booking-item__status" data-booking-status>
+            <span data-language="en" data-booking-status-language="en"></span>
+            <span data-language="ja" data-booking-status-language="ja" hidden></span>
+          </span>
+        </span>
+        <span class="booking-item__headline">
+          <span class="booking-item__title">${renderLocalizedContent(item.title)}</span>
+          <span class="booking-item__caret" aria-hidden="true"></span>
+        </span>
+        <span class="booking-item__summary-copy">${renderLocalizedContent(item.summary)}</span>
+      </summary>
+      <div class="booking-item__details">
+        <div class="booking-item__details-inner">
+          <p class="booking-item__detail-copy">${renderLocalizedContent(item.details)}</p>
+          <div class="booking-item__actions">
+            <a
+              class="booking-item__cta booking-item__cta--primary"
+              href="${item.action.href}"
+              target="_blank"
+              rel="noopener noreferrer">
+              ${renderLocalizedContent(item.action.label)}
+            </a>
+            <button
+              class="booking-item__cta booking-item__cta--secondary"
+              type="button"
+              data-booking-done-toggle
+              aria-pressed="${state.done ? "true" : "false"}">
+              <span data-language="en" data-booking-toggle-language="en"></span>
+              <span data-language="ja" data-booking-toggle-language="ja" hidden></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </details>
+  `;
+}
+
+function renderBookingTransitBoard() {
+  if (!bookingTransitGroupsRoot) {
+    return;
+  }
+
+  bookingTransitGroupsRoot.innerHTML = bookingTransitGroupDefinitions
+    .map((group) => {
+      const itemsMarkup = bookingTransitItems
+        .filter((item) => item.group === group.id)
+        .map((item) => renderBookingTransitItem(item))
+        .join("");
+
+      return `
+        <section class="booking-group" data-booking-group-section="${group.id}">
+          <h5 class="booking-group__title">${renderLocalizedContent(group.title)}</h5>
+          <div class="booking-group__list">
+            ${itemsMarkup}
+          </div>
+        </section>
+      `;
+    })
+    .join("");
+
+  markScrollSwipeTargets();
+}
+
+function syncBookingTransitItemUI(itemElement) {
+  const itemId = itemElement.dataset.bookingId;
+  const itemConfig = bookingTransitItemMap.get(itemId);
+  if (!itemConfig) {
+    return;
+  }
+
+  const state = getBookingTransitItemState(itemId);
+  itemElement.dataset.bookingState = state.done ? "done" : "pending";
+
+  if (itemElement.open !== state.expanded) {
+    itemElement.open = state.expanded;
+  }
+
+  itemElement.querySelectorAll("[data-booking-status-language]").forEach((node) => {
+    const language = node.dataset.bookingStatusLanguage;
+    const nextContent = state.done ? itemConfig.doneStatus[language] : itemConfig.defaultStatus[language];
+    node.textContent = nextContent;
+  });
+
+  const doneButton = itemElement.querySelector("[data-booking-done-toggle]");
+  if (doneButton) {
+    doneButton.classList.toggle("is-complete", state.done);
+    doneButton.setAttribute("aria-pressed", String(state.done));
+    doneButton.querySelectorAll("[data-booking-toggle-language]").forEach((node) => {
+      const language = node.dataset.bookingToggleLanguage;
+      const nextContent = state.done ? itemConfig.toggleDone[language] : itemConfig.toggleDefault[language];
+      node.textContent = nextContent;
+    });
+  }
+}
+
+function itemMatchesBookingTransitFilter(itemConfig, state) {
+  if (bookingTransitState.filter === "all") {
+    return true;
+  }
+
+  if (bookingTransitState.filter === "done") {
+    return state.done;
+  }
+
+  return itemConfig.filters.includes(bookingTransitState.filter);
+}
+
+function updateBookingTransitUI() {
+  if (!bookingTransitRoot) {
+    return;
+  }
+
+  let hasVisibleItems = false;
+  let hasVisibleDoneItems = false;
+
+  bookingTransitRoot.querySelectorAll("[data-booking-filter-button]").forEach((button) => {
+    const isActive = button.dataset.bookingFilterButton === bookingTransitState.filter;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+
+  bookingTransitRoot.querySelectorAll("[data-booking-item]").forEach((itemElement) => {
+    const itemConfig = bookingTransitItemMap.get(itemElement.dataset.bookingId || "");
+    if (!itemConfig) {
+      return;
+    }
+
+    const state = getBookingTransitItemState(itemConfig.id);
+    const isVisible = itemMatchesBookingTransitFilter(itemConfig, state);
+    itemElement.hidden = !isVisible;
+    if (isVisible) {
+      hasVisibleItems = true;
+      if (state.done) {
+        hasVisibleDoneItems = true;
+      }
+    }
+
+    syncBookingTransitItemUI(itemElement);
+  });
+
+  bookingTransitRoot.querySelectorAll("[data-booking-group-section]").forEach((groupElement) => {
+    groupElement.hidden = !groupElement.querySelector("[data-booking-item]:not([hidden])");
+  });
+
+  if (bookingTransitEmptyState) {
+    bookingTransitEmptyState.hidden =
+      bookingTransitState.filter !== "done" || hasVisibleDoneItems || !bookingTransitItems.length;
+  }
+
+  if (!hasVisibleItems && bookingTransitState.filter !== "done") {
+    bookingTransitState.filter = "all";
+    storeBookingTransitState();
+    updateBookingTransitUI();
+  }
+}
+
+function setBookingTransitFilter(nextFilter) {
+  const allowedFilters = new Set(["all", "to-book", "transit", "done"]);
+  bookingTransitState.filter = allowedFilters.has(nextFilter) ? nextFilter : "all";
+  storeBookingTransitState();
+  updateBookingTransitUI();
+}
+
+function bindBookingTransitUI() {
+  if (!bookingTransitRoot) {
+    return;
+  }
+
+  if (bookingTransitRoot.dataset.bookingFiltersBound !== "true") {
+    bookingTransitRoot.querySelectorAll("[data-booking-filter-button]").forEach((button) => {
+      button.addEventListener("click", () => {
+        setBookingTransitFilter(button.dataset.bookingFilterButton || "all");
+      });
+    });
+    bookingTransitRoot.dataset.bookingFiltersBound = "true";
+  }
+
+  bookingTransitRoot.querySelectorAll("[data-booking-item]").forEach((itemElement) => {
+    if (itemElement.dataset.bookingBound === "true") {
+      return;
+    }
+
+    itemElement.addEventListener("toggle", () => {
+      updateStoredBookingTransitItemState(itemElement.dataset.bookingId || "", {
+        expanded: itemElement.open
+      });
+      syncBookingTransitItemUI(itemElement);
+    });
+
+    itemElement.querySelector("[data-booking-done-toggle]")?.addEventListener("click", (event) => {
+      event.preventDefault();
+      const itemId = itemElement.dataset.bookingId || "";
+      const state = getBookingTransitItemState(itemId);
+      updateStoredBookingTransitItemState(itemId, {
+        done: !state.done
+      });
+      updateBookingTransitUI();
+    });
+
+    itemElement.dataset.bookingBound = "true";
+  });
+}
+
+function initializeBookingTransit() {
+  if (!bookingTransitRoot) {
+    return;
+  }
+
+  bookingTransitState = readStoredBookingTransitState();
+  renderBookingTransitBoard();
+  bindBookingTransitUI();
+  updateBookingTransitUI();
+}
+
+function resetBookingTransitState() {
+  bookingTransitState = { filter: "all", items: {} };
+  storeBookingTransitState();
+  if (bookingTransitRoot) {
+    renderBookingTransitBoard();
+    bindBookingTransitUI();
+    updateBookingTransitUI();
   }
 }
 
@@ -1682,6 +2191,7 @@ function resetTripProgress() {
   storeChecklistState();
   storeDaySet(completedHistoryStorageKey, completedHistoryDays);
   storeBoolean(optionalDaysUnlockedStorageKey, false);
+  resetBookingTransitState();
 
   window.clearTimeout(sequenceNoticeTimer);
   if (sequenceNotice) {
@@ -2076,6 +2586,10 @@ function bindRouteInteractions() {
 
 function setLanguage(language) {
   const nextLanguage = language === "ja" ? "ja" : "en";
+  const localizedNodes = document.querySelectorAll("[data-language]");
+  const ariaLabelNodes = document.querySelectorAll("[data-aria-label-en][data-aria-label-ja]");
+  const altTextNodes = document.querySelectorAll("[data-alt-en][data-alt-ja]");
+  const sourceNodes = document.querySelectorAll("[data-src-en][data-src-ja]");
 
   root.lang = nextLanguage;
   document.title = pageTitles[nextLanguage];
@@ -2320,6 +2834,8 @@ decorateProgressTimeline();
 completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
 optionalDaysUnlocked = readStoredBoolean(optionalDaysUnlockedStorageKey);
 syncOptionalDaysUI();
+initializeBookingTransit();
+markScrollSwipeTargets();
 applyTheme(readStoredThemePreference() || getCurrentTheme(), { persist: false });
 setLanguage(readStoredLanguage());
 restoreChecklistState();

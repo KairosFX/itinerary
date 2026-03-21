@@ -1094,7 +1094,7 @@
           </ul>
         </article>
 
-        <article class="essentials-card card">
+        <article class="essentials-card essentials-card--bookings card">
           <h4>
             <span data-language="en">Bookings + Transit</span>
             <span data-language="ja" hidden>予約と移動</span>
@@ -1103,14 +1103,36 @@
             <span data-language="en">Lock in the pieces that can slow the trip down if left too late.</span>
             <span data-language="ja" hidden>後回しにすると旅程が崩れやすい部分だけ先に固めます。</span>
           </p>
-          <ul class="essentials-checklist">
-            <li><span data-language="en">ICOCA, Suica, PASMO, or a mobile IC card ready.</span><span data-language="ja" hidden>ICOCA、Suica、PASMO、またはモバイルICカードを準備。</span></li>
-            <li><span data-language="en">Shin-Osaka to Odawara shinkansen booked.</span><span data-language="ja" hidden>新大阪から小田原までの新幹線を予約。</span></li>
-            <li><span data-language="en">Hakone Freepass saved; the Odawara version fits this route.</span><span data-language="ja" hidden>箱根フリーパスを保存。このルートでは小田原版が合います。</span></li>
-            <li><span data-language="en">Hakone transport status page bookmarked.</span><span data-language="ja" hidden>箱根の運行状況ページをブックマーク。</span></li>
-            <li><span data-language="en">Hakone to Kawaguchiko via Gotemba and Kawaguchiko to Tokyo details saved.</span><span data-language="ja" hidden>御殿場経由の箱根から河口湖、そして河口湖から東京の移動情報を保存。</span></li>
-            <li><span data-language="en">Kaiyukan and Shibuya Sky booked ahead.</span><span data-language="ja" hidden>海遊館と渋谷スカイを事前予約。</span></li>
-          </ul>
+          <div class="booking-transit" data-booking-transit>
+            <div
+              class="booking-transit__filters"
+              role="toolbar"
+              aria-label="Bookings and transit filters"
+              data-aria-label-en="Bookings and transit filters"
+              data-aria-label-ja="予約と移動の絞り込み">
+              <button class="booking-transit__filter is-active" type="button" data-booking-filter-button="all" aria-pressed="true">
+                <span data-language="en">All</span>
+                <span data-language="ja" hidden>すべて</span>
+              </button>
+              <button class="booking-transit__filter" type="button" data-booking-filter-button="to-book" aria-pressed="false">
+                <span data-language="en">To book</span>
+                <span data-language="ja" hidden>予約優先</span>
+              </button>
+              <button class="booking-transit__filter" type="button" data-booking-filter-button="transit" aria-pressed="false">
+                <span data-language="en">Transit info</span>
+                <span data-language="ja" hidden>移動情報</span>
+              </button>
+              <button class="booking-transit__filter" type="button" data-booking-filter-button="done" aria-pressed="false">
+                <span data-language="en">Done</span>
+                <span data-language="ja" hidden>完了</span>
+              </button>
+            </div>
+            <div class="booking-transit__groups" data-booking-transit-groups></div>
+            <p class="booking-transit__empty" data-booking-empty hidden>
+              <span data-language="en">Nothing marked done yet. Use the action toggle on any item to track what is booked or saved.</span>
+              <span data-language="ja" hidden>まだ完了扱いの項目はありません。各項目のトグルで予約済み・保存済みを管理できます。</span>
+            </p>
+          </div>
         </article>
 
         <article class="essentials-card card">
