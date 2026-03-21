@@ -33,7 +33,7 @@ const resetProgressConfirmButton = document.querySelector("[data-reset-progress-
 const backToTopButtons = document.querySelectorAll("[data-back-to-top]");
 const scrollSwipeTargets = Array.from(
   document.querySelectorAll(
-    ".card, .progress-overview, .section-heading, .route-map__status, .site-footer__lead, .site-footer__aside, .site-footer__credit"
+    ".card, .progress-overview, .progress-item, .section-heading, .route-reference, .route-map__surface, .route-map__status, .site-footer__lead, .site-footer__aside, .site-footer__credit"
   )
 );
 const optionalPrompt = document.querySelector("[data-optional-prompt]");
