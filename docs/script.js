@@ -54,6 +54,7 @@ const themeStorageKey = "japan-trip-theme";
 const checklistStorageKey = "japan-trip-checklist-state";
 const completedHistoryStorageKey = "japan-trip-completed-history";
 const optionalDaysUnlockedStorageKey = "japan-trip-optional-days-unlocked";
+const activePanelStorageKey = "japan-trip-active-panel";
 const bookingTransitStorageKey = "japan-trip-bookings-transit-state";
 const bookingTransitGroupDefinitions = [
   {
@@ -697,14 +698,6 @@ function readStoredBookingTransitState() {
 
 function storeBookingTransitState() {
   try {
-    if (
-      bookingTransitState.filter === "all" &&
-      Object.keys(bookingTransitState.items).length === 0
-    ) {
-      window.localStorage.removeItem(bookingTransitStorageKey);
-      return;
-    }
-
     window.localStorage.setItem(bookingTransitStorageKey, JSON.stringify(bookingTransitState));
   } catch (error) {
     // Ignore storage failures and keep the booking board usable.
@@ -982,6 +975,26 @@ function readStoredLanguage() {
     return window.localStorage.getItem(storageKey);
   } catch (error) {
     return null;
+  }
+}
+
+function readStoredActivePanel() {
+  try {
+    const storedPanel = window.localStorage.getItem(activePanelStorageKey);
+    return Array.from(sectionTabs)
+      .some((tab) => tab.dataset.panelTarget === storedPanel)
+      ? storedPanel
+      : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function storeActivePanel(panelId) {
+  try {
+    window.localStorage.setItem(activePanelStorageKey, panelId);
+  } catch (error) {
+    // Ignore storage failures and keep the navigation usable.
   }
 }
 
@@ -2713,6 +2726,7 @@ function setActivePanel(panelId) {
     }
 
     activePanelId = panelId;
+    storeActivePanel(panelId);
   }
 
   return hasMatch;
@@ -2842,7 +2856,7 @@ restoreChecklistState();
 refreshChecklistProgressState();
 
 registerRevealBlocks();
-setActivePanel("overview");
+setActivePanel(readStoredActivePanel() || "overview");
 setActiveProgressItem(getCurrentProgressDay());
 syncParallax();
 syncProgressTimeline();
