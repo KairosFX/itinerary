@@ -1307,8 +1307,8 @@ html.has-modal-open body {
 
 .essentials-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-auto-rows: auto;
-  align-items: start;
+  grid-auto-rows: 1fr;
+  align-items: stretch;
 }
 
 .day-grid {
@@ -1344,8 +1344,8 @@ html.has-modal-open body {
 
 .essentials-card {
   gap: 0.92rem;
-  height: auto;
-  align-self: start;
+  height: 100%;
+  align-self: stretch;
   grid-template-rows: auto auto minmax(0, 1fr);
 }
 

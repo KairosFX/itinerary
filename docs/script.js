@@ -57,6 +57,17 @@ const bookingTransitStorageKey = "japan-trip-bookings-transit-state";
 const introSeenSessionKey = "japan-trip-intro-seen";
 const queuedStorageWrites = new Map();
 const bookingTransitItemsDataUrl = "./assets/data/booking-transit-items.json";
+const revealBlockSelector =
+  ".hero-panel, .trip-stats, .progress-card, .content-section .section-heading, .essentials-grid, .day-grid, .notes-grid, [data-optional-section], .route-map, .journey-close, .site-footer__lead, .site-footer__aside, .site-footer__credit";
+const initializedSections = new Set();
+const sectionInitPromises = new Map();
+const sectionInitializers = {
+  overview: initOverviewSection,
+  checklist: initChecklistSection,
+  notes: initNotesSection,
+  route: initRouteSection,
+  essentials: initEssentialsSection
+};
 const bookingTransitGroupDefinitions = [
   {
     id: "bookings",
@@ -77,6 +88,7 @@ const bookingTransitGroupDefinitions = [
 ];
 let bookingTransitItems = [];
 let bookingTransitItemMap = new Map();
+let checklistState = {};
 let reservedHeaderHeight = 0;
 let headerLockUntil = 0;
 let lastScrollY = window.scrollY;
@@ -437,7 +449,8 @@ function getJourneyState() {
 
 function readStoredChecklistState() {
   try {
-    return JSON.parse(window.localStorage.getItem(checklistStorageKey) || "{}");
+    const parsed = JSON.parse(window.localStorage.getItem(checklistStorageKey) || "{}");
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
   } catch (error) {
     return {};
   }
@@ -445,13 +458,7 @@ function readStoredChecklistState() {
 
 function storeChecklistState() {
   try {
-    const nextState = {};
-    checklistInputs.forEach((input) => {
-      if (input.checked) {
-        nextState[input.id] = true;
-      }
-    });
-    queueStorageValue(checklistStorageKey, JSON.stringify(nextState));
+    queueStorageValue(checklistStorageKey, JSON.stringify(checklistState));
   } catch (error) {
     // Ignore storage failures and keep the checklist usable.
   }
@@ -863,24 +870,235 @@ function getDayCompletionRatio(dayCard) {
     return 0;
   }
 
-  const checkedCount = inputs.filter((input) => input.checked).length;
+  const checkedCount = inputs.filter((input) => Boolean(checklistState[input.id])).length;
   return checkedCount / inputs.length;
 }
 
 function isDayComplete(dayCard) {
   const inputs = getDayInputs(dayCard);
-  return inputs.length > 0 && inputs.every((input) => input.checked);
+  return inputs.length > 0 && inputs.every((input) => Boolean(checklistState[input.id]));
 }
 
 function areOptionalDaysUnlocked() {
   return optionalDaysUnlocked;
 }
 
-function restoreChecklistState() {
-  const storedState = readStoredChecklistState();
-  checklistInputs.forEach((input) => {
-    input.checked = Boolean(storedState[input.id]);
+function restoreChecklistState(panel = getSectionPanel("checklist")) {
+  if (!panel) {
+    return;
+  }
+
+  panel.querySelectorAll('.day-card input[type="checkbox"]').forEach((input) => {
+    input.checked = Boolean(checklistState[input.id]);
   });
+}
+
+function getSectionPanel(sectionName) {
+  return contentPanels.find((panel) => panel.dataset.panel === sectionName) || null;
+}
+
+function getActivePanelId() {
+  return contentPanels.find((panel) => panel.classList.contains("is-active"))?.dataset.panel || "";
+}
+
+function markSectionHydrated(sectionName) {
+  const panel = getSectionPanel(sectionName);
+  if (panel) {
+    panel.dataset.hydrated = "true";
+  }
+}
+
+function ensureRevealObserver() {
+  if (reducedEffectsEnabled || revealObserver || !("IntersectionObserver" in window)) {
+    return;
+  }
+
+  revealObserver = new window.IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+        }
+      });
+    },
+    {
+      threshold: 0.16,
+      rootMargin: "0px 0px -10% 0px"
+    }
+  );
+}
+
+function ensureSectionInitialized(sectionName) {
+  if (!sectionName) {
+    return Promise.resolve();
+  }
+
+  if (initializedSections.has(sectionName)) {
+    return Promise.resolve();
+  }
+
+  if (sectionInitPromises.has(sectionName)) {
+    return sectionInitPromises.get(sectionName);
+  }
+
+  const init = sectionInitializers[sectionName];
+  if (!init) {
+    initializedSections.add(sectionName);
+    markSectionHydrated(sectionName);
+    return Promise.resolve();
+  }
+
+  const promise = Promise.resolve()
+    .then(() => init())
+    .then(() => {
+      initializedSections.add(sectionName);
+      markSectionHydrated(sectionName);
+
+      if (getActivePanelId() === sectionName) {
+        refreshRevealPanel(sectionName);
+      }
+    })
+    .catch((error) => {
+      console.error(`Failed to initialize section: ${sectionName}`, error);
+    })
+    .finally(() => {
+      sectionInitPromises.delete(sectionName);
+    });
+
+  sectionInitPromises.set(sectionName, promise);
+  return promise;
+}
+
+function scheduleIdleSectionWarmup(initialSection) {
+  const likelyNextSections = initialSection === "overview" ? ["checklist"] : ["overview"];
+  const warm = () => {
+    likelyNextSections.forEach((sectionName) => {
+      void ensureSectionInitialized(sectionName);
+    });
+  };
+
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(warm, { timeout: 1200 });
+    return;
+  }
+
+  window.setTimeout(warm, 800);
+}
+
+function initOverviewSection() {
+  const panel = getSectionPanel("overview");
+  if (!panel) {
+    return;
+  }
+
+  decorateProgressTimeline();
+  registerRevealBlocks(panel);
+  refreshChecklistProgressState();
+  syncProgressTimeline();
+}
+
+function handleChecklistPanelClick(event) {
+  const dayCard = event.target.closest(".day-card[data-day]");
+  if (!dayCard) {
+    return;
+  }
+
+  const day = Number(dayCard.dataset.day);
+  if (day <= accessibleDay) {
+    return;
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
+  showSequenceNotice(accessibleDay);
+}
+
+function handleChecklistPanelChange(event) {
+  const input = event.target.closest('.day-card input[type="checkbox"]');
+  if (!input) {
+    return;
+  }
+
+  const dayCard = input.closest(".day-card[data-day]");
+  const day = dayCard?.dataset.day;
+  const wasComplete = day ? completedDays.has(day) : false;
+  const previousUnlockedDays = new Set(unlockedDays);
+  const previousCurrentDay = String(currentProgressDay);
+
+  if (input.checked) {
+    checklistState[input.id] = true;
+  } else {
+    delete checklistState[input.id];
+  }
+
+  storeChecklistState();
+  refreshChecklistProgressState({ syncDayCards: true });
+  syncProgressTimeline();
+
+  Array.from(unlockedDays)
+    .filter((unlockedDay) => !previousUnlockedDays.has(unlockedDay))
+    .forEach((unlockedDay) => {
+      animateUnlock(progressItemMap.get(unlockedDay));
+      animateUnlock(dayCardMap.get(unlockedDay));
+    });
+
+  if (String(currentProgressDay) !== previousCurrentDay) {
+    window.requestAnimationFrame(() => {
+      scrollProgressTimelineToActive(true);
+    });
+  }
+
+  if (day && !wasComplete && completedDays.has(day)) {
+    celebrateCompletedDay(day);
+  }
+}
+
+function initChecklistSection() {
+  const panel = getSectionPanel("checklist");
+  if (!panel) {
+    return;
+  }
+
+  restoreChecklistState(panel);
+
+  if (panel.dataset.checklistBound !== "true") {
+    panel.addEventListener("click", handleChecklistPanelClick);
+    panel.addEventListener("change", handleChecklistPanelChange);
+    panel.dataset.checklistBound = "true";
+  }
+
+  registerRevealBlocks(panel);
+  refreshChecklistProgressState({ syncDayCards: true });
+  syncProgressTimeline();
+  scheduleDayCardRowHeights();
+}
+
+function initNotesSection() {
+  const panel = getSectionPanel("notes");
+  if (!panel) {
+    return;
+  }
+
+  registerRevealBlocks(panel);
+}
+
+function initRouteSection() {
+  const panel = getSectionPanel("route");
+  if (!panel) {
+    return;
+  }
+
+  registerRevealBlocks(panel);
+}
+
+function initEssentialsSection() {
+  const panel = getSectionPanel("essentials");
+  if (!panel) {
+    return Promise.resolve();
+  }
+
+  registerRevealBlocks(panel);
+  return initializeBookingTransit();
 }
 
 function decorateProgressTimeline() {
@@ -1092,6 +1310,10 @@ function syncOptionalDaysUI() {
 }
 
 function scheduleDayCardRowHeights() {
+  if (!initializedSections.has("checklist")) {
+    return;
+  }
+
   dayGrids.forEach((grid) => {
     grid.querySelectorAll(".day-card").forEach((card) => {
       card.style.minHeight = "";
@@ -1167,9 +1389,13 @@ function setResetModalOpen(isOpen) {
 }
 
 function resetTripProgress() {
-  checklistInputs.forEach((input) => {
-    input.checked = false;
-  });
+  checklistState = {};
+
+  if (initializedSections.has("checklist")) {
+    checklistInputs.forEach((input) => {
+      input.checked = false;
+    });
+  }
 
   completedDays = new Set();
   completedHistoryDays = new Set();
@@ -1195,13 +1421,13 @@ function resetTripProgress() {
 
   setOptionalPromptFeedback(false);
   setOptionalPromptButtonsDisabled(false);
-  refreshChecklistProgressState();
+  refreshChecklistProgressState({ syncDayCards: initializedSections.has("checklist") });
   syncProgressTimeline();
   setActivePanel("checklist");
   setResetModalOpen(false);
 
   window.requestAnimationFrame(() => {
-    scrollToChecklistDay(1);
+    void scrollToChecklistDay(1);
   });
 }
 
@@ -1293,7 +1519,8 @@ function scrollProgressTimelineToActive(force = false) {
   });
 }
 
-function refreshChecklistProgressState() {
+function refreshChecklistProgressState(options = {}) {
+  const { syncDayCards = initializedSections.has("checklist") } = options;
   const {
     rawCompleted,
     completedHistory,
@@ -1303,26 +1530,27 @@ function refreshChecklistProgressState() {
     currentDay: nextCurrentDay
   } = getJourneyState();
 
-  dayCards.forEach((card) => {
-    const progressRatio = getDayCompletionRatio(card);
-    const dayKey = card.dataset.day;
-    const day = Number(card.dataset.day);
-    const isComplete = rawCompleted.has(dayKey);
-    const isLocked = !nextUnlockedDays.has(dayKey);
-    const isWarning = nextWarningDays.has(dayKey);
-    const isCurrent = dayKey === String(nextCurrentDay);
+  if (syncDayCards) {
+    dayCards.forEach((card) => {
+      const progressRatio = getDayCompletionRatio(card);
+      const dayKey = card.dataset.day;
+      const isComplete = rawCompleted.has(dayKey);
+      const isLocked = !nextUnlockedDays.has(dayKey);
+      const isWarning = nextWarningDays.has(dayKey);
+      const isCurrent = dayKey === String(nextCurrentDay);
 
-    card.style.setProperty("--day-progress", String(progressRatio));
-    card.setAttribute("data-day-progress", String(Math.round(progressRatio * 100)));
-    card.classList.toggle("is-complete", isComplete);
-    card.classList.toggle("is-warning-day", isWarning);
-    card.classList.toggle("is-current-day", isCurrent && !isComplete);
-    card.classList.toggle("is-locked-day", isLocked);
-    card.setAttribute("aria-disabled", String(isLocked));
-    getDayInputs(card).forEach((input) => {
-      input.disabled = isLocked;
+      card.style.setProperty("--day-progress", String(progressRatio));
+      card.setAttribute("data-day-progress", String(Math.round(progressRatio * 100)));
+      card.classList.toggle("is-complete", isComplete);
+      card.classList.toggle("is-warning-day", isWarning);
+      card.classList.toggle("is-current-day", isCurrent && !isComplete);
+      card.classList.toggle("is-locked-day", isLocked);
+      card.setAttribute("aria-disabled", String(isLocked));
+      getDayInputs(card).forEach((input) => {
+        input.disabled = isLocked;
+      });
     });
-  });
+  }
 
   progressItems.forEach((item) => {
     const dayKey = item.dataset.progressItem;
@@ -1398,7 +1626,7 @@ function celebrateCompletedDay(day) {
   }
 }
 
-function scrollToChecklistDay(day) {
+async function scrollToChecklistDay(day) {
   const targetCard = dayCardMap.get(String(day));
   if (!targetCard) {
     return;
@@ -1406,6 +1634,7 @@ function scrollToChecklistDay(day) {
 
   lockHeaderState(420);
   setActivePanel("checklist");
+  await ensureSectionInitialized("checklist");
 
   window.requestAnimationFrame(() => {
     window.requestAnimationFrame(() => {
@@ -1531,6 +1760,7 @@ function setActivePanel(panelId) {
   contentPanels.forEach((panel) => {
     const isActive = panel.dataset.panel === panelId;
     panel.classList.toggle("is-active", isActive);
+    panel.hidden = !isActive;
     panel.setAttribute("aria-hidden", String(!isActive));
     panel.toggleAttribute("inert", !isActive);
     hasMatch ||= isActive;
@@ -1543,10 +1773,6 @@ function setActivePanel(panelId) {
   });
 
   if (hasMatch) {
-    if (panelId === "essentials") {
-      initializeBookingTransit();
-    }
-
     if (
       panelId === "checklist" &&
       optionalPromptDeferred &&
@@ -1557,7 +1783,10 @@ function setActivePanel(panelId) {
       syncOptionalDaysUI();
     }
 
-    refreshRevealPanel(panelId);
+    if (initializedSections.has(panelId)) {
+      refreshRevealPanel(panelId);
+    }
+
     syncProgressTimeline();
     scheduleDayCardRowHeights();
     storeActivePanel(panelId);
@@ -1599,12 +1828,12 @@ function syncProgressTimeline() {
   });
 }
 
-function registerRevealBlocks() {
-  const revealBlocks = Array.from(
-    document.querySelectorAll(
-      ".hero-panel, .trip-stats, .progress-card, .content-section .section-heading, .essentials-grid, .day-grid, .notes-grid, [data-optional-section], .route-map, .journey-close, .site-footer__lead, .site-footer__aside, .site-footer__credit"
-    )
-  );
+function registerRevealBlocks(scope = document) {
+  const revealBlocks = Array.from(scope.querySelectorAll(revealBlockSelector));
+
+  if (!revealBlocks.length) {
+    return;
+  }
 
   revealBlocks.forEach((block, index) => {
     block.classList.add("reveal-block");
@@ -1616,25 +1845,16 @@ function registerRevealBlocks() {
     return;
   }
 
-  revealObserver = new window.IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-        }
-      });
-    },
-    {
-      threshold: 0.16,
-      rootMargin: "0px 0px -10% 0px"
-    }
-  );
-
+  ensureRevealObserver();
   revealBlocks.forEach((block) => revealObserver.observe(block));
 }
 
 function refreshRevealPanel(panelId) {
-  const activePanel = Array.from(contentPanels).find((panel) => panel.dataset.panel === panelId);
+  if (!initializedSections.has(panelId)) {
+    return;
+  }
+
+  const activePanel = getSectionPanel(panelId);
   if (!activePanel) {
     return;
   }
@@ -1660,6 +1880,64 @@ function refreshRevealPanel(panelId) {
   });
 }
 
+function getInitialPanelId() {
+  const defaultPanelId =
+    contentPanels.find((panel) => panel.classList.contains("is-active"))?.dataset.panel ??
+    contentPanels[0]?.dataset.panel ??
+    "overview";
+
+  return contentPanels.length === 1 ? defaultPanelId : readStoredActivePanel() || defaultPanelId;
+}
+
+function bindTabNavigation() {
+  sectionTabs.forEach((tab) => {
+    if (tab.dataset.navigationBound === "true") {
+      return;
+    }
+
+    tab.addEventListener("click", async () => {
+      const panelId = tab.dataset.panelTarget;
+      if (!panelId) {
+        return;
+      }
+
+      lockHeaderState(520);
+      setActivePanel(panelId);
+      await ensureSectionInitialized(panelId);
+      scrollToPanelStart(panelId);
+    });
+
+    tab.dataset.navigationBound = "true";
+  });
+}
+
+async function bootApp() {
+  syncReducedEffectsMode({ force: true });
+  completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
+  optionalDaysUnlocked = readStoredBoolean(optionalDaysUnlockedStorageKey);
+  checklistState = readStoredChecklistState();
+  syncOptionalDaysUI();
+  applyTheme(readStoredThemePreference() || getCurrentTheme(), { persist: false });
+  setLanguage(readStoredLanguage());
+
+  const siteFooter = document.querySelector(".site-footer");
+  if (siteFooter) {
+    registerRevealBlocks(siteFooter);
+  }
+
+  const initialPanelId = getInitialPanelId();
+  setActivePanel(initialPanelId);
+  await ensureSectionInitialized(initialPanelId);
+  syncProgressTimeline();
+  scheduleIdleSectionWarmup(initialPanelId);
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(() => {
+      scheduleDayCardRowHeights();
+    });
+  }
+}
+
 languageButtons.forEach((button) => {
   button.addEventListener("click", () => {
     handleLanguageButtonClick(button);
@@ -1672,93 +1950,19 @@ themeButtons.forEach((button) => {
   });
 });
 
-syncReducedEffectsMode({ force: true });
+bindTabNavigation();
 
-decorateProgressTimeline();
-completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
-optionalDaysUnlocked = readStoredBoolean(optionalDaysUnlockedStorageKey);
-syncOptionalDaysUI();
-applyTheme(readStoredThemePreference() || getCurrentTheme(), { persist: false });
-setLanguage(readStoredLanguage());
-restoreChecklistState();
-refreshChecklistProgressState();
-
-registerRevealBlocks();
-const defaultPanelId =
-  contentPanels.find((panel) => panel.classList.contains("is-active"))?.dataset.panel ??
-  contentPanels[0]?.dataset.panel ??
-  "overview";
-const initialPanelId = contentPanels.length === 1 ? defaultPanelId : readStoredActivePanel() || defaultPanelId;
-setActivePanel(initialPanelId);
-setActiveProgressItem(getCurrentProgressDay());
-syncProgressTimeline();
-scheduleDayCardRowHeights();
-
-if (document.fonts?.ready) {
-  document.fonts.ready.then(() => {
-    scheduleDayCardRowHeights();
-  });
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    void bootApp();
+  }, { once: true });
+} else {
+  void bootApp();
 }
-
-dayCards.forEach((card) => {
-  card.addEventListener("click", (event) => {
-    const day = Number(card.dataset.day);
-    if (day <= accessibleDay) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-    showSequenceNotice(accessibleDay);
-  });
-});
-
-checklistInputs.forEach((input) => {
-  input.addEventListener("change", () => {
-    const dayCard = input.closest(".day-card[data-day]");
-    const day = dayCard?.dataset.day;
-    const wasComplete = day ? completedDays.has(day) : false;
-    const previousUnlockedDays = new Set(unlockedDays);
-    const previousCurrentDay = String(currentProgressDay);
-
-    storeChecklistState();
-    refreshChecklistProgressState();
-    syncProgressTimeline();
-
-    Array.from(unlockedDays)
-      .filter((unlockedDay) => !previousUnlockedDays.has(unlockedDay))
-      .forEach((unlockedDay) => {
-        animateUnlock(progressItemMap.get(unlockedDay));
-        animateUnlock(dayCardMap.get(unlockedDay));
-      });
-
-    if (String(currentProgressDay) !== previousCurrentDay) {
-      window.requestAnimationFrame(() => {
-        scrollProgressTimelineToActive(true);
-      });
-    }
-
-    if (
-      day &&
-      !wasComplete &&
-      completedDays.has(day)
-    ) {
-      celebrateCompletedDay(day);
-    }
-  });
-});
-
-sectionTabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    lockHeaderState(520);
-    setActivePanel(tab.dataset.panelTarget);
-    scrollToPanelStart(tab.dataset.panelTarget);
-  });
-});
 
 if (jumpCurrentDayButton) {
   jumpCurrentDayButton.addEventListener("click", () => {
-    scrollToChecklistDay(getCurrentProgressDay());
+    void scrollToChecklistDay(getCurrentProgressDay());
   });
 }
 
