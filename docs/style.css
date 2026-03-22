@@ -1371,6 +1371,7 @@ html.has-modal-open body {
   overflow: hidden;
   padding-left: var(--content-box-gutter);
   --day-progress: 0;
+  container-type: inline-size;
   align-self: stretch;
   grid-template-rows: auto minmax(0, 1fr);
   min-height: 100%;
@@ -1522,13 +1523,20 @@ html.has-modal-open body {
   user-select: none;
   -webkit-user-select: none;
   line-height: 1.42;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .check-item input:checked ~ .check-copy {
   color: var(--muted);
   text-decoration: line-through;
   text-decoration-thickness: 1.5px;
+}
+
+@container (max-width: 32rem) {
+  .day-card__body--with-aside {
+    grid-template-columns: 1fr;
+  }
 }
 
 .fuji-forecast {
