@@ -8,10 +8,12 @@ const welcomeOverlay = document.querySelector(".welcome-overlay");
 const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const routeMedia = document.querySelector(".route-reference__media");
 const routeMapToggle = document.querySelector("[data-route-map-toggle]");
+const routeMapLoadButton = document.querySelector("[data-route-map-load]");
 const routeMapPanel = document.getElementById("route-map-panel");
 const routeMapSurface = document.querySelector(".route-map__surface");
 const routeMapCanvas = document.getElementById("route-map-canvas");
 const routeMapStatus = document.querySelector("[data-route-map-status]");
+const routeMapPreview = document.querySelector("[data-route-map-preview]");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
 const dayGrids = Array.from(document.querySelectorAll(".day-grid"));
 const checklistInputs = Array.from(document.querySelectorAll('.day-card input[type="checkbox"]'));
@@ -274,9 +276,10 @@ const bookingTransitItems = [
 ];
 const bookingTransitItemMap = new Map(bookingTransitItems.map((item) => [item.id, item]));
 const routeMapAssetUrls = {
-  css: "https://unpkg.com/maplibre-gl@5.18.0/dist/maplibre-gl.css",
-  js: "https://unpkg.com/maplibre-gl@5.18.0/dist/maplibre-gl.js"
+  css: "./assets/vendor/maplibre-gl/maplibre-gl.css",
+  js: "./assets/vendor/maplibre-gl/maplibre-gl.js"
 };
+const routeMapSegmentsUrl = "./assets/data/route-map-segments.json";
 const routeMapLoadTimeoutMs = 10000;
 const routeMapStops = {
   osakaStart: {
@@ -378,12 +381,16 @@ let optionalPromptDeferred = false;
 let routeMapInstance = null;
 let routeMapLibraryPromise = null;
 let routeMapInitializationPromise = null;
+let routeMapSegmentsPromise = null;
 let routeMapSegments = [];
 let routeMapMarkers = new Map();
 let routeMapStatusMode = null;
 let routeMapInteractive = false;
 let routeMapDragArmed = false;
 let routeMapDragPointerId = null;
+let routeMapLiveReady = false;
+let routeMapViewportSize = { width: 0, height: 0 };
+let routeMapHasFittedBounds = false;
 let lastResetTrigger = null;
 let dayCardRowEqualizeFrame = 0;
 let backToTopMotionResetTimer = 0;
@@ -1368,6 +1375,64 @@ function renderRouteMapStatus() {
   routeMapStatus.textContent = getRouteMapMessage(routeMapStatusMode);
 }
 
+function setRouteMapLoadPending(isPending) {
+  if (!routeMapLoadButton) {
+    return;
+  }
+
+  routeMapLoadButton.disabled = Boolean(isPending);
+  routeMapLoadButton.setAttribute("aria-busy", String(Boolean(isPending)));
+}
+
+function setRouteMapLiveReady(isReady) {
+  routeMapLiveReady = Boolean(isReady);
+  routeMapPreview?.toggleAttribute("hidden", routeMapLiveReady);
+  routeMapSurface?.classList.toggle("is-map-ready", routeMapLiveReady);
+
+  if (!routeMapLiveReady) {
+    routeMapViewportSize = { width: 0, height: 0 };
+    routeMapHasFittedBounds = false;
+  }
+}
+
+function getRouteMapViewportSize() {
+  if (!routeMapCanvas) {
+    return { width: 0, height: 0 };
+  }
+
+  return {
+    width: Math.round(routeMapCanvas.clientWidth),
+    height: Math.round(routeMapCanvas.clientHeight)
+  };
+}
+
+function syncRouteMapViewport({ force = false, fit = false } = {}) {
+  if (!routeMapInstance || !routeMapLiveReady) {
+    return;
+  }
+
+  const nextSize = getRouteMapViewportSize();
+  if (!nextSize.width || !nextSize.height) {
+    return;
+  }
+
+  const sizeChanged =
+    force ||
+    nextSize.width !== routeMapViewportSize.width ||
+    nextSize.height !== routeMapViewportSize.height;
+
+  if (!sizeChanged && !(fit && !routeMapHasFittedBounds)) {
+    return;
+  }
+
+  routeMapViewportSize = nextSize;
+  routeMapInstance.resize();
+
+  if (fit || !routeMapHasFittedBounds) {
+    fitRouteMapBounds();
+  }
+}
+
 function setRouteMapOpen(nextOpen) {
   if (!routeMapPanel || !routeMapToggle) {
     return;
@@ -1383,22 +1448,45 @@ function setRouteMapOpen(nextOpen) {
     return;
   }
 
-  initializeRouteMap()
-    .then(() => {
-      if (!routeMapInstance) {
-        return;
-      }
+  if (routeMapInstance && routeMapLiveReady) {
+    window.requestAnimationFrame(() => {
+      syncRouteMapViewport();
+      setRouteMapInteractive(false);
+      syncRouteMapState();
+    });
+  }
+}
 
-      window.requestAnimationFrame(() => {
-        routeMapInstance.resize();
-        fitRouteMapBounds();
-        setRouteMapInteractive(false);
-        syncRouteMapState();
-      });
+function loadInteractiveRouteMap() {
+  if (routeMapPanel?.hidden) {
+    setRouteMapOpen(true);
+  }
+
+  if (routeMapLiveReady) {
+    window.requestAnimationFrame(() => {
+      syncRouteMapViewport({ force: true });
+      setRouteMapInteractive(false);
+      syncRouteMapState();
+    });
+    return Promise.resolve(routeMapInstance);
+  }
+
+  setRouteMapLoadPending(true);
+
+  return initializeRouteMap()
+    .then((map) => {
+      setRouteMapLiveReady(true);
+      setRouteMapLoadPending(false);
+      syncRouteMapViewport({ force: true, fit: true });
+      setRouteMapInteractive(false);
+      syncRouteMapState();
+      return map;
     })
-    .catch(() => {
+    .catch((error) => {
       routeMapStatusMode = "error";
       renderRouteMapStatus();
+      setRouteMapLoadPending(false);
+      throw error;
     });
 }
 
@@ -1535,52 +1623,68 @@ function buildFallbackGeometry(fromCoordinates, toCoordinates) {
   };
 }
 
-async function fetchRouteMapGeometry(fromCoordinates, toCoordinates) {
-  const [fromLng, fromLat] = fromCoordinates;
-  const [toLng, toLat] = toCoordinates;
-  const url =
-    `https://router.project-osrm.org/route/v1/driving/${fromLng},${fromLat};${toLng},${toLat}` +
-    "?overview=full&geometries=geojson";
-
-  const response = await window.fetch(url);
-  if (!response.ok) {
-    throw new Error(`OSRM route request failed with status ${response.status}.`);
-  }
-
-  const data = await response.json();
-  const geometry = data.routes?.[0]?.geometry;
-  if (!geometry || geometry.type !== "LineString") {
-    throw new Error("OSRM route response did not include a GeoJSON line.");
-  }
-
-  return geometry;
+function getFallbackRouteMapSegments() {
+  return routeMapSegmentDefinitions.map((segment) => ({
+    ...segment,
+    geometry: buildFallbackGeometry(
+      routeMapStops[segment.from].coordinates,
+      routeMapStops[segment.to].coordinates
+    ),
+    usesFallback: true
+  }));
 }
 
 async function loadRouteMapSegments() {
-  const segments = await Promise.all(
-    routeMapSegmentDefinitions.map(async (segment) => {
-      const fromCoordinates = routeMapStops[segment.from].coordinates;
-      const toCoordinates = routeMapStops[segment.to].coordinates;
+  if (routeMapSegments.length) {
+    return routeMapSegments;
+  }
 
-      try {
-        const geometry = await fetchRouteMapGeometry(fromCoordinates, toCoordinates);
-        return {
-          ...segment,
-          geometry,
-          usesFallback: false
-        };
-      } catch (error) {
-        return {
-          ...segment,
-          geometry: buildFallbackGeometry(fromCoordinates, toCoordinates),
-          usesFallback: true
-        };
-      }
-    })
-  );
+  if (!routeMapSegmentsPromise) {
+    routeMapSegmentsPromise = window.fetch(routeMapSegmentsUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Route map data request failed with status ${response.status}.`);
+        }
 
-  routeMapStatusMode = segments.some((segment) => segment.usesFallback) ? "fallback" : null;
-  return segments;
+        return response.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("Route map data is not an array.");
+        }
+
+        const storedSegments = new Map(data.map((segment) => [segment.id, segment]));
+        const segments = routeMapSegmentDefinitions.map((segment) => {
+          const storedSegment = storedSegments.get(segment.id);
+          const fallbackGeometry = buildFallbackGeometry(
+            routeMapStops[segment.from].coordinates,
+            routeMapStops[segment.to].coordinates
+          );
+          const hasValidGeometry =
+            storedSegment?.geometry?.type === "LineString" &&
+            Array.isArray(storedSegment.geometry.coordinates) &&
+            storedSegment.geometry.coordinates.length > 1;
+
+          return {
+            ...segment,
+            geometry: hasValidGeometry ? storedSegment.geometry : fallbackGeometry,
+            usesFallback: Boolean(storedSegment?.usesFallback) || !hasValidGeometry
+          };
+        });
+
+        routeMapStatusMode = segments.some((segment) => segment.usesFallback) ? "fallback" : null;
+        routeMapSegments = segments;
+        return segments;
+      })
+      .catch(() => {
+        const fallbackSegments = getFallbackRouteMapSegments();
+        routeMapStatusMode = "fallback";
+        routeMapSegments = fallbackSegments;
+        return fallbackSegments;
+      });
+  }
+
+  return routeMapSegmentsPromise;
 }
 
 function getRouteMapSegmentState(dayKey) {
@@ -1878,6 +1982,7 @@ function fitRouteMapBounds(animate = false) {
     duration: animate ? 780 : 0,
     maxZoom: 6.25
   });
+  routeMapHasFittedBounds = true;
 }
 
 function setRouteMapInteractive(isInteractive) {
@@ -2085,7 +2190,6 @@ async function initializeRouteMap() {
           routeMapSegments = await loadRouteMapSegments();
           addRouteMapLayers();
           createRouteMapMarkers(maplibregl);
-          fitRouteMapBounds();
           syncRouteMapState();
           if (!settleSuccess()) {
             return;
@@ -2103,6 +2207,7 @@ async function initializeRouteMap() {
 
       routeMapInitializationPromise = null;
       routeMapInstance = null;
+      setRouteMapLiveReady(false);
       routeMapStatusMode = "error";
       renderRouteMapStatus();
       throw error;
@@ -2821,8 +2926,7 @@ function setActivePanel(panelId) {
       routeMapToggle?.getAttribute("aria-expanded") === "true"
     ) {
       window.requestAnimationFrame(() => {
-        routeMapInstance.resize();
-        fitRouteMapBounds();
+        syncRouteMapViewport();
       });
     }
 
@@ -3062,11 +3166,19 @@ if (routeMapToggle) {
   });
 }
 
+if (routeMapLoadButton) {
+  routeMapLoadButton.addEventListener("click", () => {
+    loadInteractiveRouteMap().catch(() => {
+      // Status UI already reflects the failure path.
+    });
+  });
+}
+
 if (routeMapSurface) {
   routeMapSurface.addEventListener(
     "pointerdown",
     (event) => {
-      if (event.button !== 0 || !event.isPrimary || routeMapInteractive) {
+      if (event.button !== 0 || !event.isPrimary || routeMapInteractive || !routeMapLiveReady) {
         return;
       }
 
@@ -3300,8 +3412,7 @@ if (siteHeader) {
     syncProgressTimeline();
     scheduleDayCardRowHeights();
     if (routeMapInstance && routeMapToggle?.getAttribute("aria-expanded") === "true") {
-      routeMapInstance.resize();
-      fitRouteMapBounds();
+      syncRouteMapViewport();
     }
     lockHeaderState(220);
   });

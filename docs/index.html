@@ -1023,8 +1023,8 @@
               <span data-language="ja" hidden>開閉できる旅の地図</span>
             </h3>
             <p>
-              <span data-language="en">A compact route map with progress-linked stops covering the full Osaka to Tokyo trip path.</span>
-              <span data-language="ja" hidden>進行状況と連動しながら、大阪から東京までの経路全体をまとめて見られるコンパクトな地図です。</span>
+              <span data-language="en">Start with an instant route preview, then load the live map only when you want to pan and zoom.</span>
+              <span data-language="ja" hidden>まずは軽いプレビューですぐ全体を見て、拡大縮小や移動が必要な時だけライブ地図を読み込めます。</span>
             </p>
           </div>
 
@@ -1044,6 +1044,24 @@
 
         <div class="route-map__panel" id="route-map-panel" hidden>
           <div class="route-map__surface">
+            <div class="route-map__preview" data-route-map-preview>
+              <img
+                class="route-map__preview-image"
+                src="./assets/route-map-preview.svg"
+                alt="Static preview of the Osaka to Tokyo trip route"
+                loading="lazy"
+                decoding="async">
+              <div class="route-map__preview-copy">
+                <p class="route-map__meta">
+                  <span data-language="en">This preview opens instantly. Load the live map only if you want the interactive version.</span>
+                  <span data-language="ja" hidden>このプレビューはすぐ開きます。インタラクティブな地図が必要な時だけライブ版を読み込めます。</span>
+                </p>
+                <button class="route-map__load" type="button" data-route-map-load>
+                  <span data-language="en">Load live map</span>
+                  <span data-language="ja" hidden>ライブ地図を読み込む</span>
+                </button>
+              </div>
+            </div>
             <div
               class="route-map__canvas"
               id="route-map-canvas"
