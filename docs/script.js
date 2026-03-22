@@ -71,7 +71,7 @@ const fujiForecastSpotConfigs = [
   }
 ];
 const revealBlockSelector =
-  ".hero-panel, .trip-stats, .progress-card, .content-section .section-heading, .essentials-grid, .day-grid, .notes-grid, [data-optional-section], .route-map, .journey-close, .site-footer__lead, .site-footer__aside, .site-footer__credit";
+  ".trip-stats, .progress-card, .content-section .section-heading, .essentials-grid, .day-grid, .notes-grid, [data-optional-section], .route-map, .journey-close, .site-footer__lead, .site-footer__aside, .site-footer__credit";
 const initializedSections = new Set();
 const sectionInitPromises = new Map();
 const sectionInitializers = {
