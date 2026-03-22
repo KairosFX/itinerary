@@ -6,7 +6,7 @@
   <title>Japan Trip | Travel Guide</title>
   <meta
     name="description"
-    content="Simple bilingual Japan trip website for GitHub Pages with overview, checklist, notes, essentials, and a route map from Osaka to Tokyo.">
+    content="Simple bilingual Japan trip website for GitHub Pages with overview, checklist, notes, essentials, and a fast static route preview from Osaka to Tokyo.">
   <meta name="theme-color" content="#9b3c33">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,13 +34,19 @@
       document.documentElement.style.colorScheme = initialTheme;
       document.documentElement.classList.toggle("reduce-effects", shouldReduceEffects);
       document.documentElement.classList.toggle("enhanced-effects", !shouldReduceEffects);
-      if (!shouldReduceEffects) {
-        document.documentElement.classList.add("is-welcoming");
+      const shouldShowIntro =
+        !shouldReduceEffects &&
+        window.sessionStorage.getItem("japan-trip-intro-seen") !== "1";
+
+      document.documentElement.classList.add(shouldShowIntro ? "intro-pending" : "intro-done");
+      if (!shouldShowIntro) {
+        document.documentElement.classList.remove("intro-pending");
       }
     } catch (error) {
       document.documentElement.dataset.theme = "light";
       document.documentElement.style.colorScheme = "light";
       document.documentElement.classList.add("reduce-effects");
+      document.documentElement.classList.add("intro-done");
     }
   </script>
   <link rel="stylesheet" href="./style.min.css">
@@ -53,25 +59,6 @@
   </a>
 
   <div class="welcome-overlay" aria-hidden="true">
-    <div class="welcome-overlay__scene">
-      <div class="welcome-overlay__ink"></div>
-      <div class="welcome-overlay__sun"></div>
-      <div class="welcome-overlay__petals" aria-hidden="true">
-        <span class="welcome-overlay__petal"></span>
-        <span class="welcome-overlay__petal"></span>
-        <span class="welcome-overlay__petal"></span>
-        <span class="welcome-overlay__petal"></span>
-        <span class="welcome-overlay__petal"></span>
-        <span class="welcome-overlay__petal"></span>
-      </div>
-      <div class="welcome-overlay__fuji">
-        <div class="welcome-overlay__fuji-cap"></div>
-      </div>
-      <div class="welcome-overlay__mist welcome-overlay__mist--one"></div>
-      <div class="welcome-overlay__mist welcome-overlay__mist--two"></div>
-    </div>
-    <div class="welcome-overlay__glow welcome-overlay__glow--left"></div>
-    <div class="welcome-overlay__glow welcome-overlay__glow--right"></div>
     <div class="welcome-overlay__content">
       <p class="welcome-overlay__eyebrow">
         <span data-language="en">Japan Trip</span>
@@ -1013,8 +1000,8 @@
           <span data-language="ja" hidden>ルート</span>
         </h2>
         <p class="section-intro">
-          <span data-language="en">Open the map for a geographic view of Osaka -&gt; Kyoto -&gt; Osaka -&gt; Shin-Osaka -&gt; Odawara -&gt; Hakone -&gt; Mt. Fuji area -&gt; Tokyo.</span>
-          <span data-language="ja" hidden>大阪 -&gt; 京都 -&gt; 大阪 -&gt; 新大阪 -&gt; 小田原 -&gt; 箱根 -&gt; 富士山エリア -&gt; 東京の位置関係を見たいときに地図を開けます。</span>
+          <span data-language="en">See the Osaka -&gt; Kyoto -&gt; Osaka -&gt; Shin-Osaka -&gt; Odawara -&gt; Hakone -&gt; Mt. Fuji area -&gt; Tokyo path at a glance with a lightweight preview.</span>
+          <span data-language="ja" hidden>大阪 -&gt; 京都 -&gt; 大阪 -&gt; 新大阪 -&gt; 小田原 -&gt; 箱根 -&gt; 富士山エリア -&gt; 東京の流れを、軽いプレビューでひと目で確認できます。</span>
         </p>
       </div>
 
@@ -1026,58 +1013,37 @@
               <span data-language="ja" hidden>地図表示</span>
             </p>
             <h3 id="route-map-title">
-              <span data-language="en">Expandable trip map</span>
-              <span data-language="ja" hidden>開閉できる旅の地図</span>
+              <span data-language="en">Instant route preview</span>
+              <span data-language="ja" hidden>すぐ見られるルートプレビュー</span>
             </h3>
             <p>
-              <span data-language="en">Start with an instant route preview, then load the live map only when you want to pan and zoom.</span>
-              <span data-language="ja" hidden>まずは軽いプレビューですぐ全体を見て、拡大縮小や移動が必要な時だけライブ地図を読み込めます。</span>
+              <span data-language="en">This keeps the route section instant: a static geographic preview with no heavy live map payload.</span>
+              <span data-language="ja" hidden>ルートセクションを即表示にするため、重いライブ地図は使わず、静的な位置関係プレビューだけにしています。</span>
             </p>
           </div>
-
-          <button
-            class="route-map__toggle"
-            type="button"
-            data-route-map-toggle
-            data-route-map-label-open-en="View map"
-            data-route-map-label-open-ja="地図を見る"
-            data-route-map-label-close-en="Hide map"
-            data-route-map-label-close-ja="地図を閉じる"
-            aria-expanded="false"
-            aria-controls="route-map-panel">
-            View map
-          </button>
         </div>
-
-        <div class="route-map__panel" id="route-map-panel" hidden>
-          <div class="route-map__surface">
-            <div class="route-map__preview" data-route-map-preview>
-              <img
-                class="route-map__preview-image"
-                src="./assets/route-map-preview.svg"
-                alt="Static preview of the Osaka to Tokyo trip route"
-                loading="lazy"
-                decoding="async">
-              <div class="route-map__preview-copy">
-                <p class="route-map__meta">
-                  <span data-language="en">This preview opens instantly. Load the live map only if you want the interactive version.</span>
-                  <span data-language="ja" hidden>このプレビューはすぐ開きます。インタラクティブな地図が必要な時だけライブ版を読み込めます。</span>
-                </p>
-                <button class="route-map__load" type="button" data-route-map-load>
-                  <span data-language="en">Load live map</span>
-                  <span data-language="ja" hidden>ライブ地図を読み込む</span>
-                </button>
-              </div>
+        <div class="route-map__surface">
+          <div class="route-map__preview" data-route-map-preview>
+            <img
+              class="route-map__preview-image"
+              src="./assets/route-map-preview.svg"
+              alt="Static preview of the Osaka to Tokyo trip route"
+              loading="lazy"
+              decoding="async">
+            <div class="route-map__preview-copy">
+              <p class="route-map__meta">
+                <span data-language="en">Osaka -> Kyoto -> Osaka -> Shin-Osaka -> Odawara -> Hakone -> Mt. Fuji area -> Tokyo.</span>
+                <span data-language="ja" hidden>大阪 -> 京都 -> 大阪 -> 新大阪 -> 小田原 -> 箱根 -> 富士山エリア -> 東京。</span>
+              </p>
+              <a
+                class="booking-item__cta booking-item__cta--primary"
+                href="https://www.google.com/maps/dir/Osaka/Kyoto/Shin-Osaka+Station/Odawara+Station/Hakone/Kawaguchiko/Tokyo"
+                target="_blank"
+                rel="noopener noreferrer">
+                <span data-language="en">Open route in Google Maps</span>
+                <span data-language="ja" hidden>Googleマップでルートを見る</span>
+              </a>
             </div>
-            <div
-              class="route-map__canvas"
-              id="route-map-canvas"
-              role="region"
-              aria-live="polite"
-              data-aria-label-en="Interactive route map"
-              data-aria-label-ja="インタラクティブなルートマップ"
-              aria-label="Interactive route map"></div>
-            <div class="route-map__status" data-route-map-status hidden aria-live="polite">Loading map...</div>
           </div>
         </div>
       </section>
@@ -1152,6 +1118,14 @@
                 <span data-language="ja" hidden>完了</span>
               </button>
             </div>
+            <p class="booking-transit__empty" data-booking-loading hidden>
+              <span data-language="en">Loading bookings and transit board...</span>
+              <span data-language="ja" hidden>予約と移動のボードを読み込んでいます...</span>
+            </p>
+            <p class="booking-transit__empty" data-booking-error hidden>
+              <span data-language="en">Bookings and transit details could not load right now.</span>
+              <span data-language="ja" hidden>予約と移動の詳細を現在読み込めません。</span>
+            </p>
             <div class="booking-transit__groups" data-booking-transit-groups></div>
             <p class="booking-transit__empty" data-booking-empty hidden>
               <span data-language="en">Nothing marked done yet. Use the action toggle on any item to track what is booked or saved.</span>

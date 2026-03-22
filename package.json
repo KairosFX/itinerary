@@ -1,8 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "build:css": "cleancss -o docs/style.min.css docs/style.css && cleancss -o docs/route-section.min.css docs/route-section.css",
-    "build:js": "terser docs/script.js -c -m -o docs/script.min.js && terser docs/route-map.js -c -m -o docs/route-map.min.js",
+    "build:css": "cleancss -o docs/style.min.css docs/style.css",
+    "build:js": "terser docs/script.js -c -m -o docs/script.min.js",
     "build": "npm run build:css && npm run build:js"
   },
   "devDependencies": {

@@ -1,0 +1,194 @@
+[
+  {
+    "id": "ic-card",
+    "group": "transit",
+    "filters": ["transit"],
+    "kind": "prep",
+    "tone": { "en": "Setup prep", "ja": "事前準備" },
+    "defaultStatus": { "en": "Ready", "ja": "準備OK" },
+    "doneStatus": { "en": "Ready", "ja": "準備済み" },
+    "toggleDefault": { "en": "Mark ready", "ja": "準備完了にする" },
+    "toggleDone": { "en": "Ready", "ja": "準備済み" },
+    "title": { "en": "IC card setup", "ja": "ICカードの準備" },
+    "summary": {
+      "en": "Choose ICOCA, Suica, PASMO, or mobile IC before landing.",
+      "ja": "到着前にICOCA、Suica、PASMO、またはモバイルICを決めておく。"
+    },
+    "details": {
+      "en": "Keep one reloadable tap card or wallet setup ready for city trains, subways, and convenience-store stops. Mobile IC is the lightest option if your phone supports it.",
+      "ja": "都市部の電車、地下鉄、コンビニ利用のために、チャージ式ICカードかモバイルICを一つ準備しておくと動きやすいです。対応端末ならモバイルICが最も身軽です。"
+    },
+    "action": {
+      "href": "https://www.google.com/maps/search/?api=1&query=ICOCA%20Suica%20PASMO%20Japan",
+      "label": { "en": "Open Google Maps", "ja": "Googleマップで開く" }
+    }
+  },
+  {
+    "id": "shin-osaka-odawara",
+    "group": "bookings",
+    "filters": ["to-book"],
+    "kind": "booking",
+    "tone": { "en": "Reserve ahead", "ja": "事前予約" },
+    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
+    "doneStatus": { "en": "Booked", "ja": "予約済み" },
+    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
+    "toggleDone": { "en": "Booked", "ja": "予約済み" },
+    "title": { "en": "Shin-Osaka -> Odawara shinkansen", "ja": "新大阪 -> 小田原 新幹線" },
+    "summary": {
+      "en": "Treat this as the fixed rail booking that anchors the Hakone transfer day.",
+      "ja": "箱根移動日の軸になる固定予約として扱う。"
+    },
+    "details": {
+      "en": "Reserve this once the transfer day is locked. A reserved seat keeps the Osaka to Hakone handoff cleaner, especially if you are carrying luggage.",
+      "ja": "移動日が固まったら予約しておくと安心です。荷物がある場合は指定席にしておくと、大阪から箱根への乗り継ぎがかなり楽になります。"
+    },
+    "action": {
+      "href": "https://www.rome2rio.com/map/Shin-Osaka-Station/Odawara-Station",
+      "label": { "en": "View route", "ja": "経路を見る" }
+    }
+  },
+  {
+    "id": "hakone-freepass",
+    "group": "transit",
+    "filters": ["transit"],
+    "kind": "prep",
+    "tone": { "en": "Pass option", "ja": "パス候補" },
+    "defaultStatus": { "en": "Optional", "ja": "任意" },
+    "doneStatus": { "en": "Saved", "ja": "保存済み" },
+    "toggleDefault": { "en": "Save pass", "ja": "パスを保存する" },
+    "toggleDone": { "en": "Saved", "ja": "保存済み" },
+    "title": { "en": "Hakone Freepass", "ja": "箱根フリーパス" },
+    "summary": {
+      "en": "Keep the Odawara version handy as the default pass to compare against single fares.",
+      "ja": "このルートでは小田原版を基準にして、単発運賃と比較できるようにしておく。"
+    },
+    "details": {
+      "en": "Save the pass page so you can check current pricing and coverage before Day 4. It is useful when the Hakone loop stays compact and you want one reference page for the area.",
+      "ja": "4日目の前に、料金と対象区間を確認できるようパスページを保存しておくと便利です。箱根の移動をまとめる時に、エリア全体の基準ページとして使えます。"
+    },
+    "action": {
+      "href": "https://www.google.com/maps/search/?api=1&query=Odawara%20Station%20Hakone%20Freepass",
+      "label": { "en": "Open Google Maps", "ja": "Googleマップで開く" }
+    }
+  },
+  {
+    "id": "hakone-status",
+    "group": "transit",
+    "filters": ["transit"],
+    "kind": "reference",
+    "tone": { "en": "Live updates", "ja": "運行確認" },
+    "defaultStatus": { "en": "Ready", "ja": "準備OK" },
+    "doneStatus": { "en": "Saved", "ja": "保存済み" },
+    "toggleDefault": { "en": "Save page", "ja": "ページを保存する" },
+    "toggleDone": { "en": "Saved", "ja": "保存済み" },
+    "title": { "en": "Hakone transport status page", "ja": "箱根の運行状況ページ" },
+    "summary": {
+      "en": "Use this for same-day checks on ropeway, cable car, and lake transport conditions.",
+      "ja": "ロープウェイ、ケーブルカー、湖の移動状況を当日確認するためのページ。"
+    },
+    "details": {
+      "en": "Keep a trusted map search ready for the ropeway and rail operators around Hakone so you can jump to stations and operator points quickly if the loop needs to change.",
+      "ja": "箱根周遊の変更が必要になった時にすぐ駅や運営地点へ飛べるよう、ロープウェイと鉄道周辺の信頼できる地図検索を保存しておきます。"
+    },
+    "action": {
+      "href": "https://www.google.com/maps/search/?api=1&query=Hakone%20Ropeway%20Hakone%20Tozan%20Railway",
+      "label": { "en": "Open Google Maps", "ja": "Googleマップで開く" }
+    }
+  },
+  {
+    "id": "hakone-kawaguchiko",
+    "group": "transit",
+    "filters": ["transit"],
+    "kind": "reference",
+    "tone": { "en": "Save route", "ja": "経路保存" },
+    "defaultStatus": { "en": "Ready", "ja": "準備OK" },
+    "doneStatus": { "en": "Saved", "ja": "保存済み" },
+    "toggleDefault": { "en": "Save route", "ja": "経路を保存する" },
+    "toggleDone": { "en": "Saved", "ja": "保存済み" },
+    "title": { "en": "Hakone -> Kawaguchiko via Gotemba", "ja": "箱根 -> 御殿場経由で河口湖" },
+    "summary": {
+      "en": "Keep the transfer chain ready so Day 5 stays light and weather-flexible.",
+      "ja": "5日目を軽く保つため、乗り継ぎの流れを事前に保存しておく。"
+    },
+    "details": {
+      "en": "This is the reference route for moving from Hakone toward the Fuji side. Save the route details rather than memorizing them so you can adjust if departure times shift.",
+      "ja": "箱根から富士側へ抜ける時の基準ルートです。時刻変更に対応できるよう、暗記するより経路情報を保存しておく方が実用的です。"
+    },
+    "action": {
+      "href": "https://www.rome2rio.com/map/Hakone/Kawaguchiko",
+      "label": { "en": "View route", "ja": "経路を見る" }
+    }
+  },
+  {
+    "id": "kawaguchiko-tokyo",
+    "group": "transit",
+    "filters": ["transit"],
+    "kind": "reference",
+    "tone": { "en": "Save route", "ja": "経路保存" },
+    "defaultStatus": { "en": "Ready", "ja": "準備OK" },
+    "doneStatus": { "en": "Saved", "ja": "保存済み" },
+    "toggleDefault": { "en": "Save route", "ja": "経路を保存する" },
+    "toggleDone": { "en": "Saved", "ja": "保存済み" },
+    "title": { "en": "Kawaguchiko -> Tokyo", "ja": "河口湖 -> 東京" },
+    "summary": {
+      "en": "Keep the Tokyo return options nearby, especially Fuji Excursion and bus fallback details.",
+      "ja": "東京へ戻る選択肢、特に富士回遊とバスの代替案をすぐ見られるようにしておく。"
+    },
+    "details": {
+      "en": "Use this as the saved return reference for the final move into Tokyo. It works best when you keep one rail option and one fallback option ready.",
+      "ja": "東京へ入る最後の移動のために保存しておく参照ルートです。鉄道案と代替案を一つずつ持っておくと動きやすいです。"
+    },
+    "action": {
+      "href": "https://www.rome2rio.com/map/Kawaguchiko/Tokyo",
+      "label": { "en": "View route", "ja": "経路を見る" }
+    }
+  },
+  {
+    "id": "kaiyukan",
+    "group": "bookings",
+    "filters": ["to-book"],
+    "kind": "booking",
+    "tone": { "en": "Reserve ahead", "ja": "事前予約" },
+    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
+    "doneStatus": { "en": "Booked", "ja": "予約済み" },
+    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
+    "toggleDone": { "en": "Booked", "ja": "予約済み" },
+    "title": { "en": "Kaiyukan booking", "ja": "海遊館の予約" },
+    "summary": {
+      "en": "Treat this as an ahead-of-time attraction reservation for the Osaka waterfront day.",
+      "ja": "大阪ベイエリアの日に向けた事前予約枠として扱う。"
+    },
+    "details": {
+      "en": "Keep a trusted map result ready for the Osaka Aquarium stop so the waterfront day stays easy to navigate and confirm in one place.",
+      "ja": "大阪ベイエリアの日に迷わないよう、海遊館の信頼できる地図結果をすぐ開ける状態にしておきます。"
+    },
+    "action": {
+      "href": "https://www.google.com/maps/search/?api=1&query=Kaiyukan%20Osaka%20Aquarium",
+      "label": { "en": "Open Google Maps", "ja": "Googleマップで開く" }
+    }
+  },
+  {
+    "id": "shibuya-sky",
+    "group": "bookings",
+    "filters": ["to-book"],
+    "kind": "booking",
+    "tone": { "en": "Reserve ahead", "ja": "事前予約" },
+    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
+    "doneStatus": { "en": "Booked", "ja": "予約済み" },
+    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
+    "toggleDone": { "en": "Booked", "ja": "予約済み" },
+    "title": { "en": "Shibuya Sky booking", "ja": "渋谷スカイの予約" },
+    "summary": {
+      "en": "Keep the timed-entry booking ready because night slots and weather changes matter here.",
+      "ja": "夜の時間帯や天候変更の影響があるので、時間指定予約をすぐ開けるようにしておく。"
+    },
+    "details": {
+      "en": "Keep a trusted map result ready for the Shibuya rooftop stop so arrival, entry timing, and the surrounding area are easy to check in one place.",
+      "ja": "渋谷の屋上スポットへ向かう時に、到着位置や周辺確認を一つで済ませられるよう、信頼できる地図結果をすぐ開ける状態にしておきます。"
+    },
+    "action": {
+      "href": "https://www.google.com/maps/search/?api=1&query=Shibuya%20Sky%20Tokyo",
+      "label": { "en": "Open Google Maps", "ja": "Googleマップで開く" }
+    }
+  }
+]

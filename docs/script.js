@@ -6,14 +6,6 @@ const contentPanels = Array.from(document.querySelectorAll("[data-panel]"));
 const siteHeader = document.querySelector(".site-header");
 const welcomeOverlay = document.querySelector(".welcome-overlay");
 const sequenceNotice = document.querySelector("[data-sequence-notice]");
-const routeMedia = document.querySelector(".route-reference__media");
-const routeMapToggle = document.querySelector("[data-route-map-toggle]");
-const routeMapLoadButton = document.querySelector("[data-route-map-load]");
-const routeMapPanel = document.getElementById("route-map-panel");
-const routeMapSurface = document.querySelector(".route-map__surface");
-const routeMapCanvas = document.getElementById("route-map-canvas");
-const routeMapStatus = document.querySelector("[data-route-map-status]");
-const routeMapPreview = document.querySelector("[data-route-map-preview]");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
 const dayGrids = Array.from(document.querySelectorAll(".day-grid"));
 const checklistInputs = Array.from(document.querySelectorAll('.day-card input[type="checkbox"]'));
@@ -31,6 +23,8 @@ const resetProgressConfirmButton = document.querySelector("[data-reset-progress-
 const backToTopButtons = document.querySelectorAll("[data-back-to-top]");
 const bookingTransitRoot = document.querySelector("[data-booking-transit]");
 const bookingTransitGroupsRoot = document.querySelector("[data-booking-transit-groups]");
+const bookingTransitLoadingState = document.querySelector("[data-booking-loading]");
+const bookingTransitErrorState = document.querySelector("[data-booking-error]");
 const bookingTransitEmptyState = document.querySelector("[data-booking-empty]");
 const optionalPrompt = document.querySelector("[data-optional-prompt]");
 const optionalPromptExpanded = document.querySelector("[data-optional-prompt-expanded]");
@@ -60,7 +54,9 @@ const completedHistoryStorageKey = "japan-trip-completed-history";
 const optionalDaysUnlockedStorageKey = "japan-trip-optional-days-unlocked";
 const activePanelStorageKey = "japan-trip-active-panel";
 const bookingTransitStorageKey = "japan-trip-bookings-transit-state";
+const introSeenSessionKey = "japan-trip-intro-seen";
 const queuedStorageWrites = new Map();
+const bookingTransitItemsDataUrl = "./assets/data/booking-transit-items.json";
 const bookingTransitGroupDefinitions = [
   {
     id: "bookings",
@@ -79,241 +75,8 @@ const bookingTransitGroupDefinitions = [
     }
   }
 ];
-const bookingTransitItems = [
-  {
-    id: "ic-card",
-    group: "transit",
-    filters: ["transit"],
-    kind: "prep",
-    tone: { en: "Setup prep", ja: "事前準備" },
-    defaultStatus: { en: "Ready", ja: "準備OK" },
-    doneStatus: { en: "Ready", ja: "準備済み" },
-    toggleDefault: { en: "Mark ready", ja: "準備完了にする" },
-    toggleDone: { en: "Ready", ja: "準備済み" },
-    title: { en: "IC card setup", ja: "ICカードの準備" },
-    summary: {
-      en: "Choose ICOCA, Suica, PASMO, or mobile IC before landing.",
-      ja: "到着前にICOCA、Suica、PASMO、またはモバイルICを決めておく。"
-    },
-    details: {
-      en: "Keep one reloadable tap card or wallet setup ready for city trains, subways, and convenience-store stops. Mobile IC is the lightest option if your phone supports it.",
-      ja: "都市部の電車、地下鉄、コンビニ利用のために、チャージ式ICカードかモバイルICを一つ準備しておくと動きやすいです。対応端末ならモバイルICが最も身軽です。"
-    },
-    action: {
-      href: "https://www.google.com/maps/search/?api=1&query=ICOCA%20Suica%20PASMO%20Japan",
-      label: { en: "Open Google Maps", ja: "Googleマップで開く" }
-    }
-  },
-  {
-    id: "shin-osaka-odawara",
-    group: "bookings",
-    filters: ["to-book"],
-    kind: "booking",
-    tone: { en: "Reserve ahead", ja: "事前予約" },
-    defaultStatus: { en: "Not booked", ja: "未予約" },
-    doneStatus: { en: "Booked", ja: "予約済み" },
-    toggleDefault: { en: "Mark booked", ja: "予約済みにする" },
-    toggleDone: { en: "Booked", ja: "予約済み" },
-    title: { en: "Shin-Osaka -> Odawara shinkansen", ja: "新大阪 -> 小田原 新幹線" },
-    summary: {
-      en: "Treat this as the fixed rail booking that anchors the Hakone transfer day.",
-      ja: "箱根移動日の軸になる固定予約として扱う。"
-    },
-    details: {
-      en: "Reserve this once the transfer day is locked. A reserved seat keeps the Osaka to Hakone handoff cleaner, especially if you are carrying luggage.",
-      ja: "移動日が固まったら予約しておくと安心です。荷物がある場合は指定席にしておくと、大阪から箱根への乗り継ぎがかなり楽になります。"
-    },
-    action: {
-      href: "https://www.rome2rio.com/map/Shin-Osaka-Station/Odawara-Station",
-      label: { en: "View route", ja: "経路を見る" }
-    }
-  },
-  {
-    id: "hakone-freepass",
-    group: "transit",
-    filters: ["transit"],
-    kind: "prep",
-    tone: { en: "Pass option", ja: "パス候補" },
-    defaultStatus: { en: "Optional", ja: "任意" },
-    doneStatus: { en: "Saved", ja: "保存済み" },
-    toggleDefault: { en: "Save pass", ja: "パスを保存する" },
-    toggleDone: { en: "Saved", ja: "保存済み" },
-    title: { en: "Hakone Freepass", ja: "箱根フリーパス" },
-    summary: {
-      en: "Keep the Odawara version handy as the default pass to compare against single fares.",
-      ja: "このルートでは小田原版を基準にして、単発運賃と比較できるようにしておく。"
-    },
-    details: {
-      en: "Save the pass page so you can check current pricing and coverage before Day 4. It is useful when the Hakone loop stays compact and you want one reference page for the area.",
-      ja: "4日目の前に、料金と対象区間を確認できるようパスページを保存しておくと便利です。箱根の移動をまとめる時に、エリア全体の基準ページとして使えます。"
-    },
-    action: {
-      href: "https://www.google.com/maps/search/?api=1&query=Odawara%20Station%20Hakone%20Freepass",
-      label: { en: "Open Google Maps", ja: "Googleマップで開く" }
-    }
-  },
-  {
-    id: "hakone-status",
-    group: "transit",
-    filters: ["transit"],
-    kind: "reference",
-    tone: { en: "Live updates", ja: "運行確認" },
-    defaultStatus: { en: "Ready", ja: "準備OK" },
-    doneStatus: { en: "Saved", ja: "保存済み" },
-    toggleDefault: { en: "Save page", ja: "ページを保存する" },
-    toggleDone: { en: "Saved", ja: "保存済み" },
-    title: { en: "Hakone transport status page", ja: "箱根の運行状況ページ" },
-    summary: {
-      en: "Use this for same-day checks on ropeway, cable car, and lake transport conditions.",
-      ja: "ロープウェイ、ケーブルカー、湖の移動状況を当日確認するためのページ。"
-    },
-    details: {
-      en: "Keep a trusted map search ready for the ropeway and rail operators around Hakone so you can jump to stations and operator points quickly if the loop needs to change.",
-      ja: "箱根周遊の変更が必要になった時にすぐ駅や運営地点へ飛べるよう、ロープウェイと鉄道周辺の信頼できる地図検索を保存しておきます。"
-    },
-    action: {
-      href: "https://www.google.com/maps/search/?api=1&query=Hakone%20Ropeway%20Hakone%20Tozan%20Railway",
-      label: { en: "Open Google Maps", ja: "Googleマップで開く" }
-    }
-  },
-  {
-    id: "hakone-kawaguchiko",
-    group: "transit",
-    filters: ["transit"],
-    kind: "reference",
-    tone: { en: "Save route", ja: "経路保存" },
-    defaultStatus: { en: "Ready", ja: "準備OK" },
-    doneStatus: { en: "Saved", ja: "保存済み" },
-    toggleDefault: { en: "Save route", ja: "経路を保存する" },
-    toggleDone: { en: "Saved", ja: "保存済み" },
-    title: { en: "Hakone -> Kawaguchiko via Gotemba", ja: "箱根 -> 御殿場経由で河口湖" },
-    summary: {
-      en: "Keep the transfer chain ready so Day 5 stays light and weather-flexible.",
-      ja: "5日目を軽く保つため、乗り継ぎの流れを事前に保存しておく。"
-    },
-    details: {
-      en: "This is the reference route for moving from Hakone toward the Fuji side. Save the route details rather than memorizing them so you can adjust if departure times shift.",
-      ja: "箱根から富士側へ抜ける時の基準ルートです。時刻変更に対応できるよう、暗記するより経路情報を保存しておく方が実用的です。"
-    },
-    action: {
-      href: "https://www.rome2rio.com/map/Hakone/Kawaguchiko",
-      label: { en: "View route", ja: "経路を見る" }
-    }
-  },
-  {
-    id: "kawaguchiko-tokyo",
-    group: "transit",
-    filters: ["transit"],
-    kind: "reference",
-    tone: { en: "Save route", ja: "経路保存" },
-    defaultStatus: { en: "Ready", ja: "準備OK" },
-    doneStatus: { en: "Saved", ja: "保存済み" },
-    toggleDefault: { en: "Save route", ja: "経路を保存する" },
-    toggleDone: { en: "Saved", ja: "保存済み" },
-    title: { en: "Kawaguchiko -> Tokyo", ja: "河口湖 -> 東京" },
-    summary: {
-      en: "Keep the Tokyo return options nearby, especially Fuji Excursion and bus fallback details.",
-      ja: "東京へ戻る選択肢、特に富士回遊とバスの代替案をすぐ見られるようにしておく。"
-    },
-    details: {
-      en: "Use this as the saved return reference for the final move into Tokyo. It works best when you keep one rail option and one fallback option ready.",
-      ja: "東京へ入る最後の移動のために保存しておく参照ルートです。鉄道案と代替案を一つずつ持っておくと動きやすいです。"
-    },
-    action: {
-      href: "https://www.rome2rio.com/map/Kawaguchiko/Tokyo",
-      label: { en: "View route", ja: "経路を見る" }
-    }
-  },
-  {
-    id: "kaiyukan",
-    group: "bookings",
-    filters: ["to-book"],
-    kind: "booking",
-    tone: { en: "Reserve ahead", ja: "事前予約" },
-    defaultStatus: { en: "Not booked", ja: "未予約" },
-    doneStatus: { en: "Booked", ja: "予約済み" },
-    toggleDefault: { en: "Mark booked", ja: "予約済みにする" },
-    toggleDone: { en: "Booked", ja: "予約済み" },
-    title: { en: "Kaiyukan booking", ja: "海遊館の予約" },
-    summary: {
-      en: "Treat this as an ahead-of-time attraction reservation for the Osaka waterfront day.",
-      ja: "大阪ベイエリアの日に向けた事前予約枠として扱う。"
-    },
-    details: {
-      en: "Keep a trusted map result ready for the Osaka Aquarium stop so the waterfront day stays easy to navigate and confirm in one place.",
-      ja: "大阪ベイエリアの日に迷わないよう、海遊館の信頼できる地図結果をすぐ開ける状態にしておきます。"
-    },
-    action: {
-      href: "https://www.google.com/maps/search/?api=1&query=Kaiyukan%20Osaka%20Aquarium",
-      label: { en: "Open Google Maps", ja: "Googleマップで開く" }
-    }
-  },
-  {
-    id: "shibuya-sky",
-    group: "bookings",
-    filters: ["to-book"],
-    kind: "booking",
-    tone: { en: "Reserve ahead", ja: "事前予約" },
-    defaultStatus: { en: "Not booked", ja: "未予約" },
-    doneStatus: { en: "Booked", ja: "予約済み" },
-    toggleDefault: { en: "Mark booked", ja: "予約済みにする" },
-    toggleDone: { en: "Booked", ja: "予約済み" },
-    title: { en: "Shibuya Sky booking", ja: "渋谷スカイの予約" },
-    summary: {
-      en: "Keep the timed-entry booking ready because night slots and weather changes matter here.",
-      ja: "夜の時間帯や天候変更の影響があるので、時間指定予約をすぐ開けるようにしておく。"
-    },
-    details: {
-      en: "Keep a trusted map result ready for the Shibuya rooftop stop so arrival, entry timing, and the surrounding area are easy to check in one place.",
-      ja: "渋谷の屋上スポットへ向かう時に、到着位置や周辺確認を一つで済ませられるよう、信頼できる地図結果をすぐ開ける状態にしておきます。"
-    },
-    action: {
-      href: "https://www.google.com/maps/search/?api=1&query=Shibuya%20Sky%20Tokyo",
-      label: { en: "Open Google Maps", ja: "Googleマップで開く" }
-    }
-  }
-];
-const bookingTransitItemMap = new Map(bookingTransitItems.map((item) => [item.id, item]));
-const routeExperienceAssetUrls = {
-  css: "./route-section.min.css",
-  script: "./route-map.min.js"
-};
-const routeMapControllerAssetUrls = {
-  css: "./assets/vendor/maplibre-gl/maplibre-gl.css",
-  js: "./assets/vendor/maplibre-gl/maplibre-gl.js",
-  segmentsUrl: "./assets/data/route-map-segments.json",
-  loadTimeoutMs: 10000
-};
-const routeStopProgressConfig = {
-  osakaStart: { stopId: "route-stop-osaka-start", days: ["1"] },
-  kyoto: { stopId: "route-stop-kyoto", days: ["2"] },
-  osakaReturn: { stopId: "route-stop-osaka-return", days: ["3"] },
-  shinOsaka: { stopId: "route-stop-shin-osaka", days: ["4"] },
-  odawara: { stopId: "route-stop-odawara", days: ["4"] },
-  hakone: { stopId: "route-stop-hakone", days: ["4"] },
-  fuji: { stopId: "route-stop-fuji", days: ["5", "6"] },
-  tokyo: { stopId: "route-stop-tokyo", days: ["7", "8", "9"] }
-};
-const routeSegmentConfig = {
-  "route-progress-kyoto": ["2"],
-  "route-progress-osaka-return": ["3"],
-  "route-progress-shin-osaka": ["4"],
-  "route-progress-odawara": ["4"],
-  "route-progress-hakone": ["4"],
-  "route-progress-fuji": ["5"],
-  "route-progress-tokyo": ["7"]
-};
-const routeDayToStopKey = {
-  1: "osakaStart",
-  2: "kyoto",
-  3: "osakaReturn",
-  4: "hakone",
-  5: "fuji",
-  6: "fuji",
-  7: "tokyo",
-  8: "tokyo",
-  9: "tokyo"
-};
+let bookingTransitItems = [];
+let bookingTransitItemMap = new Map();
 let reservedHeaderHeight = 0;
 let headerLockUntil = 0;
 let lastScrollY = window.scrollY;
@@ -330,18 +93,12 @@ let lastTimelineFocusDay = null;
 let optionalDaysUnlocked = false;
 let optionalPromptIsCompact = false;
 let optionalPromptDeferred = false;
-let routeMapStatusMode = null;
-let routeMapLiveReady = false;
-let routeExperienceStylesPromise = null;
-let routeMapControllerScriptPromise = null;
-let routeMapControllerPromise = null;
-let routeMapController = null;
 let lastResetTrigger = null;
-let dayCardRowEqualizeFrame = 0;
 let storageWriteFlushTimer = 0;
 let storageWriteIdleHandle = 0;
 let bookingTransitState = { filter: "all", items: {} };
 let bookingTransitInitialized = false;
+let bookingTransitItemsPromise = null;
 let reducedEffectsEnabled = false;
 
 function getSystemTheme() {
@@ -415,6 +172,46 @@ function queueStorageRemoval(key) {
   scheduleStorageFlush();
 }
 
+function setBookingTransitStatus(status) {
+  if (bookingTransitLoadingState) {
+    bookingTransitLoadingState.hidden = status !== "loading";
+  }
+
+  if (bookingTransitErrorState) {
+    bookingTransitErrorState.hidden = status !== "error";
+  }
+}
+
+function loadBookingTransitItems() {
+  if (bookingTransitItems.length) {
+    return Promise.resolve(bookingTransitItems);
+  }
+
+  if (bookingTransitItemsPromise) {
+    return bookingTransitItemsPromise;
+  }
+
+  bookingTransitItemsPromise = window.fetch(bookingTransitItemsDataUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Booking transit data request failed: ${response.status}`);
+      }
+
+      return response.json();
+    })
+    .then((items) => {
+      bookingTransitItems = Array.isArray(items) ? items : [];
+      bookingTransitItemMap = new Map(bookingTransitItems.map((item) => [item.id, item]));
+      return bookingTransitItems;
+    })
+    .catch((error) => {
+      bookingTransitItemsPromise = null;
+      throw error;
+    });
+
+  return bookingTransitItemsPromise;
+}
+
 function readStoredThemePreference() {
   try {
     const storedTheme = window.localStorage.getItem(themeStorageKey);
@@ -457,15 +254,6 @@ function updateThemeColorMeta(theme) {
   themeColorMeta.content = theme === "dark" ? "#111315" : "#9b3c33";
 }
 
-function applyRouteTheme() {
-  const routeDoc = routeMedia?.contentDocument;
-  if (!routeDoc?.documentElement) {
-    return;
-  }
-
-  routeDoc.documentElement.dataset.theme = getCurrentTheme();
-}
-
 function isLikelyLowerPowerDevice() {
   const deviceMemory = Number(navigator.deviceMemory || 0);
   const hardwareConcurrency = Number(navigator.hardwareConcurrency || 0);
@@ -496,7 +284,7 @@ function syncReducedEffectsMode({ force = false } = {}) {
   root.classList.toggle("reduce-effects", reducedEffectsEnabled);
   root.classList.toggle("enhanced-effects", !reducedEffectsEnabled);
 
-  if (reducedEffectsEnabled && root.classList.contains("is-welcoming")) {
+  if (reducedEffectsEnabled && root.classList.contains("intro-pending")) {
     finishWelcome();
   }
 }
@@ -510,16 +298,6 @@ function bindMediaQueryChange(query, handler) {
   if (typeof query.addListener === "function") {
     query.addListener(handler);
   }
-}
-
-function hasActiveChecklistPanel() {
-  return contentPanels.some(
-    (panel) => panel.dataset.panel === "checklist" && panel.classList.contains("is-active")
-  );
-}
-
-function shouldEqualizeDayCardRows() {
-  return !reducedEffectsEnabled && !compactViewportQuery.matches && hasActiveChecklistPanel();
 }
 
 function getOrderedDayNumbers() {
@@ -952,14 +730,23 @@ function bindBookingTransitUI() {
 
 function initializeBookingTransit() {
   if (!bookingTransitRoot || bookingTransitInitialized) {
-    return;
+    return Promise.resolve();
   }
 
   bookingTransitState = readStoredBookingTransitState();
-  renderBookingTransitBoard();
-  bindBookingTransitUI();
-  updateBookingTransitUI();
-  bookingTransitInitialized = true;
+  setBookingTransitStatus("loading");
+
+  return loadBookingTransitItems()
+    .then(() => {
+      renderBookingTransitBoard();
+      bindBookingTransitUI();
+      updateBookingTransitUI();
+      setBookingTransitStatus("ready");
+      bookingTransitInitialized = true;
+    })
+    .catch(() => {
+      setBookingTransitStatus("error");
+    });
 }
 
 function resetBookingTransitState() {
@@ -1009,11 +796,29 @@ function storeLanguage(language) {
 }
 
 function finishWelcome() {
-  root.classList.remove("is-welcoming");
-  root.classList.add("has-seen-welcome");
+  root.classList.remove("intro-pending", "intro-out");
+  root.classList.add("intro-done");
   if (welcomeOverlay) {
     welcomeOverlay.setAttribute("hidden", "");
   }
+}
+
+function scheduleWelcomeExit() {
+  if (!welcomeOverlay || !root.classList.contains("intro-pending")) {
+    finishWelcome();
+    return;
+  }
+
+  try {
+    window.sessionStorage.setItem(introSeenSessionKey, "1");
+  } catch (error) {
+    // Ignore session storage failures and keep the page usable.
+  }
+
+  window.setTimeout(() => {
+    root.classList.add("intro-out");
+    window.setTimeout(finishWelcome, 460);
+  }, 80);
 }
 
 function syncReservedHeaderHeight(forceReset = false) {
@@ -1251,311 +1056,6 @@ function setOptionalPromptButtonsDisabled(isDisabled) {
   }
 }
 
-function getRouteMapMessage(key) {
-  const language = root.lang === "ja" ? "ja" : "en";
-  const messages = {
-    en: {
-      open: "View map",
-      close: "Hide map",
-      loading: "Loading live map…",
-      fallback: "Live routing is unavailable right now. Showing a simplified path.",
-      error: "Map could not load right now."
-    },
-    ja: {
-      open: "地図を見る",
-      close: "地図を閉じる",
-      loading: "ライブ地図を読み込み中…",
-      fallback: "ライブの経路を取得できないため、簡易ルートを表示しています。",
-      error: "現在は地図を読み込めません。"
-    }
-  };
-
-  return messages[language][key];
-}
-
-function updateRouteMapToggleLabel() {
-  if (!routeMapToggle) {
-    return;
-  }
-
-  const isExpanded = routeMapToggle.getAttribute("aria-expanded") === "true";
-  const nextLabel = isExpanded ? getRouteMapMessage("close") : getRouteMapMessage("open");
-  routeMapToggle.textContent = nextLabel;
-}
-
-function renderRouteMapStatus() {
-  if (!routeMapStatus) {
-    return;
-  }
-
-  if (!routeMapStatusMode) {
-    routeMapStatus.hidden = true;
-    routeMapStatus.textContent = "";
-    return;
-  }
-
-  routeMapStatus.hidden = false;
-  routeMapStatus.textContent = getRouteMapMessage(routeMapStatusMode);
-}
-
-function setRouteMapLoadPending(isPending) {
-  if (!routeMapLoadButton) {
-    return;
-  }
-
-  routeMapLoadButton.disabled = Boolean(isPending);
-  routeMapLoadButton.setAttribute("aria-busy", String(Boolean(isPending)));
-}
-
-function setRouteMapLiveReady(isReady) {
-  routeMapLiveReady = Boolean(isReady);
-  routeMapPreview?.toggleAttribute("hidden", routeMapLiveReady);
-  routeMapSurface?.classList.toggle("is-map-ready", routeMapLiveReady);
-}
-
-function buildRouteMapStateSnapshot() {
-  const dayProgress = {};
-  dayCards.forEach((card) => {
-    dayProgress[card.dataset.day] = getDayCompletionRatio(card);
-  });
-
-  return {
-    language: root.lang === "ja" ? "ja" : "en",
-    theme: getCurrentTheme(),
-    accessibleDay,
-    currentProgressDay,
-    optionalDaysUnlocked,
-    completedDays: Array.from(completedDays),
-    unlockedDays: Array.from(unlockedDays),
-    warningDays: Array.from(warningDays),
-    dayProgress
-  };
-}
-
-function ensureRouteExperienceStyles() {
-  if (!routeMapPanel) {
-    return Promise.resolve(null);
-  }
-
-  const existingLink = document.querySelector("link[data-route-experience='css']");
-  if (existingLink) {
-    return Promise.resolve(existingLink);
-  }
-
-  if (routeExperienceStylesPromise) {
-    return routeExperienceStylesPromise;
-  }
-
-  routeExperienceStylesPromise = new Promise((resolve, reject) => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = routeExperienceAssetUrls.css;
-    link.dataset.routeExperience = "css";
-    link.addEventListener(
-      "load",
-      () => {
-        scheduleDayCardRowHeights();
-        resolve(link);
-      },
-      { once: true }
-    );
-    link.addEventListener(
-      "error",
-      () => {
-        routeExperienceStylesPromise = null;
-        reject(new Error("Route experience styles failed to load."));
-      },
-      { once: true }
-    );
-    document.head.append(link);
-  });
-
-  return routeExperienceStylesPromise;
-}
-
-function loadRouteMapControllerScript() {
-  if (typeof window.createJapanTripRouteMapController === "function") {
-    return Promise.resolve(window.createJapanTripRouteMapController);
-  }
-
-  if (routeMapControllerScriptPromise) {
-    return routeMapControllerScriptPromise;
-  }
-
-  routeMapControllerScriptPromise = new Promise((resolve, reject) => {
-    let script = document.querySelector("script[data-route-map-controller='script']");
-
-    if (!script) {
-      script = document.createElement("script");
-      script.src = routeExperienceAssetUrls.script;
-      script.async = true;
-      script.dataset.routeMapController = "script";
-      document.head.append(script);
-    }
-
-    const resolveController = () => {
-      if (typeof window.createJapanTripRouteMapController === "function") {
-        resolve(window.createJapanTripRouteMapController);
-      } else {
-        routeMapControllerScriptPromise = null;
-        reject(new Error("Route map controller did not initialize."));
-      }
-    };
-
-    script.addEventListener("load", resolveController, { once: true });
-    script.addEventListener(
-      "error",
-      () => {
-        routeMapControllerScriptPromise = null;
-        reject(new Error("Route map controller failed to load."));
-      },
-      { once: true }
-    );
-
-    if (typeof window.createJapanTripRouteMapController === "function") {
-      resolveController();
-    }
-  });
-
-  return routeMapControllerScriptPromise;
-}
-
-function ensureRouteMapController() {
-  if (!routeMapCanvas || !routeMapSurface) {
-    return Promise.resolve(null);
-  }
-
-  if (routeMapController) {
-    return Promise.resolve(routeMapController);
-  }
-
-  if (routeMapControllerPromise) {
-    return routeMapControllerPromise;
-  }
-
-  routeMapControllerPromise = Promise.all([
-    ensureRouteExperienceStyles(),
-    loadRouteMapControllerScript()
-  ])
-    .then(() => {
-      if (typeof window.createJapanTripRouteMapController !== "function") {
-        throw new Error("Route map controller is unavailable.");
-      }
-
-      routeMapController = window.createJapanTripRouteMapController({
-        panel: routeMapPanel,
-        surface: routeMapSurface,
-        canvas: routeMapCanvas,
-        assetUrls: routeMapControllerAssetUrls,
-        getState: buildRouteMapStateSnapshot,
-        onStatusChange: (nextStatusMode) => {
-          routeMapStatusMode = nextStatusMode;
-          renderRouteMapStatus();
-        },
-        onLiveReadyChange: (isReady) => {
-          setRouteMapLiveReady(isReady);
-        },
-        onShowSequenceNotice: (requiredDay) => {
-          showSequenceNotice(requiredDay);
-        },
-        onScrollToDay: (day) => {
-          scrollToChecklistDay(day);
-        }
-      });
-
-      syncRouteMapState();
-      return routeMapController;
-    })
-    .catch((error) => {
-      routeMapControllerPromise = null;
-      throw error;
-    });
-
-  return routeMapControllerPromise;
-}
-
-function primeRouteExperience() {
-  return ensureRouteMapController().catch(() => null);
-}
-
-function syncRouteMapViewport(options = {}) {
-  routeMapController?.resize(options);
-}
-
-function setRouteMapOpen(nextOpen) {
-  if (!routeMapPanel || !routeMapToggle) {
-    return;
-  }
-
-  const isOpen = Boolean(nextOpen);
-  routeMapPanel.hidden = !isOpen;
-  routeMapToggle.setAttribute("aria-expanded", String(isOpen));
-  updateRouteMapToggleLabel();
-
-  if (!isOpen) {
-    routeMapController?.setInteractive(false);
-    return;
-  }
-
-  primeRouteExperience();
-
-  if (routeMapController?.isLiveReady()) {
-    window.requestAnimationFrame(() => {
-      syncRouteMapViewport();
-      routeMapController?.setInteractive(false);
-      syncRouteMapState();
-    });
-  }
-}
-
-function loadInteractiveRouteMap() {
-  if (routeMapPanel?.hidden) {
-    setRouteMapOpen(true);
-  }
-
-  if (routeMapLiveReady) {
-    window.requestAnimationFrame(() => {
-      syncRouteMapViewport({ force: true });
-      routeMapController?.setInteractive(false);
-      syncRouteMapState();
-    });
-    return Promise.resolve(routeMapController);
-  }
-
-  setRouteMapLoadPending(true);
-  routeMapStatusMode = "loading";
-  renderRouteMapStatus();
-
-  return ensureRouteMapController()
-    .then((controller) => {
-      if (!controller) {
-        throw new Error("Route map controller is unavailable.");
-      }
-
-      return controller.loadInteractive(buildRouteMapStateSnapshot());
-    })
-    .then((controller) => {
-      setRouteMapLoadPending(false);
-      syncRouteMapState();
-      return controller;
-    })
-    .catch((error) => {
-      routeMapStatusMode = "error";
-      renderRouteMapStatus();
-      setRouteMapLoadPending(false);
-      throw error;
-    });
-}
-function syncRouteMapState() {
-  updateRouteMapToggleLabel();
-  renderRouteMapStatus();
-  routeMapController?.sync(buildRouteMapStateSnapshot());
-}
-
-function refreshRouteMapTheme() {
-  routeMapController?.refreshTheme(buildRouteMapStateSnapshot());
-}
-
 function syncOptionalDaysUI() {
   const canOfferOptionalDays = completedHistoryDays.has("7");
 
@@ -1591,67 +1091,10 @@ function syncOptionalDaysUI() {
   scheduleDayCardRowHeights();
 }
 
-function syncDayCardRowHeights() {
-  if (!shouldEqualizeDayCardRows()) {
-    dayGrids.forEach((grid) => {
-      grid.querySelectorAll(".day-card").forEach((card) => {
-        card.style.minHeight = "";
-      });
-    });
-    return;
-  }
-
-  dayGrids.forEach((grid) => {
-    const visibleCards = Array.from(grid.querySelectorAll(".day-card")).filter(
-      (card) => !card.hidden && card.getClientRects().length
-    );
-
-    visibleCards.forEach((card) => {
-      card.style.minHeight = "";
-    });
-
-    const rows = [];
-
-    visibleCards.forEach((card) => {
-      const top = card.offsetTop;
-      const matchingRow = rows.find((row) => Math.abs(row.top - top) <= 4);
-
-      if (matchingRow) {
-        matchingRow.cards.push(card);
-        return;
-      }
-
-      rows.push({ top, cards: [card] });
-    });
-
-    rows.forEach((row) => {
-      const tallestCard = Math.max(...row.cards.map((card) => card.getBoundingClientRect().height));
-      row.cards.forEach((card) => {
-        card.style.minHeight = `${Math.ceil(tallestCard)}px`;
-      });
-    });
-  });
-}
-
 function scheduleDayCardRowHeights() {
-  if (!shouldEqualizeDayCardRows()) {
-    if (dayCardRowEqualizeFrame) {
-      window.cancelAnimationFrame(dayCardRowEqualizeFrame);
-      dayCardRowEqualizeFrame = 0;
-    }
-
-    syncDayCardRowHeights();
-    return;
-  }
-
-  if (dayCardRowEqualizeFrame) {
-    window.cancelAnimationFrame(dayCardRowEqualizeFrame);
-  }
-
-  dayCardRowEqualizeFrame = window.requestAnimationFrame(() => {
-    dayCardRowEqualizeFrame = window.requestAnimationFrame(() => {
-      dayCardRowEqualizeFrame = 0;
-      syncDayCardRowHeights();
+  dayGrids.forEach((grid) => {
+    grid.querySelectorAll(".day-card").forEach((card) => {
+      card.style.minHeight = "";
     });
   });
 }
@@ -1754,7 +1197,6 @@ function resetTripProgress() {
   setOptionalPromptButtonsDisabled(false);
   refreshChecklistProgressState();
   syncProgressTimeline();
-  syncRouteMapState();
   setActivePanel("checklist");
   setResetModalOpen(false);
 
@@ -1851,56 +1293,6 @@ function scrollProgressTimelineToActive(force = false) {
   });
 }
 
-function updateRouteProgress() {
-  const routeDoc = routeMedia?.contentDocument;
-  if (!routeDoc) {
-    return;
-  }
-
-  const currentStopKey = routeDayToStopKey[getCurrentProgressDay()];
-
-  Object.entries(routeStopProgressConfig).forEach(([stopKey, config]) => {
-    const stop = routeDoc.getElementById(config.stopId);
-    if (!stop) {
-      return;
-    }
-
-    const relevantDays = config.days.filter((day) => optionalDaysUnlocked || Number(day) <= 7);
-    const completedCount = relevantDays.filter((day) => completedDays.has(day)).length;
-    const ratio = relevantDays.length ? completedCount / relevantDays.length : 0;
-    const progressRing = stop.querySelector(".node-progress");
-    const progressTrack = stop.querySelector(".node-progress-track");
-    const circumference = Number(progressRing?.dataset.circumference || "0");
-    const isUnlocked = relevantDays.some((day) => unlockedDays.has(day));
-    const isWarning = relevantDays.some((day) => warningDays.has(day));
-
-    stop.classList.toggle("has-progress", ratio > 0);
-    stop.classList.toggle("is-complete", ratio >= 1);
-    stop.classList.toggle("is-current", stopKey === currentStopKey);
-    stop.classList.toggle("is-locked", !isUnlocked);
-    stop.classList.toggle("is-warning", isWarning);
-
-    if (progressTrack) {
-      progressTrack.style.opacity = ratio > 0 || stopKey === currentStopKey || isUnlocked ? "1" : "0.28";
-    }
-
-    if (progressRing && circumference) {
-      progressRing.style.opacity = ratio > 0 ? "1" : "0";
-      progressRing.style.strokeDashoffset = `${circumference * (1 - ratio)}`;
-    }
-  });
-
-  Object.entries(routeSegmentConfig).forEach(([segmentId, requiredDays]) => {
-    const segment = routeDoc.getElementById(segmentId);
-    if (!segment) {
-      return;
-    }
-
-    const isComplete = requiredDays.every((day) => completedDays.has(day));
-    segment.classList.toggle("is-complete", isComplete);
-  });
-}
-
 function refreshChecklistProgressState() {
   const {
     rawCompleted,
@@ -1989,14 +1381,11 @@ function refreshChecklistProgressState() {
   warningDays = nextWarningDays;
   accessibleDay = nextAccessibleDay;
   currentProgressDay = nextCurrentDay;
-  updateRouteProgress();
-  syncRouteMapState();
 }
 
 function celebrateCompletedDay(day) {
   animateCompletion(dayCardMap.get(String(day)));
   animateCompletion(progressItemMap.get(String(day)));
-  animateRouteTargets(day);
 
   if (Number(day) === 7) {
     animateUnlock(progressItemMap.get("8"));
@@ -2007,48 +1396,6 @@ function celebrateCompletedDay(day) {
     animateUnlock(progressItemMap.get("9"));
     animateUnlock(dayCardMap.get("9"));
   }
-}
-
-function animateRouteTargets(day) {
-  if (aggressivePerformanceMode || reducedEffectsEnabled) {
-    return;
-  }
-
-  const routeDoc = routeMedia?.contentDocument;
-  if (!routeDoc) {
-    return;
-  }
-
-  const stopKey = routeDayToStopKey[Number(day)];
-  if (stopKey) {
-    const routeStop = routeDoc.getElementById(routeStopProgressConfig[stopKey]?.stopId || "");
-    if (routeStop) {
-      routeStop.classList.remove("is-celebrating");
-      void routeStop.getBoundingClientRect();
-      routeStop.classList.add("is-celebrating");
-      window.setTimeout(() => {
-        routeStop.classList.remove("is-celebrating");
-      }, 920);
-    }
-  }
-
-  Object.entries(routeSegmentConfig).forEach(([segmentId, requiredDays]) => {
-    if (!requiredDays.includes(String(day))) {
-      return;
-    }
-
-    const segment = routeDoc.getElementById(segmentId);
-    if (!segment) {
-      return;
-    }
-
-    segment.classList.remove("is-celebrating");
-    void segment.getBoundingClientRect();
-    segment.classList.add("is-celebrating");
-    window.setTimeout(() => {
-      segment.classList.remove("is-celebrating");
-    }, 920);
-  });
 }
 
 function scrollToChecklistDay(day) {
@@ -2100,45 +1447,6 @@ function scrollToPanelStart(panelId) {
   });
 }
 
-function bindRouteInteractions() {
-  if (!routeMedia?.contentDocument?.documentElement) {
-    return;
-  }
-
-  const routeRoot = routeMedia.contentDocument.documentElement;
-  applyRouteTheme();
-  if (routeRoot.dataset.interactionsBound === "1") {
-    updateRouteProgress();
-    return;
-  }
-
-  routeRoot.dataset.interactionsBound = "1";
-
-  routeMedia.contentDocument.querySelectorAll("[data-scroll-day]").forEach((stop) => {
-    const activateStop = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      const targetDay = Number(stop.dataset.scrollDay);
-      if (targetDay > accessibleDay) {
-        showSequenceNotice(accessibleDay);
-        return;
-      }
-
-      scrollToChecklistDay(stop.dataset.scrollDay);
-    };
-
-    stop.addEventListener("click", activateStop);
-    stop.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        activateStop(event);
-      }
-    });
-  });
-
-  updateRouteProgress();
-}
-
 function setLanguage(language) {
   const nextLanguage = language === "ja" ? "ja" : "en";
   const localizedNodes = document.querySelectorAll("[data-language]");
@@ -2185,7 +1493,6 @@ function setLanguage(language) {
   storeLanguage(nextLanguage);
   refreshChecklistProgressState();
   syncProgressTimeline();
-  syncRouteMapState();
   setOptionalPromptFeedback(false);
   scheduleDayCardRowHeights();
 }
@@ -2198,14 +1505,9 @@ function applyTheme(theme, options = {}) {
   root.style.colorScheme = nextTheme;
   updateThemeButtons(nextTheme);
   updateThemeColorMeta(nextTheme);
-  applyRouteTheme();
 
   if (persist) {
     storeThemePreference(nextTheme);
-  }
-
-  if (routeMapController) {
-    refreshRouteMapTheme();
   }
 }
 
@@ -2245,10 +1547,6 @@ function setActivePanel(panelId) {
       initializeBookingTransit();
     }
 
-    if (panelId === "route") {
-      primeRouteExperience();
-    }
-
     if (
       panelId === "checklist" &&
       optionalPromptDeferred &&
@@ -2262,16 +1560,6 @@ function setActivePanel(panelId) {
     refreshRevealPanel(panelId);
     syncProgressTimeline();
     scheduleDayCardRowHeights();
-    if (
-      panelId === "route" &&
-      routeMapController?.isLiveReady() &&
-      routeMapToggle?.getAttribute("aria-expanded") === "true"
-    ) {
-      window.requestAnimationFrame(() => {
-        syncRouteMapViewport();
-      });
-    }
-
     storeActivePanel(panelId);
   }
 
@@ -2396,15 +1684,14 @@ restoreChecklistState();
 refreshChecklistProgressState();
 
 registerRevealBlocks();
-const initialPanelId = readStoredActivePanel() || "overview";
-if (initialPanelId === "route") {
-  primeRouteExperience();
-}
+const defaultPanelId =
+  contentPanels.find((panel) => panel.classList.contains("is-active"))?.dataset.panel ??
+  contentPanels[0]?.dataset.panel ??
+  "overview";
+const initialPanelId = contentPanels.length === 1 ? defaultPanelId : readStoredActivePanel() || defaultPanelId;
 setActivePanel(initialPanelId);
 setActiveProgressItem(getCurrentProgressDay());
 syncProgressTimeline();
-updateRouteMapToggleLabel();
-renderRouteMapStatus();
 scheduleDayCardRowHeights();
 
 if (document.fonts?.ready) {
@@ -2468,21 +1755,6 @@ sectionTabs.forEach((tab) => {
     scrollToPanelStart(tab.dataset.panelTarget);
   });
 });
-
-if (routeMapToggle) {
-  routeMapToggle.addEventListener("click", () => {
-    const nextOpen = routeMapToggle.getAttribute("aria-expanded") !== "true";
-    setRouteMapOpen(nextOpen);
-  });
-}
-
-if (routeMapLoadButton) {
-  routeMapLoadButton.addEventListener("click", () => {
-    loadInteractiveRouteMap().catch(() => {
-      // Status UI already reflects the failure path.
-    });
-  });
-}
 
 if (jumpCurrentDayButton) {
   jumpCurrentDayButton.addEventListener("click", () => {
@@ -2554,17 +1826,10 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-if (root.classList.contains("is-welcoming")) {
-  window.setTimeout(finishWelcome, reducedEffectsEnabled ? 60 : 2100);
+if (root.classList.contains("intro-pending")) {
+  scheduleWelcomeExit();
 } else if (welcomeOverlay) {
   welcomeOverlay.setAttribute("hidden", "");
-}
-
-if (routeMedia) {
-  routeMedia.addEventListener("load", bindRouteInteractions);
-  window.requestAnimationFrame(() => {
-    bindRouteInteractions();
-  });
 }
 
 function syncHeaderState() {
@@ -2636,9 +1901,6 @@ if (siteHeader) {
     }
     syncProgressTimeline();
     scheduleDayCardRowHeights();
-    if (routeMapController?.isLiveReady() && routeMapToggle?.getAttribute("aria-expanded") === "true") {
-      syncRouteMapViewport();
-    }
     lockHeaderState(220);
   });
 }
