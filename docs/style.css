@@ -232,6 +232,81 @@ html.reduce-effects .welcome-overlay {
   display: none !important;
 }
 
+html.reduce-effects {
+  scroll-behavior: auto;
+}
+
+html.reduce-effects *,
+html.reduce-effects *::before,
+html.reduce-effects *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+html.reduce-effects .card,
+html.reduce-effects .progress-overview,
+html.reduce-effects .route-map__surface,
+html.reduce-effects .route-map__toggle,
+html.reduce-effects .progress-item,
+html.reduce-effects .check-item,
+html.reduce-effects .booking-item,
+html.reduce-effects .footer-link,
+html.reduce-effects .confirm-modal,
+html.reduce-effects .confirm-modal__button,
+html.reduce-effects .route-map .maplibregl-ctrl-group,
+html.reduce-effects .route-map .maplibregl-popup.route-map__popup .maplibregl-popup-content {
+  box-shadow: none !important;
+}
+
+html.reduce-effects .day-card.is-current-day,
+html.reduce-effects .day-card.is-route-target,
+html.reduce-effects .essentials-card:hover,
+html.reduce-effects .day-card:hover,
+html.reduce-effects .note-card:hover,
+html.reduce-effects .hero-panel:hover,
+html.reduce-effects .stat-card:hover,
+html.reduce-effects .progress-card:hover,
+html.reduce-effects .route-reference:hover,
+html.reduce-effects .route-map:hover,
+html.reduce-effects .journey-close:hover,
+html.reduce-effects .optional-unlock:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+html.reduce-effects .reveal-block {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html.reduce-effects .site-atmosphere__sun,
+html.reduce-effects .site-atmosphere__fuji,
+html.reduce-effects body::before,
+html.reduce-effects body::after {
+  filter: none;
+}
+
+html.reduce-effects .content-panel.is-active > .hero-panel,
+html.reduce-effects .content-panel.is-active > .trip-meta,
+html.reduce-effects .content-panel.is-active > .progress-card,
+html.reduce-effects .content-panel.is-active > .route-map,
+html.reduce-effects .content-panel.is-active > .journey-close,
+html.reduce-effects .content-panel.is-active > .day-grid,
+html.reduce-effects .content-panel.is-active > .notes-grid,
+html.reduce-effects .content-panel.is-active > .essentials-grid,
+html.reduce-effects .site-footer__lead,
+html.reduce-effects .site-footer__aside,
+html.reduce-effects .site-footer__credit,
+html.reduce-effects .stat-card,
+html.reduce-effects .day-card,
+html.reduce-effects .note-card,
+html.reduce-effects .essentials-card,
+html.reduce-effects .booking-group {
+  content-visibility: auto;
+  contain: layout paint style;
+  contain-intrinsic-size: 320px;
+}
+
 a {
   color: inherit;
   text-decoration: none;

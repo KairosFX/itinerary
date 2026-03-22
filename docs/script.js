@@ -1204,7 +1204,7 @@ function getScrollBehavior() {
 }
 
 function animateCompletion(target) {
-  if (!target) {
+  if (!target || aggressivePerformanceMode || reducedEffectsEnabled) {
     return;
   }
 
@@ -1217,7 +1217,7 @@ function animateCompletion(target) {
 }
 
 function animateUnlock(target) {
-  if (!target) {
+  if (!target || aggressivePerformanceMode || reducedEffectsEnabled) {
     return;
   }
 
@@ -1241,7 +1241,9 @@ function showSequenceNotice(requiredDay) {
 
   sequenceNotice.hidden = false;
   sequenceNotice.classList.remove("is-visible");
-  void sequenceNotice.getBoundingClientRect();
+  if (!reducedEffectsEnabled) {
+    void sequenceNotice.getBoundingClientRect();
+  }
   sequenceNotice.classList.add("is-visible");
 
   window.clearTimeout(sequenceNoticeTimer);
@@ -2193,6 +2195,16 @@ function syncDayCardRowHeights() {
 }
 
 function scheduleDayCardRowHeights() {
+  if (!shouldEqualizeDayCardRows()) {
+    if (dayCardRowEqualizeFrame) {
+      window.cancelAnimationFrame(dayCardRowEqualizeFrame);
+      dayCardRowEqualizeFrame = 0;
+    }
+
+    syncDayCardRowHeights();
+    return;
+  }
+
   if (dayCardRowEqualizeFrame) {
     window.cancelAnimationFrame(dayCardRowEqualizeFrame);
   }
@@ -2559,6 +2571,10 @@ function celebrateCompletedDay(day) {
 }
 
 function animateRouteTargets(day) {
+  if (aggressivePerformanceMode || reducedEffectsEnabled) {
+    return;
+  }
+
   const routeDoc = routeMedia?.contentDocument;
   if (!routeDoc) {
     return;
