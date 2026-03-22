@@ -52,6 +52,12 @@ const introSeenSessionKey = "japan-trip-intro-seen";
 const introExitDurationMs = 180;
 const fujiForecastSessionKey = "japan-trip-fuji-forecast";
 const queuedStorageWrites = new Map();
+const headerReservedHeightFallbackPx = 144;
+const timelineNodeTopRem = 1.36;
+const timelineNodeSizeRem = 1.42;
+const timelineLinkOverlapPx = 1;
+const deferredGeometryReleaseDelayMs = 160;
+const deferredNonCriticalLayoutTimeoutMs = 700;
 const bookingTransitItemsDataUrl = "./assets/data/booking-transit-items.json";
 const fujiForecastCacheMaxAgeMs = 45 * 60 * 1000;
 const fujiForecastSourceUrl = "https://open-meteo.com/en/docs";
@@ -103,7 +109,7 @@ const bookingTransitGroupDefinitions = [
 let bookingTransitItems = [];
 let bookingTransitItemMap = new Map();
 let checklistState = {};
-let reservedHeaderHeight = 0;
+let reservedHeaderHeight = headerReservedHeightFallbackPx;
 let headerLockUntil = 0;
 const headerTopRevealThreshold = 36;
 const headerCondenseScrollThreshold = 150;
@@ -127,6 +133,14 @@ let optionalPromptIsCompact = false;
 let optionalPromptDeferred = false;
 let lastResetTrigger = null;
 const pendingClassRestarts = new WeakMap();
+let deferredGeometryWorkPending = true;
+let deferredGeometryReleaseTimer = 0;
+let timelineLayoutFrame = 0;
+let timelineLayoutDelayTimer = 0;
+let timelineLayoutIdleHandle = 0;
+let headerHeightSyncFrame = 0;
+let headerHeightSyncDelayTimer = 0;
+let headerHeightSyncIdleHandle = 0;
 let storageWriteFlushTimer = 0;
 let storageWriteIdleHandle = 0;
 let bookingTransitState = { filter: "all", items: {} };
@@ -1553,19 +1567,43 @@ function scheduleWelcomeExit() {
   });
 }
 
+function applyReservedHeaderHeight(nextHeight, forceReset = false) {
+  const measuredHeight = Math.ceil(Number(nextHeight) || 0);
+  if (measuredHeight <= 0) {
+    return;
+  }
+
+  if (forceReset) {
+    reservedHeaderHeight = measuredHeight;
+  } else {
+    reservedHeaderHeight = Math.max(reservedHeaderHeight, measuredHeight);
+  }
+
+  root.style.setProperty("--header-reserved-height", `${reservedHeaderHeight}px`);
+}
+
+function getResizeObserverBlockSize(entry) {
+  if (!entry) {
+    return 0;
+  }
+
+  const borderBoxSize = Array.isArray(entry.borderBoxSize)
+    ? entry.borderBoxSize[0]
+    : entry.borderBoxSize;
+
+  if (borderBoxSize && Number.isFinite(borderBoxSize.blockSize)) {
+    return borderBoxSize.blockSize;
+  }
+
+  return Number(entry.contentRect?.height || 0);
+}
+
 function syncReservedHeaderHeight(forceReset = false) {
   if (!siteHeader) {
     return;
   }
 
-  const currentHeight = Math.ceil(siteHeader.getBoundingClientRect().height);
-  if (forceReset) {
-    reservedHeaderHeight = currentHeight;
-  } else {
-    reservedHeaderHeight = Math.max(reservedHeaderHeight, currentHeight);
-  }
-
-  root.style.setProperty("--header-reserved-height", `${reservedHeaderHeight}px`);
+  applyReservedHeaderHeight(siteHeader.getBoundingClientRect().height, forceReset);
 }
 
 function resetHeaderScrollTracking(scrollY = window.scrollY) {
@@ -1578,6 +1616,59 @@ function resetHeaderScrollTracking(scrollY = window.scrollY) {
 function lockHeaderState(duration = 420) {
   headerLockUntil = window.performance.now() + duration;
   resetHeaderScrollTracking();
+}
+
+function scheduleDeferredGeometryRelease() {
+  if (!deferredGeometryWorkPending || deferredGeometryReleaseTimer) {
+    return;
+  }
+
+  deferredGeometryReleaseTimer = window.setTimeout(() => {
+    deferredGeometryReleaseTimer = 0;
+    deferredGeometryWorkPending = false;
+  }, deferredGeometryReleaseDelayMs);
+}
+
+function scheduleReservedHeaderHeightSync({ forceReset = false, defer = false } = {}) {
+  if (!siteHeader) {
+    return;
+  }
+
+  if (headerHeightSyncFrame) {
+    window.cancelAnimationFrame(headerHeightSyncFrame);
+    headerHeightSyncFrame = 0;
+  }
+
+  if (headerHeightSyncDelayTimer) {
+    window.clearTimeout(headerHeightSyncDelayTimer);
+    headerHeightSyncDelayTimer = 0;
+  }
+
+  if (headerHeightSyncIdleHandle && typeof window.cancelIdleCallback === "function") {
+    window.cancelIdleCallback(headerHeightSyncIdleHandle);
+    headerHeightSyncIdleHandle = 0;
+  }
+
+  const runSync = () => {
+    headerHeightSyncFrame = 0;
+    headerHeightSyncDelayTimer = 0;
+    headerHeightSyncIdleHandle = 0;
+    syncReservedHeaderHeight(forceReset);
+  };
+
+  if (defer && deferredGeometryWorkPending) {
+    if (typeof window.requestIdleCallback === "function") {
+      headerHeightSyncIdleHandle = window.requestIdleCallback(runSync, {
+        timeout: deferredNonCriticalLayoutTimeoutMs
+      });
+      return;
+    }
+
+    headerHeightSyncDelayTimer = window.setTimeout(runSync, deferredNonCriticalLayoutTimeoutMs);
+    return;
+  }
+
+  headerHeightSyncFrame = window.requestAnimationFrame(runSync);
 }
 
 function preserveScrollPosition(callback) {
@@ -1775,9 +1866,7 @@ function handleChecklistPanelChange(event) {
     });
 
   if (String(currentProgressDay) !== previousCurrentDay) {
-    window.requestAnimationFrame(() => {
-      scrollProgressTimelineToActive(true);
-    });
+    lastTimelineFocusDay = null;
   }
 
   if (day && !wasComplete && completedDays.has(day)) {
@@ -2112,8 +2201,7 @@ function unlockOptionalDays() {
         revealObserver.observe(node);
       }
     });
-
-    scrollProgressTimelineToActive(true);
+    lastTimelineFocusDay = null;
   });
 }
 
@@ -2188,21 +2276,46 @@ function resetTripProgress() {
   });
 }
 
-function resolveLengthValue(value, rootFontSize) {
-  const trimmedValue = String(value || "").trim();
-  if (!trimmedValue) {
-    return 0;
+function scheduleProgressTimelineLayout({ defer = false } = {}) {
+  if (!progressTimeline) {
+    return;
   }
 
-  if (trimmedValue.endsWith("rem")) {
-    return Number.parseFloat(trimmedValue) * rootFontSize;
+  if (timelineLayoutFrame) {
+    window.cancelAnimationFrame(timelineLayoutFrame);
+    timelineLayoutFrame = 0;
   }
 
-  if (trimmedValue.endsWith("px")) {
-    return Number.parseFloat(trimmedValue);
+  if (timelineLayoutDelayTimer) {
+    window.clearTimeout(timelineLayoutDelayTimer);
+    timelineLayoutDelayTimer = 0;
   }
 
-  return Number.parseFloat(trimmedValue) || 0;
+  if (timelineLayoutIdleHandle && typeof window.cancelIdleCallback === "function") {
+    window.cancelIdleCallback(timelineLayoutIdleHandle);
+    timelineLayoutIdleHandle = 0;
+  }
+
+  const runLayout = () => {
+    timelineLayoutFrame = 0;
+    timelineLayoutDelayTimer = 0;
+    timelineLayoutIdleHandle = 0;
+    updateTimelineSpine();
+  };
+
+  if (defer && deferredGeometryWorkPending) {
+    if (typeof window.requestIdleCallback === "function") {
+      timelineLayoutIdleHandle = window.requestIdleCallback(runLayout, {
+        timeout: deferredNonCriticalLayoutTimeoutMs
+      });
+      return;
+    }
+
+    timelineLayoutDelayTimer = window.setTimeout(runLayout, deferredNonCriticalLayoutTimeoutMs);
+    return;
+  }
+
+  timelineLayoutFrame = window.requestAnimationFrame(runLayout);
 }
 
 function updateTimelineSpine() {
@@ -2220,18 +2333,10 @@ function updateTimelineSpine() {
     return;
   }
 
-  const rootFontSize =
-    Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize || "16") || 16;
-  const timelineStyles = window.getComputedStyle(progressTimeline);
-  const nodeTop = resolveLengthValue(timelineStyles.getPropertyValue("--timeline-node-top"), rootFontSize);
-  const nodeSize = resolveLengthValue(
-    timelineStyles.getPropertyValue("--timeline-node-size"),
-    rootFontSize
-  );
-  const linkOverlap = resolveLengthValue(
-    timelineStyles.getPropertyValue("--timeline-link-overlap"),
-    rootFontSize
-  );
+  const rootFontSize = 16;
+  const nodeTop = timelineNodeTopRem * rootFontSize;
+  const nodeSize = timelineNodeSizeRem * rootFontSize;
+  const linkOverlap = timelineLinkOverlapPx;
   const fillStart = nodeTop + nodeSize - linkOverlap;
   const fillEnd = anchorItem.offsetTop + nodeTop + linkOverlap;
   const fillHeight = Math.max(fillEnd - fillStart, 0);
@@ -2240,40 +2345,7 @@ function updateTimelineSpine() {
 }
 
 function scrollProgressTimelineToActive(force = false) {
-  if (!progressTimeline) {
-    return;
-  }
-
-  const timelineStyles = window.getComputedStyle(progressTimeline);
-  if (!["auto", "scroll"].includes(timelineStyles.overflowY)) {
-    lastTimelineFocusDay = null;
-    return;
-  }
-
-  const activeItem = progressTimeline.querySelector(".progress-item.is-active");
-  if (!activeItem) {
-    return;
-  }
-
-  const activeDay = activeItem.dataset.progressItem;
-  if (!force && lastTimelineFocusDay === activeDay) {
-    return;
-  }
-
-  lastTimelineFocusDay = activeDay;
-
-  if (progressTimeline.scrollHeight <= progressTimeline.clientHeight + 8) {
-    progressTimeline.scrollTop = 0;
-    return;
-  }
-
-  const nextTop =
-    activeItem.offsetTop - progressTimeline.clientHeight * 0.28 + activeItem.offsetHeight * 0.5;
-
-  progressTimeline.scrollTo({
-    top: Math.max(nextTop, 0),
-    behavior: getScrollBehavior()
-  });
+  lastTimelineFocusDay = force ? null : lastTimelineFocusDay;
 }
 
 function refreshChecklistProgressState(options = {}) {
@@ -2467,13 +2539,12 @@ function setLanguage(language) {
       node.setAttribute(sourceAttribute, nextSource);
     }
   });
-  window.requestAnimationFrame(() => syncReservedHeaderHeight(false));
 
-  languageButtons.forEach((button) => {
-    const isActive = button.dataset.setLanguage === nextLanguage;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
-  });
+  if (!("ResizeObserver" in window)) {
+    scheduleReservedHeaderHeightSync({ forceReset: false, defer: deferredGeometryWorkPending });
+  }
+
+  updateLanguageButtons(nextLanguage);
 
   storeLanguage(nextLanguage);
   refreshChecklistProgressState();
@@ -2507,6 +2578,14 @@ function handleThemeButtonClick(button) {
   lockHeaderState(280);
   preserveScrollPosition(() => {
     applyTheme(button.dataset.setTheme);
+  });
+}
+
+function updateLanguageButtons(language) {
+  languageButtons.forEach((button) => {
+    const isActive = button.dataset.setLanguage === language;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
   });
 }
 
@@ -2582,10 +2661,7 @@ function syncProgressTimeline() {
 
   setActiveProgressItem(getCurrentProgressDay());
   updateProgressOverview();
-  window.requestAnimationFrame(() => {
-    updateTimelineSpine();
-    scrollProgressTimelineToActive();
-  });
+  scheduleProgressTimelineLayout({ defer: deferredGeometryWorkPending });
 }
 
 function registerRevealBlocks(scope = document) {
@@ -2678,7 +2754,14 @@ async function bootApp() {
   checklistState = readStoredChecklistState();
   syncOptionalDaysUI();
   applyTheme(readStoredThemePreference() || getCurrentTheme(), { persist: false });
-  setLanguage(readStoredLanguage());
+  const storedLanguage = readStoredLanguage();
+  if (storedLanguage === "ja") {
+    setLanguage("ja");
+  } else {
+    root.lang = "en";
+    document.title = pageTitles.en;
+    updateLanguageButtons("en");
+  }
 
   const siteFooter = document.querySelector(".site-footer");
   if (siteFooter) {
@@ -2690,6 +2773,9 @@ async function bootApp() {
   await ensureSectionInitialized(initialPanelId);
   syncProgressTimeline();
   scheduleIdleSectionWarmup(initialPanelId);
+  window.requestAnimationFrame(() => {
+    scheduleDeferredGeometryRelease();
+  });
 
   if (document.fonts?.ready) {
     document.fonts.ready.then(() => {
@@ -2870,27 +2956,24 @@ window.addEventListener(
 );
 
 if (siteHeader) {
-  syncReservedHeaderHeight(true);
-
   if ("ResizeObserver" in window) {
-    const headerObserver = new window.ResizeObserver(() => {
-      if (siteHeader.classList.contains("is-condensed")) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => {
-        syncReservedHeaderHeight(true);
-      });
+    const headerObserver = new window.ResizeObserver((entries) => {
+      const nextHeight = getResizeObserverBlockSize(entries[0]);
+      applyReservedHeaderHeight(nextHeight, !siteHeader.classList.contains("is-condensed"));
     });
 
     headerObserver.observe(siteHeader);
+  } else {
+    scheduleReservedHeaderHeightSync({ forceReset: false, defer: true });
   }
 
   window.addEventListener("resize", () => {
     syncReducedEffectsMode();
     const wasCondensed = siteHeader.classList.contains("is-condensed");
     siteHeader.classList.remove("is-condensed");
-    syncReservedHeaderHeight(true);
+    if (!("ResizeObserver" in window)) {
+      scheduleReservedHeaderHeightSync({ forceReset: true });
+    }
     if (wasCondensed && window.scrollY > 150) {
       siteHeader.classList.add("is-condensed");
     }
