@@ -104,7 +104,13 @@ let bookingTransitItemMap = new Map();
 let checklistState = {};
 let reservedHeaderHeight = 0;
 let headerLockUntil = 0;
-let lastScrollY = window.scrollY;
+const headerTopRevealThreshold = 36;
+const headerCondenseScrollThreshold = 150;
+const headerScrollDeltaTolerance = 4;
+const headerScrollIntentThreshold = 24;
+let lastScrollY = Math.max(window.scrollY, 0);
+let headerScrollIntentStartY = lastScrollY;
+let headerScrollIntentDirection = 0;
 let scrollTicking = false;
 let revealObserver = null;
 let completedDays = new Set();
@@ -1556,9 +1562,16 @@ function syncReservedHeaderHeight(forceReset = false) {
   root.style.setProperty("--header-reserved-height", `${reservedHeaderHeight}px`);
 }
 
+function resetHeaderScrollTracking(scrollY = window.scrollY) {
+  const nextScrollY = Math.max(scrollY, 0);
+  lastScrollY = nextScrollY;
+  headerScrollIntentStartY = nextScrollY;
+  headerScrollIntentDirection = 0;
+}
+
 function lockHeaderState(duration = 420) {
   headerLockUntil = window.performance.now() + duration;
-  lastScrollY = window.scrollY;
+  resetHeaderScrollTracking();
 }
 
 function preserveScrollPosition(callback) {
@@ -2758,24 +2771,55 @@ if (root.classList.contains("intro-pending")) {
 }
 
 function syncHeaderState() {
-  const currentScrollY = window.scrollY;
-  const delta = currentScrollY - lastScrollY;
+  const currentScrollY = Math.max(window.scrollY, 0);
 
   if (!siteHeader) {
-    lastScrollY = currentScrollY;
+    resetHeaderScrollTracking(currentScrollY);
     scrollTicking = false;
     return;
   }
 
   if (window.performance.now() < headerLockUntil) {
+    resetHeaderScrollTracking(currentScrollY);
+    return;
+  }
+
+  const delta = currentScrollY - lastScrollY;
+  if (Math.abs(delta) <= headerScrollDeltaTolerance) {
     lastScrollY = currentScrollY;
     return;
   }
 
-  if (currentScrollY <= 36 || delta < -8) {
+  if (currentScrollY <= headerTopRevealThreshold) {
     siteHeader.classList.remove("is-condensed");
-  } else if (currentScrollY > 150 && delta > 8) {
+    resetHeaderScrollTracking(currentScrollY);
+    return;
+  }
+
+  const nextDirection = delta > 0 ? 1 : -1;
+  if (headerScrollIntentDirection !== nextDirection) {
+    headerScrollIntentDirection = nextDirection;
+    headerScrollIntentStartY = currentScrollY;
+    lastScrollY = currentScrollY;
+    return;
+  }
+
+  const intentDistance = Math.abs(currentScrollY - headerScrollIntentStartY);
+  if (intentDistance < headerScrollIntentThreshold) {
+    lastScrollY = currentScrollY;
+    return;
+  }
+
+  if (nextDirection > 0 && currentScrollY > headerCondenseScrollThreshold) {
     siteHeader.classList.add("is-condensed");
+    resetHeaderScrollTracking(currentScrollY);
+    return;
+  }
+
+  if (nextDirection < 0) {
+    siteHeader.classList.remove("is-condensed");
+    resetHeaderScrollTracking(currentScrollY);
+    return;
   }
 
   lastScrollY = currentScrollY;
