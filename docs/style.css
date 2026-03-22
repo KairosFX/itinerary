@@ -308,7 +308,7 @@ input:focus-visible {
   width: 100%;
   overflow-x: clip;
   overflow-anchor: none;
-  backdrop-filter: blur(20px) saturate(104%);
+  backdrop-filter: none;
   background:
     linear-gradient(180deg, rgba(251, 247, 241, 0.9), rgba(249, 243, 235, 0.72)),
     rgba(251, 247, 241, 0.62);
@@ -503,7 +503,7 @@ h3 {
   border-radius: 999px;
   background: rgba(255, 252, 248, 0.78);
   box-shadow: 0 12px 26px rgba(55, 35, 22, 0.055);
-  backdrop-filter: blur(14px);
+  backdrop-filter: none;
   transition:
     transform 180ms ease,
     box-shadow 180ms ease,
@@ -610,7 +610,7 @@ h3 {
   background:
     linear-gradient(180deg, rgba(255, 252, 248, 0.92), rgba(255, 248, 242, 0.84)),
     rgba(255, 252, 248, 0.8);
-  backdrop-filter: blur(18px) saturate(106%);
+  backdrop-filter: none;
   box-shadow:
     0 14px 28px rgba(55, 35, 22, 0.04),
     0 32px 64px rgba(55, 35, 22, 0.06),
@@ -1569,7 +1569,7 @@ html.reduce-effects .scroll-swipe-target {
   color: rgba(31, 37, 39, 0.74);
   font-size: 0.9rem;
   box-shadow: 0 14px 26px rgba(55, 35, 22, 0.1);
-  backdrop-filter: blur(10px);
+  backdrop-filter: none;
 }
 
 .route-map__meta {
@@ -1630,7 +1630,7 @@ html.reduce-effects .scroll-swipe-target {
   padding: 0.2rem 0.45rem;
   background: rgba(255, 252, 248, 0.82);
   color: rgba(94, 103, 104, 0.72);
-  backdrop-filter: blur(10px);
+  backdrop-filter: none;
 }
 
 .route-map .maplibregl-ctrl-attrib a {
@@ -1765,7 +1765,7 @@ html.reduce-effects .scroll-swipe-target {
   place-items: center;
   padding: 1.2rem;
   background: rgba(18, 20, 24, 0.48);
-  backdrop-filter: blur(12px);
+  backdrop-filter: none;
 }
 
 .confirm-modal {

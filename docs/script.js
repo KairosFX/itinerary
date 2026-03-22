@@ -45,6 +45,7 @@ const optionalProgressItems = Array.from(
 const dayCardMap = new Map(dayCards.map((card) => [card.dataset.day, card]));
 const progressItemMap = new Map(progressItems.map((item) => [item.dataset.progressItem, item]));
 const root = document.documentElement;
+const aggressivePerformanceMode = true;
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
@@ -59,6 +60,7 @@ const completedHistoryStorageKey = "japan-trip-completed-history";
 const optionalDaysUnlockedStorageKey = "japan-trip-optional-days-unlocked";
 const activePanelStorageKey = "japan-trip-active-panel";
 const bookingTransitStorageKey = "japan-trip-bookings-transit-state";
+const welcomeSeenStorageKey = "japan-trip-welcome-seen";
 const bookingTransitGroupDefinitions = [
   {
     id: "bookings",
@@ -389,6 +391,7 @@ let backToTopMotionResetTimer = 0;
 let boxSwipeMotionResetTimer = 0;
 let activePanelId = Array.from(sectionTabs).find((tab) => tab.classList.contains("is-active"))?.dataset.panelTarget ?? null;
 let bookingTransitState = { filter: "all", items: {} };
+let bookingTransitInitialized = false;
 let reducedEffectsEnabled = false;
 let lastParallaxValues = {
   shift: "",
@@ -398,6 +401,10 @@ let lastParallaxValues = {
 };
 
 function markScrollSwipeTargets() {
+  if (aggressivePerformanceMode || reducedEffectsEnabled) {
+    return;
+  }
+
   document.querySelectorAll(scrollSwipeTargetSelector).forEach((target) => {
     target.classList.add("scroll-swipe-target");
   });
@@ -465,6 +472,10 @@ function syncBoxSwipeMotion(delta, { force = false } = {}) {
 }
 
 function syncDirectionalMotion(delta, options) {
+  if (aggressivePerformanceMode || reducedEffectsEnabled) {
+    return;
+  }
+
   syncBackToTopMotion(delta, options);
   syncBoxSwipeMotion(delta, options);
 }
@@ -541,7 +552,7 @@ function applyRouteTheme() {
 }
 
 function shouldReduceEffects() {
-  return reducedMotionQuery.matches || coarsePointerQuery.matches || compactViewportQuery.matches;
+  return aggressivePerformanceMode || reducedMotionQuery.matches || coarsePointerQuery.matches || compactViewportQuery.matches;
 }
 
 function syncReducedEffectsMode({ force = false } = {}) {
@@ -568,6 +579,16 @@ function bindMediaQueryChange(query, handler) {
   if (typeof query.addListener === "function") {
     query.addListener(handler);
   }
+}
+
+function hasActiveChecklistPanel() {
+  return contentPanels.some(
+    (panel) => panel.dataset.panel === "checklist" && panel.classList.contains("is-active")
+  );
+}
+
+function shouldEqualizeDayCardRows() {
+  return !reducedEffectsEnabled && !compactViewportQuery.matches && hasActiveChecklistPanel();
 }
 
 function getOrderedDayNumbers() {
@@ -1001,7 +1022,7 @@ function bindBookingTransitUI() {
 }
 
 function initializeBookingTransit() {
-  if (!bookingTransitRoot) {
+  if (!bookingTransitRoot || bookingTransitInitialized) {
     return;
   }
 
@@ -1009,12 +1030,13 @@ function initializeBookingTransit() {
   renderBookingTransitBoard();
   bindBookingTransitUI();
   updateBookingTransitUI();
+  bookingTransitInitialized = true;
 }
 
 function resetBookingTransitState() {
   bookingTransitState = { filter: "all", items: {} };
   storeBookingTransitState();
-  if (bookingTransitRoot) {
+  if (bookingTransitRoot && bookingTransitInitialized) {
     renderBookingTransitBoard();
     bindBookingTransitUI();
     updateBookingTransitUI();
@@ -1060,6 +1082,11 @@ function storeLanguage(language) {
 function finishWelcome() {
   root.classList.remove("is-welcoming");
   root.classList.add("has-seen-welcome");
+  try {
+    window.localStorage.setItem(welcomeSeenStorageKey, "1");
+  } catch (error) {
+    // Ignore storage failures and keep the page usable.
+  }
   if (welcomeOverlay) {
     welcomeOverlay.setAttribute("hidden", "");
   }
@@ -1173,7 +1200,7 @@ function decorateProgressTimeline() {
 }
 
 function getScrollBehavior() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+  return reducedEffectsEnabled ? "auto" : "smooth";
 }
 
 function animateCompletion(target) {
@@ -2124,6 +2151,15 @@ function syncOptionalDaysUI() {
 }
 
 function syncDayCardRowHeights() {
+  if (!shouldEqualizeDayCardRows()) {
+    dayGrids.forEach((grid) => {
+      grid.querySelectorAll(".day-card").forEach((card) => {
+        card.style.minHeight = "";
+      });
+    });
+    return;
+  }
+
   dayGrids.forEach((grid) => {
     const visibleCards = Array.from(grid.querySelectorAll(".day-card")).filter(
       (card) => !card.hidden && card.getClientRects().length
@@ -2751,6 +2787,10 @@ function setActivePanel(panelId) {
   });
 
   if (hasMatch) {
+    if (panelId === "essentials") {
+      initializeBookingTransit();
+    }
+
     if (
       panelId === "checklist" &&
       optionalPromptDeferred &&
@@ -2861,7 +2901,7 @@ function registerRevealBlocks() {
     block.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 60}ms`);
   });
 
-  if (!("IntersectionObserver" in window)) {
+  if (reducedEffectsEnabled || !("IntersectionObserver" in window)) {
     revealBlocks.forEach((block) => block.classList.add("is-visible"));
     return;
   }
@@ -2890,6 +2930,11 @@ function refreshRevealPanel(panelId) {
   }
 
   const panelBlocks = activePanel.querySelectorAll(".reveal-block");
+  if (reducedEffectsEnabled) {
+    panelBlocks.forEach((block) => block.classList.add("is-visible"));
+    return;
+  }
+
   panelBlocks.forEach((block, index) => {
     block.classList.remove("is-visible");
     block.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 70}ms`);
@@ -2917,12 +2962,12 @@ themeButtons.forEach((button) => {
   });
 });
 
+syncReducedEffectsMode({ force: true });
+
 decorateProgressTimeline();
 completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
 optionalDaysUnlocked = readStoredBoolean(optionalDaysUnlockedStorageKey);
 syncOptionalDaysUI();
-initializeBookingTransit();
-markScrollSwipeTargets();
 applyTheme(readStoredThemePreference() || getCurrentTheme(), { persist: false });
 setLanguage(readStoredLanguage());
 restoreChecklistState();
@@ -3111,8 +3156,6 @@ if (resetProgressModal) {
     syncReducedEffectsMode({ force: true });
   });
 });
-
-syncReducedEffectsMode({ force: true });
 
 window.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && routeMapInteractive) {
