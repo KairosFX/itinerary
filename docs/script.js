@@ -45,7 +45,7 @@ const optionalProgressItems = Array.from(
 const dayCardMap = new Map(dayCards.map((card) => [card.dataset.day, card]));
 const progressItemMap = new Map(progressItems.map((item) => [item.dataset.progressItem, item]));
 const root = document.documentElement;
-const aggressivePerformanceMode = true;
+const aggressivePerformanceMode = false;
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
@@ -60,7 +60,6 @@ const completedHistoryStorageKey = "japan-trip-completed-history";
 const optionalDaysUnlockedStorageKey = "japan-trip-optional-days-unlocked";
 const activePanelStorageKey = "japan-trip-active-panel";
 const bookingTransitStorageKey = "japan-trip-bookings-transit-state";
-const welcomeSeenStorageKey = "japan-trip-welcome-seen";
 const bookingTransitGroupDefinitions = [
   {
     id: "bookings",
@@ -552,7 +551,7 @@ function applyRouteTheme() {
 }
 
 function shouldReduceEffects() {
-  return aggressivePerformanceMode || reducedMotionQuery.matches || coarsePointerQuery.matches || compactViewportQuery.matches;
+  return aggressivePerformanceMode || reducedMotionQuery.matches;
 }
 
 function syncReducedEffectsMode({ force = false } = {}) {
@@ -1082,11 +1081,6 @@ function storeLanguage(language) {
 function finishWelcome() {
   root.classList.remove("is-welcoming");
   root.classList.add("has-seen-welcome");
-  try {
-    window.localStorage.setItem(welcomeSeenStorageKey, "1");
-  } catch (error) {
-    // Ignore storage failures and keep the page usable.
-  }
   if (welcomeOverlay) {
     welcomeOverlay.setAttribute("hidden", "");
   }

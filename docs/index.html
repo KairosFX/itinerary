@@ -20,13 +20,11 @@
           : "light";
       document.documentElement.dataset.theme = initialTheme;
       document.documentElement.style.colorScheme = initialTheme;
-      document.documentElement.classList.add("has-seen-welcome");
-      document.documentElement.classList.add("reduce-effects");
+      document.documentElement.classList.add("is-welcoming");
     } catch (error) {
       document.documentElement.dataset.theme = "light";
       document.documentElement.style.colorScheme = "light";
-      document.documentElement.classList.add("has-seen-welcome");
-      document.documentElement.classList.add("reduce-effects");
+      document.documentElement.classList.add("is-welcoming");
     }
   </script>
   <link rel="stylesheet" href="./style.css">
