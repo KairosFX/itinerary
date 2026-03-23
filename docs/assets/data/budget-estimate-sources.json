@@ -1,449 +1,362 @@
 {
   "lastUpdated": "2026-03-23",
   "updatedCopy": {
-    "en": "Essentials budget updated Mar 23, 2026",
-    "ja": "準備予算は2026年3月23日更新"
+    "en": "Hotel and route pricing updated Mar 23, 2026",
+    "ja": "宿泊と移動の料金は2026年3月23日更新"
   },
   "metaCopy": {
-    "en": "Counts only Essentials-linked prep costs for this Osaka -> Kyoto -> Hakone -> Kawaguchiko -> Tokyo route. Hotels, full meals, sightseeing totals, shopping splurges, and large generic trip buffers are intentionally excluded.",
-    "ja": "大阪→京都→箱根→河口湖→東京のルートで、Essentialsに直結する準備費用だけを数えます。宿泊費総額、食事代総額、観光費総額、買い物の大きな余白、大きな汎用バッファは意図的に除外しています。"
+    "en": "Accommodation now uses current JPY quote bands from Expedia Japan instead of the older blanket USD-conversion approach. Only items that were materially high were reduced; transit and ticket lines that still matched current operator pages were left in place.",
+    "ja": "宿泊費は、古い一律のドル換算ではなく、Expedia Japanの現在の円建て見積り帯を使うように修正しました。明らかに高かった項目だけを下げ、運営会社の現行ページと合っていた移動費や入場料は据え置いています。"
   },
   "helperCopy": {
-    "en": "Lean defaults keep usually-owned gear at zero. Only route-specific setup, key bookings, and a few true add-on purchases are priced.",
-    "ja": "控えめな初期設定では、普段から持っている物は0円のままにします。ルート特有の準備、主要な予約、本当に追加で買う物だけを費用化します。"
+    "en": "Room logic is now explicit: Osaka and Tokyo use 2-person city rooms, Hakone uses a 3-person low-bed ryokan room, and Kawaguchiko uses a 4-person tatami room. Optional Days 8-9 stay separate until unlocked.",
+    "ja": "部屋割りを明示しました。大阪と東京は2人部屋、箱根は3人までの低床和洋室、河口湖は4人までの畳部屋で計算します。8日目と9日目は解放するまで別枠です。"
   },
-  "sections": {
-    "documents-phone": {
-      "items": [
-        {
-          "id": "esim-setup",
-          "bucket": "likely",
-          "label": {
-            "en": "eSIM / data setup",
-            "ja": "eSIM・通信準備"
-          },
-          "body": {
-            "en": "Lean baseline for a practical short-trip data plan if home roaming is not already covering the route.",
-            "ja": "自宅回線のローミングを使わない前提で、短期旅行向けの現実的な通信プランを基準にします。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 3900
-          }
+  "assumptionCopy": {
+    "en": "This is a checklist-linked estimate for actually completing the route, but the hotel side now stays closer to real midrange pricing. Osaka and Tokyo use lean city-hotel planning midpoints, Hakone keeps one current ryokan quote, and Kawaguchiko uses the current tatami-room quote that can absorb larger groups without forcing every night into a 2-travelers-per-room split.",
+    "ja": "この見積りはチェックリスト連動の旅程予算ですが、宿泊側は実際の中価格帯により近い数字へ修正しました。大阪と東京は控えめな都市ホテルの計画中央値、箱根は現在の旅館見積り、河口湖は大人数でも吸収しやすい現在の畳部屋見積りを使い、すべての夜を一律2人1室で割ることはしません。"
+  },
+  "costIndex": {
+    "osaka-base-hotel": {
+      "amount": 9300,
+      "roomCapacity": 2,
+      "pricingTier": {
+        "en": "Lean midrange city hotel",
+        "ja": "控えめな中価格帯の都市ホテル"
+      },
+      "assumption": {
+        "en": "Uses a planning midpoint between current Tokyu Stay Osaka Honmachi quote snapshots around JPY 8,803 total and JPY 9,810 total for 2 adults.",
+        "ja": "東急ステイ大阪本町の現在の見積り（2名1室で合計約8,803円から9,810円）を基に、中間の計画値を使っています。"
+      },
+      "source": {
+        "label": {
+          "en": "Tokyu Stay Osaka Honmachi",
+          "ja": "東急ステイ大阪本町"
         },
-        {
-          "id": "plug-adapter-refresh",
-          "bucket": "optional",
-          "label": {
-            "en": "Plug adapter refresh",
-            "ja": "変換プラグの買い足し"
-          },
-          "body": {
-            "en": "Only count this if your current adapter setup is missing or unreliable.",
-            "ja": "今の変換プラグが足りない、または不安な時だけ加算します。"
-          },
-          "cost": {
-            "type": "perPair",
-            "amount": 1800
-          }
-        },
-        {
-          "id": "power-bank-refresh",
-          "bucket": "optional",
-          "label": {
-            "en": "Power bank refresh",
-            "ja": "モバイルバッテリーの更新"
-          },
-          "body": {
-            "en": "Only add this if your existing battery is weak for long transit days.",
-            "ja": "長い移動日に今のバッテリーが心配な場合だけ追加します。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 3200
-          }
-        },
-        {
-          "id": "passport-backups",
-          "bucket": "owned",
-          "label": {
-            "en": "Passport / booking backups",
-            "ja": "パスポートと予約の控え"
-          },
-          "body": {
-            "en": "Assumed to be digital copies or simple prints, so no separate budget is added by default.",
-            "ja": "デジタル保存や簡単な印刷で足りる前提のため、初期状態では別費用を足しません。"
-          }
-        }
-      ]
+        "url": "https://www.expedia.co.jp/Osaka-Hotels-Tokyu-Stay-Osaka-Honmachi.h39286570.Hotel-Information"
+      }
     },
-    "bookings-transit": {
-      "items": [
-        {
-          "id": "shin-osaka-odawara-shinkansen",
-          "bucket": "required",
-          "label": {
-            "en": "Shin-Osaka -> Odawara shinkansen",
-            "ja": "新大阪→小田原の新幹線"
-          },
-          "body": {
-            "en": "Fixed prep-side reservation that anchors the Hakone transfer day.",
-            "ja": "箱根移動日の軸になる固定の事前予約です。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 12650
-          }
+    "hakone-ryokan-standard": {
+      "amount": 40200,
+      "roomCapacity": 3,
+      "pricingTier": {
+        "en": "Current midrange ryokan room",
+        "ja": "現在の中価格帯旅館"
+      },
+      "assumption": {
+        "en": "Keeps a single Hakone ryokan night near the current Hakone Pax Yoshino quote band of roughly JPY 39,206 to JPY 41,306 total, using the river-view low-bed room that sleeps 3 as the room-capacity rule.",
+        "ja": "箱根パックス吉野の現在の見積り帯（合計約39,206円から41,306円）を基に、3名まで泊まれる川側の低床客室を部屋定員の前提にしています。"
+      },
+      "source": {
+        "label": {
+          "en": "Hakone Pax Yoshino",
+          "ja": "箱根パックス吉野"
         },
-        {
-          "id": "hakone-freepass",
-          "bucket": "likely",
-          "label": {
-            "en": "Hakone local pass / loop budget",
-            "ja": "箱根ローカル移動・周遊予算"
-          },
-          "body": {
-            "en": "Uses the prep-side pass decision or equivalent local transit allowance for Day 4.",
-            "ja": "4日目に向けたパス判断、または同等の現地移動分を見込みます。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 3000
-          }
-        },
-        {
-          "id": "hakone-kawaguchiko-transfer",
-          "bucket": "likely",
-          "label": {
-            "en": "Hakone -> Kawaguchiko transfer",
-            "ja": "箱根→河口湖の移動"
-          },
-          "body": {
-            "en": "Prep-side estimate for the Gotemba chain kept in Bookings + Transit.",
-            "ja": "Bookings + Transitに置いている御殿場経由ルートの事前見込みです。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 5750
-          }
-        },
-        {
-          "id": "kawaguchiko-tokyo-return",
-          "bucket": "likely",
-          "label": {
-            "en": "Kawaguchiko -> Tokyo return",
-            "ja": "河口湖→東京の戻り"
-          },
-          "body": {
-            "en": "Lean return allowance for the final Tokyo transfer kept in Essentials.",
-            "ja": "Essentialsに残している東京方面への最終移動分を控えめに見込みます。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 2200
-          }
-        },
-        {
-          "id": "shibuya-sky-prebook",
-          "bucket": "optional",
-          "label": {
-            "en": "Shibuya Sky timed booking",
-            "ja": "渋谷スカイの時間指定予約"
-          },
-          "body": {
-            "en": "Included only if you want timed-entry attraction bookings inside this prep budget.",
-            "ja": "この準備予算に時間指定の観光予約も入れたい場合だけ加算します。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 2500
-          }
-        },
-        {
-          "id": "kaiyukan-prebook",
-          "bucket": "optional",
-          "label": {
-            "en": "Kaiyukan timed booking",
-            "ja": "海遊館の時間指定予約"
-          },
-          "body": {
-            "en": "Optional prebook layer only, not a default sightseeing total.",
-            "ja": "任意の事前予約レイヤーとしてのみ扱い、標準の観光総額にはしません。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 2700
-          }
-        },
-        {
-          "id": "ic-card-setup",
-          "bucket": "owned",
-          "label": {
-            "en": "IC card setup",
-            "ja": "ICカードの準備"
-          },
-          "body": {
-            "en": "Setup is treated as a ready-state task here, not a default trip-wide transit float.",
-            "ja": "ここでは準備タスクとして扱い、旅全体の交通チャージ予算にはしません。"
-          }
-        }
-      ]
+        "url": "https://www.expedia.co.jp/Hakone-Hotels-Hakone-Pax-Yoshino.h8738351.Hotel-Information?=Tab1"
+      }
     },
-    "offline-install": {
-      "items": [
-        {
-          "id": "offline-download",
-          "bucket": "owned",
-          "label": {
-            "en": "Offline snapshot + install setup",
-            "ja": "オフライン保存版と追加設定"
-          },
-          "body": {
-            "en": "The built-in offline package and install flow stay free by default.",
-            "ja": "標準のオフライン保存版と追加フローは初期状態で無料のままです。"
-          }
-        }
-      ]
+    "kawaguchiko-base-hotel": {
+      "amount": 22450,
+      "roomCapacity": 4,
+      "pricingTier": {
+        "en": "Tatami room near the lake",
+        "ja": "湖近くの畳部屋"
+      },
+      "assumption": {
+        "en": "Uses the current Kawaguchiko Park Hotel tatami-room quote at JPY 22,450 total and applies the listed 4-guest room capacity, which removes a major source of group overestimation.",
+        "ja": "河口湖パークホテルの現在の畳部屋見積り（合計22,450円）を使い、掲載されている4名定員を適用します。これでグループ旅行時の過大計上を大きく抑えます。"
+      },
+      "source": {
+        "label": {
+          "en": "Kawaguchiko Park Hotel",
+          "ja": "河口湖パークホテル"
+        },
+        "url": "https://www.expedia.co.jp/en/Fujikawaguchiko-Hotels-Kawaguchiko-Park-Hotel.h22353607.Hotel-Information"
+      }
     },
-    "luggage-strategy": {
-      "items": [
-        {
-          "id": "luggage-forwarding",
-          "bucket": "optional",
-          "label": {
-            "en": "Luggage forwarding",
-            "ja": "荷物配送"
-          },
-          "body": {
-            "en": "Count one forwarded main bag for every two travelers if you want the Hakone/Fuji segment lighter.",
-            "ja": "箱根・富士区間を軽くしたい場合に、2人でメイン荷物1つを配送する前提で加算します。"
-          },
-          "cost": {
-            "type": "perPair",
-            "amount": 2500
-          }
+    "tokyo-base-hotel": {
+      "amount": 22800,
+      "roomCapacity": 2,
+      "pricingTier": {
+        "en": "Lean Shibuya city hotel",
+        "ja": "控えめな渋谷の都市ホテル"
+      },
+      "assumption": {
+        "en": "Uses a planning midpoint between current Shibuya Granbell Hotel quote snapshots around JPY 19,442 total and JPY 23,450 before tax for 2 adults, instead of the previous higher fixed nightly default.",
+        "ja": "渋谷グランベルホテルの現在の見積り（2名で合計19,442円前後から税別23,450円前後）を基に、以前の高めの固定値ではなく中間の計画値を使っています。"
+      },
+      "source": {
+        "label": {
+          "en": "Shibuya Granbell Hotel",
+          "ja": "渋谷グランベルホテル"
         },
-        {
-          "id": "ticket-pouch",
-          "bucket": "optional",
-          "label": {
-            "en": "Small ticket / coin pouch",
-            "ja": "小さなチケット・小銭ポーチ"
-          },
-          "body": {
-            "en": "Only add this if you actually need a small organizer for transfer days.",
-            "ja": "移動日に使う小さな整理ポーチが必要な場合だけ追加します。"
-          },
-          "cost": {
-            "type": "sharedOnce",
-            "amount": 700
-          }
-        },
-        {
-          "id": "oversized-baggage-check",
-          "bucket": "owned",
-          "label": {
-            "en": "Oversized baggage check",
-            "ja": "特大荷物の確認"
-          },
-          "body": {
-            "en": "No default cost unless your suitcase actually crosses the oversized threshold.",
-            "ja": "スーツケースが本当に特大基準を超える場合を除き、初期状態では費用を足しません。"
-          }
-        },
-        {
-          "id": "light-transfer-bag",
-          "bucket": "owned",
-          "label": {
-            "en": "Light transfer bag split",
-            "ja": "移動用の軽い荷物分け"
-          },
-          "body": {
-            "en": "Assumed to use bags you already have rather than adding a new bag purchase.",
-            "ja": "新しいバッグ購入ではなく、手持ちのバッグを使う前提にしています。"
-          }
-        }
-      ]
+        "url": "https://www.expedia.co.jp/Tokyo-Hotels-Shibuya-Granbell-Hotel.h8150500.Hotel-Information"
+      }
     },
-    "daily-carry": {
-      "items": [
-        {
-          "id": "medication-refill",
-          "bucket": "optional",
-          "label": {
-            "en": "Medication / comfort refill",
-            "ja": "薬・快適用品の補充"
-          },
-          "body": {
-            "en": "Small refill only if you need to top up travel medicine, lip balm, or lotion before departure.",
-            "ja": "出発前に薬、リップ、保湿用品を補充する必要がある場合だけ加算します。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 1200
-          }
+    "tokyo-subway-24h": {
+      "amount": 800,
+      "pricingTier": {
+        "en": "Official 24-hour ticket",
+        "ja": "公式の24時間券"
+      },
+      "assumption": {
+        "en": "Optional Day 8 now uses the current Tokyo Subway 24-hour Ticket adult fare of JPY 800.",
+        "ja": "追加8日目の東京サブウェイ24時間券は、現在の大人料金800円に修正しています。"
+      },
+      "source": {
+        "label": {
+          "en": "Tokyo Subway Ticket",
+          "ja": "東京サブウェイチケット"
         },
-        {
-          "id": "passport-wallet-phone",
-          "bucket": "owned",
-          "label": {
-            "en": "Passport, wallet, phone, and IC card",
-            "ja": "パスポート、財布、スマホ、ICカード"
-          },
-          "body": {
-            "en": "These are treated as already-owned carry essentials, not new spend.",
-            "ja": "これらはすでに持っている毎日持ち歩く物として扱い、新しい出費にしません。"
-          }
-        },
-        {
-          "id": "umbrella-water-towel",
-          "bucket": "owned",
-          "label": {
-            "en": "Umbrella, bottle, towel, and tissues",
-            "ja": "傘、水筒、タオル、ティッシュ"
-          },
-          "body": {
-            "en": "Default assumption is that you already have the everyday carry basics.",
-            "ja": "日常の持ち物は、基本的にすでに持っている前提です。"
-          }
-        }
-      ]
-    },
-    "hakone-fuji-day-kit": {
-      "items": [
-        {
-          "id": "onsen-pouch",
-          "bucket": "optional",
-          "label": {
-            "en": "Onsen pouch / small towel",
-            "ja": "温泉ポーチ・小タオル"
-          },
-          "body": {
-            "en": "Only add this if you need a dedicated small kit for the ryokan / onsen stretch.",
-            "ja": "旅館・温泉区間のために専用の小キットが必要な場合だけ追加します。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 900
-          }
-        },
-        {
-          "id": "weather-layer-top-up",
-          "bucket": "optional",
-          "label": {
-            "en": "Weather-layer / backup socks top-up",
-            "ja": "天気対応レイヤー・替え靴下の補充"
-          },
-          "body": {
-            "en": "Small top-up for the Hakone/Fuji segment only if your current layers are not enough.",
-            "ja": "箱根・富士区間で今の重ね着が足りない場合だけ、小さな補充として加算します。"
-          },
-          "cost": {
-            "type": "perPerson",
-            "amount": 1800
-          }
-        },
-        {
-          "id": "weather-plan",
-          "bucket": "owned",
-          "label": {
-            "en": "Weather-flexible Fuji plan",
-            "ja": "天気で動かせる富士プラン"
-          },
-          "body": {
-            "en": "This is planning effort, not a separate paid extra by default.",
-            "ja": "これは計画の工夫であり、初期状態では別の有料項目にしません。"
-          }
-        },
-        {
-          "id": "shibuya-sky-info",
-          "bucket": "owned",
-          "label": {
-            "en": "Day 7 booking / bag-rule info",
-            "ja": "7日目の予約情報・荷物ルール"
-          },
-          "body": {
-            "en": "Information saving stays free unless you decide to count the optional timed ticket itself.",
-            "ja": "情報保存は無料のままで、任意の時間指定チケット本体を数えるかどうかだけ別に扱います。"
-          }
-        }
-      ]
+        "url": "https://www.tokyometro.jp/ticket/value/travel/index.html"
+      }
     }
   },
   "sourceGroups": [
     {
-      "id": "counted-by-default",
-      "label": {
-        "en": "Counted by default",
-        "ja": "初期状態で数えるもの"
+      "id": "accommodation",
+      "title": {
+        "en": "Accommodation quotes",
+        "ja": "宿泊見積り"
       },
-      "body": {
-        "en": "The lean baseline only counts Essentials-side prep: phone data, the Shin-Osaka -> Odawara shinkansen, Hakone / Fuji transfer prep, and a few small route-specific items that are realistically paid before or around the key transfer days.",
-        "ja": "控えめな基準では、スマホ通信、新大阪→小田原の新幹線、箱根・富士側の移動準備、本当に移動日に近い形で払うルート特有の小項目だけを数えます。"
-      }
-    },
-    {
-      "id": "optional-add-ons",
-      "label": {
-        "en": "Optional add-ons",
-        "ja": "任意の追加費用"
-      },
-      "body": {
-        "en": "The optional toggle adds luggage forwarding, backup gear purchases, and timed bookings that appear in Essentials. They stay out of the lean total until you explicitly include them.",
-        "ja": "任意トグルでは、荷物配送、予備の持ち物購入、Essentialsに出てくる時間指定予約を加算します。明示的に含めるまで、控えめ合計には入れません。"
-      }
-    },
-    {
-      "id": "excluded-on-purpose",
-      "label": {
-        "en": "Excluded on purpose",
-        "ja": "意図的に除外するもの"
-      },
-      "body": {
-        "en": "This view does not try to price the whole vacation. Full lodging totals, meal budgets, sightseeing totals, broad shopping money, and generic contingency padding stay out so the number remains a practical prep budget.",
-        "ja": "この表示は旅行全体を値付けしません。宿泊費総額、食事予算、観光費総額、広い買い物予算、汎用の予備費は除外し、数字を実用的な準備費用の範囲に保ちます。"
-      }
-    },
-    {
-      "id": "transit-prep-basis",
-      "label": {
-        "en": "Transit prep basis",
-        "ja": "移動準備の基準"
-      },
-      "body": {
-        "en": "The big Essentials-side numbers come from the prep items already called out in Bookings + Transit: the Smart EX shinkansen booking, Hakone pass / route references, the Hakone -> Kawaguchiko transfer, and the Tokyo return reference.",
-        "ja": "大きめの準備費用は、すでにBookings + Transitで示している項目を基準にしています。Smart EXの新幹線予約、箱根のパス・経路参照、箱根→河口湖の移動、東京への戻りです。"
+      "summary": {
+        "en": "Hotel totals now use current Expedia Japan JPY quote bands instead of a single older converted-night assumption. Osaka and Tokyo are rounded to lean planning midpoints; Hakone and Kawaguchiko stay close to their current quoted totals.",
+        "ja": "宿泊費は、古い単発の換算値ではなく、Expedia Japanの現在の円建て見積り帯を使うようにしました。大阪と東京は控えめな計画中央値へ丸め、箱根と河口湖は現在の見積り合計に近い値を使っています。"
       },
       "links": [
         {
           "label": {
-            "en": "Smart EX",
-            "ja": "Smart EX"
+            "en": "Tokyu Stay Osaka Honmachi",
+            "ja": "東急ステイ大阪本町"
           },
-          "url": "https://smart-ex.jp/en/index.php"
+          "url": "https://www.expedia.co.jp/Osaka-Hotels-Tokyu-Stay-Osaka-Honmachi.h39286570.Hotel-Information"
         },
         {
           "label": {
-            "en": "Hakone Freepass",
-            "ja": "箱根フリーパス"
+            "en": "Hakone Pax Yoshino",
+            "ja": "箱根パックス吉野"
+          },
+          "url": "https://www.expedia.co.jp/Hakone-Hotels-Hakone-Pax-Yoshino.h8738351.Hotel-Information?=Tab1"
+        },
+        {
+          "label": {
+            "en": "Kawaguchiko Park Hotel",
+            "ja": "河口湖パークホテル"
+          },
+          "url": "https://www.expedia.co.jp/en/Fujikawaguchiko-Hotels-Kawaguchiko-Park-Hotel.h22353607.Hotel-Information"
+        },
+        {
+          "label": {
+            "en": "Shibuya Granbell Hotel",
+            "ja": "渋谷グランベルホテル"
+          },
+          "url": "https://www.expedia.co.jp/Tokyo-Hotels-Shibuya-Granbell-Hotel.h8150500.Hotel-Information"
+        }
+      ]
+    },
+    {
+      "id": "room-logic",
+      "title": {
+        "en": "Room-capacity logic",
+        "ja": "部屋定員の前提"
+      },
+      "summary": {
+        "en": "The old blanket 2-travelers-per-room rule inflated larger groups. The revised model now uses the quoted room types: Osaka and Tokyo city rooms sleep 2, Hakone's low-bed river-view room sleeps 3, and Kawaguchiko's tatami room sleeps 4.",
+        "ja": "従来の一律2人1室ルールは、人数が増えると過大計上になっていました。新しいモデルでは、見積りに使った客室の定員を使います。大阪と東京の都市ホテルは2名、箱根の川側低床客室は3名、河口湖の畳部屋は4名です。"
+      },
+      "links": [
+        {
+          "label": {
+            "en": "Tokyu Stay room options",
+            "ja": "東急ステイの客室情報"
+          },
+          "url": "https://www.expedia.co.jp/Osaka-Hotels-Tokyu-Stay-Osaka-Honmachi.h39286570.Hotel-Information"
+        },
+        {
+          "label": {
+            "en": "Hakone Pax Yoshino room options",
+            "ja": "箱根パックス吉野の客室情報"
+          },
+          "url": "https://www.expedia.co.jp/Hakone-Hotels-Hakone-Pax-Yoshino.h8738351.Hotel-Information?=Tab1"
+        },
+        {
+          "label": {
+            "en": "Kawaguchiko Park Hotel room options",
+            "ja": "河口湖パークホテルの客室情報"
+          },
+          "url": "https://www.expedia.co.jp/en/Fujikawaguchiko-Hotels-Kawaguchiko-Park-Hotel.h22353607.Hotel-Information"
+        }
+      ]
+    },
+    {
+      "id": "core-transit",
+      "title": {
+        "en": "Core rail + city transit",
+        "ja": "主要な鉄道と都市交通"
+      },
+      "summary": {
+        "en": "Intercity rail and city-ticket lines were rechecked against current operator pages. Most still matched the live operator fares, but the Optional Day 8 Tokyo Subway 24-hour ticket was corrected down to JPY 800.",
+        "ja": "都市間鉄道と都市交通は現行の運営会社ページで再確認しました。多くはそのままで問題ありませんでしたが、追加8日目の東京サブウェイ24時間券だけは800円へ修正しました。"
+      },
+      "links": [
+        {
+          "label": {
+            "en": "Shin-Osaka -> Odawara price",
+            "ja": "新大阪 -> 小田原の料金"
+          },
+          "url": "https://www.navitime.co.jp/en/transfer/searchlist?defaultCondition=0&dnvStationCode=00003742&dnvStationName=%E5%B0%8F%E7%94%B0%E5%8E%9F&orvStationCode=00004305&orvStationName=%E6%96%B0%E5%A4%A7%E9%98%AA"
+        },
+        {
+          "label": {
+            "en": "Shin-Osaka -> Kyoto fare",
+            "ja": "新大阪 -> 京都の運賃"
+          },
+          "url": "https://www.navitime.co.jp/en/transfer/searchlist?defaultCondition=0&dnvStationCode=00001756&dnvStationName=Kyoto&orvStationCode=00004305&orvStationName=%E6%96%B0%E5%A4%A7%E9%98%AA"
+        },
+        {
+          "label": {
+            "en": "Osaka Metro fares",
+            "ja": "大阪メトロ運賃"
+          },
+          "url": "https://subway-tr.osakametro.co.jp/en/guide/fare/index.php"
+        },
+        {
+          "label": {
+            "en": "Kyoto Subway + Bus 1-day ticket",
+            "ja": "京都 地下鉄・バス1日券"
+          },
+          "url": "https://www2.city.kyoto.lg.jp/kotsu/webguide/ja/ticket/regular_1day_card_comm.html"
+        },
+        {
+          "label": {
+            "en": "Tokyo Subway Ticket",
+            "ja": "東京サブウェイチケット"
+          },
+          "url": "https://www.tokyometro.jp/ticket/value/travel/index.html"
+        }
+      ]
+    },
+    {
+      "id": "hakone-fuji-transit",
+      "title": {
+        "en": "Hakone + Fuji transfer chain",
+        "ja": "箱根と富士の移動連鎖"
+      },
+      "summary": {
+        "en": "Day 4 still uses the Odawara-side Hakone Freepass. Day 5 still uses the current Gotemba -> Kawaguchiko fare, and Day 6 keeps a lean Fujikyu-area movement estimate rather than a bloated catch-all buffer.",
+        "ja": "4日目は小田原側の箱根フリーパス、5日目は現行の御殿場 -> 河口湖運賃、6日目は富士急エリアの控えめな移動見積りを使い、大きすぎる雑費バッファは足していません。"
+      },
+      "links": [
+        {
+          "label": {
+            "en": "Hakone Freepass guide",
+            "ja": "箱根フリーパス案内"
           },
           "url": "https://www.odakyu.jp/english/passes/hakone/"
         },
         {
           "label": {
-            "en": "Hakone transport guide",
-            "ja": "箱根の移動ガイド"
+            "en": "Gotemba -> Kawaguchiko fares",
+            "ja": "御殿場 -> 河口湖運賃"
           },
-          "url": "https://www.hakonenavi.jp/international/en/transportation"
+          "url": "https://www.japan-guide.com/e/e6905.html?aFROM=5200_6900"
         },
         {
           "label": {
-            "en": "Fuji Excursion / Tokyo return",
-            "ja": "富士回遊・東京戻り"
+            "en": "Fuji Excursion",
+            "ja": "富士回遊"
           },
-          "url": "https://www.eki-net.com/en/jreast-train-reservation/Top/Index"
+          "url": "https://e.fujikyu-railway.jp/fujikaiyuu/"
         }
       ]
+    },
+    {
+      "id": "tickets",
+      "title": {
+        "en": "Tickets + timed admissions",
+        "ja": "入場券と時間指定チケット"
+      },
+      "summary": {
+        "en": "Paid attractions were checked against the same official or tourism-board references already used by the route. Those ticket values were still in line, so they were kept.",
+        "ja": "有料スポットは、ルート側ですでに使っていた公式または観光案内の現行ページを再確認しました。金額はまだ妥当だったため、そのまま維持しています。"
+      },
+      "links": [
+        {
+          "label": {
+            "en": "Kaiyukan fees",
+            "ja": "海遊館の料金"
+          },
+          "url": "https://pop3.kaiyukan.com/info/admission/"
+        },
+        {
+          "label": {
+            "en": "Kiyomizu-dera guide",
+            "ja": "清水寺ガイド"
+          },
+          "url": "https://www.japan-guide.com/e/e3901.html"
+        },
+        {
+          "label": {
+            "en": "Shibuya Sky guide",
+            "ja": "渋谷スカイ案内"
+          },
+          "url": "https://www.gotokyo.org/en/spot/1732/index.html"
+        },
+        {
+          "label": {
+            "en": "Tokyo Skytree tickets",
+            "ja": "東京スカイツリー料金"
+          },
+          "url": "https://www.tokyo-skytree.jp/en/ticket/individual/"
+        }
+      ]
+    },
+    {
+      "id": "meals",
+      "title": {
+        "en": "Meal assumptions",
+        "ja": "食費の前提"
+      },
+      "summary": {
+        "en": "Meal lines still use current Osaka, Kyoto, and Tokyo benchmark pages, but they stay moderate and checklist-linked rather than acting as a loose full-day padding bucket.",
+        "ja": "食費は大阪、京都、東京の現行相場ページを使いつつ、ゆるい日額バッファではなく、チェックリストの流れに沿った控えめな想定にしています。"
+      },
+      "links": [
+        {
+          "label": {
+            "en": "Osaka benchmarks",
+            "ja": "大阪の相場"
+          },
+          "url": "https://www.numbeo.com/cost-of-living/in/Osaka"
+        },
+        {
+          "label": {
+            "en": "Kyoto benchmarks",
+            "ja": "京都の相場"
+          },
+          "url": "https://www.numbeo.com/cost-of-living/in/Kyoto"
+        },
+        {
+          "label": {
+            "en": "Tokyo benchmarks",
+            "ja": "東京の相場"
+          },
+          "url": "https://www.numbeo.com/cost-of-living/in/Tokyo"
+        }
+      ]
+    },
+    {
+      "id": "assumptions",
+      "title": {
+        "en": "Route assumptions",
+        "ja": "ルート前提"
+      },
+      "summary": {
+        "en": "The base itinerary still assumes 3 Osaka nights, 1 Hakone ryokan night, 2 Kawaguchiko nights, and 1 Tokyo night on Day 7. Optional Days 8-9 add only 1 extra Tokyo hotel night, not 2.",
+        "ja": "基本旅程は大阪3泊、箱根の旅館1泊、河口湖2泊、7日目の東京1泊を前提にしています。追加の8日目と9日目を入れても、東京の追加宿泊は2泊ではなく1泊だけです。"
+      },
+      "links": []
     }
-  ]
+  ],
+  "sections": {}
 }

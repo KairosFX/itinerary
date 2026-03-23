@@ -100,7 +100,7 @@ const bookingTransitItemsDataUrl = "./assets/data/booking-transit-items.json";
 const transitDetailsDataUrl = "./assets/data/transit-details.json";
 const offlineSnapshotUrl = "./japan-escape-itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-03-23-offline-v6";
+const offlineBundleVersion = "2026-03-23-offline-v7";
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const inlineDataSelectors = {
   bookingTransit: "[data-booking-transit-inline]",
@@ -114,9 +114,9 @@ const budgetSharedRoomOccupancy = 2;
 const budgetSourceUpdatedAt = "2026-03-23";
 const budgetAssumptionCopy = {
   en:
-    "This is a route-first estimate for actually completing the checklist: stays, rail, local movement, tickets, and moderate day spend. USD hotel quotes are converted with the Feb 23, 2026 ECB / Banca d'Italia planning rate of about \u00a5154.82 per US dollar.",
+    "This is a checklist-linked estimate for actually completing the route, but the hotel side now stays closer to real midrange pricing. Osaka and Tokyo use lean city-hotel planning midpoints, Hakone keeps one current ryokan quote, and Kawaguchiko uses the current tatami-room quote that can absorb larger groups without forcing every night into a 2-travelers-per-room split.",
   ja:
-    "これはチェックリストを実際に完了するためのルート基準見積りです。宿、鉄道、現地移動、入場料、そして中間的な日別支出を含みます。米ドル建ての宿泊料金は、2026年2月23日のECB / イタリア銀行の計画用レート（およそ1米ドル=\u00a5154.82円）で円換算しています。"
+    "これはチェックリスト連動の旅程予算ですが、宿泊側は実際の中価格帯により近い数字へ修正しました。大阪と東京は控えめな都市ホテルの計画中央値、箱根は現在の旅館見積り、河口湖は大人数でも吸収しやすい現在の畳部屋見積りを使い、すべての夜を一律2人1室で割ることはしません。"
 };
 const budgetCategoryDefinitions = [
   { id: "accommodation", label: { en: "Hotels / ryokan", ja: "宿泊" } },
@@ -236,7 +236,7 @@ const budgetSourceGroups = [
 ];
 const budgetDayDefinitions = [
   { day: 1, optional: false, title: { en: "Day 1 - Osaka", ja: "1日目・大阪" }, subtitle: { en: "Arrival, Minami, and first-night walk", ja: "到着後のミナミと初夜の街歩き" }, items: [
-    { label: { en: "Osaka base hotel night", ja: "大阪の拠点ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 12100 } },
+    { label: { en: "Osaka base hotel night", ja: "大阪の拠点ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 9300, sourceCostId: "osaka-base-hotel" } },
     { label: { en: "Osaka city hop into Minami", ja: "ミナミへ入る大阪市内移動" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 300 } },
     { label: { en: "Dotonbori", ja: "道頓堀" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
     { label: { en: "Shinsaibashi", ja: "心斎橋" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
@@ -244,7 +244,7 @@ const budgetDayDefinitions = [
     { label: { en: "Nightlife", ja: "夜の街歩き" }, category: "optionalExtras", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } }
   ] },
   { day: 2, optional: false, title: { en: "Day 2 - Kyoto East", ja: "2日目・京都東側" }, subtitle: { en: "Kyoto East day trip with the temple cluster", ja: "東山中心の京都日帰り" }, items: [
-    { label: { en: "Osaka base hotel night", ja: "大阪の拠点ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 12100 } },
+    { label: { en: "Osaka base hotel night", ja: "大阪の拠点ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 9300, sourceCostId: "osaka-base-hotel" } },
     { label: { en: "Osaka -> Kyoto -> Osaka rail", ja: "大阪 -> 京都 -> 大阪の鉄道移動" }, category: "intercityTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 1160 } },
     { label: { en: "Kyoto Subway + Bus 1-day ticket", ja: "京都 地下鉄・バス1日券" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 1100 } },
     { label: { en: "Kiyomizu-dera", ja: "清水寺" }, category: "ticketsAdmissions", bucket: "required", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 500 } },
@@ -255,7 +255,7 @@ const budgetDayDefinitions = [
     { label: { en: "Kyoto sightseeing meals + snacks", ja: "京都観光日の食事と軽食" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 3200 } }
   ] },
   { day: 3, optional: false, title: { en: "Day 3 - Kyoto -> Osaka", ja: "3日目・京都から大阪" }, subtitle: { en: "Arashiyama in the morning, Osaka waterfront after", ja: "朝は嵐山、そのあと大阪ベイエリア" }, items: [
-    { label: { en: "Osaka base hotel night", ja: "大阪の拠点ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 12100 } },
+    { label: { en: "Osaka base hotel night", ja: "大阪の拠点ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 9300, sourceCostId: "osaka-base-hotel" } },
     { label: { en: "Arashiyama early rail", ja: "嵐山へ朝移動" }, category: "intercityTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 820 } },
     { label: { en: "Return to Osaka", ja: "大阪へ戻る" }, category: "intercityTransit", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
     { label: { en: "Kaiyukan", ja: "海遊館" }, category: "ticketsAdmissions", bucket: "booked", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 2300 } },
@@ -271,7 +271,7 @@ const budgetDayDefinitions = [
     { label: { en: "Togendai", ja: "桃源台" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
     { label: { en: "Lake Ashi cruise", ja: "芦ノ湖クルーズ" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
     { label: { en: "Hakone Shrine / Moto-Hakone", ja: "箱根神社 / 元箱根" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
-    { label: { en: "Ryokan", ja: "旅館" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 38700 } },
+    { label: { en: "Ryokan", ja: "旅館" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 40200, sourceCostId: "hakone-ryokan-standard" } },
     { label: { en: "Hakone transfer-day meals", ja: "箱根移動日の食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 3000 } },
     { label: { en: "Luggage handling buffer", ja: "荷物対応バッファ" }, category: "baggage", bucket: "optional", sourceGroup: "assumptions", cost: { mode: "perPair", amount: 1500 } }
   ] },
@@ -280,11 +280,11 @@ const budgetDayDefinitions = [
     { label: { en: "Bus via Gotemba", ja: "御殿場経由のバス" }, category: "intercityTransit", bucket: "required", sourceGroup: "hakone-fuji-transit", cost: { mode: "perPerson", amount: 1750 } },
     { label: { en: "Lake arrival views", ja: "到着後の湖畔の景色" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
     { label: { en: "Quiet sunset", ja: "静かな夕景" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-    { label: { en: "Kawaguchiko hotel night", ja: "河口湖ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 24900 } },
+    { label: { en: "Kawaguchiko hotel night", ja: "河口湖ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 22450, sourceCostId: "kawaguchiko-base-hotel" } },
     { label: { en: "Arrival dinner in Kawaguchiko", ja: "河口湖到着後の夕食" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 2600 } }
   ] },
   { day: 6, optional: false, title: { en: "Day 6 - Fuji Area", ja: "6日目・富士エリア" }, subtitle: { en: "Weather-flex Fuji day", ja: "天気優先の富士日" }, items: [
-    { label: { en: "Kawaguchiko hotel night", ja: "河口湖ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 24900 } },
+    { label: { en: "Kawaguchiko hotel night", ja: "河口湖ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 22450, sourceCostId: "kawaguchiko-base-hotel" } },
     { label: { en: "Fuji check at dawn", ja: "夜明けの富士チェック" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
     { label: { en: "Fuji-area local movement", ja: "富士エリア内の現地移動" }, category: "localTransit", bucket: "required", sourceGroup: "hakone-fuji-transit", cost: { mode: "perPerson", amount: 1800 } },
     { label: { en: "Chureito if clear", ja: "見えるなら忠霊塔" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
@@ -299,11 +299,11 @@ const budgetDayDefinitions = [
     { label: { en: "Shibuya Crossing", ja: "渋谷スクランブル交差点" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
     { label: { en: "Shibuya food walk", ja: "渋谷で食べ歩き" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 3300 } },
     { label: { en: "Shibuya Sky", ja: "渋谷スカイ" }, category: "ticketsAdmissions", bucket: "booked", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 2200 } },
-    { label: { en: "Tokyo hotel night", ja: "東京ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 25200 } }
+    { label: { en: "Tokyo hotel night", ja: "東京ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 22800, sourceCostId: "tokyo-base-hotel" } }
   ] },
   { day: 8, optional: true, title: { en: "Optional Day 8 - Tokyo", ja: "追加8日目・東京" }, subtitle: { en: "Tokyo East day with Skytree", ja: "スカイツリー中心の東京東側" }, items: [
-    { label: { en: "Extra Tokyo hotel night", ja: "東京の追加ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 25200 } },
-    { label: { en: "Tokyo subway day pass", ja: "東京サブウェイ1日券" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 1000 } },
+    { label: { en: "Extra Tokyo hotel night", ja: "東京の追加ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 22800, sourceCostId: "tokyo-base-hotel" } },
+    { label: { en: "Tokyo subway day pass", ja: "東京サブウェイ1日券" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 800, sourceCostId: "tokyo-subway-24h" } },
     { label: { en: "Tokyo Skytree", ja: "東京スカイツリー" }, category: "ticketsAdmissions", bucket: "booked", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 2100 } },
     { label: { en: "Tokyo Solamachi", ja: "東京ソラマチ" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
     { label: { en: "Akihabara", ja: "秋葉原" }, category: "optionalExtras", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
@@ -5693,6 +5693,54 @@ function initializeBudgetNotes() {
 
     return clamp(parsed, budgetTravelerCountMin, budgetTravelerCountMax);
   };
+  const getBudgetSourceData = () => {
+    const sourceData = getBudgetEstimateSources();
+    return sourceData && typeof sourceData === "object" && !Array.isArray(sourceData) ? sourceData : {};
+  };
+  const getSourceCostConfig = (sourceCostId) => {
+    if (!sourceCostId) {
+      return null;
+    }
+
+    const costIndex = getBudgetSourceData().costIndex;
+    const sourceCost =
+      costIndex && typeof costIndex === "object" && !Array.isArray(costIndex)
+        ? costIndex[sourceCostId]
+        : null;
+    return sourceCost && typeof sourceCost === "object" && !Array.isArray(sourceCost)
+      ? sourceCost
+      : null;
+  };
+  const getSourceGroups = () => {
+    const sourceGroups = getBudgetSourceData().sourceGroups;
+    return Array.isArray(sourceGroups) && sourceGroups.length ? sourceGroups : budgetSourceGroups;
+  };
+  const getAssumptionCopy = () => {
+    const assumptionCopy = getBudgetSourceData().assumptionCopy;
+    return assumptionCopy && typeof assumptionCopy === "object" ? assumptionCopy : budgetAssumptionCopy;
+  };
+  const getSourceMetaCopy = () => {
+    const metaCopy = getBudgetSourceData().metaCopy;
+    return metaCopy && typeof metaCopy === "object" ? metaCopy : null;
+  };
+  const getSourceHelperCopy = () => {
+    const helperCopy = getBudgetSourceData().helperCopy;
+    return helperCopy && typeof helperCopy === "object" ? helperCopy : null;
+  };
+  const getSourceUpdatedCopy = () => {
+    const updatedCopy = getBudgetSourceData().updatedCopy;
+    return updatedCopy && typeof updatedCopy === "object"
+      ? updatedCopy
+      : {
+          en: `${itineraryBudgetLabels.sourceUpdatedPrefix.en}: ${budgetSourceUpdatedAt}`,
+          ja: `${itineraryBudgetLabels.sourceUpdatedPrefix.ja}: ${budgetSourceUpdatedAt}`
+        };
+  };
+  const getUnitCount = (travelers, unitSize = budgetSharedRoomOccupancy) => {
+    const normalizedTravelers = normalizeTravelerCount(travelers, budgetDefaultTravelerCount);
+    const normalizedUnitSize = Math.max(1, Number(unitSize) || budgetSharedRoomOccupancy);
+    return Math.max(1, Math.ceil(normalizedTravelers / normalizedUnitSize));
+  };
   const getRoomCount = (travelers = budgetDefaultTravelerCount) =>
     Math.max(1, Math.ceil(normalizeTravelerCount(travelers) / budgetSharedRoomOccupancy));
   const getDefaultState = () => ({
@@ -5806,9 +5854,15 @@ function initializeBudgetNotes() {
   const optionalDays = () => budgetDayDefinitions.filter((definition) => definition.optional);
   const calculateItemCost = (item, travelers, withExtras) => {
     const cost = item.cost || { mode: "none", amount: 0 };
-    const amount = Math.max(Number(cost.amount || 0) || 0, 0);
+    const sourceCost = getSourceCostConfig(cost.sourceCostId);
+    const amount = Math.max(Number(sourceCost?.amount ?? cost.amount ?? 0) || 0, 0);
     const travelerCount = normalizeTravelerCount(travelers, budgetDefaultTravelerCount);
-    const roomCount = getRoomCount(travelerCount);
+    const roomCapacity = Math.max(
+      1,
+      Number(sourceCost?.roomCapacity ?? cost.roomCapacity ?? budgetSharedRoomOccupancy) ||
+        budgetSharedRoomOccupancy
+    );
+    const pairSize = Math.max(1, Number(sourceCost?.groupSize ?? cost.groupSize ?? 2) || 2);
     let quantity = 0;
     let total = 0;
 
@@ -5816,11 +5870,11 @@ function initializeBudgetNotes() {
       quantity = travelerCount;
       total = amount * travelerCount;
     } else if (cost.mode === "perRoom") {
-      quantity = roomCount;
-      total = amount * roomCount;
+      quantity = getUnitCount(travelerCount, roomCapacity);
+      total = amount * quantity;
     } else if (cost.mode === "perPair") {
-      quantity = roomCount;
-      total = amount * roomCount;
+      quantity = getUnitCount(travelerCount, pairSize);
+      total = amount * quantity;
     } else if (cost.mode === "perGroup") {
       quantity = 1;
       total = amount;
@@ -5831,6 +5885,8 @@ function initializeBudgetNotes() {
       amount,
       quantity,
       total,
+      roomCapacity: cost.mode === "perRoom" ? roomCapacity : null,
+      pairSize: cost.mode === "perPair" ? pairSize : null,
       included: item.bucket !== "optional" || withExtras
     };
   };
@@ -5848,14 +5904,16 @@ function initializeBudgetNotes() {
       return {
         en: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity} room${
           itemCost.quantity === 1 ? "" : "s"
-        }`,
-        ja: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity}室`
+        }${itemCost.roomCapacity ? ` (up to ${itemCost.roomCapacity} guests)` : ""}`,
+        ja: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity}室${
+          itemCost.roomCapacity ? `（${itemCost.roomCapacity}人定員）` : ""
+        }`
       };
     }
 
     if (itemCost.mode === "perPair") {
       return {
-        en: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity} shared stop${
+        en: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity} shared item${
           itemCost.quantity === 1 ? "" : "s"
         }`,
         ja: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity}件`
@@ -5943,10 +6001,8 @@ function initializeBudgetNotes() {
         label: itineraryBudgetLabels.summaryPerPerson,
         value: formatCurrency(estimate.perPerson),
         meta: {
-          en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"} / ${getRoomCount(
-            estimate.travelers
-          )} room${getRoomCount(estimate.travelers) === 1 ? "" : "s"}`,
-          ja: `${estimate.travelers}人 / ${getRoomCount(estimate.travelers)}室想定`
+          en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"} • city stays use 2 per room, Hakone 3, Kawaguchiko 4`,
+          ja: `${estimate.travelers}人 ・ 都市部は2人1室、箱根は3人、河口湖は4人定員で計算`
         }
       },
       {
@@ -6024,15 +6080,26 @@ function initializeBudgetNotes() {
       <p class="budget-source-meta-card__label">${renderLocalizedContent(
         itineraryBudgetLabels.itineraryBasis
       )}</p>
-      <p class="budget-source-meta-card__body">${renderLocalizedContent(budgetAssumptionCopy)}</p>
-      <p class="budget-source-meta-card__body">${renderLocalizedContent({
-        en: `${itineraryBudgetLabels.sourceUpdatedPrefix.en}: ${budgetSourceUpdatedAt}`,
-        ja: `${itineraryBudgetLabels.sourceUpdatedPrefix.ja}: ${budgetSourceUpdatedAt}`
-      })}</p>
+      <p class="budget-source-meta-card__body">${renderLocalizedContent(getAssumptionCopy())}</p>
+      ${
+        getSourceMetaCopy()
+          ? `<p class="budget-source-meta-card__body">${renderLocalizedContent(
+              getSourceMetaCopy()
+            )}</p>`
+          : ""
+      }
+      ${
+        getSourceHelperCopy()
+          ? `<p class="budget-source-meta-card__body">${renderLocalizedContent(
+              getSourceHelperCopy()
+            )}</p>`
+          : ""
+      }
+      <p class="budget-source-meta-card__body">${renderLocalizedContent(getSourceUpdatedCopy())}</p>
     </article>
   `;
   const renderSourcesMarkup = () =>
-    budgetSourceGroups
+    getSourceGroups()
       .map((group) => {
         const links = Array.isArray(group.links) ? group.links : [];
         return `
