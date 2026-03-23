@@ -1908,6 +1908,10 @@ html.has-modal-open body {
   gap: 0.62rem;
 }
 
+.packing-section {
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+}
+
 .packing-section__progress {
   margin: 0;
   font-size: 0.78rem;
@@ -1974,6 +1978,7 @@ html.has-modal-open body {
 
 .packing-checklist {
   margin-top: 0.14rem;
+  align-content: start;
 }
 
 .packing-checklist .packing-item::before,
