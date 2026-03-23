@@ -1184,7 +1184,7 @@
       </div>
 
       <div class="essentials-grid">
-        <article class="essentials-card card">
+        <article class="essentials-card card packing-section" data-packing-section="documents-phone">
           <h4>
             <span data-language="en">Documents + Phone</span>
             <span data-language="ja" hidden>書類とスマホ準備</span>
@@ -1193,13 +1193,65 @@
             <span data-language="en">Finish the travel, payment, and phone basics before you land.</span>
             <span data-language="ja" hidden>到着前に、渡航、支払い、通信の基本だけは整えておきます。</span>
           </p>
-          <ul class="essentials-checklist">
-            <li><span data-language="en">Passport plus a photo-page copy in your phone and cloud.</span><span data-language="ja" hidden>パスポート本体と、顔写真ページのコピーをスマホとクラウドに保存。</span></li>
-            <li><span data-language="en">Flight, hotel, and ryokan confirmations saved.</span><span data-language="ja" hidden>航空券、ホテル、旅館の予約確認を保存。</span></li>
-            <li><span data-language="en">Visit Japan Web completed and arrival QR saved.</span><span data-language="ja" hidden>Visit Japan Web を完了し、到着用QRを保存。</span></li>
-            <li><span data-language="en">Primary card, backup card, some cash, and insurance info.</span><span data-language="ja" hidden>メインカード、予備カード、現金少し、保険情報。</span></li>
-            <li><span data-language="en">eSIM or SIM working before landing.</span><span data-language="ja" hidden>到着前に eSIM または SIM を使える状態にする。</span></li>
-            <li><span data-language="en">Offline maps and a translation app ready.</span><span data-language="ja" hidden>オフライン地図と翻訳アプリを準備。</span></li>
+          <div class="packing-section__meta">
+            <p class="packing-section__progress" aria-live="polite">
+              <span data-language="en" data-packing-progress-language="en"></span>
+              <span data-language="ja" data-packing-progress-language="ja" hidden></span>
+            </p>
+            <div class="packing-section__actions">
+              <button class="packing-section__action" type="button" data-packing-mark-all>
+                <span data-language="en">Mark all packed</span>
+                <span data-language="ja" hidden>すべて完了</span>
+              </button>
+              <button class="packing-section__action" type="button" data-packing-clear-section>
+                <span data-language="en">Clear section</span>
+                <span data-language="ja" hidden>この欄を解除</span>
+              </button>
+            </div>
+          </div>
+          <ul class="essentials-checklist packing-checklist">
+            <li class="packing-item" data-packing-item="documents-phone-passport-copy">
+              <label class="packing-toggle">
+                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
+                <span class="packing-toggle__indicator" aria-hidden="true"></span>
+                <span class="packing-toggle__copy"><span data-language="en">Passport plus a photo-page copy in your phone and cloud.</span><span data-language="ja" hidden>パスポート本体と、顔写真ページのコピーをスマホとクラウドに保存。</span></span>
+              </label>
+            </li>
+            <li class="packing-item" data-packing-item="documents-phone-confirmations">
+              <label class="packing-toggle">
+                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
+                <span class="packing-toggle__indicator" aria-hidden="true"></span>
+                <span class="packing-toggle__copy"><span data-language="en">Flight, hotel, and ryokan confirmations saved.</span><span data-language="ja" hidden>航空券、ホテル、旅館の予約確認を保存。</span></span>
+              </label>
+            </li>
+            <li class="packing-item" data-packing-item="documents-phone-visit-japan-web">
+              <label class="packing-toggle">
+                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
+                <span class="packing-toggle__indicator" aria-hidden="true"></span>
+                <span class="packing-toggle__copy"><span data-language="en">Visit Japan Web completed and arrival QR saved.</span><span data-language="ja" hidden>Visit Japan Web を完了し、到着用QRを保存。</span></span>
+              </label>
+            </li>
+            <li class="packing-item" data-packing-item="documents-phone-payment-insurance">
+              <label class="packing-toggle">
+                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
+                <span class="packing-toggle__indicator" aria-hidden="true"></span>
+                <span class="packing-toggle__copy"><span data-language="en">Primary card, backup card, some cash, and insurance info.</span><span data-language="ja" hidden>メインカード、予備カード、現金少し、保険情報。</span></span>
+              </label>
+            </li>
+            <li class="packing-item" data-packing-item="documents-phone-esim">
+              <label class="packing-toggle">
+                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
+                <span class="packing-toggle__indicator" aria-hidden="true"></span>
+                <span class="packing-toggle__copy"><span data-language="en">eSIM or SIM working before landing.</span><span data-language="ja" hidden>到着前に eSIM または SIM を使える状態にする。</span></span>
+              </label>
+            </li>
+            <li class="packing-item" data-packing-item="documents-phone-offline-apps">
+              <label class="packing-toggle">
+                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
+                <span class="packing-toggle__indicator" aria-hidden="true"></span>
+                <span class="packing-toggle__copy"><span data-language="en">Offline maps and a translation app ready.</span><span data-language="ja" hidden>オフライン地図と翻訳アプリを準備。</span></span>
+              </label>
+            </li>
           </ul>
         </article>
 
