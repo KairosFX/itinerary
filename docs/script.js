@@ -2764,14 +2764,27 @@ async function bootApp() {
   }
 
   const siteFooter = document.querySelector(".site-footer");
-  if (siteFooter) {
-    registerRevealBlocks(siteFooter);
+  const initialPanelId = getInitialPanelId();
+  if (initialPanelId === "overview") {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        if (siteFooter) {
+          registerRevealBlocks(siteFooter);
+        }
+
+        void ensureSectionInitialized("overview");
+      });
+    });
+  } else {
+    setActivePanel(initialPanelId);
+    await ensureSectionInitialized(initialPanelId);
+    syncProgressTimeline();
+
+    if (siteFooter) {
+      registerRevealBlocks(siteFooter);
+    }
   }
 
-  const initialPanelId = getInitialPanelId();
-  setActivePanel(initialPanelId);
-  await ensureSectionInitialized(initialPanelId);
-  syncProgressTimeline();
   scheduleIdleSectionWarmup(initialPanelId);
   window.requestAnimationFrame(() => {
     scheduleDeferredGeometryRelease();
