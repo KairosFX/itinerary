@@ -40,6 +40,7 @@ const optionalUnlockButtons = document.querySelectorAll("[data-optional-unlock]"
 const optionalSkipButton = document.querySelector("[data-optional-skip]");
 const optionalSectionNodes = document.querySelectorAll("[data-optional-section]");
 const budgetNotesCard = document.querySelector("[data-budget-notes-card]");
+const budgetStatusNode = document.querySelector("[data-budget-status]");
 const budgetSummaryNode = document.querySelector("[data-budget-summary]");
 const budgetBreakdownNode = document.querySelector("[data-budget-breakdown]");
 const budgetSourceMetaNode = document.querySelector("[data-budget-source-meta]");
@@ -98,7 +99,7 @@ const bookingTransitItemsDataUrl = "./assets/data/booking-transit-items.json";
 const transitDetailsDataUrl = "./assets/data/transit-details.json";
 const offlineSnapshotUrl = "./japan-escape-itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-03-23-offline-v4";
+const offlineBundleVersion = "2026-03-23-offline-v5";
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const inlineDataSelectors = {
   bookingTransit: "[data-booking-transit-inline]",
@@ -109,6 +110,211 @@ const budgetDefaultTravelerCount = 2;
 const budgetTravelerCountMin = 1;
 const budgetTravelerCountMax = 24;
 const budgetSharedRoomOccupancy = 2;
+const budgetSourceUpdatedAt = "2026-03-23";
+const budgetAssumptionCopy = {
+  en:
+    "This is a route-first estimate for actually completing the checklist: stays, rail, local movement, tickets, and moderate day spend. USD hotel quotes are converted with the Feb 23, 2026 ECB / Banca d'Italia planning rate of about \u00a5154.82 per US dollar.",
+  ja:
+    "これはチェックリストを実際に完了するためのルート基準見積りです。宿、鉄道、現地移動、入場料、そして中間的な日別支出を含みます。米ドル建ての宿泊料金は、2026年2月23日のECB / イタリア銀行の計画用レート（およそ1米ドル=\u00a5154.82円）で円換算しています。"
+};
+const budgetCategoryDefinitions = [
+  { id: "accommodation", label: { en: "Hotels / ryokan", ja: "宿泊" } },
+  { id: "intercityTransit", label: { en: "Intercity transit", ja: "都市間移動" } },
+  { id: "localTransit", label: { en: "Local transit", ja: "現地移動" } },
+  { id: "ticketsAdmissions", label: { en: "Tickets / admissions", ja: "入場料・チケット" } },
+  { id: "meals", label: { en: "Meals", ja: "食事" } },
+  { id: "baggage", label: { en: "Baggage", ja: "荷物対応" } },
+  { id: "optionalExtras", label: { en: "Optional extras", ja: "任意追加" } }
+];
+const budgetBucketDefinitions = [
+  { id: "booked", label: { en: "Booked", ja: "予約前提" } },
+  { id: "required", label: { en: "Required", ja: "必須" } },
+  { id: "flexible", label: { en: "Flexible", ja: "変動" } },
+  { id: "optional", label: { en: "Optional", ja: "任意" } },
+  { id: "free", label: { en: "Free", ja: "無料" } }
+];
+const budgetSourceGroups = [
+  {
+    id: "accommodation",
+    title: { en: "Accommodation quotes", ja: "宿泊見積り" },
+    summary: {
+      en: "Osaka, Hakone, Kawaguchiko, and Tokyo nights use Expedia quote pages checked on March 23, 2026 for 2 adults.",
+      ja: "大阪、箱根、河口湖、東京の宿泊は、2026年3月23日に2名条件で確認したExpediaの見積りページを基準にしています。"
+    },
+    links: [
+      { label: { en: "Tokyu Stay Osaka Honmachi", ja: "東急ステイ大阪本町" }, url: "https://www.expedia.com/Osaka-Hotels-Tokyu-Stay-Osaka-Honmachi.h39286570.Hotel-Information" },
+      { label: { en: "Hakone Pax Yoshino", ja: "箱根パックス吉野" }, url: "https://www.expedia.com/Hakone-Hotels-Hakone-Pax-Yoshino.h8738351.Hotel-Information" },
+      { label: { en: "Kawaguchiko Park Hotel", ja: "河口湖パークホテル" }, url: "https://www.expedia.com/Fujikawaguchiko-Hotels-Kawaguchiko-Park-Hotel.h22353607.Hotel-Information" },
+      { label: { en: "Shibuya Granbell Hotel", ja: "渋谷グランベルホテル" }, url: "https://www.expedia.com/Tokyo-Hotels-Shibuya-Granbell-Hotel.h8150500.Hotel-Information" }
+    ]
+  },
+  {
+    id: "fx",
+    title: { en: "FX conversion basis", ja: "為替換算の基準" },
+    summary: {
+      en: "USD hotel quotes are converted with the Feb 23, 2026 ECB / Banca d'Italia reference rate, which works out to about \u00a5154.82 per US dollar.",
+      ja: "米ドル建ての宿泊料金は、2026年2月23日のECB / イタリア銀行基準レートを使い、およそ1米ドル=\u00a5154.82円で円換算しています。"
+    },
+    links: [
+      { label: { en: "Banca d'Italia reference rates", ja: "イタリア銀行の基準レート" }, url: "https://www.bancaditalia.it/compiti/operazioni-cambi/cambio/cambi_rif_20260223?com.dotmarketing.htmlpage.language=1" }
+    ]
+  },
+  {
+    id: "core-transit",
+    title: { en: "Core rail + city transit", ja: "主要な鉄道と都市交通" },
+    summary: {
+      en: "Intercity rail and city pass references come from current route-planner or operator pages for Kansai and Tokyo.",
+      ja: "都市間鉄道と都市内パスの基準は、関西と東京の現行経路案内または運営会社ページを使っています。"
+    },
+    links: [
+      { label: { en: "Shin-Osaka -> Odawara price", ja: "新大阪 -> 小田原の料金" }, url: "https://www.navitime.co.jp/en/transfer/searchlist?defaultCondition=0&dnvStationCode=00003742&dnvStationName=%E5%B0%8F%E7%94%B0%E5%8E%9F&orvStationCode=00004305&orvStationName=%E6%96%B0%E5%A4%A7%E9%98%AA" },
+      { label: { en: "Shin-Osaka -> Kyoto fare", ja: "新大阪 -> 京都の運賃" }, url: "https://www.navitime.co.jp/en/transfer/searchlist?defaultCondition=0&dnvStationCode=00001756&dnvStationName=Kyoto&orvStationCode=00004305&orvStationName=%E6%96%B0%E5%A4%A7%E9%98%AA" },
+      { label: { en: "Osaka Metro fares", ja: "大阪メトロ運賃" }, url: "https://subway-tr.osakametro.co.jp/en/guide/fare/index.php" },
+      { label: { en: "Kyoto Subway + Bus 1-day ticket", ja: "京都 地下鉄・バス1日券" }, url: "https://www.city.kyoto.lg.jp/kotsu/page/0000028378.html?furigana=on" },
+      { label: { en: "Tokyo Subway Ticket", ja: "東京サブウェイチケット" }, url: "https://www.tokyometro.jp/es/ticket/travel/index.html" }
+    ]
+  },
+  {
+    id: "hakone-fuji-transit",
+    title: { en: "Hakone + Fuji transfer chain", ja: "箱根と富士の移動連鎖" },
+    summary: {
+      en: "Day 4 uses the Odawara-side Hakone Freepass. Day 5 uses the current Gotemba -> Kawaguchiko fare. Day 6 keeps a lean Fujikyu-area movement estimate.",
+      ja: "4日目は小田原側の箱根フリーパス、5日目は現行の御殿場 -> 河口湖運賃、6日目は富士急エリアの軽めの現地移動見積りを使っています。"
+    },
+    links: [
+      { label: { en: "Hakone Freepass guide", ja: "箱根フリーパス案内" }, url: "https://www.odakyu.jp/english/feature/29812/" },
+      { label: { en: "Gotemba -> Kawaguchiko fares", ja: "御殿場 -> 河口湖運賃" }, url: "https://www.japan-guide.com/bus/gotemba.html" },
+      { label: { en: "Fuji local bus network", ja: "富士周辺バス路線" }, url: "https://www.fujikyubus.co.jp/fujikko?_x_tr_hl=ja&_x_tr_pto=wapp&_x_tr_sl=ja&_x_tr_tl=th" }
+    ]
+  },
+  {
+    id: "tokyo-return",
+    title: { en: "Tokyo return leg", ja: "東京への戻り" },
+    summary: {
+      en: "The Kawaguchiko -> Tokyo move uses the current Fuji Excursion one-way fare to Shinjuku.",
+      ja: "河口湖 -> 東京の戻りは、富士回遊の新宿行き片道運賃を基準にしています。"
+    },
+    links: [{ label: { en: "Fuji Excursion", ja: "富士回遊" }, url: "https://e.fujikyu-railway.jp/fujikaiyuu/" }]
+  },
+  {
+    id: "tickets",
+    title: { en: "Tickets + timed admissions", ja: "入場券と時間指定チケット" },
+    summary: {
+      en: "Paid attractions use current official or tourism-board references for Kaiyukan, Kiyomizu-dera, Shibuya Sky, and Tokyo Skytree.",
+      ja: "有料スポットは、海遊館、清水寺、渋谷スカイ、東京スカイツリーの現行公式または観光案内の料金を基準にしています。"
+    },
+    links: [
+      { label: { en: "Kaiyukan fees", ja: "海遊館の料金" }, url: "https://pop3.kaiyukan.com/info/admission/" },
+      { label: { en: "Kiyomizu-dera guide", ja: "清水寺ガイド" }, url: "https://www.japan-guide.com/e/e3901.html" },
+      { label: { en: "Shibuya Sky guide", ja: "渋谷スカイ案内" }, url: "https://www.gotokyo.org/cn/spot/1749/index.html" },
+      { label: { en: "Tokyo Skytree tickets", ja: "東京スカイツリー料金" }, url: "https://www.tokyo-skytree.jp/en/ticket/individual/" }
+    ]
+  },
+  {
+    id: "meals",
+    title: { en: "Meal assumptions", ja: "食費の前提" },
+    summary: {
+      en: "Meal lines use current Osaka, Kyoto, and Tokyo restaurant benchmarks, then adapt them to dinner-heavy, sightseeing, or transfer days.",
+      ja: "食費は大阪、京都、東京の現在の飲食相場を基準にしつつ、夕食重視の日、観光日、移動日に合わせて調整しています。"
+    },
+    links: [
+      { label: { en: "Osaka benchmarks", ja: "大阪の相場" }, url: "https://www.numbeo.com/cost-of-living/in/Osaka" },
+      { label: { en: "Kyoto benchmarks", ja: "京都の相場" }, url: "https://fr.numbeo.com/co%C3%BBt-de-la-vie/ville/Kyoto" },
+      { label: { en: "Tokyo benchmarks", ja: "東京の相場" }, url: "https://www.numbeo.com/cost-of-living/in/Tokyo" }
+    ]
+  },
+  {
+    id: "assumptions",
+    title: { en: "Route assumptions", ja: "ルート前提" },
+    summary: {
+      en: "The model assumes 3 Osaka hotel nights, 2 Kawaguchiko nights, 1 Tokyo night for Day 7, and only 1 extra Tokyo hotel night when Days 8-9 are unlocked.",
+      ja: "このモデルでは、大阪3泊、河口湖2泊、7日目の東京1泊、追加の8日目と9日目を入れる場合は東京での追加宿泊を1泊だけ前提にしています。"
+    },
+    links: []
+  }
+];
+const budgetDayDefinitions = [
+  { day: 1, optional: false, title: { en: "Day 1 - Osaka", ja: "1日目・大阪" }, subtitle: { en: "Arrival, Minami, and first-night walk", ja: "到着後のミナミと初夜の街歩き" }, items: [
+    { label: { en: "Osaka base hotel night", ja: "大阪の拠点ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 12100 } },
+    { label: { en: "Osaka city hop into Minami", ja: "ミナミへ入る大阪市内移動" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 300 } },
+    { label: { en: "Dotonbori", ja: "道頓堀" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Shinsaibashi", ja: "心斎橋" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Dinner in Minami", ja: "ミナミで夕食" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 2500 } },
+    { label: { en: "Nightlife", ja: "夜の街歩き" }, category: "optionalExtras", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } }
+  ] },
+  { day: 2, optional: false, title: { en: "Day 2 - Kyoto East", ja: "2日目・京都東側" }, subtitle: { en: "Kyoto East day trip with the temple cluster", ja: "東山中心の京都日帰り" }, items: [
+    { label: { en: "Osaka base hotel night", ja: "大阪の拠点ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 12100 } },
+    { label: { en: "Osaka -> Kyoto -> Osaka rail", ja: "大阪 -> 京都 -> 大阪の鉄道移動" }, category: "intercityTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 1160 } },
+    { label: { en: "Kyoto Subway + Bus 1-day ticket", ja: "京都 地下鉄・バス1日券" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 1100 } },
+    { label: { en: "Kiyomizu-dera", ja: "清水寺" }, category: "ticketsAdmissions", bucket: "required", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 500 } },
+    { label: { en: "Ninenzaka", ja: "二年坂" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Yasaka Pagoda", ja: "八坂の塔" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Gion", ja: "祇園" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Nanzen-ji", ja: "南禅寺" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Kyoto sightseeing meals + snacks", ja: "京都観光日の食事と軽食" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 3200 } }
+  ] },
+  { day: 3, optional: false, title: { en: "Day 3 - Kyoto -> Osaka", ja: "3日目・京都から大阪" }, subtitle: { en: "Arashiyama in the morning, Osaka waterfront after", ja: "朝は嵐山、そのあと大阪ベイエリア" }, items: [
+    { label: { en: "Osaka base hotel night", ja: "大阪の拠点ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 12100 } },
+    { label: { en: "Arashiyama early rail", ja: "嵐山へ朝移動" }, category: "intercityTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 820 } },
+    { label: { en: "Return to Osaka", ja: "大阪へ戻る" }, category: "intercityTransit", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Kaiyukan", ja: "海遊館" }, category: "ticketsAdmissions", bucket: "booked", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 2300 } },
+    { label: { en: "Tempozan local hop", ja: "天保山周辺の市内移動" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 300 } },
+    { label: { en: "Final Osaka night meal", ja: "大阪最後の夜の食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 2800 } }
+  ] },
+  { day: 4, optional: false, title: { en: "Day 4 - Hakone Loop", ja: "4日目・箱根周遊" }, subtitle: { en: "Shinkansen into Hakone, then the loop and ryokan", ja: "新幹線で入り、箱根周遊のあと旅館へ" }, items: [
+    { label: { en: "Bullet train: Shin-Osaka -> Odawara", ja: "新幹線：新大阪 -> 小田原" }, category: "intercityTransit", bucket: "booked", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 12320 } },
+    { label: { en: "Hakone Freepass", ja: "箱根フリーパス" }, category: "localTransit", bucket: "required", sourceGroup: "hakone-fuji-transit", cost: { mode: "perPerson", amount: 6000 } },
+    { label: { en: "Gora / Sounzan", ja: "強羅 / 早雲山" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Ropeway", ja: "ロープウェイ" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Owakudani", ja: "大涌谷" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Togendai", ja: "桃源台" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Lake Ashi cruise", ja: "芦ノ湖クルーズ" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Hakone Shrine / Moto-Hakone", ja: "箱根神社 / 元箱根" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Ryokan", ja: "旅館" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 38700 } },
+    { label: { en: "Hakone transfer-day meals", ja: "箱根移動日の食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 3000 } },
+    { label: { en: "Luggage handling buffer", ja: "荷物対応バッファ" }, category: "baggage", bucket: "optional", sourceGroup: "assumptions", cost: { mode: "perPair", amount: 1500 } }
+  ] },
+  { day: 5, optional: false, title: { en: "Day 5 - Hakone -> Kawaguchiko", ja: "5日目・箱根 -> 河口湖" }, subtitle: { en: "Morning onsen, then the Gotemba-side transfer", ja: "朝の温泉のあと、御殿場側経由で河口湖へ" }, items: [
+    { label: { en: "Onsen morning", ja: "朝の温泉" }, category: "accommodation", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Bus via Gotemba", ja: "御殿場経由のバス" }, category: "intercityTransit", bucket: "required", sourceGroup: "hakone-fuji-transit", cost: { mode: "perPerson", amount: 1750 } },
+    { label: { en: "Lake arrival views", ja: "到着後の湖畔の景色" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Quiet sunset", ja: "静かな夕景" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Kawaguchiko hotel night", ja: "河口湖ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 24900 } },
+    { label: { en: "Arrival dinner in Kawaguchiko", ja: "河口湖到着後の夕食" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 2600 } }
+  ] },
+  { day: 6, optional: false, title: { en: "Day 6 - Fuji Area", ja: "6日目・富士エリア" }, subtitle: { en: "Weather-flex Fuji day", ja: "天気優先の富士日" }, items: [
+    { label: { en: "Kawaguchiko hotel night", ja: "河口湖ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 24900 } },
+    { label: { en: "Fuji check at dawn", ja: "夜明けの富士チェック" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Fuji-area local movement", ja: "富士エリア内の現地移動" }, category: "localTransit", bucket: "required", sourceGroup: "hakone-fuji-transit", cost: { mode: "perPerson", amount: 1800 } },
+    { label: { en: "Chureito if clear", ja: "見えるなら忠霊塔" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Lake Kawaguchiko", ja: "河口湖" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Oshino Hakkai", ja: "忍野八海" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Fuji-area day meals", ja: "富士エリア日の食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 3200 } },
+    { label: { en: "Weather pivot taxi / timing buffer", ja: "天候対応のタクシー / 時間調整バッファ" }, category: "optionalExtras", bucket: "optional", sourceGroup: "assumptions", cost: { mode: "perPerson", amount: 800 } }
+  ] },
+  { day: 7, optional: false, title: { en: "Day 7 - Tokyo / Shibuya", ja: "7日目・東京 / 渋谷" }, subtitle: { en: "Fuji return into Tokyo, then a focused Shibuya day", ja: "富士側から東京へ戻り、渋谷に集中する日" }, items: [
+    { label: { en: "Train to Tokyo", ja: "東京までの列車" }, category: "intercityTransit", bucket: "booked", sourceGroup: "tokyo-return", cost: { mode: "perPerson", amount: 4130 } },
+    { label: { en: "Shibuya local hop", ja: "渋谷周辺の移動" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 220 } },
+    { label: { en: "Shibuya Crossing", ja: "渋谷スクランブル交差点" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Shibuya food walk", ja: "渋谷で食べ歩き" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 3300 } },
+    { label: { en: "Shibuya Sky", ja: "渋谷スカイ" }, category: "ticketsAdmissions", bucket: "booked", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 2200 } },
+    { label: { en: "Tokyo hotel night", ja: "東京ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 25200 } }
+  ] },
+  { day: 8, optional: true, title: { en: "Optional Day 8 - Tokyo", ja: "追加8日目・東京" }, subtitle: { en: "Tokyo East day with Skytree", ja: "スカイツリー中心の東京東側" }, items: [
+    { label: { en: "Extra Tokyo hotel night", ja: "東京の追加ホテル1泊" }, category: "accommodation", bucket: "booked", sourceGroup: "accommodation", cost: { mode: "perRoom", amount: 25200 } },
+    { label: { en: "Tokyo subway day pass", ja: "東京サブウェイ1日券" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 1000 } },
+    { label: { en: "Tokyo Skytree", ja: "東京スカイツリー" }, category: "ticketsAdmissions", bucket: "booked", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 2100 } },
+    { label: { en: "Tokyo Solamachi", ja: "東京ソラマチ" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Akihabara", ja: "秋葉原" }, category: "optionalExtras", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Tokyo day meals", ja: "東京日の食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 3000 } }
+  ] },
+  { day: 9, optional: true, title: { en: "Optional Day 9 - Tokyo", ja: "追加9日目・東京" }, subtitle: { en: "Final city day", ja: "最後の都内日" }, items: [
+    { label: { en: "Tokyo Imperial Palace", ja: "皇居" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Shinjuku", ja: "新宿" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+    { label: { en: "Tokyo city hops", ja: "東京市内の移動" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 330 } },
+    { label: { en: "Final Tokyo meals", ja: "最後の東京での食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 2800 } }
+  ] }
+];
 const fujiForecastCacheMaxAgeMs = 45 * 60 * 1000;
 const fujiForecastSourceUrl = "https://open-meteo.com/en/docs";
 const fujiForecastApiUrl = "https://api.open-meteo.com/v1/forecast";
@@ -3880,6 +4086,502 @@ function initializeBudgetNotes() {
   syncBudgetNotesUI();
 }
 
+const itineraryBudgetLabels = {
+  summaryTotalLocked: { en: "Days 1-7 estimate", ja: "1〜7日目の見積り" },
+  summaryTotalUnlocked: { en: "Trip estimate", ja: "旅程合計" },
+  summaryPerPerson: { en: "Per person", ja: "1人あたり" },
+  summaryBookedRequired: { en: "Booked + required", ja: "予約前提 + 必須" },
+  summaryOptionalLocked: { en: "Days 8-9 add-on", ja: "8日目と9日目の追加分" },
+  summaryOptionalUnlocked: { en: "Optional Days 8-9 included", ja: "追加の8日目と9日目を含む" },
+  itineraryBasis: { en: "Estimate basis", ja: "見積りの前提" },
+  estimateUnavailable: { en: "Itinerary budget notes are unavailable right now.", ja: "現在は旅程予算のメモを表示できません。" },
+  breakdownHeading: { en: "Category breakdown", ja: "カテゴリ別の内訳" },
+  sourcesHeading: { en: "Sources + route assumptions", ja: "出典とルート前提" },
+  noteLabel: { en: "Budget note", ja: "予算メモ" },
+  notePlaceholder: {
+    en: "Note where you may want to splurge, save, or prebook.",
+    ja: "節約したい所、少し使いたい所、先に予約したい所をメモ。"
+  },
+  statusReady: {
+    en: "Checklist-linked estimate ready.",
+    ja: "チェックリスト連動の見積りを表示中。"
+  },
+  statusLoading: {
+    en: "Loading itinerary cost model...",
+    ja: "旅程の費用モデルを読み込んでいます..."
+  },
+  statusMeta: {
+    en: "Uses the day cards as the budget spine: hotels, transit, tickets, meals, and route-specific extras only where the checklist implies them.",
+    ja: "日ごとのカードを予算の骨組みにして、宿泊、移動、チケット、食事、そしてチェックリストで必要になる追加費用だけを入れています。"
+  },
+  travelersHint: {
+    en: "Shared hotel and shared route costs assume 2 travelers per room by default.",
+    ja: "共有の宿泊費と共有のルート費用は、基本的に2人で1室を前提に計算します。"
+  },
+  extrasHint: {
+    en: "Adds optional luggage handling and weather-pivot extras. Optional Days 8-9 stay separate until unlocked.",
+    ja: "荷物対応や天候回避の任意追加費用を反映します。8日目と9日目は解放するまで別枠です。"
+  },
+  totalMeta: { en: "Checklist-linked total", ja: "チェックリスト連動の合計" },
+  bookedRequiredMeta: { en: "Booked and required items only", ja: "予約前提と必須項目のみ" },
+  sharedMeta: { en: "Shared stays and group costs", ja: "共有の宿泊費と共通費" },
+  variableMeta: { en: "Per-person variable spend", ja: "1人ごとの変動費" },
+  spendLegend: { en: "Day notes", ja: "日別メモ" },
+  optionalInactive: { en: "Not added yet", ja: "まだ未加算" },
+  optionalInactiveMeta: {
+    en: "Unlock Days 8-9 in the checklist to add them into the live total.",
+    ja: "チェックリストで8日目と9日目を解放すると、合計へ反映されます。"
+  },
+  sourceUpdatedPrefix: { en: "Updated", ja: "更新日" }
+};
+
+function getBudgetCategoryLabel(categoryId) {
+  return (
+    budgetCategoryDefinitions.find((entry) => entry.id === categoryId)?.label || {
+      en: categoryId,
+      ja: categoryId
+    }
+  );
+}
+
+function getBudgetBucketLabel(bucketId) {
+  return (
+    budgetBucketDefinitions.find((entry) => entry.id === bucketId)?.label || {
+      en: bucketId,
+      ja: bucketId
+    }
+  );
+}
+
+function formatBudgetCurrency(amount) {
+  return new Intl.NumberFormat("ja-JP", {
+    style: "currency",
+    currency: "JPY",
+    maximumFractionDigits: 0
+  }).format(Math.round(Number(amount) || 0));
+}
+
+function normalizeBudgetTravelerCount(value, fallback = budgetDefaultTravelerCount) {
+  const parsed = Number.parseInt(String(value ?? ""), 10);
+  if (Number.isNaN(parsed)) {
+    return clamp(fallback, budgetTravelerCountMin, budgetTravelerCountMax);
+  }
+
+  return clamp(parsed, budgetTravelerCountMin, budgetTravelerCountMax);
+}
+
+function getBudgetRoomCount(travelers = budgetDefaultTravelerCount) {
+  return Math.max(1, Math.ceil(normalizeBudgetTravelerCount(travelers) / budgetSharedRoomOccupancy));
+}
+
+function getDefaultBudgetNotesState() {
+  return {
+    travelers: budgetDefaultTravelerCount,
+    includeExtras: false,
+    days: {}
+  };
+}
+
+function normalizeBudgetDayEntries(daysCandidate) {
+  if (!daysCandidate || typeof daysCandidate !== "object" || Array.isArray(daysCandidate)) {
+    return {};
+  }
+
+  return Object.entries(daysCandidate).reduce((nextState, [day, entry]) => {
+    const normalizedDay = Number.parseInt(String(day), 10);
+    if (
+      Number.isNaN(normalizedDay) ||
+      !budgetDayDefinitions.some((definition) => definition.day === normalizedDay)
+    ) {
+      return nextState;
+    }
+
+    const note = typeof entry?.note === "string" ? entry.note.slice(0, 280) : "";
+    if (note.trim()) {
+      nextState[String(normalizedDay)] = { note };
+    }
+
+    return nextState;
+  }, {});
+}
+
+function readStoredBudgetNotesState() {
+  const fallbackState = getDefaultBudgetNotesState();
+
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(budgetNotesStorageKey) || "null");
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return fallbackState;
+    }
+
+    return {
+      travelers: normalizeBudgetTravelerCount(parsed.travelers, fallbackState.travelers),
+      includeExtras: parsed.includeExtras === true,
+      days: normalizeBudgetDayEntries(parsed.days)
+    };
+  } catch (error) {
+    return fallbackState;
+  }
+}
+
+function hasBudgetNotesChanges() {
+  if (
+    normalizeBudgetTravelerCount(budgetNotesState.travelers, budgetDefaultTravelerCount) !==
+      budgetDefaultTravelerCount ||
+    budgetNotesState.includeExtras === true
+  ) {
+    return true;
+  }
+
+  return Object.values(budgetNotesState.days || {}).some((entry) => String(entry?.note || "").trim());
+}
+
+function storeBudgetNotesState() {
+  try {
+    if (!hasBudgetNotesChanges()) {
+      queueStorageRemoval(budgetNotesStorageKey);
+      flushQueuedStorageWrites();
+      return;
+    }
+
+    queueStorageValue(
+      budgetNotesStorageKey,
+      JSON.stringify({
+        travelers: normalizeBudgetTravelerCount(budgetNotesState.travelers, budgetDefaultTravelerCount),
+        includeExtras: budgetNotesState.includeExtras === true,
+        days: normalizeBudgetDayEntries(budgetNotesState.days)
+      })
+    );
+    flushQueuedStorageWrites();
+  } catch (error) {
+    // Ignore storage failures and keep the budget notes usable.
+  }
+}
+
+function getBudgetTravelerCount() {
+  return normalizeBudgetTravelerCount(budgetNotesState.travelers, budgetDefaultTravelerCount);
+}
+
+function shouldIncludeBudgetExtras() {
+  return budgetNotesState.includeExtras === true;
+}
+
+function getBudgetDayState(day) {
+  const key = String(day);
+  const entry =
+    budgetNotesState.days && typeof budgetNotesState.days[key] === "object"
+      ? budgetNotesState.days[key]
+      : {};
+
+  return {
+    note: typeof entry.note === "string" ? entry.note : ""
+  };
+}
+
+function updateStoredBudgetDayState(day, nextState) {
+  const key = String(day);
+  const note = typeof nextState?.note === "string" ? nextState.note.slice(0, 280) : "";
+
+  if (!budgetNotesState.days || typeof budgetNotesState.days !== "object") {
+    budgetNotesState.days = {};
+  }
+
+  if (!note.trim()) {
+    delete budgetNotesState.days[key];
+  } else {
+    budgetNotesState.days[key] = { note };
+  }
+
+  storeBudgetNotesState();
+}
+
+function getBudgetVisibleDayDefinitions() {
+  return budgetDayDefinitions.filter((definition) => !definition.optional || areOptionalDaysUnlocked());
+}
+
+function getBudgetOptionalDayDefinitions() {
+  return budgetDayDefinitions.filter((definition) => definition.optional);
+}
+
+function calculateBudgetItemCost(item, travelers, includeExtras) {
+  const cost = item.cost || { mode: "none", amount: 0 };
+  const amount = Math.max(Number(cost.amount || 0) || 0, 0);
+  const travelerCount = normalizeBudgetTravelerCount(travelers, budgetDefaultTravelerCount);
+  const roomCount = getBudgetRoomCount(travelerCount);
+  let quantity = 0;
+  let total = 0;
+
+  if (cost.mode === "perPerson") {
+    quantity = travelerCount;
+    total = amount * travelerCount;
+  } else if (cost.mode === "perRoom") {
+    quantity = roomCount;
+    total = amount * roomCount;
+  } else if (cost.mode === "perPair") {
+    quantity = roomCount;
+    total = amount * roomCount;
+  } else if (cost.mode === "perGroup") {
+    quantity = 1;
+    total = amount;
+  }
+
+  return {
+    mode: cost.mode,
+    amount,
+    quantity,
+    total,
+    included: item.bucket !== "optional" || includeExtras
+  };
+}
+
+function getBudgetItemFormulaCopy(itemCost) {
+  if (itemCost.mode === "perPerson") {
+    return {
+      en: `${formatBudgetCurrency(itemCost.amount)} x ${itemCost.quantity} traveler${
+        itemCost.quantity === 1 ? "" : "s"
+      }`,
+      ja: `${formatBudgetCurrency(itemCost.amount)} x ${itemCost.quantity}人`
+    };
+  }
+
+  if (itemCost.mode === "perRoom") {
+    return {
+      en: `${formatBudgetCurrency(itemCost.amount)} x ${itemCost.quantity} room${
+        itemCost.quantity === 1 ? "" : "s"
+      }`,
+      ja: `${formatBudgetCurrency(itemCost.amount)} x ${itemCost.quantity}室`
+    };
+  }
+
+  if (itemCost.mode === "perPair") {
+    return {
+      en: `${formatBudgetCurrency(itemCost.amount)} x ${itemCost.quantity} shared stop${
+        itemCost.quantity === 1 ? "" : "s"
+      }`,
+      ja: `${formatBudgetCurrency(itemCost.amount)} x ${itemCost.quantity}件`
+    };
+  }
+
+  if (itemCost.mode === "perGroup") {
+    return {
+      en: "One shared trip cost",
+      ja: "旅全体の共通費"
+    };
+  }
+
+  return {
+    en: "No extra ticketed cost",
+    ja: "追加費用なし"
+  };
+}
+
+function calculateBudgetEstimate() {
+  const travelers = getBudgetTravelerCount();
+  const includeExtras = shouldIncludeBudgetExtras();
+  const visibleDays = getBudgetVisibleDayDefinitions();
+  const optionalDays = getBudgetOptionalDayDefinitions();
+  const categoryTotals = Object.fromEntries(
+    budgetCategoryDefinitions.map((definition) => [definition.id, 0])
+  );
+  const bucketTotals = Object.fromEntries(
+    budgetBucketDefinitions.map((definition) => [definition.id, 0])
+  );
+
+  const calculateDay = (definition) => {
+    const itemEstimates = definition.items.map((item) => {
+      const itemCost = calculateBudgetItemCost(item, travelers, includeExtras);
+      const lineTotal = itemCost.included ? itemCost.total : 0;
+      return {
+        ...item,
+        itemCost,
+        lineTotal
+      };
+    });
+
+    return {
+      ...definition,
+      note: getBudgetDayState(definition.day).note,
+      itemEstimates,
+      total: itemEstimates.reduce((sum, item) => sum + item.lineTotal, 0)
+    };
+  };
+
+  const visibleDayEstimates = visibleDays.map((definition) => calculateDay(definition));
+  const optionalDayAddOnEstimates = optionalDays
+    .filter((definition) => !visibleDays.some((visible) => visible.day === definition.day))
+    .map((definition) => calculateDay(definition));
+
+  visibleDayEstimates.forEach((dayEstimate) => {
+    dayEstimate.itemEstimates.forEach((item) => {
+      if (!item.itemCost.included) {
+        return;
+      }
+
+      categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.lineTotal;
+      bucketTotals[item.bucket] = (bucketTotals[item.bucket] || 0) + item.lineTotal;
+    });
+  });
+
+  const total = visibleDayEstimates.reduce((sum, day) => sum + day.total, 0);
+  const optionalDaysAddOnTotal = optionalDayAddOnEstimates.reduce((sum, day) => sum + day.total, 0);
+  const bookedAndFixedTotal = (bucketTotals.booked || 0) + (bucketTotals.required || 0);
+
+  return {
+    travelers,
+    includeExtras,
+    visibleDayEstimates,
+    optionalDayAddOnEstimates,
+    total,
+    perPerson: travelers ? total / travelers : 0,
+    optionalDaysAddOnTotal,
+    bookedAndFixedTotal,
+    bucketTotals,
+    categoryTotals,
+    sharedTotal: categoryTotals.accommodation + categoryTotals.baggage,
+    variableTotal:
+      total - (categoryTotals.accommodation + categoryTotals.baggage)
+  };
+}
+
+function renderBudgetSummaryMarkup(estimate = calculateBudgetEstimate()) {
+  const optionalDaysUnlocked = areOptionalDaysUnlocked();
+  const optionalVisibleTotal = estimate.visibleDayEstimates
+    .filter((day) => day.optional)
+    .reduce((sum, day) => sum + day.total, 0);
+  const summaryCards = [
+    {
+      className: "budget-summary-card budget-summary-card--estimate budget-summary-card--compact",
+      label: optionalDaysUnlocked
+        ? itineraryBudgetLabels.summaryTotalUnlocked
+        : itineraryBudgetLabels.summaryTotalLocked,
+      value: formatBudgetCurrency(estimate.total),
+      meta: itineraryBudgetLabels.totalMeta
+    },
+    {
+      className: "budget-summary-card budget-summary-card--per-person budget-summary-card--compact",
+      label: itineraryBudgetLabels.summaryPerPerson,
+      value: formatBudgetCurrency(estimate.perPerson),
+      meta: {
+        en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"} / ${getBudgetRoomCount(
+          estimate.travelers
+        )} room${getBudgetRoomCount(estimate.travelers) === 1 ? "" : "s"}`,
+        ja: `${estimate.travelers}人 / ${getBudgetRoomCount(estimate.travelers)}室想定`
+      }
+    },
+    {
+      className: "budget-summary-card budget-summary-card--shared budget-summary-card--compact",
+      label: itineraryBudgetLabels.summaryBookedRequired,
+      value: formatBudgetCurrency(estimate.bookedAndFixedTotal),
+      meta: itineraryBudgetLabels.bookedRequiredMeta
+    },
+    {
+      className: "budget-summary-card budget-summary-card--optional budget-summary-card--compact",
+      label: optionalDaysUnlocked
+        ? itineraryBudgetLabels.summaryOptionalUnlocked
+        : itineraryBudgetLabels.summaryOptionalLocked,
+      value: formatBudgetCurrency(optionalDaysUnlocked ? optionalVisibleTotal : estimate.optionalDaysAddOnTotal),
+      meta: optionalDaysUnlocked
+        ? {
+            en: `${estimate.optionalDayAddOnEstimates.length || estimate.visibleDayEstimates.filter((day) => day.optional).length} optional day${
+              estimate.visibleDayEstimates.filter((day) => day.optional).length === 1 ? "" : "s"
+            } in the live total`,
+            ja: `追加日 ${estimate.visibleDayEstimates.filter((day) => day.optional).length}日 を合計へ反映`
+          }
+        : itineraryBudgetLabels.optionalInactiveMeta
+    }
+  ];
+
+  return summaryCards
+    .map(
+      (card) => `
+        <article class="${card.className}">
+          <p class="budget-summary-card__label">${renderLocalizedContent(card.label)}</p>
+          <p class="budget-summary-card__value">${escapeHtml(card.value)}</p>
+          <p class="budget-summary-card__meta">${renderLocalizedContent(card.meta)}</p>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function renderBudgetBreakdownMarkup(estimate = calculateBudgetEstimate()) {
+  const categoryCards = budgetCategoryDefinitions
+    .map(
+      (definition) => `
+        <article class="budget-breakdown-card">
+          <p class="budget-breakdown-card__label">${renderLocalizedContent(definition.label)}</p>
+          <p class="budget-breakdown-card__value">${escapeHtml(
+            formatBudgetCurrency(estimate.categoryTotals[definition.id] || 0)
+          )}</p>
+        </article>
+      `
+    )
+    .join("");
+
+  const bucketPills = ["booked", "required", "flexible", "optional"]
+    .map((bucketId) => {
+      const total = bucketId === "optional" && !estimate.includeExtras
+        ? itineraryBudgetLabels.optionalInactive
+        : { en: formatBudgetCurrency(estimate.bucketTotals[bucketId] || 0), ja: formatBudgetCurrency(estimate.bucketTotals[bucketId] || 0) };
+
+      return `
+        <span class="budget-breakdown-pill budget-breakdown-pill--${bucketId}">
+          ${renderLocalizedContent(getBudgetBucketLabel(bucketId))} · ${renderLocalizedContent(total)}
+        </span>
+      `;
+    })
+    .join("");
+
+  return `
+    <div class="budget-breakdown-grid">${categoryCards}</div>
+    <div class="budget-breakdown-pills">${bucketPills}</div>
+  `;
+}
+
+function renderBudgetSourceMetaMarkup() {
+  return `
+    <article class="budget-source-meta-card">
+      <p class="budget-source-meta-card__label">${renderLocalizedContent(
+        itineraryBudgetLabels.itineraryBasis
+      )}</p>
+      <p class="budget-source-meta-card__body">${renderLocalizedContent(budgetAssumptionCopy)}</p>
+      <p class="budget-source-meta-card__body">${renderLocalizedContent({
+        en: `${itineraryBudgetLabels.sourceUpdatedPrefix.en}: ${budgetSourceUpdatedAt}`,
+        ja: `${itineraryBudgetLabels.sourceUpdatedPrefix.ja}: ${budgetSourceUpdatedAt}`
+      })}</p>
+    </article>
+  `;
+}
+
+function renderBudgetSourcesMarkup() {
+  return budgetSourceGroups
+    .map((group) => {
+      const links = Array.isArray(group.links) ? group.links : [];
+      return `
+        <article class="budget-source-card">
+          <h4>${renderLocalizedContent(group.title)}</h4>
+          <p>${renderLocalizedContent(group.summary)}</p>
+          <div class="budget-source-card__links">
+            ${links
+              .map(
+                (link) => `
+                  <a
+                    class="budget-source-card__link"
+                    href="${escapeHtml(link.url)}"
+                    target="_blank"
+                    rel="noreferrer noopener">
+                    ${renderLocalizedContent(link.label)}
+                  </a>
+                `
+              )
+              .join("")}
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
 function getBudgetEstimateSources() {
   if (budgetEstimateSources) {
     return budgetEstimateSources;
@@ -4767,6 +5469,662 @@ function initializeBudgetNotes() {
   bindBudgetNotesUI();
   syncBudgetNotesUI();
 }
+
+(() => {
+  const getCategoryLabel = (categoryId) =>
+    budgetCategoryDefinitions.find((entry) => entry.id === categoryId)?.label || {
+      en: categoryId,
+      ja: categoryId
+    };
+  const getBucketLabel = (bucketId) =>
+    budgetBucketDefinitions.find((entry) => entry.id === bucketId)?.label || {
+      en: bucketId,
+      ja: bucketId
+    };
+  const formatCurrency = (amount) =>
+    new Intl.NumberFormat("ja-JP", {
+      style: "currency",
+      currency: "JPY",
+      maximumFractionDigits: 0
+    }).format(Math.round(Number(amount) || 0));
+  const normalizeTravelerCount = (value, fallback = budgetDefaultTravelerCount) => {
+    const parsed = Number.parseInt(String(value ?? ""), 10);
+    if (Number.isNaN(parsed)) {
+      return clamp(fallback, budgetTravelerCountMin, budgetTravelerCountMax);
+    }
+
+    return clamp(parsed, budgetTravelerCountMin, budgetTravelerCountMax);
+  };
+  const getRoomCount = (travelers = budgetDefaultTravelerCount) =>
+    Math.max(1, Math.ceil(normalizeTravelerCount(travelers) / budgetSharedRoomOccupancy));
+  const getDefaultState = () => ({
+    travelers: budgetDefaultTravelerCount,
+    includeExtras: false,
+    days: {}
+  });
+  const normalizeDayEntries = (daysCandidate) => {
+    if (!daysCandidate || typeof daysCandidate !== "object" || Array.isArray(daysCandidate)) {
+      return {};
+    }
+
+    return Object.entries(daysCandidate).reduce((nextState, [day, entry]) => {
+      const normalizedDay = Number.parseInt(String(day), 10);
+      if (
+        Number.isNaN(normalizedDay) ||
+        !budgetDayDefinitions.some((definition) => definition.day === normalizedDay)
+      ) {
+        return nextState;
+      }
+
+      const note = typeof entry?.note === "string" ? entry.note.slice(0, 280) : "";
+      if (note.trim()) {
+        nextState[String(normalizedDay)] = { note };
+      }
+
+      return nextState;
+    }, {});
+  };
+  const readState = () => {
+    const fallbackState = getDefaultState();
+
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(budgetNotesStorageKey) || "null");
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        return fallbackState;
+      }
+
+      return {
+        travelers: normalizeTravelerCount(parsed.travelers, fallbackState.travelers),
+        includeExtras: parsed.includeExtras === true,
+        days: normalizeDayEntries(parsed.days)
+      };
+    } catch (error) {
+      return fallbackState;
+    }
+  };
+  const hasChanges = () => {
+    if (
+      normalizeTravelerCount(budgetNotesState.travelers, budgetDefaultTravelerCount) !==
+        budgetDefaultTravelerCount ||
+      budgetNotesState.includeExtras === true
+    ) {
+      return true;
+    }
+
+    return Object.values(budgetNotesState.days || {}).some((entry) => String(entry?.note || "").trim());
+  };
+  const storeState = () => {
+    try {
+      if (!hasChanges()) {
+        queueStorageRemoval(budgetNotesStorageKey);
+        flushQueuedStorageWrites();
+        return;
+      }
+
+      queueStorageValue(
+        budgetNotesStorageKey,
+        JSON.stringify({
+          travelers: normalizeTravelerCount(budgetNotesState.travelers, budgetDefaultTravelerCount),
+          includeExtras: budgetNotesState.includeExtras === true,
+          days: normalizeDayEntries(budgetNotesState.days)
+        })
+      );
+      flushQueuedStorageWrites();
+    } catch (error) {
+      // Ignore storage failures and keep the budget notes usable.
+    }
+  };
+  const getTravelerCount = () =>
+    normalizeTravelerCount(budgetNotesState.travelers, budgetDefaultTravelerCount);
+  const includeExtras = () => budgetNotesState.includeExtras === true;
+  const getDayState = (day) => {
+    const entry =
+      budgetNotesState.days && typeof budgetNotesState.days[String(day)] === "object"
+        ? budgetNotesState.days[String(day)]
+        : {};
+
+    return {
+      note: typeof entry.note === "string" ? entry.note : ""
+    };
+  };
+  const updateDayState = (day, nextState) => {
+    const key = String(day);
+    const note = typeof nextState?.note === "string" ? nextState.note.slice(0, 280) : "";
+
+    if (!budgetNotesState.days || typeof budgetNotesState.days !== "object") {
+      budgetNotesState.days = {};
+    }
+
+    if (!note.trim()) {
+      delete budgetNotesState.days[key];
+    } else {
+      budgetNotesState.days[key] = { note };
+    }
+
+    storeState();
+  };
+  const visibleDays = () =>
+    budgetDayDefinitions.filter((definition) => !definition.optional || areOptionalDaysUnlocked());
+  const optionalDays = () => budgetDayDefinitions.filter((definition) => definition.optional);
+  const calculateItemCost = (item, travelers, withExtras) => {
+    const cost = item.cost || { mode: "none", amount: 0 };
+    const amount = Math.max(Number(cost.amount || 0) || 0, 0);
+    const travelerCount = normalizeTravelerCount(travelers, budgetDefaultTravelerCount);
+    const roomCount = getRoomCount(travelerCount);
+    let quantity = 0;
+    let total = 0;
+
+    if (cost.mode === "perPerson") {
+      quantity = travelerCount;
+      total = amount * travelerCount;
+    } else if (cost.mode === "perRoom") {
+      quantity = roomCount;
+      total = amount * roomCount;
+    } else if (cost.mode === "perPair") {
+      quantity = roomCount;
+      total = amount * roomCount;
+    } else if (cost.mode === "perGroup") {
+      quantity = 1;
+      total = amount;
+    }
+
+    return {
+      mode: cost.mode,
+      amount,
+      quantity,
+      total,
+      included: item.bucket !== "optional" || withExtras
+    };
+  };
+  const getItemFormulaCopy = (itemCost) => {
+    if (itemCost.mode === "perPerson") {
+      return {
+        en: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity} traveler${
+          itemCost.quantity === 1 ? "" : "s"
+        }`,
+        ja: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity}人`
+      };
+    }
+
+    if (itemCost.mode === "perRoom") {
+      return {
+        en: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity} room${
+          itemCost.quantity === 1 ? "" : "s"
+        }`,
+        ja: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity}室`
+      };
+    }
+
+    if (itemCost.mode === "perPair") {
+      return {
+        en: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity} shared stop${
+          itemCost.quantity === 1 ? "" : "s"
+        }`,
+        ja: `${formatCurrency(itemCost.amount)} x ${itemCost.quantity}件`
+      };
+    }
+
+    if (itemCost.mode === "perGroup") {
+      return { en: "One shared trip cost", ja: "旅全体の共通費" };
+    }
+
+    return { en: "No extra ticketed cost", ja: "追加費用なし" };
+  };
+  const calculateEstimate = () => {
+    const travelers = getTravelerCount();
+    const withExtras = includeExtras();
+    const activeDays = visibleDays();
+    const categoryTotals = Object.fromEntries(
+      budgetCategoryDefinitions.map((definition) => [definition.id, 0])
+    );
+    const bucketTotals = Object.fromEntries(
+      budgetBucketDefinitions.map((definition) => [definition.id, 0])
+    );
+    const calculateDay = (definition) => {
+      const itemEstimates = definition.items.map((item) => {
+        const itemCost = calculateItemCost(item, travelers, withExtras);
+        return {
+          ...item,
+          itemCost,
+          lineTotal: itemCost.included ? itemCost.total : 0
+        };
+      });
+
+      return {
+        ...definition,
+        note: getDayState(definition.day).note,
+        itemEstimates,
+        total: itemEstimates.reduce((sum, item) => sum + item.lineTotal, 0)
+      };
+    };
+    const visibleDayEstimates = activeDays.map((definition) => calculateDay(definition));
+    const optionalDayAddOnEstimates = optionalDays()
+      .filter((definition) => !activeDays.some((visible) => visible.day === definition.day))
+      .map((definition) => calculateDay(definition));
+
+    visibleDayEstimates.forEach((dayEstimate) => {
+      dayEstimate.itemEstimates.forEach((item) => {
+        if (!item.itemCost.included) {
+          return;
+        }
+
+        categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.lineTotal;
+        bucketTotals[item.bucket] = (bucketTotals[item.bucket] || 0) + item.lineTotal;
+      });
+    });
+
+    return {
+      travelers,
+      includeExtras: withExtras,
+      visibleDayEstimates,
+      optionalDayAddOnEstimates,
+      total: visibleDayEstimates.reduce((sum, day) => sum + day.total, 0),
+      perPerson: visibleDayEstimates.reduce((sum, day) => sum + day.total, 0) / travelers,
+      optionalDaysAddOnTotal: optionalDayAddOnEstimates.reduce((sum, day) => sum + day.total, 0),
+      bookedAndFixedTotal: (bucketTotals.booked || 0) + (bucketTotals.required || 0),
+      bucketTotals,
+      categoryTotals
+    };
+  };
+  const renderSummaryMarkup = (estimate = calculateEstimate()) => {
+    const optionalDaysUnlocked = areOptionalDaysUnlocked();
+    const optionalVisibleTotal = estimate.visibleDayEstimates
+      .filter((day) => day.optional)
+      .reduce((sum, day) => sum + day.total, 0);
+    const summaryCards = [
+      {
+        className: "budget-summary-card budget-summary-card--estimate budget-summary-card--compact",
+        label: optionalDaysUnlocked
+          ? itineraryBudgetLabels.summaryTotalUnlocked
+          : itineraryBudgetLabels.summaryTotalLocked,
+        value: formatCurrency(estimate.total),
+        meta: itineraryBudgetLabels.totalMeta
+      },
+      {
+        className: "budget-summary-card budget-summary-card--per-person budget-summary-card--compact",
+        label: itineraryBudgetLabels.summaryPerPerson,
+        value: formatCurrency(estimate.perPerson),
+        meta: {
+          en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"} / ${getRoomCount(
+            estimate.travelers
+          )} room${getRoomCount(estimate.travelers) === 1 ? "" : "s"}`,
+          ja: `${estimate.travelers}人 / ${getRoomCount(estimate.travelers)}室想定`
+        }
+      },
+      {
+        className: "budget-summary-card budget-summary-card--shared budget-summary-card--compact",
+        label: itineraryBudgetLabels.summaryBookedRequired,
+        value: formatCurrency(estimate.bookedAndFixedTotal),
+        meta: itineraryBudgetLabels.bookedRequiredMeta
+      },
+      {
+        className: "budget-summary-card budget-summary-card--optional budget-summary-card--compact",
+        label: optionalDaysUnlocked
+          ? itineraryBudgetLabels.summaryOptionalUnlocked
+          : itineraryBudgetLabels.summaryOptionalLocked,
+        value: formatCurrency(optionalDaysUnlocked ? optionalVisibleTotal : estimate.optionalDaysAddOnTotal),
+        meta: optionalDaysUnlocked
+          ? {
+              en: `${estimate.visibleDayEstimates.filter((day) => day.optional).length} optional day${
+                estimate.visibleDayEstimates.filter((day) => day.optional).length === 1 ? "" : "s"
+              } in the live total`,
+              ja: `追加日 ${estimate.visibleDayEstimates.filter((day) => day.optional).length}日 を合計へ反映`
+            }
+          : itineraryBudgetLabels.optionalInactiveMeta
+      }
+    ];
+
+    return summaryCards
+      .map(
+        (card) => `
+          <article class="${card.className}">
+            <p class="budget-summary-card__label">${renderLocalizedContent(card.label)}</p>
+            <p class="budget-summary-card__value">${escapeHtml(card.value)}</p>
+            <p class="budget-summary-card__meta">${renderLocalizedContent(card.meta)}</p>
+          </article>
+        `
+      )
+      .join("");
+  };
+  const renderBreakdownMarkup = (estimate = calculateEstimate()) => `
+    <div class="budget-breakdown-grid">
+      ${budgetCategoryDefinitions
+        .map(
+          (definition) => `
+            <article class="budget-breakdown-card">
+              <p class="budget-breakdown-card__label">${renderLocalizedContent(definition.label)}</p>
+              <p class="budget-breakdown-card__value">${escapeHtml(
+                formatCurrency(estimate.categoryTotals[definition.id] || 0)
+              )}</p>
+            </article>
+          `
+        )
+        .join("")}
+    </div>
+    <div class="budget-breakdown-pills">
+      ${["booked", "required", "flexible", "optional"]
+        .map((bucketId) => {
+          const total =
+            bucketId === "optional" && !estimate.includeExtras
+              ? itineraryBudgetLabels.optionalInactive
+              : {
+                  en: formatCurrency(estimate.bucketTotals[bucketId] || 0),
+                  ja: formatCurrency(estimate.bucketTotals[bucketId] || 0)
+                };
+
+          return `
+            <span class="budget-breakdown-pill budget-breakdown-pill--${bucketId}">
+              ${renderLocalizedContent(getBucketLabel(bucketId))} · ${renderLocalizedContent(total)}
+            </span>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+  const renderSourceMetaMarkup = () => `
+    <article class="budget-source-meta-card">
+      <p class="budget-source-meta-card__label">${renderLocalizedContent(
+        itineraryBudgetLabels.itineraryBasis
+      )}</p>
+      <p class="budget-source-meta-card__body">${renderLocalizedContent(budgetAssumptionCopy)}</p>
+      <p class="budget-source-meta-card__body">${renderLocalizedContent({
+        en: `${itineraryBudgetLabels.sourceUpdatedPrefix.en}: ${budgetSourceUpdatedAt}`,
+        ja: `${itineraryBudgetLabels.sourceUpdatedPrefix.ja}: ${budgetSourceUpdatedAt}`
+      })}</p>
+    </article>
+  `;
+  const renderSourcesMarkup = () =>
+    budgetSourceGroups
+      .map((group) => {
+        const links = Array.isArray(group.links) ? group.links : [];
+        return `
+          <article class="budget-source-card">
+            <h4>${renderLocalizedContent(group.title)}</h4>
+            <p>${renderLocalizedContent(group.summary)}</p>
+            ${
+              links.length
+                ? `<div class="budget-source-card__links">
+                    ${links
+                      .map(
+                        (link) => `
+                          <a
+                            class="budget-source-card__link"
+                            href="${escapeHtml(link.url)}"
+                            target="_blank"
+                            rel="noreferrer noopener">
+                            ${renderLocalizedContent(link.label)}
+                          </a>
+                        `
+                      )
+                      .join("")}
+                  </div>`
+                : ""
+            }
+          </article>
+        `;
+      })
+      .join("");
+  const renderDayMarkup = (dayEstimate) => {
+    const noteAriaEn = `Budget note for ${dayEstimate.title.en}`;
+    const noteAriaJa = `${dayEstimate.title.ja}の予算メモ`;
+
+    return `
+      <article class="budget-day-card" data-budget-day="${dayEstimate.day}">
+        <div class="budget-day-card__header">
+          <div class="budget-day-card__copy">
+            <h4>${renderLocalizedContent(dayEstimate.title)}</h4>
+            <p>${renderLocalizedContent(dayEstimate.subtitle)}</p>
+          </div>
+          <p class="budget-day-card__total">${escapeHtml(formatCurrency(dayEstimate.total))}</p>
+        </div>
+        <ul class="budget-day-card__items">
+          ${dayEstimate.itemEstimates
+            .map((item) => {
+              const chipClass =
+                item.bucket === "free"
+                  ? "budget-chip budget-chip--free"
+                  : `budget-chip budget-chip--${escapeHtml(item.bucket)}`;
+              const amountCopy =
+                item.itemCost.included || item.bucket === "free"
+                  ? formatCurrency(item.lineTotal)
+                  : itineraryBudgetLabels.optionalInactive;
+
+              return `
+                <li class="budget-line-item">
+                  <div class="budget-line-item__main">
+                    <div class="budget-line-item__headline">
+                      <span class="budget-line-item__title">${renderLocalizedContent(item.label)}</span>
+                      <span class="${chipClass}">${renderLocalizedContent(
+                        getBucketLabel(item.bucket)
+                      )}</span>
+                    </div>
+                    <p class="budget-line-item__meta">
+                      <span>${renderLocalizedContent(getCategoryLabel(item.category))}</span>
+                      <span class="budget-line-item__dot" aria-hidden="true"></span>
+                      <span>${renderLocalizedContent(getItemFormulaCopy(item.itemCost))}</span>
+                    </p>
+                  </div>
+                  <p class="budget-line-item__amount">${renderLocalizedContent({
+                    en: amountCopy,
+                    ja: amountCopy
+                  })}</p>
+                </li>
+              `;
+            })
+            .join("")}
+        </ul>
+        <label class="budget-day-card__note-field">
+          <span class="budget-day-card__note-label">${renderLocalizedContent(
+            itineraryBudgetLabels.noteLabel
+          )}</span>
+          <textarea
+            class="budget-day-card__note-input"
+            rows="3"
+            maxlength="280"
+            data-budget-note-input="${dayEstimate.day}"
+            data-placeholder-en="${escapeHtml(itineraryBudgetLabels.notePlaceholder.en)}"
+            data-placeholder-ja="${escapeHtml(itineraryBudgetLabels.notePlaceholder.ja)}"
+            data-aria-label-en="${escapeHtml(noteAriaEn)}"
+            data-aria-label-ja="${escapeHtml(noteAriaJa)}"
+            aria-label="${escapeHtml(root.lang === "ja" ? noteAriaJa : noteAriaEn)}"
+            placeholder="${escapeHtml(
+              root.lang === "ja"
+                ? itineraryBudgetLabels.notePlaceholder.ja
+                : itineraryBudgetLabels.notePlaceholder.en
+            )}">${escapeHtml(dayEstimate.note || "")}</textarea>
+        </label>
+      </article>
+    `;
+  };
+  const syncStatus = (estimate = calculateEstimate()) => {
+    if (!budgetStatusNode) {
+      return;
+    }
+
+    budgetStatusNode.innerHTML = `
+      <article class="budget-notes__empty">
+        <p>${renderLocalizedContent(itineraryBudgetLabels.statusReady)}</p>
+        <p>${renderLocalizedContent({
+          en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"} • ${
+            areOptionalDaysUnlocked() ? "Optional Days 8-9 included" : "Days 8-9 still separate"
+          }`,
+          ja: `${estimate.travelers}人 ・ ${
+            areOptionalDaysUnlocked() ? "追加の8日目と9日目を含む" : "8日目と9日目は別枠"
+          }`
+        })}</p>
+        <p>${renderLocalizedContent(itineraryBudgetLabels.statusMeta)}</p>
+      </article>
+    `;
+    syncLocalizedNodes(budgetStatusNode);
+  };
+  const syncControls = () => {
+    if (budgetTravelersInput && budgetTravelersInput.value !== String(getTravelerCount())) {
+      budgetTravelersInput.value = String(getTravelerCount());
+    }
+
+    if (budgetIncludeExtrasInput) {
+      budgetIncludeExtrasInput.checked = includeExtras();
+    }
+
+    budgetResetButtons.forEach((button) => {
+      button.disabled = !hasChanges();
+    });
+  };
+  const syncUI = () => {
+    if (!budgetNotesCard || !budgetSummaryNode || !budgetBreakdownNode || !budgetDaysNode) {
+      return;
+    }
+
+    const estimate = calculateEstimate();
+    budgetSummaryNode.innerHTML = renderSummaryMarkup(estimate);
+    budgetBreakdownNode.innerHTML = renderBreakdownMarkup(estimate);
+    budgetDaysNode.innerHTML = estimate.visibleDayEstimates.map((day) => renderDayMarkup(day)).join("");
+
+    if (budgetSourceMetaNode) {
+      budgetSourceMetaNode.innerHTML = renderSourceMetaMarkup();
+    }
+
+    if (budgetSourcesNode) {
+      budgetSourcesNode.innerHTML = renderSourcesMarkup();
+    }
+
+    [budgetSummaryNode, budgetBreakdownNode, budgetDaysNode, budgetSourceMetaNode, budgetSourcesNode]
+      .filter(Boolean)
+      .forEach((node) => syncLocalizedNodes(node));
+
+    budgetDaysNode.querySelectorAll("[data-budget-note-input]").forEach((textarea) => {
+      const placeholder = root.lang === "ja" ? textarea.dataset.placeholderJa : textarea.dataset.placeholderEn;
+      const ariaLabel = root.lang === "ja" ? textarea.dataset.ariaLabelJa : textarea.dataset.ariaLabelEn;
+      textarea.setAttribute("placeholder", placeholder || "");
+      textarea.setAttribute("aria-label", ariaLabel || "");
+    });
+
+    syncStatus(estimate);
+    syncControls();
+  };
+  const commitSettings = () => {
+    budgetNotesState.travelers = normalizeTravelerCount(
+      budgetTravelersInput?.value,
+      budgetDefaultTravelerCount
+    );
+    budgetNotesState.includeExtras = budgetIncludeExtrasInput?.checked === true;
+    storeState();
+    syncUI();
+  };
+  const resetState = () => {
+    budgetNotesState = getDefaultState();
+    storeState();
+    syncUI();
+  };
+  const bindUI = () => {
+    if (!budgetNotesCard || !budgetDaysNode) {
+      return;
+    }
+
+    if (budgetTravelersInput && budgetTravelersInput.dataset.itineraryBudgetBound !== "true") {
+      budgetTravelersInput.addEventListener("input", () => {
+        const parsedValue = Number.parseInt(budgetTravelersInput.value, 10);
+        if (Number.isNaN(parsedValue)) {
+          syncControls();
+          return;
+        }
+
+        budgetNotesState.travelers = normalizeTravelerCount(parsedValue, budgetDefaultTravelerCount);
+        storeState();
+        syncUI();
+      });
+      budgetTravelersInput.addEventListener("blur", () => {
+        syncControls();
+      });
+      budgetTravelersInput.dataset.itineraryBudgetBound = "true";
+    }
+
+    if (budgetIncludeExtrasInput && budgetIncludeExtrasInput.dataset.itineraryBudgetBound !== "true") {
+      budgetIncludeExtrasInput.addEventListener("change", () => {
+        commitSettings();
+      });
+      budgetIncludeExtrasInput.dataset.itineraryBudgetBound = "true";
+    }
+
+    budgetResetButtons.forEach((button) => {
+      if (button.dataset.itineraryBudgetBound === "true") {
+        return;
+      }
+
+      button.addEventListener("click", () => {
+        resetState();
+      });
+      button.dataset.itineraryBudgetBound = "true";
+    });
+
+    if (budgetDaysNode.dataset.itineraryBudgetBound === "true") {
+      return;
+    }
+
+    budgetDaysNode.addEventListener("input", (event) => {
+      const noteField = event.target.closest?.("[data-budget-note-input]");
+      if (!noteField) {
+        return;
+      }
+
+      updateDayState(noteField.dataset.budgetNoteInput, { note: noteField.value });
+      syncControls();
+    });
+    budgetDaysNode.dataset.itineraryBudgetBound = "true";
+  };
+  const initBudgetNotes = () => {
+    if (!budgetNotesCard) {
+      return Promise.resolve();
+    }
+
+    if (!budgetNotesInitialized) {
+      budgetNotesState = readState();
+      budgetNotesInitialized = true;
+    }
+
+    bindUI();
+    syncUI();
+    return Promise.resolve();
+  };
+
+  getBudgetCategoryLabel = getCategoryLabel;
+  getBudgetBucketLabel = getBucketLabel;
+  formatBudgetCurrency = formatCurrency;
+  normalizeBudgetTravelerCount = normalizeTravelerCount;
+  getBudgetRoomCount = getRoomCount;
+  getDefaultBudgetNotesState = getDefaultState;
+  readStoredBudgetNotesState = readState;
+  hasBudgetNotesChanges = hasChanges;
+  storeBudgetNotesState = storeState;
+  getBudgetTravelerCount = getTravelerCount;
+  shouldIncludeBudgetExtras = includeExtras;
+  getBudgetDayState = getDayState;
+  updateStoredBudgetDayState = updateDayState;
+  getBudgetVisibleDayDefinitions = visibleDays;
+  getBudgetOptionalDayDefinitions = optionalDays;
+  calculateBudgetItemCost = calculateItemCost;
+  getBudgetItemFormulaCopy = getItemFormulaCopy;
+  calculateBudgetEstimate = calculateEstimate;
+  renderBudgetSummaryMarkup = renderSummaryMarkup;
+  renderBudgetBreakdownMarkup = renderBreakdownMarkup;
+  renderBudgetSourceMetaMarkup = renderSourceMetaMarkup;
+  renderBudgetSourcesMarkup = renderSourcesMarkup;
+  renderBudgetDayMarkup = renderDayMarkup;
+  syncBudgetStatus = syncStatus;
+  syncBudgetControlsUI = syncControls;
+  syncBudgetNotesUI = syncUI;
+  commitBudgetSettings = commitSettings;
+  resetBudgetNotesState = resetState;
+  bindBudgetNotesUI = bindUI;
+  initializeBudgetNotes = initBudgetNotes;
+  refreshBudgetNotesIfReady = () => {
+    if (!budgetNotesInitialized) {
+      return;
+    }
+
+    syncUI();
+  };
+})();
 
 function readStoredLanguage() {
   try {
