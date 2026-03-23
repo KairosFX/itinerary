@@ -419,11 +419,18 @@ function renderTransitDetailFact(title, value) {
   `;
 }
 
+function setTransitDetailBusyState(isBusy) {
+  if (transitDetailSectionsNode) {
+    transitDetailSectionsNode.setAttribute("aria-busy", String(Boolean(isBusy)));
+  }
+}
+
 function renderTransitDetailPlaceholder(title, summary, body) {
   if (!transitDetailModal) {
     return;
   }
 
+  setTransitDetailBusyState(true);
   setTransitDetailTag(transitDetailLabels.defaultTag);
 
   if (transitDetailTitleNode) {
@@ -484,6 +491,7 @@ function renderTransitDetail(detail) {
     return;
   }
 
+  setTransitDetailBusyState(false);
   setTransitDetailTag(detail.tag || transitDetailLabels.defaultTag);
 
   if (transitDetailTitleNode) {
@@ -1567,7 +1575,9 @@ function renderBookingTransitItem(item) {
             <button
               class="transit-trigger transit-trigger--booking"
               type="button"
-              data-transit-detail-trigger="${escapeHtml(item.transitDetailId)}">
+              data-transit-detail-trigger="${escapeHtml(item.transitDetailId)}"
+              aria-haspopup="dialog"
+              aria-controls="transit-detail-modal">
               <span data-language="en">Transit details</span>
               <span data-language="ja" hidden>移動詳細</span>
             </button>

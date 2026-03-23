@@ -1282,6 +1282,8 @@ h3 {
   width: min(100%, 42rem);
   max-height: min(84vh, 46rem);
   overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
   padding-right: 1.3rem;
 }
 
@@ -1299,6 +1301,7 @@ h3 {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.78);
   color: var(--muted);
+  z-index: 1;
   box-shadow: 0 10px 20px rgba(55, 35, 22, 0.06);
   transition:
     transform 180ms ease,
@@ -1350,6 +1353,12 @@ h3 {
   font-size: 0.9rem;
   line-height: 1.55;
   color: var(--text);
+}
+
+.transit-modal .section-tag,
+.transit-modal h2,
+.transit-modal .section-intro {
+  padding-right: 3rem;
 }
 
 .transit-modal__sections {
