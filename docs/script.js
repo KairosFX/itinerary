@@ -64,7 +64,6 @@ const routeMapCard = document.querySelector(".route-map");
 const routeMapPreviewNode = document.querySelector("[data-route-map-preview]");
 const routeMapPreviewCanvas = document.querySelector("[data-route-map-preview-canvas]");
 const routeMapPreviewStatusNode = document.querySelector("[data-route-map-preview-status]");
-const routeMapFiltersNode = document.querySelector("[data-route-map-filters]");
 const routeMapStopsNode = document.querySelector("[data-route-map-stops]");
 const routeMapExplorerNode = document.querySelector("[data-route-map-explorer]");
 const optionalProgressItems = Array.from(
@@ -894,6 +893,7 @@ const routeMapLabels = {
   days: { en: "Related days", ja: "関連日程" },
   tools: { en: "Quick tools", ja: "クイック操作" },
   stops: { en: "Major stops", ja: "主要地点" },
+  overviewTag: { en: "Route overview", ja: "ルート全体" },
   stopTag: { en: "Stop detail", ja: "地点詳細" },
   segmentTag: { en: "Route leg", ja: "区間詳細" },
   sharedLoading: { en: "Loading unified route map...", ja: "統合ルート地図を読み込み中..." },
@@ -1386,8 +1386,8 @@ const routeExplorerViewDefinitions = [
         ja: "停留地を押すと、全体表示からその地点の詳細カードへ切り替わります。"
       },
       {
-        en: "Use the day filters for the transfer-heavy legs so the long moves stay easier to reason about.",
-        ja: "移動の多い日は日別フィルターを使うと、長い乗り継ぎの流れを見失いにくくなります。"
+        en: "Tap any highlighted route leg on the same map when you want the transfer-heavy sections without leaving the main overview.",
+        ja: "移動が多い区間を見たい時は、同じ地図上で強調されたルート区間を押すだけで全体表示のまま切り替えられます。"
       }
     ],
     dayLinks: [{ day: 1 }, { day: 4 }, { day: 7 }],
@@ -4749,6 +4749,10 @@ const itineraryBudgetLabels = {
     ja: "節約したい所、少し使いたい所、先に予約したい所をメモ。"
   },
   stayLabel: { en: "Stay type", ja: "滞在タイプ" },
+  stayCaption: {
+    en: "Choose the actual sleep base for this night.",
+    ja: "この日の実際の宿泊先を選びます。"
+  },
   stayAreaLabel: { en: "Stay area", ja: "滞在エリア" },
   stayAnchorLabel: { en: "Anchor stay", ja: "基準の宿" },
   stayWhyLabel: { en: "Route fit", ja: "この場所を選ぶ理由" },
@@ -4786,8 +4790,8 @@ const itineraryBudgetLabels = {
     ja: "有料の部屋や旅館の総額を、旅行者全員ではなく一部だけで分ける時だけ指定人数を使います。"
   },
   extrasHint: {
-    en: "Adds optional luggage handling and weather-pivot extras. Optional Days 8-9 stay separate until unlocked.",
-    ja: "荷物対応や天候回避の任意追加費用を反映します。8日目と9日目は解放するまで別枠です。"
+    en: "Adds route-specific extras like luggage handling, weather pivots, and other handoff-day add-ons. Optional Days 8-9 stay separate until unlocked.",
+    ja: "荷物対応、天候回避、受け渡し日に発生する追加費用などのルート固有コストを反映します。8日目と9日目は解放するまで別枠です。"
   },
   totalMeta: {
     en: "Lean / expected / high trip total built from the real day-by-day model",
@@ -7009,10 +7013,13 @@ function initializeBudgetNotes() {
                 ja: `追加日 ${optionalDayCount}日 を合計へ反映`
               },
               estimate.includeExtras
-                ? { en: "Route extras enabled separately", ja: "追加費用も反映中" }
+                ? {
+                    en: "Route extras on: luggage handling, weather pivots, and transfer-day add-ons",
+                    ja: "追加費用を反映中: 荷物対応、天候回避、移動日の追加コスト"
+                  }
                 : {
-                    en: "Route extras still stay outside the base total unless enabled",
-                    ja: "追加費用は有効にするまで基本合計へ入りません"
+                    en: "Route extras like luggage handling and weather fallback fares still stay outside the base total unless enabled",
+                    ja: "荷物対応や天候回避の追加運賃は、有効にするまで基本合計へ入りません"
                   }
             ])
           : itineraryBudgetLabels.optionalInactiveMeta
@@ -7187,31 +7194,54 @@ function initializeBudgetNotes() {
       : "";
     const stayControlMarkup = stayOptions.length
       ? `
-        <label class="budget-day-card__stay-field">
-          <span class="budget-day-card__stay-label">${renderLocalizedContent(
-            itineraryBudgetLabels.stayLabel
-          )}</span>
-          <select
-            class="budget-day-card__stay-select"
-            data-budget-stay-select="${dayEstimate.day}"
+        <section class="budget-day-card__stay-field" aria-label="${escapeHtml(
+          getLocalizedText(itineraryBudgetLabels.stayLabel)
+        )}">
+          <div class="budget-day-card__stay-head">
+            <span class="budget-day-card__stay-label">${renderLocalizedContent(
+              itineraryBudgetLabels.stayLabel
+            )}</span>
+            <p class="budget-day-card__stay-caption">${renderLocalizedContent(
+              itineraryBudgetLabels.stayCaption
+            )}</p>
+          </div>
+          <div
+            class="budget-day-card__stay-options"
+            role="radiogroup"
             aria-label="${escapeHtml(getLocalizedText(itineraryBudgetLabels.stayLabel))}">
             ${stayOptions
               .map((stayOption) => {
-                const optionLabel = `${getLocalizedText(stayOption.label)} · ${getLocalizedText(
-                  getStayTypeLabel(stayOption.type)
-                )}`;
-                return `<option value="${escapeHtml(stayOption.id)}" ${
-                  stayOption.id === selectedStayId ? "selected" : ""
-                }>${escapeHtml(optionLabel)}</option>`;
+                const isSelected = stayOption.id === selectedStayId;
+                const stayTypeLabel = getStayTypeLabel(stayOption.type);
+                return `
+                  <label class="budget-day-card__stay-option ${isSelected ? "is-selected" : ""}">
+                    <input
+                      class="budget-day-card__stay-radio"
+                      type="radio"
+                      name="budget-stay-${dayEstimate.day}"
+                      value="${escapeHtml(stayOption.id)}"
+                      data-budget-stay-option="${dayEstimate.day}"
+                      ${isSelected ? "checked" : ""}>
+                    <span class="budget-day-card__stay-option-copy">
+                      <span class="budget-day-card__stay-option-title">${renderLocalizedContent(
+                        stayOption.label
+                      )}</span>
+                      <span class="budget-day-card__stay-option-meta">${renderLocalizedContent(
+                        stayTypeLabel
+                      )}</span>
+                    </span>
+                    <span class="budget-day-card__stay-option-indicator" aria-hidden="true"></span>
+                  </label>
+                `;
               })
               .join("")}
-          </select>
+          </div>
           ${stayMetaMarkup}
           ${stayRouteMarkup}
           <p class="budget-day-card__stay-hint">${renderLocalizedContent(
             getStayHintCopy(dayEstimate.stayDefinition)
           )}</p>
-        </label>
+        </section>
       `
       : "";
 
@@ -7506,15 +7536,17 @@ function initializeBudgetNotes() {
     }
 
     budgetDaysNode.addEventListener("change", (event) => {
-      const staySelect = event.target.closest?.("[data-budget-stay-select]");
-      if (!staySelect) {
+      const stayControl = event.target.closest?.(
+        "[data-budget-stay-option], [data-budget-stay-select]"
+      );
+      if (!stayControl) {
         return;
       }
 
-      const day = staySelect.dataset.budgetStaySelect;
+      const day = stayControl.dataset.budgetStayOption || stayControl.dataset.budgetStaySelect;
       updateDayState(day, {
         ...getDayState(day),
-        stayId: staySelect.value
+        stayId: stayControl.value
       });
       syncControls();
       syncUI();
@@ -8662,36 +8694,6 @@ function renderRouteMapExplorerShell() {
   `;
 }
 
-function renderRouteMapFilters(selectionState) {
-  if (!routeMapFiltersNode) {
-    return;
-  }
-
-  const filtersMarkup = routeExplorerViewDefinitions
-    .filter((view) => !view.optional || optionalDaysUnlocked)
-    .map((view) => {
-      const isActive = selectionState.type === "view" && selectionState.config.id === view.id;
-      const ariaLabelEn = `Show ${view.title.en}`;
-      const ariaLabelJa = `${view.title.ja}を表示`;
-
-      return `
-        <button
-          class="booking-transit__filter route-map__filter ${isActive ? "is-active" : ""}"
-          type="button"
-          data-route-map-filter="${escapeHtml(view.id)}"
-          aria-pressed="${String(isActive)}"
-          data-aria-label-en="${escapeHtml(ariaLabelEn)}"
-          data-aria-label-ja="${escapeHtml(ariaLabelJa)}"
-          aria-label="${escapeHtml(getLocalizedText({ en: ariaLabelEn, ja: ariaLabelJa }))}">
-          ${renderLocalizedContent(view.label)}
-        </button>
-      `;
-    })
-    .join("");
-
-  setLocalizedMarkupIfChanged(routeMapFiltersNode, filtersMarkup);
-}
-
 function renderRouteMapStops(selectionState) {
   const stopsNode = getRouteMapStopsNode();
   if (!stopsNode) {
@@ -8701,7 +8703,8 @@ function renderRouteMapStops(selectionState) {
   const stopsMarkup = routeExplorerStopDefinitions
     .map((stop) => {
       const isSelected = selectionState.type === "stop" && selectionState.config.id === stop.id;
-      const isRelated = !isSelected && selectionState.stopIds.has(stop.id);
+      const isRelated =
+        selectionState.type === "segment" && !isSelected && selectionState.stopIds.has(stop.id);
       const ariaLabelEn = `Show ${stop.title.en} stop details`;
       const ariaLabelJa = `${stop.title.ja}の詳細を表示`;
 
@@ -8815,7 +8818,7 @@ function renderRouteMapDetail(selectionState) {
             ? routeMapLabels.stopTag
             : selectionState.type === "segment"
               ? routeMapLabels.segmentTag
-              : selectionState.config.label
+              : routeMapLabels.overviewTag
         )}
       </p>
       <h4 class="route-reference__title">${renderLocalizedContent(config.title)}</h4>
@@ -8869,8 +8872,9 @@ function updateRouteMapMarkerElement(entry, selectionState, interactive = routeM
 
   const stop = entry.stop;
   const isActive = selectionState.type === "stop" && selectionState.config.id === stop.id;
-  const isRelated = !isActive && selectionState.stopIds.has(stop.id);
-  const isDimmed = selectionState.stopIds.size > 0 && !isActive && !isRelated;
+  const isRelated =
+    selectionState.type === "segment" && !isActive && selectionState.stopIds.has(stop.id);
+  const isDimmed = selectionState.type !== "view" && !isActive && !isRelated;
   const markerStateKey = `${root.lang}|${isActive ? 1 : 0}|${isRelated ? 1 : 0}|${isDimmed ? 1 : 0}|${interactive ? 1 : 0}`;
 
   if (entry.stateKey === markerStateKey) {
@@ -9183,7 +9187,23 @@ function bindRouteMapInteractiveEvents(map) {
     }
 
     enableRouteMapInteractiveMode();
-    activeRouteMapSelection = { type: "segment", id: segmentId };
+    const isSameSegment =
+      activeRouteMapSelection.type === "segment" && activeRouteMapSelection.id === segmentId;
+    activeRouteMapSelection = isSameSegment
+      ? { type: "view", id: routeExplorerDefaultSelectionId }
+      : { type: "segment", id: segmentId };
+    scheduleRouteMapUISync({ updateCamera: true, animateCamera: true });
+  });
+
+  map.on("click", (event) => {
+    const hitSegments = map.queryRenderedFeatures(event.point, {
+      layers: ["route-map-segments-hit"]
+    });
+    if (hitSegments.length || activeRouteMapSelection.type === "view") {
+      return;
+    }
+
+    activeRouteMapSelection = { type: "view", id: routeExplorerDefaultSelectionId };
     scheduleRouteMapUISync({ updateCamera: true, animateCamera: true });
   });
 
@@ -9315,7 +9335,6 @@ function syncRouteMapUI(options = {}) {
   const { updateCamera = false, animateCamera = false, resetOverview = false } = options;
   const selectionState = getRouteMapSelectionState();
 
-  renderRouteMapFilters(selectionState);
   renderRouteMapStops(selectionState);
   renderRouteMapDetail(selectionState);
 
@@ -9386,20 +9405,16 @@ function ensureRouteMapInitialized() {
 }
 
 function handleRouteMapClick(event) {
-  const filterTrigger = event.target.closest("[data-route-map-filter]");
-  if (filterTrigger) {
-    event.preventDefault();
-    enableRouteMapInteractiveMode();
-    activeRouteMapSelection = { type: "view", id: filterTrigger.dataset.routeMapFilter || "" };
-    scheduleRouteMapUISync({ updateCamera: true, animateCamera: true });
-    return;
-  }
-
   const stopTrigger = event.target.closest("[data-route-map-stop]");
   if (stopTrigger) {
     event.preventDefault();
     enableRouteMapInteractiveMode();
-    activeRouteMapSelection = { type: "stop", id: stopTrigger.dataset.routeMapStop || "" };
+    const stopId = stopTrigger.dataset.routeMapStop || "";
+    const isSameStop =
+      activeRouteMapSelection.type === "stop" && activeRouteMapSelection.id === stopId;
+    activeRouteMapSelection = isSameStop
+      ? { type: "view", id: routeExplorerDefaultSelectionId }
+      : { type: "stop", id: stopId };
     scheduleRouteMapUISync({ updateCamera: true, animateCamera: true });
     return;
   }
