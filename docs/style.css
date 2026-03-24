@@ -3497,6 +3497,35 @@ html.has-modal-open body {
   border-radius: inherit;
 }
 
+.route-map__map-shell .maplibregl-ctrl-bottom-right {
+  z-index: 5;
+  margin: 0;
+}
+
+.route-map__map-shell .maplibregl-ctrl.maplibregl-ctrl-attrib {
+  margin: 0 0.7rem 0.7rem 0;
+  padding: 0.2rem 0.48rem;
+  border-radius: 999px;
+  border: 1px solid rgba(171, 74, 59, 0.12);
+  background: rgba(255, 252, 248, 0.88);
+  box-shadow: 0 10px 24px rgba(55, 35, 22, 0.08);
+  color: rgba(76, 66, 62, 0.86);
+  font-size: 0.66rem;
+  line-height: 1.3;
+}
+
+.route-map__map-shell .maplibregl-ctrl.maplibregl-ctrl-attrib a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.11rem;
+}
+
+.route-map__map-shell .maplibregl-ctrl.maplibregl-ctrl-attrib.maplibregl-compact-show::after,
+.route-map__map-shell .maplibregl-ctrl.maplibregl-ctrl-attrib button {
+  color: inherit;
+}
+
 .route-map__status {
   position: absolute;
   left: 1rem;
@@ -5053,6 +5082,13 @@ html[data-theme="dark"] .route-map__map-shell--interactive {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.04),
     0 24px 42px rgba(7, 8, 9, 0.34);
+}
+
+html[data-theme="dark"] .route-map__map-shell .maplibregl-ctrl.maplibregl-ctrl-attrib {
+  border-color: rgba(248, 239, 228, 0.08);
+  background: rgba(17, 20, 24, 0.9);
+  color: rgba(239, 230, 218, 0.76);
+  box-shadow: 0 16px 30px rgba(2, 3, 5, 0.24);
 }
 
 html[data-theme="dark"] .route-map__preview-kicker,

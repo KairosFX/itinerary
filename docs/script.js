@@ -106,9 +106,10 @@ const bookingTransitItemsDataUrl = "./assets/data/booking-transit-items.json";
 const transitDetailsDataUrl = "./assets/data/transit-details.json";
 const offlineSnapshotUrl = "./japan-escape-itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-03-23-offline-v12";
+const offlineBundleVersion = "2026-03-23-offline-v13";
 const routeMapLibraryScriptUrl = "./assets/vendor/maplibre/maplibre-gl.js";
 const routeMapLibraryStyleUrl = "./assets/vendor/maplibre/maplibre-gl.css";
+const routeMapOpenFreeMapStyleUrl = "https://tiles.openfreemap.org/styles/liberty";
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const inlineDataSelectors = {
   bookingTransit: "[data-booking-transit-inline]",
@@ -773,8 +774,8 @@ const routeMapModeDefinitions = {
     getShellNode: () => routeMapPreviewNode,
     loadingTitle: routeMapLabels.previewLoading,
     loadingBody: {
-      en: "This shared MapLibre route preview stays light, then expands into the full explorer only when you open it.",
-      ja: "この共有MapLibreルートプレビューは軽いまま表示され、開いたときだけ詳しい探索地図へ広がります。"
+      en: "This shared OpenFreeMap + MapLibre preview stays light, then expands into the full explorer only when you open it.",
+      ja: "この共有OpenFreeMap + MapLibreプレビューは軽いまま表示され、開いたときだけ詳しい探索地図へ広がります。"
     },
     fallbackTitle: routeMapLabels.previewFallbackTitle,
     fallbackBody: routeMapLabels.previewFallbackBody,
@@ -795,8 +796,8 @@ const routeMapModeDefinitions = {
     getShellNode: () => routeMapInteractive,
     loadingTitle: routeMapLabels.interactiveLoading,
     loadingBody: {
-      en: "The expanded explorer reuses the same route line, stop markers, and styling as the preview mode.",
-      ja: "拡張地図はプレビューモードと同じルート線、停留地マーカー、スタイルをそのまま使います。"
+      en: "The expanded explorer reuses the same OpenFreeMap basemap, route line, stop markers, and styling as the preview mode.",
+      ja: "拡張地図はプレビューモードと同じOpenFreeMap地図、ルート線、停留地マーカー、スタイルをそのまま使います。"
     },
     fallbackTitle: routeMapLabels.interactiveFallbackTitle,
     fallbackBody: routeMapLabels.interactiveFallbackBody,
@@ -7951,146 +7952,181 @@ function getRouteMapGeoJsonData() {
   return getRouteMapGeoJsonData.cache;
 }
 
-function buildRouteMapStyle(theme = getCurrentTheme()) {
-  const palette = getRouteMapPalette(theme);
-  const geoJsonData = getRouteMapGeoJsonData();
+function getRouteMapBaseStyleUrl() {
+  return routeMapOpenFreeMapStyleUrl;
+}
 
-  return {
-    version: 8,
-    name: "Japan Escape Route",
-    center: [137.4, 35.1],
-    zoom: 4.9,
-    sources: {
-      "route-map-backdrop": {
-        type: "geojson",
-        data: geoJsonData.backdrop
-      },
-      "route-map-full": {
-        type: "geojson",
-        data: geoJsonData.full,
-        lineMetrics: true
-      },
-      "route-map-segments": {
-        type: "geojson",
-        data: geoJsonData.segments
+function getRouteMapLayerInsertBeforeId(map) {
+  const layers = map?.getStyle?.()?.layers;
+  if (!Array.isArray(layers)) {
+    return null;
+  }
+
+  const firstLabelLayer = layers.find(
+    (layer) =>
+      layer?.type === "symbol" &&
+      (layer.layout?.["text-field"] || layer.layout?.["icon-image"])
+  );
+
+  return firstLabelLayer?.id || null;
+}
+
+function buildRouteMapOverlayLayers(theme = getCurrentTheme()) {
+  const palette = getRouteMapPalette(theme);
+
+  return [
+    {
+      id: "route-map-backdrop-outer",
+      type: "circle",
+      source: "route-map-backdrop",
+      paint: {
+        "circle-color": palette.glowOuter,
+        "circle-opacity": 1,
+        "circle-radius": ["get", "outerRadius"],
+        "circle-blur": 0.52
       }
     },
-    layers: [
-      {
-        id: "route-map-background",
-        type: "background",
-        paint: {
-          "background-color": palette.background
-        }
-      },
-      {
-        id: "route-map-backdrop-outer",
-        type: "circle",
-        source: "route-map-backdrop",
-        paint: {
-          "circle-color": palette.glowOuter,
-          "circle-opacity": 1,
-          "circle-radius": ["get", "outerRadius"],
-          "circle-blur": 0.52
-        }
-      },
-      {
-        id: "route-map-backdrop-inner",
-        type: "circle",
-        source: "route-map-backdrop",
-        paint: {
-          "circle-color": palette.glowInner,
-          "circle-opacity": 1,
-          "circle-radius": ["get", "innerRadius"],
-          "circle-blur": 0.42
-        }
-      },
-      {
-        id: "route-map-corridor",
-        type: "line",
-        source: "route-map-full",
-        layout: {
-          "line-cap": "round",
-          "line-join": "round"
-        },
-        paint: {
-          "line-color": palette.corridor,
-          "line-opacity": 1,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 26, 7.3, 62]
-        }
-      },
-      {
-        id: "route-map-shadow",
-        type: "line",
-        source: "route-map-full",
-        layout: {
-          "line-cap": "round",
-          "line-join": "round"
-        },
-        paint: {
-          "line-color": palette.shadow,
-          "line-opacity": 0.9,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 12, 7.3, 24]
-        }
-      },
-      {
-        id: "route-map-full-gradient",
-        type: "line",
-        source: "route-map-full",
-        layout: {
-          "line-cap": "round",
-          "line-join": "round"
-        },
-        paint: {
-          "line-gradient": getRouteMapGradientExpression(theme),
-          "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 5.5, 7.3, 9.5]
-        }
-      },
-      {
-        id: "route-map-segments-active",
-        type: "line",
-        source: "route-map-segments",
-        layout: {
-          "line-cap": "round",
-          "line-join": "round"
-        },
-        paint: {
-          "line-color": palette.segmentActive,
-          "line-opacity": 0.92,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 4.5, 7.3, 6.8]
-        }
-      },
-      {
-        id: "route-map-segment-selected",
-        type: "line",
-        source: "route-map-segments",
-        filter: ["==", ["get", "id"], "__none__"],
-        layout: {
-          "line-cap": "round",
-          "line-join": "round"
-        },
-        paint: {
-          "line-color": palette.segmentSelected,
-          "line-opacity": 1,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 7.2, 7.3, 10.8]
-        }
-      },
-      {
-        id: "route-map-segments-hit",
-        type: "line",
-        source: "route-map-segments",
-        layout: {
-          "line-cap": "round",
-          "line-join": "round"
-        },
-        paint: {
-          "line-color": "#000000",
-          "line-opacity": 0,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 18, 7.3, 28]
-        }
+    {
+      id: "route-map-backdrop-inner",
+      type: "circle",
+      source: "route-map-backdrop",
+      paint: {
+        "circle-color": palette.glowInner,
+        "circle-opacity": 1,
+        "circle-radius": ["get", "innerRadius"],
+        "circle-blur": 0.42
       }
-    ]
+    },
+    {
+      id: "route-map-corridor",
+      type: "line",
+      source: "route-map-full",
+      layout: {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      paint: {
+        "line-color": palette.corridor,
+        "line-opacity": 1,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 26, 7.3, 62]
+      }
+    },
+    {
+      id: "route-map-shadow",
+      type: "line",
+      source: "route-map-full",
+      layout: {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      paint: {
+        "line-color": palette.shadow,
+        "line-opacity": 0.9,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 12, 7.3, 24]
+      }
+    },
+    {
+      id: "route-map-full-gradient",
+      type: "line",
+      source: "route-map-full",
+      layout: {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      paint: {
+        "line-gradient": getRouteMapGradientExpression(theme),
+        "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 5.5, 7.3, 9.5]
+      }
+    },
+    {
+      id: "route-map-segments-active",
+      type: "line",
+      source: "route-map-segments",
+      layout: {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      paint: {
+        "line-color": palette.segmentActive,
+        "line-opacity": 0.92,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 4.5, 7.3, 6.8]
+      }
+    },
+    {
+      id: "route-map-segment-selected",
+      type: "line",
+      source: "route-map-segments",
+      filter: ["==", ["get", "id"], "__none__"],
+      layout: {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      paint: {
+        "line-color": palette.segmentSelected,
+        "line-opacity": 1,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 7.2, 7.3, 10.8]
+      }
+    },
+    {
+      id: "route-map-segments-hit",
+      type: "line",
+      source: "route-map-segments",
+      layout: {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      paint: {
+        "line-color": "#000000",
+        "line-opacity": 0,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 4.3, 18, 7.3, 28]
+      }
+    }
+  ];
+}
+
+function ensureRouteMapOverlayStyle(map) {
+  if (!map) {
+    return;
+  }
+
+  const geoJsonData = getRouteMapGeoJsonData();
+  const sourceDefinitions = {
+    "route-map-backdrop": {
+      type: "geojson",
+      data: geoJsonData.backdrop
+    },
+    "route-map-full": {
+      type: "geojson",
+      data: geoJsonData.full,
+      lineMetrics: true
+    },
+    "route-map-segments": {
+      type: "geojson",
+      data: geoJsonData.segments
+    }
   };
+
+  Object.entries(sourceDefinitions).forEach(([sourceId, sourceDefinition]) => {
+    if (!map.getSource(sourceId)) {
+      map.addSource(sourceId, sourceDefinition);
+    }
+  });
+
+  const beforeLayerId = getRouteMapLayerInsertBeforeId(map) || undefined;
+  buildRouteMapOverlayLayers().forEach((layerDefinition) => {
+    if (!map.getLayer(layerDefinition.id)) {
+      map.addLayer(layerDefinition, beforeLayerId);
+    }
+  });
+}
+
+function ensureRouteMapAttributionControl(map) {
+  if (!map || map.__routeMapAttributionBound || !window.maplibregl?.AttributionControl) {
+    return;
+  }
+
+  map.addControl(new window.maplibregl.AttributionControl({ compact: true }), "bottom-right");
+  map.__routeMapAttributionBound = true;
 }
 
 function setRouteMapStatus(node, titleContent, bodyContent, state = "loading") {
@@ -8404,7 +8440,6 @@ function applyRouteMapPaintTheme(map) {
 
   const palette = getRouteMapPalette();
   const themeSetters = [
-    ["route-map-background", "background-color", palette.background],
     ["route-map-backdrop-outer", "circle-color", palette.glowOuter],
     ["route-map-backdrop-inner", "circle-color", palette.glowInner],
     ["route-map-corridor", "line-color", palette.corridor],
@@ -8664,13 +8699,16 @@ function ensureRouteMapModeReady(mode) {
     const maplibregl = await loadRouteMapLibrary();
     state.map = new maplibregl.Map({
       container: canvasNode,
-      style: buildRouteMapStyle(),
+      style: getRouteMapBaseStyleUrl(),
       ...config.mapOptions
     });
 
     await new Promise((resolve) => {
       state.map.once("load", resolve);
     });
+
+    ensureRouteMapAttributionControl(state.map);
+    ensureRouteMapOverlayStyle(state.map);
 
     if (config.interactive) {
       bindRouteMapInteractiveEvents(state.map);
