@@ -1464,12 +1464,24 @@ const routeExplorerViewDefinitions = [
     label: { en: "All path", ja: "全体" },
     title: { en: "Full trip flow", ja: "旅全体の流れ" },
     summary: {
-      en: "Select a major stop to focus the map, related days, and transfer details in the panel.",
-      ja: "主要地点を選ぶと、地図・関連日程・移動詳細をこのパネルでまとめて確認できます。"
+      en: "Use the same map surface to scan the Osaka-to-Tokyo flow, then focus a stop or route leg for day links and transfer detail.",
+      ja: "同じ地図面で大阪から東京までの流れを見渡し、地点や区間へ切り替えて関連日程や移動詳細まで追える全体表示です。"
     },
-    badges: [],
-    notes: [],
-    dayLinks: [{ day: 1 }, { day: 4 }, { day: 7 }],
+    badges: [
+      { en: "Days 1-7", ja: "1日目-7日目" },
+      { en: "Stops + transfer legs", ja: "地点＋移動区間" }
+    ],
+    notes: [
+      {
+        en: "Major-stop chips keep the city and base context visible, while route-leg selection isolates the transfers that need extra attention.",
+        ja: "主要地点チップでは都市や拠点の流れを見渡せて、区間選択では注意したい移動だけを切り出せます。"
+      },
+      {
+        en: "Hakone, Fuji, and Tokyo stay intentionally broad here so the map remains readable; related days and saved transit tools carry the practical detail.",
+        ja: "箱根、富士、東京はここではあえて広めにまとめ、地図の見やすさを保っています。実務的な細部は関連日程と保存済み移動詳細で補います。"
+      }
+    ],
+    dayLinks: [{ day: 1 }, { day: 2 }, { day: 3 }, { day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }],
     stopIds: ["osaka", "kyoto", "shin-osaka", "odawara", "hakone", "fuji", "tokyo"],
     segmentIds: routeExplorerPathDefinitions.map((path) => path.id)
   },
@@ -9321,6 +9333,15 @@ function renderRouteMapDetail(selectionState) {
 
   const config = selectionState.config;
   const visibleDayLinks = getVisibleRouteDayLinks(config.dayLinks || []);
+  const badgesMarkup = Array.isArray(config.badges) && config.badges.length
+    ? `
+        <div class="route-reference__pills">
+          ${config.badges
+            .map((badge) => `<span class="route-reference__pill">${renderLocalizedContent(badge)}</span>`)
+            .join("")}
+        </div>
+      `
+    : "";
   const notesMarkup = (config.notes || [])
     .map((note) => `<li class="route-reference__list-item">${renderLocalizedContent(note)}</li>`)
     .join("");
@@ -9352,6 +9373,7 @@ function renderRouteMapDetail(selectionState) {
       <h4 class="route-reference__title">${renderLocalizedContent(config.title)}</h4>
       <p class="route-reference__summary">${renderLocalizedContent(config.summary)}</p>
     </div>
+    ${badgesMarkup}
     ${notesMarkup ? `<ul class="route-reference__list">${notesMarkup}</ul>` : ""}
     ${daysMarkup}
     ${transitActionsMarkup}
