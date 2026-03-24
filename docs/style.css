@@ -3654,6 +3654,10 @@ html.has-modal-open body {
   cursor: pointer;
 }
 
+.route-map-marker--preview {
+  pointer-events: none;
+}
+
 .route-map-marker__pin {
   position: relative;
   display: grid;
@@ -3791,166 +3795,6 @@ html.has-modal-open body {
   color: rgba(76, 66, 62, 0.86);
   font-size: 0.78rem;
   line-height: 1.5;
-}
-
-.route-map__stage {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 5 / 3;
-  border-radius: calc(var(--radius-lg) - 4px);
-  border: 1px solid rgba(171, 74, 59, 0.12);
-  background:
-    radial-gradient(circle at 80% 18%, rgba(171, 74, 59, 0.08), rgba(171, 74, 59, 0) 28%),
-    linear-gradient(180deg, rgba(255, 254, 250, 0.96), rgba(245, 238, 231, 0.92));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    0 18px 34px rgba(55, 35, 22, 0.08);
-}
-
-.route-map__stage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 18% 82%, rgba(171, 74, 59, 0.08), rgba(171, 74, 59, 0) 18%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
-  pointer-events: none;
-  z-index: 1;
-}
-
-.route-map__stage-image,
-.route-map__overlay,
-.route-map__markers {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.route-map__stage-image {
-  object-fit: cover;
-  object-position: center;
-}
-
-.route-map__overlay {
-  z-index: 2;
-  pointer-events: auto;
-}
-
-.route-map__markers {
-  z-index: 3;
-}
-
-.route-map__path {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.route-map__path--shadow {
-  stroke: rgba(255, 248, 242, 0.84);
-  stroke-width: 18px;
-  opacity: 0.94;
-}
-
-.route-map__path--base {
-  stroke: rgba(98, 74, 68, 0.14);
-  stroke-width: 7px;
-}
-
-.route-map__path--base,
-.route-map__path--shadow {
-  pointer-events: none;
-}
-
-.route-map__path--segment {
-  stroke-width: 8px;
-  pointer-events: stroke;
-  cursor: pointer;
-  transition:
-    opacity 180ms ease,
-    stroke 180ms ease,
-    stroke-width 180ms ease,
-    filter 180ms ease;
-}
-
-.route-map__path--segment.is-active {
-  stroke: rgba(155, 60, 51, 0.94);
-  opacity: 1;
-}
-
-.route-map__path--segment.is-selected,
-.route-map__path--segment:hover,
-.route-map__path--segment:focus-visible {
-  stroke-width: 10px;
-  filter: drop-shadow(0 0 6px rgba(171, 74, 59, 0.16));
-  outline: none;
-}
-
-.route-map__path--segment.is-muted {
-  stroke: rgba(98, 74, 68, 0.16);
-  opacity: 0.24;
-}
-
-.route-map__marker {
-  position: absolute;
-  left: var(--route-marker-x);
-  top: var(--route-marker-y);
-  width: 1.52rem;
-  height: 1.52rem;
-  padding: 0;
-  border: none;
-  background: transparent;
-  transform: translate(-50%, -50%);
-  display: grid;
-  place-items: center;
-  transition:
-    transform 180ms ease,
-    opacity 180ms ease;
-}
-
-.route-map__marker::before {
-  content: "";
-  position: absolute;
-  inset: 0.12rem;
-  border-radius: 50%;
-  background: rgba(255, 250, 245, 0.8);
-  border: 1px solid rgba(171, 74, 59, 0.18);
-  box-shadow: 0 10px 20px rgba(55, 35, 22, 0.12);
-}
-
-.route-map__marker-core {
-  position: relative;
-  z-index: 1;
-  width: 0.58rem;
-  height: 0.58rem;
-  border-radius: 50%;
-  background: linear-gradient(180deg, rgba(171, 74, 59, 0.98), rgba(133, 47, 38, 1));
-}
-
-.route-map__marker.is-active {
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.route-map__marker.is-active::before {
-  inset: 0;
-  background: rgba(171, 74, 59, 0.18);
-  border-color: rgba(171, 74, 59, 0.36);
-}
-
-.route-map__marker.is-related::before {
-  inset: 0.04rem;
-  background: rgba(171, 74, 59, 0.12);
-  border-color: rgba(171, 74, 59, 0.24);
-}
-
-.route-map__marker.is-dimmed {
-  opacity: 0.42;
-}
-
-.route-map__marker:hover,
-.route-map__marker:focus-visible {
-  transform: translate(-50%, -50%) scale(1.08);
 }
 
 .route-reference {
