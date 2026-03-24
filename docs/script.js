@@ -991,16 +991,12 @@ const routeMapLabels = {
   days: { en: "Related days", ja: "関連日程" },
   tools: { en: "Quick tools", ja: "クイック操作" },
   stops: { en: "Major stops", ja: "主要地点" },
-  overviewTag: { en: "Route overview", ja: "ルート全体" },
-  stopTag: { en: "Stop detail", ja: "地点詳細" },
-  segmentTag: { en: "Route leg", ja: "区間詳細" },
-  sharedLoading: { en: "Loading unified route map...", ja: "統合ルート地図を読み込み中..." },
+  sharedLoading: { en: "Loading route map...", ja: "ルート地図を読み込み中..." },
   sharedFallbackTitle: { en: "Route map could not load here", ja: "この環境ではルート地図を読み込めませんでした" },
   sharedFallbackBody: {
-    en: "The route order, stop details, day jumps, and saved transit links still work below. Use the Google Maps link if the live map still cannot initialize here.",
-    ja: "下のルート順、停留地詳細、日程ジャンプ、保存済み移動リンクはそのまま使えます。ライブ地図がそれでも初期化できない場合は Google マップのリンクを使ってください。"
-  },
-  popupJump: { en: "Jump to related day", ja: "関連日程へ移動" }
+    en: "Use the Google Maps link if the live route map still cannot initialize here.",
+    ja: "ライブのルート地図がどうしても初期化できない場合は、Google マップのリンクを使ってください。"
+  }
 };
 const routeExplorerDefaultSelectionId = "overview";
 const routeMapInitialView = {
@@ -1010,10 +1006,7 @@ const routeMapInitialView = {
 const routeMapDisplayDefinitions = {
   preview: {
     loadingTitle: routeMapLabels.sharedLoading,
-    loadingBody: {
-      en: "The same route map loads once as the route overview, then supports live stop and route interaction in place.",
-      ja: "同じルート地図を一度だけルート概要として読み込み、そのまま地点や区間のライブ操作に対応します。"
-    },
+    loadingBody: null,
     overviewMaxZoom: 5.75
   },
   interactive: {
@@ -1471,23 +1464,11 @@ const routeExplorerViewDefinitions = [
     label: { en: "All path", ja: "全体" },
     title: { en: "Full trip flow", ja: "旅全体の流れ" },
     summary: {
-      en: "Use this for the big picture from Kansai through Hakone and the Fuji side into Tokyo.",
-      ja: "関西から箱根、富士側を経て東京へ向かう全体の流れをひと目で確認する表示です。"
+      en: "Select a major stop to focus the map, related days, and transfer details in the panel.",
+      ja: "主要地点を選ぶと、地図・関連日程・移動詳細をこのパネルでまとめて確認できます。"
     },
-    badges: [
-      { en: "7 core stages", ja: "7つの主要段階" },
-      { en: "Static + interactive", ja: "静的＋操作表示" }
-    ],
-    notes: [
-      {
-        en: "Tap any stop to switch from the overall path to a stop-specific context card.",
-        ja: "停留地を押すと、全体表示からその地点の詳細カードへ切り替わります。"
-      },
-      {
-        en: "Tap any highlighted route leg on the same map when you want the transfer-heavy sections without leaving the main overview.",
-        ja: "移動が多い区間を見たい時は、同じ地図上で強調されたルート区間を押すだけで全体表示のまま切り替えられます。"
-      }
-    ],
+    badges: [],
+    notes: [],
     dayLinks: [{ day: 1 }, { day: 4 }, { day: 7 }],
     stopIds: ["osaka", "kyoto", "shin-osaka", "odawara", "hakone", "fuji", "tokyo"],
     segmentIds: routeExplorerPathDefinitions.map((path) => path.id)
@@ -1733,10 +1714,10 @@ let budgetNotesState = getDefaultBudgetNotesState();
 let budgetNotesInitialized = false;
 let routeMapInitialized = false;
 let routeMapLibraryPromise = null;
+let routeMapStylesheetPromise = null;
 const routeMapState = createRouteMapState();
 let routeMapDisplayMode = "preview";
 let routeMapActivePopup = null;
-let routeMapActivePopupSelectionKey = "";
 let activeRouteMapSelection = { type: "view", id: routeExplorerDefaultSelectionId };
 let routeMapUISyncFrame = 0;
 let pendingRouteMapUISyncOptions = {
@@ -8584,51 +8565,99 @@ function setRouteMapFilterIfChanged(map, layerId, value) {
 }
 
 function loadRouteMapLibrary() {
+  const loadRouteMapStylesheet = () => {
+    if (routeMapStylesheetPromise) {
+      return routeMapStylesheetPromise;
+    }
+
+    routeMapStylesheetPromise = new Promise((resolve, reject) => {
+      const bindStylesheet = (link) => {
+        if (!link) {
+          reject(new Error("MapLibre stylesheet element is missing."));
+          return;
+        }
+
+        if (link.dataset.loaded === "true" || link.sheet) {
+          link.dataset.loaded = "true";
+          resolve();
+          return;
+        }
+
+        const handleLoad = () => {
+          link.dataset.loaded = "true";
+          resolve();
+        };
+        const handleError = () => {
+          routeMapStylesheetPromise = null;
+          reject(new Error("MapLibre stylesheet failed to load."));
+        };
+
+        link.addEventListener("load", handleLoad, { once: true });
+        link.addEventListener("error", handleError, { once: true });
+      };
+
+      const existingLink = document.querySelector("[data-route-maplibre-style]");
+      if (existingLink) {
+        bindStylesheet(existingLink);
+        return;
+      }
+
+      const styleLink = document.createElement("link");
+      styleLink.rel = "stylesheet";
+      styleLink.href = routeMapLibraryStyleUrl;
+      styleLink.setAttribute("data-route-maplibre-style", "true");
+      bindStylesheet(styleLink);
+      document.head.append(styleLink);
+    });
+
+    return routeMapStylesheetPromise;
+  };
+
   if (window.maplibregl) {
-    return Promise.resolve(window.maplibregl);
+    return loadRouteMapStylesheet().then(() => window.maplibregl);
   }
 
   if (routeMapLibraryPromise) {
     return routeMapLibraryPromise;
   }
 
-  routeMapLibraryPromise = new Promise((resolve, reject) => {
-    if (!document.querySelector("[data-route-maplibre-style]")) {
-      const styleLink = document.createElement("link");
-      styleLink.rel = "stylesheet";
-      styleLink.href = routeMapLibraryStyleUrl;
-      styleLink.setAttribute("data-route-maplibre-style", "true");
-      document.head.append(styleLink);
-    }
+  routeMapLibraryPromise = Promise.all([
+    loadRouteMapStylesheet(),
+    new Promise((resolve, reject) => {
+      const finishLoad = () => {
+        if (window.maplibregl) {
+          resolve(window.maplibregl);
+          return;
+        }
 
-    const finishLoad = () => {
-      if (window.maplibregl) {
-        resolve(window.maplibregl);
+        reject(new Error("MapLibre runtime did not initialize."));
+      };
+
+      const failLoad = () => {
+        reject(new Error("MapLibre assets failed to load."));
+      };
+
+      const existingScript = document.querySelector("[data-route-maplibre-script]");
+      if (existingScript) {
+        existingScript.addEventListener("load", finishLoad, { once: true });
+        existingScript.addEventListener("error", failLoad, { once: true });
         return;
       }
 
-      reject(new Error("MapLibre runtime did not initialize."));
-    };
-
-    const failLoad = () => {
-      reject(new Error("MapLibre assets failed to load."));
-    };
-
-    const existingScript = document.querySelector("[data-route-maplibre-script]");
-    if (existingScript) {
-      existingScript.addEventListener("load", finishLoad, { once: true });
-      existingScript.addEventListener("error", failLoad, { once: true });
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = routeMapLibraryScriptUrl;
-    script.defer = true;
-    script.setAttribute("data-route-maplibre-script", "true");
-    script.addEventListener("load", finishLoad, { once: true });
-    script.addEventListener("error", failLoad, { once: true });
-    document.head.append(script);
-  });
+      const script = document.createElement("script");
+      script.src = routeMapLibraryScriptUrl;
+      script.defer = true;
+      script.setAttribute("data-route-maplibre-script", "true");
+      script.addEventListener("load", finishLoad, { once: true });
+      script.addEventListener("error", failLoad, { once: true });
+      document.head.append(script);
+    })
+  ])
+    .then(([, maplibregl]) => maplibregl)
+    .catch((error) => {
+      routeMapLibraryPromise = null;
+      throw error;
+    });
 
   return routeMapLibraryPromise;
 }
@@ -9063,6 +9092,58 @@ function ensureRouteMapAttributionControl(map) {
 
   map.addControl(new window.maplibregl.AttributionControl({ compact: true }), "bottom-right");
   map.__routeMapAttributionBound = true;
+  window.requestAnimationFrame(() => {
+    const attributionNode = map.getContainer?.()?.querySelector?.(".maplibregl-ctrl-attrib");
+    attributionNode?.classList.add("maplibregl-compact");
+  });
+}
+
+function waitForRouteMapLoad(map, timeoutMs = 12000) {
+  return new Promise((resolve, reject) => {
+    if (!map) {
+      reject(new Error("Route map instance is missing."));
+      return;
+    }
+
+    let settled = false;
+    let timeoutId = 0;
+
+    const cleanup = () => {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+      map.off?.("load", handleLoad);
+      map.off?.("error", handleError);
+    };
+
+    const settle = (callback) => {
+      if (settled) {
+        return;
+      }
+
+      settled = true;
+      cleanup();
+      callback();
+    };
+
+    const handleLoad = () => {
+      settle(() => resolve());
+    };
+
+    const handleError = (event) => {
+      const cause = event?.error;
+      settle(() =>
+        reject(cause instanceof Error ? cause : new Error("Route map style failed to load."))
+      );
+    };
+
+    timeoutId = window.setTimeout(() => {
+      settle(() => reject(new Error("Route map initialization timed out.")));
+    }, timeoutMs);
+
+    map.once("load", handleLoad);
+    map.on("error", handleError);
+  });
 }
 
 function setRouteMapStatus(node, titleContent, bodyContent, state = "loading") {
@@ -9185,9 +9266,6 @@ function renderRouteMapDetail(selectionState) {
 
   const config = selectionState.config;
   const visibleDayLinks = getVisibleRouteDayLinks(config.dayLinks || []);
-  const badgesMarkup = (config.badges || [])
-    .map((badge) => `<span class="route-reference__pill">${renderLocalizedContent(badge)}</span>`)
-    .join("");
   const notesMarkup = (config.notes || [])
     .map((note) => `<li class="route-reference__list-item">${renderLocalizedContent(note)}</li>`)
     .join("");
@@ -9216,19 +9294,9 @@ function renderRouteMapDetail(selectionState) {
     detailNode,
     `
     <div class="route-reference__copy">
-      <p class="section-tag section-tag--route">
-        ${renderLocalizedContent(
-          selectionState.type === "stop"
-            ? routeMapLabels.stopTag
-            : selectionState.type === "segment"
-              ? routeMapLabels.segmentTag
-              : routeMapLabels.overviewTag
-        )}
-      </p>
       <h4 class="route-reference__title">${renderLocalizedContent(config.title)}</h4>
       <p class="route-reference__summary">${renderLocalizedContent(config.summary)}</p>
     </div>
-    ${badgesMarkup ? `<div class="route-reference__pills">${badgesMarkup}</div>` : ""}
     ${notesMarkup ? `<ul class="route-reference__list">${notesMarkup}</ul>` : ""}
     ${daysMarkup}
     ${transitActionsMarkup}
@@ -9463,77 +9531,10 @@ function clearRouteMapPopup() {
     routeMapActivePopup.remove();
     routeMapActivePopup = null;
   }
-  routeMapActivePopupSelectionKey = "";
-}
-
-function renderRouteMapPopup(selectionState) {
-  const days = getVisibleRouteDayLinks(selectionState.config.dayLinks || []);
-  const daysCopy = days.length
-    ? {
-        en: days.map((dayLink) => `Day ${dayLink.day}`).join(" • "),
-        ja: days.map((dayLink) => `${dayLink.day}日目`).join("・")
-      }
-    : null;
-
-  return `
-    <div class="route-map-popup">
-      <p class="route-map-popup__eyebrow">
-        ${renderLocalizedContent(
-          selectionState.type === "stop" ? routeMapLabels.stopTag : routeMapLabels.segmentTag
-        )}
-      </p>
-      <h4 class="route-map-popup__title">${renderLocalizedContent(selectionState.config.title)}</h4>
-      ${daysCopy ? `<p class="route-map-popup__meta">${renderLocalizedContent(daysCopy)}</p>` : ""}
-    </div>
-  `;
 }
 
 function syncRouteMapPopup(selectionState) {
-  if (
-    getRouteMapDisplayMode() !== "interactive" ||
-    !routeMapState.ready ||
-    !routeMapState.map ||
-    selectionState.type === "view"
-  ) {
-    clearRouteMapPopup();
-    return;
-  }
-
-  const popupSelectionKey = getRouteMapSelectionSignature(selectionState);
-  if (routeMapActivePopup && routeMapActivePopupSelectionKey === popupSelectionKey) {
-    return;
-  }
-
   clearRouteMapPopup();
-
-  const coordinates =
-    selectionState.type === "stop"
-      ? getRouteStopLngLat(selectionState.config.id)
-      : getRouteMapCoordinatesForSelection(selectionState);
-  const popupLngLat = Array.isArray(coordinates?.[0])
-    ? [
-        (coordinates[0][0] + coordinates[coordinates.length - 1][0]) / 2,
-        (coordinates[0][1] + coordinates[coordinates.length - 1][1]) / 2
-      ]
-    : coordinates;
-
-  if (!Array.isArray(popupLngLat) || popupLngLat.length !== 2) {
-    return;
-  }
-
-  routeMapActivePopup = new window.maplibregl.Popup({
-    closeButton: false,
-    closeOnClick: false,
-    closeOnMove: false,
-    offset: 18,
-    className: "route-map-popup-anchor"
-  })
-    .setLngLat(popupLngLat)
-    .setHTML(renderRouteMapPopup(selectionState))
-    .addTo(routeMapState.map);
-
-  syncLocalizedNodes(routeMapActivePopup.getElement());
-  routeMapActivePopupSelectionKey = popupSelectionKey;
 }
 
 function focusRouteMapSelection(map, selectionState, { animate = false } = {}) {
@@ -9686,9 +9687,7 @@ function ensureRouteMapReady() {
       ...routeMapBaseOptions
     });
 
-    await new Promise((resolve) => {
-      routeMapState.map.once("load", resolve);
-    });
+    await waitForRouteMapLoad(routeMapState.map);
 
     ensureRouteMapAttributionControl(routeMapState.map);
     ensureRouteMapOverlayStyle(routeMapState.map);
@@ -9707,7 +9706,8 @@ function ensureRouteMapReady() {
 
     return routeMapState.map;
   })()
-    .catch(() => {
+    .catch((error) => {
+      console.error("Route map failed to initialize.", error);
       routeMapState.failed = true;
       routeMapState.ready = false;
       routeMapState.markers = clearRouteMapMarkers(routeMapState.markers);
