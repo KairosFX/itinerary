@@ -124,9 +124,9 @@ const budgetAccommodationShareModes = ["not-shared", "all-travelers", "custom"];
 const budgetSourceUpdatedAt = "2026-03-23";
 const budgetAssumptionCopy = {
   en:
-    "This estimate now follows the actual stay plan with route-based areas: Osaka family stays on Days 1 and 3, a Shijo / Karasuma Kyoto base on Day 2, a Motohakone / Kojiri-side Hakone ryokan on Day 4, a Kawaguchiko station-to-lake base on Days 5-6, and a Shibuya-access Tokyo hotel on Day 7 plus Day 8 only when the optional day is active.",
+    "This estimate now follows the itinerary with reusable route-based areas: a private/local or no-cost Osaka option on Days 1 and 3, a Shijo / Karasuma Kyoto base on Day 2, a Motohakone / Kojiri-side Hakone ryokan on Day 4, a Kawaguchiko station-to-lake base on Days 5-6, and a Shibuya-access Tokyo hotel on Day 7 plus Day 8 only when the optional day is active.",
   ja:
-    "この見積りは、実際の滞在計画に沿って動線ベースの宿泊エリアへ更新しました。1日目と3日目の大阪は叔母・親族宅、2日目は四条烏丸の京都拠点、4日目は元箱根・湖尻側の箱根旅館、5日目と6日目は河口湖駅から湖畔の動線に合う拠点、7日目は渋谷アクセス重視の東京ホテルで、8日目の東京2泊目は追加日を有効にした場合だけ反映します。"
+    "この見積りは、旅程に沿った再利用可能な動線ベースの宿泊エリアへ更新しました。1日目と3日目の大阪はローカル・プライベート滞在または宿泊費なし、2日目は四条烏丸の京都拠点、4日目は元箱根・湖尻側の箱根旅館、5日目と6日目は河口湖駅から湖畔の動線に合う拠点、7日目は渋谷アクセス重視の東京ホテルで、8日目の東京2泊目は追加日を有効にした場合だけ反映します。"
 };
 const budgetCategoryDefinitions = [
   { id: "accommodation", label: { en: "Hotels / ryokan", ja: "宿泊" } },
@@ -147,26 +147,23 @@ const budgetBucketDefinitions = [
 const budgetStayTypeDefinitions = [
   { id: "hotel", label: { en: "Hotel", ja: "ホテル" } },
   { id: "ryokan", label: { en: "Ryokan", ja: "旅館" } },
-  { id: "relative", label: { en: "Relative's house", ja: "親族宅" } },
+  { id: "relative", label: { en: "Private / local stay", ja: "ローカル・プライベート滞在" } },
   { id: "none", label: { en: "No accommodation cost", ja: "宿泊費なし" } }
 ];
 const budgetStayDefinitions = {
   "osaka-compact-hotel": {
     id: "osaka-compact-hotel",
     type: "hotel",
-    label: { en: "Osaka fallback hotel", ja: "大阪の代替ホテル" },
+    label: { en: "Osaka Minami route hotel", ja: "大阪ミナミ動線ホテル" },
     bucket: "booked",
     sourceGroup: "accommodation",
-    area: { en: "Osaka city fallback base", ja: "大阪市内の代替拠点" },
-    property: {
-      en: "SUPER HOTEL Osaka Natural Hot Spring",
-      ja: "SUPER HOTEL Osaka Natural Hot Spring"
-    },
+    area: { en: "Nishi-Shinsaibashi / Minami", ja: "西心斎橋・ミナミ" },
+    property: { en: "Hearton Hotel Shinsaibashi", ja: "ハートンホテル心斎橋" },
     routeReason: {
-      en: "Use this only if you replace a free family stay with a paid room. It stays a low-cost fallback instead of silently becoming the default for Osaka.",
-      ja: "無料の親族宅泊を有料宿へ切り替える時だけ使います。大阪の標準泊を勝手に有料化せず、あくまで低コストの代替案として残します。"
+      en: "Use this when you need a paid Osaka night. Nishi-Shinsaibashi / Minami keeps Day 1 Minami walking and Day 3 Osaka-side movement practical without paying for a less relevant Osaka district.",
+      ja: "大阪で有料宿が必要な時はこの立地を使います。西心斎橋・ミナミなら、1日目のミナミ散策と3日目の大阪側の動きをまとめやすく、関係の薄い地区へ余計に払わずに済みます。"
     },
-    cost: { mode: "perGroup", amount: 9400, sourceCostId: "osaka-compact-hotel" }
+    cost: { mode: "perGroup", amount: 6200, sourceCostId: "osaka-compact-hotel" }
   },
   "kyoto-midrange-hotel": {
     id: "kyoto-midrange-hotel",
@@ -230,19 +227,19 @@ const budgetStayDefinitions = {
   "relative-stay": {
     id: "relative-stay",
     type: "relative",
-    label: { en: "Relative's / aunt's stay", ja: "親族・叔母宅滞在" },
+    label: { en: "Private / local stay", ja: "ローカル・プライベート滞在" },
     bucket: "free",
     sourceGroup: "assumptions",
-    area: { en: "Osaka family base", ja: "大阪の親族宅拠点" },
+    area: { en: "Local/private base", ja: "ローカル・プライベート拠点" },
     cost: { mode: "none", amount: 0 },
     formulaCopy: { en: "No room charge", ja: "宿泊費なし" },
     routeReason: {
-      en: "This is the real Osaka family stay, so the accommodation cost stays at JPY 0 and no hotel logic is applied unless you deliberately switch the stay type.",
-      ja: "ここは実際の大阪の親族宅泊なので、滞在タイプを明示的に切り替えない限り宿泊費は0円のままで、ホテルロジックも適用しません。"
+      en: "Use this for any private or local stay already arranged. The accommodation cost stays at JPY 0 and the route-based hotel logic does not override it unless you deliberately switch stay type.",
+      ja: "すでに決まっているローカル・プライベート滞在に使います。滞在タイプを明示的に切り替えない限り宿泊費は0円のままで、動線ベースのホテルロジックも上書きしません。"
     },
     assumption: {
-      en: "Use this for the Osaka aunt-house nights or any day when family accommodation is already arranged.",
-      ja: "大阪の叔母宅の夜や、親族宅の宿泊がすでに決まっている日に使います。"
+      en: "Use this when a private or local stay is already arranged for that day.",
+      ja: "その日にローカル・プライベート滞在がすでに決まっている時に使います。"
     }
   },
   "no-accommodation": {
@@ -269,13 +266,13 @@ const budgetSourceGroups = [
     id: "accommodation",
     title: { en: "Accommodation quotes", ja: "宿泊見積り" },
     summary: {
-      en: "The stay plan is now route-based instead of city-generic: Osaka family base on Days 1 and 3, Shijo / Karasuma for Kyoto East + Day 3 departures, Motohakone / Kojiri for the Hakone loop and Day 5 transfer, Kawaguchiko station-to-lake access on Days 5-6, and west-Shibuya access on Day 7 plus Day 8 only when unlocked.",
-      ja: "宿泊計画は、都市名だけでなく実際の動線ベースへ変更しました。1日目と3日目の大阪は親族宅、2日目は京都東側と3日目出発に合う四条烏丸、4日目は箱根周遊と5日目移動に合う元箱根・湖尻側、5日目と6日目は河口湖駅から湖畔の動線、東京は7日目と解放時だけ8日目の渋谷西側アクセス重視です。"
+      en: "The stay plan is route-based instead of city-generic: a private/local or Minami Osaka option on Days 1 and 3, Shijo / Karasuma for Kyoto East + Day 3 departures, Motohakone / Kojiri for the Hakone loop and Day 5 transfer, Kawaguchiko station-to-lake access on Days 5-6, and west-Shibuya access on Day 7 plus Day 8 only when unlocked.",
+      ja: "宿泊計画は、都市名だけでなく実際の動線ベースへ変更しました。1日目と3日目の大阪はローカル・プライベート滞在またはミナミ拠点、2日目は京都東側と3日目出発に合う四条烏丸、4日目は箱根周遊と5日目移動に合う元箱根・湖尻側、5日目と6日目は河口湖駅から湖畔の動線、東京は7日目と解放時だけ8日目の渋谷西側アクセス重視です。"
     },
     links: [
       {
         label: { en: "Osaka fallback hotel quote", ja: "大阪の代替ホテル見積り" },
-        url: "https://www.expedia.co.jp/en/Osaka-Hotels-Natural-Hot-Springs-Spa-Hotel-Hananoi-Osaka.h4110719.Hotel-Information"
+        url: "https://www.expedia.co.jp/en/Osaka-Hotels-Hearton-Hotel-Shinsaibashi.h2544378.Hotel-Information"
       },
       {
         label: { en: "Kyoto hotel quote", ja: "京都ホテル見積り" },
@@ -299,8 +296,8 @@ const budgetSourceGroups = [
     id: "room-logic",
     title: { en: "Stay logic", ja: "滞在ロジック" },
     summary: {
-      en: "The old model inflated totals by dropping in broad city hotels instead of following the real route. The new model stores stay type and route-fit area per day, so family stays remain free and paid stays stay tied to the actual logistics.",
-      ja: "以前のモデルは、実際の動線ではなく大まかな都市ホテルを当て込んでしまい、合計を膨らませていました。新しいモデルは日ごとに滞在タイプと動線に合うエリアを持つため、親族宅は無料のまま、有料宿も実際の移動に結び付けて管理します。"
+      en: "The old model inflated totals by dropping in broad city hotels instead of following the route. The new model stores a reusable stay type plus a route-fit area per day, so private/local stays remain free and paid stays stay tied to the actual logistics.",
+      ja: "以前のモデルは、実際の動線ではなく大まかな都市ホテルを当て込んでしまい、合計を膨らませていました。新しいモデルは日ごとに再利用可能な滞在タイプと動線に合うエリアを持つため、ローカル・プライベート滞在は無料のまま、有料宿も実際の移動に結び付けて管理します。"
     },
     links: []
   },
@@ -4567,8 +4564,8 @@ const itineraryBudgetLabels = {
     ja: "実際の滞在計画、修正済みの移動ルート、チケット、そして水増ししない普段寄りの食費パターンで組み立てています。"
   },
   travelersHint: {
-    en: "Stay selectors now control each accommodation night directly, so Osaka aunt-house nights stay at JPY 0 unless you switch them to a paid stay.",
-    ja: "各宿泊日は滞在セレクターで直接切り替える形にし、大阪の叔母宅の夜は有料宿へ変更しない限り0円のままです。"
+    en: "Stay selectors now control each accommodation night directly, so private/local or no-cost Osaka nights stay at JPY 0 unless you switch them to a paid stay.",
+    ja: "各宿泊日は滞在セレクターで直接切り替える形にし、大阪のローカル・プライベート滞在や宿泊費なしの夜は、有料宿へ変更しない限り0円のままです。"
   },
   shareHint: {
     en: "Paid hotel and ryokan quotes now stay as one quoted stay-total. Split that total across all travelers, keep it unshared, or divide it across a custom number of people.",
@@ -6535,8 +6532,8 @@ function initializeBudgetNotes() {
         meta: {
           en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"} • stay split: ${
             shareModeLabel.en
-          } • Osaka relative stays stay at JPY 0 unless you switch them`,
-          ja: `${estimate.travelers}人 ・ 宿泊費の分け方: ${shareModeLabel.ja} ・ 大阪の親族宅は切り替えない限り0円のままです`
+          } • private/local or no-cost Osaka stays stay at JPY 0 unless you switch them`,
+          ja: `${estimate.travelers}人 ・ 宿泊費の分け方: ${shareModeLabel.ja} ・ 大阪のローカル・プライベート滞在や宿泊費なしは切り替えない限り0円のままです`
         }
       },
       {

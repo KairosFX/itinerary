@@ -13,35 +13,35 @@
     "ja": "各日に滞在セレクターと、動線に合うエリア説明を付けました。有料のホテル・旅館は見積り総額のまま扱い、宿泊費の分け方コントロールで1人あたり計算を行い、予約や運賃リンクはすべてEssentialsへ移しました。"
   },
   "assumptionCopy": {
-    "en": "This estimate now follows the actual stay plan with route-based areas: Osaka aunt/relative stays on Days 1 and 3, a Shijo / Karasuma Kyoto base on Day 2, a Motohakone / Kojiri-side Hakone ryokan on Day 4, a Kawaguchiko station-to-lake base on Days 5-6, and a Shibuya-access Tokyo hotel on Day 7 plus Day 8 only when the optional day is active.",
-    "ja": "この見積りは、実際の滞在計画に沿って動線ベースの宿泊エリアへ更新しました。1日目と3日目の大阪は叔母・親族宅、2日目は四条烏丸の京都拠点、4日目は元箱根・湖尻側の箱根旅館、5日目と6日目は河口湖駅から湖畔の動線に合う拠点、7日目は渋谷アクセス重視の東京ホテルで、8日目の東京2泊目は追加日を有効にした場合だけ反映します。"
+    "en": "This estimate now follows the itinerary with reusable route-based areas: a private/local or no-cost Osaka option on Days 1 and 3, a Shijo / Karasuma Kyoto base on Day 2, a Motohakone / Kojiri-side Hakone ryokan on Day 4, a Kawaguchiko station-to-lake base on Days 5-6, and a Shibuya-access Tokyo hotel on Day 7 plus Day 8 only when the optional day is active.",
+    "ja": "この見積りは、旅程に沿った再利用可能な動線ベースの宿泊エリアへ更新しました。1日目と3日目の大阪はローカル・プライベート滞在または宿泊費なし、2日目は四条烏丸の京都拠点、4日目は元箱根・湖尻側の箱根旅館、5日目と6日目は河口湖駅から湖畔の動線に合う拠点、7日目は渋谷アクセス重視の東京ホテルで、8日目の東京2泊目は追加日を有効にした場合だけ反映します。"
   },
   "costIndex": {
     "osaka-compact-hotel": {
-      "amount": 9346,
+      "amount": 6189,
       "roomCapacity": 2,
       "area": {
-        "en": "Osaka city fallback base",
-        "ja": "大阪市内の代替拠点"
+        "en": "Nishi-Shinsaibashi / Minami",
+        "ja": "西心斎橋・ミナミ"
       },
       "pricingTier": {
-        "en": "Cheap Osaka fallback hotel",
-        "ja": "大阪の安めホテル代替"
+        "en": "Route-practical Osaka Minami hotel",
+        "ja": "動線に合う大阪ミナミホテル"
       },
       "routeReason": {
-        "en": "Only used if you replace a free Osaka family stay with a paid room. It stays a fallback instead of quietly becoming the default Osaka charge.",
-        "ja": "無料の大阪親族宅泊を有料宿へ置き換える時だけ使います。大阪の標準費用として勝手に入らないよう、あくまで代替案として残しています。"
+        "en": "Use this when you need a paid Osaka night. Nishi-Shinsaibashi / Minami supports the actual Day 1 Minami walking and Day 3 Osaka-side movement better than a random Osaka district.",
+        "ja": "大阪で有料宿が必要な時はこの立地を使います。西心斎橋・ミナミなら、1日目のミナミ散策と3日目の大阪側の動きに合いやすく、無関係な地区のホテルより実用的です。"
       },
       "assumption": {
-        "en": "Used only if you switch a free Osaka relative stay to a paid hotel fallback. Based on a current Expedia quote around JPY 9,346 total for 2 adults at SUPER HOTEL Osaka Natural Hot Spring.",
-        "ja": "無料の大阪親族宅滞在を有料ホテルへ切り替える時だけ使います。SUPER HOTEL Osaka Natural Hot Spring の現在のExpedia見積り（2名合計で約9,346円）を基準にしています。"
+        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Based on a current Expedia quote around JPY 6,189 before taxes for 2 adults at Hearton Hotel Shinsaibashi.",
+        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。ハートンホテル心斎橋の現在のExpedia見積り（2名税別約6,189円）を基準にしています。"
       },
       "source": {
         "label": {
-          "en": "SUPER HOTEL Osaka Natural Hot Spring",
-          "ja": "SUPER HOTEL Osaka Natural Hot Spring"
+          "en": "Hearton Hotel Shinsaibashi",
+          "ja": "ハートンホテル心斎橋"
         },
-        "url": "https://www.expedia.co.jp/en/Osaka-Hotels-Natural-Hot-Springs-Spa-Hotel-Hananoi-Osaka.h4110719.Hotel-Information"
+        "url": "https://www.expedia.co.jp/en/Osaka-Hotels-Hearton-Hotel-Shinsaibashi.h2544378.Hotel-Information"
       }
     },
     "kyoto-midrange-hotel": {
@@ -179,8 +179,8 @@
         "ja": "宿泊見積り"
       },
       "summary": {
-        "en": "The base stay plan is now explicit: free Osaka relative stays on Days 1 and 3, Kyoto hotel on Day 2, Hakone ryokan on Day 4, Kawaguchiko hotel on Days 5-6, and Tokyo hotel on Day 7 plus Day 8 only when unlocked.",
-        "ja": "基本の滞在計画を明示しました。1日目と3日目の大阪は無料の親族宅、2日目は京都ホテル、4日目は箱根旅館、5日目と6日目は河口湖ホテル、東京ホテルは7日目と、解放した時だけ8日目です。"
+        "en": "The base stay plan is now explicit: private/local or no-cost Osaka nights on Days 1 and 3 unless switched, Kyoto hotel on Day 2, Hakone ryokan on Day 4, Kawaguchiko hotel on Days 5-6, and Tokyo hotel on Day 7 plus Day 8 only when unlocked.",
+        "ja": "基本の滞在計画を明示しました。1日目と3日目の大阪は、切り替えない限りローカル・プライベート滞在または宿泊費なし、2日目は京都ホテル、4日目は箱根旅館、5日目と6日目は河口湖ホテル、東京ホテルは7日目と、解放した時だけ8日目です。"
       },
       "links": [
         {
@@ -188,7 +188,7 @@
             "en": "Osaka fallback hotel quote",
             "ja": "大阪の代替ホテル見積り"
           },
-          "url": "https://www.expedia.co.jp/en/Osaka-Hotels-Natural-Hot-Springs-Spa-Hotel-Hananoi-Osaka.h4110719.Hotel-Information"
+          "url": "https://www.expedia.co.jp/en/Osaka-Hotels-Hearton-Hotel-Shinsaibashi.h2544378.Hotel-Information"
         },
         {
           "label": {
@@ -227,8 +227,8 @@
         "ja": "滞在ロジック"
       },
       "summary": {
-        "en": "The old model inflated totals by assuming generic paid city rooms where the actual plan had family accommodation. The new model stores the stay type per day, so Osaka aunt-house nights remain free until you deliberately switch them.",
-        "ja": "以前のモデルは、実際には親族宅泊なのに汎用の有料都市ホテルを入れてしまい、合計を膨らませていました。新しいモデルは日ごとに滞在タイプを持つため、大阪の叔母宅泊は意図して切り替えるまで無料のままです。"
+        "en": "The old model inflated totals by assuming generic paid city rooms. The new model stores a reusable stay type per day, so private/local or no-cost Osaka nights remain free until you deliberately switch them.",
+        "ja": "以前のモデルは、汎用の有料都市ホテルを入れてしまい合計を膨らませていました。新しいモデルは日ごとに再利用可能な滞在タイプを持つため、大阪のローカル・プライベート滞在や宿泊費なしは意図して切り替えるまで無料のままです。"
       },
       "links": []
     },

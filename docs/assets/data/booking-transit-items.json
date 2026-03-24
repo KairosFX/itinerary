@@ -34,6 +34,40 @@
     ]
   },
   {
+    "id": "osaka-stay",
+    "group": "bookings",
+    "filters": ["to-book"],
+    "kind": "booking",
+    "tone": { "en": "Stay booking", "ja": "宿泊予約" },
+    "defaultStatus": { "en": "Optional", "ja": "任意" },
+    "doneStatus": { "en": "Booked", "ja": "予約済み" },
+    "toggleDefault": { "en": "Save option", "ja": "候補保存" },
+    "toggleDone": { "en": "Booked", "ja": "予約済み" },
+    "title": { "en": "Optional Osaka Minami hotel", "ja": "任意の大阪ミナミホテル" },
+    "summary": {
+      "en": "Use this only if Days 1 or 3 need a paid Osaka night. The Minami side is chosen for route fit, not just because it is in Osaka.",
+      "ja": "1日目または3日目に有料の大阪泊が必要な時だけ使います。大阪という広い括りではなく、ミナミ側の動線で選んでいます。"
+    },
+    "details": {
+      "en": "Nishi-Shinsaibashi / Minami keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical. Use the cheapest trustworthy booking link first; keep the official hotel page only for direct booking or policy checks.",
+      "ja": "西心斎橋・ミナミなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすいです。まずは一番安い信頼できるリンクを使い、公式ページは直販やルール確認が必要な時だけ見ます。"
+    },
+    "links": [
+      {
+        "href": "https://www.expedia.co.jp/en/Osaka-Hotels-Hearton-Hotel-Shinsaibashi.h2544378.Hotel-Information",
+        "label": { "en": "Best cheap link", "ja": "最安寄りの信頼リンク" },
+        "note": { "en": "Current Expedia quote around JPY 6.2k before taxes", "ja": "現在のExpedia見積りは税別約6,189円" },
+        "kind": "primary"
+      },
+      {
+        "href": "https://www.hearton.co.jp/en/hotel/shinsaibashi/",
+        "label": { "en": "Official hotel page", "ja": "公式ホテルページ" },
+        "note": { "en": "Direct booking and access details", "ja": "直接予約とアクセス案内" },
+        "kind": "secondary"
+      }
+    ]
+  },
+  {
     "id": "kyoto-stay",
     "group": "bookings",
     "filters": ["to-book"],
@@ -55,7 +89,7 @@
     "links": [
       {
         "href": "https://www.expedia.co.jp/en/Kyoto-Hotels-Hotel-Resol-Kyoto-Shijo-Muromachi.h23196129.Hotel-Information",
-        "label": { "en": "Cheap price-check", "ja": "安い見積り確認" },
+        "label": { "en": "Best cheap link", "ja": "最安寄りの信頼リンク" },
         "note": { "en": "Shijo / Karasuma price anchor around JPY 13.2k", "ja": "四条烏丸エリアの見積り基準は約1.32万円" },
         "kind": "primary"
       },
@@ -89,7 +123,7 @@
     "links": [
       {
         "href": "https://www.expedia.co.jp/Hakone-Hotels-YuYu-Onsen-Ryokan-Hakone.h104862373.Hotel-Information",
-        "label": { "en": "Cheap price-check", "ja": "安い見積り確認" },
+        "label": { "en": "Best cheap link", "ja": "最安寄りの信頼リンク" },
         "note": { "en": "Motohakone / Kojiri-side quote around JPY 16k total", "ja": "元箱根・湖尻側の見積りは合計約1.6万円" },
         "kind": "primary"
       },
@@ -123,7 +157,7 @@
     "links": [
       {
         "href": "https://www.expedia.co.jp/en/Fujikawaguchiko-Hotels-HaoSTAY.h42541370.Hotel-Information",
-        "label": { "en": "Cheap price-check", "ja": "安い見積り確認" },
+        "label": { "en": "Best cheap link", "ja": "最安寄りの信頼リンク" },
         "note": { "en": "Station-to-lake corridor quote around JPY 15.7k", "ja": "駅から湖畔の動線にある見積りは約1.57万円" },
         "kind": "primary"
       },
@@ -157,7 +191,7 @@
     "links": [
       {
         "href": "https://www.expedia.co.jp/en/Tokyo-Hotels-SHIBUYA-HOTEL-EN.h5394352.Hotel-Information",
-        "label": { "en": "Cheap price-check", "ja": "安い見積り確認" },
+        "label": { "en": "Best cheap link", "ja": "最安寄りの信頼リンク" },
         "note": { "en": "West-Shibuya quote around JPY 19.8k", "ja": "渋谷西側エリアの見積りは約1.98万円" },
         "kind": "primary"
       },
