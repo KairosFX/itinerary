@@ -45,6 +45,7 @@ const budgetSummaryNode = document.querySelector("[data-budget-summary]");
 const budgetBreakdownNode = document.querySelector("[data-budget-breakdown]");
 const budgetSourceMetaNode = document.querySelector("[data-budget-source-meta]");
 const budgetSourcesNode = document.querySelector("[data-budget-sources]");
+const budgetDaySelectorNode = document.querySelector("[data-budget-day-selector]");
 const budgetDaysNode = document.querySelector("[data-budget-days]");
 const tripNotesGridNode = document.querySelector("[data-trip-notes-grid]");
 const budgetResetButtons = Array.from(document.querySelectorAll("[data-budget-reset-all]"));
@@ -755,13 +756,14 @@ const fujiForecastSpotConfigs = [
   }
 ];
 const revealBlockSelector =
-  ".trip-stats, .progress-card, .content-section .section-heading, .essentials-grid, .day-grid, .notes-grid, [data-optional-section], .route-map, .journey-close, .site-footer__lead, .site-footer__aside, .site-footer__credit";
+  ".trip-stats, .progress-card, .content-section .section-heading, .essentials-grid, .day-grid, .notes-grid, .budget-panel, [data-optional-section], .route-map, .journey-close, .site-footer__lead, .site-footer__aside, .site-footer__credit";
 const initializedSections = new Set();
 const sectionInitPromises = new Map();
 const sectionInitializers = {
   overview: initOverviewSection,
   checklist: initChecklistSection,
   notes: initNotesSection,
+  budget: initBudgetSection,
   route: initRouteSection,
   essentials: initEssentialsSection
 };
@@ -5005,6 +5007,18 @@ const itineraryBudgetLabels = {
     en: "Adds route-specific extras like luggage handling, weather pivots, and other handoff-day add-ons. Optional Days 8-9 stay separate until unlocked.",
     ja: "荷物対応、天候回避、受け渡し日に発生する追加費用などのルート固有コストを反映します。8日目と9日目は解放するまで別枠です。"
   },
+  dayViewerLabel: {
+    en: "Day selector",
+    ja: "日付セレクター"
+  },
+  dayViewerHint: {
+    en: "Switch one day at a time instead of scrolling a long full-trip budget list.",
+    ja: "縦に長い予算一覧を追わず、1日ずつ切り替えて確認します。"
+  },
+  dayViewerBadgeOptional: {
+    en: "Optional",
+    ja: "追加"
+  },
   totalMeta: {
     en: "Lean / expected / high trip total built from the real day-by-day model",
     ja: "実際の日別モデルから組んだ控えめ・標準・高めの合計"
@@ -6521,6 +6535,7 @@ function initializeBudgetNotes() {
     },
     { id: "high", label: itineraryBudgetLabels.levelHigh, pillClass: "budget-pill--high" }
   ];
+  let activeBudgetDay = null;
   const createBudgetRange = (lean = 0, expected = 0, high = 0) => ({
     lean: Number(lean) || 0,
     expected: Number(expected) || 0,
@@ -6880,6 +6895,72 @@ function initializeBudgetNotes() {
 
     storeState();
   };
+  const normalizeActiveBudgetDay = (visibleDayEstimates = []) => {
+    const visibleDays = visibleDayEstimates
+      .map((dayEstimate) => Number(dayEstimate?.day))
+      .filter((day) => Number.isFinite(day));
+    if (!visibleDays.length) {
+      activeBudgetDay = null;
+      return null;
+    }
+
+    if (visibleDays.includes(activeBudgetDay)) {
+      return activeBudgetDay;
+    }
+
+    const currentDay = Number(getCurrentProgressDay());
+    activeBudgetDay = visibleDays.includes(currentDay) ? currentDay : visibleDays[0];
+    return activeBudgetDay;
+  };
+  const getDaySelectorTitleCopy = (dayEstimate) => ({
+    en:
+      String(dayEstimate?.title?.en || `Day ${dayEstimate?.day || ""}`)
+        .replace(new RegExp(`^Day\\s*${dayEstimate?.day}\\s*[-:–]\\s*`, "i"), "")
+        .trim() || `Day ${dayEstimate?.day || ""}`,
+    ja:
+      String(dayEstimate?.title?.ja || `${dayEstimate?.day || ""}日目`)
+        .replace(new RegExp(`^${dayEstimate?.day}日目[・･\\-]\\s*`), "")
+        .trim() || `${dayEstimate?.day || ""}日目`
+  });
+  const renderDaySelectorMarkup = (
+    visibleDayEstimates = [],
+    activeDay = normalizeActiveBudgetDay(visibleDayEstimates)
+  ) =>
+    visibleDayEstimates
+      .map((dayEstimate) => {
+        const isActive = dayEstimate.day === activeDay;
+        const dayLabel = {
+          en: `Day ${dayEstimate.day}`,
+          ja: `${dayEstimate.day}日目`
+        };
+        const ariaLabel = {
+          en: `Show budget for Day ${dayEstimate.day}`,
+          ja: `${dayEstimate.day}日目の予算を見る`
+        };
+        const optionalBadge = dayEstimate.optional
+          ? `<span class="budget-day-selector__badge">${renderLocalizedContent(
+              itineraryBudgetLabels.dayViewerBadgeOptional
+            )}</span>`
+          : "";
+
+        return `
+          <button
+            class="budget-day-selector__button ${isActive ? "is-active" : ""}"
+            type="button"
+            data-budget-day-select="${dayEstimate.day}"
+            aria-pressed="${String(isActive)}"
+            data-aria-label-en="${escapeHtml(ariaLabel.en)}"
+            data-aria-label-ja="${escapeHtml(ariaLabel.ja)}"
+            aria-label="${escapeHtml(getLocalizedText(ariaLabel))}">
+            <span class="budget-day-selector__button-day">${renderLocalizedContent(dayLabel)}</span>
+            <span class="budget-day-selector__button-title">${renderLocalizedContent(
+              getDaySelectorTitleCopy(dayEstimate)
+            )}</span>
+            ${optionalBadge}
+          </button>
+        `;
+      })
+      .join("");
   const visibleDays = () =>
     budgetDayDefinitions.filter((definition) => !definition.optional || areOptionalDaysUnlocked());
   const optionalDays = () => budgetDayDefinitions.filter((definition) => definition.optional);
@@ -7672,9 +7753,20 @@ function initializeBudgetNotes() {
     }
 
     const estimate = calculateEstimate();
+    const activeDay = normalizeActiveBudgetDay(estimate.visibleDayEstimates);
+    const activeDayEstimate =
+      estimate.visibleDayEstimates.find((dayEstimate) => dayEstimate.day === activeDay) ||
+      estimate.visibleDayEstimates[0] ||
+      null;
     budgetSummaryNode.innerHTML = renderSummaryMarkup(estimate);
     budgetBreakdownNode.innerHTML = renderBreakdownMarkup(estimate);
-    budgetDaysNode.innerHTML = estimate.visibleDayEstimates.map((day) => renderDayMarkup(day)).join("");
+    if (budgetDaySelectorNode) {
+      budgetDaySelectorNode.innerHTML = renderDaySelectorMarkup(
+        estimate.visibleDayEstimates,
+        activeDay
+      );
+    }
+    budgetDaysNode.innerHTML = activeDayEstimate ? renderDayMarkup(activeDayEstimate) : "";
 
     if (budgetSourceMetaNode) {
       budgetSourceMetaNode.innerHTML = renderSourceMetaMarkup();
@@ -7685,7 +7777,14 @@ function initializeBudgetNotes() {
       budgetSourcesNode.hidden = true;
     }
 
-    [budgetSummaryNode, budgetBreakdownNode, budgetDaysNode, budgetSourceMetaNode, budgetSourcesNode]
+    [
+      budgetSummaryNode,
+      budgetBreakdownNode,
+      budgetDaySelectorNode,
+      budgetDaysNode,
+      budgetSourceMetaNode,
+      budgetSourcesNode
+    ]
       .filter(Boolean)
       .forEach((node) => syncLocalizedNodes(node));
 
@@ -7723,6 +7822,27 @@ function initializeBudgetNotes() {
   const bindUI = () => {
     if (!budgetNotesCard || !budgetDaysNode) {
       return;
+    }
+
+    if (
+      budgetDaySelectorNode &&
+      budgetDaySelectorNode.dataset.itineraryBudgetSelectorBound !== "true"
+    ) {
+      budgetDaySelectorNode.addEventListener("click", (event) => {
+        const dayButton = event.target.closest?.("[data-budget-day-select]");
+        if (!dayButton) {
+          return;
+        }
+
+        const nextDay = Number.parseInt(dayButton.dataset.budgetDaySelect || "", 10);
+        if (Number.isNaN(nextDay) || activeBudgetDay === nextDay) {
+          return;
+        }
+
+        activeBudgetDay = nextDay;
+        syncUI();
+      });
+      budgetDaySelectorNode.dataset.itineraryBudgetSelectorBound = "true";
     }
 
     if (budgetTravelersInput && budgetTravelersInput.dataset.itineraryBudgetBound !== "true") {
@@ -8331,6 +8451,15 @@ function initNotesSection() {
   }
 
   renderTripNotes();
+  registerRevealBlocks(panel);
+}
+
+function initBudgetSection() {
+  const panel = getSectionPanel("budget");
+  if (!panel) {
+    return;
+  }
+
   registerRevealBlocks(panel);
   initializeBudgetNotes();
 }
