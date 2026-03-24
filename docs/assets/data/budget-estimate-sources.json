@@ -5,24 +5,32 @@
     "ja": "宿泊・食費・移動・チケットの基準は2026年3月23日更新"
   },
   "metaCopy": {
-    "en": "The old total was inflated mainly because the model treated Days 1-3 like paid Osaka hotel nights, pushed Day 2 into an Osaka day-trip pattern instead of a Kyoto overnight, and kept meal lines closer to premium full-day dining than normal Japan trip food spend.",
-    "ja": "以前の合計が膨らんでいた主因は、1〜3日目を有料の大阪ホテル泊として扱っていたこと、2日目を京都宿泊ではなく大阪発の日帰り前提で組んでいたこと、そして食費が通常の日本旅行より高めの外食寄りになっていたことです。"
+    "en": "The old total was inflated mainly because the model treated Days 1-3 like paid Osaka hotel nights, pushed Day 2 into an Osaka day-trip pattern instead of a Kyoto overnight, and chose broad city stays instead of route-fit areas for Kyoto, Hakone, Kawaguchiko, and Tokyo.",
+    "ja": "以前の合計が膨らんでいた主因は、1〜3日目を有料の大阪ホテル泊として扱っていたこと、2日目を京都宿泊ではなく大阪発の日帰り前提で組んでいたこと、さらに京都・箱根・河口湖・東京で実際の動線より大まかな都市ホテル想定を優先していたことです。"
   },
   "helperCopy": {
-    "en": "Each day now has its own stay selector. Paid hotel and ryokan quotes stay as quoted stay totals, the accommodation split control handles the per-person math, and all booking or fare links now live in Essentials.",
-    "ja": "各日に滞在セレクターを付けました。有料のホテル・旅館は見積り総額のまま扱い、宿泊費の分け方コントロールで1人あたり計算を行い、予約や運賃リンクはすべてEssentialsへ移しました。"
+    "en": "Each day now has its own stay selector plus a route-fit area explanation. Paid hotel and ryokan quotes stay as quoted stay totals, the accommodation split control handles the per-person math, and all booking or fare links now live in Essentials.",
+    "ja": "各日に滞在セレクターと、動線に合うエリア説明を付けました。有料のホテル・旅館は見積り総額のまま扱い、宿泊費の分け方コントロールで1人あたり計算を行い、予約や運賃リンクはすべてEssentialsへ移しました。"
   },
   "assumptionCopy": {
-    "en": "This estimate now follows the actual stay plan: Osaka aunt/relative stays on Days 1 and 3, a Kyoto hotel on Day 2, a practical Hakone ryokan on Day 4, Kawaguchiko hotel nights on Days 5-6, and a Tokyo hotel on Day 7 plus Day 8 only when the optional day is active.",
-    "ja": "この見積りは、実際の滞在計画に合わせて更新しました。1日目と3日目の大阪は叔母・親族宅、2日目は京都ホテル、4日目は現実的な箱根旅館、5日目と6日目は河口湖ホテル、7日目の東京ホテルと、追加日を有効にした場合だけ8日目の東京ホテルを反映します。"
+    "en": "This estimate now follows the actual stay plan with route-based areas: Osaka aunt/relative stays on Days 1 and 3, a Shijo / Karasuma Kyoto base on Day 2, a Motohakone / Kojiri-side Hakone ryokan on Day 4, a Kawaguchiko station-to-lake base on Days 5-6, and a Shibuya-access Tokyo hotel on Day 7 plus Day 8 only when the optional day is active.",
+    "ja": "この見積りは、実際の滞在計画に沿って動線ベースの宿泊エリアへ更新しました。1日目と3日目の大阪は叔母・親族宅、2日目は四条烏丸の京都拠点、4日目は元箱根・湖尻側の箱根旅館、5日目と6日目は河口湖駅から湖畔の動線に合う拠点、7日目は渋谷アクセス重視の東京ホテルで、8日目の東京2泊目は追加日を有効にした場合だけ反映します。"
   },
   "costIndex": {
     "osaka-compact-hotel": {
       "amount": 9346,
       "roomCapacity": 2,
+      "area": {
+        "en": "Osaka city fallback base",
+        "ja": "大阪市内の代替拠点"
+      },
       "pricingTier": {
         "en": "Cheap Osaka fallback hotel",
         "ja": "大阪の安めホテル代替"
+      },
+      "routeReason": {
+        "en": "Only used if you replace a free Osaka family stay with a paid room. It stays a fallback instead of quietly becoming the default Osaka charge.",
+        "ja": "無料の大阪親族宅泊を有料宿へ置き換える時だけ使います。大阪の標準費用として勝手に入らないよう、あくまで代替案として残しています。"
       },
       "assumption": {
         "en": "Used only if you switch a free Osaka relative stay to a paid hotel fallback. Based on a current Expedia quote around JPY 9,346 total for 2 adults at SUPER HOTEL Osaka Natural Hot Spring.",
@@ -39,9 +47,17 @@
     "kyoto-midrange-hotel": {
       "amount": 13152,
       "roomCapacity": 2,
+      "area": {
+        "en": "Shijo / Karasuma, Kyoto",
+        "ja": "京都・四条烏丸"
+      },
       "pricingTier": {
         "en": "Current Kyoto mid-range hotel",
         "ja": "現在の京都中価格帯ホテル"
+      },
+      "routeReason": {
+        "en": "Shijo / Karasuma fits the route because it still keeps Kyoto East convenient on Day 2 while giving cleaner subway, Hankyu, and JR options for Arashiyama and Osaka on Day 3 than a deep east-Kyoto stay would.",
+        "ja": "四条烏丸は、2日目の京都東側へ出やすく、3日目の嵐山と大阪戻りにも地下鉄・阪急・JRの選択肢を取りやすいため、東山の奥へ泊まるより動線に合います。"
       },
       "assumption": {
         "en": "Day 2 uses Hotel Resol Kyoto Shijo Muromachi at the current Expedia rate of JPY 13,152 before taxes for 2 adults, which is much more believable than padding Kyoto into another Osaka hotel night.",
@@ -58,9 +74,17 @@
     "hakone-practical-ryokan": {
       "amount": 18000,
       "roomCapacity": 2,
+      "area": {
+        "en": "Motohakone / Kojiri side",
+        "ja": "元箱根・湖尻側"
+      },
       "pricingTier": {
         "en": "Practical Hakone ryokan",
         "ja": "現実的な箱根旅館"
+      },
+      "routeReason": {
+        "en": "This side fits the loop and the next morning better because it stays closer to the Lake Ashi, ropeway, and Togendai end of Day 4 while also helping the Day 5 Gotemba-side move toward Kawaguchiko.",
+        "ja": "この側は、4日目の芦ノ湖・ロープウェイ・桃源台側の終盤へ寄せやすく、さらに5日目の御殿場経由で河口湖へ抜ける動きにも合わせやすいため、周遊と翌朝の両方に合います。"
       },
       "assumption": {
         "en": "Day 4 uses a lower current Hakone ryokan band. YuYu Hakone was showing about JPY 14,545 before fees and roughly JPY 16,000 total, so the planning default is set at JPY 18,000 instead of the old luxury-leaning value.",
@@ -77,9 +101,17 @@
     "kawaguchiko-base-hotel": {
       "amount": 15709,
       "roomCapacity": 2,
+      "area": {
+        "en": "Kawaguchiko station -> lake corridor",
+        "ja": "河口湖駅から湖畔の動線"
+      },
       "pricingTier": {
         "en": "Current Kawaguchiko hotel",
         "ja": "現在の河口湖ホテル"
+      },
+      "routeReason": {
+        "en": "This area keeps the Hakone arrival, lake access, and the next-day Tokyo departure practical without paying for a remote Fuji resort area that is worse for the actual route flow.",
+        "ja": "このエリアなら、箱根からの到着、湖へのアクセス、翌日の東京戻りをまとめやすく、実際の動線に合いにくい遠い富士リゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
         "en": "Days 5-6 use HaoSTAY at JPY 15,709 before taxes for 2 adults, which is noticeably lower than the old Kawaguchiko hotel figure while still fitting the station-and-lake itinerary.",
@@ -96,9 +128,17 @@
     "tokyo-base-hotel": {
       "amount": 19820,
       "roomCapacity": 2,
+      "area": {
+        "en": "West Shibuya / Maruyamacho",
+        "ja": "渋谷西側・円山町"
+      },
       "pricingTier": {
         "en": "Current Shibuya hotel",
         "ja": "現在の渋谷ホテル"
+      },
+      "routeReason": {
+        "en": "The route is Shibuya-heavy on Day 7 and west-Tokyo-friendly if Day 8 stays active, so this area fits better than paying for a generic Tokyo hotel in a less relevant district.",
+        "ja": "7日目は渋谷が中心で、8日目を使うなら西東京側にも動きやすいため、このエリアの方が実際の流れに合います。関係の薄い地区の東京ホテルへ払うより自然です。"
       },
       "assumption": {
         "en": "Tokyo uses Shibuya Hotel En at the current Expedia rate of JPY 19,820 before taxes for 2 adults. That applies to Day 7 and only adds a second Tokyo night on Day 8 when the optional flow is active.",

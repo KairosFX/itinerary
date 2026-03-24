@@ -106,7 +106,7 @@ const bookingTransitItemsDataUrl = "./assets/data/booking-transit-items.json";
 const transitDetailsDataUrl = "./assets/data/transit-details.json";
 const offlineSnapshotUrl = "./japan-escape-itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-03-23-offline-v10";
+const offlineBundleVersion = "2026-03-23-offline-v11";
 const routeMapLibraryScriptUrl = "./assets/vendor/maplibre/maplibre-gl.js";
 const routeMapLibraryStyleUrl = "./assets/vendor/maplibre/maplibre-gl.css";
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
@@ -124,9 +124,9 @@ const budgetAccommodationShareModes = ["not-shared", "all-travelers", "custom"];
 const budgetSourceUpdatedAt = "2026-03-23";
 const budgetAssumptionCopy = {
   en:
-    "This estimate now follows the actual stay plan: Osaka aunt/relative stays on Days 1 and 3, a Kyoto hotel on Day 2, a practical Hakone ryokan on Day 4, Kawaguchiko hotel nights on Days 5-6, and a Tokyo hotel on Day 7 plus Day 8 only when the optional day is active.",
+    "This estimate now follows the actual stay plan with route-based areas: Osaka family stays on Days 1 and 3, a Shijo / Karasuma Kyoto base on Day 2, a Motohakone / Kojiri-side Hakone ryokan on Day 4, a Kawaguchiko station-to-lake base on Days 5-6, and a Shibuya-access Tokyo hotel on Day 7 plus Day 8 only when the optional day is active.",
   ja:
-    "この見積りは、実際の滞在計画に合わせて更新しました。1日目と3日目の大阪は叔母・親族宅、2日目は京都ホテル、4日目は現実的な箱根旅館、5日目と6日目は河口湖ホテル、7日目の東京ホテルと、追加日を有効にした場合だけ8日目の東京ホテルを反映します。"
+    "この見積りは、実際の滞在計画に沿って動線ベースの宿泊エリアへ更新しました。1日目と3日目の大阪は叔母・親族宅、2日目は四条烏丸の京都拠点、4日目は元箱根・湖尻側の箱根旅館、5日目と6日目は河口湖駅から湖畔の動線に合う拠点、7日目は渋谷アクセス重視の東京ホテルで、8日目の東京2泊目は追加日を有効にした場合だけ反映します。"
 };
 const budgetCategoryDefinitions = [
   { id: "accommodation", label: { en: "Hotels / ryokan", ja: "宿泊" } },
@@ -154,51 +154,92 @@ const budgetStayDefinitions = {
   "osaka-compact-hotel": {
     id: "osaka-compact-hotel",
     type: "hotel",
-    label: { en: "Osaka compact hotel", ja: "大阪の控えめホテル" },
+    label: { en: "Osaka fallback hotel", ja: "大阪の代替ホテル" },
     bucket: "booked",
     sourceGroup: "accommodation",
+    area: { en: "Osaka city fallback base", ja: "大阪市内の代替拠点" },
+    property: {
+      en: "SUPER HOTEL Osaka Natural Hot Spring",
+      ja: "SUPER HOTEL Osaka Natural Hot Spring"
+    },
+    routeReason: {
+      en: "Use this only if you replace a free family stay with a paid room. It stays a low-cost fallback instead of silently becoming the default for Osaka.",
+      ja: "無料の親族宅泊を有料宿へ切り替える時だけ使います。大阪の標準泊を勝手に有料化せず、あくまで低コストの代替案として残します。"
+    },
     cost: { mode: "perGroup", amount: 9400, sourceCostId: "osaka-compact-hotel" }
   },
   "kyoto-midrange-hotel": {
     id: "kyoto-midrange-hotel",
     type: "hotel",
-    label: { en: "Kyoto mid-range hotel", ja: "京都の中価格帯ホテル" },
+    label: { en: "Kyoto East-access hotel", ja: "京都東側アクセス向きホテル" },
     bucket: "booked",
     sourceGroup: "accommodation",
+    area: { en: "Shijo / Karasuma, Kyoto", ja: "京都・四条烏丸" },
+    property: {
+      en: "Hotel Resol Kyoto Shijo Muromachi",
+      ja: "ホテルリソル京都 四条室町"
+    },
+    routeReason: {
+      en: "Shijo / Karasuma works better than a generic Kyoto stay because it keeps the Day 2 Higashiyama side simple while giving cleaner subway, Hankyu, and JR options for Day 3 Arashiyama and the move back to Osaka.",
+      ja: "四条烏丸は、ただの京都泊よりも実際の動線に合います。2日目の東山側へ動きやすく、3日目の嵐山と大阪戻りにも地下鉄・阪急・JRの選択肢を取りやすいからです。"
+    },
     cost: { mode: "perGroup", amount: 13200, sourceCostId: "kyoto-midrange-hotel" }
   },
   "hakone-practical-ryokan": {
     id: "hakone-practical-ryokan",
     type: "ryokan",
-    label: { en: "Hakone ryokan", ja: "箱根旅館" },
+    label: { en: "Hakone loop-side ryokan", ja: "箱根周遊向き旅館" },
     bucket: "booked",
     sourceGroup: "accommodation",
+    area: { en: "Motohakone / Kojiri side", ja: "元箱根・湖尻側" },
+    property: { en: "YuYu Hakone", ja: "YuYu Hakone" },
+    routeReason: {
+      en: "This side fits the Day 4 loop better because it is close to the Lake Ashi and ropeway end of the route, and it also makes the next morning's Gotemba-side transfer toward Kawaguchiko more practical than paying for a less relevant Hakone base.",
+      ja: "この側は4日目の周遊終盤に合いやすく、芦ノ湖やロープウェイ終点側へ寄せやすいのが利点です。さらに翌朝の御殿場経由で河口湖へ抜ける流れにも、別エリアの旅館より実用的です。"
+    },
     cost: { mode: "perGroup", amount: 18000, sourceCostId: "hakone-practical-ryokan" }
   },
   "kawaguchiko-base-hotel": {
     id: "kawaguchiko-base-hotel",
     type: "hotel",
-    label: { en: "Kawaguchiko hotel", ja: "河口湖ホテル" },
+    label: { en: "Kawaguchiko station-lake hotel", ja: "河口湖駅・湖畔動線ホテル" },
     bucket: "booked",
     sourceGroup: "accommodation",
+    area: { en: "Kawaguchiko station -> lake corridor", ja: "河口湖駅から湖畔の動線" },
+    property: { en: "HaoSTAY", ja: "HAOSTAY" },
+    routeReason: {
+      en: "This base keeps the Day 5 arrival, Day 6 lake-area wandering, and Day 7 departure practical without paying for a remote resort location that fights the actual bus and station flow.",
+      ja: "この拠点なら、5日目の到着、6日目の湖周辺の動き、7日目の東京戻りをまとめやすく、実際のバス・駅動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
+    },
     cost: { mode: "perGroup", amount: 15700, sourceCostId: "kawaguchiko-base-hotel" }
   },
   "tokyo-base-hotel": {
     id: "tokyo-base-hotel",
     type: "hotel",
-    label: { en: "Tokyo hotel", ja: "東京ホテル" },
+    label: { en: "Shibuya-access Tokyo hotel", ja: "渋谷アクセス重視の東京ホテル" },
     bucket: "booked",
     sourceGroup: "accommodation",
+    area: { en: "West Shibuya / Maruyamacho", ja: "渋谷西側・円山町" },
+    property: { en: "EN HOTEL Shibuya", ja: "EN HOTEL Shibuya" },
+    routeReason: {
+      en: "Shibuya is the actual focus on Day 7, and this west-side position also keeps west-Tokyo movement cleaner if Day 8 is active. It is a better fit than paying for a generic Tokyo stay in a less relevant district.",
+      ja: "7日目の主役が渋谷なので、この西側立地の方が実際の流れに合います。8日目を有効にした場合も西東京方面へ動きやすく、関係の薄いエリアの東京ホテルへ払うより自然です。"
+    },
     cost: { mode: "perGroup", amount: 19820, sourceCostId: "tokyo-base-hotel" }
   },
   "relative-stay": {
     id: "relative-stay",
     type: "relative",
-    label: { en: "Relative's / aunt's house", ja: "親族・叔母の家" },
+    label: { en: "Relative's / aunt's stay", ja: "親族・叔母宅滞在" },
     bucket: "free",
     sourceGroup: "assumptions",
+    area: { en: "Osaka family base", ja: "大阪の親族宅拠点" },
     cost: { mode: "none", amount: 0 },
     formulaCopy: { en: "No room charge", ja: "宿泊費なし" },
+    routeReason: {
+      en: "This is the real Osaka family stay, so the accommodation cost stays at JPY 0 and no hotel logic is applied unless you deliberately switch the stay type.",
+      ja: "ここは実際の大阪の親族宅泊なので、滞在タイプを明示的に切り替えない限り宿泊費は0円のままで、ホテルロジックも適用しません。"
+    },
     assumption: {
       en: "Use this for the Osaka aunt-house nights or any day when family accommodation is already arranged.",
       ja: "大阪の叔母宅の夜や、親族宅の宿泊がすでに決まっている日に使います。"
@@ -207,11 +248,16 @@ const budgetStayDefinitions = {
   "no-accommodation": {
     id: "no-accommodation",
     type: "none",
-    label: { en: "No accommodation cost", ja: "宿泊費なし" },
+    label: { en: "No paid accommodation", ja: "有料宿泊なし" },
     bucket: "free",
     sourceGroup: "assumptions",
+    area: { en: "No paid stay selected", ja: "有料宿泊を入れない日" },
     cost: { mode: "none", amount: 0 },
     formulaCopy: { en: "No room charge", ja: "宿泊費なし" },
+    routeReason: {
+      en: "Use this only when the day should carry no hotel or ryokan charge at all.",
+      ja: "その日にホテルや旅館の費用をまったく入れない時だけ使います。"
+    },
     assumption: {
       en: "Use this if the day does not need a paid room in the budget at all.",
       ja: "その日に有料の宿泊費を見積りへ入れない場合に使います。"
@@ -223,8 +269,8 @@ const budgetSourceGroups = [
     id: "accommodation",
     title: { en: "Accommodation quotes", ja: "宿泊見積り" },
     summary: {
-      en: "The base stay plan is now explicit: free Osaka relative stays on Days 1 and 3, Kyoto hotel on Day 2, Hakone ryokan on Day 4, Kawaguchiko hotel on Days 5-6, and Tokyo hotel on Day 7 plus Day 8 only when unlocked.",
-      ja: "基本の滞在計画を明示しました。1日目と3日目の大阪は無料の親族宅、2日目は京都ホテル、4日目は箱根旅館、5日目と6日目は河口湖ホテル、東京ホテルは7日目と、解放した時だけ8日目です。"
+      en: "The stay plan is now route-based instead of city-generic: Osaka family base on Days 1 and 3, Shijo / Karasuma for Kyoto East + Day 3 departures, Motohakone / Kojiri for the Hakone loop and Day 5 transfer, Kawaguchiko station-to-lake access on Days 5-6, and west-Shibuya access on Day 7 plus Day 8 only when unlocked.",
+      ja: "宿泊計画は、都市名だけでなく実際の動線ベースへ変更しました。1日目と3日目の大阪は親族宅、2日目は京都東側と3日目出発に合う四条烏丸、4日目は箱根周遊と5日目移動に合う元箱根・湖尻側、5日目と6日目は河口湖駅から湖畔の動線、東京は7日目と解放時だけ8日目の渋谷西側アクセス重視です。"
     },
     links: [
       {
@@ -253,8 +299,8 @@ const budgetSourceGroups = [
     id: "room-logic",
     title: { en: "Stay logic", ja: "滞在ロジック" },
     summary: {
-      en: "The old model inflated totals by assuming generic paid city rooms where the actual plan had family accommodation. The new model stores the stay type per day, so Osaka aunt-house nights remain free until you deliberately switch them.",
-      ja: "以前のモデルは、実際には親族宅泊なのに汎用の有料都市ホテルを入れてしまい、合計を膨らませていました。新しいモデルは日ごとに滞在タイプを持つため、大阪の叔母宅泊は意図して切り替えるまで無料のままです。"
+      en: "The old model inflated totals by dropping in broad city hotels instead of following the real route. The new model stores stay type and route-fit area per day, so family stays remain free and paid stays stay tied to the actual logistics.",
+      ja: "以前のモデルは、実際の動線ではなく大まかな都市ホテルを当て込んでしまい、合計を膨らませていました。新しいモデルは日ごとに滞在タイプと動線に合うエリアを持つため、親族宅は無料のまま、有料宿も実際の移動に結び付けて管理します。"
     },
     links: []
   },
@@ -4496,6 +4542,9 @@ const itineraryBudgetLabels = {
     ja: "節約したい所、少し使いたい所、先に予約したい所をメモ。"
   },
   stayLabel: { en: "Stay type", ja: "滞在タイプ" },
+  stayAreaLabel: { en: "Stay area", ja: "滞在エリア" },
+  stayAnchorLabel: { en: "Anchor stay", ja: "基準の宿" },
+  stayWhyLabel: { en: "Route fit", ja: "この場所を選ぶ理由" },
   shareModeLabel: { en: "Accommodation split", ja: "宿泊費の分け方" },
   shareCountLabel: { en: "People sharing stays", ja: "宿泊費を分ける人数" },
   shareModeAllTravelers: { en: "Share across all travelers", ja: "全員で分ける" },
@@ -6036,6 +6085,34 @@ function initializeBudgetNotes() {
     const sourceAssumption = getSourceCostConfig(stayDefinition.cost?.sourceCostId)?.assumption;
     return sourceAssumption || stayDefinition.assumption || itineraryBudgetLabels.stayHintFallback;
   };
+  const getStayAreaCopy = (stayDefinition) => {
+    if (!stayDefinition) {
+      return null;
+    }
+
+    const sourceArea = getSourceCostConfig(stayDefinition.cost?.sourceCostId)?.area;
+    return sourceArea && typeof sourceArea === "object" ? sourceArea : stayDefinition.area || null;
+  };
+  const getStayAnchorCopy = (stayDefinition) => {
+    if (!stayDefinition) {
+      return null;
+    }
+
+    const sourceLabel = getSourceCostConfig(stayDefinition.cost?.sourceCostId)?.source?.label;
+    return sourceLabel && typeof sourceLabel === "object"
+      ? sourceLabel
+      : stayDefinition.property || null;
+  };
+  const getStayRouteReasonCopy = (stayDefinition) => {
+    if (!stayDefinition) {
+      return null;
+    }
+
+    const sourceReason = getSourceCostConfig(stayDefinition.cost?.sourceCostId)?.routeReason;
+    return sourceReason && typeof sourceReason === "object"
+      ? sourceReason
+      : stayDefinition.routeReason || null;
+  };
   const normalizeDayEntry = (definition, entry) => {
     const note = typeof entry?.note === "string" ? entry.note.slice(0, 280) : "";
     const defaultStayId = definition?.defaultStayId || null;
@@ -6580,6 +6657,49 @@ function initializeBudgetNotes() {
     const noteAriaJa = `${dayEstimate.title.ja}の予算メモ`;
     const stayOptions = Array.isArray(dayEstimate.stayOptions) ? dayEstimate.stayOptions : [];
     const selectedStayId = dayEstimate.stayDefinition?.id || "";
+    const stayAreaCopy = getStayAreaCopy(dayEstimate.stayDefinition);
+    const stayAnchorCopy = getStayAnchorCopy(dayEstimate.stayDefinition);
+    const stayRouteReasonCopy = getStayRouteReasonCopy(dayEstimate.stayDefinition);
+    const stayMetaRows = [
+      stayAreaCopy
+        ? { label: itineraryBudgetLabels.stayAreaLabel, value: stayAreaCopy }
+        : null,
+      stayAnchorCopy
+        ? { label: itineraryBudgetLabels.stayAnchorLabel, value: stayAnchorCopy }
+        : null
+    ].filter(Boolean);
+    const stayMetaMarkup = stayMetaRows.length
+      ? `
+        <div class="budget-day-card__stay-meta">
+          ${stayMetaRows
+            .map(
+              (row) => `
+                <p class="budget-day-card__stay-meta-row">
+                  <span class="budget-day-card__stay-meta-label">${renderLocalizedContent(
+                    row.label
+                  )}</span>
+                  <span class="budget-day-card__stay-meta-value">${renderLocalizedContent(
+                    row.value
+                  )}</span>
+                </p>
+              `
+            )
+            .join("")}
+        </div>
+      `
+      : "";
+    const stayRouteMarkup = stayRouteReasonCopy
+      ? `
+        <p class="budget-day-card__stay-route">
+          <span class="budget-day-card__stay-route-label">${renderLocalizedContent(
+            itineraryBudgetLabels.stayWhyLabel
+          )}</span>
+          <span class="budget-day-card__stay-route-value">${renderLocalizedContent(
+            stayRouteReasonCopy
+          )}</span>
+        </p>
+      `
+      : "";
     const stayControlMarkup = stayOptions.length
       ? `
         <label class="budget-day-card__stay-field">
@@ -6601,6 +6721,8 @@ function initializeBudgetNotes() {
               })
               .join("")}
           </select>
+          ${stayMetaMarkup}
+          ${stayRouteMarkup}
           <p class="budget-day-card__stay-hint">${renderLocalizedContent(
             getStayHintCopy(dayEstimate.stayDefinition)
           )}</p>

@@ -43,26 +43,26 @@
     "doneStatus": { "en": "Booked", "ja": "予約済み" },
     "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
     "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Day 2 Kyoto hotel", "ja": "2日目の京都ホテル" },
+    "title": { "en": "Day 2 Kyoto East-access hotel", "ja": "2日目の京都東側アクセス向きホテル" },
     "summary": {
-      "en": "The model now uses a real Kyoto overnight instead of folding Day 2 back into Osaka.",
-      "ja": "2日目は大阪へ戻すのではなく、実際の京都泊として組み直しました。"
+      "en": "This stay is picked for Shijo / Karasuma route fit, not just because it is in Kyoto.",
+      "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
     },
     "details": {
-      "en": "Use the cheaper live quote for budgeting and the official property page for direct rules or booking if the direct rate is competitive.",
-      "ja": "予算確認は安い見積りリンク、施設ルールや直販確認は公式ページで見る形にしています。"
+      "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama and Osaka much better than staying deep in east Kyoto. Use the cheaper live quote for pricing and the official page for direct rules or booking.",
+      "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山と大阪戻りも東側の奥へ泊まるより整います。価格確認は安い見積りリンク、施設ルールや直販確認は公式ページを使います。"
     },
     "links": [
       {
         "href": "https://www.expedia.co.jp/en/Kyoto-Hotels-Hotel-Resol-Kyoto-Shijo-Muromachi.h23196129.Hotel-Information",
         "label": { "en": "Cheap price-check", "ja": "安い見積り確認" },
-        "note": { "en": "Current Expedia quote around JPY 13.2k", "ja": "現在のExpedia見積りは約1.32万円" },
+        "note": { "en": "Shijo / Karasuma price anchor around JPY 13.2k", "ja": "四条烏丸エリアの見積り基準は約1.32万円" },
         "kind": "primary"
       },
       {
         "href": "https://en.www.resol-hotel.jp/kyoto-s/",
         "label": { "en": "Official hotel page", "ja": "公式ホテルページ" },
-        "note": { "en": "Direct booking and hotel rules", "ja": "直接予約とホテル案内" },
+        "note": { "en": "Direct booking and access details", "ja": "直接予約とアクセス案内" },
         "kind": "secondary"
       }
     ]
@@ -77,20 +77,20 @@
     "doneStatus": { "en": "Booked", "ja": "予約済み" },
     "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
     "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Day 4 Hakone ryokan", "ja": "4日目の箱根旅館" },
+    "title": { "en": "Day 4 Hakone loop-side ryokan", "ja": "4日目の箱根周遊向き旅館" },
     "summary": {
-      "en": "The ryokan default is now a practical lower quote instead of the old inflated band.",
-      "ja": "旅館の初期値は、以前の高すぎる帯ではなく、より現実的な低めの見積りへ下げました。"
+      "en": "The ryokan is chosen for the Motohakone / Kojiri side of the route, not just for being in Hakone.",
+      "ja": "この旅館は、箱根という広い括りではなく、元箱根・湖尻側の動線で選んでいます。"
     },
     "details": {
-      "en": "The cheap quote link is the budgeting anchor. Keep a second trustworthy listing ready if you want a backup place to book the same property or compare cancellation terms.",
-      "ja": "安い見積りリンクを予算の基準にし、同じ宿やキャンセル条件の比較用に別の信頼できる掲載先も見られるようにしています。"
+      "en": "This side matches the Lake Ashi, ropeway, and Togendai end of the loop and also helps the Day 5 Gotemba-side transfer toward Kawaguchiko. Use the cheaper quote as the budget anchor and keep a trustworthy backup listing for terms comparison.",
+      "ja": "この側は芦ノ湖・ロープウェイ・桃源台寄りの周遊終盤に合いやすく、5日目の御殿場経由で河口湖へ抜ける流れにも向いています。安い見積りを予算基準にし、条件比較用に信頼できる予備掲載も残しています。"
     },
     "links": [
       {
         "href": "https://www.expedia.co.jp/Hakone-Hotels-YuYu-Onsen-Ryokan-Hakone.h104862373.Hotel-Information",
         "label": { "en": "Cheap price-check", "ja": "安い見積り確認" },
-        "note": { "en": "Current Expedia quote around JPY 16k total", "ja": "現在のExpedia見積りは合計約1.6万円" },
+        "note": { "en": "Motohakone / Kojiri-side quote around JPY 16k total", "ja": "元箱根・湖尻側の見積りは合計約1.6万円" },
         "kind": "primary"
       },
       {
@@ -111,20 +111,20 @@
     "doneStatus": { "en": "Booked", "ja": "予約済み" },
     "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
     "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Days 5-6 Kawaguchiko hotel", "ja": "5日目と6日目の河口湖ホテル" },
+    "title": { "en": "Days 5-6 Kawaguchiko station-lake hotel", "ja": "5日目と6日目の河口湖駅・湖畔動線ホテル" },
     "summary": {
-      "en": "Two Kawaguchiko hotel nights are now anchored to a lower live quote that still fits the route.",
-      "ja": "河口湖の2泊は、ルートに合いながらもより安い現在の見積りを基準にしました。"
+      "en": "The base is chosen for the station-to-lake corridor so arrival, sightseeing, and the Tokyo return all stay practical.",
+      "ja": "到着、観光、東京戻りの全部をまとめやすいよう、駅から湖畔の動線で拠点を選んでいます。"
     },
     "details": {
-      "en": "The cheaper listing is the budgeting default. The official page is there for direct policy checks and any direct-booking rate comparison.",
-      "ja": "安い掲載先を予算の初期値にし、公式ページはルール確認や直販比較用に置いています。"
+      "en": "This area works better than a remote Fuji resort because it keeps the Hakone arrival, lake walking, and Day 7 departure aligned with the actual route. The cheaper listing is the budget default; the official page stays for policy checks and direct-rate comparison.",
+      "ja": "遠い富士リゾート立地よりも、このエリアの方が箱根からの到着、湖畔散策、7日目の東京戻りを実際の流れに合わせやすいです。安い掲載先を予算の初期値にし、公式ページはルール確認や直販比較用に残しています。"
     },
     "links": [
       {
         "href": "https://www.expedia.co.jp/en/Fujikawaguchiko-Hotels-HaoSTAY.h42541370.Hotel-Information",
         "label": { "en": "Cheap price-check", "ja": "安い見積り確認" },
-        "note": { "en": "Current Expedia quote around JPY 15.7k", "ja": "現在のExpedia見積りは約1.57万円" },
+        "note": { "en": "Station-to-lake corridor quote around JPY 15.7k", "ja": "駅から湖畔の動線にある見積りは約1.57万円" },
         "kind": "primary"
       },
       {
@@ -145,20 +145,20 @@
     "doneStatus": { "en": "Booked", "ja": "予約済み" },
     "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
     "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Tokyo hotel nights", "ja": "東京ホテル泊" },
+    "title": { "en": "Shibuya-access Tokyo hotel nights", "ja": "渋谷アクセス重視の東京ホテル泊" },
     "summary": {
-      "en": "Tokyo is one hotel night on Day 7, with a second night only if Optional Day 8 is active.",
-      "ja": "東京は7日目の1泊が基本で、2泊目は追加8日目を有効にした時だけ入ります。"
+      "en": "Tokyo is kept on the Shibuya / west-side flow, with one night on Day 7 and a second only if Optional Day 8 is active.",
+      "ja": "東京は渋谷寄りの西側動線で組み、7日目の1泊を基本に、2泊目は追加8日目を有効にした時だけ入ります。"
     },
     "details": {
-      "en": "Keep the cheaper quote for pricing sanity and the official page for direct booking or policy checks. This is the cleanest way to avoid silently doubling Tokyo nights.",
-      "ja": "価格感を保つための安い見積りと、直販やルール確認のための公式ページを分けています。これで東京泊数の見えない水増しも防げます。"
+      "en": "Shibuya is the actual Day 7 focus, and this west-side area also stays cleaner for west-Tokyo movement if Day 8 is active. Keep the cheaper quote for pricing sanity and the official page for direct booking or policy checks.",
+      "ja": "7日目の主役は渋谷で、8日目を使うなら西東京方面への動きもこの西側立地の方が自然です。価格感を保つための安い見積りと、直販やルール確認のための公式ページを分けています。"
     },
     "links": [
       {
         "href": "https://www.expedia.co.jp/en/Tokyo-Hotels-SHIBUYA-HOTEL-EN.h5394352.Hotel-Information",
         "label": { "en": "Cheap price-check", "ja": "安い見積り確認" },
-        "note": { "en": "Current Expedia quote around JPY 19.8k", "ja": "現在のExpedia見積りは約1.98万円" },
+        "note": { "en": "West-Shibuya quote around JPY 19.8k", "ja": "渋谷西側エリアの見積りは約1.98万円" },
         "kind": "primary"
       },
       {
