@@ -19,6 +19,11 @@
   "costIndex": {
     "osaka-compact-hotel": {
       "amount": 6189,
+      "range": {
+        "lean": 5400,
+        "expected": 6189,
+        "high": 8400
+      },
       "roomCapacity": 2,
       "area": {
         "en": "Nishi-Shinsaibashi / Minami",
@@ -46,6 +51,11 @@
     },
     "kyoto-midrange-hotel": {
       "amount": 13152,
+      "range": {
+        "lean": 11600,
+        "expected": 13152,
+        "high": 16800
+      },
       "roomCapacity": 2,
       "area": {
         "en": "Shijo / Karasuma, Kyoto",
@@ -73,6 +83,11 @@
     },
     "hakone-practical-ryokan": {
       "amount": 18000,
+      "range": {
+        "lean": 16000,
+        "expected": 18000,
+        "high": 24000
+      },
       "roomCapacity": 2,
       "area": {
         "en": "Motohakone / Kojiri side",
@@ -100,6 +115,11 @@
     },
     "kawaguchiko-base-hotel": {
       "amount": 15709,
+      "range": {
+        "lean": 14500,
+        "expected": 15709,
+        "high": 19800
+      },
       "roomCapacity": 2,
       "area": {
         "en": "Kawaguchiko station -> lake corridor",
@@ -127,6 +147,11 @@
     },
     "tokyo-base-hotel": {
       "amount": 19820,
+      "range": {
+        "lean": 16800,
+        "expected": 19820,
+        "high": 24800
+      },
       "roomCapacity": 2,
       "area": {
         "en": "West Shibuya / Maruyamacho",

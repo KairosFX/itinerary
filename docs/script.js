@@ -130,13 +130,62 @@ const budgetAssumptionCopy = {
     "この見積りは、旅程に沿った再利用可能な動線ベースの宿泊エリアへ更新しました。1日目と3日目の大阪はローカル・プライベート滞在または宿泊費なし、2日目は四条烏丸の京都拠点、4日目は元箱根・湖尻側の箱根旅館、5日目と6日目は河口湖駅から湖畔の動線に合う拠点、7日目は渋谷アクセス重視の東京ホテルで、8日目の東京2泊目は追加日を有効にした場合だけ反映します。"
 };
 const budgetCategoryDefinitions = [
-  { id: "accommodation", label: { en: "Hotels / ryokan", ja: "宿泊" } },
-  { id: "intercityTransit", label: { en: "Intercity transit", ja: "都市間移動" } },
-  { id: "localTransit", label: { en: "Local transit", ja: "現地移動" } },
-  { id: "ticketsAdmissions", label: { en: "Tickets / admissions", ja: "入場料・チケット" } },
-  { id: "meals", label: { en: "Meals", ja: "食事" } },
-  { id: "baggage", label: { en: "Baggage", ja: "荷物対応" } },
-  { id: "optionalExtras", label: { en: "Optional extras", ja: "任意追加" } }
+  {
+    id: "accommodation",
+    label: { en: "Hotels / ryokan", ja: "宿泊" },
+    rangeHint: {
+      en: "Moves with the chosen stay selector and the route-fit hotel or ryokan quote band.",
+      ja: "選んだ滞在タイプと、動線に合うホテル・旅館の価格帯で上下します。"
+    }
+  },
+  {
+    id: "intercityTransit",
+    label: { en: "Intercity transit", ja: "都市間移動" },
+    rangeHint: {
+      en: "Most long legs are fixed, but Fuji-side fallback choices can push the higher band up.",
+      ja: "長距離移動の大半は固定ですが、富士側の代替手段が必要だと高め帯が上がります。"
+    }
+  },
+  {
+    id: "localTransit",
+    label: { en: "Local transit", ja: "現地移動" },
+    rangeHint: {
+      en: "Moves mostly on weather-flex and transfer-heavy local days.",
+      ja: "主に天気優先日や乗り継ぎの多い日の現地移動で変わります。"
+    }
+  },
+  {
+    id: "ticketsAdmissions",
+    label: { en: "Tickets / admissions", ja: "入場料・チケット" },
+    rangeHint: {
+      en: "Most tickets stay near official prices, with only timed-slot or option differences moving the range.",
+      ja: "多くのチケットは公式料金に近く、時間帯や選ぶ券種でだけ差が出ます。"
+    }
+  },
+  {
+    id: "meals",
+    label: { en: "Meals", ja: "食事" },
+    rangeHint: {
+      en: "Lean keeps simpler convenience-store or casual meals; high assumes fuller sightseeing-day spending.",
+      ja: "控えめはコンビニや気軽な食事寄り、高めは観光日の食費を少し厚めに見ます。"
+    }
+  },
+  {
+    id: "baggage",
+    label: { en: "Baggage", ja: "荷物対応" },
+    rangeHint: {
+      en: "Only changes when route extras are enabled.",
+      ja: "ルート追加費用を有効にした時だけ動きます。"
+    }
+  },
+  {
+    id: "optionalExtras",
+    label: { en: "Optional extras", ja: "任意追加" },
+    rangeHint: {
+      en: "Weather pivots and route add-ons stay outside the base total until you switch them on.",
+      ja: "天候回避や追加ルート費用は、有効にするまで基本合計へ入りません。"
+    }
+  }
 ];
 const budgetBucketDefinitions = [
   { id: "booked", label: { en: "Booked", ja: "予約前提" } },
@@ -367,7 +416,13 @@ const budgetDayDefinitions = [
       { label: { en: "Osaka city hop into Minami", ja: "ミナミへ入る大阪市内移動" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 300 } },
       { label: { en: "Dotonbori", ja: "道頓堀" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       { label: { en: "Shinsaibashi", ja: "心斎橋" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Arrival-day meals", ja: "到着日の食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 1400 } },
+      {
+        label: { en: "Arrival-day meals", ja: "到着日の食事" },
+        category: "meals",
+        bucket: "flexible",
+        sourceGroup: "meals",
+        cost: { mode: "perPerson", amount: 1400, range: { lean: 1100, expected: 1400, high: 1900 } }
+      },
       { label: { en: "Nightlife", ja: "夜の街歩き" }, category: "optionalExtras", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } }
     ]
   },
@@ -386,7 +441,13 @@ const budgetDayDefinitions = [
       { label: { en: "Yasaka Pagoda", ja: "八坂の塔" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       { label: { en: "Gion", ja: "祇園" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       { label: { en: "Nanzen-ji", ja: "南禅寺" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Kyoto sightseeing meals + snacks", ja: "京都観光日の食事と軽食" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 1800 } }
+      {
+        label: { en: "Kyoto sightseeing meals + snacks", ja: "京都観光日の食事と軽食" },
+        category: "meals",
+        bucket: "flexible",
+        sourceGroup: "meals",
+        cost: { mode: "perPerson", amount: 1800, range: { lean: 1400, expected: 1800, high: 2600 } }
+      }
     ]
   },
   {
@@ -400,7 +461,13 @@ const budgetDayDefinitions = [
       { label: { en: "Kyoto -> Arashiyama + Osaka rail", ja: "京都 -> 嵐山と大阪への鉄道移動" }, category: "intercityTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 980 } },
       { label: { en: "Tempozan local hop", ja: "天保山周辺の市内移動" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 300 } },
       { label: { en: "Kaiyukan", ja: "海遊館" }, category: "ticketsAdmissions", bucket: "booked", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 2300 } },
-      { label: { en: "Final Osaka meals", ja: "大阪最後の食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 1600 } }
+      {
+        label: { en: "Final Osaka meals", ja: "大阪最後の食事" },
+        category: "meals",
+        bucket: "flexible",
+        sourceGroup: "meals",
+        cost: { mode: "perPerson", amount: 1600, range: { lean: 1300, expected: 1600, high: 2300 } }
+      }
     ]
   },
   {
@@ -419,8 +486,20 @@ const budgetDayDefinitions = [
       { label: { en: "Togendai", ja: "桃源台" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
       { label: { en: "Lake Ashi cruise", ja: "芦ノ湖クルーズ" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
       { label: { en: "Hakone Shrine / Moto-Hakone", ja: "箱根神社 / 元箱根" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Hakone transfer-day meals", ja: "箱根移動日の食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 1700 } },
-      { label: { en: "Luggage handling buffer", ja: "荷物対応バッファ" }, category: "baggage", bucket: "optional", sourceGroup: "assumptions", cost: { mode: "perPair", amount: 1500 } }
+      {
+        label: { en: "Hakone transfer-day meals", ja: "箱根移動日の食事" },
+        category: "meals",
+        bucket: "flexible",
+        sourceGroup: "meals",
+        cost: { mode: "perPerson", amount: 1700, range: { lean: 1400, expected: 1700, high: 2400 } }
+      },
+      {
+        label: { en: "Luggage handling buffer", ja: "荷物対応バッファ" },
+        category: "baggage",
+        bucket: "optional",
+        sourceGroup: "assumptions",
+        cost: { mode: "perPair", amount: 1500, range: { lean: 1200, expected: 1500, high: 2000 } }
+      }
     ]
   },
   {
@@ -432,10 +511,22 @@ const budgetDayDefinitions = [
     subtitle: { en: "Morning onsen, then the Gotemba-side transfer", ja: "朝の温泉のあと、御殿場側経由で河口湖へ" },
     items: [
       { label: { en: "Onsen morning", ja: "朝の温泉" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Bus via Gotemba", ja: "御殿場経由のバス" }, category: "intercityTransit", bucket: "required", sourceGroup: "hakone-fuji-transit", cost: { mode: "perPerson", amount: 1750 } },
+      {
+        label: { en: "Bus via Gotemba", ja: "御殿場経由のバス" },
+        category: "intercityTransit",
+        bucket: "required",
+        sourceGroup: "hakone-fuji-transit",
+        cost: { mode: "perPerson", amount: 1750, range: { lean: 1750, expected: 1750, high: 2600 } }
+      },
       { label: { en: "Lake arrival views", ja: "到着後の湖畔の景色" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       { label: { en: "Quiet sunset", ja: "静かな夕景" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Arrival dinner in Kawaguchiko", ja: "河口湖到着後の夕食" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 1500 } }
+      {
+        label: { en: "Arrival dinner in Kawaguchiko", ja: "河口湖到着後の夕食" },
+        category: "meals",
+        bucket: "flexible",
+        sourceGroup: "meals",
+        cost: { mode: "perPerson", amount: 1500, range: { lean: 1200, expected: 1500, high: 2200 } }
+      }
     ]
   },
   {
@@ -447,12 +538,30 @@ const budgetDayDefinitions = [
     subtitle: { en: "Weather-flex Fuji day", ja: "天気優先の富士日" },
     items: [
       { label: { en: "Fuji check at dawn", ja: "夜明けの富士チェック" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Fuji-area local movement", ja: "富士エリア内の現地移動" }, category: "localTransit", bucket: "required", sourceGroup: "hakone-fuji-transit", cost: { mode: "perPerson", amount: 1300 } },
+      {
+        label: { en: "Fuji-area local movement", ja: "富士エリア内の現地移動" },
+        category: "localTransit",
+        bucket: "required",
+        sourceGroup: "hakone-fuji-transit",
+        cost: { mode: "perPerson", amount: 1300, range: { lean: 900, expected: 1300, high: 1900 } }
+      },
       { label: { en: "Chureito if clear", ja: "見えるなら忠霊塔" }, category: "localTransit", bucket: "free", sourceGroup: "hakone-fuji-transit", cost: { mode: "none", amount: 0 } },
       { label: { en: "Lake Kawaguchiko", ja: "河口湖" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       { label: { en: "Oshino Hakkai", ja: "忍野八海" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Fuji-area day meals", ja: "富士エリア日の食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 1700 } },
-      { label: { en: "Weather pivot taxi / timing buffer", ja: "天候対応のタクシー / 時間調整バッファ" }, category: "optionalExtras", bucket: "optional", sourceGroup: "assumptions", cost: { mode: "perPerson", amount: 800 } }
+      {
+        label: { en: "Fuji-area day meals", ja: "富士エリア日の食事" },
+        category: "meals",
+        bucket: "flexible",
+        sourceGroup: "meals",
+        cost: { mode: "perPerson", amount: 1700, range: { lean: 1400, expected: 1700, high: 2500 } }
+      },
+      {
+        label: { en: "Weather pivot taxi / timing buffer", ja: "天候対応のタクシー / 時間調整バッファ" },
+        category: "optionalExtras",
+        bucket: "optional",
+        sourceGroup: "assumptions",
+        cost: { mode: "perPerson", amount: 1200, range: { lean: 800, expected: 1200, high: 2400 } }
+      }
     ]
   },
   {
@@ -463,11 +572,29 @@ const budgetDayDefinitions = [
     title: { en: "Day 7 - Tokyo / Shibuya", ja: "7日目・東京 / 渋谷" },
     subtitle: { en: "Cheaper direct bus into Shibuya, then a focused evening there", ja: "安い直通バスで渋谷へ入り、夜の渋谷に集中する日" },
     items: [
-      { label: { en: "Direct bus to Shibuya / Tokyo", ja: "渋谷・東京への直通バス" }, category: "intercityTransit", bucket: "booked", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 2200 } },
+      {
+        label: { en: "Direct bus to Shibuya / Tokyo", ja: "渋谷・東京への直通バス" },
+        category: "intercityTransit",
+        bucket: "booked",
+        sourceGroup: "core-transit",
+        cost: { mode: "perPerson", amount: 2200, range: { lean: 2100, expected: 2200, high: 4130 } }
+      },
       { label: { en: "Shibuya local hop", ja: "渋谷周辺の移動" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 220 } },
       { label: { en: "Shibuya Crossing", ja: "渋谷スクランブル交差点" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Shibuya food walk", ja: "渋谷で食べ歩き" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 2000 } },
-      { label: { en: "Shibuya Sky (evening slot)", ja: "渋谷スカイ（夕方以降の枠）" }, category: "ticketsAdmissions", bucket: "booked", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 3400 } }
+      {
+        label: { en: "Shibuya food walk", ja: "渋谷で食べ歩き" },
+        category: "meals",
+        bucket: "flexible",
+        sourceGroup: "meals",
+        cost: { mode: "perPerson", amount: 2000, range: { lean: 1600, expected: 2000, high: 3000 } }
+      },
+      {
+        label: { en: "Shibuya Sky (evening slot)", ja: "渋谷スカイ（夕方以降の枠）" },
+        category: "ticketsAdmissions",
+        bucket: "booked",
+        sourceGroup: "tickets",
+        cost: { mode: "perPerson", amount: 3400, range: { lean: 3000, expected: 3400, high: 3900 } }
+      }
     ]
   },
   {
@@ -479,17 +606,41 @@ const budgetDayDefinitions = [
     subtitle: { en: "Tokyo East day with Skytree and a second Tokyo night", ja: "スカイツリー中心の東京東側と2泊目の東京ホテル" },
     items: [
       { label: { en: "Tokyo subway day pass", ja: "東京サブウェイ1日券" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 800, sourceCostId: "tokyo-subway-24h" } },
-      { label: { en: "Tokyo Skytree", ja: "東京スカイツリー" }, category: "ticketsAdmissions", bucket: "booked", sourceGroup: "tickets", cost: { mode: "perPerson", amount: 2100 } },
+      {
+        label: { en: "Tokyo Skytree", ja: "東京スカイツリー" },
+        category: "ticketsAdmissions",
+        bucket: "booked",
+        sourceGroup: "tickets",
+        cost: { mode: "perPerson", amount: 2400, range: { lean: 2100, expected: 2400, high: 2700 } }
+      },
       { label: { en: "Tokyo Solamachi", ja: "東京ソラマチ" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       { label: { en: "Akihabara", ja: "秋葉原" }, category: "optionalExtras", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Tokyo day meals", ja: "東京日の食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 1900 } }
+      {
+        label: { en: "Tokyo day meals", ja: "東京日の食事" },
+        category: "meals",
+        bucket: "flexible",
+        sourceGroup: "meals",
+        cost: { mode: "perPerson", amount: 1900, range: { lean: 1500, expected: 1900, high: 2800 } }
+      }
     ]
   },
   { day: 9, optional: true, title: { en: "Optional Day 9 - Tokyo", ja: "追加9日目・東京" }, subtitle: { en: "Final city day", ja: "最後の都内日" }, items: [
     { label: { en: "Tokyo Imperial Palace", ja: "皇居" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
     { label: { en: "Shinjuku", ja: "新宿" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-    { label: { en: "Tokyo city hops", ja: "東京市内の移動" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 330 } },
-    { label: { en: "Final Tokyo meals", ja: "最後の東京での食事" }, category: "meals", bucket: "flexible", sourceGroup: "meals", cost: { mode: "perPerson", amount: 1500 } }
+    {
+      label: { en: "Tokyo city hops", ja: "東京市内の移動" },
+      category: "localTransit",
+      bucket: "required",
+      sourceGroup: "core-transit",
+      cost: { mode: "perPerson", amount: 330, range: { lean: 260, expected: 330, high: 460 } }
+    },
+    {
+      label: { en: "Final Tokyo meals", ja: "最後の東京での食事" },
+      category: "meals",
+      bucket: "flexible",
+      sourceGroup: "meals",
+      cost: { mode: "perPerson", amount: 1500, range: { lean: 1200, expected: 1500, high: 2400 } }
+    }
   ] }
 ];
 const fujiForecastCacheMaxAgeMs = 45 * 60 * 1000;
@@ -747,17 +898,11 @@ const routeMapLabels = {
   stops: { en: "Major stops", ja: "主要地点" },
   stopTag: { en: "Stop detail", ja: "地点詳細" },
   segmentTag: { en: "Route leg", ja: "区間詳細" },
-  previewLoading: { en: "Loading map preview...", ja: "地図プレビューを読み込み中..." },
-  interactiveLoading: { en: "Loading interactive map...", ja: "インタラクティブ地図を読み込み中..." },
-  previewFallbackTitle: { en: "Map preview unavailable on this device", ja: "この端末では地図プレビューを表示できません" },
-  previewFallbackBody: {
-    en: "The route order and related day links still work below. Use the Google Maps link if the live map cannot load here.",
-    ja: "下のルート順や関連日程リンクはそのまま使えます。この環境で地図が開けない場合は Google マップのリンクを使ってください。"
-  },
-  interactiveFallbackTitle: { en: "Interactive map unavailable here", ja: "この環境ではインタラクティブ地図を表示できません" },
-  interactiveFallbackBody: {
-    en: "The route detail card, day jumps, and saved transit links still work even if the live map fails.",
-    ja: "ライブ地図が開けなくても、ルート詳細カード、日程ジャンプ、保存済み移動リンクはそのまま使えます。"
+  sharedLoading: { en: "Loading unified route map...", ja: "統合ルート地図を読み込み中..." },
+  sharedFallbackTitle: { en: "Route map unavailable on this device", ja: "この端末ではルート地図を表示できません" },
+  sharedFallbackBody: {
+    en: "The route order, stop details, day jumps, and saved transit links still work below. Use the Google Maps link if the live map cannot load here.",
+    ja: "下のルート順、停留地詳細、日程ジャンプ、保存済み移動リンクはそのまま使えます。この環境でライブ地図が開けない場合は Google マップのリンクを使ってください。"
   },
   popupJump: { en: "Jump to related day", ja: "関連日程へ移動" }
 };
@@ -766,53 +911,28 @@ const routeMapInitialView = {
   center: [137.4, 35.1],
   zoom: 4.95
 };
-const routeMapModeDefinitions = {
+const routeMapDisplayDefinitions = {
   preview: {
-    interactive: false,
-    getCanvasNode: () => routeMapPreviewCanvas,
-    getStatusNode: () => routeMapPreviewStatusNode,
-    getShellNode: () => routeMapPreviewNode,
-    loadingTitle: routeMapLabels.previewLoading,
+    loadingTitle: routeMapLabels.sharedLoading,
     loadingBody: {
-      en: "This shared OpenFreeMap + MapLibre preview stays light, then expands into the full explorer only when you open it.",
-      ja: "この共有OpenFreeMap + MapLibreプレビューは軽いまま表示され、開いたときだけ詳しい探索地図へ広がります。"
+      en: "The same route map loads once in preview mode, then switches into the richer live view when you open it.",
+      ja: "同じルート地図を一度だけ読み込み、最初はプレビューモード、開くと詳しいライブ表示へ切り替えます。"
     },
-    fallbackTitle: routeMapLabels.previewFallbackTitle,
-    fallbackBody: routeMapLabels.previewFallbackBody,
-    overviewMaxZoom: 5.75,
-    mapOptions: {
-      attributionControl: false,
-      interactive: false,
-      renderWorldCopies: false,
-      fadeDuration: 0,
-      center: routeMapInitialView.center,
-      zoom: routeMapInitialView.zoom
-    }
+    overviewMaxZoom: 5.75
   },
   interactive: {
-    interactive: true,
-    getCanvasNode: () => getRouteMapLiveCanvasNode(),
-    getStatusNode: () => getRouteMapLiveStatusNode(),
-    getShellNode: () => routeMapInteractive,
-    loadingTitle: routeMapLabels.interactiveLoading,
-    loadingBody: {
-      en: "The expanded explorer reuses the same OpenFreeMap basemap, route line, stop markers, and styling as the preview mode.",
-      ja: "拡張地図はプレビューモードと同じOpenFreeMap地図、ルート線、停留地マーカー、スタイルをそのまま使います。"
-    },
-    fallbackTitle: routeMapLabels.interactiveFallbackTitle,
-    fallbackBody: routeMapLabels.interactiveFallbackBody,
-    overviewMaxZoom: 6.15,
-    mapOptions: {
-      attributionControl: false,
-      renderWorldCopies: false,
-      dragRotate: false,
-      pitchWithRotate: false,
-      touchPitch: false,
-      scrollZoom: !coarsePointerQuery.matches,
-      center: routeMapInitialView.center,
-      zoom: routeMapInitialView.zoom
-    }
+    overviewMaxZoom: 6.15
   }
+};
+const routeMapBaseOptions = {
+  attributionControl: false,
+  renderWorldCopies: false,
+  fadeDuration: 0,
+  dragRotate: false,
+  pitchWithRotate: false,
+  touchPitch: false,
+  center: routeMapInitialView.center,
+  zoom: routeMapInitialView.zoom
 };
 const routeExplorerPathDefinitions = [
   {
@@ -1183,7 +1303,7 @@ const routeExplorerStopDefinitions = [
   },
   {
     id: "fuji",
-    title: { en: "Mt. Fuji / Kawaguchiko area", ja: "富士山・河口湖エリア" },
+    title: { en: "Kawaguchiko / Fuji area", ja: "河口湖・富士エリア" },
     summary: {
       en: "This single stop groups the Kawaguchiko base, Chureito side, and local Fuji viewpoints.",
       ja: "この地点は河口湖拠点、忠霊塔側、富士周辺の展望地をまとめて表しています。"
@@ -1517,10 +1637,8 @@ let budgetNotesState = getDefaultBudgetNotesState();
 let budgetNotesInitialized = false;
 let routeMapInitialized = false;
 let routeMapLibraryPromise = null;
-const routeMapModeState = {
-  preview: createRouteMapModeState(),
-  interactive: createRouteMapModeState()
-};
+const routeMapState = createRouteMapState();
+let routeMapDisplayMode = "preview";
 let routeMapActivePopup = null;
 let routeMapActivePopupSelectionKey = "";
 let activeRouteMapSelection = { type: "view", id: routeExplorerDefaultSelectionId };
@@ -4594,18 +4712,42 @@ function initializeBudgetNotes() {
 }
 
 const itineraryBudgetLabels = {
-  summaryTotalLocked: { en: "Days 1-7 estimate", ja: "1〜7日目の見積り" },
-  summaryTotalUnlocked: { en: "Trip estimate", ja: "旅程合計" },
-  summaryPerPerson: { en: "Per person", ja: "1人あたり" },
-  summaryAccommodationSplit: { en: "Stay split / person", ja: "宿泊の1人分" },
-  summaryBookedRequired: { en: "Booked + required", ja: "予約前提 + 必須" },
-  summaryOptionalLocked: { en: "Days 8-9 add-on", ja: "8日目と9日目の追加分" },
-  summaryOptionalUnlocked: { en: "Optional Days 8-9 included", ja: "追加の8日目と9日目を含む" },
+  summaryTotalLocked: { en: "Days 1-7 range", ja: "1〜7日目の予算帯" },
+  summaryTotalUnlocked: { en: "Trip range", ja: "旅程の予算帯" },
+  summaryPerPerson: { en: "Per-person range", ja: "1人あたりの予算帯" },
+  summaryAccommodationSplit: { en: "Stay split / person range", ja: "宿泊の1人分帯" },
+  summaryBookedRequired: { en: "Booked + required range", ja: "予約前提 + 必須の帯" },
+  summaryOptionalLocked: { en: "Days 8-9 add-on range", ja: "8日目と9日目の追加帯" },
+  summaryOptionalUnlocked: { en: "Optional Days 8-9 range", ja: "追加の8日目と9日目の帯" },
   itineraryBasis: { en: "Estimate basis", ja: "見積りの前提" },
   estimateUnavailable: { en: "Itinerary budget notes are unavailable right now.", ja: "現在は旅程予算のメモを表示できません。" },
   breakdownHeading: { en: "Category breakdown", ja: "カテゴリ別の内訳" },
   sourcesHeading: { en: "Sources + route assumptions", ja: "出典とルート前提" },
   noteLabel: { en: "Budget note", ja: "予算メモ" },
+  rangeLegendTitle: { en: "What changes the range", ja: "予算帯を動かす前提" },
+  levelLean: { en: "Lean", ja: "控えめ" },
+  levelExpected: { en: "Expected", ja: "標準" },
+  levelHigh: { en: "High", ja: "高め" },
+  rangeLegendLean: {
+    en: "Cheaper route-fit stay bands, simpler meal pattern, and the lower still-practical transit or ticket choice where one exists.",
+    ja: "動線に合う安めの宿泊帯、より軽い食事パターン、そして選べる場合は実用的な下側の移動・券種を使います。"
+  },
+  rangeLegendExpected: {
+    en: "The current default itinerary model: today's main stay quotes, the direct route assumptions already shown here, and the normal casual-meal pattern.",
+    ja: "現在の初期モデルです。ここに出している現行の宿泊見積り、既定のルート前提、通常寄りの食費パターンを使います。"
+  },
+  rangeLegendHigh: {
+    en: "A higher but still realistic version: pricier route-fit stay bands, fuller sightseeing-day meals, and fallback transit or timed-ticket variation where relevant.",
+    ja: "高めでも現実的な帯です。動線に合う上側の宿泊帯、少し厚めの観光日食費、必要時の代替移動や時間帯差を見込みます。"
+  },
+  rangeLegendOptionalDays: {
+    en: "Days 8-9 stay outside the live total until unlocked, and optional route extras stay outside the base total until you enable them.",
+    ja: "8日目と9日目は解放するまで合計へ入らず、任意のルート追加費用も有効にするまで基本合計へ入りません。"
+  },
+  rangeFixedNote: { en: "Mostly fixed across the range", ja: "この項目は帯の中でほぼ固定" },
+  rangeAvailablePrefix: { en: "Available if enabled", ja: "有効時の帯" },
+  rangeCompactPrefix: { en: "Lean", ja: "控えめ" },
+  rangeCompactSuffix: { en: "High", ja: "高め" },
   notePlaceholder: {
     en: "Note where you may want to splurge, save, or prebook.",
     ja: "節約したい所、少し使いたい所、先に予約したい所をメモ。"
@@ -4624,16 +4766,16 @@ const itineraryBudgetLabels = {
     ja: "実際の初期滞在と、実際に使える安い・無料の代替滞在を切り替えられます。"
   },
   statusReady: {
-    en: "Checklist-linked estimate ready.",
-    ja: "チェックリスト連動の見積りを表示中。"
+    en: "Checklist-linked lean / expected / high model ready.",
+    ja: "チェックリスト連動の控えめ・標準・高めモデルを表示中。"
   },
   statusLoading: {
     en: "Loading itinerary cost model...",
     ja: "旅程の費用モデルを読み込んでいます..."
   },
   statusMeta: {
-    en: "Uses the actual stay plan, corrected transit legs, attraction tickets, and a casual-meal pattern instead of padded day-spend math.",
-    ja: "実際の滞在計画、修正済みの移動ルート、チケット、そして水増ししない普段寄りの食費パターンで組み立てています。"
+    en: "Uses the actual stay plan, corrected transit legs, ticket timing, and meal-pattern bands instead of one padded single-number estimate.",
+    ja: "単一の水増し見積りではなく、実際の滞在計画、修正済みの移動、チケット時間帯、食費パターン帯で組み立てています。"
   },
   travelersHint: {
     en: "Stay selectors now control each accommodation night directly, so private/local or no-cost Osaka nights stay at JPY 0 unless you switch them to a paid stay.",
@@ -4651,7 +4793,10 @@ const itineraryBudgetLabels = {
     en: "Adds optional luggage handling and weather-pivot extras. Optional Days 8-9 stay separate until unlocked.",
     ja: "荷物対応や天候回避の任意追加費用を反映します。8日目と9日目は解放するまで別枠です。"
   },
-  totalMeta: { en: "Checklist-linked total", ja: "チェックリスト連動の合計" },
+  totalMeta: {
+    en: "Lean / expected / high trip total built from the real day-by-day model",
+    ja: "実際の日別モデルから組んだ控えめ・標準・高めの合計"
+  },
   noPaidAccommodationMeta: {
     en: "No paid hotel or ryokan stays are selected right now.",
     ja: "現在は有料のホテル・旅館宿泊が選ばれていません。"
@@ -4660,7 +4805,10 @@ const itineraryBudgetLabels = {
     en: "All booking, fare, and official resource links now live in Essentials so Budget Notes stays focused on costs and assumptions.",
     ja: "予約・運賃・公式リソースのリンクはすべてEssentialsへ移し、予算メモは費用と前提だけに絞っています。"
   },
-  bookedRequiredMeta: { en: "Booked and required items only", ja: "予約前提と必須項目のみ" },
+  bookedRequiredMeta: {
+    en: "The base route costs before optional extras and before Days 8-9 are unlocked",
+    ja: "任意追加費用と8日目・9日目を除いた基本ルート費用"
+  },
   sharedMeta: { en: "Shared stays and group costs", ja: "共有の宿泊費と共通費" },
   variableMeta: { en: "Per-person variable spend", ja: "1人ごとの変動費" },
   spendLegend: { en: "Day notes", ja: "日別メモ" },
@@ -6119,8 +6267,122 @@ function initializeBudgetNotes() {
   };
   const getRoomCount = (travelers = budgetDefaultTravelerCount) =>
     Math.max(1, Math.ceil(normalizeTravelerCount(travelers) / budgetSharedRoomOccupancy));
+  const budgetRangeLevels = [
+    { id: "lean", label: itineraryBudgetLabels.levelLean, pillClass: "budget-pill--lean" },
+    {
+      id: "expected",
+      label: itineraryBudgetLabels.levelExpected,
+      pillClass: "budget-pill--expected"
+    },
+    { id: "high", label: itineraryBudgetLabels.levelHigh, pillClass: "budget-pill--high" }
+  ];
+  const createBudgetRange = (lean = 0, expected = 0, high = 0) => ({
+    lean: Number(lean) || 0,
+    expected: Number(expected) || 0,
+    high: Number(high) || 0
+  });
+  const getZeroBudgetRange = () => createBudgetRange(0, 0, 0);
+  const getBudgetRangeValue = (range, level = "expected") =>
+    Number(range?.[level] ?? range?.expected ?? 0) || 0;
+  const normalizeBudgetRange = (rangeCandidate, fallbackAmount = 0) => {
+    const fallback = Math.max(Number(fallbackAmount) || 0, 0);
+    const rawLean = Math.max(Number(rangeCandidate?.lean ?? fallback) || 0, 0);
+    const rawExpected = Math.max(Number(rangeCandidate?.expected ?? fallback) || 0, 0);
+    const rawHigh = Math.max(Number(rangeCandidate?.high ?? fallback) || 0, 0);
+    const lean = Math.min(rawLean, rawExpected, rawHigh);
+    const high = Math.max(rawLean, rawExpected, rawHigh);
+    const expected = Math.min(Math.max(rawExpected, lean), high);
+    return createBudgetRange(lean, expected, high);
+  };
+  const mapBudgetRange = (range, mapper) =>
+    budgetRangeLevels.reduce((nextRange, definition) => {
+      nextRange[definition.id] = Number(
+        mapper(getBudgetRangeValue(range, definition.id), definition.id)
+      ) || 0;
+      return nextRange;
+    }, getZeroBudgetRange());
+  const sumBudgetRanges = (...ranges) =>
+    budgetRangeLevels.reduce((nextRange, definition) => {
+      nextRange[definition.id] = ranges.reduce(
+        (sum, range) => sum + getBudgetRangeValue(range, definition.id),
+        0
+      );
+      return nextRange;
+    }, getZeroBudgetRange());
+  const hasBudgetRangeSpread = (range) =>
+    budgetRangeLevels.some(
+      (definition) =>
+        Math.round(getBudgetRangeValue(range, definition.id)) !==
+        Math.round(getBudgetRangeValue(range, "expected"))
+    );
+  const hasBudgetRangeValue = (range) =>
+    budgetRangeLevels.some((definition) => getBudgetRangeValue(range, definition.id) > 0);
+  const getCompactRangeCopy = (range, { available = false } = {}) => ({
+    en: `${
+      available
+        ? `${itineraryBudgetLabels.rangeAvailablePrefix.en}: `
+        : ""
+    }${itineraryBudgetLabels.rangeCompactPrefix.en} ${formatCurrency(
+      getBudgetRangeValue(range, "lean")
+    )} • ${itineraryBudgetLabels.rangeCompactSuffix.en} ${formatCurrency(
+      getBudgetRangeValue(range, "high")
+    )}`,
+    ja: `${
+      available
+        ? `${itineraryBudgetLabels.rangeAvailablePrefix.ja}: `
+        : ""
+    }${itineraryBudgetLabels.rangeCompactPrefix.ja} ${formatCurrency(
+      getBudgetRangeValue(range, "lean")
+    )} ・ ${itineraryBudgetLabels.rangeCompactSuffix.ja} ${formatCurrency(
+      getBudgetRangeValue(range, "high")
+    )}`
+  });
+  const renderBudgetRangeRows = (range, variant = "summary") =>
+    budgetRangeLevels
+      .map(
+        (definition) => `
+          <div class="budget-range-row budget-range-row--${escapeHtml(definition.id)} budget-range-row--${escapeHtml(
+            variant
+          )}">
+            <span class="budget-pill ${definition.pillClass}">${renderLocalizedContent(
+              definition.label
+            )}</span>
+            <strong class="budget-range-row__value">${escapeHtml(
+              formatCurrency(getBudgetRangeValue(range, definition.id))
+            )}</strong>
+          </div>
+        `
+      )
+      .join("");
   const getLocalizedText = (copy) =>
     String((root.lang === "ja" ? copy?.ja : copy?.en) ?? copy?.en ?? copy?.ja ?? "");
+  const joinLocalizedSegments = (segments = []) => ({
+    en: segments
+      .map((segment) =>
+        typeof segment === "string" ? segment : segment?.en ?? segment?.ja ?? ""
+      )
+      .filter(Boolean)
+      .join(" • "),
+    ja: segments
+      .map((segment) =>
+        typeof segment === "string" ? segment : segment?.ja ?? segment?.en ?? ""
+      )
+      .filter(Boolean)
+      .join(" ・ ")
+  });
+  const getRangeMetaCopy = (range, { available = false } = {}) =>
+    hasBudgetRangeSpread(range)
+      ? getCompactRangeCopy(range, { available })
+      : available && hasBudgetRangeValue(range)
+        ? {
+            en: `${itineraryBudgetLabels.rangeAvailablePrefix.en}: ${formatCurrency(
+              getBudgetRangeValue(range, "expected")
+            )}`,
+            ja: `${itineraryBudgetLabels.rangeAvailablePrefix.ja}: ${formatCurrency(
+              getBudgetRangeValue(range, "expected")
+            )}`
+          }
+        : itineraryBudgetLabels.rangeFixedNote;
   const getStayTypeLabel = (stayTypeId) =>
     budgetStayTypeDefinitions.find((entry) => entry.id === stayTypeId)?.label || {
       en: stayTypeId,
@@ -6354,6 +6616,7 @@ function initializeBudgetNotes() {
     const cost = item.cost || { mode: "none", amount: 0 };
     const sourceCost = getSourceCostConfig(cost.sourceCostId);
     const amount = Math.max(Number(sourceCost?.amount ?? cost.amount ?? 0) || 0, 0);
+    const range = normalizeBudgetRange(sourceCost?.range || cost.range, amount);
     const travelerCount = normalizeTravelerCount(travelers, budgetDefaultTravelerCount);
     const roomCapacity = Math.max(
       1,
@@ -6363,26 +6626,33 @@ function initializeBudgetNotes() {
     const pairSize = Math.max(1, Number(sourceCost?.groupSize ?? cost.groupSize ?? 2) || 2);
     let quantity = 0;
     let total = 0;
+    let totalRange = getZeroBudgetRange();
 
     if (cost.mode === "perPerson") {
       quantity = travelerCount;
       total = amount * travelerCount;
+      totalRange = mapBudgetRange(range, (value) => value * travelerCount);
     } else if (cost.mode === "perRoom") {
       quantity = getUnitCount(travelerCount, roomCapacity);
       total = amount * quantity;
+      totalRange = mapBudgetRange(range, (value) => value * quantity);
     } else if (cost.mode === "perPair") {
       quantity = getUnitCount(travelerCount, pairSize);
       total = amount * quantity;
+      totalRange = mapBudgetRange(range, (value) => value * quantity);
     } else if (cost.mode === "perGroup") {
       quantity = 1;
       total = amount;
+      totalRange = range;
     }
 
     return {
       mode: cost.mode,
       amount,
+      range,
       quantity,
       total,
+      totalRange,
       roomCapacity: cost.mode === "perRoom" ? roomCapacity : null,
       pairSize: cost.mode === "perPair" ? pairSize : null,
       included: item.bucket !== "optional" || withExtras
@@ -6447,7 +6717,7 @@ function initializeBudgetNotes() {
     return { en: "No extra ticketed cost", ja: "追加費用なし" };
   };
   const getAccommodationShareBreakdown = (itemCost, travelers) => {
-    if (!itemCost || itemCost.total <= 0) {
+    if (!itemCost || !hasBudgetRangeValue(itemCost.totalRange)) {
       return null;
     }
 
@@ -6457,21 +6727,35 @@ function initializeBudgetNotes() {
       travelers: normalizeTravelerCount(travelers, budgetDefaultTravelerCount),
       shareCount,
       total: itemCost.total,
-      perPersonTotal: shareCount > 0 ? itemCost.total / shareCount : 0
+      totalRange: itemCost.totalRange,
+      perPersonTotal: shareCount > 0 ? itemCost.total / shareCount : 0,
+      perPersonRange:
+        shareCount > 0
+          ? mapBudgetRange(itemCost.totalRange, (value) => value / shareCount)
+          : getZeroBudgetRange()
     };
   };
-  const getPersonalLineTotal = (item, travelers) => {
+  const getPersonalLineTotal = (item, travelers, level = "expected") => {
     if (!item?.itemCost?.included) {
       return 0;
     }
 
     if (item.category === "accommodation" && item.accommodationShare) {
-      return item.accommodationShare.perPersonTotal;
+      return level === "expected"
+        ? item.accommodationShare.perPersonTotal
+        : getBudgetRangeValue(item.accommodationShare.perPersonRange, level);
     }
 
     const normalizedTravelers = normalizeTravelerCount(travelers, budgetDefaultTravelerCount);
-    return item.lineTotal / normalizedTravelers;
+    return normalizedTravelers > 0
+      ? getBudgetRangeValue(item.lineRangeTotals, level) / normalizedTravelers
+      : 0;
   };
+  const getPersonalLineRange = (item, travelers) =>
+    budgetRangeLevels.reduce((nextRange, definition) => {
+      nextRange[definition.id] = getPersonalLineTotal(item, travelers, definition.id);
+      return nextRange;
+    }, getZeroBudgetRange());
   const getAccommodationItem = (definition) => {
     const stayDefinition = getStayDefinitionForDay(definition, getDayState(definition.day).stayId);
     if (!stayDefinition) {
@@ -6495,8 +6779,20 @@ function initializeBudgetNotes() {
     const categoryTotals = Object.fromEntries(
       budgetCategoryDefinitions.map((definition) => [definition.id, 0])
     );
+    const categoryTotalsRange = Object.fromEntries(
+      budgetCategoryDefinitions.map((definition) => [definition.id, getZeroBudgetRange()])
+    );
+    const categoryAvailableRanges = Object.fromEntries(
+      budgetCategoryDefinitions.map((definition) => [definition.id, getZeroBudgetRange()])
+    );
     const bucketTotals = Object.fromEntries(
       budgetBucketDefinitions.map((definition) => [definition.id, 0])
+    );
+    const bucketTotalsRange = Object.fromEntries(
+      budgetBucketDefinitions.map((definition) => [definition.id, getZeroBudgetRange()])
+    );
+    const bucketAvailableRanges = Object.fromEntries(
+      budgetBucketDefinitions.map((definition) => [definition.id, getZeroBudgetRange()])
     );
     const calculateDay = (definition) => {
       const dayState = getDayState(definition.day);
@@ -6505,12 +6801,15 @@ function initializeBudgetNotes() {
       const itemEstimates = dayItems.map((item) => {
         const itemCost = calculateItemCost(item, travelers, withExtras);
         const lineTotal = itemCost.included ? itemCost.total : 0;
+        const lineRangeTotals = itemCost.included ? itemCost.totalRange : getZeroBudgetRange();
         return {
           ...item,
           itemCost,
           lineTotal,
+          rawRangeTotals: itemCost.totalRange,
+          lineRangeTotals,
           accommodationShare:
-            item.category === "accommodation" && lineTotal > 0
+            item.category === "accommodation" && hasBudgetRangeValue(itemCost.totalRange)
               ? getAccommodationShareBreakdown(itemCost, travelers)
               : null
         };
@@ -6522,7 +6821,11 @@ function initializeBudgetNotes() {
         stayDefinition,
         stayOptions: getDayStayOptions(definition),
         itemEstimates,
-        total: itemEstimates.reduce((sum, item) => sum + item.lineTotal, 0)
+        total: itemEstimates.reduce((sum, item) => sum + item.lineTotal, 0),
+        totalRange: itemEstimates.reduce(
+          (sum, item) => sumBudgetRanges(sum, item.lineRangeTotals),
+          getZeroBudgetRange()
+        )
       };
     };
     const visibleDayEstimates = activeDays.map((definition) => calculateDay(definition));
@@ -6533,36 +6836,85 @@ function initializeBudgetNotes() {
     visibleDayEstimates.forEach((dayEstimate) => {
       dayEstimate.itemEstimates.forEach((item) => {
         if (!item.itemCost.included) {
+          if (item.bucket === "optional") {
+            categoryAvailableRanges[item.category] = sumBudgetRanges(
+              categoryAvailableRanges[item.category],
+              item.rawRangeTotals
+            );
+            bucketAvailableRanges[item.bucket] = sumBudgetRanges(
+              bucketAvailableRanges[item.bucket],
+              item.rawRangeTotals
+            );
+          }
           return;
         }
 
         categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.lineTotal;
+        categoryTotalsRange[item.category] = sumBudgetRanges(
+          categoryTotalsRange[item.category],
+          item.lineRangeTotals
+        );
         bucketTotals[item.bucket] = (bucketTotals[item.bucket] || 0) + item.lineTotal;
+        bucketTotalsRange[item.bucket] = sumBudgetRanges(
+          bucketTotalsRange[item.bucket],
+          item.lineRangeTotals
+        );
       });
     });
 
     const accommodationTotal = categoryTotals.accommodation || 0;
-    const accommodationShareCount = accommodationTotal > 0 ? getAccommodationShareCount(travelers) : 0;
-    const accommodationPerPerson = visibleDayEstimates.reduce(
+    const accommodationTotalRange = categoryTotalsRange.accommodation || getZeroBudgetRange();
+    const accommodationShareCount = hasBudgetRangeValue(accommodationTotalRange)
+      ? getAccommodationShareCount(travelers)
+      : 0;
+    const accommodationPerPersonRange = visibleDayEstimates.reduce(
       (sum, dayEstimate) =>
-        sum +
-        dayEstimate.itemEstimates.reduce(
-          (daySum, item) =>
-            item.category === "accommodation" && item.accommodationShare
-              ? daySum + item.accommodationShare.perPersonTotal
-              : daySum,
-          0
+        sumBudgetRanges(
+          sum,
+          dayEstimate.itemEstimates.reduce(
+            (daySum, item) =>
+              sumBudgetRanges(
+                daySum,
+                item.category === "accommodation" && item.accommodationShare
+                  ? item.accommodationShare.perPersonRange
+                  : getZeroBudgetRange()
+              ),
+            getZeroBudgetRange()
+          )
         ),
-      0
+      getZeroBudgetRange()
     );
-    const perPerson = visibleDayEstimates.reduce(
+    const perPersonRange = visibleDayEstimates.reduce(
       (sum, dayEstimate) =>
-        sum +
-        dayEstimate.itemEstimates.reduce(
-          (daySum, item) => daySum + getPersonalLineTotal(item, travelers),
-          0
+        sumBudgetRanges(
+          sum,
+          dayEstimate.itemEstimates.reduce(
+            (daySum, item) => sumBudgetRanges(daySum, getPersonalLineRange(item, travelers)),
+            getZeroBudgetRange()
+          )
         ),
-      0
+      getZeroBudgetRange()
+    );
+    const total = visibleDayEstimates.reduce((sum, day) => sum + day.total, 0);
+    const totalRange = visibleDayEstimates.reduce(
+      (sum, day) => sumBudgetRanges(sum, day.totalRange),
+      getZeroBudgetRange()
+    );
+    const optionalDaysAddOnTotal = optionalDayAddOnEstimates.reduce((sum, day) => sum + day.total, 0);
+    const optionalDaysAddOnRange = optionalDayAddOnEstimates.reduce(
+      (sum, day) => sumBudgetRanges(sum, day.totalRange),
+      getZeroBudgetRange()
+    );
+    const optionalVisibleTotal = visibleDayEstimates
+      .filter((day) => day.optional)
+      .reduce((sum, day) => sum + day.total, 0);
+    const optionalVisibleRange = visibleDayEstimates
+      .filter((day) => day.optional)
+      .reduce((sum, day) => sumBudgetRanges(sum, day.totalRange), getZeroBudgetRange());
+    const bookedAndFixedTotal = (bucketTotals.booked || 0) + (bucketTotals.required || 0);
+    const bookedAndFixedTotalRange = sumBudgetRanges(
+      bucketTotalsRange.booked,
+      bucketTotalsRange.required
     );
 
     return {
@@ -6570,23 +6922,36 @@ function initializeBudgetNotes() {
       accommodationShareMode: getAccommodationShareMode(),
       accommodationShareCount,
       accommodationTotal,
-      accommodationPerPerson,
+      accommodationTotalRange,
+      accommodationPerPerson: getBudgetRangeValue(accommodationPerPersonRange, "expected"),
+      accommodationPerPersonRange,
       includeExtras: withExtras,
       visibleDayEstimates,
       optionalDayAddOnEstimates,
-      total: visibleDayEstimates.reduce((sum, day) => sum + day.total, 0),
-      perPerson,
-      optionalDaysAddOnTotal: optionalDayAddOnEstimates.reduce((sum, day) => sum + day.total, 0),
-      bookedAndFixedTotal: (bucketTotals.booked || 0) + (bucketTotals.required || 0),
+      total,
+      totalRange,
+      perPerson: getBudgetRangeValue(perPersonRange, "expected"),
+      perPersonRange,
+      optionalDaysAddOnTotal,
+      optionalDaysAddOnRange,
+      optionalVisibleTotal,
+      optionalVisibleRange,
+      bookedAndFixedTotal,
+      bookedAndFixedTotalRange,
       bucketTotals,
-      categoryTotals
+      bucketTotalsRange,
+      bucketAvailableRanges,
+      categoryTotals,
+      categoryTotalsRange,
+      categoryAvailableRanges
     };
   };
   const renderSummaryMarkup = (estimate = calculateEstimate()) => {
     const optionalDaysUnlocked = areOptionalDaysUnlocked();
-    const optionalVisibleTotal = estimate.visibleDayEstimates
-      .filter((day) => day.optional)
-      .reduce((sum, day) => sum + day.total, 0);
+    const optionalDayCount = estimate.visibleDayEstimates.filter((day) => day.optional).length;
+    const optionalDaysRange = optionalDaysUnlocked
+      ? estimate.optionalVisibleRange
+      : estimate.optionalDaysAddOnRange;
     const shareModeLabel = getShareModeLabel(estimate.accommodationShareMode);
     const summaryCards = [
       {
@@ -6594,40 +6959,45 @@ function initializeBudgetNotes() {
         label: optionalDaysUnlocked
           ? itineraryBudgetLabels.summaryTotalUnlocked
           : itineraryBudgetLabels.summaryTotalLocked,
-        value: formatCurrency(estimate.total),
+        range: estimate.totalRange,
         meta: itineraryBudgetLabels.totalMeta
       },
       {
         className: "budget-summary-card budget-summary-card--per-person budget-summary-card--compact",
         label: itineraryBudgetLabels.summaryPerPerson,
-        value: formatCurrency(estimate.perPerson),
-        meta: {
-          en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"} • stay split: ${
-            shareModeLabel.en
-          } • private/local or no-cost Osaka stays stay at JPY 0 unless you switch them`,
-          ja: `${estimate.travelers}人 ・ 宿泊費の分け方: ${shareModeLabel.ja} ・ 大阪のローカル・プライベート滞在や宿泊費なしは切り替えない限り0円のままです`
-        }
+        range: estimate.perPersonRange,
+        meta: joinLocalizedSegments([
+          {
+            en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"}`,
+            ja: `${estimate.travelers}人`
+          },
+          { en: `stay split: ${shareModeLabel.en}`, ja: `宿泊費の分け方: ${shareModeLabel.ja}` },
+          {
+            en: "private/local or no-cost Osaka stays stay at JPY 0 unless you switch them",
+            ja: "大阪のローカル・プライベート滞在や宿泊費なしは切り替えない限り0円のままです"
+          }
+        ])
       },
       {
         className: "budget-summary-card budget-summary-card--accommodation budget-summary-card--compact",
         label: itineraryBudgetLabels.summaryAccommodationSplit,
-        value: formatCurrency(estimate.accommodationPerPerson),
+        range: estimate.accommodationPerPersonRange,
         meta:
-          estimate.accommodationTotal > 0
-            ? {
-                en: `${formatCurrency(estimate.accommodationTotal)} total stay cost • ${
-                  shareModeLabel.en
-                } • split by ${estimate.accommodationShareCount}`,
-                ja: `宿泊合計 ${formatCurrency(estimate.accommodationTotal)} ・ ${
-                  shareModeLabel.ja
-                } ・ ${estimate.accommodationShareCount}人で分割`
-              }
+          hasBudgetRangeValue(estimate.accommodationTotalRange)
+            ? joinLocalizedSegments([
+                { en: shareModeLabel.en, ja: shareModeLabel.ja },
+                {
+                  en: `split by ${estimate.accommodationShareCount}`,
+                  ja: `${estimate.accommodationShareCount}人で分割`
+                },
+                getRangeMetaCopy(estimate.accommodationTotalRange)
+              ])
             : itineraryBudgetLabels.noPaidAccommodationMeta
       },
       {
         className: "budget-summary-card budget-summary-card--shared budget-summary-card--compact",
         label: itineraryBudgetLabels.summaryBookedRequired,
-        value: formatCurrency(estimate.bookedAndFixedTotal),
+        range: estimate.bookedAndFixedTotalRange,
         meta: itineraryBudgetLabels.bookedRequiredMeta
       },
       {
@@ -6635,14 +7005,20 @@ function initializeBudgetNotes() {
         label: optionalDaysUnlocked
           ? itineraryBudgetLabels.summaryOptionalUnlocked
           : itineraryBudgetLabels.summaryOptionalLocked,
-        value: formatCurrency(optionalDaysUnlocked ? optionalVisibleTotal : estimate.optionalDaysAddOnTotal),
+        range: optionalDaysRange,
         meta: optionalDaysUnlocked
-          ? {
-              en: `${estimate.visibleDayEstimates.filter((day) => day.optional).length} optional day${
-                estimate.visibleDayEstimates.filter((day) => day.optional).length === 1 ? "" : "s"
-              } in the live total`,
-              ja: `追加日 ${estimate.visibleDayEstimates.filter((day) => day.optional).length}日 を合計へ反映`
-            }
+          ? joinLocalizedSegments([
+              {
+                en: `${optionalDayCount} optional day${optionalDayCount === 1 ? "" : "s"} in the live total`,
+                ja: `追加日 ${optionalDayCount}日 を合計へ反映`
+              },
+              estimate.includeExtras
+                ? { en: "Route extras enabled separately", ja: "追加費用も反映中" }
+                : {
+                    en: "Route extras still stay outside the base total unless enabled",
+                    ja: "追加費用は有効にするまで基本合計へ入りません"
+                  }
+            ])
           : itineraryBudgetLabels.optionalInactiveMeta
       }
     ];
@@ -6652,7 +7028,9 @@ function initializeBudgetNotes() {
         (card) => `
           <article class="${card.className}">
             <p class="budget-summary-card__label">${renderLocalizedContent(card.label)}</p>
-            <p class="budget-summary-card__value">${escapeHtml(card.value)}</p>
+            <div class="budget-range-grid budget-range-grid--summary">
+              ${renderBudgetRangeRows(card.range, "summary")}
+            </div>
             <p class="budget-summary-card__meta">${renderLocalizedContent(card.meta)}</p>
           </article>
         `
@@ -6662,16 +7040,32 @@ function initializeBudgetNotes() {
   const renderBreakdownMarkup = (estimate = calculateEstimate()) => `
     <div class="budget-breakdown-grid">
       ${budgetCategoryDefinitions
-        .map(
-          (definition) => `
+        .map((definition) => {
+          const range = estimate.categoryTotalsRange[definition.id] || getZeroBudgetRange();
+          const availableRange =
+            estimate.categoryAvailableRanges[definition.id] || getZeroBudgetRange();
+          const metaCopy =
+            !estimate.includeExtras && hasBudgetRangeValue(availableRange)
+              ? getRangeMetaCopy(availableRange, { available: true })
+              : hasBudgetRangeValue(range)
+                ? getRangeMetaCopy(range)
+                : definition.id === "accommodation"
+                  ? itineraryBudgetLabels.noPaidAccommodationMeta
+                  : itineraryBudgetLabels.rangeFixedNote;
+
+          return `
             <article class="budget-breakdown-card">
               <p class="budget-breakdown-card__label">${renderLocalizedContent(definition.label)}</p>
-              <p class="budget-breakdown-card__value">${escapeHtml(
-                formatCurrency(estimate.categoryTotals[definition.id] || 0)
+              <div class="budget-range-grid budget-range-grid--breakdown">
+                ${renderBudgetRangeRows(range, "breakdown")}
+              </div>
+              <p class="budget-breakdown-card__meta">${renderLocalizedContent(metaCopy)}</p>
+              <p class="budget-breakdown-card__hint">${renderLocalizedContent(
+                definition.rangeHint || definition.label
               )}</p>
             </article>
-          `
-        )
+          `;
+        })
         .join("")}
     </div>
     <div class="budget-breakdown-pills">
@@ -6714,6 +7108,32 @@ function initializeBudgetNotes() {
             )}</p>`
           : ""
       }
+      <div class="budget-range-legend">
+        <p class="budget-source-meta-card__label">${renderLocalizedContent(
+          itineraryBudgetLabels.rangeLegendTitle
+        )}</p>
+        ${budgetRangeLevels
+          .map((definition) => {
+            const copy =
+              definition.id === "lean"
+                ? itineraryBudgetLabels.rangeLegendLean
+                : definition.id === "high"
+                  ? itineraryBudgetLabels.rangeLegendHigh
+                  : itineraryBudgetLabels.rangeLegendExpected;
+            return `
+              <div class="budget-range-legend__item">
+                <span class="budget-pill ${definition.pillClass}">${renderLocalizedContent(
+                  definition.label
+                )}</span>
+                <p class="budget-range-legend__copy">${renderLocalizedContent(copy)}</p>
+              </div>
+            `;
+          })
+          .join("")}
+      </div>
+      <p class="budget-source-meta-card__body">${renderLocalizedContent(
+        itineraryBudgetLabels.rangeLegendOptionalDays
+      )}</p>
       <p class="budget-source-meta-card__body">${renderLocalizedContent(
         itineraryBudgetLabels.notesLinkHubMeta
       )}</p>
@@ -6806,7 +7226,12 @@ function initializeBudgetNotes() {
             <h4>${renderLocalizedContent(dayEstimate.title)}</h4>
             <p>${renderLocalizedContent(dayEstimate.subtitle)}</p>
           </div>
-          <p class="budget-day-card__total">${escapeHtml(formatCurrency(dayEstimate.total))}</p>
+          <div class="budget-day-card__totals">
+            <p class="budget-day-card__total">${escapeHtml(formatCurrency(dayEstimate.total))}</p>
+            <p class="budget-day-card__range-note">${renderLocalizedContent(
+              getRangeMetaCopy(dayEstimate.totalRange)
+            )}</p>
+          </div>
         </div>
         ${stayControlMarkup}
         <ul class="budget-day-card__items">
@@ -6818,8 +7243,16 @@ function initializeBudgetNotes() {
                   : `budget-chip budget-chip--${escapeHtml(item.bucket)}`;
               const amountCopy =
                 item.itemCost.included || item.bucket === "free"
-                  ? formatCurrency(item.lineTotal)
+                  ? { en: formatCurrency(item.lineTotal), ja: formatCurrency(item.lineTotal) }
                   : itineraryBudgetLabels.optionalInactive;
+              const rangeCopy =
+                item.itemCost.included || item.bucket === "free"
+                  ? hasBudgetRangeSpread(item.lineRangeTotals)
+                    ? getCompactRangeCopy(item.lineRangeTotals)
+                    : null
+                  : hasBudgetRangeValue(item.rawRangeTotals)
+                    ? getRangeMetaCopy(item.rawRangeTotals, { available: true })
+                    : null;
 
               return `
                 <li class="budget-line-item">
@@ -6836,10 +7269,16 @@ function initializeBudgetNotes() {
                       <span>${renderLocalizedContent(getItemFormulaCopy(item.itemCost, item))}</span>
                     </p>
                   </div>
-                  <p class="budget-line-item__amount">${renderLocalizedContent({
-                    en: amountCopy,
-                    ja: amountCopy
-                  })}</p>
+                  <div class="budget-line-item__amounts">
+                    <p class="budget-line-item__amount">${renderLocalizedContent(amountCopy)}</p>
+                    ${
+                      rangeCopy
+                        ? `<p class="budget-line-item__range">${renderLocalizedContent(
+                            rangeCopy
+                          )}</p>`
+                        : ""
+                    }
+                  </div>
                 </li>
               `;
             })
@@ -7613,7 +8052,7 @@ function getVisibleRouteDayLinks(dayLinks = []) {
   return dayLinks.filter((link) => !link.optional || optionalDaysUnlocked);
 }
 
-function createRouteMapModeState() {
+function createRouteMapState() {
   return {
     ready: false,
     failed: false,
@@ -7624,12 +8063,12 @@ function createRouteMapModeState() {
   };
 }
 
-function getRouteMapModeConfig(mode = "preview") {
-  return routeMapModeDefinitions[mode] || routeMapModeDefinitions.preview;
+function getRouteMapDisplayMode() {
+  return routeMapDisplayMode === "interactive" ? "interactive" : "preview";
 }
 
-function getRouteMapModeState(mode = "preview") {
-  return routeMapModeState[mode] || routeMapModeState.preview;
+function getRouteMapDisplayConfig(mode = getRouteMapDisplayMode()) {
+  return routeMapDisplayDefinitions[mode] || routeMapDisplayDefinitions.preview;
 }
 
 function getRouteMapStopsNode() {
@@ -7640,19 +8079,17 @@ function getRouteMapDetailNode() {
   return routeMapExplorerNode?.querySelector("[data-route-map-detail]") || null;
 }
 
-function getRouteMapLiveCanvasNode() {
-  return routeMapExplorerNode?.querySelector("[data-route-map-live-canvas]") || null;
+function setRouteMapShellState(state = "ready") {
+  [routeMapPreviewNode, routeMapInteractive].filter(Boolean).forEach((node) => {
+    node.setAttribute("data-map-state", state);
+  });
 }
 
-function getRouteMapLiveStatusNode() {
-  return routeMapExplorerNode?.querySelector("[data-route-map-live-status]") || null;
-}
-
-function setRouteMapModeShellState(mode, state = "ready") {
-  const shellNode = getRouteMapModeConfig(mode).getShellNode?.();
-  if (shellNode) {
-    shellNode.setAttribute("data-map-state", state);
-  }
+function setRouteMapDisplayState(mode = "preview") {
+  routeMapDisplayMode = mode === "interactive" ? "interactive" : "preview";
+  routeMapCard?.setAttribute("data-route-map-active-mode", routeMapDisplayMode);
+  routeMapPreviewNode?.setAttribute("data-route-map-mode", routeMapDisplayMode);
+  routeMapInteractive?.setAttribute("data-route-map-mode", routeMapDisplayMode);
 }
 
 function getRouteMapSelectionSignature(selectionState) {
@@ -8237,16 +8674,6 @@ function clearRouteMapStatus(node) {
 
 function renderRouteMapExplorerShell() {
   return `
-    <div class="route-map__map-shell route-map__map-shell--interactive">
-      <div class="route-map__map route-map__map--interactive" data-route-map-live-canvas></div>
-      <div class="route-map__status route-map__status--interactive" data-route-map-live-status>
-        <p class="route-map__status-title">${renderLocalizedContent(routeMapLabels.interactiveLoading)}</p>
-        <p class="route-map__status-copy">${renderLocalizedContent({
-          en: "This expanded mode reuses the same shared route map only after you open it.",
-          ja: "この拡張モードは、共有ルート地図を開いたあとにだけ初期化します。"
-        })}</p>
-      </div>
-    </div>
     <article class="route-reference route-map__detail" data-route-map-detail aria-live="polite"></article>
   `;
 }
@@ -8425,18 +8852,15 @@ function clearRouteMapMarkers(markers = []) {
   return [];
 }
 
-function createRouteMapMarkerElement(stop, interactive = false) {
-  const element = document.createElement(interactive ? "button" : "div");
-  element.className = `route-map-marker ${interactive ? "route-map-marker--interactive" : "route-map-marker--preview"}`;
+function createRouteMapMarkerElement(stop) {
+  const element = document.createElement("button");
+  element.className = "route-map-marker route-map-marker--preview";
   element.dataset.labelPosition = stop.labelPosition || "ne";
-
-  if (interactive) {
-    element.type = "button";
-    element.dataset.routeMapStop = stop.id;
-    element.setAttribute("aria-pressed", "false");
-  } else {
-    element.setAttribute("aria-hidden", "true");
-  }
+  element.type = "button";
+  element.dataset.routeMapStop = stop.id;
+  element.setAttribute("aria-pressed", "false");
+  element.setAttribute("aria-hidden", "true");
+  element.tabIndex = -1;
 
   const pin = document.createElement("span");
   pin.className = "route-map-marker__pin";
@@ -8454,7 +8878,7 @@ function createRouteMapMarkerElement(stop, interactive = false) {
   return { element, labelNode, stop };
 }
 
-function updateRouteMapMarkerElement(entry, selectionState, interactive = false) {
+function updateRouteMapMarkerElement(entry, selectionState, interactive = getRouteMapDisplayMode() === "interactive") {
   if (!entry?.element || !entry.labelNode) {
     return;
   }
@@ -8471,24 +8895,24 @@ function updateRouteMapMarkerElement(entry, selectionState, interactive = false)
 
   entry.labelNode.textContent = getLocalizedText(stop.title);
 
+  entry.element.classList.toggle("route-map-marker--interactive", interactive);
+  entry.element.classList.toggle("route-map-marker--preview", !interactive);
   entry.element.classList.toggle("is-active", isActive);
   entry.element.classList.toggle("is-related", isRelated);
   entry.element.classList.toggle("is-dimmed", isDimmed);
   entry.stateKey = markerStateKey;
 
-  if (!interactive) {
-    return;
-  }
-
   const ariaLabel = {
     en: `Show ${stop.title.en} stop details`,
     ja: `${stop.title.ja}の詳細を表示`
   };
+  entry.element.tabIndex = interactive ? 0 : -1;
+  entry.element.setAttribute("aria-hidden", interactive ? "false" : "true");
   entry.element.setAttribute("aria-pressed", String(isActive));
   entry.element.setAttribute("aria-label", getLocalizedText(ariaLabel));
 }
 
-function installRouteMapMarkers(map, interactive = false) {
+function installRouteMapMarkers(map) {
   const registry = routeExplorerStopDefinitions
     .map((stop) => {
       const lngLat = getRouteStopLngLat(stop.id);
@@ -8512,24 +8936,71 @@ function installRouteMapMarkers(map, interactive = false) {
     .filter(Boolean);
 
   registry.forEach((entry) => {
-    updateRouteMapMarkerElement(entry, getRouteMapSelectionState(), interactive);
+    updateRouteMapMarkerElement(entry, getRouteMapSelectionState());
   });
 
   return registry;
 }
 
-function syncRouteMapModeMarkers(mode, selectionState) {
-  const config = getRouteMapModeConfig(mode);
-  const state = getRouteMapModeState(mode);
-  const markerStateKey = `${root.lang}|${getRouteMapSelectionSignature(selectionState)}`;
-  if (state.markerStateKey === markerStateKey) {
+function setRouteMapInteractionState(map, interactive = false) {
+  if (!map) {
     return;
   }
 
-  state.markers.forEach((entry) => {
-    updateRouteMapMarkerElement(entry, selectionState, config.interactive);
+  const setHandlerEnabled = (handlerName, enabled) => {
+    const handler = map[handlerName];
+    if (!handler) {
+      return;
+    }
+
+    if (enabled) {
+      handler.enable();
+    } else {
+      handler.disable();
+    }
+  };
+
+  setHandlerEnabled("dragPan", interactive);
+  setHandlerEnabled("doubleClickZoom", interactive);
+  setHandlerEnabled("keyboard", interactive);
+  setHandlerEnabled("scrollZoom", interactive && !coarsePointerQuery.matches);
+
+  if (map.touchZoomRotate) {
+    if (interactive) {
+      map.touchZoomRotate.enable();
+      map.touchZoomRotate.disableRotation();
+    } else {
+      map.touchZoomRotate.disable();
+    }
+  }
+
+  if (map.boxZoom) {
+    map.boxZoom.disable();
+  }
+
+  if (map.dragRotate) {
+    map.dragRotate.disable();
+  }
+
+  if (map.touchPitch) {
+    map.touchPitch.disable();
+  }
+
+  if (!interactive) {
+    map.getCanvas().style.cursor = "";
+  }
+}
+
+function syncRouteMapMarkers(selectionState) {
+  const markerStateKey = `${root.lang}|${getRouteMapSelectionSignature(selectionState)}|${getRouteMapDisplayMode()}`;
+  if (routeMapState.markerStateKey === markerStateKey) {
+    return;
+  }
+
+  routeMapState.markers.forEach((entry) => {
+    updateRouteMapMarkerElement(entry, selectionState);
   });
-  state.markerStateKey = markerStateKey;
+  routeMapState.markerStateKey = markerStateKey;
 }
 
 function applyRouteMapPaintTheme(map) {
@@ -8626,8 +9097,12 @@ function renderRouteMapPopup(selectionState) {
 }
 
 function syncRouteMapPopup(selectionState) {
-  const interactiveState = getRouteMapModeState("interactive");
-  if (!interactiveState.ready || !interactiveState.map || selectionState.type === "view") {
+  if (
+    getRouteMapDisplayMode() !== "interactive" ||
+    !routeMapState.ready ||
+    !routeMapState.map ||
+    selectionState.type === "view"
+  ) {
     clearRouteMapPopup();
     return;
   }
@@ -8663,7 +9138,7 @@ function syncRouteMapPopup(selectionState) {
   })
     .setLngLat(popupLngLat)
     .setHTML(renderRouteMapPopup(selectionState))
-    .addTo(interactiveState.map);
+    .addTo(routeMapState.map);
 
   syncLocalizedNodes(routeMapActivePopup.getElement());
   routeMapActivePopupSelectionKey = popupSelectionKey;
@@ -8710,6 +9185,9 @@ function bindRouteMapInteractiveEvents(map) {
   }
 
   map.on("mouseenter", "route-map-segments-hit", () => {
+    if (getRouteMapDisplayMode() !== "interactive") {
+      return;
+    }
     map.getCanvas().style.cursor = "pointer";
   });
 
@@ -8718,6 +9196,10 @@ function bindRouteMapInteractiveEvents(map) {
   });
 
   map.on("click", "route-map-segments-hit", (event) => {
+    if (getRouteMapDisplayMode() !== "interactive") {
+      return;
+    }
+
     const segmentId = event.features?.[0]?.properties?.id;
     if (!segmentId) {
       return;
@@ -8748,135 +9230,133 @@ function fitRouteMapOverview(map, mode = "preview") {
 
   map.fitBounds(bounds, {
     padding: getRouteMapCameraPadding(mode),
-    maxZoom: getRouteMapModeConfig(mode).overviewMaxZoom,
+    maxZoom: getRouteMapDisplayConfig(mode).overviewMaxZoom,
     duration: 0
   });
 }
 
-function syncRouteMapMode(mode, selectionState, options = {}) {
-  const { updateCamera = false, animateCamera = false } = options;
-  const config = getRouteMapModeConfig(mode);
-  const state = getRouteMapModeState(mode);
+function syncRouteMapRuntime(selectionState, options = {}) {
+  const { updateCamera = false, animateCamera = false, resetOverview = false } = options;
 
-  syncRouteMapModeMarkers(mode, selectionState);
+  syncRouteMapMarkers(selectionState);
 
-  if (!state.ready || !state.map) {
+  if (!routeMapState.ready || !routeMapState.map) {
     return;
   }
 
-  syncRouteMapSelectionLayers(state.map, selectionState);
+  syncRouteMapSelectionLayers(routeMapState.map, selectionState);
+  setRouteMapInteractionState(routeMapState.map, getRouteMapDisplayMode() === "interactive");
 
-  if (!config.interactive) {
+  if (getRouteMapDisplayMode() !== "interactive") {
+    clearRouteMapPopup();
+    if (resetOverview) {
+      fitRouteMapOverview(routeMapState.map, "preview");
+    }
     return;
   }
 
   if (updateCamera) {
-    focusRouteMapSelection(state.map, selectionState, { animate: animateCamera });
+    focusRouteMapSelection(routeMapState.map, selectionState, { animate: animateCamera });
+  } else if (resetOverview && selectionState.type === "view") {
+    fitRouteMapOverview(routeMapState.map, "interactive");
   }
 
   syncRouteMapPopup(selectionState);
 }
 
-function ensureRouteMapModeReady(mode) {
-  const config = getRouteMapModeConfig(mode);
-  const state = getRouteMapModeState(mode);
-  const canvasNode = config.getCanvasNode?.();
-  const statusNode = config.getStatusNode?.();
+function ensureRouteMapReady() {
+  const previewConfig = getRouteMapDisplayConfig("preview");
 
-  if (!canvasNode) {
+  if (!routeMapPreviewCanvas) {
     return Promise.resolve(null);
   }
 
-  if (state.ready) {
-    return Promise.resolve(state.map);
+  if (routeMapState.ready) {
+    return Promise.resolve(routeMapState.map);
   }
 
-  if (state.promise) {
-    return state.promise;
+  if (routeMapState.promise) {
+    return routeMapState.promise;
   }
 
-  setRouteMapStatus(statusNode, config.loadingTitle, config.loadingBody, "loading");
-  setRouteMapModeShellState(mode, "loading");
+  setRouteMapStatus(routeMapPreviewStatusNode, previewConfig.loadingTitle, previewConfig.loadingBody, "loading");
+  setRouteMapShellState("loading");
 
-  state.promise = (async () => {
+  routeMapState.promise = (async () => {
     if (!hasRouteMapWebGLSupport()) {
       throw new Error("WebGL is unavailable.");
     }
 
     const maplibregl = await loadRouteMapLibrary();
-    state.map = new maplibregl.Map({
-      container: canvasNode,
+    routeMapState.map = new maplibregl.Map({
+      container: routeMapPreviewCanvas,
       style: getRouteMapBaseStyleUrl(),
-      ...config.mapOptions
+      ...routeMapBaseOptions
     });
 
     await new Promise((resolve) => {
-      state.map.once("load", resolve);
+      routeMapState.map.once("load", resolve);
     });
 
-    ensureRouteMapAttributionControl(state.map);
-    ensureRouteMapOverlayStyle(state.map);
+    ensureRouteMapAttributionControl(routeMapState.map);
+    ensureRouteMapOverlayStyle(routeMapState.map);
+    bindRouteMapInteractiveEvents(routeMapState.map);
 
-    if (config.interactive) {
-      bindRouteMapInteractiveEvents(state.map);
-    }
+    routeMapState.markers = clearRouteMapMarkers(routeMapState.markers);
+    routeMapState.markers = installRouteMapMarkers(routeMapState.map);
+    routeMapState.ready = true;
+    routeMapState.failed = false;
+    routeMapState.map.resize();
+    applyRouteMapPaintTheme(routeMapState.map);
+    setRouteMapInteractionState(routeMapState.map, false);
+    syncRouteMapUI({ resetOverview: true });
+    clearRouteMapStatus(routeMapPreviewStatusNode);
+    setRouteMapShellState("ready");
 
-    state.markers = clearRouteMapMarkers(state.markers);
-    state.markers = installRouteMapMarkers(state.map, config.interactive);
-    state.ready = true;
-    state.failed = false;
-    state.map.resize();
-    applyRouteMapPaintTheme(state.map);
-    syncRouteMapMode(mode, getRouteMapSelectionState(), {
-      updateCamera: config.interactive,
-      animateCamera: false
-    });
-    if (!config.interactive) {
-      fitRouteMapOverview(state.map, mode);
-    }
-    clearRouteMapStatus(statusNode);
-    setRouteMapModeShellState(mode, "ready");
-
-    return state.map;
+    return routeMapState.map;
   })()
     .catch(() => {
-      state.failed = true;
-      state.ready = false;
-      state.markers = clearRouteMapMarkers(state.markers);
-      if (state.map) {
-        state.map.remove();
-        state.map = null;
+      routeMapState.failed = true;
+      routeMapState.ready = false;
+      routeMapState.markers = clearRouteMapMarkers(routeMapState.markers);
+      if (routeMapState.map) {
+        routeMapState.map.remove();
+        routeMapState.map = null;
       }
-      setRouteMapModeShellState(mode, "fallback");
-      setRouteMapStatus(statusNode, config.fallbackTitle, config.fallbackBody, "error");
+      setRouteMapShellState("fallback");
+      setRouteMapStatus(
+        routeMapPreviewStatusNode,
+        routeMapLabels.sharedFallbackTitle,
+        routeMapLabels.sharedFallbackBody,
+        "error"
+      );
       return null;
     })
     .finally(() => {
-      state.promise = null;
+      routeMapState.promise = null;
     });
 
-  return state.promise;
+  return routeMapState.promise;
 }
 
 function ensureRouteMapPreviewReady() {
-  return ensureRouteMapModeReady("preview");
+  return ensureRouteMapReady();
 }
 
 function ensureRouteMapInteractiveReady() {
   ensureRouteMapInitialized();
-  return ensureRouteMapModeReady("interactive");
+  return ensureRouteMapReady();
 }
 
 function syncRouteMapUI(options = {}) {
-  const { updateCamera = false, animateCamera = false } = options;
+  const { updateCamera = false, animateCamera = false, resetOverview = false } = options;
   const selectionState = getRouteMapSelectionState();
 
   renderRouteMapFilters(selectionState);
   renderRouteMapStops(selectionState);
   renderRouteMapDetail(selectionState);
 
-  syncRouteMapMode("preview", selectionState);
-  syncRouteMapMode("interactive", selectionState, { updateCamera, animateCamera });
+  syncRouteMapRuntime(selectionState, { updateCamera, animateCamera, resetOverview });
 }
 
 function scheduleRouteMapUISync(options = {}) {
@@ -8901,35 +9381,29 @@ function scheduleRouteMapUISync(options = {}) {
 }
 
 function refreshRouteMapsIfReady(options = {}) {
-  const { updateCamera = false } = options;
-  const selectionState = getRouteMapSelectionState();
+  if (!routeMapState.ready || !routeMapState.map) {
+    return;
+  }
 
-  ["preview", "interactive"].forEach((mode) => {
-    const state = getRouteMapModeState(mode);
-    if (!state.ready || !state.map) {
-      return;
-    }
-
-    applyRouteMapPaintTheme(state.map);
-    syncRouteMapMode(mode, selectionState, {
-      updateCamera: updateCamera && mode === "interactive",
-      animateCamera: false
-    });
+  applyRouteMapPaintTheme(routeMapState.map);
+  syncRouteMapUI({
+    updateCamera: options.updateCamera && getRouteMapDisplayMode() === "interactive",
+    animateCamera: false,
+    resetOverview: getRouteMapDisplayMode() !== "interactive"
   });
 }
 
 function resizeRouteMapsIfReady() {
-  const previewState = getRouteMapModeState("preview");
-  if (previewState.ready && previewState.map) {
-    previewState.map.resize();
-    fitRouteMapOverview(previewState.map, "preview");
+  if (!routeMapState.ready || !routeMapState.map) {
+    return;
   }
 
-  const interactiveState = getRouteMapModeState("interactive");
-  if (interactiveState.ready && interactiveState.map && routeMapInteractive && !routeMapInteractive.hidden) {
-    interactiveState.map.resize();
-    focusRouteMapSelection(interactiveState.map, getRouteMapSelectionState(), { animate: false });
+  routeMapState.map.resize();
+  if (getRouteMapDisplayMode() === "interactive") {
+    focusRouteMapSelection(routeMapState.map, getRouteMapSelectionState(), { animate: false });
     syncRouteMapPopup(getRouteMapSelectionState());
+  } else {
+    fitRouteMapOverview(routeMapState.map, "preview");
   }
 }
 
@@ -8944,7 +9418,8 @@ function ensureRouteMapInitialized() {
     syncLocalizedNodes(routeMapExplorerNode);
   }
   routeMapInitialized = true;
-  syncRouteMapUI();
+  setRouteMapDisplayState(routeMapInteractive && !routeMapInteractive.hidden ? "interactive" : "preview");
+  syncRouteMapUI({ resetOverview: !routeMapInteractive || routeMapInteractive.hidden });
 }
 
 function setRouteMapOpen(isOpen, { restoreFocus = false } = {}) {
@@ -8955,17 +9430,21 @@ function setRouteMapOpen(isOpen, { restoreFocus = false } = {}) {
   routeMapInteractive.hidden = !isOpen;
   routeMapCard?.classList.toggle("is-route-map-open", isOpen);
   syncRouteMapOpenButtons(isOpen);
+  setRouteMapDisplayState(isOpen ? "interactive" : "preview");
 
   if (isOpen) {
     ensureRouteMapInitialized();
-    syncRouteMapUI();
-    window.requestAnimationFrame(() => {
-      resizeRouteMapsIfReady();
+    void ensureRouteMapReady().then(() => {
+      syncRouteMapUI({ updateCamera: true, animateCamera: false });
+      window.requestAnimationFrame(() => {
+        resizeRouteMapsIfReady();
+      });
     });
     return;
   }
 
   clearRouteMapPopup();
+  syncRouteMapUI({ resetOverview: true });
 
   if (!isOpen && restoreFocus && lastRouteMapTrigger && document.contains(lastRouteMapTrigger)) {
     lastRouteMapTrigger.focus();
@@ -9037,14 +9516,14 @@ function initRouteSection() {
   registerRevealBlocks(panel);
   ensureRouteMapInitialized();
   syncRouteMapOpenButtons(routeMapInteractive ? !routeMapInteractive.hidden : false);
+  setRouteMapDisplayState(routeMapInteractive && !routeMapInteractive.hidden ? "interactive" : "preview");
 
-  const previewState = getRouteMapModeState("preview");
-  if (!previewState.ready && !previewState.failed) {
+  if (!routeMapState.ready && !routeMapState.failed) {
     window.requestAnimationFrame(() => {
       void ensureRouteMapPreviewReady();
     });
   } else {
-    refreshRouteMapsIfReady();
+    refreshRouteMapsIfReady({ updateCamera: getRouteMapDisplayMode() === "interactive" });
   }
 
   if (routeMapInteractive && !routeMapInteractive.hidden) {
