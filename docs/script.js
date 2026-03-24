@@ -4969,8 +4969,8 @@ const itineraryBudgetLabels = {
     ja: "旅程の費用モデルを読み込んでいます..."
   },
   statusMeta: {
-    en: "Uses the actual stay plan, corrected transit legs, ticket timing, and meal-pattern bands instead of one padded single-number estimate.",
-    ja: "単一の水増し見積りではなく、実際の滞在計画、修正済みの移動、チケット時間帯、食費パターン帯で組み立てています。"
+    en: "Built from the current stay plan, route logic, ticket timing, and meal-pattern bands.",
+    ja: "現在の滞在計画、移動ロジック、チケット時間帯、食費パターン帯で組み立てています。"
   },
   travelersHint: {
     en: "Stay selectors now control each accommodation night directly, so private/local or no-cost Osaka nights stay free unless you switch them to a paid stay.",
@@ -5013,8 +5013,8 @@ const itineraryBudgetLabels = {
     ja: "予約・運賃・公式リソースのリンクはすべてEssentialsへ移し、予算メモは費用と前提だけに絞っています。"
   },
   currencyDisplayMeta: {
-    en: "English view converts the same JPY trip model into CAD and USD with fixed planning FX for readability (C$1 ≈ JPY 109, US$1 ≈ JPY 149). Japanese view stays in yen.",
-    ja: "日本語表示は見積りの基準通貨である円のままです。英語表示では同じ円ベースの計算結果を、固定の旅行用為替前提（C$1 ≈ 109円、US$1 ≈ 149円）でCADとUSDへ換算しています。"
+    en: "English shows the same yen-based plan in CAD and USD planning FX. Japanese stays in yen.",
+    ja: "英語表示では同じ円ベースの計画をCADとUSDの旅行用換算で見せ、日本語表示は円のままです。"
   },
   bookedRequiredMeta: {
     en: "The base route costs before optional extras and before Days 8-9 are unlocked",
@@ -7309,34 +7309,22 @@ function initializeBudgetNotes() {
             en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"}`,
             ja: `${estimate.travelers}人`
           },
-          { en: `stay split: ${shareModeLabel.en}`, ja: `宿泊費の分け方: ${shareModeLabel.ja}` },
-          {
-            en: "private/local or no-cost Osaka stays remain free unless you switch them",
-            ja: "大阪のローカル・プライベート滞在や宿泊費なしは切り替えない限り無料のままです"
-          }
+          { en: `stay split: ${shareModeLabel.en}`, ja: `宿泊費の分け方: ${shareModeLabel.ja}` }
         ])
-      },
-      {
-        className: "budget-summary-card budget-summary-card--accommodation budget-summary-card--compact",
-        label: itineraryBudgetLabels.summaryAccommodationSplit,
-        range: estimate.accommodationPerPersonRange,
-        meta:
-          hasBudgetRangeValue(estimate.accommodationTotalRange)
-            ? joinLocalizedSegments([
-                { en: shareModeLabel.en, ja: shareModeLabel.ja },
-                {
-                  en: `split by ${estimate.accommodationShareCount}`,
-                  ja: `${estimate.accommodationShareCount}人で分割`
-                },
-                getRangeMetaCopy(estimate.accommodationTotalRange)
-              ])
-            : itineraryBudgetLabels.noPaidAccommodationMeta
       },
       {
         className: "budget-summary-card budget-summary-card--shared budget-summary-card--compact",
         label: itineraryBudgetLabels.summaryBookedRequired,
         range: estimate.bookedAndFixedTotalRange,
-        meta: itineraryBudgetLabels.bookedRequiredMeta
+        meta: joinLocalizedSegments([
+          itineraryBudgetLabels.bookedRequiredMeta,
+          hasBudgetRangeValue(estimate.accommodationPerPersonRange)
+            ? {
+                en: `stay split: ${shareModeLabel.en}`,
+                ja: `宿泊費の分け方: ${shareModeLabel.ja}`
+              }
+            : itineraryBudgetLabels.noPaidAccommodationMeta
+        ])
       },
       {
         className: "budget-summary-card budget-summary-card--optional budget-summary-card--compact",
@@ -7352,12 +7340,12 @@ function initializeBudgetNotes() {
               },
               estimate.includeExtras
                 ? {
-                    en: "Route extras on: luggage handling, weather pivots, and transfer-day add-ons",
-                    ja: "追加費用を反映中: 荷物対応、天候回避、移動日の追加コスト"
+                    en: "Route extras are currently included.",
+                    ja: "ルート追加費用を現在反映しています。"
                   }
                 : {
-                    en: "Route extras like luggage handling and weather fallback fares still stay outside the base total unless enabled",
-                    ja: "荷物対応や天候回避の追加運賃は、有効にするまで基本合計へ入りません"
+                    en: "Route extras still stay outside the base total until enabled.",
+                    ja: "ルート追加費用は有効にするまで基本合計へ入りません。"
                   }
             ])
           : itineraryBudgetLabels.optionalInactiveMeta
@@ -7378,109 +7366,115 @@ function initializeBudgetNotes() {
       )
       .join("");
   };
-  const renderBreakdownMarkup = (estimate = calculateEstimate()) => `
-    <div class="budget-breakdown-grid">
-      ${budgetCategoryDefinitions
-        .map((definition) => {
-          const range = estimate.categoryTotalsRange[definition.id] || getZeroBudgetRange();
-          const availableRange =
-            estimate.categoryAvailableRanges[definition.id] || getZeroBudgetRange();
-          const metaCopy =
-            !estimate.includeExtras && hasBudgetRangeValue(availableRange)
-              ? getRangeMetaCopy(availableRange, { available: true })
-              : hasBudgetRangeValue(range)
-                ? getRangeMetaCopy(range)
-                : definition.id === "accommodation"
-                  ? itineraryBudgetLabels.noPaidAccommodationMeta
-                  : itineraryBudgetLabels.rangeFixedNote;
+  const renderBreakdownMarkup = (estimate = calculateEstimate()) => {
+    const primaryCategoryIds = [
+      "accommodation",
+      "intercityTransit",
+      "localTransit",
+      "ticketsAdmissions",
+      "meals"
+    ];
+    const secondaryCategoryIds = ["baggage", "optionalExtras"];
+    const renderCategoryCard = (definition, className = "budget-breakdown-card") => {
+      const range = estimate.categoryTotalsRange[definition.id] || getZeroBudgetRange();
+      const availableRange =
+        estimate.categoryAvailableRanges[definition.id] || getZeroBudgetRange();
+      const metaCopy =
+        !estimate.includeExtras && hasBudgetRangeValue(availableRange)
+          ? getRangeMetaCopy(availableRange, { available: true })
+          : hasBudgetRangeValue(range)
+            ? getRangeMetaCopy(range)
+            : definition.id === "accommodation"
+              ? itineraryBudgetLabels.noPaidAccommodationMeta
+              : itineraryBudgetLabels.rangeFixedNote;
 
-          return `
-            <article class="budget-breakdown-card">
-              <p class="budget-breakdown-card__label">${renderLocalizedContent(definition.label)}</p>
-              <div class="budget-range-grid budget-range-grid--breakdown">
-                ${renderBudgetRangeRows(range, "breakdown")}
-              </div>
-              <p class="budget-breakdown-card__meta">${renderLocalizedContent(metaCopy)}</p>
-              <p class="budget-breakdown-card__hint">${renderLocalizedContent(
-                definition.rangeHint || definition.label
-              )}</p>
-            </article>
-          `;
-        })
-        .join("")}
-    </div>
-    <div class="budget-breakdown-pills">
-      ${["booked", "required", "flexible", "optional"]
-        .map((bucketId) => {
-          const total =
-            bucketId === "optional" && !estimate.includeExtras
-              ? itineraryBudgetLabels.optionalInactive
-              : formatCurrencyCopy(estimate.bucketTotals[bucketId] || 0);
+      return `
+        <article class="${className}">
+          <p class="budget-breakdown-card__label">${renderLocalizedContent(definition.label)}</p>
+          <div class="budget-range-grid budget-range-grid--breakdown">
+            ${renderBudgetRangeRows(range, "breakdown")}
+          </div>
+          <p class="budget-breakdown-card__meta">${renderLocalizedContent(metaCopy)}</p>
+          <p class="budget-breakdown-card__hint">${renderLocalizedContent(
+            definition.rangeHint || definition.label
+          )}</p>
+        </article>
+      `;
+    };
 
-          return `
-            <span class="budget-breakdown-pill budget-breakdown-pill--${bucketId}">
-              ${renderLocalizedContent(getBucketLabel(bucketId))} · ${renderLocalizedContent(total)}
-            </span>
-          `;
-        })
-        .join("")}
-    </div>
-  `;
-  const renderSourceMetaMarkup = () => `
-    <article class="budget-source-meta-card">
-      <p class="budget-source-meta-card__label">${renderLocalizedContent(
-        itineraryBudgetLabels.itineraryBasis
-      )}</p>
-      <p class="budget-source-meta-card__body">${renderLocalizedContent(getAssumptionCopy())}</p>
-      ${
-        getSourceMetaCopy()
-          ? `<p class="budget-source-meta-card__body">${renderLocalizedContent(
-              getSourceMetaCopy()
-            )}</p>`
-          : ""
-      }
-      ${
-        getSourceHelperCopy()
-          ? `<p class="budget-source-meta-card__body">${renderLocalizedContent(
-              getSourceHelperCopy()
-            )}</p>`
-          : ""
-      }
-      <p class="budget-source-meta-card__body">${renderLocalizedContent(
-        itineraryBudgetLabels.currencyDisplayMeta
-      )}</p>
-      <div class="budget-range-legend">
-        <p class="budget-source-meta-card__label">${renderLocalizedContent(
-          itineraryBudgetLabels.rangeLegendTitle
-        )}</p>
-        ${budgetRangeLevels
-          .map((definition) => {
-            const copy =
-              definition.id === "lean"
-                ? itineraryBudgetLabels.rangeLegendLean
-                : definition.id === "high"
-                  ? itineraryBudgetLabels.rangeLegendHigh
-                  : itineraryBudgetLabels.rangeLegendExpected;
+    return `
+      <div class="budget-breakdown-grid">
+        ${budgetCategoryDefinitions
+          .filter((definition) => primaryCategoryIds.includes(definition.id))
+          .map((definition) => renderCategoryCard(definition))
+          .join("")}
+      </div>
+      <div class="budget-breakdown-secondary">
+        ${budgetCategoryDefinitions
+          .filter((definition) => secondaryCategoryIds.includes(definition.id))
+          .map((definition) =>
+            renderCategoryCard(definition, "budget-breakdown-card budget-breakdown-card--secondary")
+          )
+          .join("")}
+      </div>
+      <div class="budget-breakdown-pills">
+        ${["booked", "required", "flexible", "optional"]
+          .map((bucketId) => {
+            const total =
+              bucketId === "optional" && !estimate.includeExtras
+                ? itineraryBudgetLabels.optionalInactive
+                : formatCurrencyCopy(estimate.bucketTotals[bucketId] || 0);
+
             return `
-              <div class="budget-range-legend__item">
-                <span class="budget-pill ${definition.pillClass}">${renderLocalizedContent(
-                  definition.label
-                )}</span>
-                <p class="budget-range-legend__copy">${renderLocalizedContent(copy)}</p>
-              </div>
+              <span class="budget-breakdown-pill budget-breakdown-pill--${bucketId}">
+                ${renderLocalizedContent(getBucketLabel(bucketId))} · ${renderLocalizedContent(total)}
+              </span>
             `;
           })
           .join("")}
       </div>
-      <p class="budget-source-meta-card__body">${renderLocalizedContent(
-        itineraryBudgetLabels.rangeLegendOptionalDays
-      )}</p>
-      <p class="budget-source-meta-card__body">${renderLocalizedContent(
-        itineraryBudgetLabels.notesLinkHubMeta
-      )}</p>
-      <p class="budget-source-meta-card__body">${renderLocalizedContent(getSourceUpdatedCopy())}</p>
-    </article>
-  `;
+    `;
+  };
+  const renderSourceMetaMarkup = () => {
+    const compactItems = [
+      {
+        label: { en: "Range bands", ja: "予算帯の見方" },
+        body: {
+          en: "Lean stays workable, Expected follows the current plan, and High keeps a realistic buffer.",
+          ja: "控えめは成立する安め寄り、標準は現在の計画、高めは現実的な上振れを見ています。"
+        }
+      },
+      {
+        label: { en: "Optional days + extras", ja: "追加日と追加費用" },
+        body: itineraryBudgetLabels.rangeLegendOptionalDays
+      },
+      {
+        label: { en: "Currency view", ja: "通貨表示" },
+        body: itineraryBudgetLabels.currencyDisplayMeta
+      },
+      {
+        label: itineraryBudgetLabels.sourceUpdatedPrefix,
+        body: { en: budgetSourceUpdatedAt, ja: budgetSourceUpdatedAt }
+      }
+    ];
+
+    return `
+      <article class="budget-source-meta-card budget-source-meta-card--compact">
+        <div class="budget-source-meta-card__list">
+          ${compactItems
+            .map(
+              (item) => `
+                <section class="budget-source-meta-card__item">
+                  <p class="budget-source-meta-card__label">${renderLocalizedContent(item.label)}</p>
+                  <p class="budget-source-meta-card__body">${renderLocalizedContent(item.body)}</p>
+                </section>
+              `
+            )
+            .join("")}
+        </div>
+      </article>
+    `;
+  };
   const renderSourcesMarkup = () => "";
   const renderDayMarkup = (dayEstimate) => {
     const noteAriaEn = `Budget note for ${dayEstimate.title.en}`;
@@ -7677,9 +7671,11 @@ function initializeBudgetNotes() {
     }
 
     budgetStatusNode.innerHTML = `
-      <article class="budget-notes__empty">
-        <p>${renderLocalizedContent(itineraryBudgetLabels.statusReady)}</p>
-        <p>${renderLocalizedContent({
+      <article class="budget-status-card">
+        <p class="budget-status-card__eyebrow">${renderLocalizedContent(
+          itineraryBudgetLabels.statusReady
+        )}</p>
+        <p class="budget-status-card__summary">${renderLocalizedContent({
           en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"} • ${
             areOptionalDaysUnlocked() ? "Optional Days 8-9 included" : "Days 8-9 still separate"
           }`,
@@ -7687,7 +7683,9 @@ function initializeBudgetNotes() {
             areOptionalDaysUnlocked() ? "追加の8日目と9日目を含む" : "8日目と9日目は別枠"
           }`
         })}</p>
-        <p>${renderLocalizedContent(itineraryBudgetLabels.statusMeta)}</p>
+        <p class="budget-status-card__meta">${renderLocalizedContent(
+          itineraryBudgetLabels.statusMeta
+        )}</p>
       </article>
     `;
     syncLocalizedNodes(budgetStatusNode);
@@ -9098,21 +9096,38 @@ function ensureRouteMapAttributionControl(map) {
   });
 }
 
-function waitForRouteMapLoad(map, timeoutMs = 12000) {
+function waitForRouteMapLoad(map, timeoutMs = 20000) {
   return new Promise((resolve, reject) => {
     if (!map) {
       reject(new Error("Route map instance is missing."));
       return;
     }
 
+    if (typeof map.isStyleLoaded === "function" && map.isStyleLoaded()) {
+      resolve();
+      return;
+    }
+
     let settled = false;
     let timeoutId = 0;
+    let lastError = null;
+
+    const isReady = () => {
+      try {
+        const style = map.getStyle?.();
+        return Boolean(map.isStyleLoaded?.()) && Array.isArray(style?.layers) && style.layers.length > 0;
+      } catch (error) {
+        return false;
+      }
+    };
 
     const cleanup = () => {
       if (timeoutId) {
         window.clearTimeout(timeoutId);
       }
       map.off?.("load", handleLoad);
+      map.off?.("idle", handleLoad);
+      map.off?.("styledata", handleLoad);
       map.off?.("error", handleError);
     };
 
@@ -9127,21 +9142,32 @@ function waitForRouteMapLoad(map, timeoutMs = 12000) {
     };
 
     const handleLoad = () => {
+      if (!isReady()) {
+        return;
+      }
+
       settle(() => resolve());
     };
 
     const handleError = (event) => {
       const cause = event?.error;
-      settle(() =>
-        reject(cause instanceof Error ? cause : new Error("Route map style failed to load."))
-      );
+      lastError = cause instanceof Error ? cause : new Error("Route map style failed to load.");
     };
 
     timeoutId = window.setTimeout(() => {
-      settle(() => reject(new Error("Route map initialization timed out.")));
+      if (isReady()) {
+        settle(() => resolve());
+        return;
+      }
+
+      settle(() =>
+        reject(lastError instanceof Error ? lastError : new Error("Route map initialization timed out."))
+      );
     }, timeoutMs);
 
     map.once("load", handleLoad);
+    map.on("idle", handleLoad);
+    map.on("styledata", handleLoad);
     map.on("error", handleError);
   });
 }
@@ -9452,13 +9478,14 @@ function setRouteMapInteractionState(map, interactive = false) {
 }
 
 function syncRouteMapMarkers(selectionState) {
-  const markerStateKey = `${root.lang}|${getRouteMapSelectionSignature(selectionState)}|${getRouteMapDisplayMode()}`;
+  const interactive = getRouteMapDisplayMode() === "interactive";
+  const markerStateKey = `${root.lang}|${getRouteMapSelectionSignature(selectionState)}|${interactive ? 1 : 0}`;
   if (routeMapState.markerStateKey === markerStateKey) {
     return;
   }
 
   routeMapState.markers.forEach((entry) => {
-    updateRouteMapMarkerElement(entry, selectionState);
+    updateRouteMapMarkerElement(entry, selectionState, interactive);
   });
   routeMapState.markerStateKey = markerStateKey;
 }
@@ -9634,6 +9661,7 @@ function fitRouteMapOverview(map, mode = "preview") {
 
 function syncRouteMapRuntime(selectionState, options = {}) {
   const { updateCamera = false, animateCamera = false, resetOverview = false } = options;
+  const interactive = getRouteMapDisplayMode() === "interactive";
 
   syncRouteMapMarkers(selectionState);
 
@@ -9642,9 +9670,9 @@ function syncRouteMapRuntime(selectionState, options = {}) {
   }
 
   syncRouteMapSelectionLayers(routeMapState.map, selectionState);
-  setRouteMapInteractionState(routeMapState.map, true);
+  setRouteMapInteractionState(routeMapState.map, interactive);
 
-  if (getRouteMapDisplayMode() !== "interactive") {
+  if (!interactive) {
     clearRouteMapPopup();
     if (resetOverview) {
       fitRouteMapOverview(routeMapState.map, "preview");
@@ -9699,7 +9727,7 @@ function ensureRouteMapReady() {
     routeMapState.failed = false;
     routeMapState.map.resize();
     applyRouteMapPaintTheme(routeMapState.map);
-    setRouteMapInteractionState(routeMapState.map, true);
+    setRouteMapInteractionState(routeMapState.map, false);
     syncRouteMapUI({ resetOverview: true });
     clearRouteMapStatus(routeMapPreviewStatusNode);
     setRouteMapShellState("ready");
