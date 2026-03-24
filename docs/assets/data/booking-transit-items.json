@@ -15,8 +15,8 @@
       "ja": "到着前にモバイルIC、ICOCA、Suicaを決めておくと現地移動が楽です。"
     },
     "details": {
-      "en": "Keep one tap card or mobile wallet ready for Kansai and Tokyo city transit. This is still the fastest way to keep short hops simple.",
-      "ja": "関西と東京の市内移動に使うタッチ決済のカードかモバイルICを一つ用意しておくと動きやすいです。短い移動を最も簡単に保てます。"
+      "en": "Keep one tap card or mobile wallet ready for Kansai and Tokyo city transit. This official setup guide is the single link to save for the quickest supported setup path.",
+      "ja": "関西と東京の市内移動に使うタッチ決済のカードかモバイルICを一つ用意しておくと動きやすいです。最も分かりやすく設定できる公式案内だけを一つ残しています。"
     },
     "links": [
       {
@@ -24,12 +24,6 @@
         "label": { "en": "Suica official guide", "ja": "Suica公式案内" },
         "note": { "en": "Official setup and supported use", "ja": "公式の設定方法と利用案内" },
         "kind": "primary"
-      },
-      {
-        "href": "https://www.westjr.co.jp/global/en/howto/icoca/",
-        "label": { "en": "ICOCA official guide", "ja": "ICOCA公式案内" },
-        "note": { "en": "Useful if Kansai is your first tap-in region", "ja": "最初の利用地域が関西ならこちらも便利" },
-        "kind": "secondary"
       }
     ]
   },
@@ -49,8 +43,8 @@
       "ja": "1日目または3日目に有料の大阪泊が必要な時だけ使います。大阪という広い括りではなく、ミナミ側の動線で選んでいます。"
     },
     "details": {
-      "en": "Nishi-Shinsaibashi / Minami keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical. Use the cheapest trustworthy booking link first; keep the official hotel page only for direct booking or policy checks.",
-      "ja": "西心斎橋・ミナミなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすいです。まずは一番安い信頼できるリンクを使い、公式ページは直販やルール確認が必要な時だけ見ます。"
+      "en": "Nishi-Shinsaibashi / Minami keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical. This Expedia quote stays as the single best booking link because it is the budget anchor and still useful for live availability.",
+      "ja": "西心斎橋・ミナミなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすいです。予算の基準にもなり、空室確認にもそのまま使いやすいExpedia見積りだけを残しています。"
     },
     "links": [
       {
@@ -58,12 +52,6 @@
         "label": { "en": "Best cheap link", "ja": "最安寄りの信頼リンク" },
         "note": { "en": "Current Expedia quote around JPY 6.2k before taxes", "ja": "現在のExpedia見積りは税別約6,189円" },
         "kind": "primary"
-      },
-      {
-        "href": "https://www.hearton.co.jp/en/hotel/shinsaibashi/",
-        "label": { "en": "Official hotel page", "ja": "公式ホテルページ" },
-        "note": { "en": "Direct booking and access details", "ja": "直接予約とアクセス案内" },
-        "kind": "secondary"
       }
     ]
   },
@@ -83,8 +71,8 @@
       "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
     },
     "details": {
-      "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama and Osaka much better than staying deep in east Kyoto. Use the cheaper live quote for pricing and the official page for direct rules or booking.",
-      "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山と大阪戻りも東側の奥へ泊まるより整います。価格確認は安い見積りリンク、施設ルールや直販確認は公式ページを使います。"
+      "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama and Osaka much better than staying deep in east Kyoto. This cheaper live quote stays as the single booking link because it is the clearest price anchor for the route-fit hotel.",
+      "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山と大阪戻りも東側の奥へ泊まるより整います。動線に合うホテルの価格基準として分かりやすい、安い見積りリンクだけを残しています。"
     },
     "links": [
       {
@@ -92,12 +80,6 @@
         "label": { "en": "Best cheap link", "ja": "最安寄りの信頼リンク" },
         "note": { "en": "Shijo / Karasuma price anchor around JPY 13.2k", "ja": "四条烏丸エリアの見積り基準は約1.32万円" },
         "kind": "primary"
-      },
-      {
-        "href": "https://en.www.resol-hotel.jp/kyoto-s/",
-        "label": { "en": "Official hotel page", "ja": "公式ホテルページ" },
-        "note": { "en": "Direct booking and access details", "ja": "直接予約とアクセス案内" },
-        "kind": "secondary"
       }
     ]
   },
@@ -117,8 +99,8 @@
       "ja": "この旅館は、箱根という広い括りではなく、元箱根・湖尻側の動線で選んでいます。"
     },
     "details": {
-      "en": "This side matches the Lake Ashi, ropeway, and Togendai end of the loop and also helps the Day 5 Gotemba-side transfer toward Kawaguchiko. Use the cheaper quote as the budget anchor and keep a trustworthy backup listing for terms comparison.",
-      "ja": "この側は芦ノ湖・ロープウェイ・桃源台寄りの周遊終盤に合いやすく、5日目の御殿場経由で河口湖へ抜ける流れにも向いています。安い見積りを予算基準にし、条件比較用に信頼できる予備掲載も残しています。"
+      "en": "This side matches the Lake Ashi, ropeway, and Togendai end of the loop and also helps the Day 5 Gotemba-side transfer toward Kawaguchiko. The cheaper quote stays as the single best link because it anchors both pricing and live booking availability.",
+      "ja": "この側は芦ノ湖・ロープウェイ・桃源台寄りの周遊終盤に合いやすく、5日目の御殿場経由で河口湖へ抜ける流れにも向いています。価格基準と空室確認を兼ねられる、安い見積りリンクだけを残しています。"
     },
     "links": [
       {
@@ -126,12 +108,6 @@
         "label": { "en": "Best cheap link", "ja": "最安寄りの信頼リンク" },
         "note": { "en": "Motohakone / Kojiri-side quote around JPY 16k total", "ja": "元箱根・湖尻側の見積りは合計約1.6万円" },
         "kind": "primary"
-      },
-      {
-        "href": "https://www.booking.com/hotel/jp/yuyu-hakone-private-open-air-onsen-usage-guaranteed.html",
-        "label": { "en": "Backup listing", "ja": "予備の掲載先" },
-        "note": { "en": "Trustworthy fallback for booking terms", "ja": "予約条件比較用の信頼できる代替先" },
-        "kind": "secondary"
       }
     ]
   },
@@ -151,8 +127,8 @@
       "ja": "到着、観光、東京戻りの全部をまとめやすいよう、駅から湖畔の動線で拠点を選んでいます。"
     },
     "details": {
-      "en": "This area works better than a remote Fuji resort because it keeps the Hakone arrival, lake walking, and Day 7 departure aligned with the actual route. The cheaper listing is the budget default; the official page stays for policy checks and direct-rate comparison.",
-      "ja": "遠い富士リゾート立地よりも、このエリアの方が箱根からの到着、湖畔散策、7日目の東京戻りを実際の流れに合わせやすいです。安い掲載先を予算の初期値にし、公式ページはルール確認や直販比較用に残しています。"
+      "en": "This area works better than a remote Fuji resort because it keeps the Hakone arrival, lake walking, and Day 7 departure aligned with the actual route. The cheaper listing stays as the single best link because it is both the budget default and the most useful live booking page.",
+      "ja": "遠い富士リゾート立地よりも、このエリアの方が箱根からの到着、湖畔散策、7日目の東京戻りを実際の流れに合わせやすいです。予算の初期値にもなり、そのまま予約確認にも使いやすい安い掲載先だけを残しています。"
     },
     "links": [
       {
@@ -160,12 +136,6 @@
         "label": { "en": "Best cheap link", "ja": "最安寄りの信頼リンク" },
         "note": { "en": "Station-to-lake corridor quote around JPY 15.7k", "ja": "駅から湖畔の動線にある見積りは約1.57万円" },
         "kind": "primary"
-      },
-      {
-        "href": "https://www.haostay.jp/en/place/suica",
-        "label": { "en": "Official HaoSTAY page", "ja": "HAOSTAY公式ページ" },
-        "note": { "en": "Direct brand site and property info", "ja": "ブランド公式サイトと施設案内" },
-        "kind": "secondary"
       }
     ]
   },
@@ -185,8 +155,8 @@
       "ja": "東京は渋谷寄りの西側動線で組み、7日目の1泊を基本に、2泊目は追加8日目を有効にした時だけ入ります。"
     },
     "details": {
-      "en": "Shibuya is the actual Day 7 focus, and this west-side area also stays cleaner for west-Tokyo movement if Day 8 is active. Keep the cheaper quote for pricing sanity and the official page for direct booking or policy checks.",
-      "ja": "7日目の主役は渋谷で、8日目を使うなら西東京方面への動きもこの西側立地の方が自然です。価格感を保つための安い見積りと、直販やルール確認のための公式ページを分けています。"
+      "en": "Shibuya is the actual Day 7 focus, and this west-side area also stays cleaner for west-Tokyo movement if Day 8 is active. The cheaper quote stays as the single best link because it keeps pricing and live availability in one useful place.",
+      "ja": "7日目の主役は渋谷で、8日目を使うなら西東京方面への動きもこの西側立地の方が自然です。価格感と空室確認を一つで見やすい、安い見積りリンクだけを残しています。"
     },
     "links": [
       {
@@ -194,12 +164,6 @@
         "label": { "en": "Best cheap link", "ja": "最安寄りの信頼リンク" },
         "note": { "en": "West-Shibuya quote around JPY 19.8k", "ja": "渋谷西側エリアの見積りは約1.98万円" },
         "kind": "primary"
-      },
-      {
-        "href": "https://en-hotel.com/shibuya/",
-        "label": { "en": "Official hotel page", "ja": "公式ホテルページ" },
-        "note": { "en": "Direct booking and stay policies", "ja": "直接予約と宿泊ルール" },
-        "kind": "secondary"
       }
     ]
   },
@@ -220,8 +184,8 @@
       "ja": "箱根移動日の軸になる固定予約として扱います。"
     },
     "details": {
-      "en": "Reserve on the official rail site once Day 4 is locked. Keep a fare-check link beside it so the ticket price stays transparent inside the budget notes.",
-      "ja": "4日目が固まったら公式の予約サイトで押さえ、横に運賃確認リンクも置いて予算メモ側の価格根拠を見えるようにしています。"
+      "en": "Reserve on the official rail site once Day 4 is locked. This stays as the single booking link because it is the actual reserved-seat channel for the train you need.",
+      "ja": "4日目が固まったら公式の予約サイトで押さえます。必要な列車をそのまま予約できる実運用の窓口なので、このリンクだけを残しています。"
     },
     "links": [
       {
@@ -229,12 +193,6 @@
         "label": { "en": "Official booking", "ja": "公式予約" },
         "note": { "en": "Book reserved seats on Smart EX", "ja": "Smart EXで指定席を予約" },
         "kind": "primary"
-      },
-      {
-        "href": "https://www.navitime.co.jp/en/transfer/searchlist?defaultCondition=0&dnvStationCode=00003742&dnvStationName=%E5%B0%8F%E7%94%B0%E5%8E%9F&orvStationCode=00004305&orvStationName=%E6%96%B0%E5%A4%A7%E9%98%AA",
-        "label": { "en": "Fare lookup", "ja": "運賃確認" },
-        "note": { "en": "Current price-check for the budget model", "ja": "予算モデル用の現在運賃確認" },
-        "kind": "secondary"
       }
     ]
   },
@@ -255,8 +213,8 @@
       "ja": "このルートでは小田原版を基準にして保存しておきます。"
     },
     "details": {
-      "en": "The official pass page is the main reference here because it shows current pricing clearly. Pair it with the transport status page so coverage and same-day operations stay together.",
-      "ja": "ここは料金が分かりやすい公式ページを主軸にし、対象区間と当日の運行状況を一緒に追えるようにしています。"
+      "en": "The official pass page is the single best link here because it shows current pricing and coverage most clearly.",
+      "ja": "ここは現在料金と対象範囲を最も分かりやすく確認できる公式ページだけを残しています。"
     },
     "links": [
       {
@@ -264,12 +222,6 @@
         "label": { "en": "Official pass page", "ja": "公式パスページ" },
         "note": { "en": "Current price and coverage", "ja": "現在の料金と対象範囲" },
         "kind": "primary"
-      },
-      {
-        "href": "https://www.hakonenavi.jp/international/en/status_information",
-        "label": { "en": "Live status", "ja": "運行状況" },
-        "note": { "en": "Same-day ropeway and transport checks", "ja": "当日のロープウェイと運行確認" },
-        "kind": "secondary"
       }
     ]
   },
@@ -290,8 +242,8 @@
       "ja": "ロープウェイ、ケーブルカー、湖の移動状況を当日確認するページです。"
     },
     "details": {
-      "en": "This is the operational page, not the fare page. Keep it saved beside the official loop guide so route changes stay calm if weather or wind shifts.",
-      "ja": "こちらは料金ではなく運行確認用です。公式ループ案内と並べて保存しておくと、天候や風で変更が出ても落ち着いて動けます。"
+      "en": "This is the operational page, not the fare page. Save this single official status page for same-day checks if weather or wind shifts the loop.",
+      "ja": "こちらは料金ではなく運行確認用です。天候や風で周遊状況が変わる日に備え、この公式運行ページだけを保存しておきます。"
     },
     "links": [
       {
@@ -299,12 +251,6 @@
         "label": { "en": "Live status", "ja": "運行状況" },
         "note": { "en": "Official same-day operations page", "ja": "公式の当日運行ページ" },
         "kind": "primary"
-      },
-      {
-        "href": "https://www.hakonenavi.jp/international/en/transportation",
-        "label": { "en": "Official loop guide", "ja": "公式周遊ガイド" },
-        "note": { "en": "Coverage and route overview", "ja": "対象交通とルート概要" },
-        "kind": "secondary"
       }
     ]
   },
@@ -325,8 +271,8 @@
       "ja": "5日目を軽く保つため、乗り継ぎの流れを保存しておきます。"
     },
     "details": {
-      "en": "Use the official transport page to understand the chain, then keep a practical fare explainer beside it for sanity-checking what the budget should allow.",
-      "ja": "動線の把握は公式交通ページ、予算の妥当性確認は実用的な運賃説明ページという使い分けにしています。"
+      "en": "Use the official transport page as the single saved link to understand the transfer chain for this route.",
+      "ja": "このルートの乗り継ぎを把握するための保存リンクは、公式交通ページひとつに絞っています。"
     },
     "links": [
       {
@@ -334,12 +280,6 @@
         "label": { "en": "Official transfer guide", "ja": "公式移動ガイド" },
         "note": { "en": "Core route reference", "ja": "基本ルート確認" },
         "kind": "primary"
-      },
-      {
-        "href": "https://www.japan-guide.com/e/e6905.html?aFROM=5200_6900",
-        "label": { "en": "Fare explainer", "ja": "運賃説明" },
-        "note": { "en": "Useful budget cross-check", "ja": "予算の見直し用" },
-        "kind": "secondary"
       }
     ]
   },
@@ -360,8 +300,8 @@
       "ja": "予算はより安い直通バスを初期値にし、富士回遊は鉄道代替として残しています。"
     },
     "details": {
-      "en": "Use the bus page for the cheapest direct move toward Shibuya/Tokyo. Keep Fuji Excursion beside it only if you still want the cleaner rail option and are willing to pay more.",
-      "ja": "渋谷・東京方面へ安く直通で戻るならバスページを使い、より高くても鉄道の分かりやすさを取りたい時だけ富士回遊を横に置く形です。"
+      "en": "Use the bus page for the cheapest direct move toward Shibuya/Tokyo. This stays as the single best link because it matches the cheaper default used in the budget.",
+      "ja": "渋谷・東京方面へ安く直通で戻るならバスページを使います。予算の初期値とも一致するため、このリンクだけを残しています。"
     },
     "links": [
       {
@@ -369,12 +309,6 @@
         "label": { "en": "Direct bus booking", "ja": "直通バス予約" },
         "note": { "en": "Cheapest practical default", "ja": "実用的で最安寄りの初期値" },
         "kind": "primary"
-      },
-      {
-        "href": "https://e.fujikyu-railway.jp/fujikaiyuu/",
-        "label": { "en": "Fuji Excursion fallback", "ja": "富士回遊の代替" },
-        "note": { "en": "Rail option if you prefer direct train", "ja": "直通列車を使いたい場合の鉄道代替" },
-        "kind": "secondary"
       }
     ]
   },
@@ -422,8 +356,8 @@
       "ja": "夜の枠は高くなるため、予算でも一律価格ではなく時間帯付きの夕方以降チケットとして扱います。"
     },
     "details": {
-      "en": "Use the official booking page for the actual reservation. Keep the timing guide beside it because daytime and late-afternoon/night prices differ, and rooftop access can still change with weather.",
-      "ja": "実際の予約は公式ページで行い、横に料金タイミング案内も置いています。昼間と夕方以降で価格が異なり、天候で屋上利用条件も変わるためです。"
+      "en": "Use the official booking page for the actual reservation. This stays as the single best link, while the budget notes already explain the daytime versus later-slot price difference.",
+      "ja": "実際の予約は公式ページで行います。昼と夕方以降の価格差は予算メモ側で説明できるため、ここは公式予約リンクひとつに絞っています。"
     },
     "links": [
       {
@@ -431,12 +365,6 @@
         "label": { "en": "Official tickets", "ja": "公式チケット" },
         "note": { "en": "Actual timed-entry booking", "ja": "実際の時間指定予約" },
         "kind": "primary"
-      },
-      {
-        "href": "https://matcha-jp.com/jp/11771",
-        "label": { "en": "Price timing guide", "ja": "料金タイミング案内" },
-        "note": { "en": "Shows cheaper daytime vs later slots", "ja": "昼間の安い枠と夕方以降の差を確認" },
-        "kind": "secondary"
       }
     ]
   }

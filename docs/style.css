@@ -3495,7 +3495,7 @@ html.has-modal-open body {
 }
 
 .route-map[data-route-map-active-mode="interactive"] .route-map__preview-stage {
-  min-height: clamp(22rem, 62vw, 34rem);
+  min-height: clamp(18rem, 48vw, 27rem);
 }
 
 .route-map[data-route-map-active-mode="interactive"] .route-map__preview-overlay {
@@ -3641,14 +3641,10 @@ html.has-modal-open body {
 }
 
 .route-map__actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, max-content));
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.55rem;
   align-items: center;
-}
-
-.route-map__launch {
-  min-width: 0;
 }
 
 .route-map__hint {
@@ -3658,7 +3654,7 @@ html.has-modal-open body {
   color: rgba(76, 66, 62, 0.86);
 }
 
-.route-map__interactive {
+.route-map__live-panel {
   display: grid;
   gap: 0.82rem;
 }
@@ -3666,7 +3662,7 @@ html.has-modal-open body {
 .route-map__toolbar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: start;
   gap: 0.72rem;
 }
@@ -4030,7 +4026,7 @@ html.has-modal-open body {
   }
 
   .route-map[data-route-map-active-mode="interactive"] .route-map__preview-stage {
-    min-height: 20.5rem;
+    min-height: 16.4rem;
   }
 
   .route-map__status {
@@ -6036,6 +6032,40 @@ html[data-theme="dark"] .budget-day-card__note-input {
   border-color: rgba(248, 239, 228, 0.08);
   background: rgba(28, 31, 37, 0.88);
   color: #efe6da;
+}
+
+html[data-theme="dark"] .budget-day-card__stay-field {
+  border-color: rgba(248, 239, 228, 0.08);
+  background:
+    linear-gradient(180deg, rgba(31, 35, 41, 0.92), rgba(24, 27, 33, 0.88)),
+    rgba(24, 27, 33, 0.86);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+html[data-theme="dark"] .budget-day-card__stay-select {
+  border-color: rgba(248, 239, 228, 0.1);
+  background: rgba(15, 18, 23, 0.94);
+  color: #efe6da;
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] .budget-day-card__stay-select:focus-visible {
+  border-color: rgba(236, 176, 165, 0.3);
+  outline-color: rgba(236, 176, 165, 0.22);
+}
+
+html[data-theme="dark"] .budget-day-card__stay-select option {
+  background: #11151b;
+  color: #efe6da;
+}
+
+html[data-theme="dark"] .budget-day-card__stay-meta-value,
+html[data-theme="dark"] .budget-day-card__stay-route-value {
+  color: #efe6da;
+}
+
+html[data-theme="dark"] .budget-day-card__stay-hint {
+  color: rgba(239, 230, 218, 0.72);
 }
 
 html[data-theme="dark"] .budget-chip--booked,

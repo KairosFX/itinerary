@@ -64,11 +64,9 @@ const routeMapCard = document.querySelector(".route-map");
 const routeMapPreviewNode = document.querySelector("[data-route-map-preview]");
 const routeMapPreviewCanvas = document.querySelector("[data-route-map-preview-canvas]");
 const routeMapPreviewStatusNode = document.querySelector("[data-route-map-preview-status]");
-const routeMapInteractive = document.querySelector("[data-route-map-interactive]");
 const routeMapFiltersNode = document.querySelector("[data-route-map-filters]");
 const routeMapStopsNode = document.querySelector("[data-route-map-stops]");
 const routeMapExplorerNode = document.querySelector("[data-route-map-explorer]");
-const routeMapOpenButtons = Array.from(document.querySelectorAll("[data-route-map-open]"));
 const optionalProgressItems = Array.from(
   document.querySelectorAll("[data-progress-item][data-progress-optional='true']")
 );
@@ -899,10 +897,10 @@ const routeMapLabels = {
   stopTag: { en: "Stop detail", ja: "地点詳細" },
   segmentTag: { en: "Route leg", ja: "区間詳細" },
   sharedLoading: { en: "Loading unified route map...", ja: "統合ルート地図を読み込み中..." },
-  sharedFallbackTitle: { en: "Route map unavailable on this device", ja: "この端末ではルート地図を表示できません" },
+  sharedFallbackTitle: { en: "Route map could not load here", ja: "この環境ではルート地図を読み込めませんでした" },
   sharedFallbackBody: {
-    en: "The route order, stop details, day jumps, and saved transit links still work below. Use the Google Maps link if the live map cannot load here.",
-    ja: "下のルート順、停留地詳細、日程ジャンプ、保存済み移動リンクはそのまま使えます。この環境でライブ地図が開けない場合は Google マップのリンクを使ってください。"
+    en: "The route order, stop details, day jumps, and saved transit links still work below. Use the Google Maps link if the live map still cannot initialize here.",
+    ja: "下のルート順、停留地詳細、日程ジャンプ、保存済み移動リンクはそのまま使えます。ライブ地図がそれでも初期化できない場合は Google マップのリンクを使ってください。"
   },
   popupJump: { en: "Jump to related day", ja: "関連日程へ移動" }
 };
@@ -915,8 +913,8 @@ const routeMapDisplayDefinitions = {
   preview: {
     loadingTitle: routeMapLabels.sharedLoading,
     loadingBody: {
-      en: "The same route map loads once in preview mode, then switches into the richer live view when you open it.",
-      ja: "同じルート地図を一度だけ読み込み、最初はプレビューモード、開くと詳しいライブ表示へ切り替えます。"
+      en: "The same route map loads once as the route overview, then supports live stop and route interaction in place.",
+      ja: "同じルート地図を一度だけルート概要として読み込み、そのまま地点や区間のライブ操作に対応します。"
     },
     overviewMaxZoom: 5.75
   },
@@ -1642,7 +1640,6 @@ let routeMapDisplayMode = "preview";
 let routeMapActivePopup = null;
 let routeMapActivePopupSelectionKey = "";
 let activeRouteMapSelection = { type: "view", id: routeExplorerDefaultSelectionId };
-let lastRouteMapTrigger = null;
 let routeMapUISyncFrame = 0;
 let pendingRouteMapUISyncOptions = {
   updateCamera: false,
@@ -3272,13 +3269,19 @@ function renderLocalizedContent(content) {
   return `<span data-language="en">${escapeHtml(content?.en ?? "")}</span><span data-language="ja" hidden>${escapeHtml(content?.ja ?? "")}</span>`;
 }
 
-function renderBookingTransitItem(item) {
-  const state = getBookingTransitItemState(item.id);
+function getPreferredBookingTransitLink(item) {
   const links = Array.isArray(item.links) && item.links.length
     ? item.links
     : item.action
       ? [{ ...item.action, kind: "primary" }]
       : [];
+
+  return links.find((link) => link.kind === "primary") || links[0] || null;
+}
+
+function renderBookingTransitItem(item) {
+  const state = getBookingTransitItemState(item.id);
+  const preferredLink = getPreferredBookingTransitLink(item);
   const transitTriggerMarkup = item.transitDetailId
     ? `
           <div class="booking-item__support">
@@ -3294,28 +3297,21 @@ function renderBookingTransitItem(item) {
           </div>
       `
     : "";
-  const linkMarkup = links.length
+  const linkMarkup = preferredLink
     ? `
           <div class="booking-item__link-grid">
-            ${links
-              .map((link) => {
-                const tone = link.kind === "secondary" ? "secondary" : "primary";
-                return `
-                  <a
-                    class="booking-item__cta booking-item__cta--${tone} booking-item__cta--stacked"
-                    href="${escapeHtml(link.href)}"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    <span class="booking-item__cta-label">${renderLocalizedContent(link.label)}</span>
-                    ${
-                      link.note
-                        ? `<span class="booking-item__cta-note">${renderLocalizedContent(link.note)}</span>`
-                        : ""
-                    }
-                  </a>
-                `;
-              })
-              .join("")}
+            <a
+              class="booking-item__cta booking-item__cta--primary booking-item__cta--stacked"
+              href="${escapeHtml(preferredLink.href)}"
+              target="_blank"
+              rel="noopener noreferrer">
+              <span class="booking-item__cta-label">${renderLocalizedContent(preferredLink.label)}</span>
+              ${
+                preferredLink.note
+                  ? `<span class="booking-item__cta-note">${renderLocalizedContent(preferredLink.note)}</span>`
+                  : ""
+              }
+            </a>
           </div>
       `
     : "";
@@ -8080,7 +8076,7 @@ function getRouteMapDetailNode() {
 }
 
 function setRouteMapShellState(state = "ready") {
-  [routeMapPreviewNode, routeMapInteractive].filter(Boolean).forEach((node) => {
+  [routeMapPreviewNode].filter(Boolean).forEach((node) => {
     node.setAttribute("data-map-state", state);
   });
 }
@@ -8089,7 +8085,14 @@ function setRouteMapDisplayState(mode = "preview") {
   routeMapDisplayMode = mode === "interactive" ? "interactive" : "preview";
   routeMapCard?.setAttribute("data-route-map-active-mode", routeMapDisplayMode);
   routeMapPreviewNode?.setAttribute("data-route-map-mode", routeMapDisplayMode);
-  routeMapInteractive?.setAttribute("data-route-map-mode", routeMapDisplayMode);
+}
+
+function enableRouteMapInteractiveMode() {
+  if (getRouteMapDisplayMode() === "interactive") {
+    return;
+  }
+
+  setRouteMapDisplayState("interactive");
 }
 
 function getRouteMapSelectionSignature(selectionState) {
@@ -8142,25 +8145,6 @@ function setRouteMapFilterIfChanged(map, layerId, value) {
 
   map.setFilter(layerId, value);
   cache.set(layerId, serializedValue);
-}
-
-function hasRouteMapWebGLSupport() {
-  if (typeof hasRouteMapWebGLSupport.cached === "boolean") {
-    return hasRouteMapWebGLSupport.cached;
-  }
-
-  try {
-    const canvas = document.createElement("canvas");
-    hasRouteMapWebGLSupport.cached = Boolean(
-      canvas.getContext("webgl2") ||
-        canvas.getContext("webgl") ||
-        canvas.getContext("experimental-webgl")
-    );
-  } catch (error) {
-    hasRouteMapWebGLSupport.cached = false;
-  }
-
-  return hasRouteMapWebGLSupport.cached;
 }
 
 function loadRouteMapLibrary() {
@@ -8878,7 +8862,7 @@ function createRouteMapMarkerElement(stop) {
   return { element, labelNode, stop };
 }
 
-function updateRouteMapMarkerElement(entry, selectionState, interactive = getRouteMapDisplayMode() === "interactive") {
+function updateRouteMapMarkerElement(entry, selectionState, interactive = routeMapState.ready) {
   if (!entry?.element || !entry.labelNode) {
     return;
   }
@@ -8920,7 +8904,7 @@ function installRouteMapMarkers(map) {
         return null;
       }
 
-      const entry = createRouteMapMarkerElement(stop, interactive);
+      const entry = createRouteMapMarkerElement(stop);
       const marker = new window.maplibregl.Marker({
         element: entry.element,
         anchor: "center"
@@ -9185,9 +9169,6 @@ function bindRouteMapInteractiveEvents(map) {
   }
 
   map.on("mouseenter", "route-map-segments-hit", () => {
-    if (getRouteMapDisplayMode() !== "interactive") {
-      return;
-    }
     map.getCanvas().style.cursor = "pointer";
   });
 
@@ -9196,26 +9177,17 @@ function bindRouteMapInteractiveEvents(map) {
   });
 
   map.on("click", "route-map-segments-hit", (event) => {
-    if (getRouteMapDisplayMode() !== "interactive") {
-      return;
-    }
-
     const segmentId = event.features?.[0]?.properties?.id;
     if (!segmentId) {
       return;
     }
 
+    enableRouteMapInteractiveMode();
     activeRouteMapSelection = { type: "segment", id: segmentId };
     scheduleRouteMapUISync({ updateCamera: true, animateCamera: true });
   });
 
   map.__routeMapEventsBound = true;
-}
-
-function syncRouteMapOpenButtons(isOpen = false) {
-  routeMapOpenButtons.forEach((button) => {
-    button.setAttribute("aria-expanded", String(Boolean(isOpen)));
-  });
 }
 
 function fitRouteMapOverview(map, mode = "preview") {
@@ -9245,7 +9217,7 @@ function syncRouteMapRuntime(selectionState, options = {}) {
   }
 
   syncRouteMapSelectionLayers(routeMapState.map, selectionState);
-  setRouteMapInteractionState(routeMapState.map, getRouteMapDisplayMode() === "interactive");
+  setRouteMapInteractionState(routeMapState.map, true);
 
   if (getRouteMapDisplayMode() !== "interactive") {
     clearRouteMapPopup();
@@ -9283,10 +9255,6 @@ function ensureRouteMapReady() {
   setRouteMapShellState("loading");
 
   routeMapState.promise = (async () => {
-    if (!hasRouteMapWebGLSupport()) {
-      throw new Error("WebGL is unavailable.");
-    }
-
     const maplibregl = await loadRouteMapLibrary();
     routeMapState.map = new maplibregl.Map({
       container: routeMapPreviewCanvas,
@@ -9308,7 +9276,7 @@ function ensureRouteMapReady() {
     routeMapState.failed = false;
     routeMapState.map.resize();
     applyRouteMapPaintTheme(routeMapState.map);
-    setRouteMapInteractionState(routeMapState.map, false);
+    setRouteMapInteractionState(routeMapState.map, true);
     syncRouteMapUI({ resetOverview: true });
     clearRouteMapStatus(routeMapPreviewStatusNode);
     setRouteMapShellState("ready");
@@ -9340,11 +9308,6 @@ function ensureRouteMapReady() {
 }
 
 function ensureRouteMapPreviewReady() {
-  return ensureRouteMapReady();
-}
-
-function ensureRouteMapInteractiveReady() {
-  ensureRouteMapInitialized();
   return ensureRouteMapReady();
 }
 
@@ -9418,60 +9381,15 @@ function ensureRouteMapInitialized() {
     syncLocalizedNodes(routeMapExplorerNode);
   }
   routeMapInitialized = true;
-  setRouteMapDisplayState(routeMapInteractive && !routeMapInteractive.hidden ? "interactive" : "preview");
-  syncRouteMapUI({ resetOverview: !routeMapInteractive || routeMapInteractive.hidden });
-}
-
-function setRouteMapOpen(isOpen, { restoreFocus = false } = {}) {
-  if (!routeMapInteractive) {
-    return;
-  }
-
-  routeMapInteractive.hidden = !isOpen;
-  routeMapCard?.classList.toggle("is-route-map-open", isOpen);
-  syncRouteMapOpenButtons(isOpen);
-  setRouteMapDisplayState(isOpen ? "interactive" : "preview");
-
-  if (isOpen) {
-    ensureRouteMapInitialized();
-    void ensureRouteMapReady().then(() => {
-      syncRouteMapUI({ updateCamera: true, animateCamera: false });
-      window.requestAnimationFrame(() => {
-        resizeRouteMapsIfReady();
-      });
-    });
-    return;
-  }
-
-  clearRouteMapPopup();
+  setRouteMapDisplayState("preview");
   syncRouteMapUI({ resetOverview: true });
-
-  if (!isOpen && restoreFocus && lastRouteMapTrigger && document.contains(lastRouteMapTrigger)) {
-    lastRouteMapTrigger.focus();
-  }
 }
 
 function handleRouteMapClick(event) {
-  const openTrigger = event.target.closest("[data-route-map-open]");
-  if (openTrigger) {
-    event.preventDefault();
-    lastRouteMapTrigger = openTrigger;
-    ensureRouteMapInitialized();
-    setRouteMapOpen(true);
-    void ensureRouteMapInteractiveReady();
-    return;
-  }
-
-  const closeTrigger = event.target.closest("[data-route-map-close]");
-  if (closeTrigger) {
-    event.preventDefault();
-    setRouteMapOpen(false, { restoreFocus: true });
-    return;
-  }
-
   const filterTrigger = event.target.closest("[data-route-map-filter]");
   if (filterTrigger) {
     event.preventDefault();
+    enableRouteMapInteractiveMode();
     activeRouteMapSelection = { type: "view", id: filterTrigger.dataset.routeMapFilter || "" };
     scheduleRouteMapUISync({ updateCamera: true, animateCamera: true });
     return;
@@ -9480,6 +9398,7 @@ function handleRouteMapClick(event) {
   const stopTrigger = event.target.closest("[data-route-map-stop]");
   if (stopTrigger) {
     event.preventDefault();
+    enableRouteMapInteractiveMode();
     activeRouteMapSelection = { type: "stop", id: stopTrigger.dataset.routeMapStop || "" };
     scheduleRouteMapUISync({ updateCamera: true, animateCamera: true });
     return;
@@ -9515,8 +9434,6 @@ function initRouteSection() {
 
   registerRevealBlocks(panel);
   ensureRouteMapInitialized();
-  syncRouteMapOpenButtons(routeMapInteractive ? !routeMapInteractive.hidden : false);
-  setRouteMapDisplayState(routeMapInteractive && !routeMapInteractive.hidden ? "interactive" : "preview");
 
   if (!routeMapState.ready && !routeMapState.failed) {
     window.requestAnimationFrame(() => {
@@ -9524,10 +9441,6 @@ function initRouteSection() {
     });
   } else {
     refreshRouteMapsIfReady({ updateCamera: getRouteMapDisplayMode() === "interactive" });
-  }
-
-  if (routeMapInteractive && !routeMapInteractive.hidden) {
-    void ensureRouteMapInteractiveReady();
   }
 }
 
