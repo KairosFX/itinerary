@@ -6,7 +6,6 @@ const contentPanels = Array.from(document.querySelectorAll("[data-panel]"));
 const siteHeader = document.querySelector(".site-header");
 const mainContent = document.querySelector("#main-content");
 const siteFooter = document.querySelector(".site-footer");
-const welcomeOverlay = document.querySelector(".welcome-overlay");
 const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
 const dayGrids = Array.from(document.querySelectorAll(".day-grid"));
@@ -91,8 +90,6 @@ const activePanelStorageKey = "japan-trip-active-panel";
 const bookingTransitStorageKey = "japan-trip-bookings-transit-state";
 const packingStorageKey = "japan-trip-packing-state";
 const budgetNotesStorageKey = "japan-trip-budget-notes";
-const introSeenSessionKey = "japan-trip-intro-seen";
-const introExitDurationMs = 180;
 const fujiForecastSessionKey = "japan-trip-fuji-forecast";
 const queuedStorageWrites = new Map();
 const headerReservedHeightFallbackPx = 144;
@@ -3143,10 +3140,6 @@ function syncReducedEffectsMode({ force = false } = {}) {
   reducedEffectsEnabled = nextReducedEffectsEnabled;
   root.classList.toggle("reduce-effects", reducedEffectsEnabled);
   root.classList.toggle("enhanced-effects", !reducedEffectsEnabled);
-
-  if (reducedEffectsEnabled && root.classList.contains("intro-pending")) {
-    finishWelcome();
-  }
 }
 
 function bindMediaQueryChange(query, handler) {
@@ -8042,36 +8035,6 @@ function storeLanguage(language) {
   }
 }
 
-function finishWelcome() {
-  root.classList.remove("intro-pending", "intro-out");
-  root.classList.add("intro-done");
-  if (welcomeOverlay) {
-    welcomeOverlay.setAttribute("hidden", "");
-  }
-}
-
-function scheduleWelcomeExit() {
-  if (!welcomeOverlay || !root.classList.contains("intro-pending")) {
-    finishWelcome();
-    return;
-  }
-
-  try {
-    window.sessionStorage.setItem(introSeenSessionKey, "1");
-  } catch (error) {
-    // Ignore session storage failures and keep the page usable.
-  }
-
-  window.requestAnimationFrame(() => {
-    if (!root.classList.contains("intro-pending")) {
-      return;
-    }
-
-    root.classList.add("intro-out");
-    window.setTimeout(finishWelcome, introExitDurationMs + 40);
-  });
-}
-
 function applyReservedHeaderHeight(nextHeight, forceReset = false) {
   const measuredHeight = Math.ceil(Number(nextHeight) || 0);
   if (measuredHeight <= 0) {
@@ -11006,12 +10969,6 @@ window.addEventListener("keydown", (event) => {
     setResetModalOpen(false);
   }
 });
-
-if (root.classList.contains("intro-pending")) {
-  scheduleWelcomeExit();
-} else if (welcomeOverlay) {
-  welcomeOverlay.setAttribute("hidden", "");
-}
 
 function syncHeaderState() {
   const currentScrollY = Math.max(window.scrollY, 0);
