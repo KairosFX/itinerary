@@ -105,7 +105,7 @@ const serviceWorkerUrl = "./service-worker.js";
 const offlineBundleVersion = "2026-03-24-offline-v14";
 const routeMapLibraryScriptUrl = "./assets/vendor/maplibre/maplibre-gl.js";
 const routeMapLibraryStyleUrl = "./assets/vendor/maplibre/maplibre-gl.css";
-const routeMapOpenFreeMapStyleUrl = "./assets/data/route-map-openfreemap-style.json";
+const routeMapOpenFreeMapStyleUrl = "https://tiles.openfreemap.org/styles/liberty";
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const inlineDataSelectors = {
   bookingTransit: "[data-booking-transit-inline]",
@@ -988,15 +988,15 @@ const routeMapLabels = {
   days: { en: "Related days", ja: "関連日程" },
   tools: { en: "Quick tools", ja: "クイック操作" },
   stops: { en: "Major stops", ja: "主要地点" },
-  sharedLoading: { en: "Loading live route map...", ja: "ライブのルート地図を読み込み中..." },
+  sharedLoading: { en: "Loading OpenFreeMap route...", ja: "OpenFreeMap のルート地図を読み込み中..." },
   sharedLoadingBody: {
-    en: "The static route preview stays visible while the live map initializes.",
-    ja: "ライブ地図の初期化中も静的なルート画像を表示します。"
+    en: "The major-stop route order stays visible while the live map initializes.",
+    ja: "ライブ地図の初期化中も、主要地点の流れは見えるままにしています。"
   },
-  sharedFallbackTitle: { en: "Showing static route preview", ja: "静的なルート画像を表示しています" },
+  sharedFallbackTitle: { en: "OpenFreeMap route unavailable", ja: "OpenFreeMap のルート地図を表示できません" },
   sharedFallbackBody: {
-    en: "The live route map could not initialize here, so the route preview stays visible. Use Google Maps if you need live directions.",
-    ja: "ライブのルート地図を初期化できなかったため、静的なルート画像を表示しています。経路案内が必要な場合は Google マップを使ってください。"
+    en: "The live OpenFreeMap view could not initialize here. Use Google Maps if you need door-to-door directions.",
+    ja: "OpenFreeMap のライブ地図をここでは初期化できませんでした。経路案内が必要な場合は Google マップを使ってください。"
   }
 };
 const routeExplorerDefaultSelectionId = "overview";
@@ -1729,7 +1729,7 @@ let routeMapInitialized = false;
 let routeMapLibraryPromise = null;
 let routeMapStylesheetPromise = null;
 const routeMapState = createRouteMapState();
-let routeMapDisplayMode = "preview";
+let routeMapDisplayMode = "interactive";
 let routeMapActivePopup = null;
 let activeRouteMapSelection = { type: "view", id: routeExplorerDefaultSelectionId };
 let routeMapUISyncFrame = 0;
@@ -9851,7 +9851,7 @@ function ensureRouteMapInitialized() {
     syncLocalizedNodes(routeMapExplorerNode);
   }
   routeMapInitialized = true;
-  setRouteMapDisplayState("preview");
+  setRouteMapDisplayState("interactive");
   syncRouteMapUI({ resetOverview: true });
 }
 
