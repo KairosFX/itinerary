@@ -1,10 +1,12 @@
-const OFFLINE_CACHE_VERSION = "2026-03-24-offline-v14";
+const OFFLINE_CACHE_VERSION = "2026-03-25-offline-v15";
 const OFFLINE_CACHE_NAME = `japan-escape-itinerary-${OFFLINE_CACHE_VERSION}`;
 const APP_SCOPE_URL = new URL("./", self.location);
 const APP_SCOPE_PATH = APP_SCOPE_URL.pathname;
 const APP_SHELL_PATHS = [
   "./",
   "./index.html",
+  "./style.min.css",
+  "./script.min.js",
   "./manifest.webmanifest",
   "./japan-escape-itinerary-offline.html",
   "./assets/data/budget-estimate-sources.json",
