@@ -991,11 +991,15 @@ const routeMapLabels = {
   days: { en: "Related days", ja: "関連日程" },
   tools: { en: "Quick tools", ja: "クイック操作" },
   stops: { en: "Major stops", ja: "主要地点" },
-  sharedLoading: { en: "Loading route map...", ja: "ルート地図を読み込み中..." },
-  sharedFallbackTitle: { en: "Route map could not load here", ja: "この環境ではルート地図を読み込めませんでした" },
+  sharedLoading: { en: "Loading live route map...", ja: "ライブのルート地図を読み込み中..." },
+  sharedLoadingBody: {
+    en: "The static route preview stays visible while the live map initializes.",
+    ja: "ライブ地図の初期化中も静的なルート画像を表示します。"
+  },
+  sharedFallbackTitle: { en: "Showing static route preview", ja: "静的なルート画像を表示しています" },
   sharedFallbackBody: {
-    en: "Use the Google Maps link if the live route map still cannot initialize here.",
-    ja: "ライブのルート地図がどうしても初期化できない場合は、Google マップのリンクを使ってください。"
+    en: "The live route map could not initialize here, so the route preview stays visible. Use Google Maps if you need live directions.",
+    ja: "ライブのルート地図を初期化できなかったため、静的なルート画像を表示しています。経路案内が必要な場合は Google マップを使ってください。"
   }
 };
 const routeExplorerDefaultSelectionId = "overview";
@@ -1006,7 +1010,7 @@ const routeMapInitialView = {
 const routeMapDisplayDefinitions = {
   preview: {
     loadingTitle: routeMapLabels.sharedLoading,
-    loadingBody: null,
+    loadingBody: routeMapLabels.sharedLoadingBody,
     overviewMaxZoom: 5.75
   },
   interactive: {

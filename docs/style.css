@@ -2023,8 +2023,8 @@ html.has-modal-open body {
     "summary controls"
     "status controls"
     "breakdown breakdown"
-    "days days"
-    "source source";
+    "source source"
+    "days days";
   gap: 0.96rem 1rem;
   min-width: 0;
   padding: var(--content-box-padding-block) var(--content-box-padding-inline);
@@ -3021,6 +3021,26 @@ html.has-modal-open body {
   line-height: 1.58;
 }
 
+.essentials-group--offline {
+  width: min(100%, 50rem);
+  justify-self: center;
+  gap: 0.76rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(171, 74, 59, 0.12);
+}
+
+.essentials-group--offline .essentials-group__header {
+  justify-items: center;
+  max-width: 42rem;
+  margin-inline: auto;
+  padding-left: 0;
+  text-align: center;
+}
+
+.essentials-group--offline .essentials-group__intro {
+  max-width: 38rem;
+}
+
 .essentials-card--bookings,
 .essentials-group--packing {
   width: 100%;
@@ -3202,6 +3222,26 @@ html.has-modal-open body {
   grid-template-rows: auto auto auto minmax(0, 1fr);
 }
 
+.packing-section--compact {
+  gap: 0.78rem;
+}
+
+.packing-section--compact .packing-section__meta {
+  gap: 0.42rem 0.62rem;
+}
+
+.packing-section--compact .packing-checklist {
+  gap: 0.34rem;
+}
+
+.packing-section--compact .packing-toggle {
+  gap: 0.58rem;
+}
+
+.packing-section--compact .packing-toggle__copy {
+  line-height: 1.56;
+}
+
 .packing-section__progress {
   margin: 0;
   font-size: 0.78rem;
@@ -3380,6 +3420,10 @@ html.has-modal-open body {
 .offline-tools__status,
 .offline-tools__meta {
   margin: 0;
+}
+
+.offline-tools__list {
+  gap: 0.5rem;
 }
 
 .offline-tools__status {
@@ -3931,6 +3975,7 @@ html.has-modal-open body {
 
 .route-map__preview-stage {
   position: relative;
+  isolation: isolate;
   min-height: clamp(19.5rem, 52vw, 30rem);
   overflow: hidden;
   border-radius: calc(var(--radius-lg) - 4px);
@@ -4019,6 +4064,7 @@ html.has-modal-open body {
 
 .route-map__map-shell {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   border-radius: inherit;
 }
@@ -4035,9 +4081,77 @@ html.has-modal-open body {
     0 18px 34px rgba(55, 35, 22, 0.08);
 }
 
+.route-map__fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+.route-map__fallback::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 16% 82%, rgba(171, 74, 59, 0.14), rgba(171, 74, 59, 0) 22%),
+    radial-gradient(circle at 80% 18%, rgba(171, 74, 59, 0.12), rgba(171, 74, 59, 0) 24%);
+  opacity: 0.72;
+}
+
+.route-map__fallback-art {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  color: rgba(121, 101, 91, 0.34);
+}
+
+.route-map__fallback-grid {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-dasharray: 10 14;
+}
+
+.route-map__fallback-path {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 12px 20px rgba(55, 35, 22, 0.14));
+}
+
+.route-map__fallback-path--outline {
+  stroke: rgba(255, 247, 239, 0.92);
+  stroke-width: 20;
+  filter: none;
+}
+
+.route-map__fallback-stops {
+  fill: rgba(255, 251, 246, 0.96);
+  stroke: rgba(141, 58, 47, 0.88);
+  stroke-width: 8;
+}
+
 .route-map__map {
   position: absolute;
   inset: 0;
+  z-index: 2;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.route-map__preview[data-map-state="ready"] .route-map__map {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.route-map__preview[data-map-state="ready"] .route-map__fallback {
+  opacity: 0;
 }
 
 .route-map__map-shell .maplibregl-map,
@@ -4129,6 +4243,9 @@ html.has-modal-open body {
   background: rgba(255, 252, 248, 0.86);
   box-shadow: 0 14px 28px rgba(55, 35, 22, 0.08);
   pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 
 .route-map__status-title,
@@ -4152,6 +4269,11 @@ html.has-modal-open body {
 .route-map__status[data-state="error"] {
   border-color: rgba(171, 74, 59, 0.18);
   background: rgba(255, 247, 242, 0.94);
+}
+
+.route-map__preview[data-map-state="ready"] .route-map__status {
+  opacity: 0;
+  transform: translateY(0.42rem);
 }
 
 .route-map__actions {
@@ -5243,6 +5365,11 @@ html.intro-done .welcome-overlay {
     gap: 0.76rem;
   }
 
+  .essentials-group--offline .essentials-group__header {
+    justify-items: start;
+    text-align: left;
+  }
+
   .budget-notes__reset {
     width: 100%;
   }
@@ -5884,6 +6011,19 @@ html[data-theme="dark"] .offline-tools__status {
 
 html[data-theme="dark"] .offline-tools__meta {
   color: rgba(232, 221, 209, 0.68);
+}
+
+html[data-theme="dark"] .route-map__fallback-art {
+  color: rgba(238, 224, 212, 0.18);
+}
+
+html[data-theme="dark"] .route-map__fallback-path--outline {
+  stroke: rgba(44, 35, 31, 0.84);
+}
+
+html[data-theme="dark"] .route-map__fallback-stops {
+  fill: rgba(40, 33, 29, 0.92);
+  stroke: rgba(226, 171, 153, 0.9);
 }
 
 html[data-theme="dark"] .budget-summary-card,
@@ -6751,8 +6891,8 @@ html[data-theme="light"] body {
       "status"
       "controls"
       "breakdown"
-      "days"
-      "source";
+      "source"
+      "days";
   }
 
   .budget-notes__summary {
