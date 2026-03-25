@@ -105,10 +105,10 @@ const bookingTransitItemsDataUrl = "./assets/data/booking-transit-items.json";
 const transitDetailsDataUrl = "./assets/data/transit-details.json";
 const offlineSnapshotUrl = "./japan-escape-itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-03-23-offline-v13";
+const offlineBundleVersion = "2026-03-24-offline-v14";
 const routeMapLibraryScriptUrl = "./assets/vendor/maplibre/maplibre-gl.js";
 const routeMapLibraryStyleUrl = "./assets/vendor/maplibre/maplibre-gl.css";
-const routeMapOpenFreeMapStyleUrl = "https://tiles.openfreemap.org/styles/liberty";
+const routeMapOpenFreeMapStyleUrl = "./assets/data/route-map-openfreemap-style.json";
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const inlineDataSelectors = {
   bookingTransit: "[data-booking-transit-inline]",

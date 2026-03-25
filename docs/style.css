@@ -116,6 +116,7 @@ html.reduce-effects *::after {
 .content-panel > .notes-grid,
 .content-panel > .budget-panel,
 .content-panel > .essentials-grid,
+.content-panel > .essentials-layout,
 .day-card,
 .route-reference,
 .note-card,
@@ -2021,8 +2022,8 @@ html.has-modal-open body {
     "heading heading"
     "summary controls"
     "status controls"
-    "breakdown breakdown"
     "days days"
+    "breakdown breakdown"
     "source source";
   gap: 0.96rem 1rem;
   min-width: 0;
@@ -2188,7 +2189,10 @@ html.has-modal-open body {
   grid-area: days;
   display: grid;
   gap: 0.88rem;
-  padding: 0.96rem 1rem 1rem;
+  width: min(100%, 66rem);
+  justify-self: center;
+  margin-inline: auto;
+  padding: 1.02rem 1.08rem 1.1rem;
   border: 1px solid rgba(31, 37, 39, 0.08);
   border-radius: calc(var(--radius-lg) - 0.08rem);
   background:
@@ -2228,7 +2232,7 @@ html.has-modal-open body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
   gap: 0.56rem;
-  width: min(100%, 62rem);
+  width: min(100%, 64rem);
   margin-inline: auto;
   overflow: visible;
   padding-bottom: 0;
@@ -2311,6 +2315,8 @@ html.has-modal-open body {
 
 .budget-notes__days {
   display: grid;
+  width: min(100%, 58rem);
+  margin-inline: auto;
 }
 
 .budget-summary-card {
@@ -2955,6 +2961,74 @@ html.has-modal-open body {
   }
 }
 
+.essentials-layout {
+  display: grid;
+  gap: 1.08rem;
+}
+
+.essentials-group {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.essentials-group__header {
+  display: grid;
+  gap: 0.28rem;
+  max-width: 48rem;
+  padding-left: 0.08rem;
+}
+
+.essentials-group__eyebrow,
+.essentials-group__title,
+.essentials-group__intro {
+  margin: 0;
+}
+
+.essentials-group__eyebrow {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.essentials-group__title {
+  font-size: 1.16rem;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.essentials-group__intro {
+  max-width: 44rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.58;
+}
+
+.essentials-group--core .essentials-grid {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-areas:
+    "documents bookings"
+    "offline bookings";
+}
+
+.essentials-group--route .essentials-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16.6rem), 1fr));
+}
+
+.essentials-group--core .essentials-card[data-packing-section="documents-phone"] {
+  grid-area: documents;
+}
+
+.essentials-group--core .essentials-card--bookings {
+  grid-area: bookings;
+}
+
+.essentials-group--core .essentials-card--offline {
+  grid-area: offline;
+}
+
 .essentials-card h4 {
   position: relative;
   margin: 0;
@@ -3119,10 +3193,11 @@ html.has-modal-open body {
 
 .packing-section__actions {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, max-content));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.34rem;
   justify-content: start;
   align-items: stretch;
+  width: min(100%, 18rem);
 }
 
 .packing-section__action {
@@ -3272,33 +3347,23 @@ html.has-modal-open body {
   outline-offset: 3px;
 }
 
-.essentials-card[data-packing-section="documents-phone"] {
+.essentials-group--route .essentials-card[data-packing-section="luggage-strategy"] {
   order: 1;
 }
 
-.essentials-card--bookings {
-  grid-column: 1 / -1;
+.essentials-group--route .essentials-card[data-packing-section="daily-carry"] {
   order: 2;
 }
 
-.essentials-card[data-packing-section="daily-carry"] {
+.essentials-group--route .essentials-card[data-packing-section="hakone-fuji-day-kit"] {
   order: 3;
 }
 
-.essentials-card[data-packing-section="luggage-strategy"] {
+.essentials-group--route .essentials-card[data-packing-section="clothing"] {
   order: 4;
 }
 
-.essentials-card[data-packing-section="clothing"] {
-  order: 5;
-}
-
-.essentials-card[data-packing-section="hakone-fuji-day-kit"] {
-  order: 6;
-}
-
 .essentials-card--offline {
-  order: 7;
   gap: 0.82rem;
 }
 
@@ -3322,10 +3387,11 @@ html.has-modal-open body {
 
 .offline-tools__actions {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, max-content));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.42rem;
   justify-content: start;
   align-items: stretch;
+  width: min(100%, 22rem);
 }
 
 .offline-tools__actions .packing-section__action {
@@ -4972,10 +5038,6 @@ html.intro-done .welcome-overlay {
     padding: 0.86rem 0.92rem 0.9rem;
   }
 
-  .essentials-card--bookings {
-    grid-column: 1 / -1;
-  }
-
   .day-card__body--with-aside {
     grid-template-columns: 1fr;
   }
@@ -5114,6 +5176,14 @@ html.intro-done .welcome-overlay {
     --card-header-min-block: 3.5rem;
   }
 
+  .essentials-group--core .essentials-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "documents"
+      "bookings"
+      "offline";
+  }
+
   .booking-group {
     padding: 0.82rem 0.84rem;
   }
@@ -5153,6 +5223,14 @@ html.intro-done .welcome-overlay {
   .offline-tools__actions {
     width: 100%;
     grid-template-columns: 1fr;
+  }
+
+  .essentials-layout {
+    gap: 0.96rem;
+  }
+
+  .essentials-group {
+    gap: 0.76rem;
   }
 
   .budget-notes__reset {
@@ -5233,6 +5311,14 @@ html.intro-done .welcome-overlay {
 }
 
 @media (min-width: 721px) and (max-width: 920px) {
+  .essentials-group--core .essentials-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "documents"
+      "bookings"
+      "offline";
+  }
+
   .budget-notes__summary,
   .budget-notes__sources {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -6652,8 +6738,8 @@ html[data-theme="light"] body {
       "summary"
       "status"
       "controls"
-      "breakdown"
       "days"
+      "breakdown"
       "source";
   }
 

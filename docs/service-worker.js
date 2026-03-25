@@ -1,4 +1,4 @@
-const OFFLINE_CACHE_VERSION = "2026-03-23-offline-v13";
+const OFFLINE_CACHE_VERSION = "2026-03-24-offline-v14";
 const OFFLINE_CACHE_NAME = `japan-escape-itinerary-${OFFLINE_CACHE_VERSION}`;
 const APP_SCOPE_URL = new URL("./", self.location);
 const APP_SCOPE_PATH = APP_SCOPE_URL.pathname;
@@ -9,6 +9,7 @@ const APP_SHELL_PATHS = [
   "./japan-escape-itinerary-offline.html",
   "./assets/data/budget-estimate-sources.json",
   "./assets/data/booking-transit-items.json",
+  "./assets/data/route-map-openfreemap-style.json",
   "./assets/data/transit-details.json",
   "./assets/vendor/maplibre/maplibre-gl.css",
   "./assets/vendor/maplibre/maplibre-gl.js",
