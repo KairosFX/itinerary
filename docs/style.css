@@ -2420,6 +2420,8 @@ html.has-modal-open body {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.8rem;
+  width: min(100%, 70rem);
+  justify-self: center;
 }
 
 .budget-notes__source-block {
@@ -2430,6 +2432,7 @@ html.has-modal-open body {
 .budget-notes__source-meta {
   display: grid;
   gap: 0.42rem;
+  width: 100%;
 }
 
 .budget-source-meta-card,
@@ -2484,6 +2487,8 @@ html.has-modal-open body {
   grid-area: source;
   display: grid;
   gap: 0.62rem;
+  width: min(100%, 68rem);
+  justify-self: center;
 }
 
 .budget-summary-card {
@@ -2736,8 +2741,11 @@ html.has-modal-open body {
 
 .budget-notes__days {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 0.72rem;
+  width: min(100%, 58rem);
+  margin-inline: auto;
+  justify-items: center;
 }
 
 .budget-day {
@@ -2964,12 +2972,18 @@ html.has-modal-open body {
 
 .essentials-layout {
   display: grid;
-  gap: 1.08rem;
+  gap: 1.12rem;
+  width: min(100%, 71rem);
+  margin-inline: auto;
 }
 
 .essentials-group {
   display: grid;
   gap: 0.9rem;
+}
+
+.essentials-layout > * {
+  min-width: 0;
 }
 
 .essentials-group__header {
@@ -3007,27 +3021,36 @@ html.has-modal-open body {
   line-height: 1.58;
 }
 
-.essentials-group--core .essentials-grid {
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+.essentials-card--bookings,
+.essentials-group--packing {
+  width: 100%;
+}
+
+.essentials-group--packing .essentials-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-areas:
-    "documents bookings"
-    "offline bookings";
+    "documents luggage daily"
+    "documents hakone clothing";
 }
 
-.essentials-group--route .essentials-grid {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16.6rem), 1fr));
-}
-
-.essentials-group--core .essentials-card[data-packing-section="documents-phone"] {
+.essentials-group--packing .essentials-card[data-packing-section="documents-phone"] {
   grid-area: documents;
 }
 
-.essentials-group--core .essentials-card--bookings {
-  grid-area: bookings;
+.essentials-group--packing .essentials-card[data-packing-section="luggage-strategy"] {
+  grid-area: luggage;
 }
 
-.essentials-group--core .essentials-card--offline {
-  grid-area: offline;
+.essentials-group--packing .essentials-card[data-packing-section="daily-carry"] {
+  grid-area: daily;
+}
+
+.essentials-group--packing .essentials-card[data-packing-section="hakone-fuji-day-kit"] {
+  grid-area: hakone;
+}
+
+.essentials-group--packing .essentials-card[data-packing-section="clothing"] {
+  grid-area: clothing;
 }
 
 .essentials-card h4 {
@@ -3348,24 +3371,10 @@ html.has-modal-open body {
   outline-offset: 3px;
 }
 
-.essentials-group--route .essentials-card[data-packing-section="luggage-strategy"] {
-  order: 1;
-}
-
-.essentials-group--route .essentials-card[data-packing-section="daily-carry"] {
-  order: 2;
-}
-
-.essentials-group--route .essentials-card[data-packing-section="hakone-fuji-day-kit"] {
-  order: 3;
-}
-
-.essentials-group--route .essentials-card[data-packing-section="clothing"] {
-  order: 4;
-}
-
 .essentials-card--offline {
   gap: 0.82rem;
+  width: min(100%, 46rem);
+  justify-self: center;
 }
 
 .offline-tools__status,
@@ -5177,12 +5186,12 @@ html.intro-done .welcome-overlay {
     --card-header-min-block: 3.5rem;
   }
 
-  .essentials-group--core .essentials-grid {
-    grid-template-columns: 1fr;
+  .essentials-group--packing .essentials-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-areas:
-      "documents"
-      "bookings"
-      "offline";
+      "documents documents"
+      "luggage daily"
+      "hakone clothing";
   }
 
   .booking-group {
@@ -5312,12 +5321,12 @@ html.intro-done .welcome-overlay {
 }
 
 @media (min-width: 721px) and (max-width: 920px) {
-  .essentials-group--core .essentials-grid {
-    grid-template-columns: 1fr;
+  .essentials-group--packing .essentials-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-areas:
-      "documents"
-      "bookings"
-      "offline";
+      "documents documents"
+      "luggage daily"
+      "hakone clothing";
   }
 
   .budget-notes__summary,
@@ -6343,6 +6352,7 @@ html[data-theme="light"] body {
   align-content: start;
   gap: 0.82rem;
   width: min(100%, 52rem);
+  justify-self: center;
   padding: 0.96rem 1rem;
 }
 
@@ -6769,6 +6779,16 @@ html[data-theme="light"] body {
   .budget-notes__days,
   .budget-source-meta-card__list {
     grid-template-columns: 1fr;
+  }
+
+  .essentials-group--packing .essentials-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "documents"
+      "luggage"
+      "daily"
+      "hakone"
+      "clothing";
   }
 
   .budget-breakdown-grid {
