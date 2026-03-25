@@ -2022,8 +2022,8 @@ html.has-modal-open body {
     "heading heading"
     "summary controls"
     "status controls"
-    "days days"
     "breakdown breakdown"
+    "days days"
     "source source";
   gap: 0.96rem 1rem;
   min-width: 0;
@@ -6738,8 +6738,8 @@ html[data-theme="light"] body {
       "summary"
       "status"
       "controls"
-      "days"
       "breakdown"
+      "days"
       "source";
   }
 
