@@ -1,4 +1,4 @@
-const OFFLINE_CACHE_VERSION = "2026-03-27-offline-v18";
+const OFFLINE_CACHE_VERSION = "2026-03-27-offline-v19";
 const OFFLINE_CACHE_NAME = `japan-escape-itinerary-${OFFLINE_CACHE_VERSION}`;
 const APP_SCOPE_URL = new URL("./", self.location);
 const APP_SCOPE_PATH = APP_SCOPE_URL.pathname;
@@ -11,10 +11,12 @@ const APP_SHELL_PATHS = [
   "./japan-escape-itinerary-offline.html",
   "./assets/data/budget-estimate-sources.json",
   "./assets/data/booking-transit-items.json",
-  "./assets/data/route-map-openfreemap-style.json",
   "./assets/data/transit-details.json",
+  "./assets/route-map-preview.svg",
   "./assets/vendor/maplibre/maplibre-gl.css",
   "./assets/vendor/maplibre/maplibre-gl.js",
+  "./assets/vendor/protomaps/basemaps.js",
+  "./assets/vendor/protomaps/pmtiles.js",
   "./assets/icons/apple-touch-icon.png",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png"
@@ -39,6 +41,14 @@ function matchesCachedAppAsset(url) {
     url.pathname === `${APP_SCOPE_PATH}index.html` ||
     url.pathname.startsWith(`${APP_SCOPE_PATH}assets/`)
   );
+}
+
+function isRangeRequest(request) {
+  return request.headers.has("range");
+}
+
+function isPmtilesRequest(url) {
+  return url.pathname.endsWith(".pmtiles");
 }
 
 async function addAssetsToCache(cache, urls) {
@@ -121,6 +131,10 @@ self.addEventListener("fetch", (event) => {
 
   const requestUrl = new URL(event.request.url);
   if (!isAppOrigin(requestUrl)) {
+    return;
+  }
+
+  if (isRangeRequest(event.request) || isPmtilesRequest(requestUrl)) {
     return;
   }
 

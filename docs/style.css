@@ -4022,6 +4022,8 @@ html.has-modal-open body {
   isolation: isolate;
   overflow: hidden;
   border-radius: inherit;
+  width: 100%;
+  height: 100%;
 }
 
 .route-map__map-shell--interactive {
@@ -4094,6 +4096,8 @@ html.has-modal-open body {
   position: absolute;
   inset: 0;
   z-index: 2;
+  width: 100%;
+  height: 100%;
   background: transparent;
   opacity: 0;
   pointer-events: none;
@@ -7153,21 +7157,35 @@ html[data-theme="dark"] .budget-chip--free {
 
 .route-map__fallback {
   display: grid;
-  place-items: center;
-  padding: 1rem;
+  grid-template-areas: "stack";
+  place-items: stretch;
+  padding: 0;
 }
 
 .route-map__fallback::after {
   content: none;
 }
 
+.route-map__fallback-image {
+  grid-area: stack;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.94;
+}
+
 .route-map__fallback-track {
+  grid-area: stack;
+  align-self: end;
+  justify-self: center;
   position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.5rem;
   max-width: min(34rem, calc(100% - 1rem));
+  margin: 0 1rem 1rem;
   padding: 1rem 1.08rem;
   border: 1px dashed rgba(171, 74, 59, 0.18);
   border-radius: 1.2rem;
@@ -7301,10 +7319,11 @@ html[data-theme="dark"] .budget-chip--free {
   }
 
   .route-map__fallback {
-    padding: 0.82rem;
+    padding: 0;
   }
 
   .route-map__fallback-track {
+    margin: 0 0.82rem 0.82rem;
     padding: 0.82rem 0.88rem;
     gap: 0.42rem;
   }
@@ -7324,6 +7343,11 @@ html[data-theme="dark"] .route-map__fallback-track {
   border-color: rgba(248, 239, 228, 0.1);
   background: rgba(19, 22, 27, 0.82);
   box-shadow: 0 16px 30px rgba(2, 3, 5, 0.22);
+}
+
+html[data-theme="dark"] .route-map__fallback-image {
+  opacity: 0.82;
+  filter: saturate(0.84) brightness(0.78);
 }
 
 html[data-theme="dark"] .route-map__fallback-track::before {

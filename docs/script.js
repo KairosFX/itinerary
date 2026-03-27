@@ -93,10 +93,17 @@ const bookingTransitItemsDataUrl = "./assets/data/booking-transit-items.json";
 const transitDetailsDataUrl = "./assets/data/transit-details.json";
 const offlineSnapshotUrl = "./japan-escape-itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-03-27-offline-v18";
+const offlineBundleVersion = "2026-03-27-offline-v19";
 const routeMapLibraryScriptUrl = "./assets/vendor/maplibre/maplibre-gl.js";
 const routeMapLibraryStyleUrl = "./assets/vendor/maplibre/maplibre-gl.css";
-const routeMapOpenFreeMapStyleUrl = "https://tiles.openfreemap.org/styles/liberty";
+const routeMapPmtilesScriptUrl = "./assets/vendor/protomaps/pmtiles.js";
+const routeMapBasemapsScriptUrl = "./assets/vendor/protomaps/basemaps.js";
+const routeMapPmtilesDataUrl = "./assets/data/japan-route-z7.pmtiles";
+const routeMapProtomapsGlyphsUrl =
+  "https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf";
+const routeMapProtomapsSpriteBaseUrl = "https://protomaps.github.io/basemaps-assets/sprites/v4";
+const routeMapProtomapsAttribution =
+  '<a href="https://github.com/protomaps/basemaps">Protomaps</a> © <a href="https://osm.org/copyright">OpenStreetMap</a>';
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const inlineDataSelectors = {
   bookingTransit: "[data-booking-transit-inline]",
@@ -877,15 +884,23 @@ const routeMapLabels = {
   days: { en: "Related days", ja: "関連日程" },
   tools: { en: "Quick tools", ja: "クイック操作" },
   stops: { en: "Major stops", ja: "主要地点" },
-  sharedLoading: { en: "Loading OpenFreeMap route...", ja: "OpenFreeMap のルート地図を読み込み中..." },
+  sharedLoading: { en: "Loading Protomaps route...", ja: "Protomaps のルート地図を読み込み中..." },
   sharedLoadingBody: {
-    en: "The major-stop route order stays visible while the live map initializes.",
-    ja: "ライブ地図の初期化中も、主要地点の流れは見えるままにしています。"
+    en: "The core stops and backup preview stay visible while the live map initializes.",
+    ja: "ライブ地図の初期化中も、主要地点とバックアップのプレビューを見えるままにしています。"
   },
-  sharedFallbackTitle: { en: "OpenFreeMap route unavailable", ja: "OpenFreeMap のルート地図を表示できません" },
+  sharedFallbackTitle: { en: "Protomaps route unavailable", ja: "Protomaps のルート地図を表示できません" },
   sharedFallbackBody: {
-    en: "The live OpenFreeMap view could not initialize here. Use Google Maps if you need door-to-door directions.",
-    ja: "OpenFreeMap のライブ地図をここでは初期化できませんでした。経路案内が必要な場合は Google マップを使ってください。"
+    en: "The live Protomaps view could not initialize here. The backup route preview stays visible; use Google Maps if you need door-to-door directions.",
+    ja: "Protomaps のライブ地図をここでは初期化できませんでした。バックアップのプレビューは表示したままにし、経路案内が必要な場合は Google マップを使ってください。"
+  },
+  sharedOfflineTitle: {
+    en: "Interactive map unavailable offline",
+    ja: "オフラインではインタラクティブ地図を使えません"
+  },
+  sharedOfflineBody: {
+    en: "The offline copy keeps the static route preview. Open the live site when you want the interactive Protomaps map.",
+    ja: "オフライン版では静的なルートプレビューを表示します。インタラクティブな Protomaps 地図が必要な場合はライブサイトを開いてください。"
   }
 };
 const routeExplorerDefaultSelectionId = "overview";
@@ -1485,6 +1500,7 @@ let budgetNotesInitialized = false;
 let routeMapInitialized = false;
 let routeMapLibraryPromise = null;
 let routeMapStylesheetPromise = null;
+let routeMapPmtilesProtocol = null;
 const routeMapState = createRouteMapState();
 let routeMapDisplayMode = "interactive";
 let routeMapActivePopup = null;
@@ -8099,7 +8115,8 @@ function createRouteMapState() {
     promise: null,
     map: null,
     markers: [],
-    markerStateKey: ""
+    markerStateKey: "",
+    styleSignature: ""
   };
 }
 
@@ -8117,6 +8134,25 @@ function getRouteMapStopsNode() {
 
 function getRouteMapDetailNode() {
   return routeMapExplorerNode?.querySelector("[data-route-map-detail]") || null;
+}
+
+function getRouteMapBaseLanguage() {
+  return root.lang === "ja" ? "ja" : "en";
+}
+
+function getRouteMapBaseFlavorName(theme = getCurrentTheme()) {
+  return theme === "dark" ? "dark" : "light";
+}
+
+function getRouteMapStyleSignature(
+  theme = getCurrentTheme(),
+  language = getRouteMapBaseLanguage()
+) {
+  return `${getRouteMapBaseFlavorName(theme)}|${language}`;
+}
+
+function resolveRouteMapAssetUrl(assetPath) {
+  return new URL(assetPath, window.location.href).toString();
 }
 
 function setRouteMapShellState(state = "ready") {
@@ -8239,9 +8275,63 @@ function loadRouteMapLibrary() {
     return routeMapStylesheetPromise;
   };
 
-  if (window.maplibregl) {
-    return loadRouteMapStylesheet().then(() => window.maplibregl);
-  }
+  const loadRouteMapScriptAsset = (url, dataAttribute, runtimeGlobal, runtimeLabel) => {
+    if (window[runtimeGlobal]) {
+      return Promise.resolve(window[runtimeGlobal]);
+    }
+
+    return new Promise((resolve, reject) => {
+      const handleLoad = (scriptNode) => {
+        const runtime = window[runtimeGlobal];
+        if (runtime) {
+          if (scriptNode) {
+            scriptNode.dataset.loaded = "true";
+          }
+          resolve(runtime);
+          return;
+        }
+
+        reject(new Error(`${runtimeLabel} did not initialize.`));
+      };
+
+      const handleError = () => {
+        reject(new Error(`${runtimeLabel} failed to load.`));
+      };
+
+      const existingScript = document.querySelector(`[${dataAttribute}]`);
+      if (existingScript) {
+        if (existingScript.dataset.loaded === "true" && window[runtimeGlobal]) {
+          resolve(window[runtimeGlobal]);
+          return;
+        }
+
+        existingScript.addEventListener("load", () => handleLoad(existingScript), { once: true });
+        existingScript.addEventListener("error", handleError, { once: true });
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = url;
+      script.defer = true;
+      script.setAttribute(dataAttribute, "true");
+      script.addEventListener("load", () => handleLoad(script), { once: true });
+      script.addEventListener("error", handleError, { once: true });
+      document.head.append(script);
+    });
+  };
+
+  const ensureRouteMapPmtilesProtocol = (maplibregl, pmtilesRuntime) => {
+    if (routeMapPmtilesProtocol) {
+      return;
+    }
+
+    if (!maplibregl?.addProtocol || !pmtilesRuntime?.Protocol) {
+      throw new Error("PMTiles protocol support is unavailable.");
+    }
+
+    routeMapPmtilesProtocol = new pmtilesRuntime.Protocol();
+    maplibregl.addProtocol("pmtiles", routeMapPmtilesProtocol.tile);
+  };
 
   if (routeMapLibraryPromise) {
     return routeMapLibraryPromise;
@@ -8249,37 +8339,33 @@ function loadRouteMapLibrary() {
 
   routeMapLibraryPromise = Promise.all([
     loadRouteMapStylesheet(),
-    new Promise((resolve, reject) => {
-      const finishLoad = () => {
-        if (window.maplibregl) {
-          resolve(window.maplibregl);
-          return;
-        }
-
-        reject(new Error("MapLibre runtime did not initialize."));
-      };
-
-      const failLoad = () => {
-        reject(new Error("MapLibre assets failed to load."));
-      };
-
-      const existingScript = document.querySelector("[data-route-maplibre-script]");
-      if (existingScript) {
-        existingScript.addEventListener("load", finishLoad, { once: true });
-        existingScript.addEventListener("error", failLoad, { once: true });
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.src = routeMapLibraryScriptUrl;
-      script.defer = true;
-      script.setAttribute("data-route-maplibre-script", "true");
-      script.addEventListener("load", finishLoad, { once: true });
-      script.addEventListener("error", failLoad, { once: true });
-      document.head.append(script);
-    })
+    loadRouteMapScriptAsset(
+      routeMapLibraryScriptUrl,
+      "data-route-maplibre-script",
+      "maplibregl",
+      "MapLibre runtime"
+    ),
+    loadRouteMapScriptAsset(
+      routeMapPmtilesScriptUrl,
+      "data-route-map-pmtiles-script",
+      "pmtiles",
+      "PMTiles runtime"
+    ),
+    loadRouteMapScriptAsset(
+      routeMapBasemapsScriptUrl,
+      "data-route-map-basemaps-script",
+      "basemaps",
+      "Protomaps basemap runtime"
+    )
   ])
-    .then(([, maplibregl]) => maplibregl)
+    .then(([, maplibregl, pmtilesRuntime, basemapsRuntime]) => {
+      ensureRouteMapPmtilesProtocol(maplibregl, pmtilesRuntime);
+      return {
+        maplibregl,
+        pmtiles: pmtilesRuntime,
+        basemaps: basemapsRuntime
+      };
+    })
     .catch((error) => {
       routeMapLibraryPromise = null;
       throw error;
@@ -8543,8 +8629,33 @@ function getRouteMapGeoJsonData() {
   return getRouteMapGeoJsonData.cache;
 }
 
-function getRouteMapBaseStyleUrl() {
-  return routeMapOpenFreeMapStyleUrl;
+function getRouteMapPmtilesSourceUrl() {
+  return `pmtiles://${resolveRouteMapAssetUrl(routeMapPmtilesDataUrl)}`;
+}
+
+function buildRouteMapBaseStyle() {
+  const basemapRuntime = window.basemaps;
+  if (!basemapRuntime?.namedFlavor || !basemapRuntime?.layers) {
+    throw new Error("Protomaps basemap runtime is unavailable.");
+  }
+
+  const flavorName = getRouteMapBaseFlavorName();
+
+  return {
+    version: 8,
+    sources: {
+      protomaps: {
+        type: "vector",
+        attribution: routeMapProtomapsAttribution,
+        url: getRouteMapPmtilesSourceUrl()
+      }
+    },
+    layers: basemapRuntime.layers("protomaps", basemapRuntime.namedFlavor(flavorName), {
+      lang: getRouteMapBaseLanguage()
+    }),
+    glyphs: routeMapProtomapsGlyphsUrl,
+    sprite: `${routeMapProtomapsSpriteBaseUrl}/${flavorName}`
+  };
 }
 
 function getRouteMapLayerInsertBeforeId(map) {
@@ -9356,6 +9467,20 @@ function syncRouteMapRuntime(selectionState, options = {}) {
   syncRouteMapPopup(selectionState);
 }
 
+function resetRouteMapInstance({ markFailed = false } = {}) {
+  clearRouteMapPopup();
+  routeMapState.markers = clearRouteMapMarkers(routeMapState.markers);
+  routeMapState.markerStateKey = "";
+  routeMapState.ready = false;
+  routeMapState.failed = markFailed;
+  routeMapState.styleSignature = "";
+
+  if (routeMapState.map) {
+    routeMapState.map.remove();
+    routeMapState.map = null;
+  }
+}
+
 function ensureRouteMapReady() {
   const previewConfig = getRouteMapDisplayConfig("preview");
 
@@ -9363,8 +9488,34 @@ function ensureRouteMapReady() {
     return Promise.resolve(null);
   }
 
-  if (routeMapState.ready) {
+  if (offlineSnapshotMode) {
+    routeMapState.failed = true;
+    setRouteMapShellState("fallback");
+    setRouteMapStatus(
+      routeMapPreviewStatusNode,
+      routeMapLabels.sharedOfflineTitle,
+      routeMapLabels.sharedOfflineBody,
+      "error"
+    );
+    return Promise.resolve(null);
+  }
+
+  const nextStyleSignature = getRouteMapStyleSignature();
+
+  if (
+    routeMapState.ready &&
+    routeMapState.map &&
+    routeMapState.styleSignature === nextStyleSignature
+  ) {
     return Promise.resolve(routeMapState.map);
+  }
+
+  if (
+    routeMapState.ready &&
+    routeMapState.map &&
+    routeMapState.styleSignature !== nextStyleSignature
+  ) {
+    resetRouteMapInstance();
   }
 
   if (routeMapState.promise) {
@@ -9375,10 +9526,10 @@ function ensureRouteMapReady() {
   setRouteMapShellState("loading");
 
   routeMapState.promise = (async () => {
-    const maplibregl = await loadRouteMapLibrary();
+    const { maplibregl } = await loadRouteMapLibrary();
     routeMapState.map = new maplibregl.Map({
       container: routeMapPreviewCanvas,
-      style: getRouteMapBaseStyleUrl(),
+      style: buildRouteMapBaseStyle(),
       ...routeMapBaseOptions
     });
 
@@ -9393,6 +9544,7 @@ function ensureRouteMapReady() {
     routeMapState.markers = installRouteMapMarkers(routeMapState.map);
     routeMapState.ready = true;
     routeMapState.failed = false;
+    routeMapState.styleSignature = getRouteMapStyleSignature();
     routeMapState.map.resize();
     applyRouteMapPaintTheme(routeMapState.map);
     setRouteMapInteractionState(routeMapState.map, false);
@@ -9404,13 +9556,7 @@ function ensureRouteMapReady() {
   })()
     .catch((error) => {
       console.error("Route map failed to initialize.", error);
-      routeMapState.failed = true;
-      routeMapState.ready = false;
-      routeMapState.markers = clearRouteMapMarkers(routeMapState.markers);
-      if (routeMapState.map) {
-        routeMapState.map.remove();
-        routeMapState.map = null;
-      }
+      resetRouteMapInstance({ markFailed: true });
       setRouteMapShellState("fallback");
       setRouteMapStatus(
         routeMapPreviewStatusNode,
@@ -9463,7 +9609,31 @@ function scheduleRouteMapUISync(options = {}) {
 }
 
 function refreshRouteMapsIfReady(options = {}) {
+  if (!routeMapInitialized) {
+    return;
+  }
+
+  const requiresStyleRefresh =
+    routeMapState.ready &&
+    routeMapState.map &&
+    routeMapState.styleSignature !== getRouteMapStyleSignature();
+
+  if (requiresStyleRefresh) {
+    resetRouteMapInstance();
+    setRouteMapStatus(
+      routeMapPreviewStatusNode,
+      routeMapLabels.sharedLoading,
+      routeMapLabels.sharedLoadingBody,
+      "loading"
+    );
+    setRouteMapShellState("loading");
+  }
+
   if (!routeMapState.ready || !routeMapState.map) {
+    syncRouteMapUI({ resetOverview: true });
+    if (!routeMapState.promise && !routeMapState.failed && !offlineSnapshotMode) {
+      void ensureRouteMapReady();
+    }
     return;
   }
 
