@@ -107,12 +107,12 @@
     "toggleDone": { "en": "Booked", "ja": "予約済み" },
     "title": { "en": "Day 4 Mt. Fuji area stay", "ja": "4日目の富士エリア宿泊" },
     "summary": {
-      "en": "The base is chosen for station-to-lake practicality so Day 4 arrival and Day 5 dawn checks stay easy to manage.",
-      "ja": "4日目の到着と5日目朝の富士チェックをまとめやすいよう、駅から湖側の動きで拠点を選んでいます。"
+      "en": "The base is chosen for station-to-lake practicality so Mishima, Chureito / Shimoyoshida, and Lake Kawaguchiko can stay grouped on Day 4.",
+      "ja": "三島、忠霊塔・下吉田、河口湖を4日目にまとめやすいよう、駅から湖側の動きで拠点を選んでいます。"
     },
     "details": {
-      "en": "A Kawaguchiko-side base works better than a remote resort because it keeps the station handoff, lake arrival, quiet sunset, and the Day 5 Tokyo transfer aligned with the actual route.",
-      "ja": "遠いリゾート立地より、河口湖側の拠点の方が駅からの受け渡し、湖到着、静かな夕景、5日目の東京移動までを実際の流れに合わせやすいです。"
+      "en": "A Kawaguchiko-side base works better than a remote resort because it keeps the station handoff, Chureito option, lake stop, and the Day 5 Tokyo transfer aligned with the actual route.",
+      "ja": "遠いリゾート立地より、河口湖側の拠点の方が駅からの受け渡し、忠霊塔の選択肢、河口湖の立ち寄り、5日目の東京移動までを実際の流れに合わせやすいです。"
     },
     "links": [
       {

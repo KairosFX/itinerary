@@ -83,7 +83,7 @@ const packingStorageKey = `japan-trip-packing-state-${itineraryStateVersion}`;
 const budgetNotesStorageKey = `japan-trip-budget-notes-${itineraryStateVersion}`;
 const fujiForecastSessionKey = `japan-trip-fuji-forecast-${itineraryStateVersion}`;
 const queuedStorageWrites = new Map();
-const headerReservedHeightFallbackPx = 142;
+const headerReservedHeightFallbackPx = 156;
 const timelineNodeTopRem = 1.36;
 const timelineNodeSizeRem = 1.42;
 const timelineLinkOverlapPx = 1;
@@ -245,8 +245,8 @@ const budgetStayDefinitions = {
     area: { en: "Kawaguchiko station -> lake corridor", ja: "河口湖駅から湖畔の動線" },
     property: { en: "HaoSTAY", ja: "HAOSTAY" },
     routeReason: {
-      en: "This base keeps the Day 4 arrival, the quiet lake-side start, and the Day 5 dawn Fuji check practical without paying for a remote resort location that fights the actual station and bus flow.",
-      ja: "この拠点なら、4日目の到着、静かな湖側スタート、5日目朝の富士チェックをまとめやすく、実際の駅・バス動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
+      en: "This base keeps the Day 4 Mishima handoff, Chureito / Shimoyoshida, and Lake Kawaguchiko practical without paying for a remote resort location that fights the real station and bus flow.",
+      ja: "この拠点なら、4日目の三島ハンドオフ、忠霊塔・下吉田、河口湖をまとめやすく、実際の駅・バス動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
     },
     cost: { mode: "perGroup", amount: 15700, sourceCostId: "kawaguchiko-base-hotel" }
   },
@@ -341,8 +341,8 @@ const budgetSourceGroups = [
     id: "core-transit",
     title: { en: "Core transit checks", ja: "主要移動の確認先" },
     summary: {
-      en: "Day 4 now runs straight from Kansai into the Mt. Fuji area. Day 5 then hands off from the Fuji side into Tokyo, with direct bus or rail chosen by timing.",
-      ja: "4日目は関西からそのまま富士エリアへ入り、5日目は富士側から東京へ渡す流れに整理しました。東京入りは時刻に合わせて直通バスまたは鉄道を選びます。"
+      en: "Day 4 now carries the full Mt. Fuji area block through Mishima, Chureito / Shimoyoshida, and Lake Kawaguchiko. Day 5 then starts Tokyo cleanly, with direct bus or rail chosen by timing.",
+      ja: "4日目は三島、忠霊塔・下吉田、河口湖までを含む富士エリアのまとまりにし、5日目は東京へきれいに入る流れへ整理しました。東京入りは時刻に合わせて直通バスまたは鉄道を選びます。"
     },
     links: [
       {
@@ -461,15 +461,16 @@ const budgetDayDefinitions = [
     day: 4,
     defaultStayId: "kawaguchiko-base-hotel",
     stayOptions: ["kawaguchiko-base-hotel", "relative-stay", "no-accommodation"],
-    title: { en: "Day 4 - Kansai -> Mt. Fuji Area", ja: "4日目・関西から富士エリア" },
-    subtitle: { en: "One clean transfer into the lake-side Fuji base", ja: "湖側の富士拠点へ一気に入る移動日" },
+    title: { en: "Day 4 - Mt. Fuji Area", ja: "4日目・富士エリア" },
+    subtitle: { en: "Mishima, Chureito / Shimoyoshida, and Lake Kawaguchiko", ja: "三島、忠霊塔・下吉田、河口湖" },
     items: [
       { label: { en: "Shinkansen: Kyoto / Shin-Osaka -> Mishima", ja: "新幹線：京都・新大阪 -> 三島" }, category: "intercityTransit", bucket: "booked", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 11310, range: { lean: 10780, expected: 11310, high: 11310 } } },
       { label: { en: "Mishima -> Kawaguchiko bus", ja: "三島 -> 河口湖バス" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 2500, range: { lean: 2300, expected: 2500, high: 2500 } } },
-      { label: { en: "Lake arrival views", ja: "到着後の湖の景色" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Quiet sunset", ja: "静かな夕景" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+      { label: { en: "Chureito / Shimoyoshida", ja: "忠霊塔・下吉田" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+      { label: { en: "Lake Kawaguchiko", ja: "河口湖" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+      { label: { en: "Hotel / onsen check-in", ja: "ホテル・温泉チェックイン" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       {
-        label: { en: "Fuji transfer-day meals", ja: "富士移動日の食事" },
+        label: { en: "Fuji-area day meals", ja: "富士エリア日の食事" },
         category: "meals",
         bucket: "flexible",
         sourceGroup: "meals",
@@ -488,12 +489,9 @@ const budgetDayDefinitions = [
     day: 5,
     defaultStayId: "tokyo-base-hotel",
     stayOptions: ["tokyo-base-hotel", "relative-stay", "no-accommodation"],
-    title: { en: "Day 5 - Mt. Fuji Area -> Tokyo / Shibuya", ja: "5日目・富士エリアから東京・渋谷" },
-    subtitle: { en: "Fuji first, then a Shibuya evening handoff", ja: "朝は富士優先、そのあと渋谷の夜へ渡す日" },
+    title: { en: "Day 5 - Tokyo / Shibuya", ja: "5日目・東京・渋谷" },
+    subtitle: { en: "Tokyo arrival, Shibuya walk, and skyline night", ja: "東京到着、渋谷散策、夜景" },
     items: [
-      { label: { en: "Fuji check at dawn", ja: "夜明けに富士山を確認" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Chureito / Shimoyoshida if clear", ja: "晴れていれば忠霊塔・下吉田" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
-      { label: { en: "Lake Kawaguchiko wrap-up", ja: "河口湖まわりを軽く締める" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       {
         label: { en: "Transfer to Tokyo / Shibuya", ja: "東京・渋谷へ移動" },
         category: "intercityTransit",
@@ -501,10 +499,11 @@ const budgetDayDefinitions = [
         sourceGroup: "core-transit",
         cost: { mode: "perPerson", amount: 2200, range: { lean: 2100, expected: 2200, high: 4130 } }
       },
+      { label: { en: "Tokyo hotel check-in", ja: "東京ホテルのチェックイン" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       { label: { en: "Shibuya local hop", ja: "渋谷周辺の移動" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 220 } },
-      { label: { en: "Easy Shibuya arrival evening", ja: "無理のない渋谷到着の夜" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
+      { label: { en: "Shibuya Crossing", ja: "渋谷交差点" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       {
-        label: { en: "Shibuya Crossing / food walk", ja: "渋谷交差点と食べ歩き" },
+        label: { en: "Shibuya food walk", ja: "渋谷で食べ歩き" },
         category: "meals",
         bucket: "flexible",
         sourceGroup: "meals",
@@ -605,18 +604,18 @@ const tripNoteDefinitions = [
   },
   {
     day: 4,
-    title: { en: "Day 4 - Kansai to Mt. Fuji Area", ja: "4日目・関西から富士エリア" },
+    title: { en: "Day 4 - Mt. Fuji Area", ja: "4日目・富士エリア" },
     summary: {
-      en: "Use one clean transfer day from Kansai into Kawaguchiko or the Mt. Fuji area: shinkansen first, local access second, then a quiet lake-side evening instead of another scenic detour.",
-      ja: "関西から河口湖や富士エリアへ入る4日目は、新幹線を先、現地アクセスを後にして、そのあとは寄り道を増やさず静かな湖側の夜へつなげます。"
+      en: "Make Day 4 the full Fuji block: transfer via Mishima, keep Chureito / Shimoyoshida and Lake Kawaguchiko together, then settle into the Fuji-area stay without repeating the lake on Day 5.",
+      ja: "4日目を富士エリアのまとまりにし、三島経由で入り、忠霊塔・下吉田と河口湖を同じ日にまとめて、5日目に湖側を重ねないようにします。"
     }
   },
   {
     day: 5,
-    title: { en: "Day 5 - Mt. Fuji Area to Tokyo / Shibuya", ja: "5日目・富士エリアから東京・渋谷" },
+    title: { en: "Day 5 - Tokyo / Shibuya", ja: "5日目・東京・渋谷" },
     summary: {
-      en: "Use Fuji visibility early, keep Chureito conditional, wrap the lake side cleanly, then hand the route forward into Tokyo so the day still lands in Shibuya with realistic evening energy.",
-      ja: "朝は富士山の見え方を先に使い、忠霊塔は条件付きにし、湖側を無理なく締めてから東京へ渡し、渋谷の夜へ現実的につなげます。"
+      en: "Start Tokyo cleanly on Day 5: leave the Fuji area as a departure point only, then land in Shibuya for hotel check-in, the crossing, food walk, and Shibuya Sky.",
+      ja: "5日目は東京をきれいに始め、富士エリアは出発地点だけにして、渋谷のチェックイン、交差点、食べ歩き、渋谷スカイへつなげます。"
     }
   },
   {
@@ -1078,8 +1077,8 @@ const routeExplorerPathDefinitions = [
     d: "M938 238 L1036 150",
     title: { en: "Mt. Fuji area -> Tokyo / Shibuya", ja: "富士エリア -> 東京・渋谷" },
     summary: {
-      en: "Day 5 uses the early Fuji check first, then hands the route into Tokyo for a Shibuya evening.",
-      ja: "5日目は朝の富士チェックを先に行い、そのあと東京へ移って渋谷の夜へつなぎます。"
+      en: "Day 5 is the clean Tokyo handoff from the Fuji side into Shibuya.",
+      ja: "5日目は富士側から渋谷へ入る、きれいな東京ハンドオフです。"
     },
     badges: [
       { en: "Day 5", ja: "5日目" },
@@ -1087,8 +1086,8 @@ const routeExplorerPathDefinitions = [
     ],
     notes: [
       {
-        en: "Use this when you want the Tokyo transfer separate from the local Fuji weather decision.",
-        ja: "富士側の天気判断と切り分けて、東京への移動だけ見たいときに使います。"
+        en: "Use this when you want the Tokyo transfer separate from the Fuji-area sightseeing already handled on Day 4.",
+        ja: "4日目にまとめた富士エリア観光と切り分けて、東京への移動だけ見たいときに使います。"
       },
       {
         en: "The linked transit detail keeps the direct train and highway-bus arrival options together.",
@@ -1237,32 +1236,28 @@ const routeExplorerStopDefinitions = [
     id: "fuji",
     title: { en: "Mt. Fuji area", ja: "富士エリア" },
     summary: {
-      en: "This single stop groups Kawaguchiko arrival, lake views, Chureito timing, and the quiet overnight handoff before Tokyo.",
-      ja: "この地点は、河口湖到着、湖の景色、忠霊塔のタイミング、そして東京へ渡る前の静かな宿泊をまとめています。"
+      en: "This stop groups the Day 4 Mishima handoff, Chureito / Shimoyoshida, Lake Kawaguchiko, and the overnight Fuji base before Tokyo.",
+      ja: "この地点は、4日目の三島ハンドオフ、忠霊塔・下吉田、河口湖、そして東京前の富士エリア宿泊をまとめています。"
     },
     badges: [
-      { en: "Days 4 + 5", ja: "4日目・5日目" },
-      { en: "Weather-aware", ja: "天気重視" }
+      { en: "Day 4 focus", ja: "4日目中心" },
+      { en: "3 Fuji-area places", ja: "富士エリア3か所" }
     ],
     notes: [
       {
-        en: "Day 4 is about arriving light, settling in, and using the evening quietly around the lake or onsen.",
-        ja: "4日目は荷物を軽く整えて到着し、湖や温泉まわりで静かに夜を使う構成です。"
+        en: "Day 4 now keeps Mishima, Chureito / Shimoyoshida, and Lake Kawaguchiko in one Fuji-area block.",
+        ja: "4日目は三島、忠霊塔・下吉田、河口湖を一つの富士エリアのまとまりとして扱います。"
       },
       {
-        en: "Day 5 starts with the best Fuji visibility window, then hands off to Tokyo once the morning call is clear.",
-        ja: "5日目は富士が見えやすい朝を先に使い、その判断が済んだら東京へ渡します。"
+        en: "Day 5 uses this area only as the departure point before Tokyo begins cleanly in Shibuya.",
+        ja: "5日目はこのエリアを出発地点としてだけ使い、そのあと渋谷から東京をきれいに始めます。"
       }
     ],
-    dayLinks: [{ day: 4 }, { day: 5 }],
+    dayLinks: [{ day: 4 }],
     transitActions: [
       {
         id: "fuji-local-hops",
         label: { en: "Fuji local detail", ja: "富士エリア詳細" }
-      },
-      {
-        id: "kawaguchiko-tokyo",
-        label: { en: "Tokyo arrival detail", ja: "東京到着詳細" }
       }
     ],
     segmentIds: ["fuji-gateway-kawaguchiko", "fuji-tokyo"],
@@ -1305,7 +1300,7 @@ const routeExplorerViewDefinitions = [
   {
     id: "overview",
     label: { en: "All path", ja: "全体" },
-    title: { en: "Full 7-day flow", ja: "7日間の全体ルート" },
+    title: { en: "Route overview", ja: "ルート概要" },
     summary: {
       en: "Use the same map surface to scan the fixed west-to-east route from Osaka and Kyoto through the Mt. Fuji area into Tokyo.",
       ja: "同じ地図面で、大阪と京都から富士エリアを経て東京へ入る固定の西から東への流れを見渡せます。"
@@ -1320,8 +1315,8 @@ const routeExplorerViewDefinitions = [
         ja: "主要地点チップでは都市と拠点の流れを見渡せて、区間選択では注意したい移動日だけを切り出せます。"
       },
       {
-        en: "Tokyo stays as the final cluster because the former extras are now part of the main route.",
-        ja: "以前の追加東京日程も本編へ入れたため、東京は最後のまとまりとして見せています。"
+        en: "Day 4 now holds the Fuji-area places, and Day 5 starts Tokyo without repeating the lake side.",
+        ja: "4日目に富士エリアの立ち寄りをまとめ、5日目は湖側を繰り返さず東京を始めます。"
       }
     ],
     dayLinks: [{ day: 1 }, { day: 2 }, { day: 3 }, { day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }],
@@ -1356,24 +1351,24 @@ const routeExplorerViewDefinitions = [
   },
   {
     id: "day4-transfer",
-    label: { en: "Day 4 transfer", ja: "4日目移動" },
-    title: { en: "Kansai -> Mt. Fuji area", ja: "関西 -> 富士エリア" },
+    label: { en: "Day 4 Fuji", ja: "4日目富士" },
+    title: { en: "Day 4 - Mt. Fuji area", ja: "4日目・富士エリア" },
     summary: {
-      en: "This is the clean eastbound pivot: shinkansen to Mishima first, then local access into Kawaguchiko.",
-      ja: "ここが東行きのきれいな切り替えです。まず三島まで新幹線で進み、そのあと河口湖へ入ります。"
+      en: "This view keeps the Mishima handoff, Chureito / Shimoyoshida, and Lake Kawaguchiko tied to the same Fuji-area day.",
+      ja: "この表示では、三島ハンドオフ、忠霊塔・下吉田、河口湖を同じ富士エリア日にまとめて見られます。"
     },
     badges: [
       { en: "Day 4", ja: "4日目" },
-      { en: "Shinkansen + local", ja: "新幹線＋現地移動" }
+      { en: "3 Fuji-area stops", ja: "富士エリア3か所" }
     ],
     notes: [
       {
-        en: "Use this view when you want the transfer itself, not the Osaka or Kyoto sightseeing context.",
-        ja: "大阪や京都の観光ではなく、移動そのものに集中したいときの表示です。"
+        en: "Use this view when you want the Day 4 Fuji block rather than the earlier Osaka or Kyoto city context.",
+        ja: "大阪や京都の街歩きではなく、4日目の富士エリアのまとまりを見たいときの表示です。"
       },
       {
-        en: "The saved transit popups keep the long rail leg and the Fuji-side access split into clean steps.",
-        ja: "保存済み移動詳細は、長距離鉄道と富士側アクセスを分けて見られるようにしています。"
+        en: "The saved transit popups keep the long rail leg and the Fuji-side local moves readable without splitting the lake stop into Day 5.",
+        ja: "保存済み移動詳細では、長距離鉄道と富士側のローカル移動を見やすくしつつ、河口湖を5日目へ分けないようにしています。"
       }
     ],
     dayLinks: [{ day: 4 }],
@@ -1392,32 +1387,28 @@ const routeExplorerViewDefinitions = [
   },
   {
     id: "day5-handoff",
-    label: { en: "Day 5 handoff", ja: "5日目移動" },
-    title: { en: "Mt. Fuji area -> Tokyo / Shibuya", ja: "富士エリア -> 東京・渋谷" },
+    label: { en: "Day 5 Tokyo", ja: "5日目東京" },
+    title: { en: "Day 5 - Tokyo / Shibuya", ja: "5日目・東京・渋谷" },
     summary: {
-      en: "This view covers the dawn Fuji check, the Chureito decision if clear, and the final handoff into Shibuya.",
-      ja: "この表示では、朝の富士チェック、晴れていれば忠霊塔、そして渋谷への移動までをまとめて見られます。"
+      en: "This view covers the clean Tokyo handoff and the Shibuya arrival after the Fuji day is already done.",
+      ja: "この表示では、富士エリア日を終えたあとの、きれいな東京入りと渋谷到着を見られます。"
     },
     badges: [
       { en: "Day 5", ja: "5日目" },
-      { en: "Fuji -> Tokyo", ja: "富士 -> 東京" }
+      { en: "Tokyo arrival", ja: "東京到着" }
     ],
     notes: [
       {
-        en: "Treat the Fuji morning as the weather call, then switch to the Tokyo arrival plan once the view window is done.",
-        ja: "富士の朝を天気判断の時間として使い、その見え方が固まったら東京到着プランへ切り替える流れです。"
+        en: "Treat the Fuji area as the departure point only, then switch fully to the Tokyo arrival plan.",
+        ja: "富士エリアは出発地点だけにして、そのあと東京到着プランへ完全に切り替えます。"
       },
       {
-        en: "The related popups keep the local Fuji hops and the Tokyo arrival options close together.",
-        ja: "関連ポップアップでは、富士側の現地移動と東京到着案を近い場所で確認できます。"
+        en: "The related popup keeps the direct train and highway-bus arrival options close together.",
+        ja: "関連ポップアップでは、直通列車と高速バスの到着案を近い場所で確認できます。"
       }
     ],
     dayLinks: [{ day: 5 }],
     transitActions: [
-      {
-        id: "fuji-local-hops",
-        label: { en: "Fuji local detail", ja: "富士エリア詳細" }
-      },
       {
         id: "kawaguchiko-tokyo",
         label: { en: "Tokyo arrival detail", ja: "東京到着詳細" }
@@ -1461,13 +1452,14 @@ const routeDayStopDefinitions = {
     { en: "Osaka", ja: "大阪" }
   ],
   4: [
-    { en: "Shin-Osaka", ja: "新大阪" },
     { en: "Mishima", ja: "三島" },
-    { en: "Mt. Fuji area", ja: "富士エリア" }
+    { en: "Chureito / Shimoyoshida", ja: "忠霊塔・下吉田" },
+    { en: "Lake Kawaguchiko", ja: "河口湖" }
   ],
   5: [
-    { en: "Mt. Fuji area", ja: "富士エリア" },
-    { en: "Tokyo / Shibuya", ja: "東京・渋谷" }
+    { en: "Tokyo / Shibuya", ja: "東京・渋谷" },
+    { en: "Shibuya Crossing", ja: "渋谷交差点" },
+    { en: "Shibuya Sky", ja: "渋谷スカイ" }
   ],
   6: [
     { en: "Tokyo Skytree", ja: "東京スカイツリー" },
@@ -2722,8 +2714,8 @@ function renderFujiForecastError() {
         ja: "予報を取得できません"
       })}</p>
       <p class="fuji-forecast__summary-text">${renderLocalizedContent({
-        en: "Forecast unavailable. Use the flexible Day 6 plan after an early Fuji check.",
-        ja: "予報を取得できません。朝の富士山確認後に柔軟な6日目プランで動きましょう。"
+        en: "Forecast unavailable. Keep Chureito optional and protect the Tokyo handoff.",
+        ja: "予報を取得できません。忠霊塔は任意にして、東京への移動を優先しましょう。"
       })}</p>
     `;
     syncLocalizedNodes(summaryNode);
@@ -2747,8 +2739,8 @@ function renderFujiForecastError() {
         ja: "柔軟な富士山プランを使う"
       })}</h3>
       <p class="fuji-forecast__recommendation">${renderLocalizedContent({
-        en: "Forecast unavailable. Use the existing Day 6 plan and decide after an early Fuji check.",
-        ja: "予報を取得できません。既存の6日目プランで、朝の富士山確認後に判断しましょう。"
+        en: "Forecast unavailable. Decide after a quick Fuji check, then keep Tokyo timing clean.",
+        ja: "予報を取得できません。富士山を軽く確認してから判断し、そのあと東京移動の時刻を優先しましょう。"
       })}</p>
       <p class="fuji-forecast__reason">${renderLocalizedContent({
         en: "Fallback: keep Chureito optional and prioritize the lake or flexible sightseeing.",

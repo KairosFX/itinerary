@@ -98,12 +98,12 @@
         "ja": "現在の富士エリアホテル"
       },
       "routeReason": {
-        "en": "This area keeps the Day 4 arrival, quiet lake access, and the Day 5 dawn Fuji check practical without paying for a remote resort that fights the actual route.",
-        "ja": "このエリアなら、4日目の到着、静かな湖アクセス、5日目朝の富士チェックをまとめやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
+        "en": "This area keeps the Day 4 Mishima handoff, Chureito / Shimoyoshida, and Lake Kawaguchiko practical without paying for a remote resort that fights the actual route.",
+        "ja": "このエリアなら、4日目の三島ハンドオフ、忠霊塔・下吉田、河口湖をまとめやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
-        "en": "Day 4 uses HaoSTAY at JPY 15,709 before taxes for 2 adults, which fits the station-and-lake flow for the fixed Fuji handoff night.",
-        "ja": "4日目は HAOSTAY の現在の料金（2名税別15,709円）を使っています。固定の富士受け渡し泊として、駅と湖の動線に合うためです。"
+        "en": "Day 4 uses HaoSTAY at JPY 15,709 before taxes for 2 adults, which fits the Mishima handoff and the one-night Fuji block before Tokyo.",
+        "ja": "4日目は HAOSTAY の現在の料金（2名税別15,709円）を使っています。三島ハンドオフから東京前の1泊の富士エリア日に合うためです。"
       },
       "source": {
         "label": {
@@ -224,10 +224,10 @@
         "en": "Core transit checks",
         "ja": "主要移動の確認先"
       },
-      "summary": {
-        "en": "Day 4 now runs straight from Kansai into the Mt. Fuji area. Day 5 then hands off from the Fuji side into Tokyo, with direct bus or rail chosen by timing.",
-        "ja": "4日目は関西からそのまま富士エリアへ入り、5日目は富士側から東京へ渡す流れに整理しました。東京入りは時刻に合わせて直通バスまたは鉄道を選びます。"
-      },
+    "summary": {
+        "en": "Day 4 now carries the full Mt. Fuji area block through Mishima, Chureito / Shimoyoshida, and Lake Kawaguchiko. Day 5 then starts Tokyo cleanly, with direct bus or rail chosen by timing.",
+        "ja": "4日目は三島、忠霊塔・下吉田、河口湖までを含む富士エリアのまとまりにし、5日目は東京へきれいに入る流れへ整理しました。東京入りは時刻に合わせて直通バスまたは鉄道を選びます。"
+    },
       "links": [
         {
           "label": {

@@ -118,8 +118,8 @@
         "ja": "接続が合わなくなったら途中を増やしすぎず、湖側の拠点へ素直に入ることを優先します。"
       },
       {
-        "en": "If weather looks weak, keep Day 4 as arrival plus onsen or hotel time and save viewpoint decisions for Day 5 dawn.",
-        "ja": "天候が弱い時は、4日目を到着と温泉またはホテル時間に寄せ、展望地の判断は5日目の朝へ回します。"
+        "en": "If weather looks weak, keep Day 4 to the lake base and hotel or onsen time instead of forcing every Fuji stop.",
+        "ja": "天候が弱い時は、全立ち寄りを無理に詰めず、4日目を湖側の拠点とホテル・温泉時間中心にします。"
       }
     ],
     "action": {
@@ -129,44 +129,44 @@
   },
   {
     "id": "fuji-local-hops",
-    "tag": { "en": "Day 5 local transit", "ja": "5日目の現地移動" },
+    "tag": { "en": "Day 4 local transit", "ja": "4日目の現地移動" },
     "title": {
-      "en": "Fuji-area dawn check and local movement",
-      "ja": "富士エリアの朝チェックと現地移動"
+      "en": "Mt. Fuji area local stops",
+      "ja": "富士エリアの現地立ち寄り"
     },
     "summary": {
-      "en": "Use the first clear weather window before committing to Chureito or any longer out-and-back movement.",
-      "ja": "忠霊塔や長い往復移動を決める前に、最初の見え方の良い時間帯を先に使います。"
+      "en": "Keep Chureito / Shimoyoshida and Lake Kawaguchiko on the same Fuji-area day instead of splitting them across Day 4 and Day 5.",
+      "ja": "忠霊塔・下吉田と河口湖は、4日目と5日目に分けず、同じ富士エリア日にまとめます。"
     },
     "segment": {
-      "en": "Kawaguchiko base -> Chureito / local Fuji viewpoints",
-      "ja": "河口湖拠点 -> 忠霊塔・富士周辺の展望地"
+      "en": "Mt. Fuji area base -> Chureito / Lake Kawaguchiko",
+      "ja": "富士エリア拠点 -> 忠霊塔・河口湖"
     },
     "from": { "en": "Kawaguchiko area", "ja": "河口湖エリア" },
     "to": {
-      "en": "Whichever viewpoint still makes sense after the dawn visibility check",
-      "ja": "朝の見え方確認後に最も合う展望地"
+      "en": "The Fuji-area stop that still fits your arrival window best",
+      "ja": "到着後の時間帯に最も合う富士エリアの立ち寄り先"
     },
     "transport": {
       "en": "Local rail or bus combinations, with Fujikyu rail around JPY 310 one way to Shimoyoshida / Chureito and taxi only as a time-saving fallback.",
       "ja": "路線電車とバスの組み合わせを基本にし、下吉田・忠霊塔方面の富士急行は片道約310円が目安です。必要なら短距離だけタクシーを代替に使います。"
     },
     "why": {
-      "en": "It protects the strongest Fuji view chance first, then leaves enough room to hand off into Tokyo the same day.",
-      "ja": "まず最も大事な富士の見え方を優先でき、そのうえで同日の東京移動へも余白を残せます。"
+      "en": "It keeps the three Fuji-area places on Day 4, avoids repeating Lake Kawaguchiko on Day 5, and lets Tokyo start cleanly the next day.",
+      "ja": "富士エリアの3か所を4日目にまとめ、5日目に河口湖を重ねず、翌日の東京入りをきれいにできます。"
     },
     "practicalNotes": [
       {
-        "en": "Do the first visibility check before locking in the longest out-and-back segment.",
-        "ja": "最も往復負荷の大きい移動を決める前に、最初の見え方確認を入れます。"
+        "en": "Handle the Mishima-to-lake arrival first, then add one compact Fuji-area loop.",
+        "ja": "まず三島から湖側への到着を済ませ、そのあと短めの富士エリア周遊を足します。"
       },
       {
-        "en": "If Fuji is weak, keep the morning compact and protect the Tokyo transfer timing instead.",
-        "ja": "富士山が弱い時は朝の行動を短くまとめ、代わりに東京移動の時間を守ります。"
+        "en": "Keep Chureito conditional if visibility is weak or the local timing tightens.",
+        "ja": "見え方が弱い時やローカル移動の余白が減った時は、忠霊塔を条件付きにします。"
       },
       {
-        "en": "Save one last practical return to your base or departure point before adding extra stops.",
-        "ja": "追加の立ち寄りを増やす前に、拠点または出発地点へ戻る最後の現実的な便を押さえます。"
+        "en": "Do not repeat Lake Kawaguchiko on Day 5; use Day 5 for the clean Tokyo handoff instead.",
+        "ja": "5日目に河口湖を繰り返さず、5日目は東京へのきれいな受け渡しに使います。"
       }
     ],
     "prepReminders": [
@@ -181,12 +181,12 @@
     ],
     "fallbackOptions": [
       {
-        "en": "If visibility drops, trim the outer stop and stay closer to Kawaguchiko before heading east.",
-        "ja": "視界が落ちたら外側の立ち寄りを一つ削り、東へ動く前は河口湖寄りでまとめます。"
+        "en": "If visibility drops, trim Chureito and keep Lake Kawaguchiko as the one simple scenic stop.",
+        "ja": "視界が落ちたら忠霊塔を削り、景色の立ち寄りは河口湖だけに絞ります。"
       },
       {
-        "en": "If Chureito no longer fits the weather window, pivot to lake views and an earlier Tokyo departure instead of forcing the climb.",
-        "ja": "忠霊塔が天候窓に合わない時は、無理に登らず、湖畔の景色と少し早い東京移動へ切り替えます。"
+        "en": "If the local window tightens, protect the overnight Fuji base and the next-day Tokyo departure instead of forcing every stop.",
+        "ja": "現地で使える時間が詰まったら、無理に全立ち寄りを押し込まず、富士エリアの宿泊と翌日の東京移動を守ります。"
       }
     ],
     "action": {

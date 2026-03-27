@@ -25,9 +25,9 @@
   --content-box-min: 240px;
   --content-grid-columns: repeat(4, minmax(0, 1fr));
   --content-box-gap: 1.08rem;
-  --content-box-padding-block: 1.28rem;
-  --content-box-padding-inline: 1.26rem;
-  --content-box-gutter: 1.56rem;
+  --content-box-padding-block: 1.12rem;
+  --content-box-padding-inline: 1.14rem;
+  --content-box-gutter: 1.42rem;
   --content-box-title-gap: 0.82rem;
   --content-box-item-gap: 0.62rem;
   --content-card-title-size: clamp(1.1rem, 1rem + 0.38vw, 1.28rem);
@@ -1382,7 +1382,7 @@ html.has-modal-open body {
 .essentials-grid,
 .day-grid,
 .notes-grid {
-  --card-header-min-block: 3.7rem;
+  --card-header-min-block: 3.45rem;
   display: grid;
   gap: var(--content-box-gap);
 }
@@ -1566,24 +1566,24 @@ html.has-modal-open body {
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
   align-content: start;
-  gap: 0.16rem;
+  gap: 0.14rem;
   min-block-size: var(--card-header-min-block);
-  padding-bottom: 0.74rem;
-  margin-bottom: 0.74rem;
+  padding-bottom: 0.62rem;
+  margin-bottom: 0.62rem;
   border-bottom: 1px solid var(--line);
 }
 
 .day-card__body {
   display: grid;
-  gap: 0.82rem;
+  gap: 0.72rem;
   min-width: 0;
   min-height: 0;
 }
 
 .day-card__body--with-aside {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(13.5rem, 16rem);
+  gap: 0.86rem;
   align-items: start;
 }
 
@@ -1619,15 +1619,15 @@ html.has-modal-open body {
   padding: 0;
   display: grid;
   align-content: start;
-  gap: 0.5rem;
+  gap: 0.42rem;
 }
 
 .check-item {
   display: grid;
   grid-template-columns: 1.05rem 1fr;
-  gap: 0.7rem;
+  gap: 0.62rem;
   align-items: start;
-  padding: 0.7rem 0.78rem;
+  padding: 0.62rem 0.7rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.62);
@@ -1677,8 +1677,8 @@ html.has-modal-open body {
   align-items: center;
   justify-content: center;
   gap: 0.42rem;
-  min-height: 2rem;
-  padding: 0.34rem 0.74rem;
+  min-height: 1.92rem;
+  padding: 0.3rem 0.68rem;
   border: 1px solid rgba(171, 74, 59, 0.16);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.76);
@@ -1727,9 +1727,9 @@ html.has-modal-open body {
 
 .fuji-forecast {
   display: grid;
-  gap: 0.62rem;
+  gap: 0.56rem;
   margin-top: 0;
-  padding: 0.86rem 0.92rem;
+  padding: 0.76rem 0.82rem;
   border: 1px solid rgba(171, 74, 59, 0.14);
   border-radius: calc(var(--radius-lg) - 0.12rem);
   background:
@@ -1742,7 +1742,7 @@ html.has-modal-open body {
 
 .fuji-forecast--summary {
   gap: 0.42rem;
-  padding: 0.74rem 0.82rem;
+  padding: 0.64rem 0.72rem;
   border-style: dashed;
   box-shadow: none;
 }
@@ -3695,6 +3695,7 @@ html.has-modal-open body {
   min-width: 0;
   position: relative;
   z-index: 3;
+  align-self: start;
 }
 
 .route-map__main {
@@ -3719,7 +3720,8 @@ html.has-modal-open body {
 .route-map__preview-stage {
   position: relative;
   isolation: isolate;
-  min-height: clamp(19.5rem, 52vw, 30rem);
+  height: auto;
+  min-height: clamp(14.5rem, 36vw, 20rem);
   overflow: hidden;
   border-radius: calc(var(--radius-lg) - 4px);
   border: 1px solid rgba(171, 74, 59, 0.12);
@@ -3762,7 +3764,7 @@ html.has-modal-open body {
 }
 
 .route-map[data-route-map-active-mode="interactive"] .route-map__preview-stage {
-  min-height: clamp(18rem, 48vw, 27rem);
+  min-height: clamp(14.5rem, 37vw, 20.5rem);
 }
 
 .route-map[data-route-map-active-mode="interactive"] .route-map__preview-overlay {
@@ -3811,11 +3813,11 @@ html.has-modal-open body {
   overflow: hidden;
   border-radius: inherit;
   width: 100%;
-  height: 100%;
+  height: auto;
 }
 
 .route-map__map-shell--interactive {
-  min-height: clamp(20rem, 54vw, 31rem);
+  min-height: clamp(14.8rem, 38vw, 20.8rem);
   border-radius: calc(var(--radius-lg) - 4px);
   border: 1px solid rgba(171, 74, 59, 0.12);
   background:
@@ -4287,9 +4289,9 @@ html.has-modal-open body {
 
 .route-reference {
   display: grid;
-  gap: 0.8rem;
+  gap: 0.68rem;
   align-content: start;
-  padding: 1rem 1.02rem;
+  padding: 0.9rem 0.94rem;
   border-radius: calc(var(--radius-lg) - 4px);
   border: 1px solid rgba(171, 74, 59, 0.12);
   background:
@@ -4375,8 +4377,8 @@ html.has-modal-open body {
 
 .route-reference__day {
   display: grid;
-  gap: 0.34rem;
-  padding: 0.82rem 0.88rem;
+  gap: 0.28rem;
+  padding: 0.72rem 0.78rem;
   border-radius: calc(var(--radius-lg) - 7px);
   border: 1px solid rgba(171, 74, 59, 0.12);
   background: rgba(255, 250, 245, 0.72);
@@ -4489,11 +4491,11 @@ html.has-modal-open body {
   }
 
   .route-map__preview-stage {
-    min-height: 16.4rem;
+    min-height: 13.8rem;
   }
 
   .route-map[data-route-map-active-mode="interactive"] .route-map__preview-stage {
-    min-height: 16.4rem;
+    min-height: 13.8rem;
   }
 
   .route-map__status {
@@ -6155,10 +6157,10 @@ html[data-theme="light"] body {
 .budget-day-card {
   display: grid;
   align-content: start;
-  gap: 0.82rem;
+  gap: 0.72rem;
   width: min(100%, 52rem);
   justify-self: center;
-  padding: 0.96rem 1rem;
+  padding: 0.88rem 0.92rem;
 }
 
 .budget-day-card__header {
@@ -6219,13 +6221,13 @@ html[data-theme="light"] body {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.6rem;
+  gap: 0.52rem;
 }
 
 .budget-day-card__stay-field {
   display: grid;
-  gap: 0.68rem;
-  padding: 0.88rem 0.92rem;
+  gap: 0.58rem;
+  padding: 0.8rem 0.84rem;
   border: 1px solid rgba(171, 74, 59, 0.12);
   border-radius: 1rem;
   background:
@@ -6791,18 +6793,18 @@ html[data-theme="dark"] .budget-chip--free {
 /* Header, packing, and route overrides */
 
 :root {
-  --header-reserved-height: 8.8rem;
+  --header-reserved-height: 9.8rem;
 }
 
 .site-header {
-  padding-top: 0.14rem;
+  padding-top: 0.22rem;
 }
 
 .header-inner {
   grid-template-columns: minmax(0, 1fr) minmax(16rem, 35rem);
   grid-template-areas: "brand actions";
-  padding: 0.48rem 0 0.56rem;
-  gap: 0.42rem 1rem;
+  padding: 0.68rem 0 0.76rem;
+  gap: 0.56rem 1.04rem;
   align-items: start;
 }
 
@@ -6829,24 +6831,24 @@ html[data-theme="dark"] .budget-chip--free {
 }
 
 .brand-block {
-  gap: 0.16rem;
+  gap: 0.2rem;
   max-width: 31rem;
 }
 
 .brand-block h1 {
-  font-size: clamp(1.85rem, 2.8vw, 2.35rem);
+  font-size: clamp(2rem, 3vw, 2.55rem);
   line-height: 1.04;
 }
 
 .eyebrow {
-  font-size: 0.66rem;
+  font-size: 0.7rem;
   letter-spacing: 0.18em;
 }
 
 .hero-copy {
   max-width: 46ch;
-  font-size: 0.84rem;
-  line-height: 1.48;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .theme-switcher,
@@ -6884,24 +6886,24 @@ html[data-theme="dark"] .budget-chip--free {
   flex: 0 0 auto;
   width: auto;
   min-width: max-content;
-  padding: 0.34rem 0.66rem;
-  font-size: 0.74rem;
+  padding: 0.4rem 0.74rem;
+  font-size: 0.8rem;
   line-height: 1.2;
   letter-spacing: 0.03em;
 }
 
 .language-button {
   min-width: 4rem;
-  padding: 0.32rem 0.62rem;
-  font-size: 0.72rem;
+  padding: 0.36rem 0.66rem;
+  font-size: 0.76rem;
   line-height: 1.2;
 }
 
 .theme-button {
-  width: 2rem;
-  min-width: 2rem;
-  min-height: 2rem;
-  padding: 0.2rem;
+  width: 2.12rem;
+  min-width: 2.12rem;
+  min-height: 2.12rem;
+  padding: 0.22rem;
 }
 
 .theme-button__emoji {
@@ -6911,22 +6913,22 @@ html[data-theme="dark"] .budget-chip--free {
 .site-header.is-condensed .header-inner {
   grid-template-columns: minmax(12rem, 1fr) minmax(16rem, 30rem);
   grid-template-areas: "brand actions";
-  padding: 0.24rem 0 0.28rem;
-  gap: 0.24rem 0.8rem;
+  padding: 0.34rem 0 0.4rem;
+  gap: 0.3rem 0.86rem;
   align-items: center;
 }
 
 .site-header.is-condensed .brand-block {
   max-width: 20rem;
-  max-height: 4.2rem;
-  gap: 0.08rem;
+  max-height: 4.5rem;
+  gap: 0.1rem;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
 
 .site-header.is-condensed .brand-block h1 {
-  font-size: clamp(1.42rem, 2.2vw, 1.72rem);
+  font-size: clamp(1.56rem, 2.3vw, 1.86rem);
   line-height: 1.02;
 }
 
@@ -6940,7 +6942,7 @@ html[data-theme="dark"] .budget-chip--free {
 }
 
 .site-header.is-condensed .header-actions {
-  gap: 0.12rem;
+  gap: 0.18rem;
   justify-items: end;
   justify-self: end;
   width: min(100%, 30rem);
@@ -6964,8 +6966,8 @@ html[data-theme="dark"] .budget-chip--free {
   flex: 0 0 auto;
   width: auto;
   min-width: max-content;
-  padding: 0.28rem 0.56rem;
-  font-size: 0.72rem;
+  padding: 0.34rem 0.62rem;
+  font-size: 0.76rem;
   line-height: 1.18;
 }
 
@@ -7092,13 +7094,13 @@ html[data-theme="dark"] .budget-chip--free {
 
 @media (max-width: 720px) {
   .site-header {
-    padding-top: 0.08rem;
+    padding-top: 0.14rem;
   }
 
   .header-inner {
     width: min(calc(100% - 1.1rem), var(--content-width));
-    padding: 0.34rem 0 0.38rem;
-    gap: 0.42rem;
+    padding: 0.46rem 0 0.52rem;
+    gap: 0.48rem;
   }
 
   .header-actions {
@@ -7111,11 +7113,11 @@ html[data-theme="dark"] .budget-chip--free {
   }
 
   .brand-block h1 {
-    font-size: 1.8rem;
+    font-size: 1.92rem;
   }
 
   .hero-copy {
-    font-size: 0.78rem;
+    font-size: 0.82rem;
   }
 
   .section-nav {
@@ -7123,8 +7125,8 @@ html[data-theme="dark"] .budget-chip--free {
   }
 
   .section-tab {
-    padding: 0.28rem 0.52rem;
-    font-size: 0.68rem;
+    padding: 0.34rem 0.58rem;
+    font-size: 0.72rem;
   }
 
   .theme-switcher,
@@ -7135,15 +7137,15 @@ html[data-theme="dark"] .budget-chip--free {
 
   .language-button {
     min-width: 3.35rem;
-    padding: 0.26rem 0.5rem;
-    font-size: 0.68rem;
+    padding: 0.3rem 0.54rem;
+    font-size: 0.7rem;
   }
 
   .theme-button {
-    width: 1.8rem;
-    min-width: 1.8rem;
-    min-height: 1.8rem;
-    padding: 0.18rem;
+    width: 1.92rem;
+    min-width: 1.92rem;
+    min-height: 1.92rem;
+    padding: 0.2rem;
   }
 
   .site-header.is-condensed .header-inner {
@@ -7151,17 +7153,17 @@ html[data-theme="dark"] .budget-chip--free {
     grid-template-areas:
       "brand"
       "actions";
-    padding: 0.14rem 0 0.18rem;
-    gap: 0.18rem;
+    padding: 0.22rem 0 0.26rem;
+    gap: 0.22rem;
   }
 
   .site-header.is-condensed .brand-block {
     max-width: none;
-    max-height: 3.4rem;
+    max-height: 3.7rem;
   }
 
   .site-header.is-condensed .brand-block h1 {
-    font-size: 1.46rem;
+    font-size: 1.58rem;
   }
 
   .site-header.is-condensed .header-actions {
@@ -7176,8 +7178,8 @@ html[data-theme="dark"] .budget-chip--free {
   }
 
   .site-header.is-condensed .section-tab {
-    padding: 0.24rem 0.44rem;
-    font-size: 0.66rem;
+    padding: 0.3rem 0.48rem;
+    font-size: 0.7rem;
   }
 
   .essentials-group--packing .essentials-grid {
