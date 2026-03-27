@@ -166,14 +166,14 @@
     "doneStatus": { "en": "Booked", "ja": "予約済み" },
     "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
     "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Shin-Osaka -> Mishima or Shin-Fuji shinkansen", "ja": "新大阪 -> 三島または新富士 新幹線" },
+    "title": { "en": "Kyoto / Shin-Osaka -> Mishima shinkansen", "ja": "京都・新大阪 -> 三島 新幹線" },
     "summary": {
-      "en": "Treat this as the fixed rail booking that anchors the Day 4 Fuji transfer.",
-      "ja": "4日目の富士移動日の軸になる固定予約として扱います。"
+      "en": "Treat this as the fixed intercity booking that anchors the Day 4 Mishima handoff into Kawaguchiko.",
+      "ja": "4日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
     },
     "details": {
-      "en": "Reserve on the official rail site once Day 4 is fixed. This stays as the single booking link because it is the actual reserved-seat channel for the train you need.",
-      "ja": "4日目が固まったら公式の予約サイトで押さえます。必要な列車をそのまま予約できる実運用の窓口なので、このリンクだけを残しています。"
+      "en": "Reserve on Smart EX once Day 4 timing is fixed. Kyoto -> Mishima is roughly JPY 10,780 non-reserved or JPY 11,310 reserved, so this is the main timed rail commitment if you want a specific departure and seat.",
+      "ja": "4日目の時刻が固まったら Smart EX で押さえます。京都 -> 三島は自由席で約10,780円、指定席で約11,310円が目安なので、出発時刻と座席を決めたい場合の主な鉄道予約です。"
     },
     "links": [
       {
@@ -187,28 +187,28 @@
   {
     "id": "fuji-area-access",
     "transitDetailId": "fuji-gateway-kawaguchiko",
-    "group": "transit",
-    "filters": ["transit"],
-    "kind": "reference",
-    "tone": { "en": "Save route", "ja": "経路保存" },
-    "defaultStatus": { "en": "Ready", "ja": "準備OK" },
-    "doneStatus": { "en": "Saved", "ja": "保存済み" },
-    "toggleDefault": { "en": "Save route", "ja": "経路を保存する" },
-    "toggleDone": { "en": "Saved", "ja": "保存済み" },
-    "title": { "en": "Mishima / Shin-Fuji -> Kawaguchiko access", "ja": "三島・新富士 -> 河口湖アクセス" },
+    "group": "bookings",
+    "filters": ["to-book", "transit"],
+    "kind": "booking",
+    "tone": { "en": "Reserve ahead", "ja": "事前予約" },
+    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
+    "doneStatus": { "en": "Booked", "ja": "予約済み" },
+    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
+    "toggleDone": { "en": "Booked", "ja": "予約済み" },
+    "title": { "en": "Mishima -> Kawaguchiko bus", "ja": "三島 -> 河口湖バス" },
     "summary": {
-      "en": "Keep the local handoff saved so Day 4 stays practical after the shinkansen arrival.",
-      "ja": "新幹線到着後の4日目を実用的に進めるため、現地アクセスを保存しておきます。"
+      "en": "Treat this as the Day 4 local handoff booking if you want the cleanest Mishima-to-lake transfer.",
+      "ja": "4日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
     },
     "details": {
-      "en": "Use one saved route reference for the gateway-to-lake handoff so you do not have to rebuild it on arrival.",
-      "ja": "入口駅から湖側への受け渡しは、到着後に組み直さなくて済むよう、保存リンクを一つにまとめておきます。"
+      "en": "The Mishima -> Kawaguchiko highway bus is roughly JPY 2,500 standard or about JPY 2,300 when booked on the web, so save or reserve it once your shinkansen timing is locked.",
+      "ja": "三島 -> 河口湖の高速バスは通常約2,500円、WEB予約なら約2,300円が目安なので、新幹線時刻を決めたら保存または予約しておきます。"
     },
     "links": [
       {
-        "href": "https://www.google.com/maps/search/Kawaguchiko+Station",
-        "label": { "en": "Saved directions", "ja": "保存用ルート" },
-        "note": { "en": "Simple Kawaguchiko base reference", "ja": "河口湖拠点の簡易参照" },
+        "href": "https://sekitori.jp/en/news/20250314_134/",
+        "label": { "en": "Route + fare reference", "ja": "路線・運賃参照" },
+        "note": { "en": "Mishima bus details and web-fare note", "ja": "三島バス詳細とWEB運賃案内" },
         "kind": "primary"
       }
     ]
@@ -230,8 +230,8 @@
       "ja": "5日目の東京入りを保存しておき、渋谷の夜へ入りやすくします。"
     },
     "details": {
-      "en": "Use the bus page for the simplest one-step move toward Shibuya/Tokyo. It stays as the best single saved link because it matches the route handoff most directly.",
-      "ja": "渋谷・東京方面へ最も単純に戻るなら、直通バスページが使いやすいです。今回の受け渡しに最も直結するため、この一つを保存リンクとして残しています。"
+      "en": "Use the direct bus page for the simplest one-step move toward Shibuya/Tokyo. One-way highway-bus fares are around JPY 2,200, while rail can be the cleaner fallback if the bus timing stops fitting.",
+      "ja": "渋谷・東京方面へ最も単純に戻るなら直通バスページが使いやすいです。片道約2,200円が目安で、バス時刻が合わなくなった時は鉄道を代替にできます。"
     },
     "links": [
       {
@@ -282,12 +282,12 @@
     "toggleDone": { "en": "Booked", "ja": "予約済み" },
     "title": { "en": "Shibuya Sky booking", "ja": "渋谷スカイの予約" },
     "summary": {
-      "en": "Treat this as the timed night ticket for the Day 5 Shibuya finish.",
-      "ja": "5日目の渋谷締めに合わせた、時間指定の夜チケットとして扱います。"
+      "en": "Treat this as the timed Day 5 skyline ticket if you are keeping SHIBUYA SKY in the route.",
+      "ja": "SHIBUYA SKY をルートに残すなら、5日目の時間指定チケットとして扱います。"
     },
     "details": {
-      "en": "Use the official booking page for the actual reservation. Night slots matter more here than daytime slots because the route now lands in Shibuya in the evening.",
-      "ja": "実際の予約は公式ページで行います。今回のルートは夕方以降に渋谷へ入るため、昼より夜の時間帯の方が重要です。"
+      "en": "Use the official booking page for the actual reservation. Earlier online daytime slots are cheaper, later-day online slots run higher, and same-day counter pricing is higher again, so save this once the Day 5 arrival window is clear.",
+      "ja": "実際の予約は公式ページで行います。オンラインは早い昼枠が安く、遅い時間帯ほど上がり、当日窓口はさらに高くなるため、5日目の到着時間が見えたら保存しておきます。"
     },
     "links": [
       {
@@ -314,14 +314,14 @@
       "ja": "スカイツリーは6日目の観光メイン日に入ったため、公式チケットページをすぐ見られるようにしておきます。"
     },
     "details": {
-      "en": "Use the official Skytree ticket page if you want a timed booking instead of deciding on the spot. Day 6 is now the best slot to lock this in because Day 7 stays intentionally light.",
-      "ja": "現地判断ではなく時間指定で押さえたいなら、公式のチケットページを使います。7日目は軽く保つため、スカイツリーは6日目にまとめるのが合います。"
+      "en": "Use the official Skytree ticket page if you want a timed booking instead of deciding on the spot. Advance deck tickets start around JPY 2,100 and combo tickets around JPY 3,100, so Day 6 is the clean place to pick the time band you want.",
+      "ja": "現地判断ではなく時間指定で押さえたいなら、公式チケットページを使います。前売りのデッキ券は約2,100円から、回廊付きは約3,100円からなので、6日目に時間帯を選んでまとめるのが合います。"
     },
     "links": [
       {
         "href": "https://www.tokyo-skytree.jp/en/ticket/individual/",
         "label": { "en": "Official tickets", "ja": "公式チケット" },
-        "note": { "en": "Current ticket options", "ja": "現在のチケット案内" },
+        "note": { "en": "Deck from about JPY 2.1k; combo from about JPY 3.1k", "ja": "デッキ約2,100円から・回廊付き約3,100円から" },
         "kind": "primary"
       }
     ]

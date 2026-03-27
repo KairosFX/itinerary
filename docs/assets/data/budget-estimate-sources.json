@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-03-23",
+  "lastUpdated": "2026-03-27",
   "updatedCopy": {
-    "en": "Accommodation, meals, transit, and ticket references updated Mar 23, 2026",
-    "ja": "宿泊・食費・移動・チケットの基準は2026年3月23日更新"
+    "en": "Accommodation, meals, transit, and ticket references updated Mar 27, 2026",
+    "ja": "宿泊・食費・移動・チケットの基準は2026年3月27日更新"
   },
   "metaCopy": {
     "en": "The old total was inflated mainly because the model stretched the route too far instead of matching the fixed 7-day west-to-east flow through Osaka, Kyoto, the Mt. Fuji area, and Tokyo.",
@@ -231,20 +231,6 @@
       "links": [
         {
           "label": {
-            "en": "Osaka -> Kyoto fare lookup",
-            "ja": "大阪 -> 京都の運賃確認"
-          },
-          "url": "https://www.navitime.co.jp/en/transfer/searchlist?defaultCondition=0&dnvStationCode=00001756&dnvStationName=Kyoto&orvStationCode=00004305&orvStationName=%E6%96%B0%E5%A4%A7%E9%98%AA"
-        },
-        {
-          "label": {
-            "en": "Kyoto Subway + Bus 1-day ticket",
-            "ja": "京都 地下鉄・バス1日券"
-          },
-          "url": "https://www2.city.kyoto.lg.jp/kotsu/webguide/en/tika/howtoride_tika_3_0.html"
-        },
-        {
-          "label": {
             "en": "Smart EX booking",
             "ja": "Smart EX 予約"
           },
@@ -252,24 +238,31 @@
         },
         {
           "label": {
-            "en": "Kawaguchiko base reference",
-            "ja": "河口湖拠点参照"
+            "en": "Oversized baggage rule",
+            "ja": "特大荷物ルール"
           },
-          "url": "https://www.google.com/maps/search/Kawaguchiko+Station"
+          "url": "https://global.jr-central.co.jp/en/info/oversized-baggage/index.html"
         },
         {
           "label": {
-            "en": "Kawaguchiko -> Shibuya bus",
-            "ja": "河口湖 -> 渋谷バス"
+            "en": "Mishima -> Kawaguchiko bus",
+            "ja": "三島 -> 河口湖バス"
           },
-          "url": "https://highway-buses.jp/course/shibuya.php"
+          "url": "https://sekitori.jp/en/news/20250314_134/"
         },
         {
           "label": {
-            "en": "Fuji Excursion fallback",
-            "ja": "富士回遊の代替確認"
+            "en": "Tokyo <-> Kawaguchiko bus",
+            "ja": "東京 <-> 河口湖バス"
           },
-          "url": "https://e.fujikyu-railway.jp/fujikaiyuu/"
+          "url": "https://highway-buses.jp/index.php"
+        },
+        {
+          "label": {
+            "en": "Fujikyu Railway fare",
+            "ja": "富士急行線運賃"
+          },
+          "url": "https://e.fujikyu-railway.jp/fare/"
         }
       ]
     },
@@ -280,8 +273,8 @@
         "ja": "チケットと時間帯"
       },
       "summary": {
-        "en": "Kaiyukan, Shibuya Sky, and Tokyo Skytree are the main ticketed anchors in the fixed route.",
-        "ja": "固定ルートで主な有料の軸になるのは、海遊館、渋谷スカイ、東京スカイツリーです。"
+        "en": "Shibuya Sky and Tokyo Skytree are the main timed tickets in the fixed route, while Kaiyukan remains a simpler Day 3 same-day ticket check.",
+        "ja": "固定ルートで主な時間指定チケットになるのは渋谷スカイと東京スカイツリーで、海遊館は3日目に当日判断しやすいチケットとして残しています。"
       },
       "links": [
         {

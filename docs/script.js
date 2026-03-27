@@ -83,7 +83,7 @@ const packingStorageKey = `japan-trip-packing-state-${itineraryStateVersion}`;
 const budgetNotesStorageKey = `japan-trip-budget-notes-${itineraryStateVersion}`;
 const fujiForecastSessionKey = `japan-trip-fuji-forecast-${itineraryStateVersion}`;
 const queuedStorageWrites = new Map();
-const headerReservedHeightFallbackPx = 118;
+const headerReservedHeightFallbackPx = 114;
 const timelineNodeTopRem = 1.36;
 const timelineNodeSizeRem = 1.42;
 const timelineLinkOverlapPx = 1;
@@ -93,7 +93,7 @@ const bookingTransitItemsDataUrl = "./assets/data/booking-transit-items.json";
 const transitDetailsDataUrl = "./assets/data/transit-details.json";
 const offlineSnapshotUrl = "./japan-escape-itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-03-27-offline-v17";
+const offlineBundleVersion = "2026-03-27-offline-v18";
 const routeMapLibraryScriptUrl = "./assets/vendor/maplibre/maplibre-gl.js";
 const routeMapLibraryStyleUrl = "./assets/vendor/maplibre/maplibre-gl.css";
 const routeMapOpenFreeMapStyleUrl = "https://tiles.openfreemap.org/styles/liberty";
@@ -109,7 +109,7 @@ const budgetTravelerCountMax = 24;
 const budgetSharedRoomOccupancy = 2;
 const budgetAccommodationShareModeDefault = "all-travelers";
 const budgetAccommodationShareModes = ["not-shared", "all-travelers", "custom"];
-const budgetSourceUpdatedAt = "2026-03-23";
+const budgetSourceUpdatedAt = "2026-03-27";
 const budgetDisplayExchangeRates = {
   cadPerJpy: 1 / 109,
   usdPerJpy: 1 / 149
@@ -293,8 +293,8 @@ const budgetSourceGroups = [
     id: "accommodation",
     title: { en: "Accommodation quotes", ja: "宿泊見積り" },
     summary: {
-      en: "The stay plan is route-based instead of city-generic: a private/local or Minami Osaka option on Days 1 and 3, Shijo / Karasuma for Kyoto East + Day 3 departures, one Kawaguchiko-side stay on Day 4, Tokyo hotel nights on Days 5 and 6, and no paid stay by default on the Day 7 flight-home wrap-up.",
-      ja: "宿泊計画は、都市名だけでなく実際の動線ベースへ変更しました。1日目と3日目の大阪はローカル・プライベート滞在またはミナミ拠点、2日目は京都東側と3日目出発に合う四条烏丸、4日目は河口湖側の1泊、東京ホテルは5日目と6日目で、7日目は帰国日のため初期値では有料宿泊を入れていません。"
+      en: "The base stay plan is now explicit: private/local or no-cost Osaka nights on Days 1 and 3 unless switched, Kyoto hotel on Day 2, one Mt. Fuji area stay on Day 4, Tokyo hotel nights on Days 5-6, and no paid stay by default on the Day 7 flight-home wrap-up.",
+      ja: "基本の滞在計画を明示しました。1日目と3日目の大阪は、切り替えない限りローカル・プライベート滞在または宿泊費なし、2日目は京都ホテル、4日目は富士エリア宿泊、東京ホテルは5日目と6日目で、7日目は帰国日のため初期値では有料宿泊を入れていません。"
     },
     links: [
       {
@@ -319,8 +319,8 @@ const budgetSourceGroups = [
     id: "room-logic",
     title: { en: "Stay logic", ja: "滞在ロジック" },
     summary: {
-      en: "The old model inflated totals by stretching the scenic middle section and the Tokyo finish. The new model stores a reusable stay type plus a route-fit area per day, so private/local stays remain free and paid stays stay tied to the actual logistics.",
-      ja: "以前のモデルは、中盤の景色区間と東京の締めを引き延ばして合計を膨らませていました。新しいモデルは日ごとに再利用可能な滞在タイプと動線に合うエリアを持つため、ローカル・プライベート滞在は無料のまま、有料宿も実際の移動に結び付けて管理します。"
+      en: "The old model inflated totals by stretching the mid-route scenic section and the Tokyo finish. The new model stores a reusable stay type per day, so private/local Osaka nights remain free until you deliberately switch them.",
+      ja: "以前のモデルは、中盤の景色区間と東京の締めを引き延ばして合計を膨らませていました。新しいモデルは日ごとに再利用可能な滞在タイプを持つため、大阪のローカル・プライベート滞在は意図して切り替えるまで無料のままです。"
     },
     links: []
   },
@@ -333,33 +333,37 @@ const budgetSourceGroups = [
     },
     links: [
       {
-        label: { en: "Osaka -> Kyoto fare lookup", ja: "大阪 -> 京都の運賃確認" },
-        url: "https://www.navitime.co.jp/en/transfer/searchlist?defaultCondition=0&dnvStationCode=00001756&dnvStationName=Kyoto&orvStationCode=00004305&orvStationName=%E6%96%B0%E5%A4%A7%E9%98%AA"
-      },
-      {
-        label: { en: "Kyoto Subway + Bus 1-day ticket", ja: "京都 地下鉄・バス1日券" },
-        url: "https://www2.city.kyoto.lg.jp/kotsu/webguide/en/tika/howtoride_tika_3_0.html"
-      },
-      {
         label: { en: "Smart EX booking", ja: "Smart EX 予約" },
         url: "https://smart-ex.jp/en/index.php"
       },
-      { label: { en: "Kawaguchiko base reference", ja: "河口湖拠点参照" }, url: "https://www.google.com/maps/search/Kawaguchiko+Station" },
-      { label: { en: "Kawaguchiko -> Shibuya bus", ja: "河口湖 -> 渋谷バス" }, url: "https://highway-buses.jp/course/shibuya.php" },
-      { label: { en: "Fuji Excursion fallback", ja: "富士回遊の代替確認" }, url: "https://e.fujikyu-railway.jp/fujikaiyuu/" }
+      {
+        label: { en: "Oversized baggage rule", ja: "特大荷物ルール" },
+        url: "https://global.jr-central.co.jp/en/info/oversized-baggage/index.html"
+      },
+      {
+        label: { en: "Mishima -> Kawaguchiko bus", ja: "三島 -> 河口湖バス" },
+        url: "https://sekitori.jp/en/news/20250314_134/"
+      },
+      {
+        label: { en: "Tokyo <-> Kawaguchiko bus", ja: "東京 <-> 河口湖バス" },
+        url: "https://highway-buses.jp/index.php"
+      },
+      {
+        label: { en: "Fujikyu Railway fare", ja: "富士急行線運賃" },
+        url: "https://e.fujikyu-railway.jp/fare/"
+      }
     ]
   },
   {
     id: "tickets",
     title: { en: "Tickets + timing", ja: "チケットと時間帯" },
     summary: {
-      en: "Kaiyukan still fits its current official rate. Shibuya Sky is now treated more carefully: the budget uses the later-day pricing band because the itinerary is explicitly for a night visit.",
-      ja: "海遊館は現在の公式料金で妥当でした。渋谷スカイはより慎重に扱い、旅程が夜景前提のため、予算には午後後半以降の料金帯を使っています。"
+      en: "Shibuya Sky and Tokyo Skytree are the main timed tickets in the fixed route, while Kaiyukan remains a simpler Day 3 same-day ticket check.",
+      ja: "固定ルートで主な時間指定チケットになるのは渋谷スカイと東京スカイツリーで、海遊館は3日目に当日判断しやすいチケットとして残しています。"
     },
     links: [
       { label: { en: "Kaiyukan official tickets", ja: "海遊館公式チケット" }, url: "https://pop.kaiyukan.com/info/admission/" },
       { label: { en: "Shibuya Sky official tickets", ja: "渋谷スカイ公式チケット" }, url: "https://www.shibuya-scramble-square.com/sky/ticket/" },
-      { label: { en: "Shibuya Sky price timing guide", ja: "渋谷スカイ料金タイミング案内" }, url: "https://matcha-jp.com/jp/11771" },
       { label: { en: "Tokyo Skytree official tickets", ja: "東京スカイツリー公式チケット" }, url: "https://www.tokyo-skytree.jp/en/ticket/individual/" }
     ]
   },
@@ -447,8 +451,8 @@ const budgetDayDefinitions = [
     title: { en: "Day 4 - Kansai -> Mt. Fuji Area", ja: "4日目・関西から富士エリア" },
     subtitle: { en: "One clean transfer into the lake-side Fuji base", ja: "湖側の富士拠点へ一気に入る移動日" },
     items: [
-      { label: { en: "Shinkansen: Shin-Osaka -> Mishima or Shin-Fuji", ja: "新幹線：新大阪 -> 三島または新富士" }, category: "intercityTransit", bucket: "booked", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 12320 } },
-      { label: { en: "Local access to Kawaguchiko / Mt. Fuji area", ja: "河口湖・富士エリアへの現地アクセス" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 2400, range: { lean: 1800, expected: 2400, high: 3200 } } },
+      { label: { en: "Shinkansen: Kyoto / Shin-Osaka -> Mishima", ja: "新幹線：京都・新大阪 -> 三島" }, category: "intercityTransit", bucket: "booked", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 11310, range: { lean: 10780, expected: 11310, high: 11310 } } },
+      { label: { en: "Mishima -> Kawaguchiko bus", ja: "三島 -> 河口湖バス" }, category: "localTransit", bucket: "required", sourceGroup: "core-transit", cost: { mode: "perPerson", amount: 2500, range: { lean: 2300, expected: 2500, high: 2500 } } },
       { label: { en: "Lake arrival views", ja: "到着後の湖の景色" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       { label: { en: "Quiet sunset", ja: "静かな夕景" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       {
@@ -463,7 +467,7 @@ const budgetDayDefinitions = [
         category: "baggage",
         bucket: "optional",
         sourceGroup: "assumptions",
-        cost: { mode: "perPair", amount: 1500, range: { lean: 1200, expected: 1500, high: 2000 } }
+        cost: { mode: "perPair", amount: 2500, range: { lean: 2000, expected: 2500, high: 3000 } }
       }
     ]
   },
@@ -515,7 +519,7 @@ const budgetDayDefinitions = [
         category: "ticketsAdmissions",
         bucket: "booked",
         sourceGroup: "tickets",
-        cost: { mode: "perPerson", amount: 2400, range: { lean: 2100, expected: 2400, high: 3500 } }
+        cost: { mode: "perPerson", amount: 2100, range: { lean: 2100, expected: 2100, high: 3100 } }
       },
       { label: { en: "Tokyo Solamachi", ja: "東京ソラマチ" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
       { label: { en: "Akihabara", ja: "秋葉原" }, category: "ticketsAdmissions", bucket: "free", sourceGroup: "assumptions", cost: { mode: "none", amount: 0 } },
@@ -757,12 +761,12 @@ const offlineLabels = {
     ja: "この保存版はオフラインでそのまま使える単体版です。"
   },
   standardMeta: {
-    en: "Cached bundle version 2026-03-23. Includes checklist, packing, upgraded budget notes, route preview, and transit details.",
-    ja: "キャッシュ版は 2026-03-23。チェックリスト、荷造り、強化した予算メモ、ルート画像、移動詳細を含みます。"
+    en: "Cached bundle version 2026-03-27. Includes checklist, packing, upgraded budget notes, route preview, and transit details.",
+    ja: "キャッシュ版は 2026-03-27。チェックリスト、荷造り、強化した予算メモ、ルート画像、移動詳細を含みます。"
   },
   installHintMeta: {
-    en: "If no install button appears, use your browser menu or iPhone/iPad Share sheet to add the guide to the home screen. Snapshot version: 2026-03-23.",
-    ja: "追加ボタンが出ない場合は、ブラウザーのメニューや iPhone/iPad の共有メニューからホーム画面へ追加できます。保存版は 2026-03-23 です。"
+    en: "If no install button appears, use your browser menu or iPhone/iPad Share sheet to add the guide to the home screen. Snapshot version: 2026-03-27.",
+    ja: "追加ボタンが出ない場合は、ブラウザーのメニューや iPhone/iPad の共有メニューからホーム画面へ追加できます。保存版は 2026-03-27 です。"
   },
   snapshotMeta: {
     en: "This single-file snapshot keeps the local checklist, packing, budget notes, route preview, and transit details working without fetches.",
@@ -820,8 +824,8 @@ const budgetSectionDefinitions = [
     id: "documents-phone",
     label: { en: "Documents + Phone", ja: "書類とスマホ" },
     meta: {
-      en: "eSIM, small device prep, and backup copies only.",
-      ja: "eSIM、小さな端末準備、控えだけを対象にします。"
+      en: "Arrival QR, eSIM reserve, and backup copies only.",
+      ja: "入国QR、eSIM予備費、控えだけを対象にします。"
     }
   },
   {
@@ -987,7 +991,7 @@ const routeExplorerPathDefinitions = [
   {
     id: "shin-osaka-fuji-gateway",
     d: "M202 548 L878 292",
-    title: { en: "Shin-Osaka -> Mishima / Shin-Fuji", ja: "新大阪 -> 三島・新富士" },
+    title: { en: "Shin-Osaka -> Mishima", ja: "新大阪 -> 三島" },
     summary: {
       en: "This is the longest rail segment in the route and the clean handoff from Kansai into the Mt. Fuji side.",
       ja: "この区間が旅程で最長の鉄道移動で、関西から富士側へ切り替える基幹の受け渡しです。"
@@ -1018,7 +1022,7 @@ const routeExplorerPathDefinitions = [
   {
     id: "fuji-gateway-kawaguchiko",
     d: "M878 292 L938 238",
-    title: { en: "Mishima / Shin-Fuji -> Kawaguchiko", ja: "三島・新富士 -> 河口湖" },
+    title: { en: "Mishima -> Kawaguchiko", ja: "三島 -> 河口湖" },
     summary: {
       en: "This is the local access leg into the lake base, trading the shinkansen arrival for the quieter Fuji-area night.",
       ja: "この区間で新幹線到着から湖側の拠点へ移り、静かな富士エリアの夜へつなげます。"
@@ -1033,8 +1037,8 @@ const routeExplorerPathDefinitions = [
         ja: "まずは駅から湖側へ入る実用的な移動として見て、そのあと到着景色や夕景を楽しむ流れです。"
       },
       {
-        en: "The linked detail keeps Mishima-side and Shin-Fuji-side access options together.",
-        ja: "関連詳細には、三島側と新富士側のアクセス案をまとめています。"
+        en: "The linked detail keeps the Mishima bus handoff and lake-side arrival timing together.",
+        ja: "関連詳細では、三島からのバス接続と湖側到着の時間感覚をまとめています。"
       }
     ],
     dayLinks: [{ day: 4 }],
@@ -1155,8 +1159,8 @@ const routeExplorerStopDefinitions = [
         ja: "大阪市内の細かい動きではなく、東へ伸びる大きな移動に集中したいときの起点です。"
       },
       {
-        en: "It connects directly to the saved shinkansen detail for Mishima or Shin-Fuji.",
-        ja: "三島または新富士へ向かう新幹線詳細に、そのままつなげられます。"
+        en: "It connects directly to the saved shinkansen detail for Mishima.",
+        ja: "三島へ向かう新幹線詳細に、そのままつなげられます。"
       }
     ],
     dayLinks: [{ day: 4 }],
@@ -1174,7 +1178,7 @@ const routeExplorerStopDefinitions = [
   },
   {
     id: "fuji-gateway",
-    title: { en: "Mishima / Shin-Fuji", ja: "三島・新富士" },
+    title: { en: "Mishima", ja: "三島" },
     summary: {
       en: "This stop marks the rail-to-local gateway into the Kawaguchiko side of the route.",
       ja: "この地点は、新幹線から河口湖側のローカルアクセスへ切り替わる入口です。"
@@ -1332,8 +1336,8 @@ const routeExplorerViewDefinitions = [
     label: { en: "Day 4 transfer", ja: "4日目移動" },
     title: { en: "Kansai -> Mt. Fuji area", ja: "関西 -> 富士エリア" },
     summary: {
-      en: "This is the clean eastbound pivot: shinkansen to Mishima or Shin-Fuji first, then local access into Kawaguchiko.",
-      ja: "ここが東行きのきれいな切り替えです。まず三島または新富士まで新幹線で進み、そのあと河口湖へ入ります。"
+      en: "This is the clean eastbound pivot: shinkansen to Mishima first, then local access into Kawaguchiko.",
+      ja: "ここが東行きのきれいな切り替えです。まず三島まで新幹線で進み、そのあと河口湖へ入ります。"
     },
     badges: [
       { en: "Day 4", ja: "4日目" },
@@ -9668,8 +9672,8 @@ function showSequenceNotice(requiredDay) {
 
   sequenceNotice.textContent =
     root.lang === "ja"
-      ? `${requiredDay}日目を完了すると次の行程へ進めます。`
-      : `Complete Day ${requiredDay} to unlock the next step of your trip.`;
+      ? `${requiredDay}日目を先に完了してから次の行程へ進めます。`
+      : `Complete Day ${requiredDay} first, then continue to the next part of the trip.`;
 
   sequenceNotice.hidden = false;
   sequenceNotice.classList.remove("is-visible");
