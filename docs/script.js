@@ -259,6 +259,7 @@ const tripNoteDefinitions = [
     }
   }
 ];
+const tripNoteDefinitionMap = new Map(tripNoteDefinitions.map((note) => [note.day, note]));
 const fujiForecastCacheMaxAgeMs = 45 * 60 * 1000;
 const fujiForecastSourceUrl = "https://open-meteo.com/en/docs";
 const fujiForecastApiUrl = "https://api.open-meteo.com/v1/forecast";
@@ -512,7 +513,6 @@ const budgetSectionDefinitionMap = new Map(
 const routeMapLabels = {
   days: { en: "Route days", ja: "日別ルート" },
   tools: { en: "Quick tools", ja: "クイック操作" },
-  stops: { en: "Major stops", ja: "主要地点" },
   checklistAction: { en: "Open checklist", ja: "チェックリストを開く" },
   sharedLoading: { en: "Loading route map...", ja: "ルート地図を読み込み中..." },
   sharedLoadingBody: {
@@ -533,7 +533,7 @@ const routeMapLabels = {
     ja: "ルート地図を使うときはライブサイトを開いてください。"
   }
 };
-const routeExplorerDefaultSelectionId = "overview";
+const routeExplorerDefaultSelectionId = "day-1";
 const routeMapInitialView = {
   center: [137.4, 35.1],
   zoom: 4.95
@@ -911,82 +911,42 @@ const routeExplorerStopDefinitions = [
   }
 ];
 const routeExplorerStopMap = new Map(routeExplorerStopDefinitions.map((stop) => [stop.id, stop]));
-const routeExplorerViewDefinitions = [
+const routeDayViewDefinitions = [
   {
-    id: "overview",
-    label: { en: "All path", ja: "全体" },
-    title: { en: "Route overview", ja: "ルート概要" },
-    summary: {
-      en: "Use the same map surface to scan the fixed west-to-east route from Osaka and Kyoto through the Mt. Fuji area into Tokyo.",
-      ja: "同じ地図面で、大阪と京都から富士エリアを経て東京へ入る固定の西から東への流れを見渡せます。"
-    },
+    day: 1,
+    stopIds: ["osaka"],
+    segmentIds: [],
     badges: [
-      { en: "Days 1-7", ja: "1日目-7日目" },
-      { en: "Stops + transfer legs", ja: "地点＋移動区間" }
-    ],
-    notes: [
-      {
-        en: "Major-stop chips keep the city and base context visible, while route-leg selection isolates the transfer days that need extra attention.",
-        ja: "主要地点チップでは都市と拠点の流れを見渡せて、区間選択では注意したい移動日だけを切り出せます。"
-      },
-      {
-        en: "Day 4 now holds the Fuji-area places, and Day 5 starts Tokyo without repeating the lake side.",
-        ja: "4日目に富士エリアの立ち寄りをまとめ、5日目は湖側を繰り返さず東京を始めます。"
-      }
-    ],
-    dayLinks: [{ day: 1 }, { day: 2 }, { day: 3 }, { day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }],
-    stopIds: ["osaka", "kyoto", "shin-osaka", "fuji-gateway", "fuji", "tokyo"],
-    segmentIds: routeExplorerPathDefinitions.map((path) => path.id)
+      { en: "Arrival day", ja: "到着日" },
+      { en: "Osaka start", ja: "大阪スタート" }
+    ]
   },
   {
-    id: "kansai-start",
-    label: { en: "Kansai start", ja: "関西前半" },
-    title: { en: "Osaka + Kyoto front half", ja: "大阪・京都の前半" },
-    summary: {
-      en: "This keeps Days 1 to 3 together before the route stretches into the Fuji transfer.",
-      ja: "富士側への移動へ伸びる前の1日目から3日目までを、関西側だけでまとめて見られます。"
-    },
+    day: 2,
+    stopIds: ["osaka", "kyoto"],
+    segmentIds: ["osaka-kyoto"],
     badges: [
-      { en: "Days 1-3", ja: "1日目-3日目" },
-      { en: "City rhythm", ja: "街歩き中心" }
-    ],
-    notes: [
-      {
-        en: "Kyoto East and Arashiyama stay split so each day remains practical instead of overloaded.",
-        ja: "京都東側と嵐山を分け、各日が重くなりすぎず実用的に見える構成にしています。"
-      },
-      {
-        en: "Osaka stays visible because the route deliberately returns there before heading east.",
-        ja: "東へ向かう前に大阪へ戻る構成なので、この表示でも大阪を残しています。"
-      }
-    ],
-    dayLinks: [{ day: 1 }, { day: 2 }, { day: 3 }],
-    stopIds: ["osaka", "kyoto", "shin-osaka"],
-    segmentIds: ["osaka-kyoto", "kyoto-osaka", "osaka-shin-osaka"]
+      { en: "Kyoto East", ja: "京都東側" },
+      { en: "Walking day", ja: "街歩き中心" }
+    ]
   },
   {
-    id: "day4-transfer",
-    label: { en: "Day 4 Fuji", ja: "4日目富士" },
-    title: { en: "Day 4 - Mt. Fuji area", ja: "4日目・富士エリア" },
-    summary: {
-      en: "This view keeps the Mishima handoff, Chureito / Shimoyoshida, and Lake Kawaguchiko tied to the same Fuji-area day.",
-      ja: "この表示では、三島ハンドオフ、忠霊塔・下吉田、河口湖を同じ富士エリア日にまとめて見られます。"
-    },
+    day: 3,
+    stopIds: ["kyoto", "osaka"],
+    segmentIds: ["kyoto-osaka"],
     badges: [
-      { en: "Day 4", ja: "4日目" },
-      { en: "3 Fuji-area stops", ja: "富士エリア3か所" }
+      { en: "Arashiyama + Osaka", ja: "嵐山＋大阪" },
+      { en: "Return west", ja: "大阪へ戻る日" }
+    ]
+  },
+  {
+    day: 4,
+    stopIds: ["osaka", "shin-osaka", "fuji-gateway", "fuji"],
+    segmentIds: ["osaka-shin-osaka", "shin-osaka-fuji-gateway", "fuji-gateway-kawaguchiko"],
+    badges: [
+      { en: "Transfer day", ja: "移動メイン日" },
+      { en: "Fuji area", ja: "富士エリア" }
     ],
-    notes: [
-      {
-        en: "Use this view when you want the Day 4 Fuji block rather than the earlier Osaka or Kyoto city context.",
-        ja: "大阪や京都の街歩きではなく、4日目の富士エリアのまとまりを見たいときの表示です。"
-      },
-      {
-        en: "The saved transit popups keep the long rail leg and the Fuji-side local moves readable without splitting the lake stop into Day 5.",
-        ja: "保存済み移動詳細では、長距離鉄道と富士側のローカル移動を見やすくしつつ、河口湖を5日目へ分けないようにしています。"
-      }
-    ],
-    dayLinks: [{ day: 4 }],
     transitActions: [
       {
         id: "shin-osaka-fuji-gateway",
@@ -996,69 +956,69 @@ const routeExplorerViewDefinitions = [
         id: "fuji-gateway-kawaguchiko",
         label: { en: "Fuji access detail", ja: "富士アクセス詳細" }
       }
-    ],
-    stopIds: ["shin-osaka", "fuji-gateway", "fuji"],
-    segmentIds: ["shin-osaka-fuji-gateway", "fuji-gateway-kawaguchiko"]
+    ]
   },
   {
-    id: "day5-handoff",
-    label: { en: "Day 5 Tokyo", ja: "5日目東京" },
-    title: { en: "Day 5 - Tokyo / Shibuya", ja: "5日目・東京・渋谷" },
-    summary: {
-      en: "This view covers the clean Tokyo handoff and the Shibuya arrival after the Fuji day is already done.",
-      ja: "この表示では、富士エリア日を終えたあとの、きれいな東京入りと渋谷到着を見られます。"
-    },
+    day: 5,
+    stopIds: ["fuji", "tokyo"],
+    segmentIds: ["fuji-tokyo"],
     badges: [
-      { en: "Day 5", ja: "5日目" },
-      { en: "Tokyo arrival", ja: "東京到着" }
+      { en: "Tokyo arrival", ja: "東京到着" },
+      { en: "Shibuya handoff", ja: "渋谷入り" }
     ],
-    notes: [
-      {
-        en: "Treat the Fuji area as the departure point only, then switch fully to the Tokyo arrival plan.",
-        ja: "富士エリアは出発地点だけにして、そのあと東京到着プランへ完全に切り替えます。"
-      },
-      {
-        en: "The related popup keeps the direct train and highway-bus arrival options close together.",
-        ja: "関連ポップアップでは、直通列車と高速バスの到着案を近い場所で確認できます。"
-      }
-    ],
-    dayLinks: [{ day: 5 }],
     transitActions: [
       {
         id: "kawaguchiko-tokyo",
         label: { en: "Tokyo arrival detail", ja: "東京到着詳細" }
       }
-    ],
-    stopIds: ["fuji", "tokyo"],
-    segmentIds: ["fuji-tokyo"]
+    ]
   },
   {
-    id: "tokyo-finish",
-    label: { en: "Tokyo finish", ja: "東京後半" },
-    title: { en: "Tokyo main-route finish", ja: "東京で本編を締める" },
-    summary: {
-      en: "The Tokyo close now pairs one fuller sightseeing day with a lighter Imperial Palace/Shinjuku departure-day wrap-up inside the fixed 7-day route.",
-      ja: "東京の締めは、観光メインの1日と、皇居と新宿を軽く回る帰国日を、固定の7日間本編の中で組み合わせています。"
-    },
-    badges: [
-      { en: "Days 6-7", ja: "6日目-7日目" },
-      { en: "Main route only", ja: "本編のみ" }
-    ],
-    notes: [
-      {
-        en: "Day 6 is the denser Tokyo day: Skytree, Solamachi, and Akihabara while energy is still available.",
-        ja: "6日目は体力があるうちに、スカイツリー、ソラマチ、秋葉原をまとめて回る日です。"
-      },
-      {
-        en: "Day 7 stays intentionally light around Tokyo Imperial Palace and Shinjuku so bags and the airport transfer stay low-stress.",
-        ja: "7日目は皇居と新宿を軸にあえて軽くし、荷物と空港移動を慌てず進めます。"
-      }
-    ],
-    dayLinks: [{ day: 6 }, { day: 7 }],
+    day: 6,
     stopIds: ["tokyo"],
-    segmentIds: []
+    segmentIds: [],
+    badges: [
+      { en: "Full Tokyo day", ja: "東京観光メイン日" },
+      { en: "Skytree side", ja: "スカイツリー側" }
+    ]
+  },
+  {
+    day: 7,
+    stopIds: ["tokyo"],
+    segmentIds: [],
+    badges: [
+      { en: "Departure day", ja: "帰国日" },
+      { en: "Keep it light", ja: "軽めに動く日" }
+    ]
   }
 ];
+const routeExplorerViewDefinitions = routeDayViewDefinitions.map((viewDefinition) => {
+  const tripNote = tripNoteDefinitionMap.get(viewDefinition.day) || null;
+  const fallbackTitle = {
+    en: `Day ${viewDefinition.day}`,
+    ja: `${viewDefinition.day}日目`
+  };
+  const fallbackSummary = {
+    en: `Focus Day ${viewDefinition.day} on the map and jump into the matching checklist.`,
+    ja: `${viewDefinition.day}日目のルートを地図で見て、そのまま対応するチェックリストへ移動できます。`
+  };
+
+  return {
+    id: `day-${viewDefinition.day}`,
+    day: viewDefinition.day,
+    label: {
+      en: `Day ${viewDefinition.day}`,
+      ja: `${viewDefinition.day}日目`
+    },
+    title: tripNote?.title || fallbackTitle,
+    summary: tripNote?.summary || fallbackSummary,
+    badges: viewDefinition.badges,
+    transitActions: viewDefinition.transitActions || [],
+    dayLinks: [{ day: viewDefinition.day }],
+    stopIds: viewDefinition.stopIds,
+    segmentIds: viewDefinition.segmentIds
+  };
+});
 const routeDayStopDefinitions = {
   1: [{ en: "Osaka", ja: "大阪" }],
   2: [{ en: "Kyoto", ja: "京都" }],
@@ -5615,14 +5575,26 @@ function getRouteExplorerSegmentById(segmentId) {
 
 function getRouteDayReference(day) {
   const normalizedDay = Number.parseInt(String(day), 10);
+  const tripNote = tripNoteDefinitionMap.get(normalizedDay) || null;
   const definition =
     budgetDayDefinitions.find((entry) => entry.day === normalizedDay) || null;
+  const fallbackTitle = tripNote?.title || {
+    en: `Day ${normalizedDay}`,
+    ja: `${normalizedDay}日目`
+  };
 
   return {
     day: normalizedDay,
-    title: definition?.title || {
-      en: `Day ${normalizedDay}`,
-      ja: `${normalizedDay}日目`
+    title: definition?.title || fallbackTitle,
+    displayTitle: {
+      en: (definition?.title?.en || fallbackTitle.en).replace(
+        new RegExp(`^Day\\s+${normalizedDay}\\s*[-:]\\s*`, "i"),
+        ""
+      ),
+      ja: (definition?.title?.ja || fallbackTitle.ja).replace(
+        new RegExp(`^${normalizedDay}日目[・\\-]\\s*`),
+        ""
+      )
     },
     stops: Array.isArray(routeDayStopDefinitions[normalizedDay])
       ? routeDayStopDefinitions[normalizedDay]
@@ -6422,42 +6394,26 @@ function renderRouteMapStops(selectionState) {
     .filter(Number.isFinite)
     .sort((left, right) => left - right)
     .map((day) => ({ day }));
-
-  const stopsMarkup = routeExplorerStopDefinitions
-    .map((stop) => {
-      const isSelected = selectionState.type === "stop" && selectionState.config.id === stop.id;
-      const isRelated =
-        selectionState.type === "segment" && !isSelected && selectionState.stopIds.has(stop.id);
-      const ariaLabelEn = `Show ${stop.title.en} stop details`;
-      const ariaLabelJa = `${stop.title.ja}の詳細を表示`;
-
-      return `
-        <button
-          class="booking-transit__filter route-map__stop-chip ${isSelected ? "is-active" : ""} ${isRelated ? "is-related" : ""}"
-          type="button"
-          data-route-map-stop="${escapeHtml(stop.id)}"
-          aria-pressed="${String(isSelected)}"
-          data-aria-label-en="${escapeHtml(ariaLabelEn)}"
-          data-aria-label-ja="${escapeHtml(ariaLabelJa)}"
-          aria-label="${escapeHtml(getLocalizedText({ en: ariaLabelEn, ja: ariaLabelJa }))}">
-          ${renderLocalizedContent(stop.title)}
-        </button>
-      `;
-    })
-    .join("");
+  const activeDay =
+    selectionState.type === "view"
+      ? Number.parseInt(String(selectionState.config.day), 10)
+      : NaN;
 
   setLocalizedMarkupIfChanged(
     stopsNode,
     `
-    <p class="route-map__secondary-label">${renderLocalizedContent(routeMapLabels.stops)}</p>
-    <div class="route-map__stop-rail">
-      ${stopsMarkup}
-    </div>
     <section class="route-map__day-browser">
-      <p class="route-map__secondary-label">${renderLocalizedContent(routeMapLabels.days)}</p>
-      <div class="route-map__day-rail" role="list">
+      <div
+        class="route-map__day-rail"
+        role="list"
+        aria-label="${escapeHtml(getLocalizedText(routeMapLabels.days))}">
         ${allDayLinks
-          .map((link) => renderRouteMapDaySection(link, relatedDayIds.has(link.day)))
+          .map((link) =>
+            renderRouteMapDaySection(link, {
+              isActive: activeDay === link.day,
+              isRelated: activeDay !== link.day && relatedDayIds.has(link.day)
+            })
+          )
           .join("")}
       </div>
     </section>
@@ -6465,37 +6421,54 @@ function renderRouteMapStops(selectionState) {
   );
 }
 
-function renderRouteMapDaySection(link, isRelated = false) {
+function renderRouteMapDaySection(link, { isActive = false, isRelated = false } = {}) {
   const routeDay = getRouteDayReference(link.day);
-  const ariaLabel = {
+  const dayStepLabel = {
+    en: `Day ${routeDay.day}`,
+    ja: `${routeDay.day}日目`
+  };
+  const selectAriaLabel = {
+    en: `Show ${routeDay.title.en} route details`,
+    ja: `${routeDay.title.ja}のルート詳細を表示`
+  };
+  const checklistAriaLabel = {
     en: `Jump to ${routeDay.title.en} checklist`,
     ja: `${routeDay.title.ja}のチェックリストへ移動`
   };
   const stopsMarkup = routeDay.stops.length
     ? `
-        <ul class="route-reference__day-stops" role="list">
+        <span class="route-reference__day-stops">
           ${routeDay.stops
             .map(
               (stop) =>
-                `<li class="route-reference__day-stop">${renderLocalizedContent(stop)}</li>`
+                `<span class="route-reference__day-stop">${renderLocalizedContent(stop)}</span>`
             )
             .join("")}
-        </ul>
+        </span>
       `
     : "";
 
   return `
-    <article class="route-reference__day ${isRelated ? "is-related" : ""}" role="listitem">
-      <h5 class="route-reference__day-title">${renderLocalizedContent(routeDay.title)}</h5>
-      <p class="route-reference__day-label">${renderLocalizedContent(routeMapLabels.stops)}</p>
-      ${stopsMarkup}
+    <article class="route-reference__day ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""}" role="listitem">
+      <button
+        class="route-reference__day-trigger"
+        type="button"
+        data-route-map-day-view="day-${escapeHtml(routeDay.day)}"
+        aria-pressed="${String(isActive)}"
+        data-aria-label-en="${escapeHtml(selectAriaLabel.en)}"
+        data-aria-label-ja="${escapeHtml(selectAriaLabel.ja)}"
+        aria-label="${escapeHtml(getLocalizedText(selectAriaLabel))}">
+        <span class="route-reference__day-step">${renderLocalizedContent(dayStepLabel)}</span>
+        <span class="route-reference__day-title">${renderLocalizedContent(routeDay.displayTitle)}</span>
+        ${stopsMarkup}
+      </button>
       <button
         class="packing-section__action route-reference__day-button route-reference__day-action"
         type="button"
         data-route-map-day="${escapeHtml(routeDay.day)}"
-        data-aria-label-en="${escapeHtml(ariaLabel.en)}"
-        data-aria-label-ja="${escapeHtml(ariaLabel.ja)}"
-        aria-label="${escapeHtml(getLocalizedText(ariaLabel))}">
+        data-aria-label-en="${escapeHtml(checklistAriaLabel.en)}"
+        data-aria-label-ja="${escapeHtml(checklistAriaLabel.ja)}"
+        aria-label="${escapeHtml(getLocalizedText(checklistAriaLabel))}">
         ${renderLocalizedContent(routeMapLabels.checklistAction)}
       </button>
     </article>
@@ -7108,6 +7081,17 @@ function ensureRouteMapInitialized() {
 }
 
 function handleRouteMapClick(event) {
+  const dayViewTrigger = event.target.closest("[data-route-map-day-view]");
+  if (dayViewTrigger) {
+    event.preventDefault();
+    const viewId = dayViewTrigger.dataset.routeMapDayView || "";
+    if (viewId) {
+      activeRouteMapSelection = { type: "view", id: viewId };
+      scheduleRouteMapUISync({ updateCamera: true, animateCamera: true });
+    }
+    return;
+  }
+
   const stopTrigger = event.target.closest("[data-route-map-stop]");
   if (stopTrigger) {
     event.preventDefault();
