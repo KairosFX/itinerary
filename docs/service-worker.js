@@ -1,12 +1,13 @@
-const OFFLINE_CACHE_VERSION = "2026-03-27-offline-v20";
+const OFFLINE_CACHE_VERSION = "2026-03-27-offline-v21";
 const OFFLINE_CACHE_NAME = `japan-escape-itinerary-${OFFLINE_CACHE_VERSION}`;
 const APP_SCOPE_URL = new URL("./", self.location);
 const APP_SCOPE_PATH = APP_SCOPE_URL.pathname;
+const APP_ASSET_MANIFEST_PATH = "./assets/app/asset-manifest.json";
+const APP_ASSET_MANIFEST_URL = new URL(APP_ASSET_MANIFEST_PATH, self.location).toString();
 const APP_SHELL_PATHS = [
   "./",
   "./index.html",
-  "./style.min.css",
-  "./script.min.js",
+  APP_ASSET_MANIFEST_PATH,
   "./manifest.webmanifest",
   "./japan-escape-itinerary-offline.html",
   "./assets/data/budget-estimate-sources.json",
@@ -47,7 +48,8 @@ function isNetworkFirstAppAsset(url) {
   return (
     APP_SHELL_URL_SET.has(url.href) ||
     url.pathname === APP_SCOPE_PATH ||
-    url.pathname === `${APP_SCOPE_PATH}index.html`
+    url.pathname === `${APP_SCOPE_PATH}index.html` ||
+    url.href === APP_ASSET_MANIFEST_URL
   );
 }
 
@@ -68,11 +70,28 @@ async function addAssetsToCache(cache, urls) {
   );
 }
 
+async function getVersionedAppAssetUrls() {
+  try {
+    const response = await fetch(APP_ASSET_MANIFEST_URL, { cache: "reload" });
+    if (!response.ok) {
+      return [];
+    }
+
+    const manifest = await response.json();
+    return [manifest?.stylePath, manifest?.scriptPath]
+      .filter((assetPath) => typeof assetPath === "string" && assetPath.length)
+      .map((assetPath) => new URL(assetPath, self.location).toString());
+  } catch (error) {
+    return [];
+  }
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(OFFLINE_CACHE_NAME);
       await addAssetsToCache(cache, APP_SHELL_URLS);
+      await addAssetsToCache(cache, await getVersionedAppAssetUrls());
       await self.skipWaiting();
     })()
   );

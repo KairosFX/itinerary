@@ -3,6 +3,8 @@ const path = require("path");
 
 const repoRoot = path.resolve(__dirname, "..");
 const indexPath = path.join(repoRoot, "docs", "index.html");
+const criticalCssPath = path.join(repoRoot, "docs", "critical.css");
+const assetManifestPath = path.join(repoRoot, "docs", "assets", "app", "asset-manifest.json");
 
 const styleStartMarker = "<!-- build:inline-style:start -->";
 const styleEndMarker = "<!-- build:inline-style:end -->";
@@ -12,9 +14,18 @@ const scriptStartMarker = "<!-- build:inline-script:start -->";
 const scriptEndMarker = "<!-- build:inline-script:end -->";
 
 const html = fs.readFileSync(indexPath, "utf8");
-const styleBlock = `${styleStartMarker}\n  <link rel="stylesheet" href="./style.min.css">\n  ${styleEndMarker}`;
+const criticalCss = fs.readFileSync(criticalCssPath, "utf8").trim();
+const assetManifest = JSON.parse(fs.readFileSync(assetManifestPath, "utf8"));
+const stylePath = assetManifest.stylePath;
+const scriptPath = assetManifest.scriptPath;
+
+if (!stylePath || !scriptPath) {
+  throw new Error("Versioned asset paths were not found in docs/assets/app/asset-manifest.json");
+}
+
+const styleBlock = `${styleStartMarker}\n  <style data-critical-style>${criticalCss}</style>\n  <link rel="preload" href="${stylePath}" as="style">\n  <link rel="stylesheet" href="${stylePath}" media="print" onload="this.media='all'">\n  <noscript><link rel="stylesheet" href="${stylePath}"></noscript>\n  ${styleEndMarker}`;
 const dataBlock = `${dataStartMarker}\n  ${dataEndMarker}`;
-const scriptBlock = `${scriptStartMarker}\n  <script src="./script.min.js"></script>\n  ${scriptEndMarker}`;
+const scriptBlock = `${scriptStartMarker}\n  <script src="${scriptPath}" defer></script>\n  ${scriptEndMarker}`;
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
