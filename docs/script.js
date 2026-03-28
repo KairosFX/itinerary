@@ -552,10 +552,78 @@ const routeMapBaseOptions = {
   center: routeMapInitialView.center,
   zoom: routeMapInitialView.zoom
 };
+const routeSegmentCoordinateDefinitions = {
+  osakaKyoto: [
+    [135.5023, 34.6938],
+    [135.4968, 34.7011],
+    [135.4955, 34.7139],
+    [135.5007, 34.7335],
+    [135.5189, 34.7608],
+    [135.5474, 34.8025],
+    [135.5824, 34.8496],
+    [135.6224, 34.9018],
+    [135.6697, 34.9537],
+    [135.7218, 34.9917],
+    [135.7681, 35.0116]
+  ],
+  kyotoOsakaViaArashiyama: [
+    [135.7681, 35.0116],
+    [135.7316, 35.0087],
+    [135.6901, 35.0116],
+    [135.6668, 35.0094],
+    [135.6349, 34.9792],
+    [135.6011, 34.9389],
+    [135.5658, 34.8921],
+    [135.5334, 34.8387],
+    [135.5115, 34.7822],
+    [135.5007, 34.7335],
+    [135.4962, 34.7062],
+    [135.5023, 34.6938]
+  ],
+  osakaShinOsaka: [
+    [135.5023, 34.6938],
+    [135.4993, 34.7034],
+    [135.4974, 34.7167],
+    [135.499, 34.7262],
+    [135.5007, 34.7335]
+  ],
+  shinOsakaMishima: [
+    [135.5007, 34.7335],
+    [135.7588, 34.9858],
+    [136.171, 35.214],
+    [136.2855, 35.3154],
+    [136.7413, 35.1709],
+    [137.12, 34.7768],
+    [137.4088, 34.722],
+    [137.7261, 34.708],
+    [138.3831, 34.9769],
+    [138.9208, 35.1265]
+  ],
+  mishimaKawaguchiko: [
+    [138.9208, 35.1265],
+    [138.9454, 35.1885],
+    [138.9402, 35.2514],
+    [138.9162, 35.3169],
+    [138.8798, 35.3804],
+    [138.8326, 35.4387],
+    [138.7894, 35.4786],
+    [138.7552, 35.5009]
+  ],
+  kawaguchikoTokyo: [
+    [138.7552, 35.5009],
+    [138.7808, 35.5516],
+    [138.8515, 35.6091],
+    [138.9681, 35.6452],
+    [139.1174, 35.6589],
+    [139.2856, 35.6769],
+    [139.4814, 35.6905],
+    [139.6503, 35.6895],
+    [139.7017, 35.658]
+  ]
+};
 const routeExplorerPathDefinitions = [
   {
     id: "osaka-kyoto",
-    d: "M180 580 L238 448",
     title: { en: "Osaka -> Kyoto East", ja: "大阪 -> 京都東側" },
     summary: {
       en: "Day 2 moves cleanly from Osaka into the east-side Kyoto walking cluster.",
@@ -576,11 +644,11 @@ const routeExplorerPathDefinitions = [
       }
     ],
     dayLinks: [{ day: 2 }],
-    stopIds: ["osaka", "kyoto"]
+    stopIds: ["osaka", "kyoto"],
+    coordinates: routeSegmentCoordinateDefinitions.osakaKyoto
   },
   {
     id: "kyoto-osaka",
-    d: "M238 448 L186 572",
     title: { en: "Arashiyama -> Osaka", ja: "嵐山 -> 大阪" },
     summary: {
       en: "Day 3 starts with Arashiyama, then resets back to Osaka for Kaiyukan, Tempozan, and the final Kansai night.",
@@ -601,11 +669,11 @@ const routeExplorerPathDefinitions = [
       }
     ],
     dayLinks: [{ day: 3 }],
-    stopIds: ["kyoto", "osaka"]
+    stopIds: ["kyoto", "osaka"],
+    coordinates: routeSegmentCoordinateDefinitions.kyotoOsakaViaArashiyama
   },
   {
     id: "osaka-shin-osaka",
-    d: "M186 572 L202 548",
     title: { en: "Osaka city -> Shin-Osaka", ja: "大阪市内 -> 新大阪" },
     summary: {
       en: "This short launch step turns the Osaka stay into the Day 4 eastbound transfer.",
@@ -626,11 +694,11 @@ const routeExplorerPathDefinitions = [
       }
     ],
     dayLinks: [{ day: 4 }],
-    stopIds: ["osaka", "shin-osaka"]
+    stopIds: ["osaka", "shin-osaka"],
+    coordinates: routeSegmentCoordinateDefinitions.osakaShinOsaka
   },
   {
     id: "shin-osaka-fuji-gateway",
-    d: "M202 548 L878 292",
     title: { en: "Shin-Osaka -> Mishima", ja: "新大阪 -> 三島" },
     summary: {
       en: "This is the longest rail segment in the route and the clean handoff from Kansai into the Mt. Fuji side.",
@@ -657,11 +725,11 @@ const routeExplorerPathDefinitions = [
         label: { en: "Shinkansen detail", ja: "新幹線詳細" }
       }
     ],
-    stopIds: ["shin-osaka", "fuji-gateway"]
+    stopIds: ["shin-osaka", "fuji-gateway"],
+    coordinates: routeSegmentCoordinateDefinitions.shinOsakaMishima
   },
   {
     id: "fuji-gateway-kawaguchiko",
-    d: "M878 292 L938 238",
     title: { en: "Mishima -> Kawaguchiko", ja: "三島 -> 河口湖" },
     summary: {
       en: "This is the local access leg into the lake base, trading the shinkansen arrival for the quieter Fuji-area night.",
@@ -688,11 +756,11 @@ const routeExplorerPathDefinitions = [
         label: { en: "Fuji access detail", ja: "富士アクセス詳細" }
       }
     ],
-    stopIds: ["fuji-gateway", "fuji"]
+    stopIds: ["fuji-gateway", "fuji"],
+    coordinates: routeSegmentCoordinateDefinitions.mishimaKawaguchiko
   },
   {
     id: "fuji-tokyo",
-    d: "M938 238 L1036 150",
     title: { en: "Mt. Fuji area -> Tokyo / Shibuya", ja: "富士エリア -> 東京・渋谷" },
     summary: {
       en: "Day 5 is the clean Tokyo handoff from the Fuji side into Shibuya.",
@@ -719,7 +787,8 @@ const routeExplorerPathDefinitions = [
         label: { en: "Tokyo arrival detail", ja: "東京到着詳細" }
       }
     ],
-    stopIds: ["fuji", "tokyo"]
+    stopIds: ["fuji", "tokyo"],
+    coordinates: routeSegmentCoordinateDefinitions.kawaguchikoTokyo
   }
 ];
 const routeExplorerSegmentMap = new Map(
@@ -748,11 +817,10 @@ const routeExplorerStopDefinitions = [
       }
     ],
     dayLinks: [{ day: 1 }, { day: 3 }],
+    primaryDay: 1,
     segmentIds: ["osaka-kyoto", "kyoto-osaka", "osaka-shin-osaka"],
     lngLat: [135.5023, 34.6938],
-    labelPosition: "sw",
-    x: 15,
-    y: 80.6
+    labelPosition: "sw"
   },
   {
     id: "kyoto",
@@ -776,11 +844,10 @@ const routeExplorerStopDefinitions = [
       }
     ],
     dayLinks: [{ day: 2 }, { day: 3 }],
+    primaryDay: 2,
     segmentIds: ["osaka-kyoto", "kyoto-osaka"],
     lngLat: [135.7681, 35.0116],
-    labelPosition: "n",
-    x: 19.8,
-    y: 62.2
+    labelPosition: "n"
   },
   {
     id: "shin-osaka",
@@ -804,6 +871,7 @@ const routeExplorerStopDefinitions = [
       }
     ],
     dayLinks: [{ day: 4 }],
+    primaryDay: 4,
     transitActions: [
       {
         id: "shin-osaka-fuji-gateway",
@@ -812,9 +880,7 @@ const routeExplorerStopDefinitions = [
     ],
     segmentIds: ["osaka-shin-osaka", "shin-osaka-fuji-gateway"],
     lngLat: [135.5007, 34.7335],
-    labelPosition: "ne",
-    x: 16.8,
-    y: 76.1
+    labelPosition: "ne"
   },
   {
     id: "fuji-gateway",
@@ -838,6 +904,7 @@ const routeExplorerStopDefinitions = [
       }
     ],
     dayLinks: [{ day: 4 }],
+    primaryDay: 4,
     transitActions: [
       {
         id: "fuji-gateway-kawaguchiko",
@@ -846,9 +913,7 @@ const routeExplorerStopDefinitions = [
     ],
     segmentIds: ["shin-osaka-fuji-gateway", "fuji-gateway-kawaguchiko"],
     lngLat: [138.9208, 35.1265],
-    labelPosition: "nw",
-    x: 73.4,
-    y: 39.4
+    labelPosition: "nw"
   },
   {
     id: "fuji",
@@ -872,6 +937,7 @@ const routeExplorerStopDefinitions = [
       }
     ],
     dayLinks: [{ day: 4 }],
+    primaryDay: 4,
     transitActions: [
       {
         id: "fuji-local-hops",
@@ -880,9 +946,7 @@ const routeExplorerStopDefinitions = [
     ],
     segmentIds: ["fuji-gateway-kawaguchiko", "fuji-tokyo"],
     lngLat: [138.7552, 35.5009],
-    labelPosition: "se",
-    x: 78.2,
-    y: 31.4
+    labelPosition: "se"
   },
   {
     id: "tokyo",
@@ -906,11 +970,10 @@ const routeExplorerStopDefinitions = [
       }
     ],
     dayLinks: [{ day: 5 }, { day: 6 }, { day: 7 }],
+    primaryDay: 5,
     segmentIds: ["fuji-tokyo"],
     lngLat: [139.7017, 35.658],
-    labelPosition: "ne",
-    x: 86.3,
-    y: 20.8
+    labelPosition: "ne"
   }
 ];
 const routeExplorerStopMap = new Map(routeExplorerStopDefinitions.map((stop) => [stop.id, stop]));
@@ -1122,7 +1185,8 @@ let routeMapDaySliderSyncFrame = 0;
 let routeMapDayRailScrollLeft = 0;
 let pendingRouteMapUISyncOptions = {
   updateCamera: false,
-  animateCamera: false
+  animateCamera: false,
+  revealDayRail: false
 };
 let offlineExperienceBooted = false;
 let offlineRegistration = null;
@@ -5232,6 +5296,14 @@ function lockHeaderState(duration = 420) {
   resetHeaderScrollTracking();
 }
 
+function getHeaderScrollOffset(extra = 20) {
+  const measuredHeaderHeight = Math.ceil(
+    siteHeader?.getBoundingClientRect?.().height || reservedHeaderHeight || headerReservedHeightFallbackPx
+  );
+  const baseOffset = headerIsCondensed ? measuredHeaderHeight : reservedHeaderHeight;
+  return Math.max(baseOffset + extra, measuredHeaderHeight + extra);
+}
+
 function syncHeaderAccessoryVisibility(isCondensed) {
   headerAccessoryGroups.forEach((group) => {
     group.toggleAttribute("inert", isCondensed);
@@ -5637,6 +5709,37 @@ function getRouteMapDayControlNodes() {
   return Array.from(routeMapStopsNode?.querySelectorAll("[data-route-map-day-shift]") || []);
 }
 
+function getRouteMapDayCardNode(day) {
+  return routeMapStopsNode?.querySelector(`[data-route-map-day-card="${day}"]`) || null;
+}
+
+function getPrimaryRouteDayFromLinks(dayLinks = []) {
+  const primaryDay = dayLinks
+    .map((link) => Number.parseInt(String(link?.day), 10))
+    .find(Number.isFinite);
+
+  return Number.isFinite(primaryDay) ? primaryDay : null;
+}
+
+function getRouteViewIdForDay(day) {
+  const normalizedDay = Number.parseInt(String(day), 10);
+  if (!Number.isFinite(normalizedDay)) {
+    return "";
+  }
+
+  const viewId = `day-${normalizedDay}`;
+  return getRouteExplorerViewById(viewId) ? viewId : "";
+}
+
+function getRouteStopPrimaryDay(stopId) {
+  const stop = routeExplorerStopMap.get(stopId);
+  if (!stop) {
+    return null;
+  }
+
+  return Number.isFinite(stop.primaryDay) ? stop.primaryDay : getPrimaryRouteDayFromLinks(stop.dayLinks);
+}
+
 function bindRouteMapDayRailEvents() {
   const railNode = getRouteMapDayRailNode();
   if (!railNode || railNode.dataset.routeMapDayRailBound === "true") {
@@ -5732,6 +5835,39 @@ function slideRouteMapDayRail(direction = 1) {
     behavior: reducedEffectsEnabled ? "auto" : "smooth"
   });
   window.requestAnimationFrame(syncRouteMapDaySliderControls);
+}
+
+function revealRouteMapDayCard(day, { smooth = false } = {}) {
+  const railNode = getRouteMapDayRailNode();
+  const dayCardNode = getRouteMapDayCardNode(day);
+  if (!railNode || !dayCardNode) {
+    return;
+  }
+
+  dayCardNode.scrollIntoView({
+    behavior: smooth && !reducedEffectsEnabled ? "smooth" : "auto",
+    block: "nearest",
+    inline: compactViewportQuery.matches ? "center" : "nearest"
+  });
+
+  window.requestAnimationFrame(() => {
+    routeMapDayRailScrollLeft = railNode.scrollLeft;
+    syncRouteMapDaySliderControls();
+  });
+}
+
+function setActiveRouteMapDaySelection(
+  day,
+  { updateCamera = true, animateCamera = true, revealDayRail = true } = {}
+) {
+  const viewId = getRouteViewIdForDay(day);
+  if (!viewId) {
+    return false;
+  }
+
+  activeRouteMapSelection = { type: "view", id: viewId };
+  scheduleRouteMapUISync({ updateCamera, animateCamera, revealDayRail });
+  return true;
 }
 
 function getRouteMapStyleSignature() {
@@ -5983,25 +6119,63 @@ function getRouteStopLngLat(stopId) {
   return Array.isArray(coordinates) && coordinates.length === 2 ? coordinates : null;
 }
 
+function getRouteSegmentCoordinates(segmentOrId) {
+  const segment =
+    typeof segmentOrId === "string" ? getRouteExplorerSegmentById(segmentOrId) : segmentOrId;
+  if (!segment) {
+    return [];
+  }
+
+  const coordinates = Array.isArray(segment.coordinates)
+    ? segment.coordinates
+    : (segment.stopIds || []).map((stopId) => getRouteStopLngLat(stopId)).filter(Boolean);
+
+  return coordinates.filter(
+    (coordinate) =>
+      Array.isArray(coordinate) &&
+      coordinate.length === 2 &&
+      Number.isFinite(coordinate[0]) &&
+      Number.isFinite(coordinate[1])
+  );
+}
+
+function areRouteCoordinatesEqual(left, right) {
+  if (!Array.isArray(left) || !Array.isArray(right) || left.length !== 2 || right.length !== 2) {
+    return false;
+  }
+
+  return Math.abs(left[0] - right[0]) < 0.000001 && Math.abs(left[1] - right[1]) < 0.000001;
+}
+
+function appendRouteCoordinates(target, coordinates = []) {
+  coordinates.forEach((coordinate) => {
+    if (
+      !Array.isArray(coordinate) ||
+      coordinate.length !== 2 ||
+      !Number.isFinite(coordinate[0]) ||
+      !Number.isFinite(coordinate[1])
+    ) {
+      return;
+    }
+
+    if (target.length && areRouteCoordinatesEqual(target[target.length - 1], coordinate)) {
+      return;
+    }
+
+    target.push(coordinate);
+  });
+
+  return target;
+}
+
 function getRouteMapFullCoordinates() {
   if (Array.isArray(getRouteMapFullCoordinates.cache)) {
     return getRouteMapFullCoordinates.cache;
   }
 
   const coordinates = [];
-  routeExplorerPathDefinitions.forEach((segment, index) => {
-    const segmentCoordinates = (segment.stopIds || [])
-      .map((stopId) => getRouteStopLngLat(stopId))
-      .filter(Boolean);
-    if (segmentCoordinates.length < 2) {
-      return;
-    }
-
-    if (index === 0) {
-      coordinates.push(segmentCoordinates[0]);
-    }
-
-    coordinates.push(segmentCoordinates[segmentCoordinates.length - 1]);
+  routeExplorerPathDefinitions.forEach((segment) => {
+    appendRouteCoordinates(coordinates, getRouteSegmentCoordinates(segment));
   });
 
   getRouteMapFullCoordinates.cache = coordinates;
@@ -6041,17 +6215,31 @@ function getRouteMapBoundsFromCoordinates(coordinates = []) {
 
 function getRouteMapCoordinatesForSelection(selectionState) {
   if (selectionState.type === "segment") {
-    return (selectionState.config.stopIds || [])
-      .map((stopId) => getRouteStopLngLat(stopId))
-      .filter(Boolean);
+    return getRouteSegmentCoordinates(selectionState.config);
   }
 
-  const stopIds = Array.from(selectionState.stopIds);
-  if (!stopIds.length) {
+  if (selectionState.type === "stop") {
+    const coordinates = getRouteStopLngLat(selectionState.config.id);
+    return coordinates ? [coordinates] : [];
+  }
+
+  const coordinates = [];
+  Array.from(selectionState.segmentIds || []).forEach((segmentId) => {
+    appendRouteCoordinates(coordinates, getRouteSegmentCoordinates(segmentId));
+  });
+
+  if (!coordinates.length) {
+    appendRouteCoordinates(
+      coordinates,
+      Array.from(selectionState.stopIds).map((stopId) => getRouteStopLngLat(stopId)).filter(Boolean)
+    );
+  }
+
+  if (!coordinates.length) {
     return getRouteMapFullCoordinates();
   }
 
-  return stopIds.map((stopId) => getRouteStopLngLat(stopId)).filter(Boolean);
+  return coordinates;
 }
 
 function getRouteMapSelectionState() {
@@ -6102,9 +6290,7 @@ function getRouteMapGeoJsonData() {
   const fullCoordinates = getRouteMapFullCoordinates();
   const segments = routeExplorerPathDefinitions
     .map((segment) => {
-      const coordinates = (segment.stopIds || [])
-        .map((stopId) => getRouteStopLngLat(stopId))
-        .filter(Boolean);
+      const coordinates = getRouteSegmentCoordinates(segment);
       if (coordinates.length < 2) {
         return null;
       }
@@ -6494,13 +6680,12 @@ function renderRouteMapStops(selectionState) {
   if (!stopsNode) {
     return;
   }
-  const relatedDayIds = new Set(
-    Array.isArray(selectionState?.config?.dayLinks)
-      ? selectionState.config.dayLinks
-          .map((link) => Number.parseInt(String(link.day), 10))
-          .filter(Number.isFinite)
-      : []
-  );
+  const selectionDayIds = (
+    Array.isArray(selectionState?.config?.dayLinks) ? selectionState.config.dayLinks : []
+  )
+    .map((link) => Number.parseInt(String(link.day), 10))
+    .filter(Number.isFinite);
+  const relatedDayIds = new Set(selectionDayIds);
   const allDayLinks = Object.keys(routeDayStopDefinitions)
     .map((day) => Number.parseInt(day, 10))
     .filter(Number.isFinite)
@@ -6509,7 +6694,13 @@ function renderRouteMapStops(selectionState) {
   const activeDay =
     selectionState.type === "view"
       ? Number.parseInt(String(selectionState.config.day), 10)
-      : NaN;
+      : selectionDayIds.length === 1
+        ? selectionDayIds[0]
+        : NaN;
+
+  if (Number.isFinite(activeDay)) {
+    relatedDayIds.delete(activeDay);
+  }
 
   setLocalizedMarkupIfChanged(
     stopsNode,
@@ -6598,7 +6789,10 @@ function renderRouteMapDaySection(link, { isActive = false, isRelated = false } 
     : "";
 
   return `
-    <article class="route-reference__day ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""}" role="listitem">
+    <article
+      class="route-reference__day ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""}"
+      role="listitem"
+      data-route-map-day-card="${escapeHtml(routeDay.day)}">
       <button
         class="route-reference__day-trigger"
         type="button"
@@ -6722,10 +6916,20 @@ function updateRouteMapMarkerElement(entry, selectionState) {
   }
 
   const stop = entry.stop;
-  const isActive = selectionState.type === "stop" && selectionState.config.id === stop.id;
+  const isDayView =
+    selectionState.type === "view" && Number.isFinite(Number(selectionState.config?.day));
+  const isActive =
+    (selectionState.type === "stop" && selectionState.config.id === stop.id) ||
+    (isDayView &&
+      Number.isFinite(stop.primaryDay) &&
+      Number(stop.primaryDay) === Number(selectionState.config.day));
   const isRelated =
-    selectionState.type === "segment" && !isActive && selectionState.stopIds.has(stop.id);
-  const isDimmed = selectionState.type !== "view" && !isActive && !isRelated;
+    !isActive &&
+    ((selectionState.type === "segment" || isDayView) && selectionState.stopIds.has(stop.id));
+  const isDimmed =
+    (selectionState.type === "segment" || selectionState.type === "stop" || isDayView) &&
+    !isActive &&
+    !isRelated;
   const markerStateKey = `${root.lang}|${isActive ? 1 : 0}|${isRelated ? 1 : 0}|${isDimmed ? 1 : 0}`;
 
   if (entry.stateKey === markerStateKey) {
@@ -6739,10 +6943,15 @@ function updateRouteMapMarkerElement(entry, selectionState) {
   entry.element.classList.toggle("is-dimmed", isDimmed);
   entry.stateKey = markerStateKey;
 
-  const ariaLabel = {
-    en: `Show ${stop.title.en} stop details`,
-    ja: `${stop.title.ja}の詳細を表示`
-  };
+  const ariaLabel = Number.isFinite(stop.primaryDay)
+    ? {
+        en: `Show the ${stop.title.en} route day`,
+        ja: `${stop.title.ja}に対応する日別ルートを表示`
+      }
+    : {
+        en: `Show ${stop.title.en} stop details`,
+        ja: `${stop.title.ja}の詳細を表示`
+      };
   entry.element.tabIndex = 0;
   entry.element.setAttribute("aria-hidden", "false");
   entry.element.setAttribute("aria-pressed", String(isActive));
@@ -6962,12 +7171,18 @@ function bindRouteMapInteractiveEvents(map) {
       return;
     }
 
+    const segment = getRouteExplorerSegmentById(segmentId);
+    const revealDayRail = Number.isFinite(getPrimaryRouteDayFromLinks(segment?.dayLinks));
     const isSameSegment =
       activeRouteMapSelection.type === "segment" && activeRouteMapSelection.id === segmentId;
     activeRouteMapSelection = isSameSegment
       ? { type: "view", id: routeExplorerDefaultSelectionId }
       : { type: "segment", id: segmentId };
-    scheduleRouteMapUISync({ updateCamera: true, animateCamera: true });
+    scheduleRouteMapUISync({
+      updateCamera: true,
+      animateCamera: true,
+      revealDayRail: !isSameSegment && revealDayRail
+    });
   });
 
   map.on("click", (event) => {
@@ -7133,12 +7348,26 @@ function ensureRouteMapReady() {
 }
 
 function syncRouteMapUI(options = {}) {
-  const { updateCamera = false, animateCamera = false, resetOverview = false } = options;
+  const {
+    updateCamera = false,
+    animateCamera = false,
+    resetOverview = false,
+    revealDayRail = false
+  } = options;
   const selectionState = getRouteMapSelectionState();
 
   renderRouteMapStops(selectionState);
   renderRouteMapDetail(selectionState);
   scheduleRouteMapDaySliderSync();
+  if (
+    revealDayRail &&
+    selectionState.type === "view" &&
+    Number.isFinite(Number(selectionState.config?.day))
+  ) {
+    window.requestAnimationFrame(() => {
+      revealRouteMapDayCard(selectionState.config.day, { smooth: animateCamera });
+    });
+  }
 
   syncRouteMapRuntime(selectionState, { updateCamera, animateCamera, resetOverview });
 }
@@ -7146,7 +7375,8 @@ function syncRouteMapUI(options = {}) {
 function scheduleRouteMapUISync(options = {}) {
   pendingRouteMapUISyncOptions = {
     updateCamera: pendingRouteMapUISyncOptions.updateCamera || Boolean(options.updateCamera),
-    animateCamera: pendingRouteMapUISyncOptions.animateCamera || Boolean(options.animateCamera)
+    animateCamera: pendingRouteMapUISyncOptions.animateCamera || Boolean(options.animateCamera),
+    revealDayRail: pendingRouteMapUISyncOptions.revealDayRail || Boolean(options.revealDayRail)
   };
 
   if (routeMapUISyncFrame) {
@@ -7158,7 +7388,8 @@ function scheduleRouteMapUISync(options = {}) {
     routeMapUISyncFrame = 0;
     pendingRouteMapUISyncOptions = {
       updateCamera: false,
-      animateCamera: false
+      animateCamera: false,
+      revealDayRail: false
     };
     syncRouteMapUI(nextOptions);
   });
@@ -7243,10 +7474,14 @@ function handleRouteMapClick(event) {
   const dayViewTrigger = event.target.closest("[data-route-map-day-view]");
   if (dayViewTrigger) {
     event.preventDefault();
-    const viewId = dayViewTrigger.dataset.routeMapDayView || "";
-    if (viewId) {
-      activeRouteMapSelection = { type: "view", id: viewId };
-      scheduleRouteMapUISync({ updateCamera: true, animateCamera: true });
+    const dayViewId = dayViewTrigger.dataset.routeMapDayView || "";
+    const day = Number.parseInt(dayViewId.replace("day-", ""), 10);
+    if (Number.isFinite(day)) {
+      setActiveRouteMapDaySelection(day, {
+        updateCamera: true,
+        animateCamera: true,
+        revealDayRail: true
+      });
     }
     return;
   }
@@ -7255,6 +7490,18 @@ function handleRouteMapClick(event) {
   if (stopTrigger) {
     event.preventDefault();
     const stopId = stopTrigger.dataset.routeMapStop || "";
+    const primaryDay = getRouteStopPrimaryDay(stopId);
+    if (
+      Number.isFinite(primaryDay) &&
+      setActiveRouteMapDaySelection(primaryDay, {
+        updateCamera: true,
+        animateCamera: true,
+        revealDayRail: true
+      })
+    ) {
+      return;
+    }
+
     const isSameStop =
       activeRouteMapSelection.type === "stop" && activeRouteMapSelection.id === stopId;
     activeRouteMapSelection = isSameStop
@@ -7783,8 +8030,9 @@ async function scrollToChecklistDay(day) {
 
   window.requestAnimationFrame(() => {
     window.requestAnimationFrame(() => {
+      lockHeaderState(720);
       const targetTop =
-        targetCard.getBoundingClientRect().top + window.scrollY - reservedHeaderHeight - 24;
+        targetCard.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(24);
 
       window.scrollTo({
         top: Math.max(targetTop, 0),
@@ -7809,8 +8057,9 @@ function scrollToPanelStart(panelId) {
   const anchor = panel.querySelector(".section-heading") || panel;
   window.requestAnimationFrame(() => {
     window.requestAnimationFrame(() => {
+      lockHeaderState(760);
       const targetTop =
-        anchor.getBoundingClientRect().top + window.scrollY - reservedHeaderHeight - 20;
+        anchor.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(20);
 
       window.scrollTo({
         top: Math.max(targetTop, 0),
