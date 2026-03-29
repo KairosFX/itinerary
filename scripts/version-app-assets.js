@@ -27,6 +27,21 @@ const assetDefinitions = [
     key: "routeContent",
     sourcePath: path.join(docsDir, "route-content.min.js"),
     extension: ".js"
+  },
+  {
+    key: "budgetUi",
+    sourcePath: path.join(docsDir, "budget-ui.min.js"),
+    extension: ".js"
+  },
+  {
+    key: "budgetContent",
+    sourcePath: path.join(docsDir, "budget-content.min.js"),
+    extension: ".js"
+  },
+  {
+    key: "essentialsContent",
+    sourcePath: path.join(docsDir, "essentials-content.min.js"),
+    extension: ".js"
   }
 ];
 
@@ -61,7 +76,10 @@ manifest.cacheVersion = [
   manifest.styleHash,
   manifest.routeStyleHash,
   manifest.scriptHash,
-  manifest.routeContentHash
+  manifest.routeContentHash,
+  manifest.budgetUiHash,
+  manifest.budgetContentHash,
+  manifest.essentialsContentHash
 ]
   .filter(Boolean)
   .join("-");

@@ -9,24 +9,10 @@ const cssPath = path.join(docsDir, "style.min.css");
 const routeCssPath = path.join(docsDir, "route.min.css");
 const jsPath = path.join(docsDir, "script.min.js");
 const routeContentJsPath = path.join(docsDir, "route-content.min.js");
-const bookingTransitDataPath = path.join(
-  docsDir,
-  "assets",
-  "data",
-  "booking-transit-items.json"
-);
-const transitDetailsDataPath = path.join(
-  docsDir,
-  "assets",
-  "data",
-  "transit-details.json"
-);
-const budgetEstimateDataPath = path.join(
-  docsDir,
-  "assets",
-  "data",
-  "budget-estimate-sources.json"
-);
+const budgetUiJsPath = path.join(docsDir, "budget-ui.min.js");
+const budgetContentJsPath = path.join(docsDir, "budget-content.min.js");
+const essentialsContentJsPath = path.join(docsDir, "essentials-content.min.js");
+const assetManifestPath = path.join(docsDir, "assets", "app", "asset-manifest.json");
 
 const styleStartMarker = "<!-- build:inline-style:start -->";
 const styleEndMarker = "<!-- build:inline-style:end -->";
@@ -55,29 +41,19 @@ function replaceBlock(documentHtml, startMarker, endMarker, nextBlock, label) {
 }
 
 let html = fs.readFileSync(indexPath, "utf8");
+const assetManifest = JSON.parse(fs.readFileSync(assetManifestPath, "utf8"));
 const css = [fs.readFileSync(cssPath, "utf8").trim(), fs.readFileSync(routeCssPath, "utf8").trim()]
   .filter(Boolean)
   .join("\n");
-const bookingTransitData = fs
-  .readFileSync(bookingTransitDataPath, "utf8")
-  .trim()
-  .replace(/<\/script/gi, "<\\/script");
-const transitDetailsData = fs
-  .readFileSync(transitDetailsDataPath, "utf8")
-  .trim()
-  .replace(/<\/script/gi, "<\\/script");
-const budgetEstimateData = fs
-  .readFileSync(budgetEstimateDataPath, "utf8")
-  .trim()
-  .replace(/<\/script/gi, "<\\/script");
-const js = [routeContentJsPath, jsPath]
+const serializedAssetConfig = JSON.stringify(assetManifest).replace(/<\/script/gi, "<\\/script");
+const js = [essentialsContentJsPath, budgetContentJsPath, routeContentJsPath, budgetUiJsPath, jsPath]
   .map((filePath) => fs.readFileSync(filePath, "utf8").trim())
   .filter(Boolean)
   .join("\n")
   .replace(/<\/script/gi, "<\\/script");
 
 const styleBlock = `${styleStartMarker}\n  <style data-inline-style>${css}</style>\n  ${styleEndMarker}`;
-const dataBlock = `${dataStartMarker}\n  <script type="application/json" data-booking-transit-inline>${bookingTransitData}</script>\n  <script type="application/json" data-budget-estimate-inline>${budgetEstimateData}</script>\n  <script type="application/json" data-transit-details-inline>${transitDetailsData}</script>\n  ${dataEndMarker}`;
+const dataBlock = `${dataStartMarker}\n  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = ${serializedAssetConfig};</script>\n  ${dataEndMarker}`;
 const scriptBlock = `${scriptStartMarker}\n  <script data-inline-script>${js}</script>\n  ${scriptEndMarker}`;
 
 html = replaceBlock(html, styleStartMarker, styleEndMarker, styleBlock, "Inline style");

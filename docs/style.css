@@ -115,13 +115,18 @@ html.reduce-effects *::after {
 .content-panel > .day-grid,
 .content-panel > .notes-grid,
 .content-panel > .budget-panel,
+.content-panel > .route-map,
 .content-panel > .essentials-grid,
 .content-panel > .essentials-layout,
+.budget-notes__day-browser,
 .day-card,
 .note-card,
 .essentials-card,
 .booking-group,
-.booking-item {
+.booking-item,
+.journey-close,
+.site-footer__lead,
+.site-footer__aside {
   content-visibility: auto;
   contain: layout paint style;
   contain-intrinsic-size: 320px;
