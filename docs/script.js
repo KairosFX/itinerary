@@ -412,6 +412,9 @@ const routeMapInitialView = {
 const routeMapOverviewMaxZoom = 6.15;
 const routeMapKeyboardPanStepPx = 120;
 const routeMapKeyboardPanDurationMs = 340;
+const scrollMotionEconomyVelocityThreshold = 0.95;
+const scrollMotionClassHoldMs = 180;
+const dayCardRowTopTolerancePx = 14;
 const routeMapBaseOptions = {
   attributionControl: false,
   renderWorldCopies: false,
@@ -995,6 +998,10 @@ let headerScrollIntentStartY = lastScrollY;
 let headerScrollIntentDirection = 0;
 let lastRevealScrollY = lastScrollY;
 let revealScrollDirection = 1;
+let lastScrollMotionSampleY = lastScrollY;
+let lastScrollMotionSampleTime = window.performance.now();
+let desktopReverseScrollTimer = 0;
+let scrollMotionEconomyTimer = 0;
 let scrollTicking = false;
 let resizeTicking = false;
 let revealObserver = null;
@@ -1015,6 +1022,7 @@ let deferredGeometryReleaseTimer = 0;
 let timelineLayoutFrame = 0;
 let timelineLayoutDelayTimer = 0;
 let timelineLayoutIdleHandle = 0;
+let dayCardRowHeightFrame = 0;
 let headerHeightSyncFrame = 0;
 let headerHeightSyncDelayTimer = 0;
 let headerHeightSyncIdleHandle = 0;
@@ -2553,7 +2561,11 @@ function isLikelyLowerPowerDevice() {
 }
 
 function shouldReduceEffects() {
-  return aggressivePerformanceMode || reducedMotionQuery.matches;
+  const saveDataEnabled = Boolean(navigator.connection?.saveData);
+  const constrainedTouchDevice =
+    coarsePointerQuery.matches && compactViewportQuery.matches && isLikelyLowerPowerDevice();
+
+  return aggressivePerformanceMode || reducedMotionQuery.matches || saveDataEnabled || constrainedTouchDevice;
 }
 
 function syncReducedEffectsMode({ force = false } = {}) {
@@ -2565,6 +2577,20 @@ function syncReducedEffectsMode({ force = false } = {}) {
   reducedEffectsEnabled = nextReducedEffectsEnabled;
   root.classList.toggle("reduce-effects", reducedEffectsEnabled);
   root.classList.toggle("enhanced-effects", !reducedEffectsEnabled);
+
+  if (reducedEffectsEnabled) {
+    if (desktopReverseScrollTimer) {
+      window.clearTimeout(desktopReverseScrollTimer);
+      desktopReverseScrollTimer = 0;
+    }
+
+    if (scrollMotionEconomyTimer) {
+      window.clearTimeout(scrollMotionEconomyTimer);
+      scrollMotionEconomyTimer = 0;
+    }
+
+    root.classList.remove("desktop-scroll-reverse", "scroll-motion-economy");
+  }
 }
 
 function bindMediaQueryChange(query, handler) {
@@ -3654,6 +3680,47 @@ function updateRevealScrollDirection(scrollY = window.scrollY) {
 
   lastRevealScrollY = nextScrollY;
   return revealScrollDirection;
+}
+
+function syncScrollMotionState(scrollY = window.scrollY) {
+  const nextScrollY = Math.max(scrollY, 0);
+  const now = window.performance.now();
+  const delta = nextScrollY - lastScrollMotionSampleY;
+  const elapsed = Math.max(now - lastScrollMotionSampleTime, 16);
+  const velocity = Math.abs(delta) / elapsed;
+
+  lastScrollMotionSampleY = nextScrollY;
+  lastScrollMotionSampleTime = now;
+
+  const shouldTrackDesktopScroll =
+    !reducedEffectsEnabled && !coarsePointerQuery.matches && !compactViewportQuery.matches;
+
+  if (!shouldTrackDesktopScroll) {
+    root.classList.remove("desktop-scroll-reverse", "scroll-motion-economy");
+    return;
+  }
+
+  if (delta < -revealScrollDirectionThresholdPx) {
+    root.classList.add("desktop-scroll-reverse");
+    if (desktopReverseScrollTimer) {
+      window.clearTimeout(desktopReverseScrollTimer);
+    }
+    desktopReverseScrollTimer = window.setTimeout(() => {
+      desktopReverseScrollTimer = 0;
+      root.classList.remove("desktop-scroll-reverse");
+    }, scrollMotionClassHoldMs);
+  }
+
+  if (velocity > scrollMotionEconomyVelocityThreshold) {
+    root.classList.add("scroll-motion-economy");
+    if (scrollMotionEconomyTimer) {
+      window.clearTimeout(scrollMotionEconomyTimer);
+    }
+    scrollMotionEconomyTimer = window.setTimeout(() => {
+      scrollMotionEconomyTimer = 0;
+      root.classList.remove("scroll-motion-economy");
+    }, Math.max(120, scrollMotionClassHoldMs - 20));
+  }
 }
 
 function getRevealDirectionName(direction = revealScrollDirection) {
@@ -5409,10 +5476,6 @@ function renderRouteMapDaySection(link, { isActive = false, isRelated = false } 
     en: `Show ${routeDay.title.en} route details`,
     ja: `${routeDay.title.ja}のルート詳細を表示`
   };
-  const checklistAriaLabel = {
-    en: `Jump to ${routeDay.title.en} checklist`,
-    ja: `${routeDay.title.ja}のチェックリストへ移動`
-  };
   const stopSummary = getCompactRouteDayStops(routeDay);
   const stopSummaryMarkup = stopSummary
     ? `
@@ -5436,15 +5499,6 @@ function renderRouteMapDaySection(link, { isActive = false, isRelated = false } 
         <span class="route-reference__day-step">${renderLocalizedContent(dayStepLabel)}</span>
         <span class="route-reference__day-title">${renderLocalizedContent(routeDay.displayTitle)}</span>
         ${stopSummaryMarkup}
-      </button>
-      <button
-        class="packing-section__action route-reference__day-button route-reference__day-action"
-        type="button"
-        data-route-map-day="${escapeHtml(routeDay.day)}"
-        data-aria-label-en="${escapeHtml(checklistAriaLabel.en)}"
-        data-aria-label-ja="${escapeHtml(checklistAriaLabel.ja)}"
-        aria-label="${escapeHtml(getLocalizedText(checklistAriaLabel))}">
-        ${renderLocalizedContent(routeMapLabels.checklistAction)}
       </button>
     </article>
   `;
@@ -6408,8 +6462,56 @@ function syncOptionalDaysUI() {
 }
 
 function scheduleDayCardRowHeights() {
-  // The equal-height day-card pass was removed. Keep the hook so older callers
-  // do not trigger a full grid walk and inline-style write on every resize/update.
+  if (dayCardRowHeightFrame) {
+    window.cancelAnimationFrame(dayCardRowHeightFrame);
+  }
+
+  dayCardRowHeightFrame = window.requestAnimationFrame(() => {
+    dayCardRowHeightFrame = 0;
+    const checklistPanel = getSectionPanel("checklist");
+    const checklistGrid = checklistPanel?.querySelector(".day-grid");
+    const checklistCards = Array.from(
+      checklistGrid?.querySelectorAll(".day-card[data-day]") || []
+    ).filter((card) => !card.hidden);
+
+    checklistCards.forEach((card) => {
+      card.style.removeProperty("min-height");
+    });
+
+    if (
+      !checklistPanel ||
+      checklistPanel.hidden ||
+      !checklistGrid ||
+      compactViewportQuery.matches ||
+      checklistCards.length < 2
+    ) {
+      return;
+    }
+
+    const rowGroups = [];
+    checklistCards.forEach((card) => {
+      const cardTop = Math.round(card.getBoundingClientRect().top);
+      let rowGroup = rowGroups.find((row) => Math.abs(row.top - cardTop) <= dayCardRowTopTolerancePx);
+
+      if (!rowGroup) {
+        rowGroup = { top: cardTop, cards: [] };
+        rowGroups.push(rowGroup);
+      }
+
+      rowGroup.cards.push(card);
+    });
+
+    rowGroups.forEach((rowGroup) => {
+      const maxHeight = rowGroup.cards.reduce(
+        (currentMax, card) => Math.max(currentMax, card.getBoundingClientRect().height),
+        0
+      );
+
+      rowGroup.cards.forEach((card) => {
+        card.style.minHeight = `${Math.round(maxHeight)}px`;
+      });
+    });
+  });
 }
 
 function syncModalOpenState() {
@@ -6905,7 +7007,7 @@ function registerRevealBlocks(scope = document) {
 
   revealBlocks.forEach((block, index) => {
     block.classList.add("reveal-block");
-    block.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 60}ms`);
+    block.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 40}ms`);
   });
 
   if (reducedEffectsEnabled || !("IntersectionObserver" in window)) {
@@ -6951,7 +7053,7 @@ function refreshRevealPanel(panelId) {
   }
 
   panelBlocks.forEach((block, index) => {
-    block.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 70}ms`);
+    block.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 44}ms`);
     hideRevealBlock(block);
   });
 
@@ -7018,8 +7120,8 @@ async function playSiteIntro() {
     return;
   }
 
-  const holdDurationMs = reducedEffectsEnabled ? 240 : 1380;
-  const exitDurationMs = reducedEffectsEnabled ? 0 : 760;
+  const holdDurationMs = reducedEffectsEnabled ? 180 : 920;
+  const exitDurationMs = reducedEffectsEnabled ? 0 : 420;
 
   siteIntro.hidden = false;
   root.classList.add("intro-active");
@@ -7265,6 +7367,7 @@ function syncHeaderState() {
 }
 
 function runScrollEffects() {
+  syncScrollMotionState();
   updateRevealScrollDirection();
   syncHeaderState();
   scrollTicking = false;
@@ -7336,6 +7439,17 @@ if (siteHeader) {
 window.addEventListener("pagehide", flushQueuedStorageWrites);
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") {
+    if (desktopReverseScrollTimer) {
+      window.clearTimeout(desktopReverseScrollTimer);
+      desktopReverseScrollTimer = 0;
+    }
+
+    if (scrollMotionEconomyTimer) {
+      window.clearTimeout(scrollMotionEconomyTimer);
+      scrollMotionEconomyTimer = 0;
+    }
+
+    root.classList.remove("desktop-scroll-reverse", "scroll-motion-economy");
     flushQueuedStorageWrites();
   }
 });

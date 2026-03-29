@@ -928,10 +928,93 @@ h1 {
   .site-intro__title {
     font-size: clamp(2.2rem, 12vw, 3.6rem);
   }
+}
+
+/* Intro refinement pass */
+.site-intro {
+  transition:
+    opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-intro__veil {
+  background:
+    linear-gradient(180deg, rgba(14, 17, 21, 0.16), rgba(14, 17, 21, 0.03)),
+    linear-gradient(135deg, rgba(247, 241, 232, 0.98), rgba(235, 223, 209, 0.9));
+  backdrop-filter: blur(6px) saturate(118%);
+}
+
+.site-intro__mist,
+.site-intro__glow {
+  filter: blur(6px);
+  opacity: 0.52;
+}
+
+.site-intro__mist--north {
+  width: 22rem;
+  height: 12rem;
+}
+
+.site-intro__mist--south {
+  width: 24rem;
+  height: 14rem;
+}
+
+.site-intro__glow {
+  inset: 20% 28% auto;
+  height: 18rem;
+}
+
+.site-intro__content {
+  gap: 0.58rem;
+  width: min(100%, 32rem);
+  transform: translateY(0.72rem);
+  transition:
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-intro__content::before {
+  content: "";
+  width: 3.4rem;
+  height: 1px;
+  margin: 0 auto 0.1rem;
+  background: linear-gradient(90deg, rgba(115, 41, 32, 0), rgba(115, 41, 32, 0.44), rgba(115, 41, 32, 0));
+}
+
+html.intro-leaving .site-intro__content {
+  transform: translateY(-0.28rem);
+  opacity: 0;
+}
+
+.site-intro__eyebrow,
+.site-intro__meta {
+  letter-spacing: 0.2em;
+  font-size: 0.72rem;
+  color: rgba(88, 60, 49, 0.82);
+}
+
+.site-intro__title {
+  gap: 0.28rem;
+  font-size: clamp(2.45rem, 6vw, 4.4rem);
+  line-height: 0.94;
+}
+
+.site-intro__title span:last-child {
+  font-size: clamp(0.92rem, 1.8vw, 1.14rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+html[data-theme="dark"] .site-intro__veil {
+  background:
+    linear-gradient(180deg, rgba(8, 10, 14, 0.46), rgba(8, 10, 14, 0.16)),
+    linear-gradient(135deg, rgba(15, 19, 25, 0.96), rgba(25, 31, 38, 0.92));
+  backdrop-filter: blur(6px) saturate(122%);
 }</style>
-  <link rel="preload" href="./assets/app/style.f2690e09e7.css" as="style">
-  <link rel="stylesheet" href="./assets/app/style.f2690e09e7.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.f2690e09e7.css"></noscript>
+  <link rel="preload" href="./assets/app/style.b9e2f5ad33.css" as="style">
+  <link rel="stylesheet" href="./assets/app/style.b9e2f5ad33.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.b9e2f5ad33.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -955,10 +1038,10 @@ h1 {
     <div class="site-intro__content">
       <p class="site-intro__eyebrow">Japan Escape / 日本旅行</p>
       <h2 class="site-intro__title">
+        <span>Japan Escape</span>
         <span>Osaka to Tokyo</span>
-        <span>静かな旅の案内</span>
       </h2>
-      <p class="site-intro__meta">Kyoto • Fuji • Tokyo</p>
+      <p class="site-intro__meta">Kyoto • Fuji • Tokyo / 京都 • 富士 • 東京</p>
     </div>
   </div>
 
@@ -2672,10 +2755,10 @@ h1 {
   </footer>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.f2690e09e7.css","styleHash":"f2690e09e7","routeStylePath":"./assets/app/routeStyle.a6a5be9360.css","routeStyleHash":"a6a5be9360","scriptPath":"./assets/app/script.efde32f85b.js","scriptHash":"efde32f85b","routeContentPath":"./assets/app/routeContent.64e84598a9.js","routeContentHash":"64e84598a9","budgetUiPath":"./assets/app/budgetUi.fd3bf31344.js","budgetUiHash":"fd3bf31344","budgetContentPath":"./assets/app/budgetContent.cb9a162d97.js","budgetContentHash":"cb9a162d97","essentialsContentPath":"./assets/app/essentialsContent.c27e1b1f54.js","essentialsContentHash":"c27e1b1f54","generatedAt":"2026-03-29T12:57:03.071Z","cacheVersion":"f2690e09e7-a6a5be9360-efde32f85b-64e84598a9-fd3bf31344-cb9a162d97-c27e1b1f54"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.b9e2f5ad33.css","styleHash":"b9e2f5ad33","routeStylePath":"./assets/app/routeStyle.8b90c52597.css","routeStyleHash":"8b90c52597","scriptPath":"./assets/app/script.366c1ac88c.js","scriptHash":"366c1ac88c","routeContentPath":"./assets/app/routeContent.64e84598a9.js","routeContentHash":"64e84598a9","budgetUiPath":"./assets/app/budgetUi.fd3bf31344.js","budgetUiHash":"fd3bf31344","budgetContentPath":"./assets/app/budgetContent.cb9a162d97.js","budgetContentHash":"cb9a162d97","essentialsContentPath":"./assets/app/essentialsContent.c27e1b1f54.js","essentialsContentHash":"c27e1b1f54","generatedAt":"2026-03-29T13:27:18.600Z","cacheVersion":"b9e2f5ad33-8b90c52597-366c1ac88c-64e84598a9-fd3bf31344-cb9a162d97-c27e1b1f54"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.efde32f85b.js" defer></script>
+  <script src="./assets/app/script.366c1ac88c.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>
