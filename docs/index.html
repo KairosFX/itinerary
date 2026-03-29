@@ -7,7 +7,7 @@
   <meta
     name="description"
     content="Simple bilingual Japan trip website for GitHub Pages with overview, checklist, notes, budget, routes, essentials, and a live route map from Osaka to Tokyo.">
-  <meta name="theme-color" content="#4e7a5d">
+  <meta name="theme-color" content="#ffffff">
   <link rel="dns-prefetch" href="//tiles.openfreemap.org">
   <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234e7a5d'/%3E%3Cpath d='M20 18h24v6H34v22h-6V24H20z' fill='%23fffaf4'/%3E%3C/svg%3E">
@@ -1398,9 +1398,9 @@ html[data-theme="dark"] .checklist-gate {
   background: linear-gradient(180deg, rgba(65, 42, 37, 0.92), rgba(47, 33, 30, 0.88));
   color: rgba(249, 231, 225, 0.94);
 }</style>
-  <link rel="preload" href="./assets/app/style.5531a1c902.css" as="style">
-  <link rel="stylesheet" href="./assets/app/style.5531a1c902.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.5531a1c902.css"></noscript>
+  <link rel="preload" href="./assets/app/style.16d7c596fa.css" as="style">
+  <link rel="stylesheet" href="./assets/app/style.16d7c596fa.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.16d7c596fa.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -1579,10 +1579,6 @@ html[data-theme="dark"] .checklist-gate {
             <span data-language="en">7 Days</span>
             <span data-language="ja" hidden>7日間</span>
           </strong>
-          <p>
-            <span data-language="en">Fixed west-to-east route with one clear main flow</span>
-            <span data-language="ja" hidden>西から東へ進む、ひとつの流れに固定したルートです</span>
-          </p>
         </article>
 
         <article class="stat-card card" role="listitem">
@@ -1594,10 +1590,6 @@ html[data-theme="dark"] .checklist-gate {
             <span data-language="en">4 Core Stops</span>
             <span data-language="ja" hidden>主要4か所</span>
           </strong>
-          <p>
-            <span data-language="en">Osaka, Kyoto, Mt. Fuji area, Tokyo</span>
-            <span data-language="ja" hidden>大阪、京都、富士エリア、東京</span>
-          </p>
         </article>
 
         <article class="stat-card card" role="listitem">
@@ -1609,10 +1601,6 @@ html[data-theme="dark"] .checklist-gate {
             <span data-language="en">1 Bullet Train Ride</span>
             <span data-language="ja" hidden>新幹線1回</span>
           </strong>
-          <p>
-            <span data-language="en">Kyoto or Shin-Osaka to Mishima by shinkansen, then local access to Kawaguchiko; Mt. Fuji area to Tokyo by direct train or highway bus.</span>
-            <span data-language="ja" hidden>京都または新大阪から三島まで新幹線で進み、その後は河口湖へローカルアクセス。富士エリアから東京へは直通列車または高速バスで移動します。</span>
-          </p>
         </article>
       </div>
 
@@ -1820,8 +1808,8 @@ html[data-theme="dark"] .checklist-gate {
         </h2>
       </div>
       <p class="checklist-gate" data-checklist-gate hidden>
-        <span data-language="en">Complete every Essentials item first to unlock the day-by-day checklist.</span>
-        <span data-language="ja" hidden>日別チェックリストを開くには、先にEssentialsの項目をすべて完了してください。</span>
+        <span data-language="en">Essentials still matters, but you can preview the checklist before every prep item is complete.</span>
+        <span data-language="ja" hidden>Essentials は引き続き大切ですが、準備項目をすべて終える前でもチェックリストを確認できます。</span>
       </p>
 
       <div class="day-grid">
@@ -2207,94 +2195,13 @@ html[data-theme="dark"] .checklist-gate {
 
         <div class="budget-notes__summary" data-budget-summary aria-live="polite"></div>
 
-        <div class="budget-notes__controls">
-          <label class="budget-setting">
-            <span class="budget-setting__label">
-              <span data-language="en">Travelers</span>
-              <span data-language="ja" hidden>人数</span>
-            </span>
-            <input
-              class="budget-setting__input"
-              type="number"
-              min="1"
-              max="24"
-              step="1"
-              inputmode="numeric"
-              value="2"
-              data-budget-travelers
-              data-aria-label-en="Traveler count"
-              data-aria-label-ja="人数"
-              aria-label="Traveler count">
-            <span class="budget-setting__hint">
-              <span data-language="en">Each day now carries its own stay type, so Osaka aunt-house nights stay free unless you switch them to a paid stay.</span>
-              <span data-language="ja" hidden>各日ごとに滞在タイプを持たせたので、大阪の叔母宅の夜は有料宿へ切り替えない限り無料のままです。</span>
-            </span>
-          </label>
-
-          <label class="budget-setting">
-            <span class="budget-setting__label">
-              <span data-language="en">Accommodation split</span>
-              <span data-language="ja" hidden>宿泊費の分け方</span>
-            </span>
-            <select
-              class="budget-setting__input budget-setting__input--full"
-              data-budget-share-mode
-              data-aria-label-en="Accommodation sharing rule"
-              data-aria-label-ja="宿泊費の分け方"
-              aria-label="Accommodation sharing rule">
-              <option value="all-travelers">Share across all travelers</option>
-              <option value="not-shared">Not shared</option>
-              <option value="custom">Custom share count</option>
-            </select>
-            <span class="budget-setting__hint">
-              <span data-language="en">Paid hotel and ryokan quotes stay as one stay-total, then split by the rule you choose. Private or local stays remain free.</span>
-              <span data-language="ja" hidden>有料のホテル・旅館は見積り総額のまま保持し、その総額を選んだルールで分けます。親族宅やローカル滞在は無料のままです。</span>
-            </span>
-          </label>
-
-          <label class="budget-setting" data-budget-share-count-field hidden>
-            <span class="budget-setting__label">
-              <span data-language="en">People sharing stays</span>
-              <span data-language="ja" hidden>宿泊費を分ける人数</span>
-            </span>
-            <input
-              class="budget-setting__input"
-              type="number"
-              min="1"
-              max="24"
-              step="1"
-              inputmode="numeric"
-              value="2"
-              data-budget-share-count
-              data-aria-label-en="People sharing accommodation"
-              data-aria-label-ja="宿泊費を分ける人数"
-              aria-label="People sharing accommodation">
-            <span class="budget-setting__hint">
-              <span data-language="en">Use this when the paid stay is split across fewer people than the full traveler count.</span>
-              <span data-language="ja" hidden>有料宿泊を旅行者全員ではなく、一部の人数だけで分ける時に使います。</span>
-            </span>
-          </label>
-
-        </div>
         <div class="budget-notes__breakdown" data-budget-breakdown aria-live="polite"></div>
 
-        <div class="budget-notes__sources-block">
-          <div class="budget-notes__source-meta" data-budget-source-meta aria-live="polite"></div>
-        </div>
-
         <section class="budget-notes__day-browser" aria-labelledby="budget-day-browser-title">
-          <div class="budget-notes__day-browser-head">
-            <div class="budget-notes__day-browser-copy">
-              <p class="budget-notes__subheading" id="budget-day-browser-title">
-                <span data-language="en">Day budget viewer</span>
-                <span data-language="ja" hidden>日別予算ビュー</span>
-              </p>
-              <p class="budget-notes__day-browser-intro">
-                <span data-language="en">Switch days here instead of scrolling one long budget list.</span>
-                <span data-language="ja" hidden>縦に長い予算一覧を追わず、ここで日ごとに切り替えて見られます。</span>
-              </p>
-            </div>
-          </div>
+          <p class="visually-hidden" id="budget-day-browser-title">
+            <span data-language="en">Budget day selector</span>
+            <span data-language="ja" hidden>日別予算セレクター</span>
+          </p>
           <div class="budget-notes__day-selector" data-budget-day-selector aria-live="polite"></div>
           <div class="budget-notes__days" data-budget-days></div>
         </section>
@@ -2417,10 +2324,6 @@ html[data-theme="dark"] .checklist-gate {
               <button class="booking-transit__filter is-active" type="button" data-booking-filter-button="all" aria-pressed="true">
                 <span data-language="en">All</span>
                 <span data-language="ja" hidden>すべて</span>
-              </button>
-              <button class="booking-transit__filter" type="button" data-booking-filter-button="transit" aria-pressed="false">
-                <span data-language="en">Transit</span>
-                <span data-language="ja" hidden>移動情報</span>
               </button>
               <button class="booking-transit__filter" type="button" data-booking-filter-button="done" aria-pressed="false">
                 <span data-language="en">Done</span>
@@ -2999,10 +2902,10 @@ html[data-theme="dark"] .checklist-gate {
   </footer>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.5531a1c902.css","styleHash":"5531a1c902","routeStylePath":"./assets/app/routeStyle.4b38f85510.css","routeStyleHash":"4b38f85510","scriptPath":"./assets/app/script.c208c78083.js","scriptHash":"c208c78083","routeContentPath":"./assets/app/routeContent.52819f9db9.js","routeContentHash":"52819f9db9","budgetUiPath":"./assets/app/budgetUi.1c035f0614.js","budgetUiHash":"1c035f0614","budgetContentPath":"./assets/app/budgetContent.822b44e78c.js","budgetContentHash":"822b44e78c","essentialsContentPath":"./assets/app/essentialsContent.e023f8c0d9.js","essentialsContentHash":"e023f8c0d9","generatedAt":"2026-03-29T22:44:37.378Z","cacheVersion":"5531a1c902-4b38f85510-c208c78083-52819f9db9-1c035f0614-822b44e78c-e023f8c0d9"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.16d7c596fa.css","styleHash":"16d7c596fa","routeStylePath":"./assets/app/routeStyle.4b38f85510.css","routeStyleHash":"4b38f85510","scriptPath":"./assets/app/script.decbef2885.js","scriptHash":"decbef2885","routeContentPath":"./assets/app/routeContent.52819f9db9.js","routeContentHash":"52819f9db9","budgetUiPath":"./assets/app/budgetUi.f58cd6f282.js","budgetUiHash":"f58cd6f282","budgetContentPath":"./assets/app/budgetContent.822b44e78c.js","budgetContentHash":"822b44e78c","essentialsContentPath":"./assets/app/essentialsContent.e023f8c0d9.js","essentialsContentHash":"e023f8c0d9","generatedAt":"2026-03-29T23:13:05.129Z","cacheVersion":"16d7c596fa-4b38f85510-decbef2885-52819f9db9-f58cd6f282-822b44e78c-e023f8c0d9"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.c208c78083.js" defer></script>
+  <script src="./assets/app/script.decbef2885.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>

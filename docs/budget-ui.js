@@ -142,9 +142,9 @@ const itineraryBudgetLabels = {
   stayAreaLabel: { en: "Stay area", ja: "滞在エリア" },
   stayAnchorLabel: { en: "Anchor stay", ja: "基準の宿" },
   stayWhyLabel: { en: "Route fit", ja: "この場所を選ぶ理由" },
-  shareModeLabel: { en: "Accommodation split", ja: "宿泊費の分け方" },
+  shareModeLabel: { en: "Split", ja: "宿泊費の配分" },
   shareCountLabel: { en: "People sharing stays", ja: "宿泊費を分ける人数" },
-  shareModeAllTravelers: { en: "Share across all travelers", ja: "全員で分ける" },
+  shareModeAllTravelers: { en: "Shared", ja: "共有" },
   shareModeNotShared: { en: "Not shared", ja: "分けない" },
   shareModeCustom: { en: "Custom share count", ja: "人数を指定して分ける" },
   stayHintFallback: {
@@ -155,14 +155,8 @@ const itineraryBudgetLabels = {
     en: "Loading itinerary cost model...",
     ja: "旅程の費用モデルを読み込んでいます..."
   },
-  travelersHint: {
-    en: "Stay selectors now control each accommodation night directly, so private/local or no-cost Osaka nights stay free unless you switch them to a paid stay.",
-    ja: "各宿泊日は滞在セレクターで直接切り替える形にし、大阪のローカル・プライベート滞在や宿泊費なしの夜は、有料宿へ変更しない限り0円のままです。"
-  },
-  shareHint: {
-    en: "Paid hotel and ryokan quotes now stay as one quoted stay-total. Split that total across all travelers, keep it unshared, or divide it across a custom number of people.",
-    ja: "有料のホテル・旅館は、見積り総額をそのまま保持する形へ変えました。その総額を旅行者全員、分割なし、または指定人数で分けられます。"
-  },
+  travelersHint: { en: "", ja: "" },
+  shareHint: { en: "", ja: "" },
   shareCountHint: {
     en: "Use a custom count only when fewer people are actually splitting the paid room or ryokan total.",
     ja: "有料の部屋や旅館の総額を、旅行者全員ではなく一部だけで分ける時だけ指定人数を使います。"
@@ -175,10 +169,7 @@ const itineraryBudgetLabels = {
     en: "Day selector",
     ja: "日付セレクター"
   },
-  dayViewerHint: {
-    en: "Switch one day at a time instead of scrolling a long full-trip budget list.",
-    ja: "縦に長い予算一覧を追わず、1日ずつ切り替えて確認します。"
-  },
+  dayViewerHint: { en: "", ja: "" },
   totalMeta: {
     en: "Lean / expected / high trip total built from the real day-by-day model",
     ja: "実際の日別モデルから組んだ控えめ・標準・高めの合計"
@@ -191,10 +182,7 @@ const itineraryBudgetLabels = {
     en: "All booking, fare, and official resource links now live in Essentials so Budget Notes stays focused on costs and assumptions.",
     ja: "予約・運賃・公式リソースのリンクはすべてEssentialsへ移し、予算メモは費用と前提だけに絞っています。"
   },
-  currencyDisplayMeta: {
-    en: "English shows the same yen-based plan in CAD and USD planning FX. Japanese stays in yen.",
-    ja: "英語表示では同じ円ベースの計画をCADとUSDの旅行用換算で見せ、日本語表示は円のままです。"
-  },
+  currencyDisplayMeta: { en: "", ja: "" },
   bookedRequiredMeta: {
     en: "The fixed 7-day route costs before optional route extras",
     ja: "任意のルート追加費用を除いた固定7日間ルートの費用"
@@ -206,7 +194,7 @@ const itineraryBudgetLabels = {
     en: "Enable route extras to add luggage handling, Fuji weather pivots, and other small transfer-day costs into the live total.",
     ja: "ルート追加費用を有効にすると、荷物対応、富士山の見え方に応じた動き直し、移動日の小さな追加費用を合計へ反映します。"
   },
-  sourceUpdatedPrefix: { en: "Updated", ja: "更新日" }
+  sourceUpdatedPrefix: { en: "Refreshed", ja: "更新" }
 };
 
 (() => {
@@ -574,15 +562,18 @@ const itineraryBudgetLabels = {
       }
 
       return {
-        travelers: normalizeTravelerCount(parsed.travelers, fallbackState.travelers),
-        accommodationShareMode: normalizeShareMode(
-          parsed.accommodationShareMode,
-          fallbackState.accommodationShareMode
-        ),
-        accommodationShareCount: normalizeShareCount(
-          parsed.accommodationShareCount,
-          normalizeTravelerCount(parsed.travelers, fallbackState.travelers)
-        ),
+        travelers: budgetTravelersInput
+          ? normalizeTravelerCount(parsed.travelers, fallbackState.travelers)
+          : fallbackState.travelers,
+        accommodationShareMode: budgetAccommodationShareModeInput
+          ? normalizeShareMode(parsed.accommodationShareMode, fallbackState.accommodationShareMode)
+          : fallbackState.accommodationShareMode,
+        accommodationShareCount: budgetAccommodationShareCountInput
+          ? normalizeShareCount(
+              parsed.accommodationShareCount,
+              normalizeTravelerCount(parsed.travelers, fallbackState.travelers)
+            )
+          : fallbackState.accommodationShareCount,
         includeExtras: false,
         days: normalizeDayEntries(parsed.days)
       };
@@ -752,6 +743,7 @@ const itineraryBudgetLabels = {
           en: `Show budget for Day ${dayEstimate.day}`,
           ja: `${dayEstimate.day}日目の予算を見る`
         };
+        const compactDayLabel = String(dayEstimate.day).padStart(2, "0");
 
         return `
           <button
@@ -762,10 +754,8 @@ const itineraryBudgetLabels = {
             data-aria-label-en="${escapeHtml(ariaLabel.en)}"
             data-aria-label-ja="${escapeHtml(ariaLabel.ja)}"
             aria-label="${escapeHtml(getLocalizedText(ariaLabel))}">
-            <span class="budget-day-selector__button-day">${renderLocalizedContent(dayLabel)}</span>
-            <span class="budget-day-selector__button-title">${renderLocalizedContent(
-              getDaySelectorTitleCopy(dayEstimate)
-            )}</span>
+            <span class="budget-day-selector__button-day">${escapeHtml(compactDayLabel)}</span>
+            <span class="visually-hidden">${renderLocalizedContent(dayLabel)}</span>
           </button>
         `;
       })
@@ -1092,7 +1082,6 @@ const itineraryBudgetLabels = {
     };
   };
   const renderSummaryMarkup = (estimate = calculateEstimate()) => {
-    const shareModeLabel = getShareModeLabel(estimate.accommodationShareMode);
     const summaryCards = [
       {
         className: "budget-summary-card budget-summary-card--estimate budget-summary-card--compact",
@@ -1104,27 +1093,18 @@ const itineraryBudgetLabels = {
         className: "budget-summary-card budget-summary-card--per-person budget-summary-card--compact",
         label: itineraryBudgetLabels.summaryPerPerson,
         range: estimate.perPersonRange,
-        meta: joinLocalizedSegments([
-          {
-            en: `${estimate.travelers} traveler${estimate.travelers === 1 ? "" : "s"}`,
-            ja: `${estimate.travelers}人`
-          },
-          { en: `stay split: ${shareModeLabel.en}`, ja: `宿泊費の分け方: ${shareModeLabel.ja}` }
-        ])
+        meta: {
+          en: "Per-traveler estimate using the current trip setup.",
+          ja: "現在の旅程設定を基準にした1人あたりの見積りです。"
+        }
       },
       {
         className: "budget-summary-card budget-summary-card--shared budget-summary-card--compact",
         label: itineraryBudgetLabels.summaryBookedRequired,
         range: estimate.bookedAndFixedTotalRange,
-        meta: joinLocalizedSegments([
-          itineraryBudgetLabels.bookedRequiredMeta,
-          hasBudgetRangeValue(estimate.accommodationPerPersonRange)
-            ? {
-                en: `stay split: ${shareModeLabel.en}`,
-                ja: `宿泊費の分け方: ${shareModeLabel.ja}`
-              }
-            : itineraryBudgetLabels.noPaidAccommodationMeta
-        ])
+        meta: hasBudgetRangeValue(estimate.accommodationPerPersonRange)
+          ? itineraryBudgetLabels.bookedRequiredMeta
+          : itineraryBudgetLabels.noPaidAccommodationMeta
       }
     ];
 
@@ -1210,42 +1190,7 @@ const itineraryBudgetLabels = {
       </div>
     `;
   };
-  const renderSourceMetaMarkup = () => {
-    const compactItems = [
-      {
-        label: { en: "Range bands", ja: "予算帯の見方" },
-        body: {
-          en: "Lean stays workable, Expected follows the current plan, and High keeps a realistic buffer.",
-          ja: "控えめは成立する安め寄り、標準は現在の計画、高めは現実的な上振れを見ています。"
-        }
-      },
-      {
-        label: { en: "Currency view", ja: "通貨表示" },
-        body: itineraryBudgetLabels.currencyDisplayMeta
-      },
-      {
-        label: itineraryBudgetLabels.sourceUpdatedPrefix,
-        body: { en: budgetSourceUpdatedAt, ja: budgetSourceUpdatedAt }
-      }
-    ];
-
-    return `
-      <article class="budget-source-meta-card budget-source-meta-card--compact">
-        <div class="budget-source-meta-card__list">
-          ${compactItems
-            .map(
-              (item) => `
-                <section class="budget-source-meta-card__item">
-                  <p class="budget-source-meta-card__label">${renderLocalizedContent(item.label)}</p>
-                  <p class="budget-source-meta-card__body">${renderLocalizedContent(item.body)}</p>
-                </section>
-              `
-            )
-            .join("")}
-        </div>
-      </article>
-    `;
-  };
+  const renderSourceMetaMarkup = () => "";
   const renderSourcesMarkup = () => "";
   const renderDayMarkup = (dayEstimate) => {
     const noteAriaEn = `Budget note for ${dayEstimate.title.en}`;
@@ -1352,8 +1297,8 @@ const itineraryBudgetLabels = {
       <article class="budget-day-card" data-budget-day="${dayEstimate.day}">
         <div class="budget-day-card__header">
           <div class="budget-day-card__copy">
-            <h4>${renderLocalizedContent(dayEstimate.title)}</h4>
-            <p>${renderLocalizedContent(dayEstimate.subtitle)}</p>
+            <h4>${escapeHtml(String(dayEstimate.day).padStart(2, "0"))}</h4>
+            <p class="visually-hidden">${renderLocalizedContent(dayEstimate.title)}</p>
           </div>
           <div class="budget-day-card__totals">
             <p class="budget-day-card__total">${escapeHtml(formatCurrency(dayEstimate.total))}</p>
@@ -1504,6 +1449,7 @@ const itineraryBudgetLabels = {
 
     if (budgetSourceMetaNode) {
       budgetSourceMetaNode.innerHTML = renderSourceMetaMarkup();
+      budgetSourceMetaNode.hidden = true;
     }
 
     if (budgetSourcesNode) {

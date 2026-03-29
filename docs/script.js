@@ -1014,6 +1014,7 @@ let scrollMotionEconomyTimer = 0;
 let scrollTicking = false;
 let resizeTicking = false;
 let revealObserver = null;
+let headerLockReleaseTimer = 0;
 const revealRestartFrames = new WeakMap();
 let completedDays = new Set();
 let completedHistoryDays = new Set();
@@ -2918,21 +2919,7 @@ function renderBookingTransitItem(item) {
   const preferredLink = getPreferredBookingTransitLink(item);
   const dayTagMarkup = renderBookingTransitMetaTag(item.dayLabel, "booking-item__tag--day");
   const typeTagMarkup = renderBookingTransitMetaTag(item.typeLabel, "booking-item__tag--type");
-  const transitTriggerMarkup = item.transitDetailId
-    ? `
-          <div class="booking-item__support">
-            <button
-              class="transit-trigger transit-trigger--booking"
-              type="button"
-              data-transit-detail-trigger="${escapeHtml(item.transitDetailId)}"
-              aria-haspopup="dialog"
-              aria-controls="transit-detail-modal">
-              <span data-language="en">Transit details</span>
-              <span data-language="ja" hidden>移動詳細</span>
-            </button>
-          </div>
-      `
-    : "";
+  const transitTriggerMarkup = "";
   const linkMarkup = preferredLink
     ? `
           <div class="booking-item__link-grid">
@@ -3073,15 +3060,21 @@ function itemMatchesBookingTransitFilter(itemConfig, state) {
     return state.done;
   }
 
-  return itemConfig.filters.includes(bookingTransitState.filter);
+  return false;
 }
 
 function updateBookingTransitUI() {
   const bookingTransitRoot = getBookingTransitRoot();
   const bookingTransitEmptyState = getBookingTransitEmptyState();
+  const allowedFilters = new Set(["all", "done"]);
 
   if (!bookingTransitRoot) {
     return;
+  }
+
+  if (!allowedFilters.has(bookingTransitState.filter)) {
+    bookingTransitState.filter = "all";
+    storeBookingTransitState();
   }
 
   let hasVisibleItems = false;
@@ -3131,7 +3124,7 @@ function updateBookingTransitUI() {
 }
 
 function setBookingTransitFilter(nextFilter) {
-  const allowedFilters = new Set(["all", "transit", "done"]);
+  const allowedFilters = new Set(["all", "done"]);
   bookingTransitState.filter = allowedFilters.has(nextFilter) ? nextFilter : "all";
   storeBookingTransitState();
   updateBookingTransitUI();
@@ -3251,7 +3244,7 @@ function getPackingStateSnapshot() {
   return packingInitialized ? packingState : readStoredPackingState();
 }
 
-function isChecklistAccessLocked() {
+function isChecklistGuidanceActive() {
   const itemIds = getAllPackingItems()
     .map((itemElement) => itemElement.dataset.packingItem || "")
     .filter(Boolean);
@@ -3264,24 +3257,29 @@ function isChecklistAccessLocked() {
   return !itemIds.every((itemId) => Boolean(stateSnapshot[itemId]));
 }
 
+function isChecklistAccessLocked() {
+  return false;
+}
+
 function updateChecklistAccessState() {
-  const isLocked = isChecklistAccessLocked();
+  const needsGuidance = isChecklistGuidanceActive();
   const checklistPanel = getSectionPanel("checklist");
 
   if (checklistTab) {
-    checklistTab.classList.toggle("is-disabled", isLocked);
-    checklistTab.setAttribute("aria-disabled", String(isLocked));
+    checklistTab.classList.remove("is-disabled");
+    checklistTab.setAttribute("aria-disabled", "false");
   }
 
   if (checklistPanel) {
-    checklistPanel.dataset.essentialsLocked = String(isLocked);
+    checklistPanel.dataset.essentialsLocked = "false";
+    checklistPanel.dataset.essentialsGuidance = String(needsGuidance);
   }
 
   if (checklistGateNotice) {
-    checklistGateNotice.hidden = !isLocked;
+    checklistGateNotice.hidden = !needsGuidance;
   }
 
-  return isLocked;
+  return false;
 }
 
 function isPackingItemPacked(itemId) {
@@ -3575,6 +3573,21 @@ function resetHeaderScrollTracking(scrollY = window.scrollY) {
 function lockHeaderState(duration = 420) {
   headerLockUntil = window.performance.now() + duration;
   resetHeaderScrollTracking();
+
+  if (headerLockReleaseTimer) {
+    window.clearTimeout(headerLockReleaseTimer);
+    headerLockReleaseTimer = 0;
+  }
+
+  headerLockReleaseTimer = window.setTimeout(() => {
+    headerLockReleaseTimer = 0;
+    if (window.performance.now() < headerLockUntil) {
+      return;
+    }
+
+    headerLockUntil = 0;
+    syncHeaderState();
+  }, Math.max(duration, 0) + 32);
 }
 
 function getHeaderScrollOffset(extra = 20) {
@@ -5635,7 +5648,10 @@ function renderRouteMapDetail(selectionState) {
         </div>
       `
     : "";
-  const transitActionsMarkup = Array.isArray(config.transitActions) && config.transitActions.length
+  const transitActionsMarkup =
+    selectionState.type !== "view" &&
+    Array.isArray(config.transitActions) &&
+    config.transitActions.length
     ? `
         <section class="route-reference__group">
           <p class="route-reference__group-label">${renderLocalizedContent(routeMapLabels.tools)}</p>
@@ -6512,8 +6528,8 @@ function showSequenceNotice(requiredDay) {
 function showChecklistLockNotice() {
   showToastNotice(
     root.lang === "ja"
-      ? "日別チェックリストを開くには、先にEssentialsの項目をすべて完了してください。"
-      : "Complete every Essentials item first to unlock the day-by-day checklist."
+      ? "Essentials に未完了の項目はありますが、チェックリストは先に確認できます。"
+      : "Essentials still has unfinished items, but the checklist is available to preview."
   );
 }
 

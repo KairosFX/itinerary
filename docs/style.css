@@ -7992,3 +7992,457 @@ html[data-theme="dark"] .checklist-gate {
 html[data-theme="dark"] .booking-group__caret {
   border-color: rgba(223, 215, 210, 0.82);
 }
+
+/* Final theme and budget/checklist cleanup */
+html {
+  color-scheme: light;
+}
+
+:root {
+  --bg: #f6f8f5;
+  --bg-accent: #edf2ed;
+  --surface: rgba(255, 255, 255, 0.9);
+  --surface-strong: #ffffff;
+  --text: #101512;
+  --muted: #4c5c53;
+  --line: rgba(16, 21, 18, 0.1);
+  --line-strong: rgba(16, 21, 18, 0.16);
+  --accent: #2f6b45;
+  --accent-deep: #1e4c30;
+  --accent-soft: rgba(47, 107, 69, 0.12);
+  --accent-gold: #7aa16f;
+  --accent-indigo: #415048;
+  --green: #2f6b45;
+  --shadow: 0 20px 40px rgba(6, 15, 9, 0.06);
+  --shadow-hover: 0 28px 56px rgba(6, 15, 9, 0.1);
+}
+
+body {
+  background:
+    radial-gradient(circle at 14% 14%, rgba(47, 107, 69, 0.08), rgba(47, 107, 69, 0) 26%),
+    radial-gradient(circle at 82% 10%, rgba(122, 161, 111, 0.1), rgba(122, 161, 111, 0) 24%),
+    linear-gradient(180deg, #ffffff 0%, #f7faf7 42%, #eef3ee 100%);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline-color: rgba(47, 107, 69, 0.24);
+}
+
+.site-header {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(246, 250, 246, 0.8));
+  border-bottom-color: rgba(16, 21, 18, 0.06);
+  box-shadow: 0 18px 36px rgba(6, 15, 9, 0.08);
+}
+
+.section-nav,
+.language-switcher,
+.theme-switcher {
+  background: rgba(255, 255, 255, 0.76);
+  border-color: rgba(16, 21, 18, 0.08);
+}
+
+.language-button,
+.section-tab,
+.theme-button,
+.budget-source-card__link,
+.footer-link,
+.transit-trigger {
+  border-color: rgba(16, 21, 18, 0.1);
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--text);
+  box-shadow: 0 12px 24px rgba(6, 15, 9, 0.06);
+}
+
+.language-button:hover,
+.language-button:focus-visible,
+.section-tab:hover,
+.section-tab:focus-visible,
+.theme-button:hover,
+.theme-button:focus-visible,
+.budget-source-card__link:hover,
+.budget-source-card__link:focus-visible,
+.footer-link:hover,
+.footer-link:focus-visible,
+.transit-trigger:hover,
+.transit-trigger:focus-visible {
+  border-color: rgba(47, 107, 69, 0.2);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 16px 30px rgba(6, 15, 9, 0.09);
+}
+
+.section-tab.is-active,
+.section-tab[aria-selected="true"],
+.theme-button.is-active,
+.language-button.is-active {
+  border-color: rgba(47, 107, 69, 0.24);
+  background:
+    linear-gradient(180deg, rgba(47, 107, 69, 0.16), rgba(47, 107, 69, 0.06)),
+    rgba(255, 255, 255, 0.94);
+  color: var(--accent-deep);
+}
+
+.card,
+.stat-card,
+.progress-card,
+.overview-card,
+.journey-close,
+.site-footer__inner,
+.progress-overview,
+.day-card,
+.note-card,
+.essentials-card,
+.booking-group,
+.booking-item,
+.budget-day-card,
+.budget-source-card,
+.budget-summary-card,
+.budget-breakdown-card,
+.budget-status-card,
+.budget-source-meta-card,
+.budget-notes__day-browser {
+  border-color: rgba(16, 21, 18, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(246, 250, 246, 0.88)),
+    rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 20px 40px rgba(6, 15, 9, 0.06),
+    0 36px 72px rgba(6, 15, 9, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.checklist-gate {
+  border-color: rgba(47, 107, 69, 0.16);
+  background: linear-gradient(180deg, rgba(244, 249, 245, 0.96), rgba(237, 245, 238, 0.92));
+  color: var(--text);
+}
+
+.content-panel[data-panel="checklist"][data-essentials-locked="true"] .day-grid,
+.content-panel[data-panel="checklist"][data-essentials-guidance="true"] .day-grid {
+  opacity: 1;
+  pointer-events: auto;
+  filter: none;
+}
+
+#checklist .check-item {
+  border-color: rgba(16, 21, 18, 0.08);
+  background:
+    radial-gradient(
+      circle at var(--check-pointer-x) var(--check-pointer-y),
+      rgba(47, 107, 69, 0.06),
+      rgba(47, 107, 69, 0) 42%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 250, 246, 0.9));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 10px 22px rgba(6, 15, 9, 0.05);
+}
+
+#checklist .check-item::after {
+  background:
+    radial-gradient(
+      circle at var(--check-feedback-x) var(--check-feedback-y),
+      rgba(47, 107, 69, 0.22),
+      rgba(47, 107, 69, 0.08) 16%,
+      rgba(47, 107, 69, 0) 50%
+    );
+}
+
+#checklist .check-item.is-pointer-active {
+  border-color: rgba(47, 107, 69, 0.22);
+  background:
+    radial-gradient(
+      circle at var(--check-pointer-x) var(--check-pointer-y),
+      rgba(47, 107, 69, 0.11),
+      rgba(47, 107, 69, 0) 42%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 249, 245, 0.94));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 14px 28px rgba(6, 15, 9, 0.08);
+}
+
+#checklist .check-item.is-pointer-active .check-copy,
+#checklist .check-item input:checked ~ .check-copy {
+  color: var(--text);
+}
+
+#checklist .check-item[data-feedback-state="unchecked"]::after {
+  background:
+    radial-gradient(
+      circle at var(--check-feedback-x) var(--check-feedback-y),
+      rgba(65, 80, 72, 0.18),
+      rgba(65, 80, 72, 0.08) 18%,
+      rgba(65, 80, 72, 0) 52%
+    );
+}
+
+#checklist .day-card[data-feedback-state="checked"].is-check-feedback {
+  box-shadow:
+    0 0 0 1px rgba(47, 107, 69, 0.12),
+    0 24px 48px rgba(6, 15, 9, 0.1),
+    0 40px 80px rgba(6, 15, 9, 0.12);
+}
+
+#checklist .day-card[data-feedback-state="unchecked"].is-check-feedback {
+  box-shadow:
+    0 0 0 1px rgba(16, 21, 18, 0.08),
+    0 22px 44px rgba(6, 15, 9, 0.08),
+    0 36px 72px rgba(6, 15, 9, 0.1);
+}
+
+.budget-panel {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "heading"
+    "summary"
+    "breakdown"
+    "days";
+}
+
+.budget-notes__summary {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+
+.budget-notes__controls,
+.budget-notes__status,
+.budget-notes__sources-block,
+.budget-source-meta-card,
+.budget-day-selector__button-title {
+  display: none !important;
+}
+
+.budget-notes__day-browser {
+  width: min(100%, 54rem);
+}
+
+.budget-notes__day-selector {
+  grid-template-columns: repeat(auto-fit, minmax(4.2rem, 1fr));
+}
+
+.budget-day-selector__button {
+  justify-items: center;
+  align-content: center;
+  gap: 0;
+  padding: 0.76rem 0.5rem;
+  text-align: center;
+}
+
+.budget-day-selector__button-day {
+  color: var(--accent-deep);
+  font-size: 0.88rem;
+  letter-spacing: 0.14em;
+}
+
+.budget-day-card__copy {
+  gap: 0;
+}
+
+.budget-day-card__copy h4 {
+  font-size: 0.92rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.budget-day-card__copy p {
+  display: none;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #050705;
+  --bg-accent: #0a0d0a;
+  --surface: rgba(10, 13, 11, 0.9);
+  --surface-strong: #0b0e0c;
+  --text: #f4f7f4;
+  --muted: #b8c4ba;
+  --line: rgba(235, 242, 236, 0.1);
+  --line-strong: rgba(235, 242, 236, 0.16);
+  --accent: #61a476;
+  --accent-deep: #dcecdf;
+  --accent-soft: rgba(97, 164, 118, 0.16);
+  --accent-gold: #90ba98;
+  --accent-indigo: #c7d4ca;
+  --green: #61a476;
+  --shadow: 0 28px 56px rgba(0, 0, 0, 0.44);
+  --shadow-hover: 0 36px 80px rgba(0, 0, 0, 0.54);
+}
+
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 16% 14%, rgba(97, 164, 118, 0.12), rgba(97, 164, 118, 0) 24%),
+    radial-gradient(circle at 82% 10%, rgba(144, 186, 152, 0.08), rgba(144, 186, 152, 0) 24%),
+    linear-gradient(180deg, #050705 0%, #070a07 42%, #020302 100%);
+}
+
+html[data-theme="dark"] a:focus-visible,
+html[data-theme="dark"] button:focus-visible,
+html[data-theme="dark"] input:focus-visible {
+  outline-color: rgba(97, 164, 118, 0.3);
+}
+
+html[data-theme="dark"] .site-header {
+  background: linear-gradient(180deg, rgba(6, 8, 7, 0.96), rgba(8, 11, 9, 0.88));
+  border-bottom-color: rgba(235, 242, 236, 0.08);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.42);
+}
+
+html[data-theme="dark"] .section-nav,
+html[data-theme="dark"] .language-switcher,
+html[data-theme="dark"] .theme-switcher {
+  background: rgba(11, 15, 12, 0.8);
+  border-color: rgba(235, 242, 236, 0.08);
+}
+
+html[data-theme="dark"] .language-button,
+html[data-theme="dark"] .section-tab,
+html[data-theme="dark"] .theme-button,
+html[data-theme="dark"] .budget-source-card__link,
+html[data-theme="dark"] .footer-link,
+html[data-theme="dark"] .transit-trigger {
+  border-color: rgba(235, 242, 236, 0.1);
+  background: rgba(11, 15, 12, 0.86);
+  color: var(--text);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="dark"] .language-button:hover,
+html[data-theme="dark"] .language-button:focus-visible,
+html[data-theme="dark"] .section-tab:hover,
+html[data-theme="dark"] .section-tab:focus-visible,
+html[data-theme="dark"] .theme-button:hover,
+html[data-theme="dark"] .theme-button:focus-visible,
+html[data-theme="dark"] .budget-source-card__link:hover,
+html[data-theme="dark"] .budget-source-card__link:focus-visible,
+html[data-theme="dark"] .footer-link:hover,
+html[data-theme="dark"] .footer-link:focus-visible,
+html[data-theme="dark"] .transit-trigger:hover,
+html[data-theme="dark"] .transit-trigger:focus-visible {
+  border-color: rgba(97, 164, 118, 0.24);
+  background: rgba(15, 20, 16, 0.94);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.34);
+}
+
+html[data-theme="dark"] .section-tab.is-active,
+html[data-theme="dark"] .section-tab[aria-selected="true"],
+html[data-theme="dark"] .theme-button.is-active,
+html[data-theme="dark"] .language-button.is-active {
+  border-color: rgba(97, 164, 118, 0.24);
+  background:
+    linear-gradient(180deg, rgba(97, 164, 118, 0.22), rgba(97, 164, 118, 0.08)),
+    rgba(11, 15, 12, 0.94);
+  color: var(--text);
+}
+
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .stat-card,
+html[data-theme="dark"] .progress-card,
+html[data-theme="dark"] .overview-card,
+html[data-theme="dark"] .journey-close,
+html[data-theme="dark"] .site-footer__inner,
+html[data-theme="dark"] .progress-overview,
+html[data-theme="dark"] .day-card,
+html[data-theme="dark"] .note-card,
+html[data-theme="dark"] .essentials-card,
+html[data-theme="dark"] .booking-group,
+html[data-theme="dark"] .booking-item,
+html[data-theme="dark"] .budget-day-card,
+html[data-theme="dark"] .budget-source-card,
+html[data-theme="dark"] .budget-summary-card,
+html[data-theme="dark"] .budget-breakdown-card,
+html[data-theme="dark"] .budget-status-card,
+html[data-theme="dark"] .budget-source-meta-card,
+html[data-theme="dark"] .budget-notes__day-browser {
+  border-color: rgba(235, 242, 236, 0.08);
+  background:
+    linear-gradient(180deg, rgba(8, 11, 9, 0.96), rgba(11, 15, 12, 0.92)),
+    rgba(8, 11, 9, 0.92);
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.32),
+    0 40px 80px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+html[data-theme="dark"] .checklist-gate {
+  border-color: rgba(97, 164, 118, 0.18);
+  background: linear-gradient(180deg, rgba(11, 18, 13, 0.96), rgba(9, 13, 10, 0.92));
+  color: var(--text);
+}
+
+html[data-theme="dark"] #checklist .check-item {
+  border-color: rgba(235, 242, 236, 0.08);
+  background:
+    radial-gradient(
+      circle at var(--check-pointer-x) var(--check-pointer-y),
+      rgba(97, 164, 118, 0.1),
+      rgba(97, 164, 118, 0) 42%
+    ),
+    linear-gradient(180deg, rgba(10, 13, 11, 0.96), rgba(12, 16, 13, 0.92));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="dark"] #checklist .check-item::after {
+  background:
+    radial-gradient(
+      circle at var(--check-feedback-x) var(--check-feedback-y),
+      rgba(97, 164, 118, 0.26),
+      rgba(97, 164, 118, 0.08) 16%,
+      rgba(97, 164, 118, 0) 50%
+    );
+}
+
+html[data-theme="dark"] #checklist .check-item.is-pointer-active {
+  border-color: rgba(97, 164, 118, 0.24);
+  background:
+    radial-gradient(
+      circle at var(--check-pointer-x) var(--check-pointer-y),
+      rgba(97, 164, 118, 0.15),
+      rgba(97, 164, 118, 0) 42%
+    ),
+    linear-gradient(180deg, rgba(11, 16, 12, 0.98), rgba(13, 18, 14, 0.94));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 16px 30px rgba(0, 0, 0, 0.24);
+}
+
+html[data-theme="dark"] #checklist .check-item.is-pointer-active .check-copy,
+html[data-theme="dark"] #checklist .check-item input:checked ~ .check-copy {
+  color: var(--text);
+}
+
+html[data-theme="dark"] #checklist .check-item[data-feedback-state="unchecked"]::after {
+  background:
+    radial-gradient(
+      circle at var(--check-feedback-x) var(--check-feedback-y),
+      rgba(199, 212, 202, 0.16),
+      rgba(199, 212, 202, 0.07) 18%,
+      rgba(199, 212, 202, 0) 52%
+    );
+}
+
+html[data-theme="dark"] #checklist .day-card[data-feedback-state="checked"].is-check-feedback {
+  box-shadow:
+    0 0 0 1px rgba(97, 164, 118, 0.16),
+    0 24px 52px rgba(0, 0, 0, 0.26),
+    0 40px 88px rgba(0, 0, 0, 0.34);
+}
+
+html[data-theme="dark"] #checklist .day-card[data-feedback-state="unchecked"].is-check-feedback {
+  box-shadow:
+    0 0 0 1px rgba(235, 242, 236, 0.08),
+    0 22px 46px rgba(0, 0, 0, 0.22),
+    0 38px 80px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 720px) {
+  .budget-day-selector__button {
+    min-height: 3.5rem;
+  }
+
+  .budget-day-selector__button-day {
+    font-size: 0.8rem;
+  }
+}
