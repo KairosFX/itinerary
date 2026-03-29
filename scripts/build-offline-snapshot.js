@@ -6,7 +6,9 @@ const docsDir = path.join(repoRoot, "docs");
 const indexPath = path.join(docsDir, "index.html");
 const snapshotPath = path.join(docsDir, "japan-escape-itinerary-offline.html");
 const cssPath = path.join(docsDir, "style.min.css");
+const routeCssPath = path.join(docsDir, "route.min.css");
 const jsPath = path.join(docsDir, "script.min.js");
+const routeContentJsPath = path.join(docsDir, "route-content.min.js");
 const bookingTransitDataPath = path.join(
   docsDir,
   "assets",
@@ -53,7 +55,9 @@ function replaceBlock(documentHtml, startMarker, endMarker, nextBlock, label) {
 }
 
 let html = fs.readFileSync(indexPath, "utf8");
-const css = fs.readFileSync(cssPath, "utf8").trim();
+const css = [fs.readFileSync(cssPath, "utf8").trim(), fs.readFileSync(routeCssPath, "utf8").trim()]
+  .filter(Boolean)
+  .join("\n");
 const bookingTransitData = fs
   .readFileSync(bookingTransitDataPath, "utf8")
   .trim()
@@ -66,9 +70,10 @@ const budgetEstimateData = fs
   .readFileSync(budgetEstimateDataPath, "utf8")
   .trim()
   .replace(/<\/script/gi, "<\\/script");
-const js = fs
-  .readFileSync(jsPath, "utf8")
-  .trim()
+const js = [routeContentJsPath, jsPath]
+  .map((filePath) => fs.readFileSync(filePath, "utf8").trim())
+  .filter(Boolean)
+  .join("\n")
   .replace(/<\/script/gi, "<\\/script");
 
 const styleBlock = `${styleStartMarker}\n  <style data-inline-style>${css}</style>\n  ${styleEndMarker}`;

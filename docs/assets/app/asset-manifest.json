@@ -1,8 +1,12 @@
 {
-  "stylePath": "./assets/app/style.86241a4801.css",
-  "styleHash": "86241a4801",
-  "scriptPath": "./assets/app/script.58d7f4aa40.js",
-  "scriptHash": "58d7f4aa40",
-  "generatedAt": "2026-03-29T00:14:45.552Z",
-  "cacheVersion": "86241a4801-58d7f4aa40"
+  "stylePath": "./assets/app/style.b7eba59d67.css",
+  "styleHash": "b7eba59d67",
+  "routeStylePath": "./assets/app/routeStyle.3798dfcbae.css",
+  "routeStyleHash": "3798dfcbae",
+  "scriptPath": "./assets/app/script.d7e9788f17.js",
+  "scriptHash": "d7e9788f17",
+  "routeContentPath": "./assets/app/routeContent.64e84598a9.js",
+  "routeContentHash": "64e84598a9",
+  "generatedAt": "2026-03-29T00:55:02.781Z",
+  "cacheVersion": "b7eba59d67-3798dfcbae-d7e9788f17-64e84598a9"
 }

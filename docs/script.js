@@ -94,9 +94,13 @@ const budgetEstimateSourcesDataUrl = "./assets/data/budget-estimate-sources.json
 const transitDetailsDataUrl = "./assets/data/transit-details.json";
 const offlineSnapshotUrl = "./japan-escape-itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
+const appAssetManifestUrl = "./assets/app/asset-manifest.json";
 const offlineBundleVersion = "2026-03-28-offline-v23";
 const routeMapLibraryScriptUrl = "./assets/vendor/maplibre/maplibre-gl.js";
 const routeMapLibraryStyleUrl = "./assets/vendor/maplibre/maplibre-gl.css";
+const routeContentRuntimeGlobal = "__JAPAN_ROUTE_CONTENT__";
+const routeContentFallbackScriptUrl = "./route-content.min.js";
+const routeStyleFallbackUrl = "./route.min.css";
 const routeMapStyleUrl = "https://tiles.openfreemap.org/styles/liberty";
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const inlineDataSelectors = {
@@ -201,65 +205,8 @@ const budgetStayOptionOrder = {
 let budgetStayDefinitions = {};
 let budgetSourceGroups = [];
 let budgetDayDefinitions = [];
-const tripNoteDefinitions = [
-  {
-    day: 1,
-    title: { en: "Day 1 - Osaka", ja: "1日目・大阪" },
-    summary: {
-      en: "Arrival day stays easy in Minami: settle in, walk Dotonbori and Shinsaibashi, eat nearby, and keep the first night light.",
-      ja: "到着日はミナミ周辺で無理をせず、道頓堀と心斎橋を歩いて近くで食事し、最初の夜は軽く整える日にします。"
-    }
-  },
-  {
-    day: 2,
-    title: { en: "Day 2 - Kyoto East", ja: "2日目・京都東側" },
-    summary: {
-      en: "Kyoto East stays as one walking day: Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, Gion, and Nanzen-ji on the same side of the city.",
-      ja: "京都東側は、清水寺、二年坂、八坂の塔、祇園、南禅寺を同じ側でまとめて回る一日にします。"
-    }
-  },
-  {
-    day: 3,
-    title: { en: "Day 3 - Arashiyama, then Osaka", ja: "3日目・嵐山のあと大阪" },
-    summary: {
-      en: "Arashiyama gets its own morning, then the route returns to Osaka for Kaiyukan, Tempozan, and one last Kansai night.",
-      ja: "嵐山は朝だけで独立させ、そのあと大阪へ戻って海遊館、天保山、最後の関西の夜へつなげます。"
-    }
-  },
-  {
-    day: 4,
-    title: { en: "Day 4 - Mt. Fuji Area", ja: "4日目・富士エリア" },
-    summary: {
-      en: "Day 4 is the full Fuji block: transfer via Mishima, group Chureito and Kawaguchiko together, then settle into the Fuji-area stay.",
-      ja: "4日目は富士エリアの日にし、三島経由で入り、忠霊塔と河口湖をまとめて回ってから富士側の宿へ入ります。"
-    }
-  },
-  {
-    day: 5,
-    title: { en: "Day 5 - Tokyo / Shibuya", ja: "5日目・東京・渋谷" },
-    summary: {
-      en: "Day 5 starts Tokyo cleanly: leave Fuji, check in around Shibuya, then do the crossing, food walk, and Shibuya Sky.",
-      ja: "5日目は富士エリアを出て渋谷周辺へ入り、チェックイン後に交差点、食べ歩き、渋谷スカイへつなげます。"
-    }
-  },
-  {
-    day: 6,
-    title: { en: "Day 6 - Tokyo East / Full Day", ja: "6日目・東京東側の観光メイン日" },
-    summary: {
-      en: "Day 6 is the fuller Tokyo sightseeing day: Skytree first, then Solamachi and Akihabara.",
-      ja: "6日目は東京観光の本番日にし、スカイツリー、ソラマチ、秋葉原をまとめて回ります。"
-    }
-  },
-  {
-    day: 7,
-    title: { en: "Day 7 - Imperial Palace, Shinjuku + flight home", ja: "7日目・皇居と新宿、そして帰国日" },
-    summary: {
-      en: "Day 7 stays light: Imperial Palace first, a short Shinjuku stop, then bags and airport buffer.",
-      ja: "7日目は軽めにし、皇居を見てから新宿を短く回り、荷物対応と空港までの余裕を残します。"
-    }
-  }
-];
-const tripNoteDefinitionMap = new Map(tripNoteDefinitions.map((note) => [note.day, note]));
+let tripNoteDefinitions = [];
+let tripNoteDefinitionMap = new Map();
 const fujiForecastCacheMaxAgeMs = 45 * 60 * 1000;
 const fujiForecastSourceUrl = "https://open-meteo.com/en/docs";
 const fujiForecastApiUrl = "https://api.open-meteo.com/v1/forecast";
@@ -552,624 +499,297 @@ const routeMapBaseOptions = {
   center: routeMapInitialView.center,
   zoom: routeMapInitialView.zoom
 };
-// Extracted from Google Maps preview directions responses on 2026-03-28.
-const routeSegmentCoordinateDefinitions = {
-  osakaKyoto: [
-    [135.502339, 34.694211],
-    [135.495944, 34.693993],
-    [135.495746, 34.694948],
-    [135.496044, 34.694968],
-    [135.500427, 34.695014],
-    [135.504887, 34.694403],
-    [135.509925, 34.683394],
-    [135.513989, 34.681635],
-    [135.59113, 34.678779],
-    [135.595041, 34.684938],
-    [135.591745, 34.711214],
-    [135.591988, 34.717155],
-    [135.761748, 34.970979],
-    [135.763587, 34.973192],
-    [135.764209, 34.98926],
-    [135.768966, 35.012023],
-    [135.768191, 35.012098]
-  ],
-  kyotoOsakaViaArashiyama: [
-    [135.768191, 35.012098],
-    [135.765029, 35.012183],
-    [135.765017, 35.010873],
-    [135.752294, 35.010945],
-    [135.752055, 35.003648],
-    [135.706224, 35.003631],
-    [135.700728, 34.994107],
-    [135.690969, 34.994525],
-    [135.691886, 34.993562],
-    [135.685341, 34.992068],
-    [135.683865, 34.99156],
-    [135.679688, 34.99146],
-    [135.689899, 34.993277],
-    [135.689836, 34.99455],
-    [135.690969, 34.994525],
-    [135.693206, 34.982585],
-    [135.689161, 34.978195],
-    [135.661435, 34.976363],
-    [135.656981, 34.965958],
-    [135.654331, 34.962611],
-    [135.693602, 34.903681],
-    [135.688428, 34.903383],
-    [135.46614, 34.754197],
-    [135.464885, 34.751093],
-    [135.463683, 34.748763],
-    [135.499739, 34.695017],
-    [135.504887, 34.694403],
-    [135.50774, 34.693616],
-    [135.508011, 34.69403],
-    [135.507348, 34.694349],
-    [135.507023, 34.693888],
-    [135.505086, 34.694769],
-    [135.504733, 34.693932],
-    [135.502339, 34.694211]
-  ],
-  osakaShinOsaka: [
-    [135.502339, 34.694211],
-    [135.504659, 34.693824],
-    [135.505086, 34.694769],
-    [135.502269, 34.695186],
-    [135.502474, 34.695831],
-    [135.501387, 34.696743],
-    [135.501915, 34.699601],
-    [135.501761, 34.702923],
-    [135.498841, 34.722808],
-    [135.498396, 34.729415],
-    [135.49825, 34.734677],
-    [135.498798, 34.734866],
-    [135.498955, 34.733873],
-    [135.498921, 34.733862]
-  ],
-  shinOsakaMishima: [
-    [135.499434, 34.733432],
-    [135.75909, 34.984721],
-    [136.880843, 35.170984],
-    [137.735494, 34.703999],
-    [138.389566, 34.971944],
-    [138.91012, 35.126899]
-  ],
-  mishimaKawaguchiko: [
-    [138.910892, 35.127364],
-    [138.910675, 35.12786],
-    [138.910806, 35.127968],
-    [138.910638, 35.136219],
-    [138.90896, 35.138705],
-    [138.885787, 35.140407],
-    [138.873236, 35.148138],
-    [138.868911, 35.1547],
-    [138.875284, 35.162076],
-    [138.910801, 35.25561],
-    [138.910546, 35.327662],
-    [138.905102, 35.327196],
-    [138.867486, 35.3591],
-    [138.771585, 35.47709],
-    [138.771876, 35.481722],
-    [138.769463, 35.481914],
-    [138.756706, 35.491369],
-    [138.755967, 35.497491],
-    [138.755184, 35.497602]
-  ],
-  kawaguchikoTokyo: [
-    [138.755184, 35.497602],
-    [138.754838, 35.49824],
-    [138.755847, 35.498322],
-    [138.756716, 35.492396],
-    [138.759197, 35.491299],
-    [138.77287, 35.485746],
-    [138.77816, 35.49],
-    [138.91738, 35.599104],
-    [138.918313, 35.603495],
-    [138.920343, 35.60436],
-    [139.614565, 35.677285],
-    [139.646506, 35.668476],
-    [139.648818, 35.669751],
-    [139.65249, 35.670688],
-    [139.65148, 35.672275],
-    [139.652474, 35.672325],
-    [139.652505, 35.673081],
-    [139.65269, 35.67316],
-    [139.65232, 35.673461],
-    [139.652852, 35.673834],
-    [139.650756, 35.676189],
-    [139.650638, 35.6761],
-    [139.650021, 35.676413]
-  ]
-};
-const routeExplorerPathDefinitions = [
-  {
-    id: "osaka-kyoto",
-    title: { en: "Osaka -> Kyoto East", ja: "大阪 -> 京都東側" },
-    summary: {
-      en: "Day 2 moves cleanly from Osaka into the east-side Kyoto walking cluster.",
-      ja: "2日目は大阪から京都東側の徒歩中心エリアへ、分かりやすく移る区間です。"
-    },
-    badges: [
-      { en: "Day 2", ja: "2日目" },
-      { en: "City rail", ja: "近距離鉄道" }
-    ],
-    notes: [
-      {
-        en: "This segment is about reaching Kiyomizu-dera, Ninenzaka, Gion, and Nanzen-ji without turning it into a luggage day.",
-        ja: "この区間は、清水寺、二寧坂、祇園、南禅寺へ入りやすくする移動で、荷物中心の日にはしない前提です。"
-      },
-      {
-        en: "Keeping the Osaka return separate makes the Kyoto East day easier to read.",
-        ja: "大阪へ戻る動きを別区間に分けることで、京都東側の日程を素直に見やすくしています。"
-      }
-    ],
-    dayLinks: [{ day: 2 }],
-    stopIds: ["osaka", "kyoto"],
-    coordinates: routeSegmentCoordinateDefinitions.osakaKyoto
-  },
-  {
-    id: "kyoto-osaka",
-    title: { en: "Arashiyama -> Osaka", ja: "嵐山 -> 大阪" },
-    summary: {
-      en: "Day 3 starts with Arashiyama, then resets back to Osaka for Kaiyukan, Tempozan, and the final Kansai night.",
-      ja: "3日目は嵐山から始め、そのあと大阪へ戻って海遊館、天保山、関西最後の夜へつなぎます。"
-    },
-    badges: [
-      { en: "Day 3", ja: "3日目" },
-      { en: "Return leg", ja: "戻り区間" }
-    ],
-    notes: [
-      {
-        en: "This keeps Arashiyama separate from Kyoto East while still closing the day in Osaka.",
-        ja: "嵐山を京都東側の日から分けつつ、その日の締めを大阪に戻して整えています。"
-      },
-      {
-        en: "Use this leg when you want the Osaka-side reset before the long move east.",
-        ja: "東へ大きく移る前に、大阪側へ戻る流れを見たいときの区間です。"
-      }
-    ],
-    dayLinks: [{ day: 3 }],
-    stopIds: ["kyoto", "osaka"],
-    coordinates: routeSegmentCoordinateDefinitions.kyotoOsakaViaArashiyama
-  },
-  {
-    id: "osaka-shin-osaka",
-    title: { en: "Osaka city -> Shin-Osaka", ja: "大阪市内 -> 新大阪" },
-    summary: {
-      en: "This short launch step turns the Osaka stay into the Day 4 eastbound transfer.",
-      ja: "この短い出発区間で、大阪滞在から4日目の東行き移動へ切り替えます。"
-    },
-    badges: [
-      { en: "Day 4", ja: "4日目" },
-      { en: "Launch step", ja: "出発準備" }
-    ],
-    notes: [
-      {
-        en: "It is mostly a handoff move before the long bullet-train segment.",
-        ja: "本格的な長距離新幹線区間へ入る前の引き継ぎ移動です。"
-      },
-      {
-        en: "Use it when you want the Day 4 departure flow without reopening the Osaka sightseeing context.",
-        ja: "大阪観光の文脈を開き直さずに、4日目の出発動線だけ見たいときに使えます。"
-      }
-    ],
-    dayLinks: [{ day: 4 }],
-    stopIds: ["osaka", "shin-osaka"],
-    coordinates: routeSegmentCoordinateDefinitions.osakaShinOsaka
-  },
-  {
-    id: "shin-osaka-fuji-gateway",
-    title: { en: "Shin-Osaka -> Mishima", ja: "新大阪 -> 三島" },
-    summary: {
-      en: "This is the longest rail segment in the route and the clean handoff from Kansai into the Mt. Fuji side.",
-      ja: "この区間が旅程で最長の鉄道移動で、関西から富士側へ切り替える基幹の受け渡しです。"
-    },
-    badges: [
-      { en: "Day 4", ja: "4日目" },
-      { en: "Shinkansen", ja: "新幹線" }
-    ],
-    notes: [
-      {
-        en: "Open the saved transit detail when you want the actual train choice and buffer notes.",
-        ja: "実際の列車選びや余裕時間を確認したいときは、保存済み移動詳細を開くのが早いです。"
-      },
-      {
-        en: "This leg stays separate from the local Fuji access so the main transfer remains readable.",
-        ja: "主要移動を読みやすく保つため、この区間は富士側のローカルアクセスとは分けています。"
-      }
-    ],
-    dayLinks: [{ day: 4 }],
-    transitActions: [
-      {
-        id: "shin-osaka-fuji-gateway",
-        label: { en: "Shinkansen detail", ja: "新幹線詳細" }
-      }
-    ],
-    stopIds: ["shin-osaka", "fuji-gateway"],
-    coordinates: routeSegmentCoordinateDefinitions.shinOsakaMishima
-  },
-  {
-    id: "fuji-gateway-kawaguchiko",
-    title: { en: "Mishima -> Kawaguchiko", ja: "三島 -> 河口湖" },
-    summary: {
-      en: "This is the local access leg into the lake base, trading the shinkansen arrival for the quieter Fuji-area night.",
-      ja: "この区間で新幹線到着から湖側の拠点へ移り、静かな富士エリアの夜へつなげます。"
-    },
-    badges: [
-      { en: "Day 4", ja: "4日目" },
-      { en: "Local access", ja: "現地アクセス" }
-    ],
-    notes: [
-      {
-        en: "Treat it as a practical station-to-lake handoff first, then enjoy the arrival views and sunset second.",
-        ja: "まずは駅から湖側へ入る実用的な移動として見て、そのあと到着景色や夕景を楽しむ流れです。"
-      },
-      {
-        en: "The linked detail keeps the Mishima bus handoff and lake-side arrival timing together.",
-        ja: "関連詳細では、三島からのバス接続と湖側到着の時間感覚をまとめています。"
-      }
-    ],
-    dayLinks: [{ day: 4 }],
-    transitActions: [
-      {
-        id: "fuji-gateway-kawaguchiko",
-        label: { en: "Fuji access detail", ja: "富士アクセス詳細" }
-      }
-    ],
-    stopIds: ["fuji-gateway", "fuji"],
-    coordinates: routeSegmentCoordinateDefinitions.mishimaKawaguchiko
-  },
-  {
-    id: "fuji-tokyo",
-    title: { en: "Mt. Fuji area -> Tokyo / Shibuya", ja: "富士エリア -> 東京・渋谷" },
-    summary: {
-      en: "Day 5 is the clean Tokyo handoff from the Fuji side into Shibuya.",
-      ja: "5日目は富士側から渋谷へ入る、きれいな東京ハンドオフです。"
-    },
-    badges: [
-      { en: "Day 5", ja: "5日目" },
-      { en: "Tokyo handoff", ja: "東京への受け渡し" }
-    ],
-    notes: [
-      {
-        en: "Use this when you want the Tokyo transfer separate from the Fuji-area sightseeing already handled on Day 4.",
-        ja: "4日目にまとめた富士エリア観光と切り分けて、東京への移動だけ見たいときに使います。"
-      },
-      {
-        en: "The linked transit detail keeps the direct train and highway-bus arrival options together.",
-        ja: "関連詳細には、直通列車と高速バスの到着案をまとめています。"
-      }
-    ],
-    dayLinks: [{ day: 5 }],
-    transitActions: [
-      {
-        id: "kawaguchiko-tokyo",
-        label: { en: "Tokyo arrival detail", ja: "東京到着詳細" }
-      }
-    ],
-    stopIds: ["fuji", "tokyo"],
-    coordinates: routeSegmentCoordinateDefinitions.kawaguchikoTokyo
-  }
-];
-const routeExplorerSegmentMap = new Map(
-  routeExplorerPathDefinitions.map((segment) => [segment.id, segment])
-);
-const routeExplorerStopDefinitions = [
-  {
-    id: "osaka",
-    title: { en: "Osaka", ja: "大阪" },
-    summary: {
-      en: "Osaka handles the easy Minami arrival, the Day 3 return, and the final Kansai reset before moving east.",
-      ja: "大阪は、ミナミ中心の到着日、3日目の戻り先、そして東へ移る前の関西側の締めをまとめる拠点です。"
-    },
-    badges: [
-      { en: "Days 1 + 3", ja: "1日目・3日目" },
-      { en: "Base stay", ja: "滞在拠点" }
-    ],
-    notes: [
-      {
-        en: "This marker covers Dotonbori, Shinsaibashi, dinner in Minami, nightlife, and the final Osaka night after Kaiyukan.",
-        ja: "この地点は、道頓堀、心斎橋、ミナミでの夕食、夜歩き、そして海遊館後の大阪最後の夜までを含みます。"
-      },
-      {
-        en: "It also sets up the Day 4 launch without forcing Kyoto to carry the onward transfer logic.",
-        ja: "同時に4日目の出発も支えますが、その先の移動ロジックを京都側へ持たせない形にしています。"
-      }
-    ],
-    dayLinks: [{ day: 1 }, { day: 3 }],
-    primaryDay: 1,
-    segmentIds: ["osaka-kyoto", "kyoto-osaka", "osaka-shin-osaka"],
-    lngLat: [135.5023, 34.6938],
-    labelPosition: "sw"
-  },
-  {
-    id: "kyoto",
-    title: { en: "Kyoto", ja: "京都" },
-    summary: {
-      en: "Kyoto covers the east-side temple day and the early Arashiyama branch before the Osaka return.",
-      ja: "京都は、東側の寺社日と、朝の嵐山から大阪へ戻る流れをまとめる地点です。"
-    },
-    badges: [
-      { en: "Days 2 + 3", ja: "2日目・3日目" },
-      { en: "Temple + west split", ja: "東西を分ける日" }
-    ],
-    notes: [
-      {
-        en: "Day 2 stays focused on Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, Gion, and Nanzen-ji.",
-        ja: "2日目は清水寺、二寧坂、八坂の塔、祇園、南禅寺に集中する構成です。"
-      },
-      {
-        en: "Arashiyama is separated into Day 3 so Kyoto East does not get overloaded.",
-        ja: "嵐山は3日目へ分け、京都東側の日程が重くなりすぎないようにしています。"
-      }
-    ],
-    dayLinks: [{ day: 2 }, { day: 3 }],
-    primaryDay: 2,
-    segmentIds: ["osaka-kyoto", "kyoto-osaka"],
-    lngLat: [135.7681, 35.0116],
-    labelPosition: "n"
-  },
-  {
-    id: "shin-osaka",
-    title: { en: "Shin-Osaka", ja: "新大阪" },
-    summary: {
-      en: "This is the clean launch point for the main Kansai-to-Fuji transfer day.",
-      ja: "ここが、関西から富士側へ渡る主要移動日の分かりやすい出発点です。"
-    },
-    badges: [
-      { en: "Day 4", ja: "4日目" },
-      { en: "Shinkansen pivot", ja: "新幹線起点" }
-    ],
-    notes: [
-      {
-        en: "Use this stop when you want the long eastbound handoff rather than the Osaka city details.",
-        ja: "大阪市内の細かい動きではなく、東へ伸びる大きな移動に集中したいときの起点です。"
-      },
-      {
-        en: "It connects directly to the saved shinkansen detail for Mishima.",
-        ja: "三島へ向かう新幹線詳細に、そのままつなげられます。"
-      }
-    ],
-    dayLinks: [{ day: 4 }],
-    primaryDay: 4,
-    transitActions: [
-      {
-        id: "shin-osaka-fuji-gateway",
-        label: { en: "Shinkansen detail", ja: "新幹線詳細" }
-      }
-    ],
-    segmentIds: ["osaka-shin-osaka", "shin-osaka-fuji-gateway"],
-    lngLat: [135.5007, 34.7335],
-    labelPosition: "ne"
-  },
-  {
-    id: "fuji-gateway",
-    title: { en: "Mishima", ja: "三島" },
-    summary: {
-      en: "This stop marks the rail-to-local gateway into the Kawaguchiko side of the route.",
-      ja: "この地点は、新幹線から河口湖側のローカルアクセスへ切り替わる入口です。"
-    },
-    badges: [
-      { en: "Day 4", ja: "4日目" },
-      { en: "Gateway stop", ja: "受け渡し地点" }
-    ],
-    notes: [
-      {
-        en: "It is less about sightseeing and more about keeping the transfer calm and readable.",
-        ja: "ここは観光よりも、乗り継ぎを落ち着いて進めるための地点として見ています。"
-      },
-      {
-        en: "Keep the next bus or local rail option saved before arrival so the lake transfer stays simple.",
-        ja: "湖側への移動を簡単にするため、次のバスやローカル鉄道は到着前に控えておくと安心です。"
-      }
-    ],
-    dayLinks: [{ day: 4 }],
-    primaryDay: 4,
-    transitActions: [
-      {
-        id: "fuji-gateway-kawaguchiko",
-        label: { en: "Fuji access detail", ja: "富士アクセス詳細" }
-      }
-    ],
-    segmentIds: ["shin-osaka-fuji-gateway", "fuji-gateway-kawaguchiko"],
-    lngLat: [138.9208, 35.1265],
-    labelPosition: "nw"
-  },
-  {
-    id: "fuji",
-    title: { en: "Mt. Fuji area", ja: "富士エリア" },
-    summary: {
-      en: "This stop groups the Day 4 Mishima handoff, Chureito / Shimoyoshida, Lake Kawaguchiko, and the overnight Fuji base before Tokyo.",
-      ja: "この地点は、4日目の三島ハンドオフ、忠霊塔・下吉田、河口湖、そして東京前の富士エリア宿泊をまとめています。"
-    },
-    badges: [
-      { en: "Day 4 focus", ja: "4日目中心" },
-      { en: "3 Fuji-area places", ja: "富士エリア3か所" }
-    ],
-    notes: [
-      {
-        en: "Day 4 now keeps Mishima, Chureito / Shimoyoshida, and Lake Kawaguchiko in one Fuji-area block.",
-        ja: "4日目は三島、忠霊塔・下吉田、河口湖を一つの富士エリアのまとまりとして扱います。"
-      },
-      {
-        en: "Day 5 uses this area only as the departure point before Tokyo begins cleanly in Shibuya.",
-        ja: "5日目はこのエリアを出発地点としてだけ使い、そのあと渋谷から東京をきれいに始めます。"
-      }
-    ],
-    dayLinks: [{ day: 4 }],
-    primaryDay: 4,
-    transitActions: [
-      {
-        id: "fuji-local-hops",
-        label: { en: "Fuji local detail", ja: "富士エリア詳細" }
-      }
-    ],
-    segmentIds: ["fuji-gateway-kawaguchiko", "fuji-tokyo"],
-    lngLat: [138.7552, 35.5009],
-    labelPosition: "se"
-  },
-  {
-    id: "tokyo",
-    title: { en: "Tokyo", ja: "東京" },
-    summary: {
-      en: "Tokyo now absorbs the Shibuya arrival, one fuller east-side sightseeing day, and a lighter Imperial Palace/Shinjuku departure-day wrap-up into the same main-route finish.",
-      ja: "東京は、渋谷到着、東側の観光本番日、そして皇居と新宿を軽く回る帰国日までをまとめて、本編ルート終盤のひとまとまりにしています。"
-    },
-    badges: [
-      { en: "Days 5-7", ja: "5日目-7日目" },
-      { en: "Main-route finish", ja: "本編の締め" }
-    ],
-    notes: [
-      {
-        en: "Day 5 lands in Shibuya for the crossing, food walk, and Shibuya Sky.",
-        ja: "5日目は渋谷に入り、スクランブル交差点、食べ歩き、渋谷スカイへつなげます。"
-      },
-      {
-        en: "Day 6 carries the Skytree, Solamachi, and Akihabara cluster, while Day 7 stays lighter with Tokyo Imperial Palace, Shinjuku, bags, and the airport run.",
-        ja: "6日目にスカイツリー、ソラマチ、秋葉原をまとめ、7日目は皇居、新宿、荷物、空港移動を軽めに組んでいます。"
-      }
-    ],
-    dayLinks: [{ day: 5 }, { day: 6 }, { day: 7 }],
-    primaryDay: 5,
-    segmentIds: ["fuji-tokyo"],
-    lngLat: [139.7017, 35.658],
-    labelPosition: "ne"
-  }
-];
-const routeExplorerStopMap = new Map(routeExplorerStopDefinitions.map((stop) => [stop.id, stop]));
-const routeDayViewDefinitions = [
-  {
-    day: 1,
-    stopIds: ["osaka"],
-    segmentIds: [],
-    badges: [
-      { en: "Arrival day", ja: "到着日" },
-      { en: "Osaka start", ja: "大阪スタート" }
-    ]
-  },
-  {
-    day: 2,
-    stopIds: ["osaka", "kyoto"],
-    segmentIds: ["osaka-kyoto"],
-    badges: [
-      { en: "Kyoto East", ja: "京都東側" },
-      { en: "Walking day", ja: "街歩き中心" }
-    ]
-  },
-  {
-    day: 3,
-    stopIds: ["kyoto", "osaka"],
-    segmentIds: ["kyoto-osaka"],
-    badges: [
-      { en: "Arashiyama + Osaka", ja: "嵐山＋大阪" },
-      { en: "Return west", ja: "大阪へ戻る日" }
-    ]
-  },
-  {
-    day: 4,
-    stopIds: ["osaka", "shin-osaka", "fuji-gateway", "fuji"],
-    segmentIds: ["osaka-shin-osaka", "shin-osaka-fuji-gateway", "fuji-gateway-kawaguchiko"],
-    badges: [
-      { en: "Transfer day", ja: "移動メイン日" },
-      { en: "Fuji area", ja: "富士エリア" }
-    ],
-    transitActions: [
-      {
-        id: "shin-osaka-fuji-gateway",
-        label: { en: "Shinkansen detail", ja: "新幹線詳細" }
-      },
-      {
-        id: "fuji-gateway-kawaguchiko",
-        label: { en: "Fuji access detail", ja: "富士アクセス詳細" }
-      }
-    ]
-  },
-  {
-    day: 5,
-    stopIds: ["fuji", "tokyo"],
-    segmentIds: ["fuji-tokyo"],
-    badges: [
-      { en: "Tokyo arrival", ja: "東京到着" },
-      { en: "Shibuya handoff", ja: "渋谷入り" }
-    ],
-    transitActions: [
-      {
-        id: "kawaguchiko-tokyo",
-        label: { en: "Tokyo arrival detail", ja: "東京到着詳細" }
-      }
-    ]
-  },
-  {
-    day: 6,
-    stopIds: ["tokyo"],
-    segmentIds: [],
-    badges: [
-      { en: "Full Tokyo day", ja: "東京観光メイン日" },
-      { en: "Skytree side", ja: "スカイツリー側" }
-    ]
-  },
-  {
-    day: 7,
-    stopIds: ["tokyo"],
-    segmentIds: [],
-    badges: [
-      { en: "Departure day", ja: "帰国日" },
-      { en: "Keep it light", ja: "軽めに動く日" }
-    ]
-  }
-];
-const routeExplorerViewDefinitions = routeDayViewDefinitions.map((viewDefinition) => {
-  const tripNote = tripNoteDefinitionMap.get(viewDefinition.day) || null;
-  const fallbackTitle = {
-    en: `Day ${viewDefinition.day}`,
-    ja: `${viewDefinition.day}日目`
-  };
-  const fallbackSummary = {
-    en: `Focus Day ${viewDefinition.day} on the map and jump into the matching checklist.`,
-    ja: `${viewDefinition.day}日目のルートを地図で見て、そのまま対応するチェックリストへ移動できます。`
-  };
+let routeExplorerPathDefinitions = [];
+let routeExplorerSegmentMap = new Map();
+let routeExplorerStopDefinitions = [];
+let routeExplorerStopMap = new Map();
+let routeDayViewDefinitions = [];
+let routeExplorerViewDefinitions = [];
+let routeDayStopDefinitions = {};
+let routeContentLoaded = false;
+let routeContentPromise = null;
+let appAssetManifest = null;
+let appAssetManifestPromise = null;
+let routeSectionStylesheetPromise = null;
 
-  return {
-    id: `day-${viewDefinition.day}`,
-    day: viewDefinition.day,
-    label: {
+function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
+  return viewDefinitions.map((viewDefinition) => {
+    const tripNote = tripNoteDefinitionMap.get(viewDefinition.day) || null;
+    const fallbackTitle = {
       en: `Day ${viewDefinition.day}`,
       ja: `${viewDefinition.day}日目`
-    },
-    title: tripNote?.title || fallbackTitle,
-    summary: tripNote?.summary || fallbackSummary,
-    badges: viewDefinition.badges,
-    transitActions: viewDefinition.transitActions || [],
-    dayLinks: [{ day: viewDefinition.day }],
-    stopIds: viewDefinition.stopIds,
-    segmentIds: viewDefinition.segmentIds
+    };
+    const fallbackSummary = {
+      en: `Focus Day ${viewDefinition.day} on the map and jump into the matching checklist.`,
+      ja: `${viewDefinition.day}日目のルートを地図で見て、そのまま対応するチェックリストへ移動できます。`
+    };
+
+    return {
+      id: `day-${viewDefinition.day}`,
+      day: viewDefinition.day,
+      label: {
+        en: `Day ${viewDefinition.day}`,
+        ja: `${viewDefinition.day}日目`
+      },
+      title: tripNote?.title || fallbackTitle,
+      summary: tripNote?.summary || fallbackSummary,
+      badges: viewDefinition.badges,
+      transitActions: viewDefinition.transitActions || [],
+      dayLinks: [{ day: viewDefinition.day }],
+      stopIds: viewDefinition.stopIds,
+      segmentIds: viewDefinition.segmentIds
+    };
+  });
+}
+
+function applyRouteContentData(sourceData, { loaded = false } = {}) {
+  const normalizedSourceData =
+    sourceData && typeof sourceData === "object" && !Array.isArray(sourceData) ? sourceData : {};
+
+  tripNoteDefinitions = Array.isArray(normalizedSourceData.tripNotes)
+    ? normalizedSourceData.tripNotes
+    : [];
+  tripNoteDefinitionMap = new Map(tripNoteDefinitions.map((note) => [note.day, note]));
+
+  routeExplorerPathDefinitions = Array.isArray(normalizedSourceData.routeSegments)
+    ? normalizedSourceData.routeSegments
+    : [];
+  routeExplorerSegmentMap = new Map(
+    routeExplorerPathDefinitions.map((segment) => [segment.id, segment])
+  );
+
+  routeExplorerStopDefinitions = Array.isArray(normalizedSourceData.routeStops)
+    ? normalizedSourceData.routeStops
+    : [];
+  routeExplorerStopMap = new Map(routeExplorerStopDefinitions.map((stop) => [stop.id, stop]));
+
+  routeDayViewDefinitions = Array.isArray(normalizedSourceData.routeDayViews)
+    ? normalizedSourceData.routeDayViews
+    : [];
+  routeDayStopDefinitions =
+    normalizedSourceData.routeDayStops &&
+    typeof normalizedSourceData.routeDayStops === "object" &&
+    !Array.isArray(normalizedSourceData.routeDayStops)
+      ? normalizedSourceData.routeDayStops
+      : {};
+  routeExplorerViewDefinitions = buildRouteExplorerViewDefinitions(routeDayViewDefinitions);
+  routeContentLoaded = loaded || routeContentLoaded;
+
+  getRouteMapFullCoordinates.cache = null;
+  getRouteMapGeoJsonData.cache = null;
+
+  if (activeRouteMapSelection.type === "view" && !getRouteExplorerViewById(activeRouteMapSelection.id)) {
+    activeRouteMapSelection = { type: "view", id: routeExplorerDefaultSelectionId };
+  }
+
+  return {
+    tripNotes: tripNoteDefinitions,
+    routeSegments: routeExplorerPathDefinitions,
+    routeStops: routeExplorerStopDefinitions,
+    routeDayViews: routeDayViewDefinitions,
+    routeDayStops: routeDayStopDefinitions
   };
-});
-const routeDayStopDefinitions = {
-  1: [{ en: "Osaka", ja: "大阪" }],
-  2: [{ en: "Kyoto", ja: "京都" }],
-  3: [
-    { en: "Arashiyama", ja: "嵐山" },
-    { en: "Osaka", ja: "大阪" }
-  ],
-  4: [
-    { en: "Mishima", ja: "三島" },
-    { en: "Chureito / Shimoyoshida", ja: "忠霊塔・下吉田" },
-    { en: "Lake Kawaguchiko", ja: "河口湖" }
-  ],
-  5: [
-    { en: "Tokyo / Shibuya", ja: "東京・渋谷" },
-    { en: "Shibuya Crossing", ja: "渋谷交差点" },
-    { en: "Shibuya Sky", ja: "渋谷スカイ" }
-  ],
-  6: [
-    { en: "Tokyo Skytree", ja: "東京スカイツリー" },
-    { en: "Akihabara", ja: "秋葉原" }
-  ],
-  7: [
-    { en: "Imperial Palace", ja: "皇居" },
-    { en: "Shinjuku", ja: "新宿" }
-  ]
-};
+}
+
+function getRouteContentData() {
+  if (routeContentLoaded && routeExplorerPathDefinitions.length) {
+    return {
+      tripNotes: tripNoteDefinitions,
+      routeSegments: routeExplorerPathDefinitions,
+      routeStops: routeExplorerStopDefinitions,
+      routeDayViews: routeDayViewDefinitions,
+      routeDayStops: routeDayStopDefinitions
+    };
+  }
+
+  const runtimePayload = window[routeContentRuntimeGlobal];
+  if (runtimePayload && typeof runtimePayload === "object") {
+    return applyRouteContentData(runtimePayload, { loaded: true });
+  }
+
+  return applyRouteContentData({}, { loaded: false });
+}
+
+function loadAppAssetManifest() {
+  if (appAssetManifest) {
+    return Promise.resolve(appAssetManifest);
+  }
+
+  if (appAssetManifestPromise) {
+    return appAssetManifestPromise;
+  }
+
+  appAssetManifestPromise = window
+    .fetch(appAssetManifestUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Asset manifest request failed: ${response.status}`);
+      }
+
+      return response.json();
+    })
+    .then((payload) => {
+      appAssetManifest =
+        payload && typeof payload === "object" && !Array.isArray(payload) ? payload : {};
+      return appAssetManifest;
+    })
+    .catch((error) => {
+      console.error("Asset manifest could not be loaded.", error);
+      appAssetManifest = {};
+      return appAssetManifest;
+    })
+    .finally(() => {
+      appAssetManifestPromise = null;
+    });
+
+  return appAssetManifestPromise;
+}
+
+function loadLazyAssetScript(url, dataAttribute, runtimeGlobal, runtimeLabel) {
+  if (window[runtimeGlobal]) {
+    return Promise.resolve(window[runtimeGlobal]);
+  }
+
+  return new Promise((resolve, reject) => {
+    const handleLoad = (scriptNode) => {
+      const runtime = window[runtimeGlobal];
+      if (runtime) {
+        if (scriptNode) {
+          scriptNode.dataset.loaded = "true";
+        }
+        resolve(runtime);
+        return;
+      }
+
+      reject(new Error(`${runtimeLabel} did not initialize.`));
+    };
+
+    const handleError = () => {
+      reject(new Error(`${runtimeLabel} failed to load.`));
+    };
+
+    const existingScript = document.querySelector(`[${dataAttribute}]`);
+    if (existingScript) {
+      if (existingScript.dataset.loaded === "true" && window[runtimeGlobal]) {
+        resolve(window[runtimeGlobal]);
+        return;
+      }
+
+      existingScript.addEventListener("load", () => handleLoad(existingScript), { once: true });
+      existingScript.addEventListener("error", handleError, { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = url;
+    script.defer = true;
+    script.setAttribute(dataAttribute, "true");
+    script.addEventListener("load", () => handleLoad(script), { once: true });
+    script.addEventListener("error", handleError, { once: true });
+    document.head.append(script);
+  });
+}
+
+function loadLazyStylesheet(url, dataAttribute, label) {
+  return new Promise((resolve, reject) => {
+    const bindLink = (link) => {
+      if (!link) {
+        reject(new Error(`${label} element is missing.`));
+        return;
+      }
+
+      if (link.dataset.loaded === "true" || link.sheet) {
+        link.dataset.loaded = "true";
+        resolve();
+        return;
+      }
+
+      const handleLoad = () => {
+        link.dataset.loaded = "true";
+        resolve();
+      };
+      const handleError = () => {
+        reject(new Error(`${label} failed to load.`));
+      };
+
+      link.addEventListener("load", handleLoad, { once: true });
+      link.addEventListener("error", handleError, { once: true });
+    };
+
+    const existingLink = document.querySelector(`[${dataAttribute}]`);
+    if (existingLink) {
+      bindLink(existingLink);
+      return;
+    }
+
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = url;
+    link.setAttribute(dataAttribute, "true");
+    bindLink(link);
+    document.head.append(link);
+  });
+}
+
+function loadRouteContentData() {
+  if (routeContentLoaded && routeExplorerPathDefinitions.length) {
+    return Promise.resolve(getRouteContentData());
+  }
+
+  if (routeContentPromise) {
+    return routeContentPromise;
+  }
+
+  routeContentPromise = loadAppAssetManifest()
+    .then((manifest) => {
+      const routeContentPath = manifest.routeContentPath || routeContentFallbackScriptUrl;
+      return loadLazyAssetScript(
+        routeContentPath,
+        "data-route-content-script",
+        routeContentRuntimeGlobal,
+        "Route content"
+      );
+    })
+    .then(() => getRouteContentData())
+    .catch((error) => {
+      console.error("Route content could not be loaded.", error);
+      return getRouteContentData();
+    })
+    .finally(() => {
+      routeContentPromise = null;
+    });
+
+  return routeContentPromise;
+}
+
+function ensureRouteContentLoaded() {
+  return loadRouteContentData();
+}
+
+function ensureRouteSectionStylesLoaded() {
+  if (routeSectionStylesheetPromise) {
+    return routeSectionStylesheetPromise;
+  }
+
+  routeSectionStylesheetPromise = loadAppAssetManifest()
+    .then((manifest) =>
+      loadLazyStylesheet(manifest.routeStylePath || routeStyleFallbackUrl, "data-route-style", "Route styles")
+    )
+    .catch((error) => {
+      routeSectionStylesheetPromise = null;
+      console.error("Route styles could not be loaded.", error);
+    });
+
+  return routeSectionStylesheetPromise;
+}
+
+function ensureSectionAssetsReady(sectionName) {
+  if (sectionName === "route") {
+    return ensureRouteSectionStylesLoaded();
+  }
+
+  return Promise.resolve();
+}
 let bookingTransitItems = [];
 let bookingTransitItemMap = new Map();
 let transitDetailItems = [];
@@ -1181,6 +801,7 @@ const inlineJsonPayloadCache = new Map();
 const localizedMarkupCache = new WeakMap();
 let checklistState = {};
 let reservedHeaderHeight = headerReservedHeightFallbackPx;
+let currentHeaderHeight = headerReservedHeightFallbackPx;
 let headerLockUntil = 0;
 const headerTopRevealThreshold = 36;
 const headerCondenseScrollThreshold = 150;
@@ -1242,6 +863,8 @@ let activeRouteMapSelection = { type: "view", id: routeExplorerDefaultSelectionI
 let routeMapUISyncFrame = 0;
 let routeMapDaySliderSyncFrame = 0;
 let routeMapDayRailScrollLeft = 0;
+let routeMapDayRailStep = 0;
+let routeMapDayRailMaxScroll = 0;
 let pendingRouteMapUISyncOptions = {
   updateCamera: false,
   animateCamera: false,
@@ -1257,6 +880,7 @@ let fujiForecastResult = null;
 let fujiForecastPromise = null;
 let reducedEffectsEnabled = false;
 let lastTimelineSpineFillHeight = null;
+let maxScrollableY = 0;
 
 function getSystemTheme() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -2976,7 +2600,7 @@ function renderTripNotes() {
 }
 
 function refreshTripNotesIfReady() {
-  if (!tripNotesGridNode) {
+  if (!tripNotesGridNode || !initializedSections.has("notes") || !routeContentLoaded) {
     return;
   }
 
@@ -5310,6 +4934,8 @@ function applyReservedHeaderHeight(nextHeight, forceReset = false) {
     return;
   }
 
+  currentHeaderHeight = measuredHeight;
+
   if (forceReset) {
     reservedHeaderHeight = measuredHeight;
   } else {
@@ -5343,6 +4969,12 @@ function syncReservedHeaderHeight(forceReset = false) {
   applyReservedHeaderHeight(siteHeader.getBoundingClientRect().height, forceReset);
 }
 
+function updateMaxScrollableY() {
+  const scrollRoot = document.scrollingElement || document.documentElement;
+  maxScrollableY = Math.max((scrollRoot?.scrollHeight || 0) - window.innerHeight, 0);
+  return maxScrollableY;
+}
+
 function resetHeaderScrollTracking(scrollY = window.scrollY) {
   const nextScrollY = Math.max(scrollY, 0);
   lastScrollY = nextScrollY;
@@ -5357,7 +4989,7 @@ function lockHeaderState(duration = 420) {
 
 function getHeaderScrollOffset(extra = 20) {
   const measuredHeaderHeight = Math.ceil(
-    siteHeader?.getBoundingClientRect?.().height || reservedHeaderHeight || headerReservedHeightFallbackPx
+    currentHeaderHeight || reservedHeaderHeight || headerReservedHeightFallbackPx
   );
   const baseOffset = headerIsCondensed ? measuredHeaderHeight : reservedHeaderHeight;
   return Math.max(baseOffset + extra, measuredHeaderHeight + extra);
@@ -5387,9 +5019,7 @@ function setHeaderCondensed(nextState) {
 }
 
 function getRemainingScrollDistance(scrollY = window.scrollY) {
-  const scrollRoot = document.scrollingElement || document.documentElement;
-  const maxScrollY = Math.max((scrollRoot?.scrollHeight || 0) - window.innerHeight, 0);
-  return Math.max(maxScrollY - scrollY, 0);
+  return Math.max(maxScrollableY - scrollY, 0);
 }
 
 function scheduleDeferredGeometryRelease() {
@@ -5550,6 +5180,7 @@ function ensureSectionInitialized(sectionName) {
     .then(() => {
       initializedSections.add(sectionName);
       markSectionHydrated(sectionName);
+      updateMaxScrollableY();
 
       if (getActivePanelId() === sectionName) {
         refreshRevealPanel(sectionName);
@@ -5676,12 +5307,13 @@ function initChecklistSection() {
   }
 }
 
-function initNotesSection() {
+async function initNotesSection() {
   const panel = getSectionPanel("notes");
   if (!panel) {
     return;
   }
 
+  await ensureRouteContentLoaded();
   renderTripNotes();
   registerRevealBlocks(panel);
 }
@@ -5772,6 +5404,23 @@ function getRouteMapDayCardNode(day) {
   return routeMapStopsNode?.querySelector(`[data-route-map-day-card="${day}"]`) || null;
 }
 
+function updateRouteMapDayRailMetrics(railNode = getRouteMapDayRailNode()) {
+  if (!railNode) {
+    routeMapDayRailStep = 0;
+    routeMapDayRailMaxScroll = 0;
+    return;
+  }
+
+  const firstCard = railNode.querySelector(".route-reference__day");
+  const styles = window.getComputedStyle(railNode);
+  const gap = Number.parseFloat(styles.columnGap || styles.gap || "0") || 0;
+  routeMapDayRailStep = firstCard
+    ? firstCard.getBoundingClientRect().width + gap
+    : Math.max(railNode.clientWidth * 0.82, 180);
+  routeMapDayRailMaxScroll = Math.max(railNode.scrollWidth - railNode.clientWidth, 0);
+  routeMapDayRailScrollLeft = Math.min(routeMapDayRailScrollLeft, routeMapDayRailMaxScroll);
+}
+
 function getPrimaryRouteDayFromLinks(dayLinks = []) {
   const primaryDay = dayLinks
     .map((link) => Number.parseInt(String(link?.day), 10))
@@ -5823,7 +5472,7 @@ function syncRouteMapDaySliderControls() {
     return;
   }
 
-  const maxScroll = Math.max(railNode.scrollWidth - railNode.clientWidth, 0);
+  const maxScroll = routeMapDayRailMaxScroll;
   const hasOverflow = maxScroll > 4;
   routeMapDayRailScrollLeft = Math.min(routeMapDayRailScrollLeft, maxScroll);
 
@@ -5849,9 +5498,9 @@ function syncRouteMapDaySliderUI() {
   }
 
   bindRouteMapDayRailEvents();
+  updateRouteMapDayRailMetrics(railNode);
 
-  const maxScroll = Math.max(railNode.scrollWidth - railNode.clientWidth, 0);
-  routeMapDayRailScrollLeft = Math.min(routeMapDayRailScrollLeft, maxScroll);
+  routeMapDayRailScrollLeft = Math.min(routeMapDayRailScrollLeft, routeMapDayRailMaxScroll);
   if (Math.abs(railNode.scrollLeft - routeMapDayRailScrollLeft) > 1) {
     railNode.scrollLeft = routeMapDayRailScrollLeft;
   }
@@ -5876,13 +5525,12 @@ function slideRouteMapDayRail(direction = 1) {
     return;
   }
 
-  const firstCard = railNode.querySelector(".route-reference__day");
-  const styles = window.getComputedStyle(railNode);
-  const gap = Number.parseFloat(styles.columnGap || styles.gap || "0") || 0;
-  const step = firstCard
-    ? firstCard.getBoundingClientRect().width + gap
-    : Math.max(railNode.clientWidth * 0.82, 180);
-  const maxScroll = Math.max(railNode.scrollWidth - railNode.clientWidth, 0);
+  if (routeMapDayRailStep <= 0) {
+    updateRouteMapDayRailMetrics(railNode);
+  }
+
+  const step = routeMapDayRailStep || Math.max(railNode.clientWidth * 0.82, 180);
+  const maxScroll = routeMapDayRailMaxScroll;
   const nextScrollLeft = Math.max(
     0,
     Math.min(maxScroll, railNode.scrollLeft + step * direction)
@@ -7593,7 +7241,7 @@ async function initRouteSection() {
     return;
   }
 
-  await ensureBudgetConfigLoaded();
+  await Promise.all([ensureBudgetConfigLoaded(), ensureRouteContentLoaded(), ensureRouteSectionStylesLoaded()]);
 
   if (routeMapCard && panel.dataset.routeBound !== "true") {
     routeMapCard.addEventListener("click", handleRouteMapClick);
@@ -8254,6 +7902,7 @@ function setActivePanel(panelId) {
     syncProgressTimeline();
     scheduleDayCardRowHeights();
     storeActivePanel(panelId);
+    updateMaxScrollableY();
   }
 
   return hasMatch;
@@ -8362,6 +8011,7 @@ function bindTabNavigation() {
         return;
       }
 
+      await ensureSectionAssetsReady(panelId);
       lockHeaderState(520);
       setActivePanel(panelId);
       await ensureSectionInitialized(panelId);
@@ -8400,6 +8050,7 @@ async function bootApp() {
       });
     });
   } else {
+    await ensureSectionAssetsReady(initialPanelId);
     setActivePanel(initialPanelId);
     await ensureSectionInitialized(initialPanelId);
     syncProgressTimeline();
@@ -8413,6 +8064,7 @@ async function bootApp() {
   scheduleNonCriticalTask(() => {
     bootOfflineExperience();
   });
+  updateMaxScrollableY();
   window.requestAnimationFrame(() => {
     scheduleDeferredGeometryRelease();
   });
@@ -8611,6 +8263,18 @@ window.addEventListener(
   { passive: true }
 );
 
+updateMaxScrollableY();
+
+if ("ResizeObserver" in window) {
+  const scrollBoundsObserver = new window.ResizeObserver(() => {
+    updateMaxScrollableY();
+  });
+
+  [mainContent, siteFooter].filter(Boolean).forEach((node) => {
+    scrollBoundsObserver.observe(node);
+  });
+}
+
 if (siteHeader) {
   if ("ResizeObserver" in window) {
     const headerObserver = new window.ResizeObserver((entries) => {
@@ -8640,6 +8304,7 @@ if (siteHeader) {
     if (wasCondensed && window.scrollY > 150) {
       setHeaderCondensed(true);
     }
+    updateMaxScrollableY();
     syncProgressTimeline();
     scheduleDayCardRowHeights();
     resizeRouteMapsIfReady();

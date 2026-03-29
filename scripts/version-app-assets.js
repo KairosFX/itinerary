@@ -14,8 +14,18 @@ const assetDefinitions = [
     extension: ".css"
   },
   {
+    key: "routeStyle",
+    sourcePath: path.join(docsDir, "route.min.css"),
+    extension: ".css"
+  },
+  {
     key: "script",
     sourcePath: path.join(docsDir, "script.min.js"),
+    extension: ".js"
+  },
+  {
+    key: "routeContent",
+    sourcePath: path.join(docsDir, "route-content.min.js"),
     extension: ".js"
   }
 ];
@@ -47,7 +57,14 @@ assetDefinitions.forEach(({ key, sourcePath, extension }) => {
 });
 
 manifest.generatedAt = new Date().toISOString();
-manifest.cacheVersion = `${manifest.styleHash}-${manifest.scriptHash}`;
+manifest.cacheVersion = [
+  manifest.styleHash,
+  manifest.routeStyleHash,
+  manifest.scriptHash,
+  manifest.routeContentHash
+]
+  .filter(Boolean)
+  .join("-");
 
 fs.readdirSync(appAssetsDir, { withFileTypes: true }).forEach((entry) => {
   if (!entry.isFile()) {

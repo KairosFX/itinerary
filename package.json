@@ -2,13 +2,17 @@
   "private": true,
   "scripts": {
     "build:css": "cleancss -o docs/style.min.css docs/style.css",
+    "build:route-css": "cleancss -o docs/route.min.css docs/route.css",
     "build:js": "terser docs/script.js -c -m -o docs/script.min.js",
+    "build:route-data": "terser docs/route-content.js -c -m -o docs/route-content.min.js",
     "build:assets": "node scripts/version-app-assets.js",
     "build:html": "node scripts/inline-css.js",
     "build:offline-snapshot": "node scripts/build-offline-snapshot.js",
-    "build": "npm run build:css && npm run build:js && npm run build:assets && npm run build:html && npm run build:offline-snapshot"
+    "build": "npm run build:css && npm run build:route-css && npm run build:js && npm run build:route-data && npm run build:assets && npm run build:html && npm run build:offline-snapshot",
+    "perf": "node scripts/run-perf.js"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "clean-css-cli": "^5.6.3",
     "terser": "^5.46.1"
   }
