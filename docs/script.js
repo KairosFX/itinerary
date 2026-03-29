@@ -2546,7 +2546,7 @@ function updateThemeColorMeta(theme) {
     return;
   }
 
-  themeColorMeta.content = theme === "dark" ? "#111315" : "#9b3c33";
+  themeColorMeta.content = theme === "dark" ? "#102016" : "#4e7a5d";
 }
 
 function isLikelyLowerPowerDevice() {
@@ -4732,36 +4732,36 @@ function loadRouteMapLibrary() {
 function getRouteMapPalette(theme = getCurrentTheme()) {
   if (theme === "dark") {
     return {
-      background: "#0d141b",
-      glowOuter: "rgba(214, 128, 108, 0.16)",
-      glowInner: "rgba(244, 203, 191, 0.18)",
-      corridor: "rgba(101, 140, 167, 0.14)",
-      shadow: "rgba(6, 8, 12, 0.6)",
-      routeCasing: "rgba(24, 35, 45, 0.94)",
-      routeStart: "#da8470",
-      routeMid: "#e1ad67",
-      routeMidAlt: "#8fb1c4",
-      routeEnd: "#79a0c1",
-      segmentActive: "rgba(246, 225, 214, 0.84)",
-      segmentMuted: "rgba(243, 233, 222, 0.12)",
-      segmentSelected: "#ffd8ce"
+      background: "#0c1711",
+      glowOuter: "rgba(92, 138, 104, 0.2)",
+      glowInner: "rgba(197, 224, 201, 0.18)",
+      corridor: "rgba(110, 146, 122, 0.16)",
+      shadow: "rgba(4, 9, 6, 0.6)",
+      routeCasing: "rgba(18, 31, 22, 0.94)",
+      routeStart: "#8db196",
+      routeMid: "#b5cda8",
+      routeMidAlt: "#6f9475",
+      routeEnd: "#537261",
+      segmentActive: "rgba(231, 241, 232, 0.84)",
+      segmentMuted: "rgba(225, 238, 227, 0.12)",
+      segmentSelected: "#d8efdb"
     };
   }
 
   return {
-    background: "#f8f3eb",
-    glowOuter: "rgba(171, 74, 59, 0.08)",
-    glowInner: "rgba(184, 149, 100, 0.1)",
-    corridor: "rgba(117, 133, 148, 0.1)",
-    shadow: "rgba(255, 249, 244, 0.72)",
-    routeCasing: "rgba(255, 252, 248, 0.96)",
-    routeStart: "#ab4a3b",
-    routeMid: "#c8844f",
-    routeMidAlt: "#b59b59",
-    routeEnd: "#64879b",
-    segmentActive: "rgba(132, 54, 47, 0.9)",
-    segmentMuted: "rgba(98, 74, 68, 0.14)",
-    segmentSelected: "#c86755"
+    background: "#edf5ee",
+    glowOuter: "rgba(92, 138, 104, 0.12)",
+    glowInner: "rgba(205, 226, 208, 0.16)",
+    corridor: "rgba(109, 143, 118, 0.12)",
+    shadow: "rgba(245, 251, 245, 0.74)",
+    routeCasing: "rgba(250, 255, 250, 0.96)",
+    routeStart: "#345743",
+    routeMid: "#4f7a58",
+    routeMidAlt: "#719470",
+    routeEnd: "#93b19a",
+    segmentActive: "rgba(37, 74, 52, 0.9)",
+    segmentMuted: "rgba(64, 95, 70, 0.14)",
+    segmentSelected: "#4e7a5d"
   };
 }
 

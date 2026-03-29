@@ -7,10 +7,10 @@
   <meta
     name="description"
     content="Simple bilingual Japan trip website for GitHub Pages with overview, checklist, notes, budget, routes, essentials, and a live route map from Osaka to Tokyo.">
-  <meta name="theme-color" content="#9b3c33">
+  <meta name="theme-color" content="#4e7a5d">
   <link rel="dns-prefetch" href="//tiles.openfreemap.org">
   <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%239b3c33'/%3E%3Cpath d='M20 18h24v6H34v22h-6V24H20z' fill='%23fffaf4'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234e7a5d'/%3E%3Cpath d='M20 18h24v6H34v22h-6V24H20z' fill='%23fffaf4'/%3E%3C/svg%3E">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1017,10 +1017,329 @@ html[data-theme="dark"] .site-intro__veil {
     linear-gradient(180deg, rgba(8, 10, 14, 0.46), rgba(8, 10, 14, 0.16)),
     linear-gradient(135deg, rgba(15, 19, 25, 0.96), rgba(25, 31, 38, 0.92));
   backdrop-filter: none;
+}
+
+/* Arashiyama bamboo forest re-theme */
+:root {
+  --bg: #edf4ee;
+  --bg-accent: #d8e5da;
+  --surface: rgba(247, 251, 246, 0.86);
+  --surface-strong: rgba(252, 255, 252, 0.94);
+  --text: #16231a;
+  --muted: #51675a;
+  --line: rgba(39, 69, 49, 0.12);
+  --line-strong: rgba(39, 69, 49, 0.2);
+  --accent: #4e7a5d;
+  --accent-deep: #234936;
+  --accent-soft: rgba(126, 164, 132, 0.16);
+  --accent-gold: #9db491;
+  --accent-indigo: #4f6761;
+  --green: #335842;
+  --shadow: 0 22px 44px rgba(12, 31, 20, 0.08);
+  --shadow-hover: 0 30px 62px rgba(11, 29, 19, 0.14);
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% -14%, rgba(244, 250, 243, 0.9), rgba(244, 250, 243, 0) 36%),
+    radial-gradient(circle at 16% 22%, rgba(123, 161, 130, 0.18), rgba(123, 161, 130, 0) 28%),
+    radial-gradient(circle at 82% 16%, rgba(164, 188, 156, 0.14), rgba(164, 188, 156, 0) 24%),
+    linear-gradient(180deg, rgba(13, 39, 23, 0.12), rgba(13, 39, 23, 0.02) 14%, rgba(244, 249, 243, 0) 40%),
+    linear-gradient(180deg, rgba(241, 247, 241, 0.98) 0%, rgba(230, 239, 231, 0.98) 42%, rgba(219, 229, 220, 1) 100%);
+}
+
+body::before,
+body::after {
+  border-radius: 999px;
+  filter: blur(36px);
+  opacity: 0.44;
+}
+
+body::before {
+  top: -14rem;
+  right: 10%;
+  width: 18rem;
+  height: 120vh;
+  background: linear-gradient(180deg, rgba(231, 246, 233, 0.76), rgba(186, 216, 190, 0.18) 40%, rgba(186, 216, 190, 0) 100%);
+}
+
+body::after {
+  left: -6rem;
+  bottom: -18rem;
+  width: 22rem;
+  height: 92vh;
+  background: linear-gradient(180deg, rgba(55, 99, 68, 0.2), rgba(55, 99, 68, 0));
+}
+
+.site-atmosphere::before,
+.site-atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.site-atmosphere::before {
+  background:
+    linear-gradient(180deg, rgba(11, 36, 22, 0.18), rgba(11, 36, 22, 0.02) 24%, rgba(246, 250, 246, 0.04) 62%, rgba(11, 36, 22, 0.18) 100%),
+    radial-gradient(circle at 50% 0%, rgba(244, 249, 243, 0.3), rgba(244, 249, 243, 0) 34%);
+  opacity: 0.92;
+}
+
+.site-atmosphere::after {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(248, 252, 248, 0.16) 50%, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(circle at 50% 14%, rgba(233, 245, 234, 0.16), rgba(233, 245, 234, 0) 30%);
+  mix-blend-mode: screen;
+  opacity: 0.54;
+}
+
+.site-atmosphere__orb {
+  border-radius: 2.4rem;
+  filter: blur(0.8px);
+  opacity: 0.24;
+  animation: bambooSway 20s ease-in-out infinite alternate;
+}
+
+.site-atmosphere__orb--north,
+.site-atmosphere__orb--ember {
+  width: min(30vw, 24rem);
+  height: 122vh;
+  background:
+    repeating-linear-gradient(90deg, rgba(25, 61, 40, 0) 0 2.4rem, rgba(56, 105, 71, 0.24) 2.4rem 3.02rem, rgba(151, 192, 157, 0.2) 3.02rem 3.26rem, rgba(246, 251, 246, 0.08) 3.26rem 3.34rem, rgba(25, 61, 40, 0) 3.34rem 6.7rem),
+    repeating-linear-gradient(180deg, rgba(245, 251, 245, 0) 0 6rem, rgba(245, 251, 245, 0.12) 6rem 6.14rem, rgba(26, 65, 43, 0.2) 6.14rem 6.34rem, rgba(245, 251, 245, 0) 6.34rem 12.4rem);
+}
+
+.site-atmosphere__orb--north {
+  top: -10vh;
+  left: -4vw;
+  transform: rotate(-2deg);
+}
+
+.site-atmosphere__orb--sun {
+  top: -14vh;
+  left: 35%;
+  width: min(24vw, 18rem);
+  height: 126vh;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(239, 248, 239, 0.54), rgba(193, 221, 197, 0.16) 34%, rgba(26, 58, 36, 0) 80%),
+    radial-gradient(circle at 50% 8%, rgba(247, 251, 247, 0.42), rgba(247, 251, 247, 0) 42%);
+  filter: blur(10px);
+  opacity: 0.46;
+  animation-duration: 24s;
+}
+
+.site-atmosphere__orb--ember {
+  top: -6vh;
+  right: -3vw;
+  transform: rotate(1.8deg);
+  animation-duration: 22s;
+}
+
+.site-atmosphere__grain {
+  opacity: 0.3;
+  background-image:
+    linear-gradient(180deg, rgba(18, 46, 29, 0.14), rgba(18, 46, 29, 0) 26%, rgba(255, 255, 255, 0.04) 60%, rgba(18, 46, 29, 0.16) 100%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0) 0 7.5rem, rgba(255, 255, 255, 0.05) 7.5rem 7.58rem, rgba(255, 255, 255, 0) 7.58rem 15rem),
+    radial-gradient(circle at 24% 18%, rgba(233, 245, 234, 0.16), rgba(233, 245, 234, 0) 12%),
+    radial-gradient(circle at 74% 12%, rgba(233, 245, 234, 0.14), rgba(233, 245, 234, 0) 14%);
+  background-size: auto, auto, 24rem 24rem, 28rem 28rem;
+  mix-blend-mode: soft-light;
+}
+
+.site-header {
+  background:
+    linear-gradient(180deg, rgba(241, 247, 241, 0.8), rgba(229, 238, 230, 0.58)),
+    rgba(231, 240, 232, 0.46);
+  border-bottom-color: rgba(244, 250, 244, 0.52);
+  box-shadow: 0 24px 50px rgba(12, 30, 19, 0.09);
+}
+
+.section-nav {
+  background: rgba(244, 250, 243, 0.34);
+  border-color: rgba(237, 247, 238, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 18px 32px rgba(14, 34, 22, 0.06);
+}
+
+.section-tab,
+.language-button,
+.theme-button {
+  border-color: rgba(47, 82, 57, 0.14);
+  background: rgba(250, 255, 249, 0.58);
+  color: rgba(36, 67, 47, 0.76);
+  box-shadow: 0 14px 28px rgba(14, 34, 22, 0.06);
+}
+
+.section-tab.is-active,
+.section-tab[aria-selected="true"],
+.theme-button.is-active {
+  border-color: rgba(78, 122, 93, 0.24);
+  background:
+    linear-gradient(180deg, rgba(90, 129, 97, 0.22), rgba(90, 129, 97, 0.08)),
+    rgba(251, 255, 251, 0.86);
+  color: var(--accent-deep);
+  box-shadow:
+    0 18px 34px rgba(13, 32, 21, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.site-intro__veil {
+  background:
+    linear-gradient(180deg, rgba(8, 28, 17, 0.34), rgba(8, 28, 17, 0.08)),
+    linear-gradient(135deg, rgba(234, 243, 233, 0.98), rgba(208, 225, 209, 0.9));
+}
+
+.site-intro__panorama::before,
+.site-intro__panorama::after {
+  content: "";
+  position: absolute;
+  inset: -6% -4%;
+  pointer-events: none;
+}
+
+.site-intro__panorama::before {
+  background:
+    linear-gradient(180deg, rgba(10, 34, 20, 0.28), rgba(10, 34, 20, 0.04) 18%, rgba(255, 255, 255, 0) 56%),
+    repeating-linear-gradient(90deg, rgba(16, 42, 27, 0) 0 3.4rem, rgba(59, 108, 75, 0.34) 3.4rem 4.06rem, rgba(152, 194, 158, 0.28) 4.06rem 4.3rem, rgba(248, 252, 248, 0.1) 4.3rem 4.38rem, rgba(16, 42, 27, 0) 4.38rem 8.7rem),
+    repeating-linear-gradient(180deg, rgba(248, 252, 248, 0) 0 6.8rem, rgba(248, 252, 248, 0.16) 6.8rem 6.94rem, rgba(22, 63, 39, 0.22) 6.94rem 7.16rem, rgba(248, 252, 248, 0) 7.16rem 13.8rem);
+  opacity: 0.44;
+}
+
+.site-intro__panorama::after {
+  background:
+    radial-gradient(circle at 50% 6%, rgba(245, 250, 244, 0.42), rgba(245, 250, 244, 0) 34%),
+    linear-gradient(180deg, rgba(245, 250, 244, 0.08), rgba(9, 28, 17, 0.08));
+  mix-blend-mode: screen;
+  opacity: 0.82;
+}
+
+.site-intro__mist--north {
+  background: radial-gradient(circle, rgba(78, 122, 93, 0.2), rgba(78, 122, 93, 0));
+}
+
+.site-intro__mist--south {
+  background: radial-gradient(circle, rgba(187, 208, 182, 0.3), rgba(187, 208, 182, 0));
+}
+
+.site-intro__glow {
+  background: radial-gradient(circle, rgba(242, 250, 241, 0.86), rgba(214, 232, 216, 0.38) 34%, rgba(242, 250, 241, 0) 72%);
+  box-shadow: 0 0 120px rgba(232, 244, 233, 0.18);
+}
+
+.site-intro__content::before {
+  background: linear-gradient(90deg, rgba(39, 73, 52, 0), rgba(39, 73, 52, 0.5), rgba(39, 73, 52, 0));
+}
+
+.site-intro__eyebrow,
+.site-intro__meta {
+  color: rgba(42, 72, 52, 0.74);
+}
+
+.site-intro__title span:last-child {
+  color: rgba(44, 84, 56, 0.84);
+}
+
+html[data-theme="dark"] {
+  --bg: #0b130f;
+  --bg-accent: #101b14;
+  --surface: rgba(17, 29, 21, 0.78);
+  --surface-strong: rgba(20, 35, 26, 0.92);
+  --text: #edf5ec;
+  --muted: #b7c9b8;
+  --line: rgba(181, 211, 186, 0.12);
+  --line-strong: rgba(181, 211, 186, 0.22);
+  --accent: #82ad8d;
+  --accent-deep: #dcefe0;
+  --accent-soft: rgba(130, 173, 141, 0.18);
+  --accent-gold: #acc4a8;
+  --accent-indigo: #9ab5ae;
+  --green: #93ba9b;
+}
+
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 50% -12%, rgba(173, 205, 180, 0.08), rgba(173, 205, 180, 0) 30%),
+    radial-gradient(circle at 18% 18%, rgba(77, 120, 90, 0.22), rgba(77, 120, 90, 0) 26%),
+    radial-gradient(circle at 84% 12%, rgba(122, 150, 117, 0.16), rgba(122, 150, 117, 0) 24%),
+    linear-gradient(180deg, rgba(6, 17, 11, 0.99) 0%, rgba(8, 20, 13, 0.99) 42%, rgba(6, 14, 10, 1) 100%);
+}
+
+html[data-theme="dark"] .site-header {
+  background:
+    linear-gradient(180deg, rgba(13, 24, 18, 0.86), rgba(10, 20, 14, 0.74)),
+    rgba(12, 20, 15, 0.56);
+  border-bottom-color: rgba(209, 231, 213, 0.08);
+  box-shadow: 0 26px 52px rgba(2, 8, 4, 0.36);
+}
+
+html[data-theme="dark"] .section-nav {
+  background: rgba(13, 23, 17, 0.58);
+  border-color: rgba(209, 231, 213, 0.08);
+}
+
+html[data-theme="dark"] .section-tab,
+html[data-theme="dark"] .language-button,
+html[data-theme="dark"] .theme-button {
+  border-color: rgba(128, 164, 137, 0.18);
+  background: rgba(25, 39, 30, 0.76);
+  color: rgba(228, 239, 229, 0.84);
+  box-shadow: 0 16px 30px rgba(2, 7, 4, 0.24);
+}
+
+html[data-theme="dark"] .section-tab.is-active,
+html[data-theme="dark"] .section-tab[aria-selected="true"],
+html[data-theme="dark"] .language-button.is-active,
+html[data-theme="dark"] .theme-button.is-active {
+  border-color: rgba(130, 173, 141, 0.24);
+  background: linear-gradient(180deg, rgba(98, 138, 109, 0.24), rgba(98, 138, 109, 0.12));
+  color: #eef6ef;
+}
+
+html[data-theme="dark"] .site-intro__veil {
+  background:
+    linear-gradient(180deg, rgba(4, 12, 8, 0.58), rgba(4, 12, 8, 0.26)),
+    linear-gradient(135deg, rgba(11, 21, 15, 0.96), rgba(24, 37, 28, 0.92));
+}
+
+html[data-theme="dark"] .site-intro__eyebrow,
+html[data-theme="dark"] .site-intro__meta {
+  color: rgba(214, 229, 216, 0.72);
+}
+
+html[data-theme="dark"] .site-intro__title {
+  color: rgba(242, 248, 242, 0.98);
+}
+
+html[data-theme="dark"] .site-intro__title span:last-child {
+  color: rgba(186, 213, 190, 0.88);
+}
+
+@media (max-width: 920px) {
+  .site-atmosphere__orb--north,
+  .site-atmosphere__orb--ember {
+    width: 36vw;
+  }
+
+  .site-atmosphere__orb--sun {
+    left: 30%;
+    width: 30vw;
+  }
+}
+
+@keyframes bambooSway {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-1deg);
+  }
+
+  100% {
+    transform: translate3d(1.2rem, -0.4rem, 0) rotate(1.4deg);
+  }
 }</style>
-  <link rel="preload" href="./assets/app/style.0f0ef77ec2.css" as="style">
-  <link rel="stylesheet" href="./assets/app/style.0f0ef77ec2.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.0f0ef77ec2.css"></noscript>
+  <link rel="preload" href="./assets/app/style.f23967c38e.css" as="style">
+  <link rel="stylesheet" href="./assets/app/style.f23967c38e.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.f23967c38e.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -2758,10 +3077,10 @@ html[data-theme="dark"] .site-intro__veil {
   </footer>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.0f0ef77ec2.css","styleHash":"0f0ef77ec2","routeStylePath":"./assets/app/routeStyle.5c71ee8874.css","routeStyleHash":"5c71ee8874","scriptPath":"./assets/app/script.4135c4b9cd.js","scriptHash":"4135c4b9cd","routeContentPath":"./assets/app/routeContent.64e84598a9.js","routeContentHash":"64e84598a9","budgetUiPath":"./assets/app/budgetUi.fd3bf31344.js","budgetUiHash":"fd3bf31344","budgetContentPath":"./assets/app/budgetContent.cb9a162d97.js","budgetContentHash":"cb9a162d97","essentialsContentPath":"./assets/app/essentialsContent.c27e1b1f54.js","essentialsContentHash":"c27e1b1f54","generatedAt":"2026-03-29T19:17:43.284Z","cacheVersion":"0f0ef77ec2-5c71ee8874-4135c4b9cd-64e84598a9-fd3bf31344-cb9a162d97-c27e1b1f54"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.f23967c38e.css","styleHash":"f23967c38e","routeStylePath":"./assets/app/routeStyle.c849fbf5db.css","routeStyleHash":"c849fbf5db","scriptPath":"./assets/app/script.c1d1a65ec8.js","scriptHash":"c1d1a65ec8","routeContentPath":"./assets/app/routeContent.64e84598a9.js","routeContentHash":"64e84598a9","budgetUiPath":"./assets/app/budgetUi.fd3bf31344.js","budgetUiHash":"fd3bf31344","budgetContentPath":"./assets/app/budgetContent.cb9a162d97.js","budgetContentHash":"cb9a162d97","essentialsContentPath":"./assets/app/essentialsContent.c27e1b1f54.js","essentialsContentHash":"c27e1b1f54","generatedAt":"2026-03-29T19:33:43.854Z","cacheVersion":"f23967c38e-c849fbf5db-c1d1a65ec8-64e84598a9-fd3bf31344-cb9a162d97-c27e1b1f54"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.4135c4b9cd.js" defer></script>
+  <script src="./assets/app/script.c1d1a65ec8.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>

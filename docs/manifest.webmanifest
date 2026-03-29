@@ -6,8 +6,8 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f7f1e8",
-  "theme_color": "#9b3c33",
+  "background_color": "#edf4ee",
+  "theme_color": "#4e7a5d",
   "categories": [
     "travel",
     "navigation",
