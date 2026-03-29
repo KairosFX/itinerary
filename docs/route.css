@@ -366,6 +366,10 @@
   align-items: stretch;
 }
 
+.route-map__detail {
+  min-height: 0;
+}
+
 .route-map-marker {
   position: relative;
   display: inline-grid;
@@ -789,12 +793,35 @@
     align-items: stretch;
   }
 
+  .route-map__map-shell,
   .route-map__aside {
-    grid-template-rows: auto minmax(0, 1fr);
+    height: 100%;
   }
 
-  .route-map__explorer {
+  .route-map__aside {
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .route-map__explorer,
+  .route-map__detail {
     min-height: 100%;
+    height: 100%;
+  }
+
+  .route-map__detail {
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+  }
+
+  .route-map__detail::after {
+    content: "";
+    display: block;
+    align-self: stretch;
+    min-height: 5.25rem;
+    border-radius: calc(var(--radius-lg) - 10px);
+    border: 1px dashed rgba(52, 87, 67, 0.12);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.42)),
+      radial-gradient(circle at 50% 0%, rgba(102, 144, 112, 0.14), rgba(102, 144, 112, 0) 74%);
   }
 }
 
@@ -1866,6 +1893,13 @@ html[data-theme="dark"] .route-map-marker__label::before {
 
 html[data-theme="dark"] .route-map__status {
   backdrop-filter: blur(10px) saturate(136%);
+}
+
+html[data-theme="dark"] .route-map__detail::after {
+  border-color: rgba(112, 141, 119, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.04)),
+    radial-gradient(circle at 50% 0%, rgba(112, 141, 119, 0.16), rgba(112, 141, 119, 0) 74%);
 }
 
 /* Published-site route polish overrides */

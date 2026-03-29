@@ -592,7 +592,7 @@ const itineraryBudgetLabels = {
           parsed.accommodationShareCount,
           normalizeTravelerCount(parsed.travelers, fallbackState.travelers)
         ),
-        includeExtras: parsed.includeExtras === true,
+        includeExtras: false,
         days: normalizeDayEntries(parsed.days)
       };
     } catch (error) {
@@ -615,8 +615,7 @@ const itineraryBudgetLabels = {
       normalizeShareMode(
         budgetNotesState.accommodationShareMode,
         budgetAccommodationShareModeDefault
-      ) !== budgetAccommodationShareModeDefault ||
-      budgetNotesState.includeExtras === true
+      ) !== budgetAccommodationShareModeDefault
     ) {
       return true;
     }
@@ -646,7 +645,7 @@ const itineraryBudgetLabels = {
             budgetNotesState.accommodationShareCount,
             normalizeTravelerCount(budgetNotesState.travelers, budgetDefaultTravelerCount)
           ),
-          includeExtras: budgetNotesState.includeExtras === true,
+          includeExtras: false,
           days: normalizeDayEntries(budgetNotesState.days)
         })
       );
@@ -684,8 +683,7 @@ const itineraryBudgetLabels = {
     return normalizedTravelers;
   };
   const includeExtras = () => {
-    hydrateState();
-    return budgetNotesState.includeExtras === true;
+    return false;
   };
   const getDayState = (day) => {
     hydrateState();
@@ -1136,17 +1134,6 @@ const itineraryBudgetLabels = {
               }
             : itineraryBudgetLabels.noPaidAccommodationMeta
         ])
-      },
-      {
-        className: "budget-summary-card budget-summary-card--optional budget-summary-card--compact",
-        label: itineraryBudgetLabels.summaryRouteExtras,
-        range: estimate.bucketAvailableRanges.optional || getZeroBudgetRange(),
-        meta: estimate.includeExtras
-          ? {
-              en: "Route extras are currently included.",
-              ja: "ルート追加費用を現在反映しています。"
-            }
-          : itineraryBudgetLabels.optionalInactiveMeta
       }
     ];
 
@@ -1172,7 +1159,7 @@ const itineraryBudgetLabels = {
       "ticketsAdmissions",
       "meals"
     ];
-    const secondaryCategoryIds = ["baggage", "optionalExtras"];
+    const visibleSecondaryCategoryIds = [];
     const renderCategoryCard = (definition, className = "budget-breakdown-card") => {
       const range = estimate.categoryTotalsRange[definition.id] || getZeroBudgetRange();
       const availableRange =
@@ -1199,6 +1186,12 @@ const itineraryBudgetLabels = {
         </article>
       `;
     };
+    const secondaryMarkup = budgetCategoryDefinitions
+      .filter((definition) => visibleSecondaryCategoryIds.includes(definition.id))
+      .map((definition) =>
+        renderCategoryCard(definition, "budget-breakdown-card budget-breakdown-card--secondary")
+      )
+      .join("");
 
     return `
       <div class="budget-breakdown-grid">
@@ -1207,16 +1200,9 @@ const itineraryBudgetLabels = {
           .map((definition) => renderCategoryCard(definition))
           .join("")}
       </div>
-      <div class="budget-breakdown-secondary">
-        ${budgetCategoryDefinitions
-          .filter((definition) => secondaryCategoryIds.includes(definition.id))
-          .map((definition) =>
-            renderCategoryCard(definition, "budget-breakdown-card budget-breakdown-card--secondary")
-          )
-          .join("")}
-      </div>
+      ${secondaryMarkup ? `<div class="budget-breakdown-secondary">${secondaryMarkup}</div>` : ""}
       <div class="budget-breakdown-pills">
-        ${["booked", "required", "flexible", "optional"]
+        ${["booked", "required", "flexible"]
           .map((bucketId) => {
             const total =
               bucketId === "optional" && !estimate.includeExtras
@@ -1241,10 +1227,6 @@ const itineraryBudgetLabels = {
           en: "Lean stays workable, Expected follows the current plan, and High keeps a realistic buffer.",
           ja: "控えめは成立する安め寄り、標準は現在の計画、高めは現実的な上振れを見ています。"
         }
-      },
-      {
-        label: { en: "Route extras", ja: "ルート追加費用" },
-        body: itineraryBudgetLabels.rangeLegendRouteExtras
       },
       {
         label: { en: "Currency view", ja: "通貨表示" },
@@ -1392,6 +1374,7 @@ const itineraryBudgetLabels = {
         ${stayControlMarkup}
         <ul class="budget-day-card__items">
           ${dayEstimate.itemEstimates
+            .filter((item) => !["baggage", "optionalExtras"].includes(item.category))
             .map((item) => {
               const chipClass =
                 item.bucket === "free"
@@ -1583,7 +1566,7 @@ const itineraryBudgetLabels = {
       budgetAccommodationShareCountInput?.value ?? budgetNotesState.accommodationShareCount,
       nextTravelers
     );
-    budgetNotesState.includeExtras = budgetIncludeExtrasInput?.checked === true;
+    budgetNotesState.includeExtras = false;
     storeState();
     syncUI();
   };

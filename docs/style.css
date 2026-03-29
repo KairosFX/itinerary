@@ -3300,15 +3300,37 @@ html.has-modal-open body {
   box-shadow: 0 0 0 0.18rem rgba(171, 74, 59, 0.08);
 }
 
+.booking-group[data-booking-group-section="accommodations"] .booking-group__title::before {
+  background: rgba(78, 122, 93, 0.26);
+  box-shadow: 0 0 0 0.18rem rgba(78, 122, 93, 0.1);
+}
+
 .booking-group[data-booking-group-section="transit"] .booking-group__title::before {
   background: rgba(111, 124, 137, 0.34);
   box-shadow: 0 0 0 0.18rem rgba(111, 124, 137, 0.1);
+}
+
+.booking-group[data-booking-group-section="activities"] .booking-group__title::before {
+  background: rgba(128, 104, 58, 0.26);
+  box-shadow: 0 0 0 0.18rem rgba(128, 104, 58, 0.1);
+}
+
+.booking-group[data-booking-group-section="accommodations"] {
+  background:
+    linear-gradient(180deg, rgba(249, 253, 248, 0.86), rgba(241, 248, 240, 0.74)),
+    rgba(246, 251, 246, 0.66);
 }
 
 .booking-group[data-booking-group-section="transit"] {
   background:
     linear-gradient(180deg, rgba(249, 251, 252, 0.84), rgba(245, 248, 250, 0.72)),
     rgba(248, 250, 252, 0.64);
+}
+
+.booking-group[data-booking-group-section="activities"] {
+  background:
+    linear-gradient(180deg, rgba(253, 252, 248, 0.86), rgba(248, 245, 236, 0.74)),
+    rgba(252, 249, 242, 0.66);
 }
 
 .booking-group__list > .booking-item {
@@ -3367,9 +3389,41 @@ html.has-modal-open body {
 .booking-item__meta {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   gap: 0.28rem;
   align-items: center;
   min-block-size: 1.52rem;
+}
+
+.booking-item__meta-copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+  align-items: center;
+  min-width: 0;
+}
+
+.booking-item__tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.52rem;
+  padding: 0.16rem 0.56rem;
+  border-radius: 999px;
+  font-size: 0.71rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.booking-item__tag--day {
+  color: rgba(44, 84, 56, 0.92);
+  background: rgba(78, 122, 93, 0.12);
+}
+
+.booking-item__tag--type {
+  color: rgba(70, 81, 95, 0.92);
+  background: rgba(111, 124, 137, 0.12);
 }
 
 .booking-item__tone,
@@ -4429,10 +4483,22 @@ html[data-theme="dark"] .booking-group {
     0 14px 28px rgba(3, 4, 6, 0.18);
 }
 
+html[data-theme="dark"] .booking-group[data-booking-group-section="accommodations"] {
+  background:
+    linear-gradient(180deg, rgba(20, 30, 24, 0.92), rgba(14, 22, 18, 0.86)),
+    rgba(17, 24, 20, 0.84);
+}
+
 html[data-theme="dark"] .booking-group[data-booking-group-section="transit"] {
   background:
     linear-gradient(180deg, rgba(24, 28, 34, 0.92), rgba(17, 20, 25, 0.86)),
     rgba(18, 20, 24, 0.84);
+}
+
+html[data-theme="dark"] .booking-group[data-booking-group-section="activities"] {
+  background:
+    linear-gradient(180deg, rgba(31, 28, 22, 0.92), rgba(23, 20, 15, 0.86)),
+    rgba(24, 21, 17, 0.84);
 }
 
 html[data-theme="dark"] .booking-group__copy {
@@ -4475,6 +4541,16 @@ html[data-theme="dark"] .booking-item[data-booking-kind="prep"] .booking-item__t
 html[data-theme="dark"] .booking-item__status {
   color: #f0d39b;
   background: rgba(206, 154, 79, 0.16);
+}
+
+html[data-theme="dark"] .booking-item__tag--day {
+  color: #d6e6d8;
+  background: rgba(96, 136, 108, 0.18);
+}
+
+html[data-theme="dark"] .booking-item__tag--type {
+  color: #d2dde7;
+  background: rgba(111, 124, 137, 0.18);
 }
 
 html[data-theme="dark"] .booking-item[data-booking-state="done"] .booking-item__status {

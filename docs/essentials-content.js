@@ -7,6 +7,14 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "transit"
       ],
       "kind": "prep",
+      "dayLabel": {
+        "en": "Before Day 1",
+        "ja": "1日目までに"
+      },
+      "typeLabel": {
+        "en": "Transit",
+        "ja": "移動"
+      },
       "tone": {
         "en": "Setup prep",
         "ja": "事前準備"
@@ -36,8 +44,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "到着前にモバイルIC、ICOCA、Suicaを決めておくと現地移動が楽です。"
       },
       "details": {
-        "en": "Keep one tap card or mobile wallet ready for Kansai and Tokyo city transit. This official setup guide is the single link to save for the quickest supported setup path.",
-        "ja": "関西と東京の市内移動に使うタッチ決済のカードかモバイルICを一つ用意しておくと動きやすいです。最も分かりやすく設定できる公式案内だけを一つ残しています。"
+        "en": "Keep one tap card or mobile wallet ready for Kansai and Tokyo city transit. Save the JR East Suica guide as the most reliable official setup reference.",
+        "ja": "関西と東京の市内移動に使うタッチ決済のカードかモバイルICを一つ用意しておくと動きやすいです。最も確実な公式案内として JR東日本の Suica ガイドを残しています。"
       },
       "links": [
         {
@@ -56,11 +64,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     },
     {
       "id": "osaka-stay",
-      "group": "bookings",
+      "group": "accommodations",
       "filters": [
         "to-book"
       ],
       "kind": "booking",
+      "dayLabel": {
+        "en": "Days 1 or 3",
+        "ja": "1日目または3日目"
+      },
+      "typeLabel": {
+        "en": "Hotel / Accommodation",
+        "ja": "ホテル・宿泊"
+      },
       "stayVisibility": {
         "days": [
           1,
@@ -99,19 +115,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "1日目または3日目に有料の大阪泊が必要な時だけ使います。大阪という広い括りではなく、ミナミ側の動線で選んでいます。"
       },
       "details": {
-        "en": "Nishi-Shinsaibashi / Minami keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical. This Expedia quote stays as the single best booking link because it is the budget anchor and still useful for live availability.",
-        "ja": "西心斎橋・ミナミなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすいです。予算の基準にもなり、空室確認にもそのまま使いやすいExpedia見積りだけを残しています。"
+        "en": "Nishi-Shinsaibashi / Minami keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical. Save the official Hearton Hotel Shinsaibashi page so you can confirm the property and move into the hotel's own booking flow.",
+        "ja": "西心斎橋・ミナミなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすいです。公式のハートンホテル心斎橋ページを残し、施設確認からそのままホテル側の予約導線へ進めるようにしています。"
       },
       "links": [
         {
-          "href": "https://www.expedia.co.jp/en/Osaka-Hotels-Hearton-Hotel-Shinsaibashi.h2544378.Hotel-Information",
+          "href": "https://www.hearton.co.jp/en/shinsaibashi/",
           "label": {
-            "en": "Best cheap link",
-            "ja": "最安寄りの信頼リンク"
+            "en": "Official hotel page",
+            "ja": "公式ホテルページ"
           },
           "note": {
-            "en": "Current Expedia quote around JPY 6.2k before taxes",
-            "ja": "現在のExpedia見積りは税別約6,189円"
+            "en": "Official property details and reservation access",
+            "ja": "公式の施設案内と予約導線"
           },
           "kind": "primary"
         }
@@ -119,11 +135,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     },
     {
       "id": "kyoto-stay",
-      "group": "bookings",
+      "group": "accommodations",
       "filters": [
         "to-book"
       ],
       "kind": "booking",
+      "dayLabel": {
+        "en": "Day 2",
+        "ja": "2日目"
+      },
+      "typeLabel": {
+        "en": "Hotel / Accommodation",
+        "ja": "ホテル・宿泊"
+      },
       "stayVisibility": {
         "days": [
           2
@@ -161,19 +185,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
       },
       "details": {
-        "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama and Osaka much better than staying deep in east Kyoto. This cheaper live quote stays as the single booking link because it is the clearest price anchor for the route-fit hotel.",
-        "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山と大阪戻りも東側の奥へ泊まるより整います。動線に合うホテルの価格基準として分かりやすい、安い見積りリンクだけを残しています。"
+        "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama and Osaka much better than staying deep in east Kyoto. Keep the official Hotel Resol Kyoto Shijo Muromachi page here for the direct hotel reference and booking entry point.",
+        "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山と大阪戻りも東側の奥へ泊まるより整います。公式の HOTEL RESOL KYOTO SHIJO MUROMACHI ページを残し、施設確認とホテル側の予約導線を一つにまとめています。"
       },
       "links": [
         {
-          "href": "https://www.expedia.co.jp/en/Kyoto-Hotels-Hotel-Resol-Kyoto-Shijo-Muromachi.h23196129.Hotel-Information",
+          "href": "https://en.www.resol-hotel.jp/kyoto-s/",
           "label": {
-            "en": "Best cheap link",
-            "ja": "最安寄りの信頼リンク"
+            "en": "Official hotel page",
+            "ja": "公式ホテルページ"
           },
           "note": {
-            "en": "Shijo / Karasuma price anchor around JPY 13.2k",
-            "ja": "四条烏丸エリアの見積り基準は約1.32万円"
+            "en": "Official property details and booking access",
+            "ja": "公式の施設案内と予約導線"
           },
           "kind": "primary"
         }
@@ -181,11 +205,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     },
     {
       "id": "fuji-area-stay",
-      "group": "bookings",
+      "group": "accommodations",
       "filters": [
         "to-book"
       ],
       "kind": "booking",
+      "dayLabel": {
+        "en": "Day 4",
+        "ja": "4日目"
+      },
+      "typeLabel": {
+        "en": "Hotel / Accommodation",
+        "ja": "ホテル・宿泊"
+      },
       "stayVisibility": {
         "days": [
           4
@@ -223,19 +255,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "三島、忠霊塔・下吉田、河口湖を4日目にまとめやすいよう、駅から湖側の動きで拠点を選んでいます。"
       },
       "details": {
-        "en": "A Kawaguchiko-side base works better than a remote resort because it keeps the station handoff, Chureito option, lake stop, and the Day 5 Tokyo transfer aligned with the actual route.",
-        "ja": "遠いリゾート立地より、河口湖側の拠点の方が駅からの受け渡し、忠霊塔の選択肢、河口湖の立ち寄り、5日目の東京移動までを実際の流れに合わせやすいです。"
+        "en": "A Kawaguchiko-side base works better than a remote resort because it keeps the station handoff, Chureito option, lake stop, and the Day 5 Tokyo transfer aligned with the actual route. Keep the official HAOSTAY page here for the property reference.",
+        "ja": "遠いリゾート立地より、河口湖側の拠点の方が駅からの受け渡し、忠霊塔の選択肢、河口湖の立ち寄り、5日目の東京移動までを実際の流れに合わせやすいです。施設確認用に公式の HAOSTAY ページを残しています。"
       },
       "links": [
         {
-          "href": "https://www.expedia.co.jp/en/Fujikawaguchiko-Hotels-HaoSTAY.h42541370.Hotel-Information",
+          "href": "https://www.haostay.jp/en/place/gallery",
           "label": {
-            "en": "Best cheap link",
-            "ja": "最安寄りの信頼リンク"
+            "en": "Official stay page",
+            "ja": "公式宿泊ページ"
           },
           "note": {
-            "en": "Station-to-lake corridor quote around JPY 15.7k",
-            "ja": "駅から湖畔の動線にある見積りは約1.57万円"
+            "en": "Official property reference for the lake-side stay",
+            "ja": "湖側滞在の公式施設案内"
           },
           "kind": "primary"
         }
@@ -243,11 +275,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     },
     {
       "id": "tokyo-stay",
-      "group": "bookings",
+      "group": "accommodations",
       "filters": [
         "to-book"
       ],
       "kind": "booking",
+      "dayLabel": {
+        "en": "Days 5-6",
+        "ja": "5日目-6日目"
+      },
+      "typeLabel": {
+        "en": "Hotel / Accommodation",
+        "ja": "ホテル・宿泊"
+      },
       "stayVisibility": {
         "days": [
           5,
@@ -286,19 +326,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "東京ホテル泊は5日目と6日目に置き、渋谷到着、観光メイン日、そして帰国前の軽い7日目を同じ拠点で回せるようにします。"
       },
       "details": {
-        "en": "Shibuya access still fits the first Tokyo evening best, and keeping the same west-side base for Day 6 leaves Day 7 free for a lighter Imperial Palace/Shinjuku block instead of wasting time on a mid-route hotel switch before the airport.",
-        "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、6日目も同じ西側拠点のままなら、空港前にホテル移動で時間を削らず、7日目を皇居と新宿中心に軽く回せます。"
+        "en": "Shibuya access still fits the first Tokyo evening best, and keeping the same west-side base for Day 6 leaves Day 7 free for a lighter Imperial Palace/Shinjuku block instead of wasting time on a mid-route hotel switch before the airport. Keep the official EN HOTEL Shibuya page here for the hotel and direct reservation access.",
+        "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、6日目も同じ西側拠点のままなら、空港前にホテル移動で時間を削らず、7日目を皇居と新宿中心に軽く回せます。ホテル確認と予約導線のために、公式の EN HOTEL Shibuya ページを残しています。"
       },
       "links": [
         {
-          "href": "https://www.expedia.co.jp/en/Tokyo-Hotels-SHIBUYA-HOTEL-EN.h5394352.Hotel-Information",
+          "href": "https://en-hotel.com/shibuya/ja/",
           "label": {
-            "en": "Best cheap link",
-            "ja": "最安寄りの信頼リンク"
+            "en": "Official hotel page",
+            "ja": "公式ホテルページ"
           },
           "note": {
-            "en": "West-Shibuya quote around JPY 19.8k",
-            "ja": "渋谷西側エリアの見積りは約1.98万円"
+            "en": "Official property details and booking access",
+            "ja": "公式の施設案内と予約導線"
           },
           "kind": "primary"
         }
@@ -307,11 +347,20 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     {
       "id": "shin-osaka-fuji-gateway",
       "transitDetailId": "shin-osaka-fuji-gateway",
-      "group": "bookings",
+      "group": "transit",
       "filters": [
-        "to-book"
+        "to-book",
+        "transit"
       ],
       "kind": "booking",
+      "dayLabel": {
+        "en": "Day 4",
+        "ja": "4日目"
+      },
+      "typeLabel": {
+        "en": "Transit",
+        "ja": "移動"
+      },
       "tone": {
         "en": "Reserve ahead",
         "ja": "事前予約"
@@ -341,8 +390,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "4日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
       },
       "details": {
-        "en": "Reserve on Smart EX once Day 4 timing is fixed. Kyoto -> Mishima is roughly JPY 10,780 non-reserved or JPY 11,310 reserved, so this is the main timed rail commitment if you want a specific departure and seat.",
-        "ja": "4日目の時刻が固まったら Smart EX で押さえます。京都 -> 三島は自由席で約10,780円、指定席で約11,310円が目安なので、出発時刻と座席を決めたい場合の主な鉄道予約です。"
+        "en": "Reserve on Smart EX once Day 4 timing is fixed. Kyoto -> Mishima is the main timed rail commitment on this route, so the official Smart EX page is the safest place to keep.",
+        "ja": "4日目の時刻が固まったら Smart EX で押さえます。京都 -> 三島はこの旅程の主要な時間指定の鉄道予約になるため、公式の Smart EX ページを残すのが最も安全です。"
       },
       "links": [
         {
@@ -352,8 +401,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
             "ja": "公式予約"
           },
           "note": {
-            "en": "Book reserved seats on Smart EX",
-            "ja": "Smart EXで指定席を予約"
+            "en": "Reserve shinkansen seats on Smart EX",
+            "ja": "Smart EXで新幹線を予約"
           },
           "kind": "primary"
         }
@@ -362,12 +411,20 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     {
       "id": "fuji-area-access",
       "transitDetailId": "fuji-gateway-kawaguchiko",
-      "group": "bookings",
+      "group": "transit",
       "filters": [
         "to-book",
         "transit"
       ],
       "kind": "booking",
+      "dayLabel": {
+        "en": "Day 4",
+        "ja": "4日目"
+      },
+      "typeLabel": {
+        "en": "Transit",
+        "ja": "移動"
+      },
       "tone": {
         "en": "Reserve ahead",
         "ja": "事前予約"
@@ -397,19 +454,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "4日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
       },
       "details": {
-        "en": "The Mishima -> Kawaguchiko highway bus is roughly JPY 2,500 standard or about JPY 2,300 when booked on the web, so save or reserve it once your shinkansen timing is locked.",
-        "ja": "三島 -> 河口湖の高速バスは通常約2,500円、WEB予約なら約2,300円が目安なので、新幹線時刻を決めたら保存または予約しておきます。"
+        "en": "The official SEKITORI route notice is the most dependable operator-run reference for the Mishima-Kawaguchiko liner timing and fare notes, so keep that here once the shinkansen timing is locked.",
+        "ja": "三島・河口湖ライナーの時刻と運賃メモは、運営側の SEKITORI 案内を残すのが最も確実です。新幹線時刻が固まったら、この参照を保存しておきます。"
       },
       "links": [
         {
           "href": "https://sekitori.jp/en/news/20250314_134/",
           "label": {
-            "en": "Route + fare reference",
-            "ja": "路線・運賃参照"
+            "en": "Operator fare + timetable notice",
+            "ja": "運営側の運賃・時刻案内"
           },
           "note": {
-            "en": "Mishima bus details and web-fare note",
-            "ja": "三島バス詳細とWEB運賃案内"
+            "en": "SEKITORI notice for the Mishima-Kawaguchiko liner",
+            "ja": "三島・河口湖ライナーのSEKITORI案内"
           },
           "kind": "primary"
         }
@@ -423,6 +480,14 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "transit"
       ],
       "kind": "reference",
+      "dayLabel": {
+        "en": "Day 5",
+        "ja": "5日目"
+      },
+      "typeLabel": {
+        "en": "Transit",
+        "ja": "移動"
+      },
       "tone": {
         "en": "Save route",
         "ja": "経路保存"
@@ -452,8 +517,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "5日目の東京入りを保存しておき、渋谷の夜へ入りやすくします。"
       },
       "details": {
-        "en": "Use the direct bus page for the simplest one-step move toward Shibuya/Tokyo. One-way highway-bus fares are around JPY 2,200, while rail can be the cleaner fallback if the bus timing stops fitting.",
-        "ja": "渋谷・東京方面へ最も単純に戻るなら直通バスページが使いやすいです。片道約2,200円が目安で、バス時刻が合わなくなった時は鉄道を代替にできます。"
+        "en": "Use the direct bus page for the simplest one-step move toward Shibuya/Tokyo. This operator page is the clearest live reference for the direct highway-bus handoff.",
+        "ja": "渋谷・東京方面へ最も単純に戻るなら直通バスページが使いやすいです。直通の高速バス移動を確認するには、この運行側ページが最も分かりやすいです。"
       },
       "links": [
         {
@@ -463,8 +528,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
             "ja": "直通バス予約"
           },
           "note": {
-            "en": "Simple Shibuya / Tokyo handoff",
-            "ja": "渋谷・東京への簡潔な移動"
+            "en": "Operator page for the Shibuya / Tokyo handoff",
+            "ja": "渋谷・東京への運行側ページ"
           },
           "kind": "primary"
         }
@@ -472,11 +537,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     },
     {
       "id": "kaiyukan",
-      "group": "bookings",
+      "group": "activities",
       "filters": [
         "to-book"
       ],
       "kind": "booking",
+      "dayLabel": {
+        "en": "Day 3",
+        "ja": "3日目"
+      },
+      "typeLabel": {
+        "en": "Activity",
+        "ja": "アクティビティ"
+      },
       "tone": {
         "en": "Reserve ahead",
         "ja": "事前予約"
@@ -526,11 +599,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     },
     {
       "id": "shibuya-sky",
-      "group": "bookings",
+      "group": "activities",
       "filters": [
         "to-book"
       ],
       "kind": "booking",
+      "dayLabel": {
+        "en": "Day 5",
+        "ja": "5日目"
+      },
+      "typeLabel": {
+        "en": "Activity",
+        "ja": "アクティビティ"
+      },
       "tone": {
         "en": "Reserve ahead",
         "ja": "事前予約"
@@ -560,8 +641,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "SHIBUYA SKY をルートに残すなら、5日目の時間指定チケットとして扱います。"
       },
       "details": {
-        "en": "Use the official booking page for the actual reservation. Earlier online daytime slots are cheaper, later-day online slots run higher, and same-day counter pricing is higher again, so save this once the Day 5 arrival window is clear.",
-        "ja": "実際の予約は公式ページで行います。オンラインは早い昼枠が安く、遅い時間帯ほど上がり、当日窓口はさらに高くなるため、5日目の到着時間が見えたら保存しておきます。"
+        "en": "Use the official booking page for the actual reservation. Save it once the Day 5 arrival window is clear.",
+        "ja": "実際の予約は公式ページで行います。5日目の到着時間が見えたら保存しておきます。"
       },
       "links": [
         {
@@ -580,11 +661,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     },
     {
       "id": "tokyo-skytree",
-      "group": "bookings",
+      "group": "activities",
       "filters": [
         "to-book"
       ],
       "kind": "booking",
+      "dayLabel": {
+        "en": "Day 6",
+        "ja": "6日目"
+      },
+      "typeLabel": {
+        "en": "Activity",
+        "ja": "アクティビティ"
+      },
       "tone": {
         "en": "Reserve ahead",
         "ja": "事前予約"
@@ -614,8 +703,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "スカイツリーは6日目の観光メイン日に入ったため、公式チケットページをすぐ見られるようにしておきます。"
       },
       "details": {
-        "en": "Use the official Skytree ticket page if you want a timed booking instead of deciding on the spot. Advance deck tickets start around JPY 2,100 and combo tickets around JPY 3,100, so Day 6 is the clean place to pick the time band you want.",
-        "ja": "現地判断ではなく時間指定で押さえたいなら、公式チケットページを使います。前売りのデッキ券は約2,100円から、回廊付きは約3,100円からなので、6日目に時間帯を選んでまとめるのが合います。"
+        "en": "Use the official Skytree ticket page if you want a timed booking instead of deciding on the spot.",
+        "ja": "現地判断ではなく時間指定で押さえたいなら、公式チケットページを使います。"
       },
       "links": [
         {
@@ -625,8 +714,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
             "ja": "公式チケット"
           },
           "note": {
-            "en": "Deck from about JPY 2.1k; combo from about JPY 3.1k",
-            "ja": "デッキ約2,100円から・回廊付き約3,100円から"
+            "en": "Timed-entry ticket information",
+            "ja": "時間指定チケット案内"
           },
           "kind": "primary"
         }

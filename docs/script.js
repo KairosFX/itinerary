@@ -155,19 +155,27 @@ const sectionInitializers = {
 };
 const bookingTransitGroupDefinitions = [
   {
-    id: "bookings",
-    title: { en: "Bookings", ja: "予約" },
+    id: "accommodations",
+    title: { en: "Hotels / Accommodations", ja: "ホテル・宿泊" },
     copy: {
-      en: "Keep the timed or pre-trip reservations together so the critical items are easy to scan first.",
-      ja: "時間指定や出発前に固めたい予約をまとめて、優先度の高い項目を先に見渡せるようにします。"
+      en: "Keep each route-fit hotel or stay decision together so day-linked accommodation changes are easy to scan.",
+      ja: "動線に合うホテルや宿泊判断をまとめ、日ごとの滞在先を見渡しやすくします。"
     }
   },
   {
     id: "transit",
     title: { en: "Transit", ja: "移動" },
     copy: {
-      en: "Keep the saved route references and transport checks together so transfer days stay calmer.",
-      ja: "保存しておきたい経路メモや運行確認をまとめて、移動日を落ち着いて進められるようにします。"
+      en: "Keep the fixed transfer legs and saved route references together so the moving days stay calmer.",
+      ja: "固定の移動予約と保存しておきたい経路メモをまとめ、移動日を落ち着いて進められるようにします。"
+    }
+  },
+  {
+    id: "activities",
+    title: { en: "Activities", ja: "アクティビティ" },
+    copy: {
+      en: "Keep the timed attraction bookings together so the sightseeing days stay easy to plan.",
+      ja: "時間指定の観光予約をまとめ、観光日の組み立てを分かりやすくします。"
     }
   }
 ];
@@ -2893,9 +2901,21 @@ function getPreferredBookingTransitLink(item) {
   return links.find((link) => link.kind === "primary") || links[0] || null;
 }
 
+function renderBookingTransitMetaTag(content, className = "") {
+  if (!content || (typeof content !== "object" && typeof content !== "string")) {
+    return "";
+  }
+
+  const labelMarkup =
+    typeof content === "string" ? escapeHtml(content) : renderLocalizedContent(content);
+  return `<span class="booking-item__tag ${className}">${labelMarkup}</span>`;
+}
+
 function renderBookingTransitItem(item) {
   const state = getBookingTransitItemState(item.id);
   const preferredLink = getPreferredBookingTransitLink(item);
+  const dayTagMarkup = renderBookingTransitMetaTag(item.dayLabel, "booking-item__tag--day");
+  const typeTagMarkup = renderBookingTransitMetaTag(item.typeLabel, "booking-item__tag--type");
   const transitTriggerMarkup = item.transitDetailId
     ? `
           <div class="booking-item__support">
@@ -2941,7 +2961,10 @@ function renderBookingTransitItem(item) {
       ${state.expanded ? "open" : ""}>
       <summary>
         <span class="booking-item__meta">
-          <span class="booking-item__tone">${renderLocalizedContent(item.tone)}</span>
+          <span class="booking-item__meta-copy">
+            ${dayTagMarkup}
+            ${typeTagMarkup}
+          </span>
           <span class="booking-item__status" data-booking-status>
             <span data-language="en" data-booking-status-language="en"></span>
             <span data-language="ja" data-booking-status-language="ja" hidden></span>

@@ -624,8 +624,16 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
   ];
 
   const routeDayStops = {
-    1: [{ en: "Osaka", ja: "大阪" }],
-    2: [{ en: "Kyoto", ja: "京都" }],
+    1: [
+      { en: "Minami", ja: "ミナミ" },
+      { en: "Dotonbori", ja: "道頓堀" },
+      { en: "Shinsaibashi", ja: "心斎橋" }
+    ],
+    2: [
+      { en: "Kiyomizu-dera", ja: "清水寺" },
+      { en: "Ninenzaka", ja: "二年坂" },
+      { en: "Gion", ja: "祇園" }
+    ],
     3: [
       { en: "Arashiyama", ja: "嵐山" },
       { en: "Osaka", ja: "大阪" }
