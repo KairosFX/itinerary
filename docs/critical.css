@@ -29,7 +29,7 @@
     "Yu Mincho",
     "Hiragino Mincho ProN",
     serif;
-  --page-backdrop-image: url("./assets/app/1yegabjjbjp01.jpg");
+  --page-backdrop-image: url("__PAGE_BACKDROP_IMAGE_PATH__");
   --page-backdrop-position: 50% 12%;
   --header-ease: 260ms cubic-bezier(0.22, 1, 0.36, 1);
   --header-reserved-height: 9.8rem;
@@ -600,7 +600,7 @@ body {
     linear-gradient(90deg, rgba(248, 243, 236, 0.16), rgba(248, 243, 236, 0.06) 22%, rgba(248, 243, 236, 0.06) 78%, rgba(248, 243, 236, 0.16)),
     radial-gradient(circle at 50% 10%, rgba(255, 246, 236, 0.28), rgba(255, 246, 236, 0) 34%),
     linear-gradient(180deg, rgba(244, 236, 225, 0.08), rgba(244, 236, 225, 0.22) 42%, rgba(235, 225, 214, 0.34) 100%),
-    var(--page-backdrop-image);
+    var(--page-backdrop-image, none);
   background-repeat: no-repeat;
   background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, cover;
   background-position:
@@ -1014,7 +1014,7 @@ body {
     linear-gradient(90deg, rgba(9, 16, 12, 0.22), rgba(9, 16, 12, 0.1) 20%, rgba(9, 16, 12, 0.1) 80%, rgba(9, 16, 12, 0.22)),
     radial-gradient(circle at 50% 8%, rgba(228, 242, 230, 0.14), rgba(228, 242, 230, 0) 30%),
     linear-gradient(180deg, rgba(7, 15, 10, 0.28), rgba(7, 15, 10, 0.44) 44%, rgba(7, 15, 10, 0.58) 100%),
-    var(--page-backdrop-image);
+    var(--page-backdrop-image, none);
   background-repeat: no-repeat;
   background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, cover;
   background-position:

@@ -34,7 +34,7 @@ const networkFirstPaths = [
   "./japan-escape-itinerary-offline.html"
 ];
 
-const cacheVersion = `2026-03-29-${assetManifest.cacheVersion || "app-shell"}`;
+const cacheVersion = assetManifest.cacheVersion || assetManifest.generatedAt || "app-shell";
 
 const nextServiceWorker = template
   .replace(/"__OFFLINE_CACHE_VERSION__"/g, JSON.stringify(cacheVersion))

@@ -102,14 +102,6 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
-      if (self.registration.navigationPreload) {
-        try {
-          await self.registration.navigationPreload.enable();
-        } catch (error) {
-          // Keep navigation working even if preload is unavailable on this browser.
-        }
-      }
-
       const cacheNames = await caches.keys();
       await Promise.all(
         cacheNames
@@ -130,12 +122,6 @@ async function respondToNavigation(event) {
   const { request } = event;
 
   try {
-    const preloadResponse = await event.preloadResponse;
-    if (preloadResponse) {
-      await cacheResponse(request, preloadResponse.clone());
-      return preloadResponse;
-    }
-
     const networkRequest = new Request(request, { cache: "no-cache" });
     const networkResponse = await fetch(networkRequest);
     await cacheResponse(request, networkResponse.clone());
@@ -240,7 +226,7 @@ self.addEventListener("fetch", (event) => {
 
   if (matchesCachedAppAsset(requestUrl)) {
     event.respondWith(
-      isNetworkFirstAppAsset(requestUrl)
+      isNetworkFirstAppAsset(requestUrl) || shouldPersistInAppShell(requestUrl)
         ? respondToNetworkFirstAsset(event.request)
         : isStaticAssetRequest(event.request, requestUrl)
           ? respondToCachedAsset(event)

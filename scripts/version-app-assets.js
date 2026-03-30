@@ -48,7 +48,6 @@ const assetDefinitions = [
 const staticAssetDefinitions = [
   {
     key: "pageBackdropImage",
-    fileName: "1yegabjjbjp01.jpg",
     sourcePath: path.join(docsDir, "assets", "icons", "1yegabjjbjp01.jpg")
   }
 ];
@@ -79,14 +78,20 @@ assetDefinitions.forEach(({ key, sourcePath, extension }) => {
   retainedFiles.add(fileName);
 });
 
-staticAssetDefinitions.forEach(({ key, fileName, sourcePath }) => {
+staticAssetDefinitions.forEach(({ key, sourcePath }) => {
   if (!fs.existsSync(sourcePath)) {
     throw new Error(`Static asset source was not found: ${sourcePath}`);
   }
 
+  const assetBuffer = fs.readFileSync(sourcePath);
+  const assetHash = createAssetHash(assetBuffer);
+  const extension = path.extname(sourcePath);
+  const baseName = path.basename(sourcePath, extension);
+  const fileName = `${baseName}.${assetHash}${extension}`;
   const destinationPath = path.join(appAssetsDir, fileName);
-  fs.copyFileSync(sourcePath, destinationPath);
+  fs.writeFileSync(destinationPath, assetBuffer);
   manifest[`${key}Path`] = toWebPath(fileName);
+  manifest[`${key}Hash`] = assetHash;
   retainedFiles.add(fileName);
 });
 
@@ -98,7 +103,8 @@ manifest.cacheVersion = [
   manifest.routeContentHash,
   manifest.budgetUiHash,
   manifest.budgetContentHash,
-  manifest.essentialsContentHash
+  manifest.essentialsContentHash,
+  manifest.pageBackdropImageHash
 ]
   .filter(Boolean)
   .join("-");

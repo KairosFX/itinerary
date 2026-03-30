@@ -1,6 +1,6 @@
 {
-  "stylePath": "./assets/app/style.ef3871f236.css",
-  "styleHash": "ef3871f236",
+  "stylePath": "./assets/app/style.463407e49e.css",
+  "styleHash": "463407e49e",
   "routeStylePath": "./assets/app/routeStyle.2d8476cd59.css",
   "routeStyleHash": "2d8476cd59",
   "scriptPath": "./assets/app/script.1598514e6c.js",
@@ -13,7 +13,8 @@
   "budgetContentHash": "742acba799",
   "essentialsContentPath": "./assets/app/essentialsContent.4bea009362.js",
   "essentialsContentHash": "4bea009362",
-  "pageBackdropImagePath": "./assets/app/1yegabjjbjp01.jpg",
-  "generatedAt": "2026-03-30T22:42:05.139Z",
-  "cacheVersion": "ef3871f236-2d8476cd59-1598514e6c-c1930b9262-0922094195-742acba799-4bea009362"
+  "pageBackdropImagePath": "./assets/app/1yegabjjbjp01.1e878db773.jpg",
+  "pageBackdropImageHash": "1e878db773",
+  "generatedAt": "2026-03-30T23:30:00.586Z",
+  "cacheVersion": "463407e49e-2d8476cd59-1598514e6c-c1930b9262-0922094195-742acba799-4bea009362-1e878db773"
 }

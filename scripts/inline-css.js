@@ -16,15 +16,18 @@ const scriptEndMarker = "<!-- build:inline-script:end -->";
 const html = fs.readFileSync(indexPath, "utf8");
 const criticalCss = fs.readFileSync(criticalCssPath, "utf8").trim();
 const assetManifest = JSON.parse(fs.readFileSync(assetManifestPath, "utf8"));
+const pageBackdropImagePath = assetManifest.pageBackdropImagePath;
 const stylePath = assetManifest.stylePath;
 const scriptPath = assetManifest.scriptPath;
 const serializedAssetConfig = JSON.stringify(assetManifest).replace(/<\/script/gi, "<\\/script");
 
-if (!stylePath || !scriptPath) {
+if (!stylePath || !scriptPath || !pageBackdropImagePath) {
   throw new Error("Versioned asset paths were not found in docs/assets/app/asset-manifest.json");
 }
 
-const styleBlock = `${styleStartMarker}\n  <style data-critical-style>${criticalCss}</style>\n  <link rel="preload" href="${stylePath}" as="style" fetchpriority="high">\n  <link rel="preload" href="${scriptPath}" as="script" fetchpriority="high">\n  <link rel="stylesheet" href="${stylePath}" media="print" onload="this.media='all'">\n  <noscript><link rel="stylesheet" href="${stylePath}"></noscript>\n  ${styleEndMarker}`;
+const resolvedCriticalCss = criticalCss.replace(/__PAGE_BACKDROP_IMAGE_PATH__/g, pageBackdropImagePath);
+
+const styleBlock = `${styleStartMarker}\n  <style data-critical-style>${resolvedCriticalCss}</style>\n  <link rel="preload" href="${stylePath}" as="style" fetchpriority="high">\n  <link rel="preload" href="${scriptPath}" as="script" fetchpriority="high">\n  <link rel="stylesheet" href="${stylePath}" media="print" onload="this.media='all'">\n  <noscript><link rel="stylesheet" href="${stylePath}"></noscript>\n  ${styleEndMarker}`;
 const dataBlock = `${dataStartMarker}\n  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = ${serializedAssetConfig};</script>\n  ${dataEndMarker}`;
 const scriptBlock = `${scriptStartMarker}\n  <script src="${scriptPath}" defer></script>\n  ${scriptEndMarker}`;
 
