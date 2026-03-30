@@ -6,13 +6,6 @@ const repoRoot = path.resolve(__dirname, "..");
 const docsDir = path.join(repoRoot, "docs");
 const appAssetsDir = path.join(docsDir, "assets", "app");
 const manifestPath = path.join(appAssetsDir, "asset-manifest.json");
-const siteBackgroundPath = path.join(
-  docsDir,
-  "assets",
-  "background",
-  "bamboo-path-1697607635151.webp"
-);
-const siteBackgroundRelativePath = "./assets/background/bamboo-path-1697607635151.webp";
 
 const assetDefinitions = [
   {
@@ -64,10 +57,6 @@ fs.mkdirSync(appAssetsDir, { recursive: true });
 
 const manifest = {};
 const retainedFiles = new Set([path.basename(manifestPath)]);
-const siteBackgroundBuffer = fs.readFileSync(siteBackgroundPath);
-
-manifest.siteBackgroundPath = siteBackgroundRelativePath;
-manifest.siteBackgroundHash = createAssetHash(siteBackgroundBuffer);
 
 assetDefinitions.forEach(({ key, sourcePath, extension }) => {
   const assetBuffer = fs.readFileSync(sourcePath);

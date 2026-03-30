@@ -13,13 +13,6 @@ const budgetUiJsPath = path.join(docsDir, "budget-ui.min.js");
 const budgetContentJsPath = path.join(docsDir, "budget-content.min.js");
 const essentialsContentJsPath = path.join(docsDir, "essentials-content.min.js");
 const assetManifestPath = path.join(docsDir, "assets", "app", "asset-manifest.json");
-const siteBackgroundPath = "./assets/background/bamboo-path-1697607635151.webp";
-const siteBackgroundFilePath = path.join(
-  docsDir,
-  "assets",
-  "background",
-  "bamboo-path-1697607635151.webp"
-);
 
 const styleStartMarker = "<!-- build:inline-style:start -->";
 const styleEndMarker = "<!-- build:inline-style:end -->";
@@ -34,13 +27,6 @@ function stripHeadTag(documentHtml, pattern) {
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function toDataUri(filePath) {
-  const extension = path.extname(filePath).toLowerCase();
-  const mimeType = extension === ".webp" ? "image/webp" : "application/octet-stream";
-  const base64 = fs.readFileSync(filePath).toString("base64");
-  return `data:${mimeType};base64,${base64}`;
 }
 
 function replaceBlock(documentHtml, startMarker, endMarker, nextBlock, label) {
@@ -69,12 +55,10 @@ const js = [essentialsContentJsPath, budgetContentJsPath, routeContentJsPath, bu
 const styleBlock = `${styleStartMarker}\n  <style data-inline-style>${css}</style>\n  ${styleEndMarker}`;
 const dataBlock = `${dataStartMarker}\n  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = ${serializedAssetConfig};</script>\n  ${dataEndMarker}`;
 const scriptBlock = `${scriptStartMarker}\n  <script data-inline-script>${js}</script>\n  ${scriptEndMarker}`;
-const siteBackgroundDataUri = toDataUri(siteBackgroundFilePath);
 
 html = replaceBlock(html, styleStartMarker, styleEndMarker, styleBlock, "Inline style");
 html = replaceBlock(html, dataStartMarker, dataEndMarker, dataBlock, "Inline data");
 html = replaceBlock(html, scriptStartMarker, scriptEndMarker, scriptBlock, "Inline script");
-html = html.replace(new RegExp(escapeRegExp(siteBackgroundPath), "g"), siteBackgroundDataUri);
 
 html = html.replace("<html lang=\"en\">", "<html lang=\"en\" data-offline-snapshot=\"true\">");
 html = stripHeadTag(html, /\s*<link rel="manifest" href="\.\/manifest\.webmanifest">\r?\n/g);

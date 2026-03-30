@@ -1359,9 +1359,6 @@ html[data-theme="dark"] .checklist-gate {
   --line: rgba(35, 57, 43, 0.12);
   --accent: #4e7a5d;
   --accent-deep: #234936;
-  --site-backdrop-image: url("./assets/background/bamboo-path-1697607635151.webp");
-  --site-backdrop-opacity: 0.28;
-  --site-backdrop-filter: saturate(0.9) contrast(1.02) brightness(0.96);
 }
 
 html[data-theme="dark"] {
@@ -1371,39 +1368,6 @@ html[data-theme="dark"] {
   --line: rgba(233, 241, 232, 0.12);
   --accent: #8dbb97;
   --accent-deep: #dcebdd;
-  --site-backdrop-opacity: 0.17;
-  --site-backdrop-filter: saturate(0.78) brightness(0.48) contrast(1.02);
-}
-
-body {
-  isolation: isolate;
-  background: linear-gradient(180deg, #f3f7ef 0%, #e9f0e6 48%, #dfe8dc 100%);
-}
-
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-
-body::before {
-  z-index: -2;
-  background-image: var(--site-backdrop-image);
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  filter: var(--site-backdrop-filter);
-  opacity: var(--site-backdrop-opacity);
-}
-
-body::after {
-  z-index: -1;
-  background:
-    linear-gradient(180deg, rgba(247, 250, 244, 0.8) 0%, rgba(237, 243, 234, 0.86) 34%, rgba(228, 236, 225, 0.93) 100%),
-    radial-gradient(circle at 14% 14%, rgba(78, 122, 93, 0.16), rgba(78, 122, 93, 0) 24%),
-    radial-gradient(circle at 84% 8%, rgba(182, 146, 88, 0.16), rgba(182, 146, 88, 0) 22%);
 }
 
 .site-header {
@@ -1439,13 +1403,6 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible {
   outline-color: rgba(78, 122, 93, 0.26);
-}
-
-html[data-theme="dark"] body::after {
-  background:
-    linear-gradient(180deg, rgba(12, 19, 15, 0.72) 0%, rgba(17, 26, 20, 0.84) 36%, rgba(15, 22, 18, 0.94) 100%),
-    radial-gradient(circle at 14% 12%, rgba(109, 156, 120, 0.16), rgba(109, 156, 120, 0) 22%),
-    radial-gradient(circle at 86% 10%, rgba(178, 143, 88, 0.12), rgba(178, 143, 88, 0) 20%);
 }
 
 html[data-theme="dark"] .site-header {

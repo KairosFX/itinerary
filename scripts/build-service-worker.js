@@ -9,12 +9,6 @@ const assetManifestPath = path.join(docsDir, "assets", "app", "asset-manifest.js
 
 const assetManifest = JSON.parse(fs.readFileSync(assetManifestPath, "utf8"));
 const template = fs.readFileSync(templatePath, "utf8");
-const siteBackgroundPath = assetManifest.siteBackgroundPath;
-const siteBackgroundVersion = assetManifest.siteBackgroundHash;
-
-if (!siteBackgroundPath || !siteBackgroundVersion) {
-  throw new Error("Background asset metadata was not found in docs/assets/app/asset-manifest.json");
-}
 
 const appShellPaths = [
   "./",
@@ -23,7 +17,6 @@ const appShellPaths = [
   "./assets/icons/apple-touch-icon.png",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
-  siteBackgroundPath,
   assetManifest.stylePath,
   assetManifest.scriptPath,
   assetManifest.routeStylePath,
@@ -40,7 +33,7 @@ const networkFirstPaths = [
   "./japan-escape-itinerary-offline.html"
 ];
 
-const cacheVersion = `2026-03-29-${assetManifest.cacheVersion || "app-shell"}-${siteBackgroundVersion}`;
+const cacheVersion = `2026-03-29-${assetManifest.cacheVersion || "app-shell"}`;
 
 const nextServiceWorker = template
   .replace(/"__OFFLINE_CACHE_VERSION__"/g, JSON.stringify(cacheVersion))

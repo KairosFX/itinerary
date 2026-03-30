@@ -1,8 +1,6 @@
 {
-  "siteBackgroundPath": "./assets/background/bamboo-path-1697607635151.webp",
-  "siteBackgroundHash": "14623e717a",
-  "stylePath": "./assets/app/style.c58c77512f.css",
-  "styleHash": "c58c77512f",
+  "stylePath": "./assets/app/style.d35737eb28.css",
+  "styleHash": "d35737eb28",
   "routeStylePath": "./assets/app/routeStyle.d1b840e112.css",
   "routeStyleHash": "d1b840e112",
   "scriptPath": "./assets/app/script.feb70c6555.js",
@@ -15,6 +13,6 @@
   "budgetContentHash": "742acba799",
   "essentialsContentPath": "./assets/app/essentialsContent.4bea009362.js",
   "essentialsContentHash": "4bea009362",
-  "generatedAt": "2026-03-30T18:27:41.641Z",
-  "cacheVersion": "c58c77512f-d1b840e112-feb70c6555-5639907043-362cdb335c-742acba799-4bea009362"
+  "generatedAt": "2026-03-30T18:40:25.088Z",
+  "cacheVersion": "d35737eb28-d1b840e112-feb70c6555-5639907043-362cdb335c-742acba799-4bea009362"
 }

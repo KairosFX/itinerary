@@ -8834,9 +8834,6 @@ html[data-theme="dark"] .offline-tools__status {
   --green: #456a4d;
   --shadow: 0 18px 38px rgba(18, 31, 21, 0.08);
   --shadow-hover: 0 26px 52px rgba(18, 31, 21, 0.14);
-  --site-backdrop-image: url("./assets/background/bamboo-path-1697607635151.webp");
-  --site-backdrop-opacity: 0.28;
-  --site-backdrop-filter: saturate(0.9) contrast(1.02) brightness(0.96);
 }
 
 :root[data-theme="dark"] {
@@ -8855,39 +8852,6 @@ html[data-theme="dark"] .offline-tools__status {
   --accent-indigo: #97b2a8;
   --shadow: 0 18px 38px rgba(2, 8, 4, 0.34);
   --shadow-hover: 0 24px 46px rgba(2, 8, 4, 0.42);
-  --site-backdrop-opacity: 0.17;
-  --site-backdrop-filter: saturate(0.78) brightness(0.48) contrast(1.02);
-}
-
-body {
-  isolation: isolate;
-  background: linear-gradient(180deg, #f3f7ef 0%, #e9f0e6 48%, #dfe8dc 100%);
-}
-
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-
-body::before {
-  z-index: -2;
-  background-image: var(--site-backdrop-image);
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  filter: var(--site-backdrop-filter);
-  opacity: var(--site-backdrop-opacity);
-}
-
-body::after {
-  z-index: -1;
-  background:
-    linear-gradient(180deg, rgba(247, 250, 244, 0.8) 0%, rgba(237, 243, 234, 0.86) 34%, rgba(228, 236, 225, 0.93) 100%),
-    radial-gradient(circle at 14% 14%, rgba(78, 122, 93, 0.16), rgba(78, 122, 93, 0) 24%),
-    radial-gradient(circle at 84% 8%, rgba(182, 146, 88, 0.16), rgba(182, 146, 88, 0) 22%);
 }
 
 .site-header {
@@ -8931,13 +8895,6 @@ input:focus-visible {
   outline-color: rgba(78, 122, 93, 0.26);
 }
 
-html[data-theme="dark"] body::after {
-  background:
-    linear-gradient(180deg, rgba(12, 19, 15, 0.72) 0%, rgba(17, 26, 20, 0.84) 36%, rgba(15, 22, 18, 0.94) 100%),
-    radial-gradient(circle at 14% 12%, rgba(109, 156, 120, 0.16), rgba(109, 156, 120, 0) 22%),
-    radial-gradient(circle at 86% 10%, rgba(178, 143, 88, 0.12), rgba(178, 143, 88, 0) 20%);
-}
-
 html[data-theme="dark"] .site-header {
   background:
     linear-gradient(180deg, rgba(18, 29, 22, 0.84), rgba(16, 24, 20, 0.6)),
@@ -8950,12 +8907,6 @@ html[data-theme="dark"] .site-header.is-condensed {
   background:
     linear-gradient(180deg, rgba(16, 26, 20, 0.92), rgba(15, 22, 18, 0.76)),
     rgba(14, 21, 17, 0.56);
-}
-
-@media (max-width: 720px) {
-  body::before {
-    background-position: 54% center;
-  }
 }
 
 /* Compact header + progress spine fixes */
