@@ -6136,33 +6136,7 @@ function updateRouteMapMarkerElement(entry, selectionState) {
 }
 
 function installRouteMapMarkers(map) {
-  const registry = routeExplorerStopDefinitions
-    .map((stop) => {
-      const lngLat = getRouteStopLngLat(stop.id);
-      if (!lngLat) {
-        return null;
-      }
-
-      const entry = createRouteMapMarkerElement(stop);
-      const marker = new window.maplibregl.Marker({
-        element: entry.element,
-        anchor: "center"
-      })
-        .setLngLat(lngLat)
-        .addTo(map);
-
-      return {
-        ...entry,
-        marker
-      };
-    })
-    .filter(Boolean);
-
-  registry.forEach((entry) => {
-    updateRouteMapMarkerElement(entry, getRouteMapSelectionState());
-  });
-
-  return registry;
+  return [];
 }
 
 function setRouteMapInteractionState(map) {
