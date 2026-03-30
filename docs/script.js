@@ -3258,11 +3258,11 @@ function isChecklistGuidanceActive() {
 }
 
 function isChecklistAccessLocked() {
-  return false;
+  return isChecklistGuidanceActive();
 }
 
 function updateChecklistAccessState() {
-  const needsGuidance = isChecklistGuidanceActive();
+  const isLocked = isChecklistAccessLocked();
   const checklistPanel = getSectionPanel("checklist");
 
   if (checklistTab) {
@@ -3271,15 +3271,19 @@ function updateChecklistAccessState() {
   }
 
   if (checklistPanel) {
-    checklistPanel.dataset.essentialsLocked = "false";
-    checklistPanel.dataset.essentialsGuidance = String(needsGuidance);
+    checklistPanel.dataset.essentialsLocked = String(isLocked);
+    checklistPanel.dataset.essentialsGuidance = String(isLocked);
+    if (isLocked && checklistPanel.contains(document.activeElement)) {
+      document.activeElement?.blur?.();
+    }
+    clearChecklistHover(checklistPanel);
   }
 
   if (checklistGateNotice) {
-    checklistGateNotice.hidden = !needsGuidance;
+    checklistGateNotice.hidden = !isLocked;
   }
 
-  return false;
+  return isLocked;
 }
 
 function isPackingItemPacked(itemId) {
@@ -3355,6 +3359,7 @@ function syncPackingUI() {
   });
 
   updateChecklistAccessState();
+  refreshChecklistProgressState({ syncDayCards: initializedSections.has("checklist") });
 }
 
 function setPackingSectionState(sectionElement, packed) {
@@ -3979,6 +3984,16 @@ function initOverviewSection() {
 }
 
 function handleChecklistPanelClick(event) {
+  if (isChecklistAccessLocked()) {
+    const lockedTarget = event.target.closest(".check-item, .transit-trigger--checklist");
+    if (lockedTarget) {
+      event.preventDefault();
+      event.stopPropagation();
+      showChecklistLockNotice();
+      return;
+    }
+  }
+
   const transitTrigger = event.target.closest("[data-transit-detail-trigger]");
   const dayCard = event.target.closest(".day-card[data-day]");
   if (transitTrigger) {
@@ -4095,6 +4110,11 @@ function triggerChecklistInteractionFeedback(input) {
 }
 
 function handleChecklistPanelPointerMove(event) {
+  if (isChecklistAccessLocked()) {
+    clearChecklistHover(event.currentTarget);
+    return;
+  }
+
   if (aggressivePerformanceMode || reducedEffectsEnabled || coarsePointerQuery.matches) {
     return;
   }
@@ -4114,6 +4134,11 @@ function handleChecklistPanelPointerLeave(event) {
 }
 
 function handleChecklistPanelFocusIn(event) {
+  if (isChecklistAccessLocked()) {
+    clearChecklistHover(event.currentTarget);
+    return;
+  }
+
   const checkItem = event.target.closest(".check-item");
   if (!checkItem) {
     return;
@@ -4136,6 +4161,13 @@ function handleChecklistPanelFocusOut(event) {
 }
 
 function handleChecklistPanelChange(event) {
+  if (isChecklistAccessLocked()) {
+    event.preventDefault();
+    showChecklistLockNotice();
+    restoreChecklistState(event.currentTarget);
+    return;
+  }
+
   const input = event.target.closest('.day-card input[type="checkbox"]');
   if (!input) {
     return;
@@ -6528,8 +6560,8 @@ function showSequenceNotice(requiredDay) {
 function showChecklistLockNotice() {
   showToastNotice(
     root.lang === "ja"
-      ? "Essentials に未完了の項目はありますが、チェックリストは先に確認できます。"
-      : "Essentials still has unfinished items, but the checklist is available to preview."
+      ? "チェックリストは確認できますが、Essentials をすべて packed にするまで操作はロックされています。"
+      : "The checklist is visible, but it stays locked until every Essentials item is packed."
   );
 }
 
@@ -6724,15 +6756,10 @@ function resetTripProgress() {
   refreshChecklistProgressState({ syncDayCards: initializedSections.has("checklist") });
   refreshRouteMapsIfReady({ updateCamera: true });
   syncProgressTimeline();
-  setActivePanel(isChecklistAccessLocked() ? "essentials" : "checklist");
+  setActivePanel("checklist");
   setResetModalOpen(false);
 
   window.requestAnimationFrame(() => {
-    if (isChecklistAccessLocked()) {
-      scrollToPanelStart("essentials");
-      return;
-    }
-
     void scrollToChecklistDay(1);
   });
 }
@@ -6848,6 +6875,10 @@ function refreshChecklistProgressState(options = {}) {
       getDayInputs(card).forEach((input) => {
         input.disabled = isUnavailable;
       });
+      card.querySelectorAll(".transit-trigger--checklist").forEach((button) => {
+        button.disabled = checklistLocked;
+        button.setAttribute("aria-disabled", String(checklistLocked));
+      });
     });
   }
 
@@ -6919,12 +6950,6 @@ function celebrateCompletedDay(day) {
 async function scrollToChecklistDay(day) {
   if (isChecklistAccessLocked()) {
     showChecklistLockNotice();
-    lockHeaderState(420);
-    await ensureSectionAssetsReady("essentials");
-    setActivePanel("essentials");
-    await ensureSectionInitialized("essentials");
-    scrollToPanelStart("essentials");
-    return;
   }
 
   const targetCard = dayCardMap.get(String(day));
@@ -7220,7 +7245,7 @@ function getInitialPanelId() {
   const nextPanelId =
     contentPanels.length === 1 ? defaultPanelId : readStoredActivePanel() || defaultPanelId;
 
-  return nextPanelId === "checklist" && isChecklistAccessLocked() ? "essentials" : nextPanelId;
+  return nextPanelId;
 }
 
 function bindTabNavigation() {
@@ -7232,16 +7257,6 @@ function bindTabNavigation() {
     tab.addEventListener("click", async () => {
       const panelId = tab.dataset.panelTarget;
       if (!panelId) {
-        return;
-      }
-
-      if (panelId === "checklist" && isChecklistAccessLocked()) {
-        showChecklistLockNotice();
-        await ensureSectionAssetsReady("essentials");
-        lockHeaderState(520);
-        setActivePanel("essentials");
-        await ensureSectionInitialized("essentials");
-        scrollToPanelStart("essentials");
         return;
       }
 
