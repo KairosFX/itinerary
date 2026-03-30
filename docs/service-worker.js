@@ -1,4 +1,4 @@
-const OFFLINE_CACHE_VERSION = "2026-03-29-083f1bd8f4-2fcaba1679-7135b1d3be-c1930b9262-0509dd4045-742acba799-4bea009362";
+const OFFLINE_CACHE_VERSION = "2026-03-29-835707ab3f-627e96f99d-7135b1d3be-c1930b9262-0509dd4045-742acba799-4bea009362";
 const CACHE_PREFIX = "japan-escape-itinerary-";
 const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
@@ -11,9 +11,9 @@ const APP_SHELL_PATHS = [
   "./assets/icons/apple-touch-icon.png",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
-  "./assets/app/style.083f1bd8f4.css",
+  "./assets/app/style.835707ab3f.css",
   "./assets/app/script.7135b1d3be.js",
-  "./assets/app/routeStyle.2fcaba1679.css",
+  "./assets/app/routeStyle.627e96f99d.css",
   "./assets/app/routeContent.c1930b9262.js",
   "./assets/app/budgetUi.0509dd4045.js",
   "./assets/app/budgetContent.742acba799.js",

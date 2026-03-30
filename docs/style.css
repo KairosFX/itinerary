@@ -8949,6 +8949,11 @@ html[data-theme="dark"] .site-header.is-condensed {
   align-items: center;
 }
 
+.brand-block .eyebrow {
+  letter-spacing: 0.12em;
+  text-transform: none;
+}
+
 .eyebrow::before {
   content: none;
 }
