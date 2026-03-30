@@ -58,7 +58,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     }
   ];
 
-  // Extracted from Google Maps preview directions responses on 2026-03-28.
+  // Extracted from saved preview directions responses on 2026-03-28.
   const routeSegmentCoordinateDefinitions = {
     osakaKyoto: [
       [135.502339, 34.694211],
