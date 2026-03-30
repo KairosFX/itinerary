@@ -8,8 +8,13 @@
     name="description"
     content="Simple bilingual Japan trip website for GitHub Pages with overview, checklist, notes, budget, routes, essentials, and a live route map from Osaka to Tokyo.">
   <meta name="theme-color" content="#ffffff">
-  <link rel="dns-prefetch" href="//tiles.openfreemap.org">
-  <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
+  <!-- Configure a browser-restricted Google Maps JavaScript API key and optional map ID for the Route atlas here. -->
+  <meta name="google-maps-api-key" content="">
+  <meta name="google-maps-map-id" content="">
+  <meta name="google-maps-3d-mode" content="HYBRID">
+  <link rel="dns-prefetch" href="//maps.googleapis.com">
+  <link rel="preconnect" href="https://maps.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://maps.gstatic.com" crossorigin>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234e7a5d'/%3E%3Cpath d='M20 18h24v6H34v22h-6V24H20z' fill='%23fffaf4'/%3E%3C/svg%3E">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
@@ -2264,12 +2269,12 @@ html[data-theme="dark"] .checklist-gate {
                 </span>
                 <span class="route-map__loading-copy">
                   <strong>
-                    <span data-language="en">Preparing the live route</span>
-                    <span data-language="ja" hidden>ライブ ルートを準備中</span>
+                    <span data-language="en">Preparing the 3D route atlas</span>
+                    <span data-language="ja" hidden>3Dルートアトラスを準備中</span>
                   </strong>
                   <span>
-                    <span data-language="en">Warming OpenFreeMap from Kansai through Fuji to Tokyo so the full itinerary appears as the primary map.</span>
-                    <span data-language="ja" hidden>関西から富士、東京までの OpenFreeMap を先に温め、旅程全体を標準のライブ地図として表示します。</span>
+                    <span data-language="en">Loading Google Maps 3D from Kansai through Fuji to Tokyo so the selected day, stops, and route stay in sync.</span>
+                    <span data-language="ja" hidden>関西から富士、東京までの Google Maps 3D を読み込み、選択中の日、立ち寄り先、ルートが連動するようにします。</span>
                   </span>
                 </span>
               </div>
@@ -2287,8 +2292,8 @@ html[data-theme="dark"] .checklist-gate {
                   <span data-language="ja" hidden>ルート地図を読み込み中...</span>
                 </p>
                 <p class="route-map__status-copy">
-                  <span data-language="en">OpenFreeMap is loading.</span>
-                  <span data-language="ja" hidden>OpenFreeMap を読み込んでいます。</span>
+                  <span data-language="en">Google Maps 3D is loading.</span>
+                  <span data-language="ja" hidden>Google Maps 3D を読み込んでいます。</span>
                 </p>
               </div>
             </div>
@@ -2910,10 +2915,10 @@ html[data-theme="dark"] .checklist-gate {
   </footer>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.effca39054.css","styleHash":"effca39054","routeStylePath":"./assets/app/routeStyle.4b38f85510.css","routeStyleHash":"4b38f85510","scriptPath":"./assets/app/script.0dd4c99846.js","scriptHash":"0dd4c99846","routeContentPath":"./assets/app/routeContent.52819f9db9.js","routeContentHash":"52819f9db9","budgetUiPath":"./assets/app/budgetUi.ab37b60496.js","budgetUiHash":"ab37b60496","budgetContentPath":"./assets/app/budgetContent.822b44e78c.js","budgetContentHash":"822b44e78c","essentialsContentPath":"./assets/app/essentialsContent.e023f8c0d9.js","essentialsContentHash":"e023f8c0d9","generatedAt":"2026-03-30T00:38:06.620Z","cacheVersion":"effca39054-4b38f85510-0dd4c99846-52819f9db9-ab37b60496-822b44e78c-e023f8c0d9"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.effca39054.css","styleHash":"effca39054","routeStylePath":"./assets/app/routeStyle.a8f4581434.css","routeStyleHash":"a8f4581434","scriptPath":"./assets/app/script.8edf33319d.js","scriptHash":"8edf33319d","routeContentPath":"./assets/app/routeContent.52819f9db9.js","routeContentHash":"52819f9db9","budgetUiPath":"./assets/app/budgetUi.ab37b60496.js","budgetUiHash":"ab37b60496","budgetContentPath":"./assets/app/budgetContent.822b44e78c.js","budgetContentHash":"822b44e78c","essentialsContentPath":"./assets/app/essentialsContent.e023f8c0d9.js","essentialsContentHash":"e023f8c0d9","generatedAt":"2026-03-30T00:59:15.784Z","cacheVersion":"effca39054-a8f4581434-8edf33319d-52819f9db9-ab37b60496-822b44e78c-e023f8c0d9"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.0dd4c99846.js" defer></script>
+  <script src="./assets/app/script.8edf33319d.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>
