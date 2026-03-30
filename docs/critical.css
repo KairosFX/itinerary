@@ -594,35 +594,49 @@ body {
 
 body {
   isolation: isolate;
-  background:
-    radial-gradient(circle at 14% 12%, rgba(170, 84, 68, 0.12), rgba(170, 84, 68, 0) 28%),
-    radial-gradient(circle at 84% 9%, rgba(196, 155, 95, 0.16), rgba(196, 155, 95, 0) 24%),
-    linear-gradient(180deg, rgba(250, 245, 238, 0.98) 0%, rgba(244, 236, 226, 0.98) 38%, rgba(236, 226, 212, 1) 100%);
+  background-color: #f2ede6;
+  background-image:
+    linear-gradient(180deg, rgba(247, 241, 235, 0.16), rgba(247, 241, 235, 0.44) 24%, rgba(243, 237, 229, 0.76) 62%, rgba(243, 237, 229, 0.9) 100%),
+    linear-gradient(90deg, rgba(248, 243, 236, 0.16), rgba(248, 243, 236, 0.06) 22%, rgba(248, 243, 236, 0.06) 78%, rgba(248, 243, 236, 0.16)),
+    radial-gradient(circle at 50% 10%, rgba(255, 246, 236, 0.28), rgba(255, 246, 236, 0) 34%),
+    linear-gradient(180deg, rgba(244, 236, 225, 0.08), rgba(244, 236, 225, 0.22) 42%, rgba(235, 225, 214, 0.34) 100%),
+    var(--page-backdrop-image);
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, cover;
+  background-position:
+    center center,
+    center center,
+    center center,
+    center center,
+    var(--page-backdrop-position);
+  background-attachment: fixed, fixed, fixed, fixed, fixed;
 }
 
 body::before,
 body::after {
-  content: "";
-  position: fixed;
-  width: 32rem;
-  height: 32rem;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(18px);
-  opacity: 0.5;
-  z-index: 0;
+  content: none;
 }
 
-body::before {
-  top: -11rem;
-  right: -8rem;
-  background: radial-gradient(circle, rgba(214, 178, 113, 0.24), rgba(214, 178, 113, 0));
+@media (max-width: 960px) {
+  :root {
+    --page-backdrop-position: 50% 10%;
+  }
+
+  body {
+    background-attachment: scroll, scroll, scroll, scroll, scroll;
+  }
 }
 
-body::after {
-  left: -11rem;
-  bottom: -12rem;
-  background: radial-gradient(circle, rgba(151, 95, 80, 0.18), rgba(151, 95, 80, 0));
+@media (max-width: 640px) {
+  :root {
+    --page-backdrop-position: 50% 8%;
+  }
+}
+
+@media (pointer: coarse) {
+  body {
+    background-attachment: scroll, scroll, scroll, scroll, scroll;
+  }
 }
 
 .site-atmosphere {
@@ -994,35 +1008,27 @@ html[data-theme="dark"] .site-intro__veil {
 }
 
 body {
-  background:
-    radial-gradient(circle at 50% -14%, rgba(244, 250, 243, 0.9), rgba(244, 250, 243, 0) 36%),
-    radial-gradient(circle at 16% 22%, rgba(123, 161, 130, 0.18), rgba(123, 161, 130, 0) 28%),
-    radial-gradient(circle at 82% 16%, rgba(164, 188, 156, 0.14), rgba(164, 188, 156, 0) 24%),
-    linear-gradient(180deg, rgba(13, 39, 23, 0.12), rgba(13, 39, 23, 0.02) 14%, rgba(244, 249, 243, 0) 40%),
-    linear-gradient(180deg, rgba(241, 247, 241, 0.98) 0%, rgba(230, 239, 231, 0.98) 42%, rgba(219, 229, 220, 1) 100%);
+  background-color: #0d1510;
+  background-image:
+    linear-gradient(180deg, rgba(9, 16, 12, 0.34), rgba(9, 16, 12, 0.56) 28%, rgba(9, 16, 12, 0.78) 68%, rgba(9, 16, 12, 0.92) 100%),
+    linear-gradient(90deg, rgba(9, 16, 12, 0.22), rgba(9, 16, 12, 0.1) 20%, rgba(9, 16, 12, 0.1) 80%, rgba(9, 16, 12, 0.22)),
+    radial-gradient(circle at 50% 8%, rgba(228, 242, 230, 0.14), rgba(228, 242, 230, 0) 30%),
+    linear-gradient(180deg, rgba(7, 15, 10, 0.28), rgba(7, 15, 10, 0.44) 44%, rgba(7, 15, 10, 0.58) 100%),
+    var(--page-backdrop-image);
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, cover;
+  background-position:
+    center center,
+    center center,
+    center center,
+    center center,
+    var(--page-backdrop-position);
+  background-attachment: fixed, fixed, fixed, fixed, fixed;
 }
 
 body::before,
 body::after {
-  border-radius: 999px;
-  filter: blur(36px);
-  opacity: 0.44;
-}
-
-body::before {
-  top: -14rem;
-  right: 10%;
-  width: 18rem;
-  height: 120vh;
-  background: linear-gradient(180deg, rgba(231, 246, 233, 0.76), rgba(186, 216, 190, 0.18) 40%, rgba(186, 216, 190, 0) 100%);
-}
-
-body::after {
-  left: -6rem;
-  bottom: -18rem;
-  width: 22rem;
-  height: 92vh;
-  background: linear-gradient(180deg, rgba(55, 99, 68, 0.2), rgba(55, 99, 68, 0));
+  content: none;
 }
 
 .site-atmosphere::before,
