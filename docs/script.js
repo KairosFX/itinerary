@@ -59,6 +59,7 @@ const pageTitles = {
 const storageKey = "japan-trip-language";
 const themeStorageKey = "japan-trip-theme";
 const itineraryStateVersion = "2026-03-27-flight-home-v1";
+const introSessionStorageKey = `japan-trip-intro-played-${itineraryStateVersion}`;
 const checklistStorageKey = `japan-trip-checklist-state-${itineraryStateVersion}`;
 const completedHistoryStorageKey = `japan-trip-completed-history-${itineraryStateVersion}`;
 const activePanelStorageKey = `japan-trip-active-panel-${itineraryStateVersion}`;
@@ -80,6 +81,7 @@ const appAssetConfigRuntimeGlobal = "__JAPAN_APP_ASSETS__";
 const budgetUiRuntimeGlobal = "__JAPAN_BUDGET_UI__";
 const budgetContentRuntimeGlobal = "__JAPAN_BUDGET_CONTENT__";
 const essentialsContentRuntimeGlobal = "__JAPAN_ESSENTIALS_CONTENT__";
+const routeMapPreviewImageUrl = "./assets/route-map-preview.svg";
 const routeMapLibraryScriptUrl = "./assets/vendor/maplibre/maplibre-gl.js";
 const routeMapLibraryStyleUrl = "./assets/vendor/maplibre/maplibre-gl.css";
 const budgetUiFallbackScriptUrl = "./budget-ui.min.js";
@@ -630,6 +632,7 @@ function getWarmCacheAssetUrls(manifest) {
   return Array.from(
     new Set(
       [
+        routeMapPreviewImageUrl,
         manifest.routeStylePath || routeStyleFallbackUrl,
         manifest.routeContentPath || routeContentFallbackScriptUrl,
         manifest.budgetUiPath || budgetUiFallbackScriptUrl,
@@ -7594,14 +7597,31 @@ function waitForDuration(durationMs) {
   });
 }
 
+function hasPlayedSiteIntroThisSession() {
+  try {
+    return window.sessionStorage.getItem(introSessionStorageKey) === "true";
+  } catch (error) {
+    return false;
+  }
+}
+
+function markSiteIntroPlayed() {
+  try {
+    window.sessionStorage.setItem(introSessionStorageKey, "true");
+  } catch (error) {
+    // Keep the intro resilient even when storage is unavailable.
+  }
+}
+
 async function playSiteIntro() {
   if (!siteIntro) {
     root.classList.remove("intro-pending", "intro-active", "intro-leaving");
     return;
   }
 
-  const holdDurationMs = reducedEffectsEnabled ? 180 : 920;
-  const exitDurationMs = reducedEffectsEnabled ? 0 : 420;
+  const repeatVisit = hasPlayedSiteIntroThisSession();
+  const holdDurationMs = reducedEffectsEnabled ? 140 : repeatVisit ? 220 : 920;
+  const exitDurationMs = reducedEffectsEnabled ? 0 : repeatVisit ? 180 : 420;
 
   siteIntro.hidden = false;
   root.classList.add("intro-active");
@@ -7618,6 +7638,7 @@ async function playSiteIntro() {
     await waitForDuration(exitDurationMs);
   }
 
+  markSiteIntroPlayed();
   root.classList.remove("intro-pending", "intro-active", "intro-leaving");
   siteIntro.hidden = true;
 }

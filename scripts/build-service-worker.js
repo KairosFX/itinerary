@@ -6,22 +6,24 @@ const docsDir = path.join(repoRoot, "docs");
 const templatePath = path.join(docsDir, "service-worker.template.js");
 const outputPath = path.join(docsDir, "service-worker.js");
 const assetManifestPath = path.join(docsDir, "assets", "app", "asset-manifest.json");
-const siteBackgroundPath = "./assets/background/bamboo-path-1697607635151.webp";
-const siteBackgroundVersion = "bamboo-path-1697607635151";
 
 const assetManifest = JSON.parse(fs.readFileSync(assetManifestPath, "utf8"));
 const template = fs.readFileSync(templatePath, "utf8");
+const siteBackgroundPath = assetManifest.siteBackgroundPath;
+const siteBackgroundVersion = assetManifest.siteBackgroundHash;
+
+if (!siteBackgroundPath || !siteBackgroundVersion) {
+  throw new Error("Background asset metadata was not found in docs/assets/app/asset-manifest.json");
+}
 
 const appShellPaths = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./japan-escape-itinerary-offline.html",
   "./assets/icons/apple-touch-icon.png",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
   siteBackgroundPath,
-  "./assets/route-map-preview.svg",
   assetManifest.stylePath,
   assetManifest.scriptPath,
   assetManifest.routeStylePath,

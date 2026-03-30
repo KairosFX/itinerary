@@ -5,7 +5,6 @@ const repoRoot = path.resolve(__dirname, "..");
 const indexPath = path.join(repoRoot, "docs", "index.html");
 const criticalCssPath = path.join(repoRoot, "docs", "critical.css");
 const assetManifestPath = path.join(repoRoot, "docs", "assets", "app", "asset-manifest.json");
-const siteBackgroundPath = "./assets/background/bamboo-path-1697607635151.webp";
 
 const styleStartMarker = "<!-- build:inline-style:start -->";
 const styleEndMarker = "<!-- build:inline-style:end -->";
@@ -19,10 +18,13 @@ const criticalCss = fs.readFileSync(criticalCssPath, "utf8").trim();
 const assetManifest = JSON.parse(fs.readFileSync(assetManifestPath, "utf8"));
 const stylePath = assetManifest.stylePath;
 const scriptPath = assetManifest.scriptPath;
+const siteBackgroundPath = assetManifest.siteBackgroundPath;
 const serializedAssetConfig = JSON.stringify(assetManifest).replace(/<\/script/gi, "<\\/script");
 
-if (!stylePath || !scriptPath) {
-  throw new Error("Versioned asset paths were not found in docs/assets/app/asset-manifest.json");
+if (!stylePath || !scriptPath || !siteBackgroundPath) {
+  throw new Error(
+    "Versioned asset paths were not found in docs/assets/app/asset-manifest.json"
+  );
 }
 
 const styleBlock = `${styleStartMarker}\n  <style data-critical-style>${criticalCss}</style>\n  <link rel="preload" href="${stylePath}" as="style" fetchpriority="high">\n  <link rel="preload" href="${scriptPath}" as="script" fetchpriority="high">\n  <link rel="preload" href="${siteBackgroundPath}" as="image" type="image/webp" fetchpriority="high">\n  <link rel="stylesheet" href="${stylePath}" media="print" onload="this.media='all'">\n  <noscript><link rel="stylesheet" href="${stylePath}"></noscript>\n  ${styleEndMarker}`;
