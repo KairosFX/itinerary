@@ -6115,37 +6115,11 @@ body {
 
 body {
   isolation: isolate;
-  background:
-    radial-gradient(circle at 14% 12%, rgba(170, 84, 68, 0.12), rgba(170, 84, 68, 0) 28%),
-    radial-gradient(circle at 84% 9%, rgba(196, 155, 95, 0.16), rgba(196, 155, 95, 0) 24%),
-    radial-gradient(circle at 72% 72%, rgba(116, 138, 151, 0.12), rgba(116, 138, 151, 0) 28%),
-    linear-gradient(180deg, rgba(250, 245, 238, 0.98) 0%, rgba(244, 236, 226, 0.98) 38%, rgba(236, 226, 212, 1) 100%);
 }
 
 body::before,
 body::after {
-  content: "";
-  position: fixed;
-  inset: auto;
-  width: 34rem;
-  height: 34rem;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(18px);
-  opacity: 0.54;
-  z-index: 0;
-}
-
-body::before {
-  top: -10rem;
-  right: -8rem;
-  background: radial-gradient(circle, rgba(214, 178, 113, 0.24), rgba(214, 178, 113, 0));
-}
-
-body::after {
-  left: -10rem;
-  bottom: -12rem;
-  background: radial-gradient(circle, rgba(151, 95, 80, 0.18), rgba(151, 95, 80, 0));
+  content: none;
 }
 
 #main-content,
@@ -7343,35 +7317,12 @@ html[data-theme="dark"] .site-footer__copyright {
 }
 
 body {
-  background:
-    radial-gradient(circle at 50% -14%, rgba(244, 250, 243, 0.9), rgba(244, 250, 243, 0) 36%),
-    radial-gradient(circle at 16% 22%, rgba(123, 161, 130, 0.18), rgba(123, 161, 130, 0) 28%),
-    radial-gradient(circle at 82% 16%, rgba(164, 188, 156, 0.14), rgba(164, 188, 156, 0) 24%),
-    linear-gradient(180deg, rgba(13, 39, 23, 0.12), rgba(13, 39, 23, 0.02) 14%, rgba(244, 249, 243, 0) 40%),
-    linear-gradient(180deg, rgba(241, 247, 241, 0.98) 0%, rgba(230, 239, 231, 0.98) 42%, rgba(219, 229, 220, 1) 100%);
+  background: #f2ede6;
 }
 
 body::before,
 body::after {
-  border-radius: 999px;
-  filter: blur(36px);
-  opacity: 0.44;
-}
-
-body::before {
-  top: -14rem;
-  right: 10%;
-  width: 18rem;
-  height: 120vh;
-  background: linear-gradient(180deg, rgba(231, 246, 233, 0.76), rgba(186, 216, 190, 0.18) 40%, rgba(186, 216, 190, 0) 100%);
-}
-
-body::after {
-  left: -6rem;
-  bottom: -18rem;
-  width: 22rem;
-  height: 92vh;
-  background: linear-gradient(180deg, rgba(55, 99, 68, 0.2), rgba(55, 99, 68, 0));
+  content: none;
 }
 
 .site-atmosphere::before,

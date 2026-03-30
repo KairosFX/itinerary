@@ -89,6 +89,12 @@ staticAssetDefinitions.forEach(({ key, sourcePath }) => {
   const baseName = path.basename(sourcePath, extension);
   const fileName = `${baseName}.${assetHash}${extension}`;
   const destinationPath = path.join(appAssetsDir, fileName);
+  const legacyDestinationPath = path.join(appAssetsDir, path.basename(sourcePath));
+
+  if (legacyDestinationPath !== destinationPath && fs.existsSync(legacyDestinationPath)) {
+    fs.unlinkSync(legacyDestinationPath);
+  }
+
   fs.writeFileSync(destinationPath, assetBuffer);
   manifest[`${key}Path`] = toWebPath(fileName);
   manifest[`${key}Hash`] = assetHash;
