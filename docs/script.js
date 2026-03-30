@@ -2605,7 +2605,7 @@ function updateThemeColorMeta(theme) {
     return;
   }
 
-  themeColorMeta.content = theme === "dark" ? "#102016" : "#4e7a5d";
+  themeColorMeta.content = theme === "dark" ? "#18261d" : "#e7efe3";
 }
 
 function isLikelyLowerPowerDevice() {
