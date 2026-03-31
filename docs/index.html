@@ -643,37 +643,54 @@ body {
 body {
   isolation: isolate;
   background-color: #f2ede6;
-  background-image:
-    linear-gradient(180deg, rgba(247, 241, 235, 0.16), rgba(247, 241, 235, 0.44) 24%, rgba(243, 237, 229, 0.76) 62%, rgba(243, 237, 229, 0.9) 100%),
-    linear-gradient(90deg, rgba(248, 243, 236, 0.16), rgba(248, 243, 236, 0.06) 22%, rgba(248, 243, 236, 0.06) 78%, rgba(248, 243, 236, 0.16)),
-    radial-gradient(circle at 50% 10%, rgba(255, 246, 236, 0.28), rgba(255, 246, 236, 0) 34%),
-    linear-gradient(180deg, rgba(244, 236, 225, 0.08), rgba(244, 236, 225, 0.22) 42%, rgba(235, 225, 214, 0.34) 100%),
-    var(--page-backdrop-image, none);
-  background-repeat: no-repeat;
-  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, cover;
-  background-position:
-    center center,
-    center center,
-    center center,
-    center center,
-    var(--page-backdrop-position);
-  background-attachment: fixed, fixed, fixed, fixed, fixed;
 }
 
 body::before,
 body::after {
-  content: none;
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  filter: none;
+  pointer-events: none;
+}
+
+body::before {
+  z-index: 0;
+  opacity: 1;
+  background-image:
+    radial-gradient(circle at 50% 10%, rgba(255, 246, 236, 0.34), rgba(255, 246, 236, 0) 34%),
+    linear-gradient(180deg, rgba(244, 236, 225, 0.1), rgba(244, 236, 225, 0.24) 42%, rgba(235, 225, 214, 0.38) 100%),
+    var(--page-backdrop-image, none);
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 100%, cover;
+  background-position:
+    center center,
+    center center,
+    var(--page-backdrop-position);
+  transform: scale(1.01);
+  transform-origin: center top;
+}
+
+body::after {
+  z-index: 1;
+  opacity: 1;
+  background:
+    linear-gradient(180deg, rgba(247, 241, 235, 0.14), rgba(247, 241, 235, 0.44) 24%, rgba(247, 241, 235, 0.68) 62%, rgba(243, 237, 229, 0.84) 100%),
+    linear-gradient(90deg, rgba(248, 243, 236, 0.24), rgba(248, 243, 236, 0.06) 22%, rgba(248, 243, 236, 0.06) 78%, rgba(248, 243, 236, 0.24));
 }
 
 .site-atmosphere {
-  z-index: 0;
+  z-index: 2;
 }
 
 #main-content,
 .page-shell,
 .site-footer {
   position: relative;
-  z-index: 1;
+  z-index: 3;
 }
 
 .site-header {
@@ -684,10 +701,6 @@ body::after {
   :root {
     --page-backdrop-position: 50% 10%;
   }
-
-  body {
-    background-attachment: scroll, scroll, scroll, scroll, scroll;
-  }
 }
 
 @media (max-width: 640px) {
@@ -697,8 +710,8 @@ body::after {
 }
 
 @media (pointer: coarse) {
-  body {
-    background-attachment: scroll, scroll, scroll, scroll, scroll;
+  body::before {
+    transform: none;
   }
 }
 
@@ -1072,26 +1085,31 @@ html[data-theme="dark"] .site-intro__veil {
 
 body {
   background-color: #0d1510;
-  background-image:
-    linear-gradient(180deg, rgba(9, 16, 12, 0.34), rgba(9, 16, 12, 0.56) 28%, rgba(9, 16, 12, 0.78) 68%, rgba(9, 16, 12, 0.92) 100%),
-    linear-gradient(90deg, rgba(9, 16, 12, 0.22), rgba(9, 16, 12, 0.1) 20%, rgba(9, 16, 12, 0.1) 80%, rgba(9, 16, 12, 0.22)),
-    radial-gradient(circle at 50% 8%, rgba(228, 242, 230, 0.14), rgba(228, 242, 230, 0) 30%),
-    linear-gradient(180deg, rgba(7, 15, 10, 0.28), rgba(7, 15, 10, 0.44) 44%, rgba(7, 15, 10, 0.58) 100%),
-    var(--page-backdrop-image, none);
-  background-repeat: no-repeat;
-  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, cover;
-  background-position:
-    center center,
-    center center,
-    center center,
-    center center,
-    var(--page-backdrop-position);
-  background-attachment: fixed, fixed, fixed, fixed, fixed;
 }
 
 body::before,
 body::after {
-  content: none;
+  content: "";
+}
+
+body::before {
+  opacity: 0.92;
+  background-image:
+    radial-gradient(circle at 50% 8%, rgba(228, 242, 230, 0.16), rgba(228, 242, 230, 0) 30%),
+    linear-gradient(180deg, rgba(7, 15, 10, 0.22), rgba(7, 15, 10, 0.38) 44%, rgba(7, 15, 10, 0.54) 100%),
+    var(--page-backdrop-image, none);
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 100%, cover;
+  background-position:
+    center center,
+    center center,
+    var(--page-backdrop-position);
+}
+
+body::after {
+  background:
+    linear-gradient(180deg, rgba(9, 16, 12, 0.42), rgba(9, 16, 12, 0.6) 28%, rgba(9, 16, 12, 0.78) 68%, rgba(9, 16, 12, 0.9) 100%),
+    linear-gradient(90deg, rgba(9, 16, 12, 0.28), rgba(9, 16, 12, 0.12) 20%, rgba(9, 16, 12, 0.12) 80%, rgba(9, 16, 12, 0.28));
 }
 
 .site-atmosphere::before,
@@ -1646,10 +1664,10 @@ html[data-theme="dark"] .site-header {
     padding: 1.08rem;
   }
 }</style>
-  <link rel="preload" href="./assets/app/style.8761784a2b.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/style.99bff31d75.css" as="style" fetchpriority="high">
   <link rel="preload" href="./assets/app/script.1598514e6c.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.8761784a2b.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.8761784a2b.css"></noscript>
+  <link rel="stylesheet" href="./assets/app/style.99bff31d75.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.99bff31d75.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -3082,7 +3100,7 @@ html[data-theme="dark"] .site-header {
   </footer>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.8761784a2b.css","styleHash":"8761784a2b","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.1598514e6c.js","scriptHash":"1598514e6c","routeContentPath":"./assets/app/routeContent.c1930b9262.js","routeContentHash":"c1930b9262","budgetUiPath":"./assets/app/budgetUi.0922094195.js","budgetUiHash":"0922094195","budgetContentPath":"./assets/app/budgetContent.742acba799.js","budgetContentHash":"742acba799","essentialsContentPath":"./assets/app/essentialsContent.4bea009362.js","essentialsContentHash":"4bea009362","pageBackdropImagePath":"./assets/app/1yegabjjbjp01.1e878db773.jpg","pageBackdropImageHash":"1e878db773","generatedAt":"2026-03-31T00:11:22.220Z","cacheVersion":"8761784a2b-2d8476cd59-1598514e6c-c1930b9262-0922094195-742acba799-4bea009362-1e878db773"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.99bff31d75.css","styleHash":"99bff31d75","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.1598514e6c.js","scriptHash":"1598514e6c","routeContentPath":"./assets/app/routeContent.c1930b9262.js","routeContentHash":"c1930b9262","budgetUiPath":"./assets/app/budgetUi.0922094195.js","budgetUiHash":"0922094195","budgetContentPath":"./assets/app/budgetContent.742acba799.js","budgetContentHash":"742acba799","essentialsContentPath":"./assets/app/essentialsContent.4bea009362.js","essentialsContentHash":"4bea009362","pageBackdropImagePath":"./assets/app/1yegabjjbjp01.1e878db773.jpg","pageBackdropImageHash":"1e878db773","generatedAt":"2026-03-31T00:19:13.543Z","cacheVersion":"99bff31d75-2d8476cd59-1598514e6c-c1930b9262-0922094195-742acba799-4bea009362-1e878db773"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
   <script src="./assets/app/script.1598514e6c.js" defer></script>

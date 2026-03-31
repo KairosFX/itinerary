@@ -1,6 +1,6 @@
 {
-  "stylePath": "./assets/app/style.8761784a2b.css",
-  "styleHash": "8761784a2b",
+  "stylePath": "./assets/app/style.99bff31d75.css",
+  "styleHash": "99bff31d75",
   "routeStylePath": "./assets/app/routeStyle.2d8476cd59.css",
   "routeStyleHash": "2d8476cd59",
   "scriptPath": "./assets/app/script.1598514e6c.js",
@@ -15,6 +15,6 @@
   "essentialsContentHash": "4bea009362",
   "pageBackdropImagePath": "./assets/app/1yegabjjbjp01.1e878db773.jpg",
   "pageBackdropImageHash": "1e878db773",
-  "generatedAt": "2026-03-31T00:11:22.220Z",
-  "cacheVersion": "8761784a2b-2d8476cd59-1598514e6c-c1930b9262-0922094195-742acba799-4bea009362-1e878db773"
+  "generatedAt": "2026-03-31T00:19:13.543Z",
+  "cacheVersion": "99bff31d75-2d8476cd59-1598514e6c-c1930b9262-0922094195-742acba799-4bea009362-1e878db773"
 }
