@@ -9261,16 +9261,16 @@ html[data-theme="dark"] {
   border-radius: 0;
   background: transparent;
   color: var(--accent-deep);
-  font-size: clamp(1.18rem, 1rem + 0.94vw, 1.84rem);
+  font-size: clamp(1.44rem, 1.14rem + 1.66vw, 2.32rem);
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   line-height: 1;
   text-transform: none;
   box-shadow: none;
 }
 
 .eyebrow__icon {
-  width: 1.3rem;
+  width: 1.42rem;
 }
 
 .section-nav {
@@ -9578,8 +9578,8 @@ html[data-theme="dark"] #checklist .day-card.is-warning-day::after {
 @media (max-width: 720px) {
   .brand-block .eyebrow {
     gap: 0.48rem;
-    font-size: clamp(1.08rem, 0.98rem + 0.48vw, 1.3rem);
-    letter-spacing: 0.14em;
+    font-size: clamp(1.22rem, 1.06rem + 0.72vw, 1.54rem);
+    letter-spacing: 0.12em;
   }
 
   .section-tab {
@@ -9590,5 +9590,159 @@ html[data-theme="dark"] #checklist .day-card.is-warning-day::after {
   .site-header.is-condensed .section-tab {
     padding: 0.3rem 0.52rem;
     font-size: 0.71rem;
+  }
+}
+
+.budget-setting__mode {
+  display: none;
+}
+
+.budget-setting--stepper {
+  gap: 0.5rem;
+}
+
+.budget-stepper {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.34rem;
+  padding: 0.28rem;
+  border: 1px solid rgba(31, 37, 39, 0.08);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(248, 252, 248, 0.74)),
+    rgba(255, 255, 255, 0.74);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 8px 18px rgba(16, 33, 22, 0.04);
+}
+
+.budget-stepper__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  min-width: 2.1rem;
+  min-height: 2.1rem;
+  padding: 0;
+  border: 1px solid rgba(63, 123, 84, 0.12);
+  border-radius: 999px;
+  background: rgba(249, 253, 249, 0.9);
+  color: var(--accent-deep);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 6px 12px rgba(16, 33, 22, 0.04);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.budget-stepper__button:hover,
+.budget-stepper__button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(63, 123, 84, 0.22);
+  background: rgba(252, 255, 252, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 8px 14px rgba(16, 33, 22, 0.06);
+}
+
+.budget-stepper__input {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.1rem;
+  padding: 0.24rem 0.2rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.budget-stepper__input::-webkit-outer-spin-button,
+.budget-stepper__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.budget-stepper__input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.budget-notes__day-browser-head {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  justify-items: stretch;
+  gap: 0.72rem;
+}
+
+.budget-notes__day-browser-copy {
+  justify-items: start;
+  text-align: left;
+  max-width: 38rem;
+  margin-inline: 0;
+}
+
+.budget-notes__day-browser-actions {
+  display: flex;
+  align-items: start;
+  justify-content: flex-end;
+}
+
+.budget-notes__reset {
+  justify-self: auto;
+  align-self: start;
+}
+
+html[data-theme="dark"] .budget-stepper {
+  border-color: rgba(149, 195, 160, 0.08);
+  background:
+    linear-gradient(180deg, rgba(24, 34, 27, 0.94), rgba(18, 27, 21, 0.88)),
+    rgba(18, 27, 21, 0.84);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 8px 18px rgba(5, 11, 8, 0.16);
+}
+
+html[data-theme="dark"] .budget-stepper__button {
+  border-color: rgba(149, 195, 160, 0.12);
+  background: rgba(28, 40, 31, 0.9);
+  color: var(--accent-deep);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 6px 12px rgba(5, 11, 8, 0.18);
+}
+
+html[data-theme="dark"] .budget-stepper__button:hover,
+html[data-theme="dark"] .budget-stepper__button:focus-visible {
+  border-color: rgba(149, 195, 160, 0.22);
+  background: rgba(33, 47, 37, 0.96);
+}
+
+html[data-theme="dark"] .budget-stepper__input {
+  color: var(--accent-deep);
+}
+
+@media (max-width: 720px) {
+  .budget-notes__day-browser-head {
+    grid-template-columns: 1fr;
+    gap: 0.54rem;
+  }
+
+  .budget-notes__day-browser-actions {
+    justify-content: flex-end;
+  }
+
+  .budget-stepper__button {
+    width: 2rem;
+    min-width: 2rem;
+    min-height: 2rem;
   }
 }

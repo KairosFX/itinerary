@@ -1699,9 +1699,9 @@ input:focus-visible {
   border-radius: 0;
   background: transparent;
   color: var(--accent-deep);
-  font-size: clamp(1.18rem, 1rem + 0.9vw, 1.82rem);
+  font-size: clamp(1.42rem, 1.12rem + 1.6vw, 2.28rem);
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   line-height: 1;
   text-transform: none;
   box-shadow: none;
@@ -1713,7 +1713,7 @@ input:focus-visible {
 }
 
 .eyebrow__icon {
-  width: 1.3rem;
+  width: 1.42rem;
 }
 
 .section-nav {
@@ -1805,8 +1805,8 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
 @media (max-width: 720px) {
   .brand-block .eyebrow {
     gap: 0.48rem;
-    font-size: clamp(1.08rem, 0.98rem + 0.48vw, 1.28rem);
-    letter-spacing: 0.14em;
+    font-size: clamp(1.22rem, 1.06rem + 0.72vw, 1.52rem);
+    letter-spacing: 0.12em;
   }
 
   .section-tab {
@@ -1814,10 +1814,10 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
     font-size: 0.72rem;
   }
 }</style>
-  <link rel="preload" href="./assets/app/style.b4c4a1a5cd.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/style.c89f55276e.css" as="style" fetchpriority="high">
   <link rel="preload" href="./assets/app/script.5a59a050e1.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.b4c4a1a5cd.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.b4c4a1a5cd.css"></noscript>
+  <link rel="stylesheet" href="./assets/app/style.c89f55276e.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.c89f55276e.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -2564,18 +2564,6 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
       </div>
 
       <article class="budget-panel card" data-budget-notes-card>
-        <div class="budget-notes__heading">
-          <div class="budget-notes__title-group">
-            <p class="budget-notes__intro">
-              <span data-language="en">Adjust travellers and stay sharing, then review the day-by-day estimate.</span>
-              <span data-language="ja" hidden>旅行人数と宿泊の共有を調整してから、日ごとの見積りを確認できます。</span>
-            </p>
-          </div>
-          <button class="booking-item__cta booking-item__cta--secondary budget-notes__reset" type="button" data-budget-reset-all>
-            <span data-language="en">Reset budget</span>
-            <span data-language="ja" hidden>予算をリセット</span>
-          </button>
-        </div>
         <div class="budget-notes__status" data-budget-status hidden aria-live="polite"></div>
 
         <section
@@ -2583,38 +2571,95 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
           aria-label="Trip setup"
           data-aria-label-en="Trip setup"
           data-aria-label-ja="旅の設定">
-          <label class="budget-setting">
+          <label class="budget-setting budget-setting--stepper">
             <span class="budget-setting__label">
               <span data-language="en">Travellers</span>
               <span data-language="ja" hidden>旅行人数</span>
             </span>
-            <input
-              class="budget-setting__input"
-              type="number"
-              min="1"
-              max="24"
-              step="1"
-              value="2"
-              inputmode="numeric"
-              data-budget-travelers
-              aria-label="Travellers"
-              data-aria-label-en="Travellers"
-              data-aria-label-ja="旅行人数">
+            <div class="budget-stepper" data-budget-stepper="travelers">
+              <button
+                class="budget-stepper__button"
+                type="button"
+                data-budget-step-target="travelers"
+                data-budget-step-delta="-1"
+                aria-label="Decrease travellers"
+                data-aria-label-en="Decrease travellers"
+                data-aria-label-ja="旅行人数を減らす">
+                <span aria-hidden="true">−</span>
+              </button>
+              <input
+                class="budget-setting__input budget-stepper__input"
+                type="number"
+                min="1"
+                max="24"
+                step="1"
+                value="2"
+                inputmode="numeric"
+                data-budget-travelers
+                aria-label="Travellers"
+                data-aria-label-en="Travellers"
+                data-aria-label-ja="旅行人数">
+              <button
+                class="budget-stepper__button"
+                type="button"
+                data-budget-step-target="travelers"
+                data-budget-step-delta="1"
+                aria-label="Increase travellers"
+                data-aria-label-en="Increase travellers"
+                data-aria-label-ja="旅行人数を増やす">
+                <span aria-hidden="true">+</span>
+              </button>
+            </div>
           </label>
 
-          <label class="budget-setting">
+          <label class="budget-setting budget-setting--stepper budget-setting--share" data-budget-share-count-field>
             <span class="budget-setting__label">
-              <span data-language="en">Accommodation sharing</span>
-              <span data-language="ja" hidden>宿泊の共有</span>
+              <span data-language="en">People per room</span>
+              <span data-language="ja" hidden>1室あたり人数</span>
             </span>
+            <div class="budget-stepper" data-budget-stepper="share">
+              <button
+                class="budget-stepper__button"
+                type="button"
+                data-budget-step-target="share"
+                data-budget-step-delta="-1"
+                aria-label="Decrease room sharing"
+                data-aria-label-en="Decrease room sharing"
+                data-aria-label-ja="1室あたり人数を減らす">
+                <span aria-hidden="true">−</span>
+              </button>
+              <input
+                class="budget-setting__input budget-stepper__input"
+                type="number"
+                min="1"
+                max="24"
+                step="1"
+                value="2"
+                inputmode="numeric"
+                data-budget-share-count
+                aria-label="People per room"
+                data-aria-label-en="People per room"
+                data-aria-label-ja="1室あたり人数">
+              <button
+                class="budget-stepper__button"
+                type="button"
+                data-budget-step-target="share"
+                data-budget-step-delta="1"
+                aria-label="Increase room sharing"
+                data-aria-label-en="Increase room sharing"
+                data-aria-label-ja="1室あたり人数を増やす">
+                <span aria-hidden="true">+</span>
+              </button>
+            </div>
             <select
-              class="budget-setting__input budget-setting__input--full"
+              class="budget-setting__mode"
               data-budget-share-mode
-              aria-label="Accommodation sharing"
-              data-aria-label-en="Accommodation sharing"
-              data-aria-label-ja="宿泊の共有">
+              hidden
+              tabindex="-1"
+              aria-hidden="true">
               <option value="all-travelers">Shared accommodation</option>
               <option value="not-shared">Not shared</option>
+              <option value="custom">Custom share count</option>
             </select>
           </label>
         </section>
@@ -2629,6 +2674,12 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
                 <span data-language="en">Switch days here instead of scrolling one long budget list.</span>
                 <span data-language="ja" hidden>縦に長い予算一覧を追わず、ここで日ごとに切り替えて見られます。</span>
               </p>
+            </div>
+            <div class="budget-notes__day-browser-actions">
+              <button class="booking-item__cta booking-item__cta--secondary budget-notes__reset" type="button" data-budget-reset-all>
+                <span data-language="en">Reset budget</span>
+                <span data-language="ja" hidden>予算をリセット</span>
+              </button>
             </div>
           </div>
           <div class="budget-notes__day-selector" data-budget-day-selector aria-live="polite"></div>
@@ -2648,8 +2699,8 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
         <div class="route-map__header">
           <div class="route-map__copy">
             <h3 id="route-title">
-              <span data-language="en">Route Line</span>
-              <span data-language="ja" hidden>ルートライン</span>
+              <span data-language="en">Path</span>
+              <span data-language="ja" hidden>経路</span>
             </h3>
           </div>
           <div class="route-map__header-actions">
@@ -3254,7 +3305,7 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
   </footer>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"pageBackdropImagePath":"./assets/app/1yegabjjbjp01.1e878db773.jpg","pageBackdropImageCssPath":"./1yegabjjbjp01.1e878db773.jpg","pageBackdropImageHash":"1e878db773","stylePath":"./assets/app/style.b4c4a1a5cd.css","styleHash":"b4c4a1a5cd","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.5a59a050e1.js","scriptHash":"5a59a050e1","routeContentPath":"./assets/app/routeContent.c1930b9262.js","routeContentHash":"c1930b9262","budgetUiPath":"./assets/app/budgetUi.0922094195.js","budgetUiHash":"0922094195","budgetContentPath":"./assets/app/budgetContent.742acba799.js","budgetContentHash":"742acba799","essentialsContentPath":"./assets/app/essentialsContent.4bea009362.js","essentialsContentHash":"4bea009362","generatedAt":"2026-03-31T01:15:17.277Z","cacheVersion":"b4c4a1a5cd-2d8476cd59-5a59a050e1-c1930b9262-0922094195-742acba799-4bea009362-1e878db773"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"pageBackdropImagePath":"./assets/app/1yegabjjbjp01.1e878db773.jpg","pageBackdropImageCssPath":"./1yegabjjbjp01.1e878db773.jpg","pageBackdropImageHash":"1e878db773","stylePath":"./assets/app/style.c89f55276e.css","styleHash":"c89f55276e","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.5a59a050e1.js","scriptHash":"5a59a050e1","routeContentPath":"./assets/app/routeContent.c1930b9262.js","routeContentHash":"c1930b9262","budgetUiPath":"./assets/app/budgetUi.17c321f035.js","budgetUiHash":"17c321f035","budgetContentPath":"./assets/app/budgetContent.742acba799.js","budgetContentHash":"742acba799","essentialsContentPath":"./assets/app/essentialsContent.4bea009362.js","essentialsContentHash":"4bea009362","generatedAt":"2026-03-31T01:31:06.299Z","cacheVersion":"c89f55276e-2d8476cd59-5a59a050e1-c1930b9262-17c321f035-742acba799-4bea009362-1e878db773"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
   <script src="./assets/app/script.5a59a050e1.js" defer></script>

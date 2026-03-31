@@ -1651,9 +1651,9 @@ input:focus-visible {
   border-radius: 0;
   background: transparent;
   color: var(--accent-deep);
-  font-size: clamp(1.18rem, 1rem + 0.9vw, 1.82rem);
+  font-size: clamp(1.42rem, 1.12rem + 1.6vw, 2.28rem);
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   line-height: 1;
   text-transform: none;
   box-shadow: none;
@@ -1665,7 +1665,7 @@ input:focus-visible {
 }
 
 .eyebrow__icon {
-  width: 1.3rem;
+  width: 1.42rem;
 }
 
 .section-nav {
@@ -1757,8 +1757,8 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
 @media (max-width: 720px) {
   .brand-block .eyebrow {
     gap: 0.48rem;
-    font-size: clamp(1.08rem, 0.98rem + 0.48vw, 1.28rem);
-    letter-spacing: 0.14em;
+    font-size: clamp(1.22rem, 1.06rem + 0.72vw, 1.52rem);
+    letter-spacing: 0.12em;
   }
 
   .section-tab {
