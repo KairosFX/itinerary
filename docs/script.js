@@ -60,7 +60,6 @@ const pageTitles = {
 const storageKey = "japan-trip-language";
 const themeStorageKey = "japan-trip-theme";
 const itineraryStateVersion = "2026-03-27-flight-home-v1";
-const introSessionStorageKey = `japan-trip-intro-played-${itineraryStateVersion}`;
 const checklistStorageKey = `japan-trip-checklist-state-${itineraryStateVersion}`;
 const completedHistoryStorageKey = `japan-trip-completed-history-${itineraryStateVersion}`;
 const activePanelStorageKey = `japan-trip-active-panel-${itineraryStateVersion}`;
@@ -98,7 +97,7 @@ const budgetTravelerCountMin = 1;
 const budgetTravelerCountMax = 24;
 const budgetSharedRoomOccupancy = 2;
 const budgetAccommodationShareModeDefault = "all-travelers";
-const budgetAccommodationShareModes = ["not-shared", "all-travelers", "custom"];
+const budgetAccommodationShareModes = ["not-shared", "all-travelers"];
 const serviceWorkerWarmMessageType = "CACHE_URLS";
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
@@ -7599,31 +7598,14 @@ function waitForDuration(durationMs) {
   });
 }
 
-function hasPlayedSiteIntroThisSession() {
-  try {
-    return window.sessionStorage.getItem(introSessionStorageKey) === "true";
-  } catch (error) {
-    return false;
-  }
-}
-
-function markSiteIntroPlayed() {
-  try {
-    window.sessionStorage.setItem(introSessionStorageKey, "true");
-  } catch (error) {
-    // Keep the intro resilient even when storage is unavailable.
-  }
-}
-
 async function playSiteIntro() {
   if (!siteIntro) {
     root.classList.remove("intro-pending", "intro-active", "intro-leaving");
     return;
   }
 
-  const repeatVisit = hasPlayedSiteIntroThisSession();
-  const holdDurationMs = reducedEffectsEnabled ? 140 : repeatVisit ? 220 : 920;
-  const exitDurationMs = reducedEffectsEnabled ? 0 : repeatVisit ? 180 : 420;
+  const holdDurationMs = reducedEffectsEnabled ? 160 : 920;
+  const exitDurationMs = reducedEffectsEnabled ? 0 : 420;
 
   siteIntro.hidden = false;
   root.classList.add("intro-active");
@@ -7640,7 +7622,6 @@ async function playSiteIntro() {
     await waitForDuration(exitDurationMs);
   }
 
-  markSiteIntroPlayed();
   root.classList.remove("intro-pending", "intro-active", "intro-leaving");
   siteIntro.hidden = true;
 }

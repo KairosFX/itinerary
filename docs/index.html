@@ -1813,11 +1813,207 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
     padding: 0.34rem 0.56rem;
     font-size: 0.72rem;
   }
+}
+
+/* Welcome panorama + open budget settings */
+:root {
+  --intro-panorama-position: 50% 48%;
+}
+
+.site-intro {
+  padding: clamp(1.1rem, 2.8vw, 1.9rem);
+  overflow: hidden;
+}
+
+.site-intro__veil {
+  background:
+    linear-gradient(180deg, rgba(4, 14, 9, 0.18), rgba(4, 14, 9, 0.44)),
+    linear-gradient(135deg, rgba(6, 22, 14, 0.24), rgba(6, 22, 14, 0.08));
+}
+
+.site-intro__panorama {
+  overflow: hidden;
+  background-image:
+    linear-gradient(180deg, rgba(4, 12, 8, 0.06), rgba(4, 12, 8, 0.18)),
+    linear-gradient(180deg, rgba(4, 12, 8, 0) 0%, rgba(4, 12, 8, 0.08) 34%, rgba(4, 12, 8, 0.68) 100%),
+    var(--page-backdrop-image);
+  background-position: center, center, var(--intro-panorama-position);
+  background-repeat: no-repeat;
+  background-size: auto, auto, cover;
+  transform: scale(1.04);
+}
+
+.site-intro__panorama::before,
+.site-intro__panorama::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.site-intro__panorama::before {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(154, 197, 164, 0.22), rgba(154, 197, 164, 0) 24%),
+    linear-gradient(110deg, rgba(6, 20, 13, 0.08), rgba(6, 20, 13, 0.02) 32%, rgba(6, 20, 13, 0.44) 100%);
+}
+
+.site-intro__panorama::after {
+  background:
+    radial-gradient(circle at 52% 36%, rgba(240, 248, 242, 0.12), rgba(240, 248, 242, 0) 28%),
+    linear-gradient(180deg, rgba(4, 12, 8, 0.02), rgba(4, 12, 8, 0.24) 58%, rgba(4, 12, 8, 0.74));
+}
+
+.site-intro__mist,
+.site-intro__glow {
+  opacity: 0.82;
+}
+
+.site-intro__mist--north {
+  background: radial-gradient(circle, rgba(77, 122, 92, 0.22), rgba(77, 122, 92, 0));
+}
+
+.site-intro__mist--south {
+  background: radial-gradient(circle, rgba(198, 220, 203, 0.22), rgba(198, 220, 203, 0));
+}
+
+.site-intro__glow {
+  inset: auto 16% 10%;
+  height: 19rem;
+  background: radial-gradient(circle, rgba(208, 228, 213, 0.22), rgba(208, 228, 213, 0) 68%);
+  box-shadow: none;
+}
+
+.site-intro__content {
+  inset: auto auto clamp(1.2rem, 4vw, 2.4rem) clamp(1.2rem, 4vw, 2.4rem);
+  display: grid;
+  gap: 0.5rem;
+  width: min(38rem, calc(100% - 2.4rem));
+  min-height: auto;
+  text-align: left;
+  align-content: end;
+  color: rgba(243, 248, 243, 0.98);
+}
+
+.site-intro__content::before {
+  width: 4rem;
+  margin: 0 0 0.55rem;
+  background: linear-gradient(90deg, rgba(206, 227, 212, 0), rgba(206, 227, 212, 0.86), rgba(206, 227, 212, 0));
+}
+
+.site-intro__eyebrow,
+.site-intro__meta {
+  color: rgba(220, 233, 223, 0.84);
+  text-shadow: 0 1px 18px rgba(1, 6, 3, 0.34);
+}
+
+.site-intro__eyebrow {
+  font-weight: 700;
+}
+
+.site-intro__title {
+  font-size: clamp(3rem, 7vw, 5.9rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #f5fbf6;
+  text-shadow:
+    0 18px 40px rgba(1, 6, 3, 0.34),
+    0 2px 14px rgba(1, 6, 3, 0.32);
+}
+
+.site-intro__meta {
+  max-width: 26rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.2em;
+}
+
+.budget-notes__settings-panel {
+  gap: 0.8rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.budget-notes__controls {
+  grid-template-columns: repeat(2, minmax(16rem, 19rem));
+  justify-content: start;
+}
+
+.budget-notes__settings-head {
+  max-width: 36rem;
+}
+
+.budget-notes__summary {
+  margin-top: 0.08rem;
+}
+
+html[data-theme="dark"] .site-intro__veil {
+  background:
+    linear-gradient(180deg, rgba(3, 10, 7, 0.18), rgba(3, 10, 7, 0.52)),
+    linear-gradient(135deg, rgba(4, 15, 10, 0.3), rgba(4, 15, 10, 0.1));
+}
+
+html[data-theme="dark"] .site-intro__panorama::before {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(137, 180, 147, 0.16), rgba(137, 180, 147, 0) 24%),
+    linear-gradient(110deg, rgba(4, 14, 9, 0.12), rgba(4, 14, 9, 0.04) 32%, rgba(4, 14, 9, 0.56) 100%);
+}
+
+html[data-theme="dark"] .site-intro__panorama::after {
+  background:
+    radial-gradient(circle at 52% 36%, rgba(226, 238, 229, 0.08), rgba(226, 238, 229, 0) 28%),
+    linear-gradient(180deg, rgba(3, 10, 7, 0.04), rgba(3, 10, 7, 0.3) 58%, rgba(3, 10, 7, 0.82));
+}
+
+html[data-theme="dark"] .budget-notes__settings-panel {
+  background: none;
+  box-shadow: none;
+}
+
+@media (max-width: 920px) {
+  .site-intro__content {
+    width: min(32rem, calc(100% - 2.2rem));
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --intro-panorama-position: 56% 48%;
+  }
+
+  .site-intro {
+    padding: 0.9rem;
+  }
+
+  .site-intro__content {
+    inset: auto 1rem 1.2rem 1rem;
+    width: auto;
+    gap: 0.42rem;
+  }
+
+  .site-intro__title {
+    font-size: clamp(2.7rem, 14vw, 4.3rem);
+  }
+
+  .site-intro__meta {
+    max-width: 18rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+  }
+
+  .budget-notes__settings-panel {
+    padding: 0;
+  }
+
+  .budget-notes__controls {
+    grid-template-columns: 1fr;
+  }
 }</style>
-  <link rel="preload" href="./assets/app/style.9fe213b270.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.bc6963d2b1.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.9fe213b270.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.9fe213b270.css"></noscript>
+  <link rel="preload" href="./assets/app/style.b0f9f8be42.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.8c2e71b05f.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.b0f9f8be42.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.b0f9f8be42.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -1825,6 +2021,28 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
     <span data-language="en">Skip to content</span>
     <span data-language="ja" hidden>本文へ移動</span>
   </a>
+  <div class="site-intro" data-site-intro aria-hidden="true">
+    <div class="site-intro__veil"></div>
+    <div class="site-intro__panorama" aria-hidden="true">
+      <span class="site-intro__mist site-intro__mist--north"></span>
+      <span class="site-intro__mist site-intro__mist--south"></span>
+      <span class="site-intro__glow"></span>
+    </div>
+    <div class="site-intro__content">
+      <p class="site-intro__eyebrow">
+        <span data-language="en">Welcome</span>
+        <span data-language="ja" hidden>ようこそ</span>
+      </p>
+      <h1 class="site-intro__title">
+        <span data-language="en">Japan Escape</span>
+        <span data-language="ja" hidden>Japan Escape</span>
+      </h1>
+      <p class="site-intro__meta">
+        <span data-language="en">Seven Days • Osaka to Tokyo</span>
+        <span data-language="ja" hidden>7日間・大阪から東京へ</span>
+      </p>
+    </div>
+  </div>
   <div class="site-atmosphere" aria-hidden="true">
     <span class="site-atmosphere__orb site-atmosphere__orb--north"></span>
     <span class="site-atmosphere__orb site-atmosphere__orb--sun"></span>
@@ -2581,8 +2799,8 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
               <span data-language="ja" hidden>最初に旅の見積りを調整</span>
             </h3>
             <p class="budget-notes__settings-intro">
-              <span data-language="en">Set travellers and room sharing here. The live trip total and day-by-day estimate update below.</span>
-              <span data-language="ja" hidden>ここで旅行人数と宿泊の分け方を調整すると、合計と日別見積りが下で更新されます。</span>
+              <span data-language="en">Set travellers and accommodation sharing here. The live trip total and day-by-day estimate update below.</span>
+              <span data-language="ja" hidden>ここで旅行人数と宿泊の共有方法を調整すると、合計と日別見積りが下で更新されます。</span>
             </p>
           </div>
 
@@ -2645,49 +2863,7 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
                 data-aria-label-ja="宿泊の共有">
                 <option value="all-travelers">Shared accommodation</option>
                 <option value="not-shared">Not shared</option>
-                <option value="custom">Custom share count</option>
               </select>
-            </label>
-
-            <label class="budget-setting budget-setting--stepper budget-setting--share" data-budget-share-count-field>
-              <span class="budget-setting__label">
-                <span data-language="en">People per room</span>
-                <span data-language="ja" hidden>1室あたり人数</span>
-              </span>
-              <div class="budget-stepper" data-budget-stepper="share">
-                <button
-                  class="budget-stepper__button"
-                  type="button"
-                  data-budget-step-target="share"
-                  data-budget-step-delta="-1"
-                  aria-label="Decrease room sharing"
-                  data-aria-label-en="Decrease room sharing"
-                  data-aria-label-ja="1室あたり人数を減らす">
-                  <span aria-hidden="true">−</span>
-                </button>
-                <input
-                  class="budget-setting__input budget-stepper__input"
-                  type="number"
-                  min="1"
-                  max="24"
-                  step="1"
-                  value="2"
-                  inputmode="numeric"
-                  data-budget-share-count
-                  aria-label="People per room"
-                  data-aria-label-en="People per room"
-                  data-aria-label-ja="1室あたり人数">
-                <button
-                  class="budget-stepper__button"
-                  type="button"
-                  data-budget-step-target="share"
-                  data-budget-step-delta="1"
-                  aria-label="Increase room sharing"
-                  data-aria-label-en="Increase room sharing"
-                  data-aria-label-ja="1室あたり人数を増やす">
-                  <span aria-hidden="true">+</span>
-                </button>
-              </div>
             </label>
           </section>
 
@@ -3335,10 +3511,10 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
   </footer>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"pageBackdropImagePath":"./assets/app/1yegabjjbjp01.1e878db773.jpg","pageBackdropImageCssPath":"./1yegabjjbjp01.1e878db773.jpg","pageBackdropImageHash":"1e878db773","stylePath":"./assets/app/style.9fe213b270.css","styleHash":"9fe213b270","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.bc6963d2b1.js","scriptHash":"bc6963d2b1","routeContentPath":"./assets/app/routeContent.c1930b9262.js","routeContentHash":"c1930b9262","budgetUiPath":"./assets/app/budgetUi.fcf54f4fab.js","budgetUiHash":"fcf54f4fab","budgetContentPath":"./assets/app/budgetContent.742acba799.js","budgetContentHash":"742acba799","essentialsContentPath":"./assets/app/essentialsContent.4bea009362.js","essentialsContentHash":"4bea009362","generatedAt":"2026-03-31T02:39:40.857Z","cacheVersion":"9fe213b270-2d8476cd59-bc6963d2b1-c1930b9262-fcf54f4fab-742acba799-4bea009362-1e878db773"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"pageBackdropImagePath":"./assets/app/1yegabjjbjp01.1e878db773.jpg","pageBackdropImageCssPath":"./1yegabjjbjp01.1e878db773.jpg","pageBackdropImageHash":"1e878db773","stylePath":"./assets/app/style.b0f9f8be42.css","styleHash":"b0f9f8be42","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.8c2e71b05f.js","scriptHash":"8c2e71b05f","routeContentPath":"./assets/app/routeContent.c1930b9262.js","routeContentHash":"c1930b9262","budgetUiPath":"./assets/app/budgetUi.74853b8e0a.js","budgetUiHash":"74853b8e0a","budgetContentPath":"./assets/app/budgetContent.742acba799.js","budgetContentHash":"742acba799","essentialsContentPath":"./assets/app/essentialsContent.4bea009362.js","essentialsContentHash":"4bea009362","generatedAt":"2026-03-31T03:00:35.930Z","cacheVersion":"b0f9f8be42-2d8476cd59-8c2e71b05f-c1930b9262-74853b8e0a-742acba799-4bea009362-1e878db773"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.bc6963d2b1.js" defer></script>
+  <script src="./assets/app/script.8c2e71b05f.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>
