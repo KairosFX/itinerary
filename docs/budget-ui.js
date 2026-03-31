@@ -97,10 +97,10 @@ const budgetStayOptionOrder = {
 };
 
 const itineraryBudgetLabels = {
-  summaryTotal: { en: "Trip range", ja: "旅程の予算帯" },
-  summaryPerPerson: { en: "Per-person range", ja: "1人あたりの予算帯" },
+  summaryTotal: { en: "Total trip estimate", ja: "旅全体の見積り" },
+  summaryPerPerson: { en: "Per traveller", ja: "1人あたり" },
   summaryAccommodationSplit: { en: "Stay split / person range", ja: "宿泊の1人分帯" },
-  summaryBookedRequired: { en: "Booked + required range", ja: "予約前提 + 必須の帯" },
+  summaryBookedRequired: { en: "Booked + required", ja: "予約前提 + 必須" },
   summaryRouteExtras: { en: "Route extras range", ja: "ルート追加費用の帯" },
   itineraryBasis: { en: "Estimate basis", ja: "見積りの前提" },
   estimateUnavailable: { en: "Itinerary budget notes are unavailable right now.", ja: "現在は旅程予算のメモを表示できません。" },
@@ -172,8 +172,8 @@ const itineraryBudgetLabels = {
   },
   dayViewerHint: { en: "", ja: "" },
   totalMeta: {
-    en: "Lean / expected / high trip total built from the real day-by-day model",
-    ja: "実際の日別モデルから組んだ控えめ・標準・高めの合計"
+    en: "Live total based on the current trip settings and day-by-day cost model.",
+    ja: "現在の旅設定と日別費用モデルに連動するライブ合計です。"
   },
   noPaidAccommodationMeta: {
     en: "No paid hotel or ryokan stays are selected right now.",
@@ -1139,15 +1139,17 @@ const itineraryBudgetLabels = {
   const renderSummaryMarkup = (estimate = calculateEstimate()) => {
     const summaryCards = [
       {
-        className: "budget-summary-card budget-summary-card--estimate budget-summary-card--compact",
+        className: "budget-summary-card budget-summary-card--estimate budget-summary-card--primary",
         label: itineraryBudgetLabels.summaryTotal,
-        range: estimate.totalRange,
+        value: formatCurrency(estimate.total),
+        rangeNote: getCompactRangeCopy(estimate.totalRange),
         meta: itineraryBudgetLabels.totalMeta
       },
       {
         className: "budget-summary-card budget-summary-card--per-person budget-summary-card--compact",
         label: itineraryBudgetLabels.summaryPerPerson,
-        range: estimate.perPersonRange,
+        value: formatCurrency(estimate.perPerson),
+        rangeNote: getCompactRangeCopy(estimate.perPersonRange),
         meta: {
           en: "Per-traveler estimate using the current trip setup.",
           ja: "現在の旅程設定を基準にした1人あたりの見積りです。"
@@ -1156,7 +1158,8 @@ const itineraryBudgetLabels = {
       {
         className: "budget-summary-card budget-summary-card--shared budget-summary-card--compact",
         label: itineraryBudgetLabels.summaryBookedRequired,
-        range: estimate.bookedAndFixedTotalRange,
+        value: formatCurrency(estimate.bookedAndFixedTotal),
+        rangeNote: getCompactRangeCopy(estimate.bookedAndFixedTotalRange),
         meta: hasBudgetRangeValue(estimate.accommodationPerPersonRange)
           ? itineraryBudgetLabels.bookedRequiredMeta
           : itineraryBudgetLabels.noPaidAccommodationMeta
@@ -1168,9 +1171,8 @@ const itineraryBudgetLabels = {
         (card) => `
           <article class="${card.className}">
             <p class="budget-summary-card__label">${renderLocalizedContent(card.label)}</p>
-            <div class="budget-range-grid budget-range-grid--summary">
-              ${renderBudgetRangeRows(card.range, "summary")}
-            </div>
+            <p class="budget-summary-card__headline">${escapeHtml(card.value)}</p>
+            <p class="budget-summary-card__range-note">${renderLocalizedContent(card.rangeNote)}</p>
             <p class="budget-summary-card__meta">${renderLocalizedContent(card.meta)}</p>
           </article>
         `
