@@ -1616,3 +1616,162 @@ html[data-theme="dark"] .site-header {
     padding: 1.08rem;
   }
 }
+
+/* Refined green header hierarchy */
+:root {
+  --accent: #3f7b54;
+  --accent-deep: #214f35;
+}
+
+body {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(63, 123, 84, 0.08), rgba(63, 123, 84, 0) 24%),
+    radial-gradient(circle at 88% 10%, rgba(134, 170, 127, 0.12), rgba(134, 170, 127, 0) 26%),
+    linear-gradient(180deg, rgba(250, 251, 247, 0.98) 0%, rgba(244, 249, 243, 0.97) 38%, #edf3ea 100%);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline-color: rgba(63, 123, 84, 0.24);
+}
+
+.site-header {
+  background:
+    linear-gradient(180deg, rgba(251, 253, 249, 0.92), rgba(242, 248, 241, 0.78)),
+    rgba(249, 252, 248, 0.68);
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 16px 30px rgba(16, 33, 22, 0.08);
+}
+
+.brand-block .eyebrow {
+  padding: 0.34rem 0.74rem 0.38rem;
+  border: 1px solid rgba(63, 123, 84, 0.12);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(241, 248, 241, 0.78)),
+    rgba(249, 252, 248, 0.78);
+  color: var(--accent-deep);
+  font-size: clamp(1rem, 0.9rem + 0.52vw, 1.34rem);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: none;
+  box-shadow:
+    0 14px 28px rgba(16, 33, 22, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.eyebrow::before {
+  background: radial-gradient(circle at 45% 45%, #8bb796 0%, #3f7b54 72%, #27573b 100%);
+  box-shadow: 0 0 0 0.16rem rgba(63, 123, 84, 0.08);
+}
+
+.eyebrow__icon {
+  width: 1.16rem;
+}
+
+.section-nav {
+  gap: 0.22rem;
+  background: rgba(247, 252, 247, 0.48);
+  border-color: rgba(63, 123, 84, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 18px 32px rgba(16, 33, 22, 0.06);
+}
+
+.section-tab,
+.language-button,
+.theme-button {
+  border-color: rgba(63, 123, 84, 0.1);
+  background: rgba(252, 255, 252, 0.62);
+  color: rgba(33, 79, 53, 0.78);
+  box-shadow: 0 12px 24px rgba(16, 33, 22, 0.05);
+}
+
+.section-tab {
+  padding: 0.4rem 0.72rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.section-tab.is-active,
+.section-tab[aria-selected="true"] {
+  border-color: rgba(63, 123, 84, 0.26);
+  background:
+    linear-gradient(180deg, rgba(63, 123, 84, 0.2), rgba(63, 123, 84, 0.08)),
+    rgba(252, 255, 252, 0.88);
+  color: var(--accent-deep);
+  box-shadow:
+    0 16px 30px rgba(16, 33, 22, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76);
+}
+
+html[data-theme="dark"] {
+  --accent: #95c3a0;
+  --accent-deep: #e3f0e6;
+}
+
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(149, 195, 160, 0.12), rgba(149, 195, 160, 0) 24%),
+    linear-gradient(180deg, #0d1510 0%, #101b14 42%, #132019 100%);
+}
+
+html[data-theme="dark"] .site-header {
+  background:
+    linear-gradient(180deg, rgba(13, 21, 16, 0.92), rgba(16, 27, 20, 0.82)),
+    rgba(13, 21, 16, 0.74);
+  border-bottom-color: rgba(149, 195, 160, 0.08);
+  box-shadow: 0 16px 30px rgba(6, 12, 8, 0.3);
+}
+
+html[data-theme="dark"] .brand-block .eyebrow {
+  border-color: rgba(149, 195, 160, 0.16);
+  background:
+    linear-gradient(180deg, rgba(20, 32, 24, 0.96), rgba(18, 29, 22, 0.9)),
+    rgba(17, 28, 21, 0.86);
+  color: var(--accent-deep);
+  box-shadow:
+    0 14px 28px rgba(5, 11, 8, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+html[data-theme="dark"] .section-nav {
+  background: rgba(17, 28, 21, 0.74);
+  border-color: rgba(149, 195, 160, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 18px 32px rgba(5, 11, 8, 0.22);
+}
+
+html[data-theme="dark"] .section-tab,
+html[data-theme="dark"] .language-button,
+html[data-theme="dark"] .theme-button {
+  border-color: rgba(149, 195, 160, 0.08);
+  background: rgba(20, 32, 24, 0.84);
+  color: rgba(227, 240, 230, 0.74);
+}
+
+html[data-theme="dark"] .section-tab.is-active,
+html[data-theme="dark"] .section-tab[aria-selected="true"] {
+  border-color: rgba(149, 195, 160, 0.24);
+  background:
+    linear-gradient(180deg, rgba(149, 195, 160, 0.2), rgba(149, 195, 160, 0.08)),
+    rgba(20, 32, 24, 0.96);
+  color: var(--accent-deep);
+}
+
+@media (max-width: 720px) {
+  .brand-block .eyebrow {
+    padding: 0.3rem 0.6rem 0.34rem;
+    font-size: clamp(0.96rem, 0.9rem + 0.24vw, 1.08rem);
+    letter-spacing: 0.14em;
+  }
+
+  .section-tab {
+    padding: 0.34rem 0.56rem;
+    font-size: 0.72rem;
+  }
+}
