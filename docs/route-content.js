@@ -18,18 +18,18 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 3,
-      title: { en: "Arashiyama", ja: "嵐山" },
+      title: { en: "Day 3 - Arashiyama", ja: "3日目・嵐山" },
       summary: {
-        en: "Start early in Arashiyama for the bamboo grove, river-edge views, and temple foothills, then shift back to Osaka where Kaiyukan and Tempozan make a cleaner waterfront finish than packing in more Kyoto stops.",
-        ja: "嵐山は朝だけで独立させ、そのあと大阪へ戻って海遊館、天保山、最後の関西の夜へつなげます。"
+        en: "Start Day 3 in Arashiyama, then head back to Osaka and keep the second half simple with Kaiyukan as the main waterfront stop before the final Kansai night.",
+        ja: "3日目は嵐山から始め、そのあと大阪へ戻って海遊館を中心に回り、関西最後の夜へつなげます。"
       }
     },
     {
       day: 4,
-      title: { en: "Mt. Fuji", ja: "富士山" },
+      title: { en: "Day 4 - Mt. Fuji", ja: "4日目・富士山" },
       summary: {
-        en: "Use Mishima as the clean transfer gate, then keep the Fuji block practical: Chureito / Shimoyoshida for the classic pagoda-and-Fuji view when visibility is good, Lake Kawaguchiko for broader shoreline scenery, and an early lake-side check-in before dark.",
-        ja: "4日目は大きな移動日で、新幹線で三島へ入り、そのあと富士エリアへ渡して夕景と宿泊へつなげます。"
+        en: "Leave Osaka early, use Mishima as the clean transfer gate, and keep the Mt. Fuji day centered on Chureito and Lake Kawaguchiko before settling into the Fuji-area base.",
+        ja: "4日目は大阪を早めに出て三島を経由し、忠霊塔と河口湖を中心に富士エリアを回ってから宿へ入る流れにします。"
       }
     },
     {
@@ -217,8 +217,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "kyoto-osaka",
       title: { en: "Arashiyama -> Osaka", ja: "嵐山 -> 大阪" },
       summary: {
-        en: "Day 3 starts with Arashiyama, then resets back to Osaka for Kaiyukan, Tempozan, and the final Kansai night.",
-        ja: "3日目は嵐山から始め、そのあと大阪へ戻って海遊館、天保山、関西最後の夜へつなぎます。"
+        en: "Day 3 starts with Arashiyama, then resets back to Osaka for Kaiyukan and the final Kansai night.",
+        ja: "3日目は嵐山から始め、そのあと大阪へ戻って海遊館と関西最後の夜へつなぎます。"
       },
       badges: [
         { en: "Day 3", ja: "3日目" },
