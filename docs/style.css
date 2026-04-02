@@ -9126,16 +9126,29 @@ body {
 
 body::before,
 body::after {
-  content: "";
+  content: none;
+}
+
+.site-backdrop {
   position: fixed;
   inset: 0;
-  min-height: 100svh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.site-backdrop::before,
+.site-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  min-height: 100%;
   border-radius: 0;
   filter: none;
   pointer-events: none;
 }
 
-body::before {
+.site-backdrop::before {
   z-index: 0;
   opacity: 1;
   background-image:
@@ -9150,7 +9163,7 @@ body::before {
     var(--page-backdrop-position);
 }
 
-body::after {
+.site-backdrop::after {
   z-index: 1;
   opacity: 1;
   background:
@@ -9163,7 +9176,7 @@ body::after {
   inset: 0;
   width: 100%;
   min-height: 100%;
-  z-index: 2;
+  z-index: 1;
 }
 
 #main-content,
@@ -9193,7 +9206,7 @@ body::after {
   opacity: 0.08;
 }
 
-html[data-theme="dark"] body::before {
+html[data-theme="dark"] .site-backdrop::before {
   opacity: 0.92;
   background-image:
     radial-gradient(circle at 50% 8%, rgba(228, 242, 230, 0.16), rgba(228, 242, 230, 0) 30%),
@@ -9207,7 +9220,7 @@ html[data-theme="dark"] body::before {
     var(--page-backdrop-position);
 }
 
-html[data-theme="dark"] body::after {
+html[data-theme="dark"] .site-backdrop::after {
   background:
     linear-gradient(180deg, rgba(9, 16, 12, 0.42), rgba(9, 16, 12, 0.6) 28%, rgba(9, 16, 12, 0.78) 68%, rgba(9, 16, 12, 0.9) 100%),
     linear-gradient(90deg, rgba(9, 16, 12, 0.28), rgba(9, 16, 12, 0.12) 20%, rgba(9, 16, 12, 0.12) 80%, rgba(9, 16, 12, 0.28));
@@ -10182,6 +10195,7 @@ html[data-theme="dark"] .budget-notes__settings-panel {
 
 /* Final intro sequence + room split polish */
 .skip-link,
+.site-backdrop,
 .site-atmosphere,
 .site-header,
 #main-content,
@@ -10194,12 +10208,14 @@ html[data-theme="dark"] .budget-notes__settings-panel {
 }
 
 html.intro-pending .skip-link,
+html.intro-pending .site-backdrop,
 html.intro-pending .site-atmosphere,
 html.intro-pending .site-header,
 html.intro-pending #main-content,
 html.intro-pending .modal-backdrop,
 html.intro-pending .site-footer,
 html.intro-active .skip-link,
+html.intro-active .site-backdrop,
 html.intro-active .site-atmosphere,
 html.intro-active .site-header,
 html.intro-active #main-content,
@@ -10600,6 +10616,7 @@ html[data-theme="dark"] .site-intro__title {
 }
 
 html.reduce-effects .skip-link,
+html.reduce-effects .site-backdrop,
 html.reduce-effects .site-atmosphere,
 html.reduce-effects .site-header,
 html.reduce-effects #main-content,
