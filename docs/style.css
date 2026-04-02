@@ -9137,24 +9137,6 @@ body::after {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-}
-
-.site-backdrop::before,
-.site-backdrop::after {
-  content: "";
-  position: sticky;
-  top: 0;
-  display: block;
-  width: 100%;
-  height: 100svh;
-  border-radius: 0;
-  filter: none;
-  pointer-events: none;
-}
-
-.site-backdrop::before {
-  z-index: 0;
-  opacity: 1;
   background-image:
     radial-gradient(circle at 50% 10%, rgba(255, 246, 236, 0.34), rgba(255, 246, 236, 0) 34%),
     linear-gradient(180deg, rgba(244, 236, 225, 0.1), rgba(244, 236, 225, 0.24) 42%, rgba(235, 225, 214, 0.38) 100%),
@@ -9168,9 +9150,15 @@ body::after {
 }
 
 .site-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  min-height: 100%;
   z-index: 1;
-  margin-top: -100svh;
   opacity: 1;
+  border-radius: 0;
+  filter: none;
+  pointer-events: none;
   background:
     linear-gradient(180deg, rgba(247, 241, 235, 0.14), rgba(247, 241, 235, 0.44) 24%, rgba(247, 241, 235, 0.68) 62%, rgba(243, 237, 229, 0.84) 100%),
     linear-gradient(90deg, rgba(248, 243, 236, 0.24), rgba(248, 243, 236, 0.06) 22%, rgba(248, 243, 236, 0.06) 78%, rgba(248, 243, 236, 0.24));
@@ -9212,8 +9200,7 @@ body::after {
   opacity: 0.08;
 }
 
-html[data-theme="dark"] .site-backdrop::before {
-  opacity: 0.92;
+html[data-theme="dark"] .site-backdrop {
   background-image:
     radial-gradient(circle at 50% 8%, rgba(228, 242, 230, 0.16), rgba(228, 242, 230, 0) 30%),
     linear-gradient(180deg, rgba(7, 15, 10, 0.22), rgba(7, 15, 10, 0.38) 44%, rgba(7, 15, 10, 0.54) 100%),
