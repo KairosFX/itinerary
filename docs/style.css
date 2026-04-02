@@ -90,10 +90,8 @@ body {
   color: var(--text);
   font-family: var(--font-sans);
   line-height: 1.68;
-  background:
-    radial-gradient(circle at 12% 12%, rgba(155, 60, 51, 0.08), rgba(155, 60, 51, 0) 24%),
-    radial-gradient(circle at 88% 10%, rgba(184, 149, 100, 0.12), rgba(184, 149, 100, 0) 26%),
-    linear-gradient(180deg, rgba(251, 247, 241, 0.98) 0%, rgba(247, 240, 231, 0.97) 38%, rgba(240, 231, 220, 1) 100%);
+  background: #f2ede6;
+  background-color: #f2ede6;
 }
 
 html.reduce-effects .site-header,
@@ -9117,22 +9115,16 @@ html[data-theme="dark"] .site-header.is-condensed {
 
 body {
   isolation: isolate;
-  background:
-    radial-gradient(circle at 12% 12%, rgba(155, 60, 51, 0.08), rgba(155, 60, 51, 0) 24%),
-    radial-gradient(circle at 88% 10%, rgba(184, 149, 100, 0.12), rgba(184, 149, 100, 0) 26%),
-    linear-gradient(180deg, rgba(251, 247, 241, 0.98) 0%, rgba(247, 240, 231, 0.97) 38%, rgba(240, 231, 220, 1) 100%);
+  background: #f2ede6;
   background-color: #f2ede6;
 }
 
 body::before,
 body::after {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
-  border-radius: 0;
-  filter: none;
-  transform: translateZ(0);
 }
 
 body::before {
@@ -9156,24 +9148,21 @@ body::after {
     linear-gradient(90deg, rgba(248, 243, 236, 0.24), rgba(248, 243, 236, 0.06) 22%, rgba(248, 243, 236, 0.06) 78%, rgba(248, 243, 236, 0.24));
 }
 
-.site-backdrop {
-  display: none;
-}
-
 .site-atmosphere {
-  position: fixed;
+  position: absolute;
   inset: 0;
   width: 100%;
-  height: 100vh;
-  height: 100svh;
-  z-index: 2;
+  min-height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 #main-content,
 .page-shell,
 .site-footer {
   position: relative;
-  z-index: 3;
+  z-index: 2;
   background: transparent;
 }
 
@@ -9217,10 +9206,7 @@ html[data-theme="dark"] body::after {
 }
 
 html[data-theme="dark"] body {
-  background:
-    radial-gradient(circle at 18% 12%, rgba(70, 111, 82, 0.18), rgba(70, 111, 82, 0) 28%),
-    radial-gradient(circle at 82% 10%, rgba(120, 153, 128, 0.1), rgba(120, 153, 128, 0) 24%),
-    linear-gradient(180deg, rgba(15, 24, 19, 0.98) 0%, rgba(11, 19, 14, 0.97) 42%, rgba(8, 14, 10, 1) 100%);
+  background: #0d1510;
   background-color: #0d1510;
 }
 
