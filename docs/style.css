@@ -9125,22 +9125,18 @@ body::after {
 }
 
 .site-backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  width: 100%;
-  min-height: 100%;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .site-backdrop__image,
 .site-backdrop__wash {
-  position: sticky;
-  top: 0;
+  position: absolute;
+  inset: 0;
   display: block;
-  width: 100%;
-  height: 100vh;
-  height: 100svh;
   pointer-events: none;
 }
 
@@ -9161,18 +9157,15 @@ body::after {
 
 .site-backdrop__wash {
   z-index: 1;
-  margin-top: -100svh;
   background:
     linear-gradient(180deg, rgba(247, 241, 235, 0.14), rgba(247, 241, 235, 0.44) 24%, rgba(247, 241, 235, 0.68) 62%, rgba(243, 237, 229, 0.84) 100%),
     linear-gradient(90deg, rgba(248, 243, 236, 0.24), rgba(248, 243, 236, 0.06) 22%, rgba(248, 243, 236, 0.06) 78%, rgba(248, 243, 236, 0.24));
 }
 
 .site-atmosphere {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  width: 100%;
-  min-height: 100%;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
   overflow: hidden;
 }

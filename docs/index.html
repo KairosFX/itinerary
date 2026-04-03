@@ -647,19 +647,27 @@ body {
 
 body::before,
 body::after {
-  content: "";
+  content: none;
+}
+
+.site-backdrop {
   position: fixed;
   inset: 0;
-  width: auto;
-  height: auto;
-  border-radius: 0;
-  filter: none;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.site-backdrop__image,
+.site-backdrop__wash {
+  position: absolute;
+  inset: 0;
+  display: block;
   pointer-events: none;
 }
 
-body::before {
+.site-backdrop__image {
   z-index: 0;
-  opacity: 1;
   background-image:
     radial-gradient(circle at 50% 10%, rgba(255, 246, 236, 0.34), rgba(255, 246, 236, 0) 34%),
     linear-gradient(180deg, rgba(244, 236, 225, 0.1), rgba(244, 236, 225, 0.24) 42%, rgba(235, 225, 214, 0.38) 100%),
@@ -670,20 +678,17 @@ body::before {
     center center,
     center center,
     var(--page-backdrop-position);
-  transform: scale(1.01);
-  transform-origin: center top;
 }
 
-body::after {
+.site-backdrop__wash {
   z-index: 1;
-  opacity: 1;
   background:
     linear-gradient(180deg, rgba(247, 241, 235, 0.14), rgba(247, 241, 235, 0.44) 24%, rgba(247, 241, 235, 0.68) 62%, rgba(243, 237, 229, 0.84) 100%),
     linear-gradient(90deg, rgba(248, 243, 236, 0.24), rgba(248, 243, 236, 0.06) 22%, rgba(248, 243, 236, 0.06) 78%, rgba(248, 243, 236, 0.24));
 }
 
 .site-atmosphere {
-  z-index: 2;
+  z-index: 1;
 }
 
 #main-content,
@@ -709,16 +714,10 @@ body::after {
   }
 }
 
-@media (pointer: coarse) {
-  body::before {
-    transform: none;
-  }
-}
-
 .site-atmosphere {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
   overflow: hidden;
 }
@@ -1089,11 +1088,10 @@ body {
 
 body::before,
 body::after {
-  content: "";
+  content: none;
 }
 
-body::before {
-  opacity: 0.92;
+html[data-theme="dark"] .site-backdrop__image {
   background-image:
     radial-gradient(circle at 50% 8%, rgba(228, 242, 230, 0.16), rgba(228, 242, 230, 0) 30%),
     linear-gradient(180deg, rgba(7, 15, 10, 0.22), rgba(7, 15, 10, 0.38) 44%, rgba(7, 15, 10, 0.54) 100%),
@@ -1106,7 +1104,7 @@ body::before {
     var(--page-backdrop-position);
 }
 
-body::after {
+html[data-theme="dark"] .site-backdrop__wash {
   background:
     linear-gradient(180deg, rgba(9, 16, 12, 0.42), rgba(9, 16, 12, 0.6) 28%, rgba(9, 16, 12, 0.78) 68%, rgba(9, 16, 12, 0.9) 100%),
     linear-gradient(90deg, rgba(9, 16, 12, 0.28), rgba(9, 16, 12, 0.12) 20%, rgba(9, 16, 12, 0.12) 80%, rgba(9, 16, 12, 0.28));
@@ -2360,10 +2358,10 @@ html.reduce-effects .site-intro__content {
   transform: none !important;
   filter: none !important;
 }</style>
-  <link rel="preload" href="./assets/app/style.0295bf5ab2.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/style.268eceedc4.css" as="style" fetchpriority="high">
   <link rel="preload" href="./assets/app/script.43d4bba508.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.0295bf5ab2.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.0295bf5ab2.css"></noscript>
+  <link rel="stylesheet" href="./assets/app/style.268eceedc4.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.268eceedc4.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -3853,7 +3851,7 @@ html.reduce-effects .site-intro__content {
   </footer>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"pageBackdropImagePath":"./assets/app/1yegabjjbjp01.1e878db773.jpg","pageBackdropImageCssPath":"./1yegabjjbjp01.1e878db773.jpg","pageBackdropImageHash":"1e878db773","stylePath":"./assets/app/style.0295bf5ab2.css","styleHash":"0295bf5ab2","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.43d4bba508.js","scriptHash":"43d4bba508","routeContentPath":"./assets/app/routeContent.f5a38cf4cd.js","routeContentHash":"f5a38cf4cd","budgetUiPath":"./assets/app/budgetUi.3cdc35c055.js","budgetUiHash":"3cdc35c055","budgetContentPath":"./assets/app/budgetContent.af081bb5d7.js","budgetContentHash":"af081bb5d7","essentialsContentPath":"./assets/app/essentialsContent.4a9a06f02f.js","essentialsContentHash":"4a9a06f02f","generatedAt":"2026-04-02T03:04:01.977Z","cacheVersion":"0295bf5ab2-2d8476cd59-43d4bba508-f5a38cf4cd-3cdc35c055-af081bb5d7-4a9a06f02f-1e878db773"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"pageBackdropImagePath":"./assets/app/1yegabjjbjp01.1e878db773.jpg","pageBackdropImageCssPath":"./1yegabjjbjp01.1e878db773.jpg","pageBackdropImageHash":"1e878db773","stylePath":"./assets/app/style.268eceedc4.css","styleHash":"268eceedc4","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.43d4bba508.js","scriptHash":"43d4bba508","routeContentPath":"./assets/app/routeContent.f5a38cf4cd.js","routeContentHash":"f5a38cf4cd","budgetUiPath":"./assets/app/budgetUi.3cdc35c055.js","budgetUiHash":"3cdc35c055","budgetContentPath":"./assets/app/budgetContent.af081bb5d7.js","budgetContentHash":"af081bb5d7","essentialsContentPath":"./assets/app/essentialsContent.4a9a06f02f.js","essentialsContentHash":"4a9a06f02f","generatedAt":"2026-04-03T20:51:12.460Z","cacheVersion":"268eceedc4-2d8476cd59-43d4bba508-f5a38cf4cd-3cdc35c055-af081bb5d7-4a9a06f02f-1e878db773"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
   <script src="./assets/app/script.43d4bba508.js" defer></script>
