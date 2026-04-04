@@ -89,6 +89,10 @@ const essentialsContentFallbackScriptUrl = "./essentials-content.min.js";
 const routeContentRuntimeGlobal = "__JAPAN_ROUTE_CONTENT__";
 const routeContentFallbackScriptUrl = "./route-content.min.js";
 const routeStyleFallbackUrl = "./route.min.css";
+const welcomeIntroAudioFallbackUrl = "./assets/audio/welcome-intro.mp3";
+const sectionOpenAudioFallbackUrl = "./assets/audio/opening.mp3";
+const backgroundLoopAudioFallbackUrl = "./assets/audio/page-background-loop.mp3";
+const transitionAudioFallbackUrl = "./assets/audio/transition.mp3";
 const routeMapOriginUrl = "https://tiles.openfreemap.org";
 const routeMapStyleUrl = "https://tiles.openfreemap.org/styles/positron";
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
@@ -98,6 +102,17 @@ const budgetTravelerCountMax = 24;
 const budgetSharedRoomOccupancy = 2;
 const budgetTravelersPerRoomDefault = budgetSharedRoomOccupancy;
 const serviceWorkerWarmMessageType = "CACHE_URLS";
+const audioAmbientVolume = 0.085;
+const audioAmbientDuckVolume = 0.05;
+const audioIntroVolume = 0.58;
+const audioSectionOpenVolume = 0.24;
+const audioTransitionVolume = 0.28;
+const audioIntroFadeWindowMs = 220;
+const audioSectionOpenCooldownMs = 180;
+const audioTransitionCooldownMs = 320;
+const scrollAnimationMinDurationMs = 280;
+const scrollAnimationMaxDurationMs = 720;
+const scrollAnimationDistanceFactor = 0.22;
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
   en:
@@ -211,6 +226,52 @@ const transitDetailLabels = {
   errorSummary: {
     en: "The transit notes could not be loaded right now.",
     ja: "移動メモを現在読み込めません。"
+  },
+  errorBody: {
+    en: "Close this popup and try again in a moment.",
+    ja: "このポップアップを閉じて、少ししてからもう一度試してください。"
+  },
+  fallbackAction: {
+    en: "Open reference",
+    ja: "参照を開く"
+  }
+};
+const checklistDetailLabels = {
+  defaultTag: { en: "Checklist detail", ja: "詳細" },
+  stayTag: { en: "Stay detail", ja: "宿泊詳細" },
+  bookingTag: { en: "Booking detail", ja: "予約詳細" },
+  when: { en: "When", ja: "タイミング" },
+  type: { en: "Type", ja: "種類" },
+  notes: { en: "Notes", ja: "メモ" },
+  referenceNote: { en: "Reference note", ja: "参照メモ" },
+  loadingTitle: { en: "Loading detail", ja: "詳細を読み込み中" },
+  loadingSummary: {
+    en: "Loading the saved notes for this checklist item...",
+    ja: "このチェック項目の保存済みメモを読み込んでいます..."
+  },
+  loadingBody: {
+    en: "Saved checklist notes will appear here.",
+    ja: "保存済みのチェック項目メモがここに表示されます。"
+  },
+  unavailableTitle: {
+    en: "Detail unavailable",
+    ja: "詳細を表示できません"
+  },
+  unavailableSummary: {
+    en: "This checklist item does not have a saved detail yet.",
+    ja: "このチェック項目にはまだ保存済みの詳細がありません。"
+  },
+  unavailableBody: {
+    en: "Use the Essentials section for the broader reference in the meantime.",
+    ja: "ひとまず Essentials セクションの内容を参照してください。"
+  },
+  errorTitle: {
+    en: "Detail could not load",
+    ja: "詳細を読み込めませんでした"
+  },
+  errorSummary: {
+    en: "The saved checklist notes could not be loaded right now.",
+    ja: "保存済みのチェック項目メモを現在読み込めません。"
   },
   errorBody: {
     en: "Close this popup and try again in a moment.",
@@ -439,6 +500,19 @@ let routeSectionStylesheetPromise = null;
 let budgetUiPromise = null;
 let budgetContentPromise = null;
 let essentialsContentPromise = null;
+let siteAudioNodes = null;
+let ambientAudioResumeTimer = 0;
+let introAudioFadeFrame = 0;
+let introAudioStopTimer = 0;
+let activeWindowScrollAnimation = null;
+const siteAudioState = {
+  ambientWanted: true,
+  pendingAmbientStart: false,
+  userGestureSeen: false,
+  gestureBindingReady: false,
+  lastSectionOpenAt: 0,
+  lastTransitionAt: 0
+};
 
 function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
   return viewDefinitions.map((viewDefinition) => {
@@ -549,12 +623,7 @@ function getRouteContentData() {
 }
 
 function loadAppAssetManifest() {
-  const runtimeConfig = window[appAssetConfigRuntimeGlobal];
-  if (runtimeConfig && typeof runtimeConfig === "object" && !Array.isArray(runtimeConfig)) {
-    appAssetManifest = runtimeConfig;
-  }
-
-  return Promise.resolve(appAssetManifest || {});
+  return Promise.resolve(getResolvedAppAssetManifest());
 }
 
 function primeHeadLink(rel, href, attributes = {}) {
@@ -589,6 +658,341 @@ function primeHeadLink(rel, href, attributes = {}) {
   return link;
 }
 
+function getResolvedAppAssetManifest() {
+  const runtimeConfig = window[appAssetConfigRuntimeGlobal];
+  if (runtimeConfig && typeof runtimeConfig === "object" && !Array.isArray(runtimeConfig)) {
+    appAssetManifest = runtimeConfig;
+  }
+
+  return appAssetManifest || {};
+}
+
+function getAudioAssetConfig(manifest = getResolvedAppAssetManifest()) {
+  return {
+    welcomeIntroPath: manifest.welcomeIntroAudioPath || welcomeIntroAudioFallbackUrl,
+    sectionOpenPath: manifest.sectionOpenAudioPath || sectionOpenAudioFallbackUrl,
+    backgroundLoopPath: manifest.backgroundLoopAudioPath || backgroundLoopAudioFallbackUrl,
+    transitionPath: manifest.transitionAudioPath || transitionAudioFallbackUrl
+  };
+}
+
+function createManagedAudioNode(url, { loop = false, preload = "metadata", volume = 1 } = {}) {
+  if (!url) {
+    return null;
+  }
+
+  const audio = new Audio(url);
+  audio.loop = loop;
+  audio.preload = preload;
+  audio.volume = volume;
+
+  try {
+    audio.playsInline = true;
+  } catch {
+    // Ignore browser-only assignment failures.
+  }
+
+  try {
+    audio.disableRemotePlayback = true;
+  } catch {
+    // Ignore unsupported audio flags.
+  }
+
+  return audio;
+}
+
+function ensureSiteAudioNodes() {
+  if (siteAudioNodes) {
+    return siteAudioNodes;
+  }
+
+  const audioAssets = getAudioAssetConfig();
+  siteAudioNodes = {
+    intro: createManagedAudioNode(audioAssets.welcomeIntroPath, {
+      preload: "auto",
+      volume: audioIntroVolume
+    }),
+    sectionOpen: createManagedAudioNode(audioAssets.sectionOpenPath, {
+      preload: "auto",
+      volume: audioSectionOpenVolume
+    }),
+    transition: createManagedAudioNode(audioAssets.transitionPath, {
+      preload: "auto",
+      volume: audioTransitionVolume
+    }),
+    ambient: createManagedAudioNode(audioAssets.backgroundLoopPath, {
+      loop: true,
+      preload: shouldWarmDeferredAssets() ? "auto" : "metadata",
+      volume: audioAmbientVolume
+    })
+  };
+
+  return siteAudioNodes;
+}
+
+function clearAmbientAudioResumeTimer() {
+  if (ambientAudioResumeTimer) {
+    window.clearTimeout(ambientAudioResumeTimer);
+    ambientAudioResumeTimer = 0;
+  }
+}
+
+function pauseManagedAudio(node, { resetTime = false } = {}) {
+  if (!node) {
+    return;
+  }
+
+  try {
+    node.pause();
+    if (resetTime) {
+      node.currentTime = 0;
+    }
+  } catch {
+    // Ignore media pause failures.
+  }
+}
+
+function primeCriticalAudioAssets() {
+  if (offlineSnapshotMode) {
+    return;
+  }
+
+  const { welcomeIntroPath, sectionOpenPath, transitionPath } = getAudioAssetConfig();
+  [welcomeIntroPath, sectionOpenPath, transitionPath]
+    .filter(Boolean)
+    .forEach((href) => {
+      primeHeadLink("preload", href, {
+        as: "audio",
+        type: "audio/mpeg"
+      });
+    });
+}
+
+function requestAmbientPlayback() {
+  const ambient = ensureSiteAudioNodes().ambient;
+  if (!ambient || document.visibilityState === "hidden" || !siteAudioState.ambientWanted) {
+    return Promise.resolve(false);
+  }
+
+  clearAmbientAudioResumeTimer();
+  ambient.volume = audioAmbientVolume;
+
+  if (!ambient.paused && !ambient.ended) {
+    siteAudioState.pendingAmbientStart = false;
+    return Promise.resolve(true);
+  }
+
+  const playResult = ambient.play();
+  if (!playResult || typeof playResult.then !== "function") {
+    siteAudioState.pendingAmbientStart = false;
+    return Promise.resolve(true);
+  }
+
+  return playResult
+    .then(() => {
+      siteAudioState.pendingAmbientStart = false;
+      return true;
+    })
+    .catch(() => {
+      siteAudioState.pendingAmbientStart = true;
+      return false;
+    });
+}
+
+function pauseAmbientPlayback({ keepIntent = true } = {}) {
+  const ambient = ensureSiteAudioNodes().ambient;
+  if (!ambient) {
+    return;
+  }
+
+  if (!keepIntent) {
+    siteAudioState.ambientWanted = false;
+    siteAudioState.pendingAmbientStart = false;
+  }
+
+  clearAmbientAudioResumeTimer();
+  pauseManagedAudio(ambient, { resetTime: false });
+}
+
+function duckAmbientLoop(durationMs = 520) {
+  const ambient = ensureSiteAudioNodes().ambient;
+  if (!ambient || ambient.paused) {
+    return;
+  }
+
+  clearAmbientAudioResumeTimer();
+  ambient.volume = Math.min(ambient.volume, audioAmbientDuckVolume);
+  ambientAudioResumeTimer = window.setTimeout(() => {
+    ambientAudioResumeTimer = 0;
+    if (!ambient.paused) {
+      ambient.volume = audioAmbientVolume;
+    }
+  }, durationMs);
+}
+
+function bindSiteAudioGestureListeners() {
+  if (siteAudioState.gestureBindingReady) {
+    return;
+  }
+
+  const handleGesture = () => {
+    siteAudioState.userGestureSeen = true;
+    if (
+      siteAudioState.ambientWanted &&
+      (siteAudioState.pendingAmbientStart || ensureSiteAudioNodes().ambient?.paused)
+    ) {
+      void requestAmbientPlayback();
+    }
+  };
+
+  window.addEventListener("pointerdown", handleGesture, { passive: true, capture: true });
+  window.addEventListener("touchend", handleGesture, { passive: true, capture: true });
+  window.addEventListener("keydown", handleGesture, { capture: true });
+  siteAudioState.gestureBindingReady = true;
+}
+
+function stopIntroAudioPlayback() {
+  if (introAudioFadeFrame) {
+    window.cancelAnimationFrame(introAudioFadeFrame);
+    introAudioFadeFrame = 0;
+  }
+
+  if (introAudioStopTimer) {
+    window.clearTimeout(introAudioStopTimer);
+    introAudioStopTimer = 0;
+  }
+
+  const intro = ensureSiteAudioNodes().intro;
+  if (!intro) {
+    return;
+  }
+
+  pauseManagedAudio(intro, { resetTime: true });
+  intro.volume = audioIntroVolume;
+}
+
+function startIntroAudioFade(durationMs = audioIntroFadeWindowMs) {
+  const intro = ensureSiteAudioNodes().intro;
+  if (!intro) {
+    return;
+  }
+
+  if (introAudioFadeFrame) {
+    window.cancelAnimationFrame(introAudioFadeFrame);
+  }
+
+  const startVolume = intro.volume;
+  const startTime = performance.now();
+  const safeDurationMs = Math.max(durationMs, 80);
+
+  const step = (timestamp) => {
+    const progress = Math.min((timestamp - startTime) / safeDurationMs, 1);
+    intro.volume = Math.max(startVolume * (1 - progress), 0);
+
+    if (progress >= 1) {
+      introAudioFadeFrame = 0;
+      stopIntroAudioPlayback();
+      return;
+    }
+
+    introAudioFadeFrame = window.requestAnimationFrame(step);
+  };
+
+  introAudioFadeFrame = window.requestAnimationFrame(step);
+}
+
+function playIntroAudioForDuration(totalDurationMs) {
+  if (reducedEffectsEnabled || totalDurationMs <= 0) {
+    stopIntroAudioPlayback();
+    return;
+  }
+
+  const intro = ensureSiteAudioNodes().intro;
+  if (!intro) {
+    return;
+  }
+
+  stopIntroAudioPlayback();
+  duckAmbientLoop(totalDurationMs + 120);
+  intro.currentTime = 0;
+  intro.volume = audioIntroVolume;
+
+  const playResult = intro.play();
+  const scheduleFade = () => {
+    const fadeWindowMs = Math.min(
+      audioIntroFadeWindowMs,
+      Math.max(totalDurationMs - 80, 120)
+    );
+
+    introAudioStopTimer = window.setTimeout(() => {
+      introAudioStopTimer = 0;
+      startIntroAudioFade(fadeWindowMs);
+    }, Math.max(totalDurationMs - fadeWindowMs, 0));
+  };
+
+  if (!playResult || typeof playResult.then !== "function") {
+    scheduleFade();
+    return;
+  }
+
+  playResult.then(scheduleFade).catch(() => null);
+}
+
+function playManagedOneShot(node, { volume = 1, cooldownMs = 180, stateKey, duckMs = 420 } = {}) {
+  if (!node || !stateKey) {
+    return;
+  }
+
+  const now = performance.now();
+  if (now - siteAudioState[stateKey] < cooldownMs) {
+    return;
+  }
+
+  siteAudioState[stateKey] = now;
+  siteAudioState.userGestureSeen = true;
+  if (siteAudioState.ambientWanted && siteAudioState.pendingAmbientStart) {
+    void requestAmbientPlayback();
+  }
+
+  duckAmbientLoop(duckMs);
+
+  try {
+    node.pause();
+    node.currentTime = 0;
+    node.volume = volume;
+    const playResult = node.play();
+    if (playResult && typeof playResult.catch === "function") {
+      playResult.catch(() => null);
+    }
+  } catch {
+    // Ignore media playback failures from unsupported autoplay contexts.
+  }
+}
+
+function playSectionOpenSound() {
+  playManagedOneShot(ensureSiteAudioNodes().sectionOpen, {
+    volume: audioSectionOpenVolume,
+    cooldownMs: audioSectionOpenCooldownMs,
+    stateKey: "lastSectionOpenAt",
+    duckMs: 360
+  });
+}
+
+function playTransitionSound() {
+  playManagedOneShot(ensureSiteAudioNodes().transition, {
+    volume: audioTransitionVolume,
+    cooldownMs: audioTransitionCooldownMs,
+    stateKey: "lastTransitionAt",
+    duckMs: 460
+  });
+}
+
+function initializeSiteAudioExperience() {
+  bindSiteAudioGestureListeners();
+  primeCriticalAudioAssets();
+  ensureSiteAudioNodes();
+}
+
 function shouldWarmDeferredAssets() {
   if (offlineSnapshotMode) {
     return false;
@@ -621,6 +1025,10 @@ function getWarmCacheAssetUrls(manifest) {
     new Set(
       [
         manifest.pageBackdropImagePath,
+        manifest.welcomeIntroAudioPath || welcomeIntroAudioFallbackUrl,
+        manifest.sectionOpenAudioPath || sectionOpenAudioFallbackUrl,
+        manifest.backgroundLoopAudioPath || backgroundLoopAudioFallbackUrl,
+        manifest.transitionAudioPath || transitionAudioFallbackUrl,
         manifest.routeStylePath || routeStyleFallbackUrl,
         manifest.routeContentPath || routeContentFallbackScriptUrl,
         manifest.budgetUiPath || budgetUiFallbackScriptUrl,
@@ -1432,13 +1840,18 @@ function setTransitDetailBusyState(isBusy) {
   }
 }
 
-function renderTransitDetailPlaceholder(title, summary, body) {
+function renderTransitDetailPlaceholder(
+  title,
+  summary,
+  body,
+  { tag = transitDetailLabels.defaultTag } = {}
+) {
   if (!transitDetailModal) {
     return;
   }
 
   setTransitDetailBusyState(true);
-  setTransitDetailTag(transitDetailLabels.defaultTag);
+  setTransitDetailTag(tag);
 
   if (transitDetailTitleNode) {
     transitDetailTitleNode.innerHTML = renderLocalizedContent(title);
@@ -1590,6 +2003,137 @@ function openTransitDetail(detailId, triggerElement) {
     .catch(() => {
       if (activeTransitDetailId === detailId) {
         renderTransitDetailErrorState();
+      }
+    });
+}
+
+function getChecklistDetailTag(item) {
+  if (item?.group === "accommodations") {
+    return checklistDetailLabels.stayTag;
+  }
+
+  if (item?.kind === "booking") {
+    return checklistDetailLabels.bookingTag;
+  }
+
+  return checklistDetailLabels.defaultTag;
+}
+
+function renderChecklistDetailLoadingState() {
+  renderTransitDetailPlaceholder(
+    checklistDetailLabels.loadingTitle,
+    checklistDetailLabels.loadingSummary,
+    checklistDetailLabels.loadingBody,
+    { tag: checklistDetailLabels.defaultTag }
+  );
+}
+
+function renderChecklistDetailUnavailableState() {
+  renderTransitDetailPlaceholder(
+    checklistDetailLabels.unavailableTitle,
+    checklistDetailLabels.unavailableSummary,
+    checklistDetailLabels.unavailableBody,
+    { tag: checklistDetailLabels.defaultTag }
+  );
+}
+
+function renderChecklistDetailErrorState() {
+  renderTransitDetailPlaceholder(
+    checklistDetailLabels.errorTitle,
+    checklistDetailLabels.errorSummary,
+    checklistDetailLabels.errorBody,
+    { tag: checklistDetailLabels.defaultTag }
+  );
+}
+
+function renderChecklistDetail(item) {
+  if (!transitDetailModal || !item) {
+    return;
+  }
+
+  const preferredLink = getPreferredBookingTransitLink(item);
+  const referenceNote = preferredLink?.note || null;
+
+  setTransitDetailBusyState(false);
+  setTransitDetailTag(getChecklistDetailTag(item));
+
+  if (transitDetailTitleNode) {
+    transitDetailTitleNode.innerHTML = renderLocalizedContent(item.title);
+  }
+
+  if (transitDetailSummaryNode) {
+    transitDetailSummaryNode.innerHTML = renderLocalizedContent(item.summary);
+  }
+
+  if (transitDetailMetaNode) {
+    const metaMarkup = [
+      renderTransitDetailFact(checklistDetailLabels.when, item.dayLabel),
+      renderTransitDetailFact(checklistDetailLabels.type, item.typeLabel)
+    ]
+      .filter(Boolean)
+      .join("");
+
+    transitDetailMetaNode.hidden = !metaMarkup;
+    transitDetailMetaNode.innerHTML = metaMarkup;
+  }
+
+  if (transitDetailSectionsNode) {
+    transitDetailSectionsNode.innerHTML = [
+      renderTransitDetailTextSection(checklistDetailLabels.notes, item.details),
+      renderTransitDetailTextSection(checklistDetailLabels.referenceNote, referenceNote)
+    ]
+      .filter(Boolean)
+      .join("");
+  }
+
+  if (transitDetailActionLink) {
+    if (preferredLink?.href) {
+      transitDetailActionLink.hidden = false;
+      transitDetailActionLink.href = preferredLink.href;
+      transitDetailActionLink.innerHTML = renderLocalizedContent(
+        preferredLink.label || checklistDetailLabels.fallbackAction
+      );
+    } else {
+      transitDetailActionLink.hidden = true;
+      transitDetailActionLink.removeAttribute("href");
+    }
+  }
+
+  syncLocalizedNodes(transitDetailModal);
+}
+
+function openChecklistDetail(detailId, triggerElement) {
+  if (!transitDetailModal || !detailId) {
+    return;
+  }
+
+  if (resetProgressModal && !resetProgressModal.hidden) {
+    setResetModalOpen(false);
+  }
+
+  const requestKey = `checklist:${detailId}`;
+  lastTransitTrigger = triggerElement || document.activeElement;
+  activeTransitDetailId = requestKey;
+  renderChecklistDetailLoadingState();
+  setTransitModalOpen(true);
+
+  loadBookingTransitItems()
+    .then(() => {
+      if (activeTransitDetailId !== requestKey) {
+        return;
+      }
+
+      const detail = bookingTransitItemMap.get(detailId);
+      if (!detail) {
+        renderChecklistDetailUnavailableState();
+        return;
+      }
+
+      renderChecklistDetail(detail);
+    })
+    .catch(() => {
+      if (activeTransitDetailId === requestKey) {
+        renderChecklistDetailErrorState();
       }
     });
 }
@@ -4085,8 +4629,9 @@ function handleChecklistPanelClick(event) {
   }
 
   const transitTrigger = event.target.closest("[data-transit-detail-trigger]");
+  const checklistDetailTrigger = event.target.closest("[data-checklist-detail-trigger]");
   const dayCard = event.target.closest(".day-card[data-day]");
-  if (transitTrigger) {
+  if (transitTrigger || checklistDetailTrigger) {
     if (!dayCard) {
       return;
     }
@@ -4101,7 +4646,15 @@ function handleChecklistPanelClick(event) {
 
     event.preventDefault();
     event.stopPropagation();
-    openTransitDetail(transitTrigger.dataset.transitDetailTrigger || "", transitTrigger);
+    if (transitTrigger) {
+      openTransitDetail(transitTrigger.dataset.transitDetailTrigger || "", transitTrigger);
+      return;
+    }
+
+    openChecklistDetail(
+      checklistDetailTrigger?.dataset.checklistDetailTrigger || "",
+      checklistDetailTrigger
+    );
     return;
   }
 
@@ -6776,6 +7329,93 @@ function getScrollBehavior() {
   return reducedEffectsEnabled ? "auto" : "smooth";
 }
 
+function getMaxWindowScrollTop() {
+  return Math.max(document.documentElement.scrollHeight - window.innerHeight, 0);
+}
+
+function stopWindowScrollAnimation() {
+  if (!activeWindowScrollAnimation) {
+    return;
+  }
+
+  window.cancelAnimationFrame(activeWindowScrollAnimation.frameId);
+  activeWindowScrollAnimation.resolve(false);
+  activeWindowScrollAnimation = null;
+}
+
+function isWindowScrollInterruptKey(event) {
+  if (event.defaultPrevented) {
+    return false;
+  }
+
+  return ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(
+    event.key
+  );
+}
+
+function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}) {
+  const clampedTop = clamp(Math.round(nextTop), 0, getMaxWindowScrollTop());
+  if (behavior !== "smooth") {
+    stopWindowScrollAnimation();
+    window.scrollTo({
+      top: clampedTop,
+      behavior: "auto"
+    });
+    return Promise.resolve(false);
+  }
+
+  const startTop = window.scrollY;
+  const distance = clampedTop - startTop;
+  if (Math.abs(distance) < 2) {
+    stopWindowScrollAnimation();
+    window.scrollTo({
+      top: clampedTop,
+      behavior: "auto"
+    });
+    return Promise.resolve(true);
+  }
+
+  stopWindowScrollAnimation();
+  const durationMs = clamp(
+    scrollAnimationMinDurationMs + Math.abs(distance) * scrollAnimationDistanceFactor,
+    scrollAnimationMinDurationMs,
+    scrollAnimationMaxDurationMs
+  );
+
+  return new Promise((resolve) => {
+    const animation = { frameId: 0, resolve, startedAt: 0 };
+    activeWindowScrollAnimation = animation;
+
+    const step = (timestamp) => {
+      if (activeWindowScrollAnimation !== animation) {
+        resolve(false);
+        return;
+      }
+
+      if (!animation.startedAt) {
+        animation.startedAt = timestamp;
+      }
+
+      const progress = Math.min((timestamp - animation.startedAt) / durationMs, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      window.scrollTo({
+        top: startTop + distance * eased,
+        behavior: "auto"
+      });
+
+      if (progress >= 1) {
+        activeWindowScrollAnimation = null;
+        resolve(true);
+        return;
+      }
+
+      animation.frameId = window.requestAnimationFrame(step);
+    };
+
+    animation.frameId = window.requestAnimationFrame(step);
+  });
+}
+
 function restartClassOnNextFrame(target, className) {
   if (!target) {
     return;
@@ -7269,6 +7909,9 @@ async function scrollToChecklistDay(day) {
   }
 
   lockHeaderState(420);
+  if (getActivePanelId() !== "checklist") {
+    playTransitionSound();
+  }
   setActivePanel("checklist");
   await ensureSectionInitialized("checklist");
 
@@ -7278,10 +7921,7 @@ async function scrollToChecklistDay(day) {
       const targetTop =
         targetCard.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(24);
 
-      window.scrollTo({
-        top: Math.max(targetTop, 0),
-        behavior: getScrollBehavior()
-      });
+      void smoothlyScrollWindowTo(Math.max(targetTop, 0));
 
       targetCard.classList.remove("is-route-target");
       restartClassOnNextFrame(targetCard, "is-route-target");
@@ -7305,12 +7945,44 @@ function scrollToPanelStart(panelId) {
       const targetTop =
         anchor.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(20);
 
-      window.scrollTo({
-        top: Math.max(targetTop, 0),
-        behavior: getScrollBehavior()
-      });
+      void smoothlyScrollWindowTo(Math.max(targetTop, 0));
     });
   });
+}
+
+function handleAnchorScrollClick(event) {
+  if (event.defaultPrevented) {
+    return;
+  }
+
+  const anchor = event.target.closest('a[href^="#"]:not([href="#"])');
+  if (!anchor || anchor.hasAttribute("download")) {
+    return;
+  }
+
+  const targetId = anchor.getAttribute("href")?.slice(1);
+  if (!targetId) {
+    return;
+  }
+
+  const targetNode = document.getElementById(targetId);
+  if (!targetNode) {
+    return;
+  }
+
+  event.preventDefault();
+  if (!targetNode.hasAttribute("tabindex")) {
+    targetNode.setAttribute("tabindex", "-1");
+  }
+
+  targetNode.focus({ preventScroll: true });
+  const targetTop =
+    targetNode.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(18);
+  void smoothlyScrollWindowTo(Math.max(targetTop, 0));
+
+  if (window.history?.replaceState) {
+    window.history.replaceState(null, "", `#${targetId}`);
+  }
 }
 
 function setLanguage(language) {
@@ -7571,6 +8243,10 @@ function bindTabNavigation() {
         return;
       }
 
+      if (panelId !== getActivePanelId()) {
+        playTransitionSound();
+      }
+
       await ensureSectionAssetsReady(panelId);
       lockHeaderState(520);
       setActivePanel(panelId);
@@ -7594,14 +8270,25 @@ function waitForDuration(durationMs) {
   });
 }
 
+function getSiteIntroTimings() {
+  const holdDurationMs = reducedEffectsEnabled ? 180 : 1120;
+  const exitDurationMs = reducedEffectsEnabled ? 120 : 620;
+
+  return {
+    holdDurationMs,
+    exitDurationMs,
+    totalDurationMs: holdDurationMs + exitDurationMs
+  };
+}
+
 async function playSiteIntro() {
   if (!siteIntro) {
+    stopIntroAudioPlayback();
     root.classList.remove("intro-pending", "intro-active", "intro-leaving");
     return;
   }
 
-  const holdDurationMs = reducedEffectsEnabled ? 180 : 1120;
-  const exitDurationMs = reducedEffectsEnabled ? 120 : 620;
+  const { holdDurationMs, exitDurationMs, totalDurationMs } = getSiteIntroTimings();
 
   siteIntro.hidden = false;
   siteIntro.setAttribute("aria-hidden", "false");
@@ -7611,6 +8298,7 @@ async function playSiteIntro() {
   await waitForFrame();
   root.classList.remove("intro-pending");
   root.classList.add("intro-active");
+  playIntroAudioForDuration(totalDurationMs);
   await waitForDuration(holdDurationMs);
 
   root.classList.add("intro-leaving");
@@ -7642,7 +8330,13 @@ async function bootApp() {
   }
 
   bootOfflineExperience();
+  initializeSiteAudioExperience();
   const introPromise = playSiteIntro();
+  introPromise.finally(() => {
+    if (siteAudioState.ambientWanted) {
+      void requestAmbientPlayback();
+    }
+  });
   void warmRouteExperience();
   const siteFooter = document.querySelector(".site-footer");
   const initialPanelId = getInitialPanelId();
@@ -7705,6 +8399,23 @@ themeButtons.forEach((button) => {
 });
 
 bindTabNavigation();
+document.addEventListener("click", handleAnchorScrollClick);
+document.addEventListener(
+  "toggle",
+  (event) => {
+    const detailsNode = event.target;
+    if (
+      !(detailsNode instanceof HTMLDetailsElement) ||
+      !detailsNode.open ||
+      !detailsNode.matches(".booking-group, .booking-item")
+    ) {
+      return;
+    }
+
+    playSectionOpenSound();
+  },
+  true
+);
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
@@ -7741,10 +8452,8 @@ if (resetProgressConfirmButton) {
 
 backToTopButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: getScrollBehavior()
-    });
+    playTransitionSound();
+    void smoothlyScrollWindowTo(0);
   });
 });
 
@@ -7777,6 +8486,10 @@ if (transitDetailModal) {
 });
 
 window.addEventListener("keydown", (event) => {
+  if (isWindowScrollInterruptKey(event)) {
+    stopWindowScrollAnimation();
+  }
+
   if (event.key !== "Escape") {
     return;
   }
@@ -7790,6 +8503,8 @@ window.addEventListener("keydown", (event) => {
     setResetModalOpen(false);
   }
 });
+window.addEventListener("wheel", stopWindowScrollAnimation, { passive: true });
+window.addEventListener("touchstart", stopWindowScrollAnimation, { passive: true });
 
 function syncHeaderState() {
   const currentScrollY = Math.max(window.scrollY, 0);
@@ -7871,9 +8586,13 @@ if (siteHeader) {
   });
 }
 
-window.addEventListener("pagehide", flushQueuedStorageWrites);
+window.addEventListener("pagehide", () => {
+  pauseAmbientPlayback({ keepIntent: true });
+  flushQueuedStorageWrites();
+});
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") {
+    pauseAmbientPlayback({ keepIntent: true });
     if (desktopReverseScrollTimer) {
       window.clearTimeout(desktopReverseScrollTimer);
       desktopReverseScrollTimer = 0;
@@ -7886,6 +8605,12 @@ document.addEventListener("visibilitychange", () => {
 
     root.classList.remove("desktop-scroll-reverse", "scroll-motion-economy");
     flushQueuedStorageWrites();
+    stopWindowScrollAnimation();
+    return;
+  }
+
+  if (siteAudioState.ambientWanted) {
+    void requestAmbientPlayback();
   }
 });
 

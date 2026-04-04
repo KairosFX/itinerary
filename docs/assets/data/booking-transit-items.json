@@ -98,11 +98,42 @@
     ]
   },
   {
+    "id": "osaka-kyoto-transfer",
+    "transitDetailId": "osaka-kyoto-transfer",
+    "group": "transit",
+    "filters": ["transit"],
+    "kind": "reference",
+    "dayLabel": { "en": "Day 2", "ja": "2日目" },
+    "typeLabel": { "en": "Transit", "ja": "移動" },
+    "tone": { "en": "Save route", "ja": "経路保存" },
+    "defaultStatus": { "en": "Ready", "ja": "準備OK" },
+    "doneStatus": { "en": "Saved", "ja": "保存済み" },
+    "toggleDefault": { "en": "Save route", "ja": "経路を保存する" },
+    "toggleDone": { "en": "Saved", "ja": "保存済み" },
+    "title": { "en": "Osaka -> Kyoto transfer", "ja": "大阪 -> 京都の移動" },
+    "summary": {
+      "en": "Save the Day 2 Osaka-to-Kyoto handoff so the Kyoto East walking day starts cleanly instead of burning time on a messy station decision.",
+      "ja": "2日目の大阪から京都への受け渡しを保存しておくと、駅で迷わず京都東側の街歩きを素直に始められます。"
+    },
+    "details": {
+      "en": "Treat this as a light Kansai city-to-city move, not a luggage-heavy transfer day. Reach Kyoto Station or the Shijo / Karasuma side first, then push east toward Kiyomizu-dera, Gion, and the rest of the Higashiyama cluster. Keep one live route saved once your Osaka starting point for the morning is fixed.",
+      "ja": "この移動は、荷物中心の日ではなく、関西内の軽い都市間移動として扱います。まずは京都駅か四条烏丸側へ入り、そのあと清水寺、祇園、東山エリアへ東へ寄せていく形にします。朝の大阪側の出発地点が固まったら、ライブ経路を一つ保存しておきます。"
+    },
+    "links": [
+      {
+        "href": "https://www.google.com/maps/dir/Osaka+Station/Kyoto+Station",
+        "label": { "en": "Open live directions", "ja": "ライブ経路を開く" },
+        "note": { "en": "Google Maps handoff for Osaka -> Kyoto", "ja": "大阪 -> 京都の Google マップ経路" },
+        "kind": "primary"
+      }
+    ]
+  },
+  {
     "id": "fuji-area-stay",
     "group": "accommodations",
     "filters": ["to-book"],
     "kind": "booking",
-    "dayLabel": { "en": "Day 4", "ja": "4日目" },
+    "dayLabel": { "en": "Day 3", "ja": "3日目" },
     "typeLabel": { "en": "Hotel / Accommodation", "ja": "ホテル・宿泊" },
     "stayVisibility": {
       "days": [4],
@@ -115,8 +146,8 @@
     "toggleDone": { "en": "Booked", "ja": "予約済み" },
     "title": { "en": "Mt. Fuji Onsen", "ja": "富士山温泉" },
     "summary": {
-      "en": "The base is chosen for station-to-lake practicality so Mishima, Chureito / Shimoyoshida, and Lake Kawaguchiko can stay grouped on Day 4.",
-      "ja": "三島、忠霊塔・下吉田、河口湖を4日目にまとめやすいよう、駅から湖側の動きで拠点を選んでいます。"
+      "en": "The base is chosen for station-to-lake practicality so the Day 3 arrival into Kawaguchiko stays calm while the fuller Fuji-area stops still fit cleanly the next day.",
+      "ja": "3日目の河口湖到着を落ち着いて進めつつ、翌日の富士エリア立ち寄りも無理なくつなげられるよう、駅から湖側の動きで拠点を選んでいます。"
     },
     "details": {
       "en": "A Kawaguchiko-side base works better than a remote resort because it keeps the station handoff, Chureito option, lake stop, and the Day 5 Tokyo transfer aligned with the actual route. Keep the official HAOSTAY page here for the property reference.",
@@ -171,7 +202,7 @@
     "group": "transit",
     "filters": ["to-book", "transit"],
     "kind": "booking",
-    "dayLabel": { "en": "Day 4", "ja": "4日目" },
+    "dayLabel": { "en": "Day 3", "ja": "3日目" },
     "typeLabel": { "en": "Transit", "ja": "移動" },
     "tone": { "en": "Reserve ahead", "ja": "事前予約" },
     "defaultStatus": { "en": "Not booked", "ja": "未予約" },
@@ -180,12 +211,12 @@
     "toggleDone": { "en": "Booked", "ja": "予約済み" },
     "title": { "en": "Shinkansen to Mishima", "ja": "三島行き新幹線" },
     "summary": {
-      "en": "Treat this as the fixed intercity booking that anchors the Day 4 Mishima handoff into Kawaguchiko.",
-      "ja": "4日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
+      "en": "Treat this as the fixed intercity booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
+      "ja": "3日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
     },
     "details": {
-      "en": "Reserve on Smart EX once Day 4 timing is fixed. Kyoto -> Mishima is the main timed rail commitment on this route, so the official Smart EX page is the safest place to keep.",
-      "ja": "4日目の時刻が固まったら Smart EX で押さえます。京都 -> 三島はこの旅程の主要な時間指定の鉄道予約になるため、公式の Smart EX ページを残すのが最も安全です。"
+      "en": "Reserve on Smart EX once Day 3 timing is fixed. Kyoto -> Mishima is the main timed rail commitment on this route, so the official Smart EX page is the safest place to keep.",
+      "ja": "3日目の時刻が固まったら Smart EX で押さえます。京都 -> 三島はこの旅程の主要な時間指定の鉄道予約になるため、公式の Smart EX ページを残すのが最も安全です。"
     },
     "links": [
       {
@@ -202,7 +233,7 @@
     "group": "transit",
     "filters": ["to-book", "transit"],
     "kind": "booking",
-    "dayLabel": { "en": "Day 4", "ja": "4日目" },
+    "dayLabel": { "en": "Day 3", "ja": "3日目" },
     "typeLabel": { "en": "Transit", "ja": "移動" },
     "tone": { "en": "Reserve ahead", "ja": "事前予約" },
     "defaultStatus": { "en": "Not booked", "ja": "未予約" },
@@ -211,8 +242,8 @@
     "toggleDone": { "en": "Booked", "ja": "予約済み" },
     "title": { "en": "Mishima to Kawaguchiko", "ja": "三島から河口湖" },
     "summary": {
-      "en": "Treat this as the Day 4 local handoff booking if you want the cleanest Mishima-to-lake transfer.",
-      "ja": "4日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
+      "en": "Treat this as the Day 3 local handoff booking if you want the cleanest Mishima-to-lake transfer.",
+      "ja": "3日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
     },
     "details": {
       "en": "The official SEKITORI route notice is the most dependable operator-run reference for the Mishima-Kawaguchiko liner timing and fare notes, so keep that here once the shinkansen timing is locked.",
