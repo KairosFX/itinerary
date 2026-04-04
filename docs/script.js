@@ -114,11 +114,18 @@ const scrollAnimationSnapTolerancePx = 0.45;
 const scrollAnimationProgrammaticBaseMs = 132;
 const scrollAnimationProgrammaticDistanceBoostMs = 54;
 const scrollAnimationProgrammaticCompactBoostMs = 20;
-const scrollAnimationWheelSmoothingMs = 84;
-const scrollAnimationWheelSettleDelayMs = 72;
+const scrollAnimationWheelSmoothingMs = 92;
+const scrollAnimationWheelSettleDelayMs = 64;
 const scrollAnimationWheelLineHeightPx = 18;
 const scrollAnimationWheelPageFactor = 0.9;
-const scrollAnimationWheelMaxStepPx = 720;
+const scrollAnimationWheelMaxStepPx = 680;
+// Grounded motion profiles keep the scroll premium without drifting away from the site's mood.
+const scrollAnimationIntentProfiles = {
+  default: { smoothingBoostMs: 0, runtimeBoostMs: 0, snapTolerancePx: scrollAnimationSnapTolerancePx },
+  anchor: { smoothingBoostMs: 10, runtimeBoostMs: 26, snapTolerancePx: 0.42 },
+  section: { smoothingBoostMs: 18, runtimeBoostMs: 52, snapTolerancePx: 0.38 },
+  "back-to-top": { smoothingBoostMs: 24, runtimeBoostMs: 84, snapTolerancePx: 0.34 }
+};
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
   en:
@@ -7296,13 +7303,27 @@ function getScrollSmoothingFactor(deltaTimeMs, smoothingWindowMs) {
   return 1 - Math.exp(-Math.max(deltaTimeMs, 1) / Math.max(smoothingWindowMs, 1));
 }
 
-function getProgrammaticScrollSmoothingMs(distancePx) {
+function getProgrammaticScrollProfile(distancePx, intent = "default") {
+  const intentProfile =
+    scrollAnimationIntentProfiles[intent] || scrollAnimationIntentProfiles.default;
   const distanceFactor = clamp(Math.abs(distancePx) / 1600, 0, 1);
-  return (
+  const smoothingMs =
     scrollAnimationProgrammaticBaseMs +
     distanceFactor * scrollAnimationProgrammaticDistanceBoostMs +
-    (compactViewportQuery.matches ? scrollAnimationProgrammaticCompactBoostMs : 0)
-  );
+    (compactViewportQuery.matches ? scrollAnimationProgrammaticCompactBoostMs : 0) +
+    intentProfile.smoothingBoostMs;
+  const maxRuntimeMs =
+    clamp(
+      scrollAnimationMinDurationMs + Math.abs(distancePx) * scrollAnimationDistanceFactor,
+      scrollAnimationMinDurationMs,
+      scrollAnimationMaxDurationMs
+    ) + smoothingMs + intentProfile.runtimeBoostMs;
+
+  return {
+    smoothingMs,
+    maxRuntimeMs,
+    snapTolerancePx: intentProfile.snapTolerancePx
+  };
 }
 
 function getWheelScrollableAncestor(startNode) {
@@ -7504,7 +7525,7 @@ function isWindowScrollInterruptKey(event) {
   );
 }
 
-function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}) {
+function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior(), intent = "default" } = {}) {
   const clampedTop = clamp(Math.round(nextTop), 0, getMaxWindowScrollTop());
   if (behavior !== "smooth") {
     stopWheelScrollAssist();
@@ -7530,11 +7551,7 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
 
   stopWheelScrollAssist();
   stopWindowScrollAnimation();
-  const maxRuntimeMs = clamp(
-    scrollAnimationMinDurationMs + Math.abs(distance) * scrollAnimationDistanceFactor,
-    scrollAnimationMinDurationMs,
-    scrollAnimationMaxDurationMs
-  ) + getProgrammaticScrollSmoothingMs(distance);
+  const profile = getProgrammaticScrollProfile(distance, intent);
 
   return new Promise((resolve) => {
     const animation = {
@@ -7544,8 +7561,9 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
       lastFrameAt: 0,
       currentTop: startTop,
       targetTop: clampedTop,
-      smoothingMs: getProgrammaticScrollSmoothingMs(distance),
-      maxRuntimeMs
+      smoothingMs: profile.smoothingMs,
+      maxRuntimeMs: profile.maxRuntimeMs,
+      snapTolerancePx: profile.snapTolerancePx
     };
     activeWindowScrollAnimation = animation;
 
@@ -7563,7 +7581,7 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
       animation.currentTop += remaining * smoothingFactor;
 
       const didTimeout = timestamp - animation.startedAt >= animation.maxRuntimeMs;
-      if (Math.abs(remaining) <= scrollAnimationSnapTolerancePx || didTimeout) {
+      if (Math.abs(remaining) <= animation.snapTolerancePx || didTimeout) {
         animation.currentTop = animation.targetTop;
       }
 
@@ -8095,7 +8113,7 @@ async function scrollToChecklistDay(day) {
       const targetTop =
         targetCard.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(24);
 
-      void smoothlyScrollWindowTo(Math.max(targetTop, 0));
+      void smoothlyScrollWindowTo(Math.max(targetTop, 0), { intent: "section" });
 
       targetCard.classList.remove("is-route-target");
       restartClassOnNextFrame(targetCard, "is-route-target");
@@ -8119,7 +8137,7 @@ function scrollToPanelStart(panelId) {
       const targetTop =
         anchor.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(20);
 
-      void smoothlyScrollWindowTo(Math.max(targetTop, 0));
+      void smoothlyScrollWindowTo(Math.max(targetTop, 0), { intent: "section" });
     });
   });
 }
@@ -8152,7 +8170,7 @@ function handleAnchorScrollClick(event) {
   targetNode.focus({ preventScroll: true });
   const targetTop =
     targetNode.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(18);
-  void smoothlyScrollWindowTo(Math.max(targetTop, 0));
+  void smoothlyScrollWindowTo(Math.max(targetTop, 0), { intent: "anchor" });
 
   if (window.history?.replaceState) {
     window.history.replaceState(null, "", `#${targetId}`);
@@ -8625,7 +8643,7 @@ if (resetProgressConfirmButton) {
 backToTopButtons.forEach((button) => {
   button.addEventListener("click", () => {
     playTransitionSound();
-    void smoothlyScrollWindowTo(0);
+    void smoothlyScrollWindowTo(0, { intent: "back-to-top" });
   });
 });
 
