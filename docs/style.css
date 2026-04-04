@@ -76,12 +76,8 @@
 html {
   min-height: 100%;
   color-scheme: light dark;
-  scroll-behavior: auto;
-  scroll-padding-top: calc(var(--header-reserved-height) + 0.9rem);
-}
-
-html.enhanced-effects {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-reserved-height) + 0.9rem);
 }
 
 body {

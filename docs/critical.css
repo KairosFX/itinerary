@@ -50,8 +50,12 @@
 
 html {
   color-scheme: light dark;
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-reserved-height) + 0.9rem);
+}
+
+html.reduce-effects {
+  scroll-behavior: auto;
 }
 
 body {

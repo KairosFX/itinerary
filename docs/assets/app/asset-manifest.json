@@ -11,12 +11,12 @@
   "transitionAudioPath": "./assets/app/transition.9afc15ad27.mp3",
   "transitionAudioCssPath": "./transition.9afc15ad27.mp3",
   "transitionAudioHash": "9afc15ad27",
-  "stylePath": "./assets/app/style.22f698fcc8.css",
-  "styleHash": "22f698fcc8",
+  "stylePath": "./assets/app/style.a2c050f40b.css",
+  "styleHash": "a2c050f40b",
   "routeStylePath": "./assets/app/routeStyle.2d8476cd59.css",
   "routeStyleHash": "2d8476cd59",
-  "scriptPath": "./assets/app/script.739fb6d874.js",
-  "scriptHash": "739fb6d874",
+  "scriptPath": "./assets/app/script.3133f8a377.js",
+  "scriptHash": "3133f8a377",
   "routeContentPath": "./assets/app/routeContent.f5a38cf4cd.js",
   "routeContentHash": "f5a38cf4cd",
   "budgetUiPath": "./assets/app/budgetUi.3cdc35c055.js",
@@ -25,6 +25,6 @@
   "budgetContentHash": "af081bb5d7",
   "essentialsContentPath": "./assets/app/essentialsContent.59fa61e07f.js",
   "essentialsContentHash": "59fa61e07f",
-  "generatedAt": "2026-04-04T20:08:21.760Z",
-  "cacheVersion": "22f698fcc8-2d8476cd59-739fb6d874-f5a38cf4cd-3cdc35c055-af081bb5d7-59fa61e07f-1e878db773-b71f05a930-bcde8dff98-9afc15ad27"
+  "generatedAt": "2026-04-04T20:18:43.354Z",
+  "cacheVersion": "a2c050f40b-2d8476cd59-3133f8a377-f5a38cf4cd-3cdc35c055-af081bb5d7-59fa61e07f-1e878db773-b71f05a930-bcde8dff98-9afc15ad27"
 }
