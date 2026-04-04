@@ -107,9 +107,13 @@ const audioAmbientDuckVolume = 0.05;
 const audioIntroVolume = 0.58;
 const audioSectionOpenVolume = 0.24;
 const audioTransitionVolume = 0.28;
+const audioIntroFallbackDurationMs = 15000;
 const audioIntroFadeWindowMs = 220;
-const audioSectionOpenCooldownMs = 180;
+const audioSectionOpenCooldownMs = 96;
 const audioTransitionCooldownMs = 320;
+const introHoldFloorMs = 1120;
+const introExitFloorMs = 620;
+const introGestureResumeLeadMs = 120;
 const scrollAnimationMinDurationMs = 280;
 const scrollAnimationMaxDurationMs = 720;
 const scrollAnimationDistanceFactor = 0.22;
@@ -511,7 +515,10 @@ const siteAudioState = {
   userGestureSeen: false,
   gestureBindingReady: false,
   lastSectionOpenAt: 0,
-  lastTransitionAt: 0
+  lastTransitionAt: 0,
+  introSequenceStartedAt: 0,
+  introSequenceDurationMs: 0,
+  introAudioPendingStart: false
 };
 
 function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
@@ -752,6 +759,36 @@ function pauseManagedAudio(node, { resetTime = false } = {}) {
   }
 }
 
+function clearIntroAudioSequenceState() {
+  siteAudioState.introSequenceStartedAt = 0;
+  siteAudioState.introSequenceDurationMs = 0;
+  siteAudioState.introAudioPendingStart = false;
+}
+
+function getActiveIntroSequenceElapsedMs() {
+  if (!siteAudioState.introSequenceStartedAt) {
+    return 0;
+  }
+
+  return Math.max(performance.now() - siteAudioState.introSequenceStartedAt, 0);
+}
+
+function getActiveIntroSequenceRemainingMs() {
+  if (!siteAudioState.introSequenceStartedAt || siteAudioState.introSequenceDurationMs <= 0) {
+    return 0;
+  }
+
+  return Math.max(siteAudioState.introSequenceDurationMs - getActiveIntroSequenceElapsedMs(), 0);
+}
+
+function getWelcomeIntroDurationMs() {
+  const intro = ensureSiteAudioNodes().intro;
+  const durationSeconds = intro?.duration;
+  return Number.isFinite(durationSeconds) && durationSeconds > 0
+    ? Math.round(durationSeconds * 1000)
+    : audioIntroFallbackDurationMs;
+}
+
 function primeCriticalAudioAssets() {
   if (offlineSnapshotMode) {
     return;
@@ -837,6 +874,10 @@ function bindSiteAudioGestureListeners() {
 
   const handleGesture = () => {
     siteAudioState.userGestureSeen = true;
+    if (siteAudioState.introAudioPendingStart) {
+      void tryPlayIntroAudio({ syncToSequence: true });
+    }
+
     if (
       siteAudioState.ambientWanted &&
       (siteAudioState.pendingAmbientStart || ensureSiteAudioNodes().ambient?.paused)
@@ -901,41 +942,83 @@ function startIntroAudioFade(durationMs = audioIntroFadeWindowMs) {
   introAudioFadeFrame = window.requestAnimationFrame(step);
 }
 
-function playIntroAudioForDuration(totalDurationMs) {
-  if (reducedEffectsEnabled || totalDurationMs <= 0) {
-    stopIntroAudioPlayback();
-    return;
+function tryPlayIntroAudio({ syncToSequence = false } = {}) {
+  const intro = ensureSiteAudioNodes().intro;
+  if (!intro || reducedEffectsEnabled || !siteAudioState.introSequenceStartedAt) {
+    return Promise.resolve(false);
   }
 
-  const intro = ensureSiteAudioNodes().intro;
-  if (!intro) {
-    return;
+  const remainingMs = getActiveIntroSequenceRemainingMs();
+  if (remainingMs <= audioIntroFadeWindowMs + 40) {
+    siteAudioState.introAudioPendingStart = false;
+    stopIntroAudioPlayback();
+    return Promise.resolve(false);
   }
+
+  if (!intro.paused && !intro.ended) {
+    siteAudioState.introAudioPendingStart = false;
+    return Promise.resolve(true);
+  }
+
+  const introDurationMs = getWelcomeIntroDurationMs();
+  const startOffsetMs = syncToSequence
+    ? Math.min(
+        getActiveIntroSequenceElapsedMs(),
+        Math.max(introDurationMs - introGestureResumeLeadMs, 0)
+      )
+    : 0;
 
   stopIntroAudioPlayback();
-  duckAmbientLoop(totalDurationMs + 120);
-  intro.currentTime = 0;
+  duckAmbientLoop(remainingMs + 120);
+  intro.currentTime = startOffsetMs / 1000;
   intro.volume = audioIntroVolume;
 
-  const playResult = intro.play();
   const scheduleFade = () => {
     const fadeWindowMs = Math.min(
       audioIntroFadeWindowMs,
-      Math.max(totalDurationMs - 80, 120)
+      Math.max(remainingMs - 80, 120)
     );
 
     introAudioStopTimer = window.setTimeout(() => {
       introAudioStopTimer = 0;
       startIntroAudioFade(fadeWindowMs);
-    }, Math.max(totalDurationMs - fadeWindowMs, 0));
+    }, Math.max(remainingMs - fadeWindowMs, 0));
   };
 
+  const playResult = intro.play();
   if (!playResult || typeof playResult.then !== "function") {
+    siteAudioState.introAudioPendingStart = false;
     scheduleFade();
+    return Promise.resolve(true);
+  }
+
+  return playResult
+    .then(() => {
+      siteAudioState.introAudioPendingStart = false;
+      scheduleFade();
+      return true;
+    })
+    .catch(() => {
+      siteAudioState.introAudioPendingStart = true;
+      return false;
+    });
+}
+
+function playIntroAudioForDuration(totalDurationMs) {
+  if (reducedEffectsEnabled || totalDurationMs <= 0) {
+    clearIntroAudioSequenceState();
+    stopIntroAudioPlayback();
     return;
   }
 
-  playResult.then(scheduleFade).catch(() => null);
+  if (!ensureSiteAudioNodes().intro) {
+    return;
+  }
+
+  siteAudioState.introSequenceStartedAt = performance.now();
+  siteAudioState.introSequenceDurationMs = totalDurationMs;
+  siteAudioState.introAudioPendingStart = false;
+  void tryPlayIntroAudio();
 }
 
 function playManagedOneShot(node, { volume = 1, cooldownMs = 180, stateKey, duckMs = 420 } = {}) {
@@ -985,6 +1068,50 @@ function playTransitionSound() {
     stateKey: "lastTransitionAt",
     duckMs: 460
   });
+}
+
+function shouldPlayGenericButtonSound(button) {
+  if (!(button instanceof HTMLButtonElement) || button.disabled) {
+    return false;
+  }
+
+  if (button.getAttribute("aria-disabled") === "true") {
+    return false;
+  }
+
+  if (
+    button.matches(
+      "[data-panel-target], [data-back-to-top], [data-jump-current-day], [data-route-map-day]"
+    )
+  ) {
+    return false;
+  }
+
+  if (
+    isChecklistAccessLocked() &&
+    button.matches(".transit-trigger--checklist, [data-checklist-detail-trigger]")
+  ) {
+    return false;
+  }
+
+  const dayCard = button.closest(".day-card[data-day]");
+  if (dayCard) {
+    const day = Number(dayCard.dataset.day);
+    if (day > accessibleDay) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function handleGenericButtonSoundClick(event) {
+  const button = event.target.closest("button");
+  if (!button || !shouldPlayGenericButtonSound(button)) {
+    return;
+  }
+
+  playSectionOpenSound();
 }
 
 function initializeSiteAudioExperience() {
@@ -8271,8 +8398,23 @@ function waitForDuration(durationMs) {
 }
 
 function getSiteIntroTimings() {
-  const holdDurationMs = reducedEffectsEnabled ? 180 : 1120;
-  const exitDurationMs = reducedEffectsEnabled ? 120 : 620;
+  if (reducedEffectsEnabled) {
+    const holdDurationMs = 180;
+    const exitDurationMs = 120;
+
+    return {
+      holdDurationMs,
+      exitDurationMs,
+      totalDurationMs: holdDurationMs + exitDurationMs
+    };
+  }
+
+  const exitDurationMs = introExitFloorMs;
+  const totalDurationMs = Math.max(
+    getWelcomeIntroDurationMs(),
+    introHoldFloorMs + exitDurationMs
+  );
+  const holdDurationMs = Math.max(totalDurationMs - exitDurationMs, introHoldFloorMs);
 
   return {
     holdDurationMs,
@@ -8283,6 +8425,7 @@ function getSiteIntroTimings() {
 
 async function playSiteIntro() {
   if (!siteIntro) {
+    clearIntroAudioSequenceState();
     stopIntroAudioPlayback();
     root.classList.remove("intro-pending", "intro-active", "intro-leaving");
     return;
@@ -8311,6 +8454,8 @@ async function playSiteIntro() {
   root.classList.remove("intro-pending", "intro-active", "intro-leaving");
   siteIntro.hidden = true;
   siteIntro.setAttribute("aria-hidden", "true");
+  clearIntroAudioSequenceState();
+  stopIntroAudioPlayback();
 }
 
 async function bootApp() {
@@ -8399,6 +8544,7 @@ themeButtons.forEach((button) => {
 });
 
 bindTabNavigation();
+document.addEventListener("click", handleGenericButtonSoundClick, true);
 document.addEventListener("click", handleAnchorScrollClick);
 document.addEventListener(
   "toggle",
@@ -8406,7 +8552,6 @@ document.addEventListener(
     const detailsNode = event.target;
     if (
       !(detailsNode instanceof HTMLDetailsElement) ||
-      !detailsNode.open ||
       !detailsNode.matches(".booking-group, .booking-item")
     ) {
       return;
