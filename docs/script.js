@@ -110,6 +110,15 @@ const audioTransitionCooldownMs = 320;
 const scrollAnimationMinDurationMs = 280;
 const scrollAnimationMaxDurationMs = 720;
 const scrollAnimationDistanceFactor = 0.22;
+const scrollAnimationSnapTolerancePx = 0.45;
+const scrollAnimationProgrammaticBaseMs = 132;
+const scrollAnimationProgrammaticDistanceBoostMs = 54;
+const scrollAnimationProgrammaticCompactBoostMs = 20;
+const scrollAnimationWheelSmoothingMs = 84;
+const scrollAnimationWheelSettleDelayMs = 72;
+const scrollAnimationWheelLineHeightPx = 18;
+const scrollAnimationWheelPageFactor = 0.9;
+const scrollAnimationWheelMaxStepPx = 720;
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
   en:
@@ -1446,6 +1455,7 @@ let lastScrollMotionSampleTime = window.performance.now();
 let desktopReverseScrollTimer = 0;
 let scrollMotionEconomyTimer = 0;
 let scrollTicking = false;
+let activeWheelScrollAssist = null;
 let resizeTicking = false;
 let revealObserver = null;
 let headerLockReleaseTimer = 0;
@@ -3157,6 +3167,9 @@ function syncReducedEffectsMode({ force = false } = {}) {
   root.classList.toggle("enhanced-effects", !reducedEffectsEnabled);
 
   if (reducedEffectsEnabled) {
+    stopWheelScrollAssist();
+    stopWindowScrollAnimation();
+
     if (desktopReverseScrollTimer) {
       window.clearTimeout(desktopReverseScrollTimer);
       desktopReverseScrollTimer = 0;
@@ -7279,6 +7292,170 @@ function getMaxWindowScrollTop() {
   return Math.max(document.documentElement.scrollHeight - window.innerHeight, 0);
 }
 
+function getScrollSmoothingFactor(deltaTimeMs, smoothingWindowMs) {
+  return 1 - Math.exp(-Math.max(deltaTimeMs, 1) / Math.max(smoothingWindowMs, 1));
+}
+
+function getProgrammaticScrollSmoothingMs(distancePx) {
+  const distanceFactor = clamp(Math.abs(distancePx) / 1600, 0, 1);
+  return (
+    scrollAnimationProgrammaticBaseMs +
+    distanceFactor * scrollAnimationProgrammaticDistanceBoostMs +
+    (compactViewportQuery.matches ? scrollAnimationProgrammaticCompactBoostMs : 0)
+  );
+}
+
+function getWheelScrollableAncestor(startNode) {
+  let currentNode = startNode instanceof Element ? startNode : startNode?.parentElement;
+
+  while (currentNode && currentNode !== document.body && currentNode !== document.documentElement) {
+    const style = window.getComputedStyle(currentNode);
+    const canScrollY =
+      /(auto|scroll|overlay)/.test(style.overflowY) &&
+      currentNode.scrollHeight - currentNode.clientHeight > 2;
+
+    if (canScrollY) {
+      return currentNode;
+    }
+
+    currentNode = currentNode.parentElement;
+  }
+
+  return null;
+}
+
+function canWheelScrollableAncestorConsumeDelta(scrollableAncestor, deltaY) {
+  if (!scrollableAncestor || !deltaY) {
+    return false;
+  }
+
+  const maxScrollTop = scrollableAncestor.scrollHeight - scrollableAncestor.clientHeight;
+  if (maxScrollTop <= 1) {
+    return false;
+  }
+
+  const scrollTop = scrollableAncestor.scrollTop;
+  if (deltaY < 0) {
+    return scrollTop > 1;
+  }
+
+  return scrollTop < maxScrollTop - 1;
+}
+
+function shouldAllowNativeWheelScroll(event) {
+  if (event.ctrlKey || event.metaKey || event.altKey) {
+    return true;
+  }
+
+  if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+    return true;
+  }
+
+  const target = event.target;
+  if (!(target instanceof Element)) {
+    return false;
+  }
+
+  if (
+    target.closest(
+      ".route-map, .maplibregl-map, .maplibregl-canvas-container, input, textarea, select, iframe, video, audio, [contenteditable='true']"
+    )
+  ) {
+    return true;
+  }
+
+  return canWheelScrollableAncestorConsumeDelta(
+    getWheelScrollableAncestor(target),
+    event.deltaY
+  );
+}
+
+function getNormalizedWheelDelta(event) {
+  const deltaModeMultiplier =
+    event.deltaMode === WheelEvent.DOM_DELTA_LINE
+      ? scrollAnimationWheelLineHeightPx
+      : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+        ? window.innerHeight * scrollAnimationWheelPageFactor
+        : 1;
+
+  return clamp(
+    event.deltaY * deltaModeMultiplier,
+    -scrollAnimationWheelMaxStepPx,
+    scrollAnimationWheelMaxStepPx
+  );
+}
+
+function stopWheelScrollAssist() {
+  if (!activeWheelScrollAssist) {
+    return;
+  }
+
+  window.cancelAnimationFrame(activeWheelScrollAssist.frameId);
+  activeWheelScrollAssist = null;
+}
+
+function stepWheelScrollAssist(timestamp) {
+  const assist = activeWheelScrollAssist;
+  if (!assist) {
+    return;
+  }
+
+  const deltaTimeMs = assist.lastFrameAt ? Math.min(timestamp - assist.lastFrameAt, 64) : 16.667;
+  assist.lastFrameAt = timestamp;
+
+  const remaining = assist.targetTop - assist.currentTop;
+  const smoothingFactor = getScrollSmoothingFactor(
+    deltaTimeMs,
+    scrollAnimationWheelSmoothingMs
+  );
+
+  assist.currentTop += remaining * smoothingFactor;
+
+  if (Math.abs(remaining) <= scrollAnimationSnapTolerancePx) {
+    assist.currentTop = assist.targetTop;
+  }
+
+  window.scrollTo({
+    top: assist.currentTop,
+    behavior: "auto"
+  });
+
+  if (
+    assist.currentTop === assist.targetTop &&
+    timestamp - assist.lastInputAt >= scrollAnimationWheelSettleDelayMs
+  ) {
+    activeWheelScrollAssist = null;
+    return;
+  }
+
+  assist.frameId = window.requestAnimationFrame(stepWheelScrollAssist);
+}
+
+function queueWheelScrollAssist(deltaY) {
+  updateMaxScrollableY();
+
+  const nextTargetTop = clamp(
+    Math.round((activeWheelScrollAssist?.targetTop ?? window.scrollY) + deltaY),
+    0,
+    getMaxWindowScrollTop()
+  );
+
+  if (!activeWheelScrollAssist) {
+    activeWheelScrollAssist = {
+      frameId: 0,
+      currentTop: window.scrollY,
+      targetTop: nextTargetTop,
+      lastFrameAt: 0,
+      lastInputAt: window.performance.now()
+    };
+    activeWheelScrollAssist.frameId = window.requestAnimationFrame(stepWheelScrollAssist);
+    return;
+  }
+
+  activeWheelScrollAssist.targetTop = nextTargetTop;
+  activeWheelScrollAssist.lastInputAt = window.performance.now();
+}
+
 function stopWindowScrollAnimation() {
   if (!activeWindowScrollAnimation) {
     return;
@@ -7287,6 +7464,34 @@ function stopWindowScrollAnimation() {
   window.cancelAnimationFrame(activeWindowScrollAnimation.frameId);
   activeWindowScrollAnimation.resolve(false);
   activeWindowScrollAnimation = null;
+}
+
+function handleWheelScrollAssist(event) {
+  if (event.defaultPrevented) {
+    return;
+  }
+
+  if (
+    reducedEffectsEnabled ||
+    aggressivePerformanceMode ||
+    coarsePointerQuery.matches ||
+    root.classList.contains("has-modal-open") ||
+    !event.cancelable ||
+    shouldAllowNativeWheelScroll(event)
+  ) {
+    stopWheelScrollAssist();
+    stopWindowScrollAnimation();
+    return;
+  }
+
+  const deltaY = getNormalizedWheelDelta(event);
+  if (Math.abs(deltaY) < 0.1) {
+    return;
+  }
+
+  event.preventDefault();
+  stopWindowScrollAnimation();
+  queueWheelScrollAssist(deltaY);
 }
 
 function isWindowScrollInterruptKey(event) {
@@ -7302,6 +7507,7 @@ function isWindowScrollInterruptKey(event) {
 function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}) {
   const clampedTop = clamp(Math.round(nextTop), 0, getMaxWindowScrollTop());
   if (behavior !== "smooth") {
+    stopWheelScrollAssist();
     stopWindowScrollAnimation();
     window.scrollTo({
       top: clampedTop,
@@ -7313,6 +7519,7 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
   const startTop = window.scrollY;
   const distance = clampedTop - startTop;
   if (Math.abs(distance) < 2) {
+    stopWheelScrollAssist();
     stopWindowScrollAnimation();
     window.scrollTo({
       top: clampedTop,
@@ -7321,15 +7528,25 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
     return Promise.resolve(true);
   }
 
+  stopWheelScrollAssist();
   stopWindowScrollAnimation();
-  const durationMs = clamp(
+  const maxRuntimeMs = clamp(
     scrollAnimationMinDurationMs + Math.abs(distance) * scrollAnimationDistanceFactor,
     scrollAnimationMinDurationMs,
     scrollAnimationMaxDurationMs
-  );
+  ) + getProgrammaticScrollSmoothingMs(distance);
 
   return new Promise((resolve) => {
-    const animation = { frameId: 0, resolve, startedAt: 0 };
+    const animation = {
+      frameId: 0,
+      resolve,
+      startedAt: window.performance.now(),
+      lastFrameAt: 0,
+      currentTop: startTop,
+      targetTop: clampedTop,
+      smoothingMs: getProgrammaticScrollSmoothingMs(distance),
+      maxRuntimeMs
+    };
     activeWindowScrollAnimation = animation;
 
     const step = (timestamp) => {
@@ -7338,18 +7555,24 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
         return;
       }
 
-      if (!animation.startedAt) {
-        animation.startedAt = timestamp;
+      const deltaTimeMs = animation.lastFrameAt ? Math.min(timestamp - animation.lastFrameAt, 64) : 16.667;
+      animation.lastFrameAt = timestamp;
+
+      const remaining = animation.targetTop - animation.currentTop;
+      const smoothingFactor = getScrollSmoothingFactor(deltaTimeMs, animation.smoothingMs);
+      animation.currentTop += remaining * smoothingFactor;
+
+      const didTimeout = timestamp - animation.startedAt >= animation.maxRuntimeMs;
+      if (Math.abs(remaining) <= scrollAnimationSnapTolerancePx || didTimeout) {
+        animation.currentTop = animation.targetTop;
       }
 
-      const progress = Math.min((timestamp - animation.startedAt) / durationMs, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
       window.scrollTo({
-        top: startTop + distance * eased,
+        top: animation.currentTop,
         behavior: "auto"
       });
 
-      if (progress >= 1) {
+      if (animation.currentTop === animation.targetTop) {
         activeWindowScrollAnimation = null;
         resolve(true);
         return;
@@ -7557,6 +7780,11 @@ function syncModalOpenState() {
   const isModalOpen =
     Boolean(resetProgressModal && !resetProgressModal.hidden) ||
     Boolean(transitDetailModal && !transitDetailModal.hidden);
+
+  if (isModalOpen) {
+    stopWheelScrollAssist();
+    stopWindowScrollAnimation();
+  }
 
   root.classList.toggle("has-modal-open", isModalOpen);
   [siteHeader, mainContent, siteFooter].forEach((node) => {
@@ -8431,6 +8659,7 @@ if (transitDetailModal) {
 
 window.addEventListener("keydown", (event) => {
   if (isWindowScrollInterruptKey(event)) {
+    stopWheelScrollAssist();
     stopWindowScrollAnimation();
   }
 
@@ -8447,8 +8676,15 @@ window.addEventListener("keydown", (event) => {
     setResetModalOpen(false);
   }
 });
-window.addEventListener("wheel", stopWindowScrollAnimation, { passive: true });
-window.addEventListener("touchstart", stopWindowScrollAnimation, { passive: true });
+window.addEventListener("wheel", handleWheelScrollAssist, { passive: false });
+window.addEventListener(
+  "touchstart",
+  () => {
+    stopWheelScrollAssist();
+    stopWindowScrollAnimation();
+  },
+  { passive: true }
+);
 
 function syncHeaderState() {
   const currentScrollY = Math.max(window.scrollY, 0);
@@ -8531,11 +8767,14 @@ if (siteHeader) {
 }
 
 window.addEventListener("pagehide", () => {
+  stopWheelScrollAssist();
+  stopWindowScrollAnimation();
   pauseAmbientPlayback({ keepIntent: true });
   flushQueuedStorageWrites();
 });
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") {
+    stopWheelScrollAssist();
     pauseAmbientPlayback({ keepIntent: true });
     if (desktopReverseScrollTimer) {
       window.clearTimeout(desktopReverseScrollTimer);
