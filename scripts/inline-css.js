@@ -19,6 +19,7 @@ const assetManifest = JSON.parse(fs.readFileSync(assetManifestPath, "utf8"));
 const pageBackdropImagePath = assetManifest.pageBackdropImagePath;
 const stylePath = assetManifest.stylePath;
 const scriptPath = assetManifest.scriptPath;
+const backgroundLoopAudioPath = assetManifest.backgroundLoopAudioPath;
 const sectionOpenAudioPath = assetManifest.sectionOpenAudioPath;
 const transitionAudioPath = assetManifest.transitionAudioPath;
 const serializedAssetConfig = JSON.stringify(assetManifest).replace(/<\/script/gi, "<\\/script");
@@ -29,6 +30,7 @@ if (!stylePath || !scriptPath || !pageBackdropImagePath) {
 
 const resolvedCriticalCss = criticalCss.replace(/__PAGE_BACKDROP_IMAGE_PATH__/g, pageBackdropImagePath);
 const audioPreloadMarkup = [
+  backgroundLoopAudioPath,
   sectionOpenAudioPath,
   transitionAudioPath
 ]

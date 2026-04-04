@@ -12,6 +12,11 @@ const budgetTravelersInput = document.querySelector("[data-budget-travelers]");
 const budgetTravelersPerRoomInput = document.querySelector("[data-budget-travelers-per-room]");
 const budgetIncludeExtrasInput = document.querySelector("[data-budget-include-extras]");
 const budgetStepButtons = Array.from(document.querySelectorAll("[data-budget-step-target]"));
+const playBudgetInteractionSound = () => {
+  if (typeof window.__JAPAN_PLAY_SECTION_OPEN_SOUND__ === "function") {
+    window.__JAPAN_PLAY_SECTION_OPEN_SOUND__();
+  }
+};
 const budgetDisplayExchangeRates = {
   cadPerJpy: 1 / 109,
   usdPerJpy: 1 / 149
@@ -1469,6 +1474,9 @@ const itineraryBudgetLabels = {
       budgetTravelersInput.addEventListener("blur", () => {
         syncControls();
       });
+      budgetTravelersInput.addEventListener("change", () => {
+        playBudgetInteractionSound();
+      });
       budgetTravelersInput.dataset.itineraryBudgetBound = "true";
     }
 
@@ -1489,6 +1497,9 @@ const itineraryBudgetLabels = {
       });
       budgetTravelersPerRoomInput.addEventListener("blur", () => {
         syncControls();
+      });
+      budgetTravelersPerRoomInput.addEventListener("change", () => {
+        playBudgetInteractionSound();
       });
       budgetTravelersPerRoomInput.dataset.itineraryBudgetBound = "true";
     }
@@ -1523,6 +1534,7 @@ const itineraryBudgetLabels = {
 
     if (budgetIncludeExtrasInput && budgetIncludeExtrasInput.dataset.itineraryBudgetBound !== "true") {
       budgetIncludeExtrasInput.addEventListener("change", () => {
+        playBudgetInteractionSound();
         commitSettings();
       });
       budgetIncludeExtrasInput.dataset.itineraryBudgetBound = "true";
@@ -1552,6 +1564,7 @@ const itineraryBudgetLabels = {
       }
 
       const day = stayControl.dataset.budgetStayOption || stayControl.dataset.budgetStaySelect;
+      playBudgetInteractionSound();
       updateDayState(day, {
         ...getDayState(day),
         stayId: stayControl.value

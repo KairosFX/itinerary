@@ -82,6 +82,7 @@ const appAssetConfigRuntimeGlobal = "__JAPAN_APP_ASSETS__";
 const budgetUiRuntimeGlobal = "__JAPAN_BUDGET_UI__";
 const budgetContentRuntimeGlobal = "__JAPAN_BUDGET_CONTENT__";
 const essentialsContentRuntimeGlobal = "__JAPAN_ESSENTIALS_CONTENT__";
+const sectionOpenSoundRuntimeGlobal = "__JAPAN_PLAY_SECTION_OPEN_SOUND__";
 const routeMapLibraryScriptUrl = "./assets/vendor/maplibre/maplibre-gl.js";
 const routeMapLibraryStyleUrl = "./assets/vendor/maplibre/maplibre-gl.css";
 const budgetUiFallbackScriptUrl = "./budget-ui.min.js";
@@ -502,6 +503,7 @@ const siteAudioState = {
   pendingAmbientStart: false,
   userGestureSeen: false,
   gestureBindingReady: false,
+  autoplayBindingReady: false,
   lastSectionOpenAt: 0,
   lastTransitionAt: 0
 };
@@ -709,7 +711,7 @@ function ensureSiteAudioNodes() {
     }),
     ambient: createManagedAudioNode(audioAssets.backgroundLoopPath, {
       loop: true,
-      preload: shouldWarmDeferredAssets() ? "auto" : "metadata",
+      preload: "auto",
       volume: audioAmbientVolume
     })
   };
@@ -744,8 +746,8 @@ function primeCriticalAudioAssets() {
     return;
   }
 
-  const { sectionOpenPath, transitionPath } = getAudioAssetConfig();
-  [sectionOpenPath, transitionPath]
+  const { sectionOpenPath, transitionPath, backgroundLoopPath } = getAudioAssetConfig();
+  [sectionOpenPath, transitionPath, backgroundLoopPath]
     .filter(Boolean)
     .forEach((href) => {
       primeHeadLink("preload", href, {
@@ -838,6 +840,31 @@ function bindSiteAudioGestureListeners() {
   siteAudioState.gestureBindingReady = true;
 }
 
+function requestImmediateSiteAudioStart() {
+  if (!siteAudioState.ambientWanted || document.visibilityState === "hidden") {
+    return;
+  }
+
+  void requestAmbientPlayback();
+}
+
+function bindSiteAudioAutoplayListeners() {
+  if (siteAudioState.autoplayBindingReady) {
+    return;
+  }
+
+  const retryAutoplay = () => {
+    requestImmediateSiteAudioStart();
+  };
+
+  if (document.readyState !== "complete") {
+    window.addEventListener("load", retryAutoplay, { once: true });
+  }
+
+  window.addEventListener("pageshow", retryAutoplay);
+  siteAudioState.autoplayBindingReady = true;
+}
+
 function playManagedOneShot(node, { volume = 1, cooldownMs = 180, stateKey, duckMs = 420 } = {}) {
   if (!node || !stateKey) {
     return;
@@ -877,6 +904,8 @@ function playSectionOpenSound() {
     duckMs: 360
   });
 }
+
+window[sectionOpenSoundRuntimeGlobal] = playSectionOpenSound;
 
 function playTransitionSound() {
   playManagedOneShot(ensureSiteAudioNodes().transition, {
@@ -933,8 +962,13 @@ function handleGenericButtonSoundClick(event) {
 
 function initializeSiteAudioExperience() {
   bindSiteAudioGestureListeners();
+  bindSiteAudioAutoplayListeners();
   primeCriticalAudioAssets();
   ensureSiteAudioNodes();
+  requestImmediateSiteAudioStart();
+  window.requestAnimationFrame(() => {
+    requestImmediateSiteAudioStart();
+  });
 }
 
 function shouldWarmDeferredAssets() {
@@ -4028,6 +4062,7 @@ function bindPackingUI() {
         delete packingState[itemId];
       }
 
+      playSectionOpenSound();
       storePackingState();
       syncPackingUI();
     });
@@ -8196,6 +8231,7 @@ async function playSiteIntro() {
 
 async function bootApp() {
   syncReducedEffectsMode({ force: true });
+  initializeSiteAudioExperience();
   completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
   checklistState = readStoredChecklistState();
   updateChecklistAccessState();
@@ -8211,7 +8247,6 @@ async function bootApp() {
   }
 
   bootOfflineExperience();
-  initializeSiteAudioExperience();
   const introPromise = playSiteIntro();
   introPromise.finally(() => {
     if (siteAudioState.ambientWanted) {
