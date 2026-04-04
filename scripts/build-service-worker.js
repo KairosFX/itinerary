@@ -18,7 +18,6 @@ const appShellPaths = [
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
   assetManifest.pageBackdropImagePath,
-  assetManifest.welcomeIntroAudioPath,
   assetManifest.sectionOpenAudioPath,
   assetManifest.backgroundLoopAudioPath,
   assetManifest.transitionAudioPath,

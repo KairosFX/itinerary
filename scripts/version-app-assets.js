@@ -51,10 +51,6 @@ const staticAssetDefinitions = [
     sourcePath: path.join(docsDir, "assets", "icons", "1yegabjjbjp01.jpg")
   },
   {
-    key: "welcomeIntroAudio",
-    sourcePath: path.join(docsDir, "assets", "audio", "welcome-intro.mp3")
-  },
-  {
     key: "sectionOpenAudio",
     sourcePath: path.join(docsDir, "assets", "audio", "opening.mp3")
   },
@@ -138,7 +134,6 @@ manifest.cacheVersion = [
   manifest.budgetContentHash,
   manifest.essentialsContentHash,
   manifest.pageBackdropImageHash,
-  manifest.welcomeIntroAudioHash,
   manifest.sectionOpenAudioHash,
   manifest.backgroundLoopAudioHash,
   manifest.transitionAudioHash
