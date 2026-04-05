@@ -1965,41 +1965,6 @@ function renderTransitDetail(detail) {
   syncLocalizedNodes(transitDetailModal);
 }
 
-function openTransitDetail(detailId, triggerElement) {
-  if (!transitDetailModal || !detailId) {
-    return;
-  }
-
-  if (resetProgressModal && !resetProgressModal.hidden) {
-    setResetModalOpen(false);
-  }
-
-  lastTransitTrigger = triggerElement || document.activeElement;
-  activeTransitDetailId = detailId;
-  renderTransitDetailLoadingState();
-  setTransitModalOpen(true);
-
-  loadTransitDetailItems()
-    .then(() => {
-      if (activeTransitDetailId !== detailId) {
-        return;
-      }
-
-      const detail = transitDetailItemMap.get(detailId);
-      if (!detail) {
-        renderTransitDetailUnavailableState();
-        return;
-      }
-
-      renderTransitDetail(detail);
-    })
-    .catch(() => {
-      if (activeTransitDetailId === detailId) {
-        renderTransitDetailErrorState();
-      }
-    });
-}
-
 function getChecklistDetailTag(item) {
   if (item?.group === "accommodations") {
     return checklistDetailLabels.stayTag;
@@ -2010,6 +1975,14 @@ function getChecklistDetailTag(item) {
   }
 
   return checklistDetailLabels.defaultTag;
+}
+
+function getTransitBookingDetailTag(item) {
+  if (item?.kind === "booking") {
+    return checklistDetailLabels.bookingTag;
+  }
+
+  return transitDetailLabels.defaultTag;
 }
 
 function renderChecklistDetailLoadingState() {
@@ -2039,7 +2012,7 @@ function renderChecklistDetailErrorState() {
   );
 }
 
-function renderChecklistDetail(item) {
+function renderBookingTransitDetail(item, { tag = getChecklistDetailTag(item) } = {}) {
   if (!transitDetailModal || !item) {
     return;
   }
@@ -2048,7 +2021,7 @@ function renderChecklistDetail(item) {
   const referenceNote = preferredLink?.note || null;
 
   setTransitDetailBusyState(false);
-  setTransitDetailTag(getChecklistDetailTag(item));
+  setTransitDetailTag(tag);
 
   if (transitDetailTitleNode) {
     transitDetailTitleNode.innerHTML = renderLocalizedContent(item.title);
@@ -2096,6 +2069,10 @@ function renderChecklistDetail(item) {
   syncLocalizedNodes(transitDetailModal);
 }
 
+function renderChecklistDetail(item) {
+  renderBookingTransitDetail(item, { tag: getChecklistDetailTag(item) });
+}
+
 function openChecklistDetail(detailId, triggerElement) {
   if (!transitDetailModal || !detailId) {
     return;
@@ -2128,6 +2105,55 @@ function openChecklistDetail(detailId, triggerElement) {
     .catch(() => {
       if (activeTransitDetailId === requestKey) {
         renderChecklistDetailErrorState();
+      }
+    });
+}
+
+function openTransitDetail(detailId, triggerElement) {
+  if (!transitDetailModal || !detailId) {
+    return;
+  }
+
+  if (resetProgressModal && !resetProgressModal.hidden) {
+    setResetModalOpen(false);
+  }
+
+  lastTransitTrigger = triggerElement || document.activeElement;
+  activeTransitDetailId = detailId;
+  renderTransitDetailLoadingState();
+  setTransitModalOpen(true);
+
+  loadBookingTransitItems()
+    .then(() => {
+      if (activeTransitDetailId !== detailId) {
+        return null;
+      }
+
+      const bookingDetail = getBookingTransitItemByDetailId(detailId);
+      if (bookingDetail) {
+        renderBookingTransitDetail(bookingDetail, {
+          tag: getTransitBookingDetailTag(bookingDetail)
+        });
+        return null;
+      }
+
+      return loadTransitDetailItems().then(() => {
+        if (activeTransitDetailId !== detailId) {
+          return;
+        }
+
+        const detail = transitDetailItemMap.get(detailId);
+        if (!detail) {
+          renderTransitDetailUnavailableState();
+          return;
+        }
+
+        renderTransitDetail(detail);
+      });
+    })
+    .catch(() => {
+      if (activeTransitDetailId === detailId) {
+        renderTransitDetailErrorState();
       }
     });
 }
