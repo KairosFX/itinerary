@@ -26,7 +26,7 @@ Please send:
 
 ### Where to report
 Please report vulnerabilities through one of these private channels:
-- **Email:** `security@yourdomain.com`
+- **Email:** `186529170+KairosFX@users.noreply.github.com`
 - **GitHub Security Advisory:** if this repository is public and advisories are enabled
 
 Please **do not** report security vulnerabilities through public GitHub issues, public discussions, or social media.
