@@ -29,16 +29,7 @@ if (!stylePath || !scriptPath || !pageBackdropImagePath) {
 }
 
 const resolvedCriticalCss = criticalCss.replace(/__PAGE_BACKDROP_IMAGE_PATH__/g, pageBackdropImagePath);
-const audioPreloadMarkup = [
-  backgroundLoopAudioPath,
-  sectionOpenAudioPath,
-  transitionAudioPath
-]
-  .filter(Boolean)
-  .map((assetPath) => `  <link rel="preload" href="${assetPath}" as="audio" type="audio/mpeg">`)
-  .join("\n");
-
-const styleBlock = `${styleStartMarker}\n  <style data-critical-style>${resolvedCriticalCss}</style>\n  <link rel="preload" href="${stylePath}" as="style" fetchpriority="high">\n  <link rel="preload" href="${scriptPath}" as="script" fetchpriority="high">\n${audioPreloadMarkup ? `${audioPreloadMarkup}\n` : ""}  <link rel="stylesheet" href="${stylePath}" media="print" onload="this.media='all'">\n  <noscript><link rel="stylesheet" href="${stylePath}"></noscript>\n  ${styleEndMarker}`;
+const styleBlock = `${styleStartMarker}\n  <style data-critical-style>${resolvedCriticalCss}</style>\n  <link rel="preload" href="${stylePath}" as="style" fetchpriority="high">\n  <link rel="preload" href="${scriptPath}" as="script" fetchpriority="high">\n  <link rel="stylesheet" href="${stylePath}" media="print" onload="this.media='all'">\n  <noscript><link rel="stylesheet" href="${stylePath}"></noscript>\n  ${styleEndMarker}`;
 const dataBlock = `${dataStartMarker}\n  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = ${serializedAssetConfig};</script>\n  ${dataEndMarker}`;
 const scriptBlock = `${scriptStartMarker}\n  <script src="${scriptPath}" defer></script>\n  ${scriptEndMarker}`;
 

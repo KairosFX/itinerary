@@ -51,14 +51,14 @@
       "ja": "1日目または3日目に有料の大阪泊が必要な時だけ使います。大阪という広い括りではなく、ミナミ側の動線で選んでいます。"
     },
     "details": {
-      "en": "Nishi-Shinsaibashi / Minami keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical. Save the official Hearton Hotel Shinsaibashi page so you can confirm the property and move into the hotel's own booking flow.",
-      "ja": "西心斎橋・ミナミなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすいです。公式のハートンホテル心斎橋ページを残し、施設確認からそのままホテル側の予約導線へ進めるようにしています。"
+      "en": "Nishi-Shinsaibashi / Minami keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical. Save the Booking.com Hearton Hotel Shinsaibashi page so you can confirm the property and book the paid Osaka fallback from the same listing.",
+      "ja": "西心斎橋・ミナミなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすいです。Booking.com のハートンホテル心斎橋ページを残し、施設確認からそのまま有料の大阪代替宿を予約できるようにしています。"
     },
     "links": [
       {
-        "href": "https://www.hearton.co.jp/en/shinsaibashi/",
-        "label": { "en": "Official hotel page", "ja": "公式ホテルページ" },
-        "note": { "en": "Official property details and reservation access", "ja": "公式の施設案内と予約導線" },
+        "href": "https://www.booking.com/hotel/jp/hearton-shinsaibashi.html",
+        "label": { "en": "Booking.com hotel page", "ja": "Booking.com ホテルページ" },
+        "note": { "en": "Booking.com listing for the Osaka fallback stay", "ja": "大阪の代替宿に使う Booking.com ページ" },
         "kind": "primary"
       }
     ]
@@ -85,14 +85,14 @@
       "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
     },
     "details": {
-      "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama and Osaka much better than staying deep in east Kyoto. Keep the official Hotel Resol Kyoto Shijo Muromachi page here for the direct hotel reference and booking entry point.",
-      "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山と大阪戻りも東側の奥へ泊まるより整います。公式の HOTEL RESOL KYOTO SHIJO MUROMACHI ページを残し、施設確認とホテル側の予約導線を一つにまとめています。"
+      "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama and Osaka much better than staying deep in east Kyoto. Keep the Booking.com Hotel Resol Kyoto Shijo Muromachi page here for the stay reference and booking entry point.",
+      "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山と大阪戻りも東側の奥へ泊まるより整います。Booking.com の HOTEL RESOL KYOTO SHIJO MUROMACHI ページを残し、宿の確認と予約導線を一つにまとめています。"
     },
     "links": [
       {
-        "href": "https://en.www.resol-hotel.jp/kyoto-s/",
-        "label": { "en": "Official hotel page", "ja": "公式ホテルページ" },
-        "note": { "en": "Official property details and booking access", "ja": "公式の施設案内と予約導線" },
+        "href": "https://www.booking.com/hotel/jp/hotel-resol-kyoto-shijomuromati.html",
+        "label": { "en": "Booking.com hotel page", "ja": "Booking.com ホテルページ" },
+        "note": { "en": "Booking.com listing for the Kyoto route-fit stay", "ja": "京都の動線に合う宿の Booking.com ページ" },
         "kind": "primary"
       }
     ]
@@ -150,14 +150,14 @@
       "ja": "3日目の河口湖到着を落ち着いて進めつつ、翌日の富士エリア立ち寄りも無理なくつなげられるよう、駅から湖側の動きで拠点を選んでいます。"
     },
     "details": {
-      "en": "A Kawaguchiko-side base works better than a remote resort because it keeps the station handoff, Chureito option, lake stop, and the Day 5 Tokyo transfer aligned with the actual route. Keep the official HAOSTAY page here for the property reference.",
-      "ja": "遠いリゾート立地より、河口湖側の拠点の方が駅からの受け渡し、忠霊塔の選択肢、河口湖の立ち寄り、5日目の東京移動までを実際の流れに合わせやすいです。施設確認用に公式の HAOSTAY ページを残しています。"
+      "en": "A Kawaguchiko-side base works better than a remote resort because it keeps the station handoff, Chureito option, lake stop, and the Day 5 Tokyo transfer aligned with the actual route. Keep the Booking.com HaoStay Kawaguchiko Ekimae page here for the stay reference.",
+      "ja": "遠いリゾート立地より、河口湖側の拠点の方が駅からの受け渡し、忠霊塔の選択肢、河口湖の立ち寄り、5日目の東京移動までを実際の流れに合わせやすいです。宿確認用に Booking.com の HaoStay河口湖駅前 ページを残しています。"
     },
     "links": [
       {
-        "href": "https://www.haostay.jp/en/place/gallery",
-        "label": { "en": "Official stay page", "ja": "公式宿泊ページ" },
-        "note": { "en": "Official property reference for the lake-side stay", "ja": "湖側滞在の公式施設案内" },
+        "href": "https://www.booking.com/hotel/jp/haostayhe-kou-hu-yi-qian.html",
+        "label": { "en": "Booking.com stay page", "ja": "Booking.com 宿泊ページ" },
+        "note": { "en": "Booking.com listing for the Kawaguchiko base stay", "ja": "河口湖の拠点宿に使う Booking.com ページ" },
         "kind": "primary"
       }
     ]
@@ -184,14 +184,14 @@
       "ja": "東京ホテル泊は5日目と6日目に置き、渋谷到着、観光メイン日、そして帰国前の軽い7日目を同じ拠点で回せるようにします。"
     },
     "details": {
-      "en": "Shibuya access still fits the first Tokyo evening best, and keeping the same west-side base for Day 6 leaves Day 7 free for a lighter Imperial Palace/Shinjuku block instead of wasting time on a mid-route hotel switch before the airport. Keep the official EN HOTEL Shibuya page here for the hotel and direct reservation access.",
-      "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、6日目も同じ西側拠点のままなら、空港前にホテル移動で時間を削らず、7日目を皇居と新宿中心に軽く回せます。ホテル確認と予約導線のために、公式の EN HOTEL Shibuya ページを残しています。"
+      "en": "Shibuya access still fits the first Tokyo evening best, and keeping the same west-side base for Day 6 leaves Day 7 free for a lighter Imperial Palace/Shinjuku block instead of wasting time on a mid-route hotel switch before the airport. Keep the Booking.com EN Hotel Shibuya page here for the hotel reference and reservation access.",
+      "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、6日目も同じ西側拠点のままなら、空港前にホテル移動で時間を削らず、7日目を皇居と新宿中心に軽く回せます。ホテル確認と予約導線のために、Booking.com の EN Hotel Shibuya ページを残しています。"
     },
     "links": [
       {
-        "href": "https://en-hotel.com/shibuya/ja/",
-        "label": { "en": "Official hotel page", "ja": "公式ホテルページ" },
-        "note": { "en": "Official property details and booking access", "ja": "公式の施設案内と予約導線" },
+        "href": "https://www.booking.com/hotel/jp/shibuya-city.en-gb.html",
+        "label": { "en": "Booking.com hotel page", "ja": "Booking.com ホテルページ" },
+        "note": { "en": "Booking.com listing for the Shibuya base stay", "ja": "渋谷の拠点ホテルに使う Booking.com ページ" },
         "kind": "primary"
       }
     ]

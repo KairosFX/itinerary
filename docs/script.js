@@ -743,19 +743,7 @@ function pauseManagedAudio(node, { resetTime = false } = {}) {
 }
 
 function primeCriticalAudioAssets() {
-  if (offlineSnapshotMode) {
-    return;
-  }
-
-  const { sectionOpenPath, transitionPath, backgroundLoopPath } = getAudioAssetConfig();
-  [sectionOpenPath, transitionPath, backgroundLoopPath]
-    .filter(Boolean)
-    .forEach((href) => {
-      primeHeadLink("preload", href, {
-        as: "audio",
-        type: "audio/mpeg"
-      });
-    });
+  return;
 }
 
 function requestAmbientPlayback() {
