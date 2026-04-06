@@ -18,11 +18,11 @@
   },
   "costIndex": {
     "osaka-compact-hotel": {
-      "amount": 6189,
+      "amount": 5664,
       "range": {
-        "lean": 5400,
-        "expected": 6189,
-        "high": 8400
+        "lean": 5200,
+        "expected": 5664,
+        "high": 7200
       },
       "roomCapacity": 2,
       "area": {
@@ -38,23 +38,23 @@
         "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目のミナミ散策と3日目の大阪側の動きに合いやすく、無関係な地区のホテルより実用的です。"
       },
       "assumption": {
-        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Via Inn Prime Shinsaibashi Yotsubashi is the saved cheaper route-fit fallback stay for that paid Osaka night.",
-        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。Via Inn Prime Shinsaibashi Yotsubashi を、その有料の大阪泊に使うより安い動線重視の代替宿として保存しています。"
+        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Hotel Trend Nishi Shinsaibashi is the cheaper BudgetAir hotel-channel fallback that still keeps the Minami side practical.",
+        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。Hotel Trend Nishi Shinsaibashi を、BudgetAir 提携ホテル経由で拾える、ミナミ側の動線に合うより安い代替宿として保存しています。"
       },
       "source": {
         "label": {
-          "en": "Via Inn Prime Shinsaibashi Yotsubashi",
-          "ja": "Via Inn Prime Shinsaibashi Yotsubashi"
+          "en": "Hotel Trend Nishi Shinsaibashi",
+          "ja": "Hotel Trend Nishi Shinsaibashi"
         },
-        "url": "https://www.booking.com/hotel/jp/via-inn-shinsaibashi-yotsubashi.html"
+        "url": "https://us.trip.com/hotels/osaka-hotel-detail-32615922/hotel-trend-nishi-shinsaibashi/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
       }
     },
     "kyoto-midrange-hotel": {
-      "amount": 13152,
+      "amount": 7440,
       "range": {
-        "lean": 11600,
-        "expected": 13152,
-        "high": 16800
+        "lean": 6600,
+        "expected": 7440,
+        "high": 9500
       },
       "roomCapacity": 2,
       "area": {
@@ -70,28 +70,28 @@
         "ja": "四条烏丸は、2日目の京都東側へ出やすく、3日目の嵐山と大阪戻りにも地下鉄・阪急・JRの選択肢を取りやすいため、実際の動線に合います。"
       },
       "assumption": {
-        "en": "Day 2 uses the saved Imu Hotel Kyoto stay as the cheaper route-fit Kyoto hotel reference.",
-        "ja": "2日目は、より安い京都ホテルの基準として保存した Imu Hotel Kyoto を使っています。"
+        "en": "Day 2 now uses the cheaper BudgetAir hotel-channel Imu Hotel Kyoto reference for the same Shijo / Karasuma route fit.",
+        "ja": "2日目は、同じ四条烏丸の動線適性を保ちながら、BudgetAir 提携ホテル経由でより安く拾える Imu Hotel Kyoto を基準にしています。"
       },
       "source": {
         "label": {
           "en": "Imu Hotel Kyoto",
           "ja": "Imu Hotel Kyoto"
         },
-        "url": "https://www.booking.com/hotel/jp/imu.html"
+        "url": "https://us.trip.com/hotels/kyoto-hotel-detail-21887858/imu-hotel-kyoto/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
       }
     },
     "kawaguchiko-base-hotel": {
-      "amount": 15709,
+      "amount": 8662,
       "range": {
-        "lean": 14500,
-        "expected": 15709,
-        "high": 19800
+        "lean": 8200,
+        "expected": 8662,
+        "high": 11200
       },
       "roomCapacity": 2,
       "area": {
-        "en": "Kawaguchiko station -> lake corridor",
-        "ja": "河口湖駅から湖畔の動線"
+        "en": "Funatsu / Kawaguchiko corridor",
+        "ja": "船津・河口湖動線"
       },
       "pricingTier": {
         "en": "Current Mt. Fuji area hotel",
@@ -102,28 +102,28 @@
         "ja": "このエリアなら、4日目の三島ハンドオフ、忠霊塔・下吉田、河口湖をまとめやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
-        "en": "Day 4 uses the saved HaoStay Kawaguchiko Ekimae stay because it fits the Mishima handoff and the one-night Fuji block before Tokyo.",
-        "ja": "4日目は、三島ハンドオフから東京前の1泊の富士エリア日に合う HaoStay河口湖駅前 を保存して使っています。"
+        "en": "Day 4 now uses SUPER HOTEL Fujikawaguchiko Natural Hot Spring because it is the cheaper BudgetAir hotel-channel Fuji stay that still keeps the onsen reset and the Tokyo handoff practical.",
+        "ja": "4日目は、温泉で立て直しやすく、東京への受け渡しも崩さない、BudgetAir 提携ホテル経由でより安い SUPER HOTEL Fujikawaguchiko Natural Hot Spring を基準にしています。"
       },
       "source": {
         "label": {
-          "en": "HaoStay Kawaguchiko Ekimae",
-          "ja": "HaoStay河口湖駅前"
+          "en": "SUPER HOTEL Fujikawaguchiko Natural Hot Spring",
+          "ja": "SUPER HOTEL Fujikawaguchiko Natural Hot Spring"
         },
-        "url": "https://www.booking.com/hotel/jp/haostayhe-kou-hu-yi-qian.html"
+        "url": "https://us.trip.com/hotels/fujikawaguchiko-hotel-detail-76325560/super-hotel-fujikawaguchiko-tennen-onsen/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
       }
     },
     "tokyo-base-hotel": {
-      "amount": 19820,
+      "amount": 8582,
       "range": {
-        "lean": 16800,
-        "expected": 19820,
-        "high": 24800
+        "lean": 7800,
+        "expected": 8582,
+        "high": 10800
       },
       "roomCapacity": 2,
       "area": {
-        "en": "Central Shibuya / Udagawacho",
-        "ja": "渋谷中心部・宇田川町"
+        "en": "Central Shibuya / Jinnan",
+        "ja": "渋谷中心部・神南"
       },
       "pricingTier": {
         "en": "Current Shibuya hotel",
@@ -134,15 +134,15 @@
         "ja": "今回のルートは5日目に渋谷へ入り、東京ホテル泊は5日目と6日目に置くため、渋谷中心部の拠点なら到着夜と観光メイン日を拠点変更なしでまとめやすくなります。"
       },
       "assumption": {
-        "en": "Tokyo uses the saved lyf Shibuya Tokyo stay for the fixed hotel base on Days 5 and 6, while Day 7 defaults to no paid stay because it is the flight-home day.",
-        "ja": "東京は、保存した lyf Shibuya Tokyo を5日目と6日目の固定ホテル拠点として使い、7日目は帰国日のため初期値では有料宿泊を入れていません。"
+        "en": "Tokyo now uses The OneFive Tokyo Shibuya as the cheaper BudgetAir hotel-channel Shibuya base for Days 5 and 6, while Day 7 still defaults to no paid stay because it is the flight-home day.",
+        "ja": "東京は、5日目と6日目の渋谷拠点として、BudgetAir 提携ホテル経由でより安い The OneFive Tokyo Shibuya を基準にし、7日目は帰国日のため初期値では有料宿泊を入れていません。"
       },
       "source": {
         "label": {
-          "en": "lyf Shibuya Tokyo",
-          "ja": "lyf Shibuya Tokyo"
+          "en": "The OneFive Tokyo Shibuya",
+          "ja": "The OneFive Tokyo Shibuya"
         },
-        "url": "https://www.booking.com/hotel/jp/lyf-shibuya-tokyo.html"
+        "url": "https://us.trip.com/hotels/tokyo-hotel-detail-15935455/hotel-emit-shibuya/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
       }
     },
     "tokyo-subway-24h": {
@@ -178,31 +178,31 @@
       "links": [
         {
           "label": {
-            "en": "Booking.com Osaka fallback stay",
-            "ja": "Booking.com 大阪代替ホテル"
+            "en": "BudgetAir Osaka fallback stay",
+            "ja": "BudgetAir 大阪代替ホテル"
           },
-          "url": "https://www.booking.com/hotel/jp/via-inn-shinsaibashi-yotsubashi.html"
+          "url": "https://us.trip.com/hotels/osaka-hotel-detail-32615922/hotel-trend-nishi-shinsaibashi/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
         },
         {
           "label": {
-            "en": "Booking.com Kyoto stay",
-            "ja": "Booking.com 京都ホテル"
+            "en": "BudgetAir Kyoto stay",
+            "ja": "BudgetAir 京都ホテル"
           },
-          "url": "https://www.booking.com/hotel/jp/imu.html"
+          "url": "https://us.trip.com/hotels/kyoto-hotel-detail-21887858/imu-hotel-kyoto/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
         },
         {
           "label": {
-            "en": "Booking.com Mt. Fuji area stay",
-            "ja": "Booking.com 富士エリアホテル"
+            "en": "BudgetAir Mt. Fuji area stay",
+            "ja": "BudgetAir 富士エリアホテル"
           },
-          "url": "https://www.booking.com/hotel/jp/haostayhe-kou-hu-yi-qian.html"
+          "url": "https://us.trip.com/hotels/fujikawaguchiko-hotel-detail-76325560/super-hotel-fujikawaguchiko-tennen-onsen/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
         },
         {
           "label": {
-            "en": "Booking.com Tokyo stay",
-            "ja": "Booking.com 東京ホテル"
+            "en": "BudgetAir Tokyo stay",
+            "ja": "BudgetAir 東京ホテル"
           },
-          "url": "https://www.booking.com/hotel/jp/lyf-shibuya-tokyo.html"
+          "url": "https://us.trip.com/hotels/tokyo-hotel-detail-15935455/hotel-emit-shibuya/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
         }
       ]
     },
@@ -353,8 +353,8 @@
         "ja": "四ツ橋・西心斎橋"
       },
       "property": {
-        "en": "Via Inn Prime Shinsaibashi Yotsubashi",
-        "ja": "Via Inn Prime Shinsaibashi Yotsubashi"
+        "en": "Hotel Trend Nishi Shinsaibashi",
+        "ja": "Hotel Trend Nishi Shinsaibashi"
       },
       "routeReason": {
         "en": "Use this when you need a paid Osaka night. Yotsubashi / Nishi-Shinsaibashi keeps Day 1 Minami walking and Day 3 Osaka-side movement practical while cutting the fallback room cost.",
@@ -362,7 +362,7 @@
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 6200,
+        "amount": 5700,
         "sourceCostId": "osaka-compact-hotel"
       }
     },
@@ -389,7 +389,7 @@
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 13200,
+        "amount": 7440,
         "sourceCostId": "kyoto-midrange-hotel"
       }
     },
@@ -403,20 +403,20 @@
       "bucket": "booked",
       "sourceGroup": "accommodation",
       "area": {
-        "en": "Kawaguchiko station -> lake corridor",
-        "ja": "河口湖駅から湖畔の動線"
+        "en": "Funatsu / Kawaguchiko corridor",
+        "ja": "船津・河口湖動線"
       },
       "property": {
-        "en": "HaoSTAY",
-        "ja": "HAOSTAY"
+        "en": "SUPER HOTEL Fujikawaguchiko Natural Hot Spring",
+        "ja": "SUPER HOTEL Fujikawaguchiko Natural Hot Spring"
       },
       "routeReason": {
-        "en": "This base keeps the Day 4 Mishima handoff, Chureito / Shimoyoshida, and Lake Kawaguchiko practical without paying for a remote resort location that fights the real station and bus flow.",
-        "ja": "この拠点なら、4日目の三島ハンドオフ、忠霊塔・下吉田、河口湖をまとめやすく、実際の駅・バス動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
+        "en": "This base keeps the Day 4 Mishima handoff, the hot-spring reset, and the Lake Kawaguchiko side practical without paying for a remote resort location that fights the real station and bus flow.",
+        "ja": "この拠点なら、4日目の三島ハンドオフ、温泉での立て直し、河口湖側の動きをまとめやすく、実際の駅・バス動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 15700,
+        "amount": 8700,
         "sourceCostId": "kawaguchiko-base-hotel"
       }
     },
@@ -430,12 +430,12 @@
       "bucket": "booked",
       "sourceGroup": "accommodation",
       "area": {
-        "en": "Central Shibuya / Udagawacho",
-        "ja": "渋谷中心部・宇田川町"
+        "en": "Central Shibuya / Jinnan",
+        "ja": "渋谷中心部・神南"
       },
       "property": {
-        "en": "lyf Shibuya Tokyo",
-        "ja": "lyf Shibuya Tokyo"
+        "en": "The OneFive Tokyo Shibuya",
+        "ja": "The OneFive Tokyo Shibuya"
       },
       "routeReason": {
         "en": "Shibuya is the Day 5 arrival focus, and the same central Shibuya base keeps the following Tokyo days cleaner than shifting districts mid-route.",
@@ -443,7 +443,7 @@
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 19820,
+        "amount": 8580,
         "sourceCostId": "tokyo-base-hotel"
       }
     },

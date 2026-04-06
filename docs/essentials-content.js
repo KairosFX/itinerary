@@ -115,19 +115,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "1日目または3日目に有料の大阪泊が必要な時だけ使います。大阪という広い括りではなく、ミナミ側の動線で選んでいます。"
       },
       "details": {
-        "en": "Yotsubashi / Nishi-Shinsaibashi keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical while cutting the fallback room cost. Save the Booking.com Via Inn Prime Shinsaibashi Yotsubashi page so you can confirm the property and book the cheaper paid Osaka fallback from the same listing.",
-        "ja": "四ツ橋・西心斎橋寄りなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすく、代替宿の費用も抑えやすいです。Booking.com の Via Inn Prime Shinsaibashi Yotsubashi ページを残し、施設確認からそのまま安い大阪代替宿を予約できるようにしています。"
+        "en": "Nishi-Shinsaibashi keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical while trimming the paid fallback cost. Keep the BudgetAir hotel partner page for Hotel Trend Nishi Shinsaibashi here so the cheaper Minami fallback still lands in the right part of Osaka.",
+        "ja": "西心斎橋寄りなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすく、代替宿の費用も抑えやすいです。より安い大阪ミナミ代替宿として、Hotel Trend Nishi Shinsaibashi の BudgetAir 提携ホテルページを残しています。"
       },
       "links": [
         {
-          "href": "https://www.booking.com/hotel/jp/via-inn-shinsaibashi-yotsubashi.html",
+          "href": "https://us.trip.com/hotels/osaka-hotel-detail-32615922/hotel-trend-nishi-shinsaibashi/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab",
           "label": {
-            "en": "Booking.com hotel page",
-            "ja": "Booking.com ホテルページ"
+            "en": "BudgetAir hotel partner page",
+            "ja": "BudgetAir 提携ホテルページ"
           },
           "note": {
-            "en": "Booking.com listing for the cheaper Osaka fallback stay",
-            "ja": "より安い大阪代替宿に使う Booking.com ページ"
+            "en": "BudgetAir hotel-channel listing for the cheaper Osaka fallback stay",
+            "ja": "より安い大阪代替宿に使う BudgetAir 提携ホテルページ"
           },
           "kind": "primary"
         }
@@ -185,19 +185,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
       },
       "details": {
-        "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama and Osaka much better than staying deep in east Kyoto. Keep the Booking.com Imu Hotel Kyoto page here for the stay reference and cheaper booking entry point.",
-        "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山と大阪戻りも東側の奥へ泊まるより整います。Booking.com の Imu Hotel Kyoto ページを残し、宿の確認とより安い予約導線を一つにまとめています。"
+        "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama and Osaka much better than staying deep in east Kyoto. Keep the BudgetAir hotel partner page for Imu Hotel Kyoto here for the same route-fit stay at a cheaper booking entry point.",
+        "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山と大阪戻りも東側の奥へ泊まるより整います。同じ動線向き宿をより安く拾えるよう、Imu Hotel Kyoto の BudgetAir 提携ホテルページを残しています。"
       },
       "links": [
         {
-          "href": "https://www.booking.com/hotel/jp/imu.html",
+          "href": "https://us.trip.com/hotels/kyoto-hotel-detail-21887858/imu-hotel-kyoto/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab",
           "label": {
-            "en": "Booking.com hotel page",
-            "ja": "Booking.com ホテルページ"
+            "en": "BudgetAir hotel partner page",
+            "ja": "BudgetAir 提携ホテルページ"
           },
           "note": {
-            "en": "Booking.com listing for the cheaper Kyoto route-fit stay",
-            "ja": "より安い京都の動線向き宿の Booking.com ページ"
+            "en": "BudgetAir hotel-channel listing for the cheaper Kyoto route-fit stay",
+            "ja": "より安い京都の動線向き宿に使う BudgetAir 提携ホテルページ"
           },
           "kind": "primary"
         }
@@ -318,19 +318,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "3日目の河口湖到着を落ち着いて進めつつ、翌日の富士エリア立ち寄りも無理なくつなげられるよう、駅から湖側の動きで拠点を選んでいます。"
       },
       "details": {
-        "en": "A Kawaguchiko-side base works better than a remote resort because it keeps the station handoff, Chureito option, lake stop, and the Day 5 Tokyo transfer aligned with the actual route. Keep the Booking.com HaoStay Kawaguchiko Ekimae page here for the stay reference.",
-        "ja": "遠いリゾート立地より、河口湖側の拠点の方が駅からの受け渡し、忠霊塔の選択肢、河口湖の立ち寄り、5日目の東京移動までを実際の流れに合わせやすいです。宿確認用に Booking.com の HaoStay河口湖駅前 ページを残しています。"
+        "en": "A Fujikawaguchiko base with a natural hot spring works better than a remote resort because it keeps the station handoff, onsen reset, lake stop, and the Day 5 Tokyo transfer aligned with the real route. Keep the BudgetAir hotel partner page for SUPER HOTEL Fujikawaguchiko Natural Hot Spring here for the cheaper Fuji stay reference.",
+        "ja": "遠いリゾート立地より、天然温泉付きの富士河口湖拠点の方が駅からの受け渡し、温泉での立て直し、河口湖の立ち寄り、5日目の東京移動までを実際の流れに合わせやすいです。より安い富士エリア宿として、SUPER HOTEL Fujikawaguchiko Natural Hot Spring の BudgetAir 提携ホテルページを残しています。"
       },
       "links": [
         {
-          "href": "https://www.booking.com/hotel/jp/haostayhe-kou-hu-yi-qian.html",
+          "href": "https://us.trip.com/hotels/fujikawaguchiko-hotel-detail-76325560/super-hotel-fujikawaguchiko-tennen-onsen/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab",
           "label": {
-            "en": "Booking.com stay page",
-            "ja": "Booking.com 宿泊ページ"
+            "en": "BudgetAir hotel partner page",
+            "ja": "BudgetAir 提携ホテルページ"
           },
           "note": {
-            "en": "Booking.com listing for the Kawaguchiko base stay",
-            "ja": "河口湖の拠点宿に使う Booking.com ページ"
+            "en": "BudgetAir hotel-channel listing for the cheaper Fuji-area stay",
+            "ja": "より安い富士エリア宿に使う BudgetAir 提携ホテルページ"
           },
           "kind": "primary"
         }
@@ -389,19 +389,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "東京ホテル泊は5日目と6日目に置き、渋谷到着、観光メイン日、そして帰国前の軽い7日目を同じ拠点で回せるようにします。"
       },
       "details": {
-        "en": "Shibuya access still fits the first Tokyo evening best, and a central Shibuya / Udagawacho base keeps Day 6 and the Day 7 reset simple without wasting time on a mid-route hotel switch before the airport. Keep the Booking.com lyf Shibuya Tokyo page here for the hotel reference and reservation access.",
-        "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、宇田川町寄りの渋谷拠点なら6日目と7日目の立て直しもホテル移動なしで進めやすいです。ホテル確認と予約導線のために、Booking.com の lyf Shibuya Tokyo ページを残しています。"
+        "en": "Shibuya access still fits the first Tokyo evening best, and a central Shibuya / Jinnan base keeps Day 6 and the Day 7 reset simple without wasting time on a mid-route hotel switch before the airport. Keep the BudgetAir hotel partner page for The OneFive Tokyo Shibuya here for the cheaper Shibuya booking entry point.",
+        "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、神南寄りの渋谷拠点なら6日目と7日目の立て直しもホテル移動なしで進めやすいです。より安い渋谷拠点として、The OneFive Tokyo Shibuya の BudgetAir 提携ホテルページを残しています。"
       },
       "links": [
         {
-          "href": "https://www.booking.com/hotel/jp/lyf-shibuya-tokyo.html",
+          "href": "https://us.trip.com/hotels/tokyo-hotel-detail-15935455/hotel-emit-shibuya/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab",
           "label": {
-            "en": "Booking.com hotel page",
-            "ja": "Booking.com ホテルページ"
+            "en": "BudgetAir hotel partner page",
+            "ja": "BudgetAir 提携ホテルページ"
           },
           "note": {
-            "en": "Booking.com listing for the cheaper Shibuya base stay",
-            "ja": "より安い渋谷拠点ホテルに使う Booking.com ページ"
+            "en": "BudgetAir hotel-channel listing for the cheaper Shibuya base stay",
+            "ja": "より安い渋谷拠点ホテルに使う BudgetAir 提携ホテルページ"
           },
           "kind": "primary"
         }
