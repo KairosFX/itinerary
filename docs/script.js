@@ -10,6 +10,7 @@ const mainContent = document.querySelector("#main-content");
 const siteFooter = document.querySelector(".site-footer");
 const siteIntro = document.querySelector("[data-site-intro]");
 const siteTransition = document.querySelector("[data-site-transition]");
+const clickBambooLayer = document.querySelector("[data-click-bamboo]");
 const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const checklistGateNotice = document.querySelector("[data-checklist-gate]");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
@@ -111,9 +112,11 @@ const audioSectionOpenVolume = 0.24;
 const audioTransitionVolume = 0.28;
 const audioSectionOpenCooldownMs = 96;
 const audioTransitionCooldownMs = 320;
-const siteTransitionDurationMs = 760;
-const siteTransitionSwapDelayMs = 176;
-const siteTransitionBackToTopDelayMs = 108;
+const siteTransitionDurationMs = 520;
+const siteTransitionSwapDelayMs = 118;
+const siteTransitionBackToTopDelayMs = 92;
+const interactionBambooCooldownMs = 620;
+const interactionBambooViewportPaddingPx = 26;
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
   en:
@@ -510,7 +513,9 @@ const siteAudioState = {
   gestureBindingReady: false,
   autoplayBindingReady: false,
   lastSectionOpenAt: 0,
-  lastTransitionAt: 0
+  lastTransitionAt: 0,
+  lastInteractionBambooAt: 0,
+  lastInteractionBambooSoundAt: 0
 };
 let siteTransitionCleanupTimer = 0;
 let siteTransitionToken = 0;
@@ -911,6 +916,15 @@ function playTransitionSound() {
   });
 }
 
+function playInteractionBambooSound() {
+  playManagedOneShot(ensureSiteAudioNodes().sectionOpen, {
+    volume: Math.min(audioSectionOpenVolume + 0.02, 0.28),
+    cooldownMs: interactionBambooCooldownMs,
+    stateKey: "lastInteractionBambooSoundAt",
+    duckMs: 380
+  });
+}
+
 function shouldPlayGenericButtonSound(button) {
   if (!(button instanceof HTMLButtonElement) || button.disabled) {
     return false;
@@ -947,12 +961,31 @@ function shouldPlayGenericButtonSound(button) {
 }
 
 function handleGenericButtonSoundClick(event) {
-  const button = event.target.closest("button");
-  if (!button || !shouldPlayGenericButtonSound(button)) {
+  if (event.defaultPrevented || event.button !== 0) {
     return;
   }
 
-  playSectionOpenSound();
+  const target = event.target instanceof Element ? event.target : null;
+  if (!target || root.classList.contains("intro-pending") || root.classList.contains("intro-active")) {
+    return;
+  }
+
+  const button = target.closest("button");
+  const isTransitionInteraction = isTransitionInteractionTarget(target);
+  const shouldPlayInteractionAudio =
+    !isTransitionInteraction && !target.closest("summary, label, input[type='checkbox']");
+
+  if (button && !isTransitionInteraction && !shouldPlayGenericButtonSound(button)) {
+    return;
+  }
+
+  triggerInteractionBambooBurst({
+    event,
+    target,
+    direction: getInteractionTransitionDirection(target),
+    intensity: isTransitionInteraction ? "transition" : button ? "button" : "site",
+    playAudio: shouldPlayInteractionAudio
+  });
 }
 
 function initializeSiteAudioExperience() {
@@ -3226,6 +3259,7 @@ function syncReducedEffectsMode({ force = false } = {}) {
 
   if (reducedEffectsEnabled) {
     clearSiteTransitionState();
+    clearInteractionBambooBursts();
 
     if (desktopReverseScrollTimer) {
       window.clearTimeout(desktopReverseScrollTimer);
@@ -8260,6 +8294,310 @@ function getPanelTransitionDirection(nextPanelId, currentPanelId = getActivePane
   }
 
   return nextIndex > currentIndex ? "forward" : "backward";
+}
+
+function clearInteractionBambooBursts() {
+  if (!clickBambooLayer) {
+    return;
+  }
+
+  clickBambooLayer.replaceChildren();
+}
+
+function isTransitionInteractionTarget(target) {
+  if (!(target instanceof Element)) {
+    return false;
+  }
+
+  return Boolean(
+    target.closest("[data-panel-target], [data-back-to-top], [data-jump-current-day], [data-route-map-day]")
+  );
+}
+
+function getInteractionTransitionDirection(target) {
+  if (!(target instanceof Element)) {
+    return "forward";
+  }
+
+  if (target.closest("[data-back-to-top]")) {
+    return "up";
+  }
+
+  const panelTarget = target.closest("[data-panel-target]")?.dataset.panelTarget;
+  if (panelTarget) {
+    return getPanelTransitionDirection(panelTarget);
+  }
+
+  if (target.closest("[data-jump-current-day], [data-route-map-day]")) {
+    return getPanelTransitionDirection("checklist");
+  }
+
+  return "forward";
+}
+
+function clampInteractionCoordinate(value, maxValue) {
+  const lowerBound = Math.min(interactionBambooViewportPaddingPx, maxValue);
+  const upperBound = Math.max(lowerBound, maxValue - interactionBambooViewportPaddingPx);
+  return Math.min(Math.max(value, lowerBound), upperBound);
+}
+
+function resolveInteractionBurstOrigin(event, target) {
+  const anchor =
+    target.closest("button, a, summary, [role='button'], label, .check-item, .footer-link") || target;
+  let x = Number.isFinite(event.clientX) ? event.clientX : Number.NaN;
+  let y = Number.isFinite(event.clientY) ? event.clientY : Number.NaN;
+
+  if ((!Number.isFinite(x) || !Number.isFinite(y)) && anchor instanceof Element) {
+    const rect = anchor.getBoundingClientRect();
+    x = rect.left + rect.width / 2;
+    y = rect.top + Math.min(Math.max(rect.height * 0.34, 18), 42);
+  }
+
+  if (!Number.isFinite(x)) {
+    x = window.innerWidth / 2;
+  }
+
+  if (!Number.isFinite(y)) {
+    y = Math.min(window.innerHeight * 0.38, 320);
+  }
+
+  return {
+    x: clampInteractionCoordinate(x, window.innerWidth),
+    y: clampInteractionCoordinate(y, window.innerHeight)
+  };
+}
+
+function getInteractionBambooRecipes(intensity = "site", direction = "forward") {
+  const baseRecipes =
+    intensity === "transition"
+      ? [
+          {
+            spread: -38,
+            drift: 22,
+            drop: 118,
+            startTilt: -10,
+            endTilt: 16,
+            scale: 0.72,
+            width: "0.42rem",
+            height: "7.2rem",
+            delay: 0,
+            duration: 660,
+            opacity: 0.54
+          },
+          {
+            spread: -10,
+            drift: 40,
+            drop: 138,
+            startTilt: -6,
+            endTilt: 18,
+            scale: 0.82,
+            width: "0.46rem",
+            height: "8rem",
+            delay: 18,
+            duration: 700,
+            opacity: 0.6
+          },
+          {
+            spread: 22,
+            drift: 62,
+            drop: 154,
+            startTilt: 4,
+            endTilt: 22,
+            scale: 0.76,
+            width: "0.4rem",
+            height: "6.8rem",
+            delay: 54,
+            duration: 720,
+            opacity: 0.48
+          }
+        ]
+      : intensity === "button"
+        ? [
+            {
+              spread: -46,
+              drift: -24,
+              drop: 144,
+              startTilt: -16,
+              endTilt: -2,
+              scale: 0.84,
+              width: "0.48rem",
+              height: "8.8rem",
+              delay: 0,
+              duration: 820,
+              opacity: 0.66
+            },
+            {
+              spread: -14,
+              drift: -6,
+              drop: 164,
+              startTilt: -8,
+              endTilt: 10,
+              scale: 0.94,
+              width: "0.54rem",
+              height: "9.8rem",
+              delay: 18,
+              duration: 860,
+              opacity: 0.72
+            },
+            {
+              spread: 18,
+              drift: 18,
+              drop: 156,
+              startTilt: 6,
+              endTilt: 18,
+              scale: 0.88,
+              width: "0.5rem",
+              height: "9.2rem",
+              delay: 42,
+              duration: 840,
+              opacity: 0.68
+            },
+            {
+              spread: 46,
+              drift: 34,
+              drop: 176,
+              startTilt: 14,
+              endTilt: 26,
+              scale: 0.78,
+              width: "0.46rem",
+              height: "8.4rem",
+              delay: 76,
+              duration: 900,
+              opacity: 0.6
+            }
+          ]
+        : [
+            {
+              spread: -34,
+              drift: -20,
+              drop: 132,
+              startTilt: -14,
+              endTilt: -2,
+              scale: 0.78,
+              width: "0.46rem",
+              height: "7.8rem",
+              delay: 0,
+              duration: 760,
+              opacity: 0.56
+            },
+            {
+              spread: 2,
+              drift: 12,
+              drop: 148,
+              startTilt: 4,
+              endTilt: 16,
+              scale: 0.84,
+              width: "0.5rem",
+              height: "8.6rem",
+              delay: 28,
+              duration: 820,
+              opacity: 0.62
+            },
+            {
+              spread: 36,
+              drift: 26,
+              drop: 142,
+              startTilt: 12,
+              endTilt: 24,
+              scale: 0.74,
+              width: "0.44rem",
+              height: "7.4rem",
+              delay: 64,
+              duration: 800,
+              opacity: 0.52
+            }
+          ];
+
+  return baseRecipes.map((recipe) => {
+    if (direction === "backward") {
+      return {
+        ...recipe,
+        spread: -recipe.spread,
+        drift: -Math.abs(recipe.drift),
+        startTilt: -recipe.startTilt,
+        endTilt: -recipe.endTilt
+      };
+    }
+
+    if (direction === "up") {
+      return {
+        ...recipe,
+        spread: recipe.spread * 0.64,
+        drift: recipe.drift * 0.32,
+        drop: Math.max(recipe.drop - 28, 104),
+        startTilt: recipe.startTilt * 0.74,
+        endTilt: recipe.endTilt * 0.84
+      };
+    }
+
+    return recipe;
+  });
+}
+
+function createInteractionBambooStem({ x, y, recipe, intensity }) {
+  const stem = document.createElement("span");
+  stem.className = "site-click-bamboo__stem";
+  stem.dataset.intensity = intensity;
+  stem.style.setProperty("--click-bamboo-origin-x", `${x + recipe.spread}px`);
+  stem.style.setProperty("--click-bamboo-origin-y", `${y - 18}px`);
+  stem.style.setProperty("--click-bamboo-drift-x", `${recipe.drift}px`);
+  stem.style.setProperty("--click-bamboo-drift-y", `${recipe.drop}px`);
+  stem.style.setProperty("--click-bamboo-rotate-start", `${recipe.startTilt}deg`);
+  stem.style.setProperty("--click-bamboo-rotate-end", `${recipe.endTilt}deg`);
+  stem.style.setProperty("--click-bamboo-scale", String(recipe.scale));
+  stem.style.setProperty("--click-bamboo-width", recipe.width);
+  stem.style.setProperty("--click-bamboo-height", recipe.height);
+  stem.style.setProperty("--click-bamboo-delay", `${recipe.delay}ms`);
+  stem.style.setProperty("--click-bamboo-duration", `${recipe.duration}ms`);
+  stem.style.setProperty("--click-bamboo-opacity", String(recipe.opacity));
+  stem.addEventListener(
+    "animationend",
+    () => {
+      stem.remove();
+    },
+    { once: true }
+  );
+  return stem;
+}
+
+function triggerInteractionBambooBurst({
+  event,
+  target,
+  direction = "forward",
+  intensity = "site",
+  playAudio = false
+} = {}) {
+  const targetElement = target instanceof Element ? target : null;
+  if (!targetElement) {
+    return false;
+  }
+
+  const now = performance.now();
+  if (now - siteAudioState.lastInteractionBambooAt < interactionBambooCooldownMs) {
+    return false;
+  }
+
+  siteAudioState.lastInteractionBambooAt = now;
+  if (playAudio) {
+    playInteractionBambooSound();
+  }
+
+  if (!clickBambooLayer || reducedEffectsEnabled) {
+    return true;
+  }
+
+  const { x, y } = resolveInteractionBurstOrigin(event, targetElement);
+  const fragment = document.createDocumentFragment();
+  getInteractionBambooRecipes(intensity, direction).forEach((recipe) => {
+    fragment.append(createInteractionBambooStem({ x, y, recipe, intensity }));
+  });
+
+  while (clickBambooLayer.childElementCount > 16) {
+    clickBambooLayer.firstElementChild?.remove();
+  }
+
+  clickBambooLayer.append(fragment);
+  return true;
 }
 
 function triggerSiteTransition({ mode = "section", direction = "forward" } = {}) {
