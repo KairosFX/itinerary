@@ -17,7 +17,6 @@
     "perf": "node scripts/run-perf.js"
   },
   "devDependencies": {
-    "@lhci/cli": "^0.15.1",
     "clean-css-cli": "^5.6.3",
     "terser": "^5.46.1"
   }
