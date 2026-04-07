@@ -111,9 +111,9 @@ const audioSectionOpenVolume = 0.24;
 const audioTransitionVolume = 0.28;
 const audioSectionOpenCooldownMs = 96;
 const audioTransitionCooldownMs = 320;
-const siteTransitionDurationMs = 500;
-const siteTransitionSwapDelayMs = 108;
-const siteTransitionBackToTopDelayMs = 84;
+const siteTransitionDurationMs = 520;
+const siteTransitionSwapDelayMs = 118;
+const siteTransitionBackToTopDelayMs = 92;
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
   en:
