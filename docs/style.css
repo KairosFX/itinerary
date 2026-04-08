@@ -9301,12 +9301,15 @@ html[data-theme="dark"] .progress-item.is-active .progress-item__ratio {
 }
 
 html[data-theme="dark"] .progress-item.is-complete {
-  border-color: rgba(137, 179, 151, 0.18);
-  background: linear-gradient(180deg, rgba(59, 72, 66, 0.9), rgba(47, 57, 53, 0.86));
+  border-color: rgba(137, 179, 151, 0.2);
+  background:
+    linear-gradient(180deg, rgba(62, 76, 69, 0.96), rgba(49, 60, 55, 0.92)),
+    rgba(48, 58, 53, 0.92);
   opacity: 1;
   box-shadow:
     0 0 0 1px rgba(137, 179, 151, 0.1),
-    0 18px 32px rgba(7, 11, 8, 0.18);
+    0 18px 32px rgba(7, 11, 8, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 html[data-theme="dark"] .progress-item.is-complete::before {
@@ -9314,6 +9317,16 @@ html[data-theme="dark"] .progress-item.is-complete::before {
   box-shadow:
     0 0 0 1px rgba(137, 179, 151, 0.18),
     0 0 0 0.42rem rgba(24, 30, 27, 0.96);
+}
+
+html[data-theme="dark"] .progress-item.is-complete .progress-item__place {
+  color: rgba(236, 245, 238, 0.96);
+}
+
+html[data-theme="dark"] .progress-item.is-complete .progress-item__step,
+html[data-theme="dark"] .progress-item.is-complete .progress-item__ratio,
+html[data-theme="dark"] .progress-item.is-complete .progress-item__notice {
+  color: rgba(198, 228, 205, 0.9);
 }
 
 html[data-theme="dark"] .progress-item.is-warning {
@@ -10078,10 +10091,14 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
 }
 
 .progress-item.is-complete {
-  border-color: rgba(63, 123, 84, 0.18);
-  background: rgba(248, 252, 248, 0.9);
+  border-color: rgba(63, 123, 84, 0.2);
+  background:
+    linear-gradient(180deg, rgba(250, 253, 250, 0.98), rgba(243, 249, 243, 0.94)),
+    rgba(248, 252, 248, 0.96);
   opacity: 1;
-  box-shadow: 0 12px 26px rgba(16, 33, 22, 0.08);
+  box-shadow:
+    0 12px 26px rgba(16, 33, 22, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62);
 }
 
 .progress-item.is-complete::before {
@@ -10091,9 +10108,14 @@ html[data-theme="dark"] .section-tab[aria-selected="true"] {
     0 0 0 0.42rem rgba(248, 252, 248, 0.96);
 }
 
-.progress-item.is-complete .progress-item__place,
-.progress-item.is-complete .progress-item__ratio {
-  color: var(--accent-deep);
+.progress-item.is-complete .progress-item__place {
+  color: #244232;
+}
+
+.progress-item.is-complete .progress-item__step,
+.progress-item.is-complete .progress-item__ratio,
+.progress-item.is-complete .progress-item__notice {
+  color: #4f735b;
 }
 
 .progress-item.is-warning {
