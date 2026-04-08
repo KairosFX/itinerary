@@ -2384,11 +2384,130 @@ html.reduce-effects .site-backdrop__video {
   html.reduce-effects .site-backdrop__video {
     object-position: 54% 46% !important;
   }
+}
+
+/* Final header density overrides */
+.site-header {
+  backdrop-filter: blur(10px) saturate(1.06);
+}
+
+.header-inner,
+.site-header.is-condensed .header-inner {
+  padding: 0.14rem 0 0.18rem !important;
+  gap: 0.18rem 0.6rem !important;
+}
+
+.header-actions,
+.site-header.is-condensed .header-actions {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-areas: "nav controls" !important;
+  align-items: center !important;
+  gap: 0.18rem 0.58rem !important;
+  padding-top: 0 !important;
+}
+
+.section-nav,
+.site-header.is-condensed .section-nav {
+  width: 100% !important;
+  justify-content: flex-start !important;
+  gap: 0.16rem !important;
+  padding-bottom: 0 !important;
+}
+
+.section-tab,
+.site-header.is-condensed .section-tab {
+  padding: 0.32rem 0.56rem !important;
+  font-size: 0.72rem !important;
+  line-height: 1.08 !important;
+}
+
+.header-controls,
+.site-header.is-condensed .header-controls {
+  width: auto !important;
+  min-width: max-content !important;
+  gap: 0.16rem !important;
+  overflow: visible !important;
+}
+
+.language-switcher,
+.site-header.is-condensed .language-switcher {
+  max-height: none !important;
+  max-width: none !important;
+  padding: 0.12rem !important;
+  gap: 0.12rem !important;
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+.language-button {
+  min-height: 1.76rem !important;
+  padding: 0.22rem 0.48rem !important;
+  font-size: 0.67rem !important;
+}
+
+@media (max-width: 920px) {
+  .header-inner,
+  .site-header.is-condensed .header-inner {
+    padding: 0.12rem 0 0.16rem !important;
+    gap: 0.16rem 0.42rem !important;
+  }
+
+  .header-actions,
+  .site-header.is-condensed .header-actions {
+    gap: 0.16rem 0.4rem !important;
+  }
+
+  .section-nav,
+  .site-header.is-condensed .section-nav {
+    gap: 0.12rem !important;
+  }
+
+  .section-tab,
+  .site-header.is-condensed .section-tab {
+    padding: 0.3rem 0.48rem !important;
+    font-size: 0.69rem !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .header-inner,
+  .site-header.is-condensed .header-inner {
+    padding: 0.1rem 0 0.14rem !important;
+    gap: 0.14rem 0.36rem !important;
+  }
+
+  .header-actions,
+  .site-header.is-condensed .header-actions {
+    gap: 0.14rem 0.32rem !important;
+  }
+
+  .section-nav,
+  .site-header.is-condensed .section-nav {
+    gap: 0.1rem !important;
+  }
+
+  .section-tab,
+  .site-header.is-condensed .section-tab {
+    padding: 0.28rem 0.44rem !important;
+    font-size: 0.66rem !important;
+  }
+
+  .language-switcher,
+  .site-header.is-condensed .language-switcher {
+    padding: 0.1rem !important;
+  }
+
+  .language-button {
+    min-height: 1.68rem !important;
+    padding: 0.2rem 0.42rem !important;
+    font-size: 0.64rem !important;
+  }
 }</style>
-  <link rel="preload" href="./assets/app/style.757bb2ffe3.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.da5e09ad1f.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.757bb2ffe3.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.757bb2ffe3.css"></noscript>
+  <link rel="preload" href="./assets/app/style.d610db58af.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.c0dcc35cae.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.d610db58af.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.d610db58af.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -3911,10 +4030,10 @@ html.reduce-effects .site-backdrop__video {
   </footer>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"sectionOpenAudioPath":"./assets/app/opening.b71f05a930.mp3","sectionOpenAudioCssPath":"./opening.b71f05a930.mp3","sectionOpenAudioHash":"b71f05a930","backgroundLoopAudioPath":"./assets/app/page-background-loop.bcde8dff98.mp3","backgroundLoopAudioCssPath":"./page-background-loop.bcde8dff98.mp3","backgroundLoopAudioHash":"bcde8dff98","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.757bb2ffe3.css","styleHash":"757bb2ffe3","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.da5e09ad1f.js","scriptHash":"da5e09ad1f","routeContentPath":"./assets/app/routeContent.f5a38cf4cd.js","routeContentHash":"f5a38cf4cd","budgetUiPath":"./assets/app/budgetUi.521698fae8.js","budgetUiHash":"521698fae8","budgetContentPath":"./assets/app/budgetContent.2505fd076d.js","budgetContentHash":"2505fd076d","essentialsContentPath":"./assets/app/essentialsContent.9f71cbe550.js","essentialsContentHash":"9f71cbe550","generatedAt":"2026-04-08T21:46:15.073Z","cacheVersion":"757bb2ffe3-2d8476cd59-da5e09ad1f-f5a38cf4cd-521698fae8-2505fd076d-9f71cbe550-b71f05a930-bcde8dff98-9afc15ad27"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/page-background-loop.bcde8dff98.mp3","backgroundLoopAudioCssPath":"./page-background-loop.bcde8dff98.mp3","backgroundLoopAudioHash":"bcde8dff98","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.d610db58af.css","styleHash":"d610db58af","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.c0dcc35cae.js","scriptHash":"c0dcc35cae","routeContentPath":"./assets/app/routeContent.f5a38cf4cd.js","routeContentHash":"f5a38cf4cd","budgetUiPath":"./assets/app/budgetUi.7f22bfe2db.js","budgetUiHash":"7f22bfe2db","budgetContentPath":"./assets/app/budgetContent.2505fd076d.js","budgetContentHash":"2505fd076d","essentialsContentPath":"./assets/app/essentialsContent.9f71cbe550.js","essentialsContentHash":"9f71cbe550","generatedAt":"2026-04-08T22:27:15.104Z","cacheVersion":"d610db58af-2d8476cd59-c0dcc35cae-f5a38cf4cd-7f22bfe2db-2505fd076d-9f71cbe550-bcde8dff98-9afc15ad27"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.da5e09ad1f.js" defer></script>
+  <script src="./assets/app/script.c0dcc35cae.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>

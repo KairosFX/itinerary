@@ -17,7 +17,6 @@ const appShellPaths = [
   "./assets/icons/apple-touch-icon.png",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
-  assetManifest.sectionOpenAudioPath,
   assetManifest.backgroundLoopAudioPath,
   assetManifest.transitionAudioPath,
   assetManifest.stylePath,

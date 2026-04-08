@@ -16,11 +16,6 @@ const budgetSoundRuntimeGlobal = "__JAPAN_PLAY_BUDGET_SOUND__";
 const playBudgetInteractionSound = (tone = "positive") => {
   if (typeof window[budgetSoundRuntimeGlobal] === "function") {
     window[budgetSoundRuntimeGlobal](tone);
-    return;
-  }
-
-  if (typeof window.__JAPAN_PLAY_SECTION_OPEN_SOUND__ === "function") {
-    window.__JAPAN_PLAY_SECTION_OPEN_SOUND__();
   }
 };
 const triggerBudgetStepperEffect = (stepperElement, effectName, sourceButton) => {

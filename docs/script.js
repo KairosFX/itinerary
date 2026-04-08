@@ -86,7 +86,6 @@ const appAssetConfigRuntimeGlobal = "__JAPAN_APP_ASSETS__";
 const budgetUiRuntimeGlobal = "__JAPAN_BUDGET_UI__";
 const budgetContentRuntimeGlobal = "__JAPAN_BUDGET_CONTENT__";
 const essentialsContentRuntimeGlobal = "__JAPAN_ESSENTIALS_CONTENT__";
-const sectionOpenSoundRuntimeGlobal = "__JAPAN_PLAY_SECTION_OPEN_SOUND__";
 const budgetSoundRuntimeGlobal = "__JAPAN_PLAY_BUDGET_SOUND__";
 const budgetStepperEffectRuntimeGlobal = "__JAPAN_TRIGGER_BUDGET_STEPPER_EFFECT__";
 const routeMapLibraryScriptUrl = "./assets/vendor/maplibre/maplibre-gl.js";
@@ -97,7 +96,6 @@ const essentialsContentFallbackScriptUrl = "./essentials-content.min.js";
 const routeContentRuntimeGlobal = "__JAPAN_ROUTE_CONTENT__";
 const routeContentFallbackScriptUrl = "./route-content.min.js";
 const routeStyleFallbackUrl = "./route.min.css";
-const sectionOpenAudioFallbackUrl = "./assets/audio/opening.mp3";
 const backgroundLoopAudioFallbackUrl = "./assets/audio/page-background-loop.mp3";
 const transitionAudioFallbackUrl = "./assets/audio/transition.mp3";
 const celebrationVideoAssetUrl = "./assets/media/celebrationanimation.mp4";
@@ -112,12 +110,10 @@ const budgetTravelersPerRoomDefault = budgetSharedRoomOccupancy;
 const serviceWorkerWarmMessageType = "CACHE_URLS";
 const audioAmbientVolume = 0.085;
 const audioAmbientDuckVolume = 0.05;
-const audioSectionOpenVolume = 0.24;
 const audioTransitionVolume = 0.28;
 const audioBudgetPositiveVolume = 0.15;
 const audioBudgetNegativeVolume = 0.14;
 const audioHammerClickVolume = 0.112;
-const audioSectionOpenCooldownMs = 96;
 const audioTransitionCooldownMs = 320;
 const audioBudgetCooldownMs = 132;
 const audioHammerClickCooldownMs = 84;
@@ -639,7 +635,6 @@ const siteAudioState = {
   userGestureSeen: false,
   gestureBindingReady: false,
   autoplayBindingReady: false,
-  lastSectionOpenAt: 0,
   lastTransitionAt: 0,
   lastBudgetCueAt: 0,
   lastHammerClickAt: 0
@@ -920,7 +915,6 @@ function getResolvedAppAssetManifest() {
 
 function getAudioAssetConfig(manifest = getResolvedAppAssetManifest()) {
   return {
-    sectionOpenPath: manifest.sectionOpenAudioPath || sectionOpenAudioFallbackUrl,
     backgroundLoopPath: manifest.backgroundLoopAudioPath || backgroundLoopAudioFallbackUrl,
     transitionPath: manifest.transitionAudioPath || transitionAudioFallbackUrl
   };
@@ -1316,10 +1310,6 @@ function ensureSiteAudioNodes() {
 
   const audioAssets = getAudioAssetConfig();
   siteAudioNodes = {
-    sectionOpen: createManagedAudioNode(audioAssets.sectionOpenPath, {
-      preload: "auto",
-      volume: audioSectionOpenVolume
-    }),
     transition: createManagedAudioNode(audioAssets.transitionPath, {
       preload: "auto",
       volume: audioTransitionVolume
@@ -1549,17 +1539,6 @@ function playManagedSynthOneShot(
   triggerCue();
 }
 
-function playSectionOpenSound() {
-  playManagedOneShot(ensureSiteAudioNodes().sectionOpen, {
-    volume: audioSectionOpenVolume,
-    cooldownMs: audioSectionOpenCooldownMs,
-    stateKey: "lastSectionOpenAt",
-    duckMs: 360
-  });
-}
-
-window[sectionOpenSoundRuntimeGlobal] = playSectionOpenSound;
-
 function playTransitionSound() {
   return;
 }
@@ -1569,7 +1548,6 @@ function playBudgetInteractionSound(tone = "positive") {
     tone === "counter" || tone === "negative" || tone === "chung" ? "counter" : "positive";
 
   if (!getManagedAudioContextCtor()) {
-    playSectionOpenSound();
     return;
   }
 
@@ -1600,50 +1578,6 @@ function playBambooHammerClickSound() {
       duckMs: audioHammerClickDuckMs
     }
   );
-}
-
-function shouldPlayGenericButtonSound(button) {
-  if (!(button instanceof HTMLButtonElement) || button.disabled) {
-    return false;
-  }
-
-  if (button.getAttribute("aria-disabled") === "true") {
-    return false;
-  }
-
-  if (
-    button.matches(
-      "[data-panel-target], [data-back-to-top], [data-jump-current-day], [data-route-map-day]"
-    )
-  ) {
-    return false;
-  }
-
-  if (
-    isChecklistAccessLocked() &&
-    button.matches(".transit-trigger--checklist, [data-checklist-detail-trigger]")
-  ) {
-    return false;
-  }
-
-  const dayCard = button.closest(".day-card[data-day]");
-  if (dayCard) {
-    const day = Number(dayCard.dataset.day);
-    if (day > accessibleDay) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function handleGenericButtonSoundClick(event) {
-  const button = event.target.closest("button");
-  if (!button || !shouldPlayGenericButtonSound(button)) {
-    return;
-  }
-
-  playSectionOpenSound();
 }
 
 function initializeSiteAudioExperience() {
@@ -1688,7 +1622,6 @@ function getWarmCacheAssetUrls(manifest) {
   return Array.from(
     new Set(
       [
-        manifest.sectionOpenAudioPath || sectionOpenAudioFallbackUrl,
         manifest.backgroundLoopAudioPath || backgroundLoopAudioFallbackUrl,
         manifest.transitionAudioPath || transitionAudioFallbackUrl,
         manifest.routeStylePath || routeStyleFallbackUrl,
@@ -5381,7 +5314,6 @@ function bindPackingUI() {
         delete packingState[itemId];
       }
 
-      playSectionOpenSound();
       storePackingState();
       syncPackingUI();
     });
@@ -6262,7 +6194,6 @@ function markAllChecklistItemsChecked() {
     checklistState[input.id] = true;
   });
 
-  playSectionOpenSound();
   storeChecklistState();
   refreshChecklistProgressState({ syncDayCards: true });
   syncProgressTimeline();
@@ -6297,7 +6228,6 @@ function handleChecklistPanelChange(event) {
   }
 
   triggerChecklistInteractionFeedback(input);
-  playSectionOpenSound();
   storeChecklistState();
   refreshChecklistProgressState({ syncDayCards: true });
   syncProgressTimeline();
@@ -9770,24 +9700,8 @@ languageButtons.forEach((button) => {
 });
 
 bindTabNavigation();
-document.addEventListener("click", handleGenericButtonSoundClick, true);
 document.addEventListener("click", handleAnchorScrollClick);
 document.addEventListener("selectstart", handleSelectionStart);
-document.addEventListener(
-  "toggle",
-  (event) => {
-    const detailsNode = event.target;
-    if (
-      !(detailsNode instanceof HTMLDetailsElement) ||
-      !detailsNode.matches(".booking-group, .booking-item")
-    ) {
-      return;
-    }
-
-    playSectionOpenSound();
-  },
-  true
-);
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {

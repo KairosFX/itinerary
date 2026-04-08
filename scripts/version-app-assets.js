@@ -47,10 +47,6 @@ const assetDefinitions = [
 
 const staticAssetDefinitions = [
   {
-    key: "sectionOpenAudio",
-    sourcePath: path.join(docsDir, "assets", "audio", "opening.mp3")
-  },
-  {
     key: "backgroundLoopAudio",
     sourcePath: path.join(docsDir, "assets", "audio", "page-background-loop.mp3")
   },
@@ -119,7 +115,6 @@ manifest.cacheVersion = [
   manifest.budgetUiHash,
   manifest.budgetContentHash,
   manifest.essentialsContentHash,
-  manifest.sectionOpenAudioHash,
   manifest.backgroundLoopAudioHash,
   manifest.transitionAudioHash
 ]
