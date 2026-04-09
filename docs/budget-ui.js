@@ -135,8 +135,8 @@ const itineraryBudgetLabels = {
   },
   dayViewerHint: { en: "", ja: "" },
   totalMeta: {
-    en: "Required purchases only: booked items, flexible spend, and optional route extras stay outside this main total.",
-    ja: "このメイン合計には、これから必要な購入分だけを含めています。予約済み項目、変動費、任意の追加ルート費用は含めません。"
+    en: "Combined total of every day shown in the Day Budget Viewer. Any day change updates this trip total immediately.",
+    ja: "Day Budget Viewer に表示される全日程の合計です。各日の金額が変わると、この旅全体の合計もすぐ更新されます。"
   },
   noPaidAccommodationMeta: {
     en: "No paid hotel or ryokan stays are selected right now.",
@@ -931,8 +931,8 @@ const itineraryBudgetLabels = {
       visibleDayEstimates,
       total,
       totalRange,
-      mainTotal: bucketTotals.required || 0,
-      mainTotalRange: bucketTotalsRange.required || getZeroBudgetRange(),
+      mainTotal: total,
+      mainTotalRange: totalRange,
       perPerson: getBudgetRangeValue(perPersonRange, "expected"),
       perPersonRange,
       bookedAndFixedTotal,
