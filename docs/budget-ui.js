@@ -135,8 +135,8 @@ const itineraryBudgetLabels = {
   },
   dayViewerHint: { en: "", ja: "" },
   totalMeta: {
-    en: "Live total based on the current trip settings and day-by-day cost model.",
-    ja: "現在の旅設定と日別費用モデルに連動するライブ合計です。"
+    en: "Required purchases only: booked items, flexible spend, and optional route extras stay outside this main total.",
+    ja: "このメイン合計には、これから必要な購入分だけを含めています。予約済み項目、変動費、任意の追加ルート費用は含めません。"
   },
   noPaidAccommodationMeta: {
     en: "No paid hotel or ryokan stays are selected right now.",
@@ -931,6 +931,8 @@ const itineraryBudgetLabels = {
       visibleDayEstimates,
       total,
       totalRange,
+      mainTotal: bucketTotals.required || 0,
+      mainTotalRange: bucketTotalsRange.required || getZeroBudgetRange(),
       perPerson: getBudgetRangeValue(perPersonRange, "expected"),
       perPersonRange,
       bookedAndFixedTotal,
@@ -941,36 +943,16 @@ const itineraryBudgetLabels = {
       categoryTotalsRange
     };
   };
-  const getBudgetEstimateTotal = () => calculateEstimate().total;
+  const getBudgetEstimateTotal = () => calculateEstimate().mainTotal;
   const renderSummaryMarkup = (estimate = calculateEstimate()) => {
-    const summaryCards = [
-      {
-        className: "budget-summary-card budget-summary-card--estimate budget-summary-card--primary",
-        label: itineraryBudgetLabels.summaryTotal,
-        value: formatCurrency(estimate.total),
-        rangeNote: getCompactRangeCopy(estimate.totalRange),
-        meta: itineraryBudgetLabels.totalMeta
-      },
-      {
-        className: "budget-summary-card budget-summary-card--per-person budget-summary-card--compact",
-        label: itineraryBudgetLabels.summaryPerPerson,
-        value: formatCurrency(estimate.perPerson),
-        rangeNote: getCompactRangeCopy(estimate.perPersonRange),
-        meta: {
-          en: "Per-traveler estimate using the current trip setup.",
-          ja: "現在の旅程設定を基準にした1人あたりの見積りです。"
-        }
-      },
-      {
-        className: "budget-summary-card budget-summary-card--shared budget-summary-card--compact",
-        label: itineraryBudgetLabels.summaryBookedRequired,
-        value: formatCurrency(estimate.bookedAndFixedTotal),
-        rangeNote: getCompactRangeCopy(estimate.bookedAndFixedTotalRange),
-        meta: hasBudgetRangeValue(estimate.accommodationPerPersonRange)
-          ? itineraryBudgetLabels.bookedRequiredMeta
-          : itineraryBudgetLabels.noPaidAccommodationMeta
-      }
-    ];
+    const summaryCard = {
+      className:
+        "budget-summary-card budget-summary-card--estimate budget-summary-card--primary budget-summary-card--single-total",
+      label: itineraryBudgetLabels.summaryTotal,
+      value: formatCurrency(estimate.mainTotal),
+      rangeNote: getCompactRangeCopy(estimate.mainTotalRange),
+      meta: itineraryBudgetLabels.totalMeta
+    };
     const rangeGuideItems = [
       {
         label: itineraryBudgetLabels.levelLean,
@@ -990,18 +972,12 @@ const itineraryBudgetLabels = {
     ];
 
     return `
-      ${summaryCards
-        .map(
-          (card) => `
-            <article class="${card.className}">
-              <p class="budget-summary-card__label">${renderLocalizedContent(card.label)}</p>
-              <p class="budget-summary-card__headline">${escapeHtml(card.value)}</p>
-              <p class="budget-summary-card__range-note">${renderLocalizedContent(card.rangeNote)}</p>
-              <p class="budget-summary-card__meta">${renderLocalizedContent(card.meta)}</p>
-            </article>
-          `
-        )
-        .join("")}
+      <article class="${summaryCard.className}">
+        <p class="budget-summary-card__label">${renderLocalizedContent(summaryCard.label)}</p>
+        <p class="budget-summary-card__headline">${escapeHtml(summaryCard.value)}</p>
+        <p class="budget-summary-card__range-note">${renderLocalizedContent(summaryCard.rangeNote)}</p>
+        <p class="budget-summary-card__meta">${renderLocalizedContent(summaryCard.meta)}</p>
+      </article>
       <section class="budget-range-guide" aria-label="${escapeHtml(
         getLocalizedText(itineraryBudgetLabels.rangeLegendTitle)
       )}">
@@ -1069,19 +1045,6 @@ const itineraryBudgetLabels = {
           .join("")}
       </div>
       ${secondaryMarkup ? `<div class="budget-breakdown-secondary">${secondaryMarkup}</div>` : ""}
-      <div class="budget-breakdown-pills">
-        ${["booked", "required", "flexible"]
-          .map(
-            (bucketId) => `
-              <span class="budget-breakdown-pill budget-breakdown-pill--${bucketId}">
-                ${renderLocalizedContent(getBucketLabel(bucketId))} · ${renderLocalizedContent(
-                  formatCurrencyCopy(estimate.bucketTotals[bucketId] || 0)
-                )}
-              </span>
-            `
-          )
-          .join("")}
-      </div>
     `;
   };
   const renderSourceMetaMarkup = () => "";

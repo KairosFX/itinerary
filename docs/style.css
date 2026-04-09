@@ -9772,6 +9772,12 @@ html[data-theme="dark"] .budget-stepper__input {
     0 14px 30px rgba(16, 33, 22, 0.08);
 }
 
+.budget-summary-card--single-total {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: min(100%, 38rem);
+}
+
 .budget-summary-card__headline {
   margin: 0;
   min-width: 0;
