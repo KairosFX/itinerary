@@ -114,19 +114,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
       },
       "details": {
-        "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama to Osaka much better than staying deep in east Kyoto. Keep the BudgetAir hotel handoff for Imu Hotel Kyoto here so the exact route-fit property stays preselected.",
-        "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山から大阪への流れも東側の奥へ泊まるより整います。同じ動線向き宿として、Imu Hotel Kyoto が最初から選ばれた BudgetAir ホテル予約導線を残しています。"
+        "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama to Osaka much better than staying deep in east Kyoto. Keep the Trip.com hotel page for Imu Hotel Kyoto here so the exact route-fit property stays preselected.",
+        "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山から大阪への流れも東側の奥へ泊まるより整います。同じ動線向き宿として、Imu Hotel Kyoto の Trip.com ホテルページを残しています。"
       },
       "links": [
         {
           "href": "https://us.trip.com/hotels/kyoto-hotel-detail-21887858/imu-hotel-kyoto/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab",
           "label": {
-            "en": "BudgetAir hotel handoff",
-            "ja": "BudgetAirホテル予約"
+            "en": "Trip.com hotel page",
+            "ja": "Trip.comホテルページ"
           },
           "note": {
-            "en": "BudgetAir hotel handoff with Imu Hotel Kyoto preselected",
-            "ja": "Imu Hotel Kyoto が選択済みの BudgetAir ホテル予約導線"
+            "en": "Trip.com hotel page for Imu Hotel Kyoto",
+            "ja": "Imu Hotel Kyoto の Trip.com ホテルページ"
           },
           "price": {
             "en": "From JPY 15,280 / night",
@@ -181,19 +181,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "2日目の大阪から京都への受け渡しを保存しておくと、駅で迷わず京都東側の街歩きを素直に始められます。"
       },
       "details": {
-        "en": "Treat this as a light Kansai city-to-city move, not a luggage-heavy transfer day. Reach Kyoto Station or the Shijo / Karasuma side first, then push east toward Kiyomizu-dera, Gion, and the rest of the Higashiyama cluster. Keep the official JR-West reservation search handy once your Osaka starting point for the morning is fixed.",
-        "ja": "この移動は、荷物中心の日ではなく、関西内の軽い都市間移動として扱います。まずは京都駅か四条烏丸側へ入り、そのあと清水寺、祇園、東山エリアへ東へ寄せていく形にします。朝の大阪側の出発地点が固まったら、JR西日本の公式予約検索ページをすぐ開けるようにしておきます。"
+        "en": "Treat this as a light Kansai city-to-city move, not a luggage-heavy transfer day. Reach Kyoto Station or the Shijo / Karasuma side first, then push east toward Kiyomizu-dera, Gion, and the rest of the Higashiyama cluster. Keep the Trip.com Osaka Station -> Kyoto Station transport page handy once your Osaka starting point for the morning is fixed.",
+        "ja": "この移動は、荷物中心の日ではなく、関西内の軽い都市間移動として扱います。まずは京都駅か四条烏丸側へ入り、そのあと清水寺、祇園、東山エリアへ東へ寄せていく形にします。朝の大阪側の出発地点が固まったら、Trip.com の大阪駅 -> 京都駅 交通ページをすぐ開けるようにしておきます。"
       },
       "links": [
         {
-          "href": "https://e5489.jr-odekake.net/e5489/ibpc/CBTrainEntryExternalPC?LANG=en%2F1000",
+          "href": "https://www.trip.com/transport/osaka-station-to-kyoto-station/",
           "label": {
-            "en": "JR-West reservation search",
-            "ja": "JR西日本の予約検索"
+            "en": "Trip.com route guide",
+            "ja": "Trip.com経路ガイド"
           },
           "note": {
-            "en": "Official JR-West train reservation entry",
-            "ja": "JR西日本の公式列車予約入口"
+            "en": "Trip.com Osaka Station -> Kyoto Station transport page",
+            "ja": "大阪駅 -> 京都駅の Trip.com 交通ページ"
           },
           "kind": "primary"
         }
@@ -251,19 +251,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "3日目の河口湖到着を落ち着いて進めつつ、宿で整えたあとに4日目の富士エリア立ち寄りと東京移動まで無理なくつなげられるよう、駅から湖側の動きで拠点を選んでいます。"
       },
       "details": {
-        "en": "A Fujikawaguchiko base with a natural hot spring works better than a remote resort because it keeps the Day 3 station handoff, onsen reset, Day 4 lake-side stops, and the Day 4 Tokyo transfer aligned with the real route. Keep the BudgetAir hotel handoff for SUPER HOTEL Fujikawaguchiko Natural Hot Spring here so the exact Fuji stay stays preselected.",
-        "ja": "遠いリゾート立地より、天然温泉付きの富士河口湖拠点の方が、3日目の駅からの受け渡し、温泉での立て直し、4日目の河口湖側の立ち寄り、同日の東京移動までを実際の流れに合わせやすいです。富士エリア宿の参照先として、SUPER HOTEL Fujikawaguchiko Natural Hot Spring が選択済みの BudgetAir ホテル予約導線を残しています。"
+        "en": "A Fujikawaguchiko base with a natural hot spring works better than a remote resort because it keeps the Day 3 station handoff, onsen reset, Day 4 lake-side stops, and the Day 4 Tokyo transfer aligned with the real route. Keep the Trip.com hotel page for SUPER HOTEL Fujikawaguchiko Natural Hot Spring here so the exact Fuji stay stays preselected.",
+        "ja": "遠いリゾート立地より、天然温泉付きの富士河口湖拠点の方が、3日目の駅からの受け渡し、温泉での立て直し、4日目の河口湖側の立ち寄り、同日の東京移動までを実際の流れに合わせやすいです。富士エリア宿の参照先として、SUPER HOTEL Fujikawaguchiko Natural Hot Spring の Trip.com ホテルページを残しています。"
       },
       "links": [
         {
           "href": "https://us.trip.com/hotels/fujikawaguchiko-hotel-detail-76325560/super-hotel-fujikawaguchiko-natural-hot-spring/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab",
           "label": {
-            "en": "BudgetAir hotel handoff",
-            "ja": "BudgetAirホテル予約"
+            "en": "Trip.com hotel page",
+            "ja": "Trip.comホテルページ"
           },
           "note": {
-            "en": "BudgetAir hotel handoff with the Fuji onsen stay preselected",
-            "ja": "富士温泉ホテルが選択済みの BudgetAir ホテル予約導線"
+            "en": "Trip.com hotel page for the Fuji onsen stay",
+            "ja": "富士温泉ホテルの Trip.com ホテルページ"
           },
           "price": {
             "en": "From JPY 11,656 / night",
@@ -327,19 +327,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "東京ホテル泊は4日目、5日目、6日目に置き、4日目の渋谷到着、続く観光日、そして帰国前の軽い7日目を同じ拠点で回せるようにします。"
       },
       "details": {
-        "en": "Shibuya access still fits the first Tokyo evening best, and a central Shibuya / Jinnan base keeps Days 5 and 6 plus the Day 7 reset simple without wasting time on a mid-route hotel switch after the Fuji handoff. Keep the BudgetAir hotel handoff for The OneFive Tokyo Shibuya here so the Shibuya base stays preselected.",
-        "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、神南寄りの渋谷拠点なら富士側から入ったあとも、5日目と6日目、そして7日目の立て直しまでホテル移動なしで進めやすいです。渋谷拠点の参照先として、The OneFive Tokyo Shibuya が選択済みの BudgetAir ホテル予約導線を残しています。"
+        "en": "Shibuya access still fits the first Tokyo evening best, and a central Shibuya / Jinnan base keeps Days 5 and 6 plus the Day 7 reset simple without wasting time on a mid-route hotel switch after the Fuji handoff. Keep the Trip.com hotel page for The OneFive Tokyo Shibuya here so the Shibuya base stays preselected.",
+        "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、神南寄りの渋谷拠点なら富士側から入ったあとも、5日目と6日目、そして7日目の立て直しまでホテル移動なしで進めやすいです。渋谷拠点の参照先として、The OneFive Tokyo Shibuya の Trip.com ホテルページを残しています。"
       },
       "links": [
         {
-          "href": "https://us.trip.com/hotels/tokyo-hotel-detail-15935455/hotel-emit-shibuya/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab",
+          "href": "https://www.trip.com/hotels/tokyo-hotel-detail-15935455/the-onefive-tokyo-shibuya",
           "label": {
-            "en": "BudgetAir hotel handoff",
-            "ja": "BudgetAirホテル予約"
+            "en": "Trip.com hotel page",
+            "ja": "Trip.comホテルページ"
           },
           "note": {
-            "en": "BudgetAir hotel handoff with the Shibuya base preselected",
-            "ja": "渋谷拠点ホテルが選択済みの BudgetAir ホテル予約導線"
+            "en": "Trip.com hotel page for the Shibuya base",
+            "ja": "渋谷拠点ホテルの Trip.com ホテルページ"
           },
           "price": {
             "en": "From JPY 10,865 / night",
@@ -530,19 +530,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "4日目の東京入りを保存しておき、富士側のまとまりのあとも渋谷到着とホテルチェックインへ入りやすくします。"
       },
       "details": {
-        "en": "Use the direct bus page for the simplest one-step move toward Shibuya/Tokyo. This operator page is the clearest live reference for the direct highway-bus handoff.",
-        "ja": "渋谷・東京方面へ最も単純に戻るなら直通バスページが使いやすいです。直通の高速バス移動を確認するには、この運行側ページが最も分かりやすいです。"
+        "en": "Use the Trip.com Shibuya MARK CITY direct bus page for the simplest one-step move toward Shibuya/Tokyo. It keeps the exact bus product open instead of a generic operator landing page.",
+        "ja": "渋谷・東京方面へ最も単純に戻るなら、Trip.com の渋谷マークシティ直通バスページが使いやすいです。汎用的な運行トップではなく、該当バス商品ページをそのまま開けます。"
       },
       "links": [
         {
-          "href": "https://highway-buses.jp/course/kawaguchiko.php",
+          "href": "https://us.trip.com/things-to-do/detail/102425674?districtId=294&districtType=1&language=EN&locale=en_us",
           "label": {
-            "en": "Direct bus booking",
-            "ja": "直通バス予約"
+            "en": "Trip.com direct bus",
+            "ja": "Trip.com直通バス"
           },
           "note": {
-            "en": "Operator page for the Shibuya / Tokyo handoff",
-            "ja": "渋谷・東京への運行側ページ"
+            "en": "Trip.com Shibuya MARK CITY <-> Kawaguchiko bus ticket page",
+            "ja": "渋谷マークシティ <-> 河口湖の Trip.com バスチケットページ"
           },
           "kind": "primary"
         }
@@ -817,10 +817,10 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         }
       ],
       "action": {
-        "href": "https://e5489.jr-odekake.net/e5489/ibpc/CBTrainEntryExternalPC?LANG=en%2F1000",
+        "href": "https://www.trip.com/transport/osaka-station-to-kyoto-station/",
         "label": {
-          "en": "JR-West reservation search",
-          "ja": "JR西日本の予約検索"
+          "en": "Open Trip.com route",
+          "ja": "Trip.com経路を開く"
         }
       }
     },
@@ -893,10 +893,10 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         }
       ],
       "action": {
-        "href": "https://smart-ex.jp/en/lp/app/",
+        "href": "https://us.trip.com/trains/japan/route/shin-osaka-to-mishima/?locale=en-US&curr=JPY",
         "label": {
-          "en": "Open Smart EX",
-          "ja": "Smart EX を開く"
+          "en": "Open Trip.com rail booking",
+          "ja": "Trip.com鉄道予約を開く"
         }
       }
     },
@@ -1121,10 +1121,10 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         }
       ],
       "action": {
-        "href": "https://highway-buses.jp/course/kawaguchiko.php",
+        "href": "https://us.trip.com/things-to-do/detail/102425674?districtId=294&districtType=1&language=EN&locale=en_us",
         "label": {
-          "en": "Open direct bus",
-          "ja": "直通バスを開く"
+          "en": "Open Trip.com direct bus",
+          "ja": "Trip.com直通バスを開く"
         }
       }
     }

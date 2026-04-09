@@ -62,8 +62,8 @@
       }
     ],
     "action": {
-      "href": "https://e5489.jr-odekake.net/e5489/ibpc/CBTrainEntryExternalPC?LANG=en%2F1000",
-      "label": { "en": "JR-West reservation search", "ja": "JR西日本の予約検索" }
+      "href": "https://www.trip.com/transport/osaka-station-to-kyoto-station/",
+      "label": { "en": "Open Trip.com route", "ja": "Trip.com経路を開く" }
     }
   },
   {
@@ -126,8 +126,8 @@
       }
     ],
     "action": {
-      "href": "https://smart-ex.jp/en/lp/app/",
-      "label": { "en": "Open Smart EX", "ja": "Smart EX を開く" }
+      "href": "https://us.trip.com/trains/japan/route/shin-osaka-to-mishima/?locale=en-US&curr=JPY",
+      "label": { "en": "Open Trip.com rail booking", "ja": "Trip.com鉄道予約を開く" }
     }
   },
   {
@@ -321,8 +321,8 @@
       }
     ],
     "action": {
-      "href": "https://highway-buses.jp/course/kawaguchiko.php",
-      "label": { "en": "Open direct bus", "ja": "直通バスを開く" }
+      "href": "https://us.trip.com/things-to-do/detail/102425674?districtId=294&districtType=1&language=EN&locale=en_us",
+      "label": { "en": "Open Trip.com direct bus", "ja": "Trip.com直通バスを開く" }
     }
   }
 ]

@@ -9,8 +9,8 @@ window.__JAPAN_BUDGET_CONTENT__ = {
     "ja": "以前の合計が膨らんでいた主因は、大阪、京都、富士エリア、東京をつなぐ固定7日間の西から東への流れに合わせず、旅程を広げすぎていたことです。"
   },
   "helperCopy": {
-    "en": "Each day keeps its own stay selector, the accommodation split control handles the per-person math, and the BudgetAir hotel handoffs plus route or ticket links stay in Essentials.",
-    "ja": "各日に滞在セレクターを残し、宿泊費の分け方コントロールで1人あたり計算を行い、BudgetAir ホテル予約導線と各種ルート・チケットリンクはすべて Essentials にまとめています。"
+    "en": "Each day keeps its own stay selector, the accommodation split control handles the per-person math, and the Trip.com hotel pages plus route or ticket links stay in Essentials.",
+    "ja": "各日に滞在セレクターを残し、宿泊費の分け方コントロールで1人あたり計算を行い、Trip.com のホテルページと各種ルート・チケットリンクはすべて Essentials にまとめています。"
   },
   "assumptionCopy": {
     "en": "The cost model matches one fixed 7-day route through Osaka, Kyoto, the Mt. Fuji area, and Tokyo.",
@@ -38,8 +38,8 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目のミナミ散策と3日目の大阪側の動きに合いやすく、無関係な地区のホテルより実用的です。"
       },
       "assumption": {
-        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Hotel Trend Nishi Shinsaibashi is the BudgetAir hotel handoff fallback that still keeps the Minami side practical.",
-        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。Hotel Trend Nishi Shinsaibashi を、ミナミ側の動線に合う BudgetAir ホテル予約の代替宿として保存しています。"
+        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Hotel Trend Nishi Shinsaibashi is the Trip.com fallback hotel page that still keeps the Minami side practical.",
+        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。Hotel Trend Nishi Shinsaibashi を、ミナミ側の動線に合う Trip.com の代替ホテルページとして保存しています。"
       },
       "source": {
         "label": {
@@ -70,8 +70,8 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "四条烏丸は、2日目の京都東側へ出やすく、3日目の嵐山と大阪戻りにも地下鉄・阪急・JRの選択肢を取りやすいため、実際の動線に合います。"
       },
       "assumption": {
-        "en": "Day 2 now uses the current BudgetAir hotel handoff for Imu Hotel Kyoto while keeping the same Shijo / Karasuma route fit.",
-        "ja": "2日目は、同じ四条烏丸の動線適性を保ちながら、Imu Hotel Kyoto の BudgetAir ホテル予約導線を基準にしています。"
+        "en": "Day 2 now uses the current Trip.com hotel page for Imu Hotel Kyoto while keeping the same Shijo / Karasuma route fit.",
+        "ja": "2日目は、同じ四条烏丸の動線適性を保ちながら、Imu Hotel Kyoto の Trip.com ホテルページを基準にしています。"
       },
       "source": {
         "label": {
@@ -102,8 +102,8 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "このエリアなら、3日目の三島ハンドオフに加え、4日目の忠霊塔・下吉田と河口湖のまとまりも進めやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
-        "en": "Day 3 now uses the current BudgetAir hotel handoff for SUPER HOTEL Fujikawaguchiko Natural Hot Spring because it still keeps the onsen reset, the Day 4 Fuji block, and the Tokyo handoff practical.",
-        "ja": "3日目は、温泉で立て直しやすく、4日目の富士エリアのまとまりと東京への受け渡しも崩さない SUPER HOTEL Fujikawaguchiko Natural Hot Spring の BudgetAir ホテル予約導線を基準にしています。"
+        "en": "Day 3 now uses the current Trip.com hotel page for SUPER HOTEL Fujikawaguchiko Natural Hot Spring because it still keeps the onsen reset, the Day 4 Fuji block, and the Tokyo handoff practical.",
+        "ja": "3日目は、温泉で立て直しやすく、4日目の富士エリアのまとまりと東京への受け渡しも崩さない SUPER HOTEL Fujikawaguchiko Natural Hot Spring の Trip.com ホテルページを基準にしています。"
       },
       "source": {
         "label": {
@@ -134,15 +134,15 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "今回のルートは4日目に渋谷へ入り、東京ホテル泊は4日目、5日目、6日目に置くため、渋谷中心部の拠点なら到着夜とその後の東京日程を拠点変更なしでまとめやすくなります。"
       },
       "assumption": {
-        "en": "Tokyo now uses the current BudgetAir hotel handoff for The OneFive Tokyo Shibuya as the Shibuya base for Days 4, 5, and 6, while Day 7 still defaults to no paid stay because it is the flight-home day.",
-        "ja": "東京は、4日目、5日目、6日目の渋谷拠点として The OneFive Tokyo Shibuya の BudgetAir ホテル予約導線を基準にし、7日目は帰国日のため初期値では有料宿泊を入れていません。"
+        "en": "Tokyo now uses the current Trip.com hotel page for The OneFive Tokyo Shibuya as the Shibuya base for Days 4, 5, and 6, while Day 7 still defaults to no paid stay because it is the flight-home day.",
+        "ja": "東京は、4日目、5日目、6日目の渋谷拠点として The OneFive Tokyo Shibuya の Trip.com ホテルページを基準にし、7日目は帰国日のため初期値では有料宿泊を入れていません。"
       },
       "source": {
         "label": {
           "en": "The OneFive Tokyo Shibuya",
           "ja": "The OneFive Tokyo Shibuya"
         },
-        "url": "https://us.trip.com/hotels/tokyo-hotel-detail-15935455/hotel-emit-shibuya/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+        "url": "https://www.trip.com/hotels/tokyo-hotel-detail-15935455/the-onefive-tokyo-shibuya"
       }
     },
     "tokyo-subway-24h": {
@@ -178,31 +178,31 @@ window.__JAPAN_BUDGET_CONTENT__ = {
       "links": [
         {
           "label": {
-            "en": "BudgetAir Osaka fallback stay",
-            "ja": "BudgetAir 大阪代替ホテル"
+            "en": "Trip.com Osaka fallback stay",
+            "ja": "Trip.com 大阪代替ホテル"
           },
           "url": "https://us.trip.com/hotels/osaka-hotel-detail-32615922/hotel-trend-nishi-shinsaibashi/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
         },
         {
           "label": {
-            "en": "BudgetAir Kyoto stay",
-            "ja": "BudgetAir 京都ホテル"
+            "en": "Trip.com Kyoto stay",
+            "ja": "Trip.com 京都ホテル"
           },
           "url": "https://us.trip.com/hotels/kyoto-hotel-detail-21887858/imu-hotel-kyoto/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
         },
         {
           "label": {
-            "en": "BudgetAir Mt. Fuji area stay",
-            "ja": "BudgetAir 富士エリアホテル"
+            "en": "Trip.com Mt. Fuji area stay",
+            "ja": "Trip.com 富士エリアホテル"
           },
           "url": "https://us.trip.com/hotels/fujikawaguchiko-hotel-detail-76325560/super-hotel-fujikawaguchiko-natural-hot-spring/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
         },
         {
           "label": {
-            "en": "BudgetAir Tokyo stay",
-            "ja": "BudgetAir 東京ホテル"
+            "en": "Trip.com Tokyo stay",
+            "ja": "Trip.com 東京ホテル"
           },
-          "url": "https://us.trip.com/hotels/tokyo-hotel-detail-15935455/hotel-emit-shibuya/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+          "url": "https://www.trip.com/hotels/tokyo-hotel-detail-15935455/the-onefive-tokyo-shibuya"
         }
       ]
     },
@@ -252,10 +252,10 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         },
         {
           "label": {
-            "en": "Tokyo <-> Kawaguchiko bus",
-            "ja": "東京 <-> 河口湖バス"
+            "en": "Trip.com Shibuya <-> Kawaguchiko bus",
+            "ja": "Trip.com 渋谷 <-> 河口湖バス"
           },
-          "url": "https://highway-buses.jp/index.php"
+          "url": "https://us.trip.com/things-to-do/detail/102425674?districtId=294&districtType=1&language=EN&locale=en_us"
         },
         {
           "label": {
