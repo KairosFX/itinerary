@@ -68,7 +68,7 @@
   },
   {
     "id": "shin-osaka-fuji-gateway",
-    "tag": { "en": "Day 4 transfer", "ja": "4日目の移動" },
+    "tag": { "en": "Day 3 transfer", "ja": "3日目の移動" },
     "title": {
       "en": "Shin-Osaka -> Mishima shinkansen handoff",
       "ja": "新大阪 -> 三島 新幹線ハンドオフ"
@@ -84,12 +84,12 @@
     "from": { "en": "Shin-Osaka Station", "ja": "新大阪駅" },
     "to": { "en": "Mishima Station", "ja": "三島駅" },
     "transport": {
-      "en": "Tokaido Shinkansen; reserve if you want a specific Hikari departure or luggage-friendly seat. Treat Shin-Osaka -> Mishima as the fixed Day 4 rail commitment and keep the exact train details saved in one place.",
-      "ja": "東海道新幹線。Hikari の時刻や荷物を置きやすい席を押さえたいなら指定席基準で考えます。新大阪 -> 三島を4日目の固定鉄道移動として扱い、列車情報は一か所にまとめて保存します。"
+      "en": "Tokaido Shinkansen; reserve if you want a specific Hikari departure or luggage-friendly seat. Treat Shin-Osaka -> Mishima as the fixed Day 3 rail commitment and keep the exact train details saved in one place.",
+      "ja": "東海道新幹線。Hikari の時刻や荷物を置きやすい席を押さえたいなら指定席基準で考えます。新大阪 -> 三島を3日目の固定鉄道移動として扱い、列車情報は一か所にまとめて保存します。"
     },
     "why": {
-      "en": "It keeps Day 4 as one clear eastbound move, shortens the long leg, and leaves the local Kawaguchiko access decisions for after the rail arrival.",
-      "ja": "4日目を一つの東向き移動として整理しやすく、長距離区間をまとめたうえで、河口湖側の細かい判断を到着後へ回せます。"
+      "en": "It keeps Day 3 as one clear eastbound move, shortens the long leg, and leaves the local Kawaguchiko access decisions for after the rail arrival.",
+      "ja": "3日目を一つの東向き移動として整理しやすく、長距離区間をまとめたうえで、河口湖側の細かい判断を到着後へ回せます。"
     },
     "practicalNotes": [
       {
@@ -107,8 +107,8 @@
     ],
     "prepReminders": [
       {
-        "en": "Book once Day 4 is fixed rather than leaving the Kansai-to-Fuji handoff to the last minute.",
-        "ja": "4日目が固まったら予約し、関西から富士側への受け渡しを直前判断にしないようにします。"
+        "en": "Book once Day 3 is fixed rather than leaving the Kansai-to-Fuji handoff to the last minute.",
+        "ja": "3日目が固まったら予約し、関西から富士側への受け渡しを直前判断にしないようにします。"
       },
       {
         "en": "Save the next local step toward Kawaguchiko so the arrival platform decision stays simple.",
@@ -121,8 +121,8 @@
         "ja": "希望の便が埋まった時は、理想の一便だけを追わず、近い便と少し遅い便の両方を候補にします。"
       },
       {
-        "en": "If the transfer window feels too tight, simplify the Day 4 arrival and protect the calm Kawaguchiko check-in.",
-        "ja": "接続が窮屈に感じる時は、4日目の到着後を簡潔にして、河口湖での落ち着いたチェックインを優先します。"
+        "en": "If the transfer window feels too tight, simplify the Day 3 arrival and protect the calm Kawaguchiko check-in.",
+        "ja": "接続が窮屈に感じる時は、3日目の到着後を簡潔にして、河口湖での落ち着いたチェックインを優先します。"
       }
     ],
     "action": {
@@ -132,14 +132,14 @@
   },
   {
     "id": "fuji-gateway-kawaguchiko",
-    "tag": { "en": "Day 4 arrival", "ja": "4日目の到着" },
+    "tag": { "en": "Day 3 arrival", "ja": "3日目の到着" },
     "title": {
       "en": "Mishima -> Kawaguchiko highway-bus handoff",
       "ja": "三島 -> 河口湖 高速バスハンドオフ"
     },
     "summary": {
-      "en": "Treat the Day 4 handoff as a practical station-to-lake move, not another sightseeing detour.",
-      "ja": "4日目の移動は、観光の寄り道ではなく、駅から湖側へ入る実用的な移動として考えます。"
+      "en": "Treat the Day 3 handoff as a practical station-to-lake move, not another sightseeing detour.",
+      "ja": "3日目の移動は、観光の寄り道ではなく、駅から湖側へ入る実用的な移動として考えます。"
     },
     "segment": {
       "en": "Mishima Station -> Kawaguchiko Station area",
@@ -185,8 +185,8 @@
         "ja": "接続が合わなくなったら途中を増やしすぎず、湖側の拠点へ素直に入ることを優先します。"
       },
       {
-        "en": "If weather looks weak, keep Day 4 to the lake base and onsen check-in instead of forcing extra Fuji stops on arrival.",
-        "ja": "天候が弱い時は、到着日に無理をせず、4日目は湖側の拠点と温泉チェックイン中心にします。"
+        "en": "If weather looks weak, keep Day 3 to the lake base and onsen check-in instead of forcing extra Fuji stops on arrival.",
+        "ja": "天候が弱い時は、到着日に無理をせず、3日目は湖側の拠点と温泉チェックイン中心にします。"
       }
     ],
     "action": {
@@ -202,12 +202,12 @@
       "ja": "富士エリアの現地立ち寄り"
     },
     "summary": {
-      "en": "Use the Day 4 Fuji-area window after arrival for the local stops: fit Chureito first if timing stays clean, then Lake Kawaguchiko.",
-      "ja": "4日目は到着後に使える富士エリアの時間帯で現地立ち寄りをまとめ、余裕があれば先に忠霊塔、そのあと河口湖へ向かいます。"
+      "en": "Use the Day 4 Fuji-area window for the local stops: fit Chureito Shimoyoshida first if timing stays clean, then Lake Kawaguchiko before the Tokyo handoff.",
+      "ja": "4日目は富士エリアの時間帯で現地立ち寄りをまとめ、余裕があれば先に忠霊塔・下吉田、そのあと河口湖を回ってから東京へ向かいます。"
     },
     "segment": {
-      "en": "Mt. Fuji area base -> Chureito / Lake Kawaguchiko",
-      "ja": "富士エリア拠点 -> 忠霊塔・河口湖"
+      "en": "Mt. Fuji area base -> Chureito Shimoyoshida / Lake Kawaguchiko",
+      "ja": "富士エリア拠点 -> 忠霊塔・下吉田 / 河口湖"
     },
     "from": { "en": "Kawaguchiko area", "ja": "河口湖エリア" },
     "to": {
@@ -219,21 +219,21 @@
       "ja": "路線電車とバスの組み合わせを基本にし、下吉田・忠霊塔方面の富士急行は片道約310円が目安です。必要なら短距離だけタクシーを代替に使います。"
     },
     "why": {
-      "en": "It keeps the core Fuji-area places on Day 4 after the transfer in, avoids repeating Lake Kawaguchiko on Day 5, and lets Tokyo start cleanly the next day.",
-      "ja": "移動後の4日目に富士エリアの主要立ち寄りをまとめ、5日目に河口湖を重ねず、翌日の東京入りをきれいにできます。"
+      "en": "It keeps the core Fuji-area places on Day 4 before the Tokyo handoff, avoids repeating Lake Kawaguchiko on Day 5, and lets West Tokyo stay focused the next day.",
+      "ja": "4日目のうちに富士エリアの主要立ち寄りをまとめてから東京へ入り、5日目に河口湖を重ねず、西東京側をすっきり回せるようにします。"
     },
     "practicalNotes": [
       {
-        "en": "Start with Chureito in the cleaner morning window, then settle into Lake Kawaguchiko after.",
-        "ja": "朝の見え方が整いやすい時間帯に忠霊塔へ先に入り、そのあと河口湖へ落ち着いて移ります。"
+        "en": "Start with Chureito Shimoyoshida in the cleaner morning window, then settle into Lake Kawaguchiko after.",
+        "ja": "朝の見え方が整いやすい時間帯に忠霊塔・下吉田へ先に入り、そのあと河口湖へ落ち着いて移ります。"
       },
       {
         "en": "Keep Chureito conditional if visibility is weak or the local timing tightens.",
         "ja": "見え方が弱い時やローカル移動の余白が減った時は、忠霊塔を条件付きにします。"
       },
       {
-        "en": "Do not repeat Lake Kawaguchiko on Day 5; use Day 5 for the clean Tokyo handoff instead.",
-        "ja": "5日目に河口湖を繰り返さず、5日目は東京へのきれいな受け渡しに使います。"
+        "en": "Do not repeat Lake Kawaguchiko on Day 5; use Day 5 for the cleaner West Tokyo block instead.",
+        "ja": "5日目に河口湖を繰り返さず、5日目は西東京側のまとまりに使います。"
       }
     ],
     "prepReminders": [
@@ -248,8 +248,8 @@
     ],
     "fallbackOptions": [
       {
-        "en": "If visibility drops, trim Chureito and keep Lake Kawaguchiko as the one simple scenic stop.",
-        "ja": "視界が落ちたら忠霊塔を削り、景色の立ち寄りは河口湖だけに絞ります。"
+        "en": "If visibility drops, trim Chureito Shimoyoshida and keep Lake Kawaguchiko as the one simple scenic stop.",
+        "ja": "視界が落ちたら忠霊塔・下吉田を削り、景色の立ち寄りは河口湖だけに絞ります。"
       },
       {
         "en": "If the local window tightens, protect the overnight Fuji base and the next-day Tokyo departure instead of forcing every stop.",
@@ -263,14 +263,14 @@
   },
   {
     "id": "kawaguchiko-tokyo",
-    "tag": { "en": "Day 5 return", "ja": "5日目の東京入り" },
+    "tag": { "en": "Day 4 return", "ja": "4日目の東京入り" },
     "title": {
       "en": "Mt. Fuji area -> Tokyo / Shibuya return",
       "ja": "富士エリア -> 東京・渋谷 戻り"
     },
     "summary": {
-      "en": "Use the Tokyo handoff as the second half of Day 5, landing in Shibuya for a focused evening rather than spreading arrival across the city.",
-      "ja": "5日目後半は東京への受け渡しに充て、東京到着後は街を広げすぎず、渋谷の夜に集中します。"
+      "en": "Use the Tokyo handoff as the second half of Day 4, landing in Shibuya for hotel check-in without spreading the arrival across the city.",
+      "ja": "4日目後半は東京への受け渡しに充て、東京到着後は街を広げすぎず、渋谷でのホテルチェックインへつなげます。"
     },
     "segment": {
       "en": "Kawaguchiko / Mt. Fuji area -> Tokyo core -> Shibuya",
@@ -279,25 +279,25 @@
     "from": { "en": "Kawaguchiko / Mt. Fuji area", "ja": "河口湖・富士エリア" },
     "to": { "en": "Tokyo / Shibuya side", "ja": "東京・渋谷側" },
     "transport": {
-      "en": "Direct highway bus or rail depending on the timing that best fits your Shibuya evening. The direct bus anchor is around JPY 2,200 one way.",
-      "ja": "渋谷の夜に合わせやすい時刻を優先して、直通高速バスまたは鉄道を選びます。直通バスの目安は片道約2,200円です。"
+      "en": "Direct highway bus or rail depending on the timing that best fits your Day 4 Shibuya arrival. The direct bus anchor is around JPY 2,200 one way.",
+      "ja": "4日目の渋谷到着に合わせやすい時刻を優先して、直通高速バスまたは鉄道を選びます。直通バスの目安は片道約2,200円です。"
     },
     "why": {
-      "en": "It keeps the west-to-east flow intact, gets you into Tokyo cleanly, and leaves Day 6 open for the fuller city day while Day 7 can stay focused on the Imperial Palace, a short Shinjuku stop, bag pickup or handoff, and the airport transfer.",
-      "ja": "西から東への流れを崩さずに東京へ入れ、6日目は都内観光の本番日に、7日目は皇居、新宿、空港移動を軽めに組みやすくなります。"
+      "en": "It keeps the west-to-east flow intact, gets you into Tokyo cleanly on Day 4, and leaves Day 5 open for the West Tokyo block while Day 6 stays free for the fuller east-side city day.",
+      "ja": "西から東への流れを崩さずに4日目のうちに東京へ入れ、5日目を西東京側のまとまりに、6日目を都内観光の本番日に使いやすくなります。"
     },
     "practicalNotes": [
       {
-        "en": "Decide whether you are going straight to your Tokyo base or dropping bags first before Shibuya.",
-        "ja": "東京到着後に宿へ直行するか、荷物を置いてから渋谷へ向かうかを先に決めます。"
+        "en": "Decide whether you are going straight to your Tokyo base or taking one brief Shibuya stop before hotel check-in.",
+        "ja": "東京到着後に宿へ直行するか、渋谷で短く一か所だけ寄ってからホテルへ向かうかを先に決めます。"
       },
       {
         "en": "Keep one arrival target in Tokyo saved so the final city transfer is only one more hop.",
         "ja": "東京側の到着目標を一つ決めて保存し、最後の市内移動を一回で済ませます。"
       },
       {
-        "en": "If the transfer starts running late, protect Shibuya food and Shibuya Sky before adding extra stops.",
-        "ja": "移動が遅れ始めたら、余計な立ち寄りを増やす前に、渋谷の食事と渋谷スカイを守ります。"
+        "en": "If the transfer starts running late, cut extra stops and protect the Tokyo hotel check-in first.",
+        "ja": "移動が遅れ始めたら、余計な立ち寄りを増やす前に、まず東京ホテルのチェックインを優先します。"
       }
     ],
     "prepReminders": [
@@ -316,8 +316,8 @@
         "ja": "直通バスの時刻が合わなくなったら、その便に旅程を合わせすぎず、鉄道へ切り替えます。"
       },
       {
-        "en": "If Tokyo arrival is running late, cut the first city stop and protect the rest of the evening.",
-        "ja": "東京到着が遅れそうなら、最初の都内立ち寄りを一つ削って夜の流れを守ります。"
+        "en": "If Tokyo arrival is running late, cut the first city stop and go straight into the hotel check-in flow.",
+        "ja": "東京到着が遅れそうなら、最初の都内立ち寄りを一つ削って、そのままホテルチェックインへ向かいます。"
       }
     ],
     "action": {

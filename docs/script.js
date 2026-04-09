@@ -50,7 +50,6 @@ const offlineDownloadLink = document.querySelector("[data-offline-download]");
 const dayCardMap = new Map(dayCards.map((card) => [card.dataset.day, card]));
 const progressItemMap = new Map(progressItems.map((item) => [item.dataset.progressItem, item]));
 const root = document.documentElement;
-const supportsNativeSmoothScroll = "scrollBehavior" in root.style;
 const lazyNodeCache = new Map();
 const aggressivePerformanceMode = false;
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -61,7 +60,7 @@ const pageTitles = {
   ja: "日本旅行"
 };
 const storageKey = "japan-trip-language";
-const itineraryStateVersion = "2026-04-09-trip-flow-booking-v1";
+const itineraryStateVersion = "2026-04-09-checklist-shift-raf-v2";
 const checklistStorageKey = `japan-trip-checklist-state-${itineraryStateVersion}`;
 const completedHistoryStorageKey = `japan-trip-completed-history-${itineraryStateVersion}`;
 const activePanelStorageKey = `japan-trip-active-panel-${itineraryStateVersion}`;
@@ -1715,10 +1714,14 @@ let warningDays = new Set();
 let accessibleDay = 1;
 let currentProgressDay = 1;
 let activeChecklistHoverItem = null;
+let checklistPointerGlowFrame = 0;
+let pendingChecklistPointerGlow = null;
 let sequenceNoticeTimer = 0;
 let lastTimelineFocusDay = null;
 let lastResetTrigger = null;
 const pendingClassRestarts = new WeakMap();
+let activeWindowScrollAnimation = null;
+const activeElementScrollAnimations = new WeakMap();
 const checklistGroupCompletionState = new WeakMap();
 let deferredGeometryWorkPending = true;
 let deferredGeometryReleaseTimer = 0;
@@ -4967,18 +4970,36 @@ function setActiveChecklistHover(nextItem) {
 }
 
 function clearChecklistHover(panel = getSectionPanel("checklist")) {
+  if (checklistPointerGlowFrame) {
+    window.cancelAnimationFrame(checklistPointerGlowFrame);
+    checklistPointerGlowFrame = 0;
+  }
+  pendingChecklistPointerGlow = null;
+
   if (activeChecklistHoverItem) {
     activeChecklistHoverItem.classList.remove("is-pointer-active");
     activeChecklistHoverItem = null;
   }
 
-  if (!panel) {
+  void panel;
+}
+
+function flushChecklistPointerGlow() {
+  checklistPointerGlowFrame = 0;
+  const nextPointerState = pendingChecklistPointerGlow;
+  if (!nextPointerState?.item || nextPointerState.item !== activeChecklistHoverItem) {
     return;
   }
 
-  panel.querySelectorAll(".check-item.is-pointer-active").forEach((item) => {
-    item.classList.remove("is-pointer-active");
-  });
+  const rect = nextPointerState.item.getBoundingClientRect();
+  nextPointerState.item.style.setProperty(
+    "--check-pointer-x",
+    `${nextPointerState.clientX - rect.left}px`
+  );
+  nextPointerState.item.style.setProperty(
+    "--check-pointer-y",
+    `${nextPointerState.clientY - rect.top}px`
+  );
 }
 
 function updateChecklistPointerGlow(item, clientX, clientY) {
@@ -4986,9 +5007,17 @@ function updateChecklistPointerGlow(item, clientX, clientY) {
     return;
   }
 
-  const rect = item.getBoundingClientRect();
-  item.style.setProperty("--check-pointer-x", `${clientX - rect.left}px`);
-  item.style.setProperty("--check-pointer-y", `${clientY - rect.top}px`);
+  pendingChecklistPointerGlow = {
+    item,
+    clientX,
+    clientY
+  };
+
+  if (checklistPointerGlowFrame) {
+    return;
+  }
+
+  checklistPointerGlowFrame = window.requestAnimationFrame(flushChecklistPointerGlow);
 }
 
 function triggerChecklistInteractionFeedback(input) {
@@ -5179,8 +5208,8 @@ function initChecklistSection() {
   if (panel.dataset.checklistBound !== "true") {
     panel.addEventListener("click", handleChecklistPanelClick);
     panel.addEventListener("change", handleChecklistPanelChange);
-    panel.addEventListener("pointermove", handleChecklistPanelPointerMove);
-    panel.addEventListener("pointerleave", handleChecklistPanelPointerLeave);
+    panel.addEventListener("pointermove", handleChecklistPanelPointerMove, { passive: true });
+    panel.addEventListener("pointerleave", handleChecklistPanelPointerLeave, { passive: true });
     panel.addEventListener("focusin", handleChecklistPanelFocusIn);
     panel.addEventListener("focusout", handleChecklistPanelFocusOut);
     panel.dataset.checklistBound = "true";
@@ -5567,6 +5596,98 @@ function scheduleRouteMapDaySliderSync() {
   });
 }
 
+function cancelElementScrollAnimation(element, didReachTarget = false) {
+  const activeAnimation = activeElementScrollAnimations.get(element);
+  if (!activeAnimation) {
+    return;
+  }
+
+  window.cancelAnimationFrame(activeAnimation.frameId);
+  activeElementScrollAnimations.delete(element);
+  activeAnimation.resolve?.(didReachTarget);
+}
+
+function animateScrollableElement(
+  element,
+  property,
+  nextValue,
+  { behavior = "smooth", minDuration = 160, maxDuration = 420, multiplier = 0.36 } = {}
+) {
+  const targetValue = Math.max(0, Number(nextValue) || 0);
+  const currentValue = Number(element?.[property] ?? 0);
+  const shouldAnimate = behavior === "smooth" && !reducedEffectsEnabled;
+
+  cancelElementScrollAnimation(element, false);
+
+  if (!element || Math.abs(targetValue - currentValue) < 1 || !shouldAnimate) {
+    if (element) {
+      element[property] = targetValue;
+    }
+    return Promise.resolve(true);
+  }
+
+  const startValue = currentValue;
+  const delta = targetValue - startValue;
+  const duration = getTimedMotionDuration(delta, {
+    min: minDuration,
+    max: maxDuration,
+    multiplier
+  });
+
+  return new Promise((resolve) => {
+    const animationState = {
+      frameId: 0,
+      resolve
+    };
+    const startTime = window.performance.now();
+
+    const step = (timestamp) => {
+      if (activeElementScrollAnimations.get(element) !== animationState) {
+        return;
+      }
+
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easedProgress = easeTimedMotion(progress);
+      element[property] = startValue + delta * easedProgress;
+
+      if (progress < 1) {
+        animationState.frameId = window.requestAnimationFrame(step);
+        return;
+      }
+
+      activeElementScrollAnimations.delete(element);
+      element[property] = targetValue;
+      resolve(true);
+    };
+
+    activeElementScrollAnimations.set(element, animationState);
+    animationState.frameId = window.requestAnimationFrame(step);
+  });
+}
+
+function getRouteMapDayRailTargetScrollLeft(railNode, dayCardNode) {
+  const maxScroll = Math.max(railNode.scrollWidth - railNode.clientWidth, 0);
+  const cardStart = dayCardNode.offsetLeft;
+  const cardWidth = dayCardNode.offsetWidth;
+  const cardEnd = cardStart + cardWidth;
+  const currentStart = railNode.scrollLeft;
+  const currentEnd = currentStart + railNode.clientWidth;
+
+  if (compactViewportQuery.matches) {
+    return clamp(cardStart - (railNode.clientWidth - cardWidth) / 2, 0, maxScroll);
+  }
+
+  if (cardStart < currentStart) {
+    return clamp(cardStart, 0, maxScroll);
+  }
+
+  if (cardEnd > currentEnd) {
+    return clamp(cardEnd - railNode.clientWidth, 0, maxScroll);
+  }
+
+  return clamp(currentStart, 0, maxScroll);
+}
+
 function slideRouteMapDayRail(direction = 1) {
   const railNode = getRouteMapDayRailNode();
   if (!railNode) {
@@ -5585,11 +5706,12 @@ function slideRouteMapDayRail(direction = 1) {
   );
 
   routeMapDayRailScrollLeft = nextScrollLeft;
-  railNode.scrollTo({
-    left: nextScrollLeft,
+  void animateScrollableElement(railNode, "scrollLeft", nextScrollLeft, {
     behavior: reducedEffectsEnabled ? "auto" : "smooth"
+  }).then(() => {
+    routeMapDayRailScrollLeft = railNode.scrollLeft;
+    syncRouteMapDaySliderControls();
   });
-  window.requestAnimationFrame(syncRouteMapDaySliderControls);
 }
 
 function revealRouteMapDayCard(day, { smooth = false } = {}) {
@@ -5599,13 +5721,13 @@ function revealRouteMapDayCard(day, { smooth = false } = {}) {
     return;
   }
 
-  dayCardNode.scrollIntoView({
+  const targetScrollLeft = getRouteMapDayRailTargetScrollLeft(railNode, dayCardNode);
+  void animateScrollableElement(railNode, "scrollLeft", targetScrollLeft, {
     behavior: smooth && !reducedEffectsEnabled ? "smooth" : "auto",
-    block: "nearest",
-    inline: compactViewportQuery.matches ? "center" : "nearest"
-  });
-
-  window.requestAnimationFrame(() => {
+    minDuration: 180,
+    maxDuration: 360,
+    multiplier: 0.34
+  }).then(() => {
     routeMapDayRailScrollLeft = railNode.scrollLeft;
     syncRouteMapDaySliderControls();
   });
@@ -7645,17 +7767,51 @@ function decorateProgressTimeline() {
 }
 
 function getScrollBehavior() {
-  return reducedEffectsEnabled || !supportsNativeSmoothScroll ? "auto" : "smooth";
+  return reducedEffectsEnabled ? "auto" : "smooth";
 }
 
 function getMaxWindowScrollTop() {
   return Math.max(document.documentElement.scrollHeight - window.innerHeight, 0);
 }
 
+function getTimedMotionDuration(
+  distance,
+  { min = 180, max = 620, multiplier = 0.32 } = {}
+) {
+  return clamp(Math.round(min + Math.abs(distance) * multiplier), min, max);
+}
+
+function easeTimedMotion(progress) {
+  if (progress <= 0) {
+    return 0;
+  }
+
+  if (progress >= 1) {
+    return 1;
+  }
+
+  return progress < 0.5
+    ? 4 * progress * progress * progress
+    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+}
+
+function cancelWindowScrollAnimation(didReachTarget = false) {
+  if (!activeWindowScrollAnimation) {
+    return;
+  }
+
+  window.cancelAnimationFrame(activeWindowScrollAnimation.frameId);
+  const { resolve } = activeWindowScrollAnimation;
+  activeWindowScrollAnimation = null;
+  resolve?.(didReachTarget);
+}
+
 function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}) {
   const clampedTop = clamp(Math.round(nextTop), 0, getMaxWindowScrollTop());
   const currentTop = Math.max(window.scrollY, 0);
-  const resolvedBehavior = behavior === "smooth" && supportsNativeSmoothScroll ? "smooth" : "auto";
+  const shouldAnimate = behavior === "smooth" && !reducedEffectsEnabled;
+
+  cancelWindowScrollAnimation(false);
 
   if (Math.abs(clampedTop - currentTop) < 2) {
     if (clampedTop !== currentTop) {
@@ -7667,11 +7823,52 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
     return Promise.resolve(true);
   }
 
-  window.scrollTo({
-    top: clampedTop,
-    behavior: resolvedBehavior
+  if (!shouldAnimate) {
+    window.scrollTo({
+      top: clampedTop,
+      behavior: "auto"
+    });
+    return Promise.resolve(true);
+  }
+
+  const startTop = currentTop;
+  const delta = clampedTop - startTop;
+  const duration = getTimedMotionDuration(delta, {
+    min: 220,
+    max: 680,
+    multiplier: 0.28
   });
-  return Promise.resolve(true);
+
+  return new Promise((resolve) => {
+    const animationState = {
+      frameId: 0,
+      resolve
+    };
+    const startTime = window.performance.now();
+
+    const step = (timestamp) => {
+      if (activeWindowScrollAnimation !== animationState) {
+        return;
+      }
+
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easedProgress = easeTimedMotion(progress);
+      const nextScrollTop = startTop + delta * easedProgress;
+      window.scrollTo(0, Math.round(nextScrollTop));
+
+      if (progress < 1) {
+        animationState.frameId = window.requestAnimationFrame(step);
+        return;
+      }
+
+      activeWindowScrollAnimation = null;
+      window.scrollTo(0, clampedTop);
+      resolve(true);
+    };
+
+    activeWindowScrollAnimation = animationState;
+    animationState.frameId = window.requestAnimationFrame(step);
+  });
 }
 
 function restartClassOnNextFrame(target, className) {
@@ -8716,6 +8913,22 @@ window.addEventListener(
   { passive: true }
 );
 
+window.addEventListener(
+  "wheel",
+  () => {
+    cancelWindowScrollAnimation(false);
+  },
+  { passive: true }
+);
+
+window.addEventListener(
+  "touchstart",
+  () => {
+    cancelWindowScrollAnimation(false);
+  },
+  { passive: true }
+);
+
 updateMaxScrollableY();
 
 if ("ResizeObserver" in window) {
@@ -8763,12 +8976,14 @@ if (siteHeader) {
 }
 
 window.addEventListener("pagehide", () => {
+  cancelWindowScrollAnimation(false);
   syncDecorativeVideoPlayback();
   pauseAmbientPlayback({ keepIntent: true });
   flushQueuedStorageWrites();
 });
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") {
+    cancelWindowScrollAnimation(false);
     syncDecorativeVideoPlayback();
     pauseAmbientPlayback({ keepIntent: true });
     if (desktopReverseScrollTimer) {

@@ -98,12 +98,12 @@
         "ja": "現在の富士エリアホテル"
       },
       "routeReason": {
-        "en": "This area keeps the Day 4 Mishima handoff, Chureito / Shimoyoshida, and Lake Kawaguchiko practical without paying for a remote resort that fights the actual route.",
-        "ja": "このエリアなら、4日目の三島ハンドオフ、忠霊塔・下吉田、河口湖をまとめやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
+        "en": "This area keeps the Day 3 Mishima handoff plus the Day 4 Chureito Shimoyoshida and Lake Kawaguchiko block practical without paying for a remote resort that fights the actual route.",
+        "ja": "このエリアなら、3日目の三島ハンドオフに加え、4日目の忠霊塔・下吉田と河口湖のまとまりも進めやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
-        "en": "Day 4 now uses the current Booking.com SUPER HOTEL Fujikawaguchiko Natural Hot Spring listing because it still keeps the onsen reset and the Tokyo handoff practical.",
-        "ja": "4日目は、温泉で立て直しやすく、東京への受け渡しも崩さない Booking.com の SUPER HOTEL Fujikawaguchiko Natural Hot Spring を基準にしています。"
+        "en": "Day 3 now uses the current Booking.com SUPER HOTEL Fujikawaguchiko Natural Hot Spring listing because it still keeps the onsen reset, the Day 4 Fuji block, and the Tokyo handoff practical.",
+        "ja": "3日目は、温泉で立て直しやすく、4日目の富士エリアのまとまりと東京への受け渡しも崩さない Booking.com の SUPER HOTEL Fujikawaguchiko Natural Hot Spring を基準にしています。"
       },
       "source": {
         "label": {
@@ -130,12 +130,12 @@
         "ja": "現在の渋谷ホテル"
       },
       "routeReason": {
-        "en": "The route now lands in Shibuya on Day 5 and keeps the hotel nights on Days 5 and 6, so a central Shibuya base supports the arrival evening and the fuller Tokyo day without switching bases.",
-        "ja": "今回のルートは5日目に渋谷へ入り、東京ホテル泊は5日目と6日目に置くため、渋谷中心部の拠点なら到着夜と観光メイン日を拠点変更なしでまとめやすくなります。"
+        "en": "The route now lands in Shibuya on Day 4 and keeps the hotel nights on Days 4, 5, and 6, so a central Shibuya base supports the arrival evening and the following Tokyo days without switching bases.",
+        "ja": "今回のルートは4日目に渋谷へ入り、東京ホテル泊は4日目、5日目、6日目に置くため、渋谷中心部の拠点なら到着夜とその後の東京日程を拠点変更なしでまとめやすくなります。"
       },
       "assumption": {
-        "en": "Tokyo now uses the current Booking.com The OneFive Tokyo Shibuya listing as the Shibuya base for Days 5 and 6, while Day 7 still defaults to no paid stay because it is the flight-home day.",
-        "ja": "東京は、5日目と6日目の渋谷拠点として Booking.com の The OneFive Tokyo Shibuya を基準にし、7日目は帰国日のため初期値では有料宿泊を入れていません。"
+        "en": "Tokyo now uses the current Booking.com The OneFive Tokyo Shibuya listing as the Shibuya base for Days 4, 5, and 6, while Day 7 still defaults to no paid stay because it is the flight-home day.",
+        "ja": "東京は、4日目、5日目、6日目の渋谷拠点として Booking.com の The OneFive Tokyo Shibuya を基準にし、7日目は帰国日のため初期値では有料宿泊を入れていません。"
       },
       "source": {
         "label": {
@@ -172,8 +172,8 @@
         "ja": "宿泊見積り"
       },
       "summary": {
-        "en": "The base stay plan is now explicit: private/local or no-cost Osaka nights on Days 1 and 3 unless switched, Kyoto hotel on Day 2, one Mt. Fuji area stay on Day 4, Tokyo hotel nights on Days 5-6, and no paid stay by default on the Day 7 flight-home wrap-up.",
-        "ja": "基本の滞在計画を明示しました。1日目と3日目の大阪は、切り替えない限りローカル・プライベート滞在または宿泊費なし、2日目は京都ホテル、4日目は富士エリア宿泊、東京ホテルは5日目と6日目で、7日目は帰国日のため初期値では有料宿泊を入れていません。"
+        "en": "The base stay plan is now explicit: private/local or no-cost Osaka night on Day 1 unless switched, Kyoto hotel on Day 2, one Mt. Fuji area stay on Day 3, Tokyo hotel nights on Days 4-6, and no paid stay by default on the Day 7 flight-home wrap-up.",
+        "ja": "基本の滞在計画を明示しました。1日目の大阪は、切り替えない限りローカル・プライベート滞在または宿泊費なし、2日目は京都ホテル、3日目は富士エリア宿泊、東京ホテルは4日目から6日目で、7日目は帰国日のため初期値では有料宿泊を入れていません。"
       },
       "links": [
         {
@@ -225,8 +225,8 @@
         "ja": "主要移動の確認先"
       },
       "summary": {
-        "en": "Day 4 now carries the full Mt. Fuji area block through Mishima, Chureito / Shimoyoshida, and Lake Kawaguchiko. Day 5 then starts Tokyo cleanly, with direct bus or rail chosen by timing.",
-        "ja": "4日目は三島、忠霊塔・下吉田、河口湖までを含む富士エリアのまとまりにし、5日目は東京へきれいに入る流れへ整理しました。東京入りは時刻に合わせて直通バスまたは鉄道を選びます。"
+        "en": "Day 3 now carries the full eastbound transfer into the Mt. Fuji base, and Day 4 then keeps Chureito Shimoyoshida, Lake Kawaguchiko, and the Tokyo handoff in one clean sequence.",
+        "ja": "3日目は富士エリア拠点までの東向き移動をまとめ、4日目は忠霊塔・下吉田、河口湖、東京への受け渡しを一つの流れに整理しました。"
       },
       "links": [
         {
@@ -411,8 +411,8 @@
         "ja": "SUPER HOTEL Fujikawaguchiko Natural Hot Spring"
       },
       "routeReason": {
-        "en": "This base keeps the Day 4 Mishima handoff, the hot-spring reset, and the Lake Kawaguchiko side practical without paying for a remote resort location that fights the real station and bus flow.",
-        "ja": "この拠点なら、4日目の三島ハンドオフ、温泉での立て直し、河口湖側の動きをまとめやすく、実際の駅・バス動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
+        "en": "This base keeps the Day 3 Mishima handoff, the hot-spring reset, and the Day 4 Chureito Shimoyoshida plus Lake Kawaguchiko block practical without paying for a remote resort location that fights the real station and bus flow.",
+        "ja": "この拠点なら、3日目の三島ハンドオフ、温泉での立て直し、4日目の忠霊塔・下吉田と河口湖のまとまりをまとめやすく、実際の駅・バス動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
       },
       "cost": {
         "mode": "perGroup",
@@ -438,8 +438,8 @@
         "ja": "The OneFive Tokyo Shibuya"
       },
       "routeReason": {
-        "en": "Shibuya is the Day 5 arrival focus, and the same central Shibuya base keeps the following Tokyo days cleaner than shifting districts mid-route.",
-        "ja": "渋谷は5日目の到着後の主役であり、この渋谷中心部の拠点のままなら、その後の東京日程も地区を変えずに進めやすくなります。"
+        "en": "Shibuya is the Day 4 arrival focus, and the same central Shibuya base keeps the following Tokyo days cleaner than shifting districts mid-route.",
+        "ja": "渋谷は4日目の到着後の主役であり、この渋谷中心部の拠点のままなら、その後の東京日程も地区を変えずに進めやすくなります。"
       },
       "cost": {
         "mode": "perGroup",
@@ -715,10 +715,10 @@
     },
     {
       "day": 3,
-      "defaultStayId": "relative-stay",
+      "defaultStayId": "kawaguchiko-base-hotel",
       "stayOptions": [
+        "kawaguchiko-base-hotel",
         "relative-stay",
-        "osaka-compact-hotel",
         "no-accommodation"
       ],
       "title": {
@@ -726,8 +726,8 @@
         "ja": "3日目・嵐山から大阪"
       },
       "subtitle": {
-        "en": "Arashiyama first, then the Osaka waterfront reset",
-        "ja": "先に嵐山、そのあと大阪ベイエリアへ戻る流れ"
+        "en": "Arashiyama, Osaka waterfront reset, then the Fuji transfer night",
+        "ja": "嵐山、大阪ベイエリア、そして富士への移動で締める日"
       },
       "items": [
         {
@@ -769,43 +769,6 @@
             "amount": 2300
           }
         },
-        {
-          "label": {
-            "en": "Final Osaka meals",
-            "ja": "大阪最後の食事"
-          },
-          "category": "meals",
-          "bucket": "flexible",
-          "sourceGroup": "meals",
-          "cost": {
-            "mode": "perPerson",
-            "amount": 1600,
-            "range": {
-              "lean": 1300,
-              "expected": 1600,
-              "high": 2300
-            }
-          }
-        }
-      ]
-    },
-    {
-      "day": 4,
-      "defaultStayId": "kawaguchiko-base-hotel",
-      "stayOptions": [
-        "kawaguchiko-base-hotel",
-        "relative-stay",
-        "no-accommodation"
-      ],
-      "title": {
-        "en": "Day 4 - Mt. Fuji",
-        "ja": "4日目・富士山"
-      },
-      "subtitle": {
-        "en": "Shinkansen, Kawaguchiko arrival, and Fuji-area stops",
-        "ja": "新幹線、河口湖到着、富士エリアの立ち寄り"
-      },
-      "items": [
         {
           "label": {
             "en": "Shinkansen: Shin-Osaka to Mishima",
@@ -857,7 +820,44 @@
         },
         {
           "label": {
-            "en": "Chureito / Shimoyoshida",
+            "en": "Final Osaka meals + transfer snacks",
+            "ja": "大阪最後の食事と移動中の軽食"
+          },
+          "category": "meals",
+          "bucket": "flexible",
+          "sourceGroup": "meals",
+          "cost": {
+            "mode": "perPerson",
+            "amount": 1600,
+            "range": {
+              "lean": 1300,
+              "expected": 1600,
+              "high": 2300
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "defaultStayId": "tokyo-base-hotel",
+      "stayOptions": [
+        "tokyo-base-hotel",
+        "relative-stay",
+        "no-accommodation"
+      ],
+      "title": {
+        "en": "Day 4 - Mt. Fuji",
+        "ja": "4日目・富士山"
+      },
+      "subtitle": {
+        "en": "Fuji-area stops first, then the Shibuya handoff",
+        "ja": "富士エリアの立ち寄りを先に回し、そのあと渋谷へ入る日"
+      },
+      "items": [
+        {
+          "label": {
+            "en": "Chureito Shimoyoshida",
             "ja": "忠霊塔・下吉田"
           },
           "category": "ticketsAdmissions",
@@ -881,43 +881,6 @@
             "amount": 0
           }
         },
-        {
-          "label": {
-            "en": "Fuji-area day meals",
-            "ja": "富士エリア日の食事"
-          },
-          "category": "meals",
-          "bucket": "flexible",
-          "sourceGroup": "meals",
-          "cost": {
-            "mode": "perPerson",
-            "amount": 1700,
-            "range": {
-              "lean": 1400,
-              "expected": 1700,
-              "high": 2400
-            }
-          }
-        }
-      ]
-    },
-    {
-      "day": 5,
-      "defaultStayId": "tokyo-base-hotel",
-      "stayOptions": [
-        "tokyo-base-hotel",
-        "relative-stay",
-        "no-accommodation"
-      ],
-      "title": {
-        "en": "West Tokyo",
-        "ja": "東京西側"
-      },
-      "subtitle": {
-        "en": "Tokyo arrival, Shibuya walk, and skyline night",
-        "ja": "東京到着、渋谷散策、夜景"
-      },
-      "items": [
         {
           "label": {
             "en": "Transfer to Tokyo / Shibuya",
@@ -949,6 +912,43 @@
             "amount": 0
           }
         },
+        {
+          "label": {
+            "en": "Fuji + Tokyo transfer meals",
+            "ja": "富士エリアと東京移動日の食事"
+          },
+          "category": "meals",
+          "bucket": "flexible",
+          "sourceGroup": "meals",
+          "cost": {
+            "mode": "perPerson",
+            "amount": 1700,
+            "range": {
+              "lean": 1400,
+              "expected": 1700,
+              "high": 2400
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "defaultStayId": "tokyo-base-hotel",
+      "stayOptions": [
+        "tokyo-base-hotel",
+        "relative-stay",
+        "no-accommodation"
+      ],
+      "title": {
+        "en": "West Tokyo",
+        "ja": "東京西側"
+      },
+      "subtitle": {
+        "en": "Shibuya walk and skyline night",
+        "ja": "渋谷散策と夜景のまとまり"
+      },
+      "items": [
         {
           "label": {
             "en": "Shibuya local hop",
