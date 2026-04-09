@@ -10,7 +10,6 @@ const budgetDaysNode = document.querySelector("[data-budget-days]");
 const budgetResetButtons = Array.from(document.querySelectorAll("[data-budget-reset-all]"));
 const budgetTravelersInput = document.querySelector("[data-budget-travelers]");
 const budgetTravelersPerRoomInput = document.querySelector("[data-budget-travelers-per-room]");
-const budgetIncludeExtrasInput = document.querySelector("[data-budget-include-extras]");
 const budgetStepButtons = Array.from(document.querySelectorAll("[data-budget-step-target]"));
 const budgetDisplayExchangeRates = {
   cadPerJpy: 1 / 109,
@@ -56,22 +55,6 @@ const budgetCategoryDefinitions = [
       en: "Lean keeps simpler convenience-store or casual meals; high assumes fuller sightseeing-day spending.",
       ja: "控えめはコンビニや気軽な食事寄り、高めは観光日の食費を少し厚めに見ます。"
     }
-  },
-  {
-    id: "baggage",
-    label: { en: "Baggage", ja: "荷物対応" },
-    rangeHint: {
-      en: "Only changes when route extras are enabled.",
-      ja: "ルート追加費用を有効にした時だけ動きます。"
-    }
-  },
-  {
-    id: "optionalExtras",
-    label: { en: "Optional extras", ja: "任意追加" },
-    rangeHint: {
-      en: "Weather pivots and route add-ons stay outside the base total until you switch them on.",
-      ja: "天候回避や追加ルート費用は、有効にするまで基本合計へ入りません。"
-    }
   }
 ];
 const budgetBucketDefinitions = [
@@ -98,34 +81,28 @@ const itineraryBudgetLabels = {
   summaryTotal: { en: "Total trip estimate", ja: "旅全体の見積り" },
   summaryPerPerson: { en: "Per traveller", ja: "1人あたり" },
   summaryBookedRequired: { en: "Booked + required", ja: "予約前提 + 必須" },
-  summaryRouteExtras: { en: "Route extras range", ja: "ルート追加費用の帯" },
   itineraryBasis: { en: "Estimate basis", ja: "見積りの前提" },
   estimateUnavailable: { en: "Itinerary budget notes are unavailable right now.", ja: "現在は旅程予算のメモを表示できません。" },
   breakdownHeading: { en: "Category breakdown", ja: "カテゴリ別の内訳" },
   sourcesHeading: { en: "Sources + route assumptions", ja: "出典とルート前提" },
   noteLabel: { en: "Budget note", ja: "予算メモ" },
-  rangeLegendTitle: { en: "What changes the range", ja: "予算帯を動かす前提" },
+  rangeLegendTitle: { en: "Lean / Expected / High", ja: "控えめ / 標準 / 高め" },
   levelLean: { en: "Lean", ja: "控えめ" },
   levelExpected: { en: "Expected", ja: "標準" },
   levelHigh: { en: "High", ja: "高め" },
   rangeLegendLean: {
-    en: "Cheaper route-fit stay bands, simpler meal pattern, and the lower still-practical transit or ticket choice where one exists.",
-    ja: "動線に合う安めの宿泊帯、より軽い食事パターン、そして選べる場合は実用的な下側の移動・券種を使います。"
+    en: "Lower practical stay, transit, and meal choices without changing the route.",
+    ja: "ルートは変えず、宿・移動・食費を実用的な下側で見ます。"
   },
   rangeLegendExpected: {
-    en: "The current default itinerary model: today's main stay quotes, the direct route assumptions already shown here, and the normal casual-meal pattern.",
-    ja: "現在の初期モデルです。ここに出している現行の宿泊見積り、既定のルート前提、通常寄りの食費パターンを使います。"
+    en: "The current baseline for this itinerary using the normal stay and spending pattern.",
+    ja: "この旅程の現在の標準値で、通常の宿泊と支出パターンです。"
   },
   rangeLegendHigh: {
-    en: "A higher but still realistic version: pricier route-fit stay bands, fuller sightseeing-day meals, and fallback transit or timed-ticket variation where relevant.",
-    ja: "高めでも現実的な帯です。動線に合う上側の宿泊帯、少し厚めの観光日食費、必要時の代替移動や時間帯差を見込みます。"
-  },
-  rangeLegendRouteExtras: {
-    en: "The route always stays at 7 days. Route extras only cover things like luggage handling, Fuji visibility pivots, and small transfer-day add-ons when you enable them.",
-    ja: "ルートは常に7日間固定です。ルート追加費用は、有効にしたときだけ荷物対応、富士山の見え方に応じた動き直し、移動日の小さな追加費用を含めます。"
+    en: "A fuller but still realistic version with pricier stays and heavier day-of spending.",
+    ja: "高めでも現実的な帯で、宿泊費とその日の支出を少し厚めに見ます。"
   },
   rangeFixedNote: { en: "Mostly fixed across the range", ja: "この項目は帯の中でほぼ固定" },
-  rangeAvailablePrefix: { en: "Available if enabled", ja: "有効時の帯" },
   rangeCompactPrefix: { en: "Lean", ja: "控えめ" },
   rangeCompactSuffix: { en: "High", ja: "高め" },
   notePlaceholder: {
@@ -137,9 +114,7 @@ const itineraryBudgetLabels = {
     en: "Choose the actual sleep base for this night.",
     ja: "この日の実際の宿泊先を選びます。"
   },
-  stayAreaLabel: { en: "Stay area", ja: "滞在エリア" },
   stayAnchorLabel: { en: "Anchor stay", ja: "基準の宿" },
-  stayWhyLabel: { en: "Route fit", ja: "この場所を選ぶ理由" },
   travelersPerRoomLabel: { en: "Travellers per room", ja: "1室あたりの人数" },
   travelersPerRoomHint: {
     en: "Controls how many travellers split each hotel or ryokan room quote.",
@@ -154,10 +129,6 @@ const itineraryBudgetLabels = {
     ja: "旅程の費用モデルを読み込んでいます..."
   },
   travelersHint: { en: "", ja: "" },
-  extrasHint: {
-    en: "Adds route-specific extras like luggage handling, Fuji visibility pivots, and other handoff-day add-ons.",
-    ja: "荷物対応、富士山の見え方に応じた動き直し、受け渡し日に発生する追加費用などのルート固有コストを反映します。"
-  },
   dayViewerLabel: {
     en: "Day selector",
     ja: "日付セレクター"
@@ -177,16 +148,11 @@ const itineraryBudgetLabels = {
   },
   currencyDisplayMeta: { en: "", ja: "" },
   bookedRequiredMeta: {
-    en: "The fixed 7-day route costs before optional route extras",
-    ja: "任意のルート追加費用を除いた固定7日間ルートの費用"
+    en: "Core booked and required costs for the fixed 7-day route",
+    ja: "固定7日間ルートの予約前提・必須コストです"
   },
   sharedMeta: { en: "Shared stays and group costs", ja: "共有の宿泊費と共通費" },
   variableMeta: { en: "Per-person variable spend", ja: "1人ごとの変動費" },
-  optionalInactive: { en: "Not added yet", ja: "まだ未加算" },
-  optionalInactiveMeta: {
-    en: "Enable route extras to add luggage handling, Fuji weather pivots, and other small transfer-day costs into the live total.",
-    ja: "ルート追加費用を有効にすると、荷物対応、富士山の見え方に応じた動き直し、移動日の小さな追加費用を合計へ反映します。"
-  },
   sourceUpdatedPrefix: { en: "Refreshed", ja: "更新" }
 };
 
@@ -359,23 +325,15 @@ const itineraryBudgetLabels = {
     );
   const hasBudgetRangeValue = (range) =>
     budgetRangeLevels.some((definition) => getBudgetRangeValue(range, definition.id) > 0);
-  const getCompactRangeCopy = (range, { available = false } = {}) => ({
-    en: `${
-      available
-        ? `${itineraryBudgetLabels.rangeAvailablePrefix.en}: `
-        : ""
-    }${itineraryBudgetLabels.rangeCompactPrefix.en} ${formatCurrencyForLanguage(
+  const getCompactRangeCopy = (range) => ({
+    en: `${itineraryBudgetLabels.rangeCompactPrefix.en} ${formatCurrencyForLanguage(
       getBudgetRangeValue(range, "lean"),
       "en"
     )} • ${itineraryBudgetLabels.rangeCompactSuffix.en} ${formatCurrencyForLanguage(
       getBudgetRangeValue(range, "high"),
       "en"
     )}`,
-    ja: `${
-      available
-        ? `${itineraryBudgetLabels.rangeAvailablePrefix.ja}: `
-        : ""
-    }${itineraryBudgetLabels.rangeCompactPrefix.ja} ${formatCurrencyForLanguage(
+    ja: `${itineraryBudgetLabels.rangeCompactPrefix.ja} ${formatCurrencyForLanguage(
       getBudgetRangeValue(range, "lean"),
       "ja"
     )} ・ ${itineraryBudgetLabels.rangeCompactSuffix.ja} ${formatCurrencyForLanguage(
@@ -416,21 +374,10 @@ const itineraryBudgetLabels = {
       .filter(Boolean)
       .join(" ・ ")
   });
-  const getRangeMetaCopy = (range, { available = false } = {}) =>
+  const getRangeMetaCopy = (range) =>
     hasBudgetRangeSpread(range)
-      ? getCompactRangeCopy(range, { available })
-      : available && hasBudgetRangeValue(range)
-        ? {
-            en: `${itineraryBudgetLabels.rangeAvailablePrefix.en}: ${formatCurrencyForLanguage(
-              getBudgetRangeValue(range, "expected"),
-              "en"
-            )}`,
-            ja: `${itineraryBudgetLabels.rangeAvailablePrefix.ja}: ${formatCurrencyForLanguage(
-              getBudgetRangeValue(range, "expected"),
-              "ja"
-            )}`
-          }
-        : itineraryBudgetLabels.rangeFixedNote;
+      ? getCompactRangeCopy(range)
+      : itineraryBudgetLabels.rangeFixedNote;
   const getStayTypeLabel = (stayTypeId) =>
     budgetStayTypeDefinitions.find((entry) => entry.id === stayTypeId)?.label || {
       en: stayTypeId,
@@ -473,14 +420,6 @@ const itineraryBudgetLabels = {
     const sourceAssumption = getSourceCostConfig(stayDefinition.cost?.sourceCostId)?.assumption;
     return sourceAssumption || stayDefinition.assumption || itineraryBudgetLabels.stayHintFallback;
   };
-  const getStayAreaCopy = (stayDefinition) => {
-    if (!stayDefinition) {
-      return null;
-    }
-
-    const sourceArea = getSourceCostConfig(stayDefinition.cost?.sourceCostId)?.area;
-    return sourceArea && typeof sourceArea === "object" ? sourceArea : stayDefinition.area || null;
-  };
   const getStayAnchorCopy = (stayDefinition) => {
     if (!stayDefinition) {
       return null;
@@ -491,16 +430,6 @@ const itineraryBudgetLabels = {
       ? sourceLabel
       : stayDefinition.property || null;
   };
-  const getStayRouteReasonCopy = (stayDefinition) => {
-    if (!stayDefinition) {
-      return null;
-    }
-
-    const sourceReason = getSourceCostConfig(stayDefinition.cost?.sourceCostId)?.routeReason;
-    return sourceReason && typeof sourceReason === "object"
-      ? sourceReason
-      : stayDefinition.routeReason || null;
-  };
   const normalizeDayEntry = (definition, entry) => {
     const defaultStayId = definition?.defaultStayId || null;
     const allowedStayIds = new Set(Array.isArray(definition?.stayOptions) ? definition.stayOptions : []);
@@ -510,7 +439,6 @@ const itineraryBudgetLabels = {
   const getDefaultState = () => ({
     travelers: budgetDefaultTravelerCount,
     travelersPerRoom: getDefaultTravelersPerRoom(budgetDefaultTravelerCount),
-    includeExtras: false,
     days: {}
   });
   const normalizeDayEntries = (daysCandidate) => {
@@ -557,7 +485,6 @@ const itineraryBudgetLabels = {
               travelers
             )
           : fallbackState.travelersPerRoom,
-        includeExtras: false,
         days: normalizeDayEntries(parsed.days)
       };
     } catch (error) {
@@ -609,7 +536,6 @@ const itineraryBudgetLabels = {
             budgetNotesState.travelersPerRoom,
             normalizeTravelerCount(budgetNotesState.travelers, budgetDefaultTravelerCount)
           ),
-          includeExtras: false,
           days: normalizeDayEntries(budgetNotesState.days)
         })
       );
@@ -648,9 +574,6 @@ const itineraryBudgetLabels = {
     const normalizedTravelers = normalizeTravelerCount(travelers, budgetDefaultTravelerCount);
     const travelersPerRoom = getTravelersPerRoom(normalizedTravelers);
     return Math.max(1, Math.ceil(normalizedTravelers / travelersPerRoom));
-  };
-  const includeExtras = () => {
-    return false;
   };
   const getDayState = (day) => {
     hydrateState();
@@ -891,15 +814,11 @@ const itineraryBudgetLabels = {
   };
   const calculateEstimate = () => {
     const travelers = getTravelerCount();
-    const withExtras = includeExtras();
     const activeDays = visibleDays();
     const categoryTotals = Object.fromEntries(
       budgetCategoryDefinitions.map((definition) => [definition.id, 0])
     );
     const categoryTotalsRange = Object.fromEntries(
-      budgetCategoryDefinitions.map((definition) => [definition.id, getZeroBudgetRange()])
-    );
-    const categoryAvailableRanges = Object.fromEntries(
       budgetCategoryDefinitions.map((definition) => [definition.id, getZeroBudgetRange()])
     );
     const bucketTotals = Object.fromEntries(
@@ -908,22 +827,18 @@ const itineraryBudgetLabels = {
     const bucketTotalsRange = Object.fromEntries(
       budgetBucketDefinitions.map((definition) => [definition.id, getZeroBudgetRange()])
     );
-    const bucketAvailableRanges = Object.fromEntries(
-      budgetBucketDefinitions.map((definition) => [definition.id, getZeroBudgetRange()])
-    );
     const calculateDay = (definition) => {
       const dayState = getDayState(definition.day);
       const stayDefinition = getStayDefinitionForDay(definition, dayState.stayId);
       const dayItems = [getAccommodationItem(definition), ...definition.items].filter(Boolean);
       const itemEstimates = dayItems.map((item) => {
-        const itemCost = calculateItemCost(item, travelers, withExtras);
+        const itemCost = calculateItemCost(item, travelers, false);
         const lineTotal = itemCost.included ? itemCost.total : 0;
         const lineRangeTotals = itemCost.included ? itemCost.totalRange : getZeroBudgetRange();
         return {
           ...item,
           itemCost,
           lineTotal,
-          rawRangeTotals: itemCost.totalRange,
           lineRangeTotals
         };
       });
@@ -945,16 +860,6 @@ const itineraryBudgetLabels = {
     visibleDayEstimates.forEach((dayEstimate) => {
       dayEstimate.itemEstimates.forEach((item) => {
         if (!item.itemCost.included) {
-          if (item.bucket === "optional") {
-            categoryAvailableRanges[item.category] = sumBudgetRanges(
-              categoryAvailableRanges[item.category],
-              item.rawRangeTotals
-            );
-            bucketAvailableRanges[item.bucket] = sumBudgetRanges(
-              bucketAvailableRanges[item.bucket],
-              item.rawRangeTotals
-            );
-          }
           return;
         }
 
@@ -1023,7 +928,6 @@ const itineraryBudgetLabels = {
       accommodationTotalRange,
       accommodationPerPerson: getBudgetRangeValue(accommodationPerPersonRange, "expected"),
       accommodationPerPersonRange,
-      includeExtras: withExtras,
       visibleDayEstimates,
       total,
       totalRange,
@@ -1033,10 +937,8 @@ const itineraryBudgetLabels = {
       bookedAndFixedTotalRange,
       bucketTotals,
       bucketTotalsRange,
-      bucketAvailableRanges,
       categoryTotals,
-      categoryTotalsRange,
-      categoryAvailableRanges
+      categoryTotalsRange
     };
   };
   const getBudgetEstimateTotal = () => calculateEstimate().total;
@@ -1069,19 +971,57 @@ const itineraryBudgetLabels = {
           : itineraryBudgetLabels.noPaidAccommodationMeta
       }
     ];
+    const rangeGuideItems = [
+      {
+        label: itineraryBudgetLabels.levelLean,
+        pillClass: "budget-pill budget-pill--lean budget-range-guide__pill",
+        copy: itineraryBudgetLabels.rangeLegendLean
+      },
+      {
+        label: itineraryBudgetLabels.levelExpected,
+        pillClass: "budget-pill budget-pill--expected budget-range-guide__pill",
+        copy: itineraryBudgetLabels.rangeLegendExpected
+      },
+      {
+        label: itineraryBudgetLabels.levelHigh,
+        pillClass: "budget-pill budget-pill--high budget-range-guide__pill",
+        copy: itineraryBudgetLabels.rangeLegendHigh
+      }
+    ];
 
-    return summaryCards
-      .map(
-        (card) => `
-          <article class="${card.className}">
-            <p class="budget-summary-card__label">${renderLocalizedContent(card.label)}</p>
-            <p class="budget-summary-card__headline">${escapeHtml(card.value)}</p>
-            <p class="budget-summary-card__range-note">${renderLocalizedContent(card.rangeNote)}</p>
-            <p class="budget-summary-card__meta">${renderLocalizedContent(card.meta)}</p>
-          </article>
-        `
-      )
-      .join("");
+    return `
+      ${summaryCards
+        .map(
+          (card) => `
+            <article class="${card.className}">
+              <p class="budget-summary-card__label">${renderLocalizedContent(card.label)}</p>
+              <p class="budget-summary-card__headline">${escapeHtml(card.value)}</p>
+              <p class="budget-summary-card__range-note">${renderLocalizedContent(card.rangeNote)}</p>
+              <p class="budget-summary-card__meta">${renderLocalizedContent(card.meta)}</p>
+            </article>
+          `
+        )
+        .join("")}
+      <section class="budget-range-guide" aria-label="${escapeHtml(
+        getLocalizedText(itineraryBudgetLabels.rangeLegendTitle)
+      )}">
+        <p class="budget-range-guide__title">${renderLocalizedContent(
+          itineraryBudgetLabels.rangeLegendTitle
+        )}</p>
+        <div class="budget-range-guide__items">
+          ${rangeGuideItems
+            .map(
+              (item) => `
+                <article class="budget-range-guide__item">
+                  <span class="${item.pillClass}">${renderLocalizedContent(item.label)}</span>
+                  <p class="budget-range-guide__copy">${renderLocalizedContent(item.copy)}</p>
+                </article>
+              `
+            )
+            .join("")}
+        </div>
+      </section>
+    `;
   };
   const renderBreakdownMarkup = (estimate = calculateEstimate()) => {
     const primaryCategoryIds = [
@@ -1094,16 +1034,12 @@ const itineraryBudgetLabels = {
     const visibleSecondaryCategoryIds = [];
     const renderCategoryCard = (definition, className = "budget-breakdown-card") => {
       const range = estimate.categoryTotalsRange[definition.id] || getZeroBudgetRange();
-      const availableRange =
-        estimate.categoryAvailableRanges[definition.id] || getZeroBudgetRange();
       const metaCopy =
-        !estimate.includeExtras && hasBudgetRangeValue(availableRange)
-          ? getRangeMetaCopy(availableRange, { available: true })
-          : hasBudgetRangeValue(range)
-            ? getRangeMetaCopy(range)
-            : definition.id === "accommodation"
-              ? itineraryBudgetLabels.noPaidAccommodationMeta
-              : itineraryBudgetLabels.rangeFixedNote;
+        hasBudgetRangeValue(range)
+          ? getRangeMetaCopy(range)
+          : definition.id === "accommodation"
+            ? itineraryBudgetLabels.noPaidAccommodationMeta
+            : itineraryBudgetLabels.rangeFixedNote;
 
       return `
         <article class="${className}">
@@ -1135,18 +1071,15 @@ const itineraryBudgetLabels = {
       ${secondaryMarkup ? `<div class="budget-breakdown-secondary">${secondaryMarkup}</div>` : ""}
       <div class="budget-breakdown-pills">
         ${["booked", "required", "flexible"]
-          .map((bucketId) => {
-            const total =
-              bucketId === "optional" && !estimate.includeExtras
-                ? itineraryBudgetLabels.optionalInactive
-                : formatCurrencyCopy(estimate.bucketTotals[bucketId] || 0);
-
-            return `
+          .map(
+            (bucketId) => `
               <span class="budget-breakdown-pill budget-breakdown-pill--${bucketId}">
-                ${renderLocalizedContent(getBucketLabel(bucketId))} · ${renderLocalizedContent(total)}
+                ${renderLocalizedContent(getBucketLabel(bucketId))} · ${renderLocalizedContent(
+                  formatCurrencyCopy(estimate.bucketTotals[bucketId] || 0)
+                )}
               </span>
-            `;
-          })
+            `
+          )
           .join("")}
       </div>
     `;
@@ -1156,46 +1089,12 @@ const itineraryBudgetLabels = {
   const renderDayMarkup = (dayEstimate) => {
     const stayOptions = Array.isArray(dayEstimate.stayOptions) ? dayEstimate.stayOptions : [];
     const selectedStayId = dayEstimate.stayDefinition?.id || "";
-    const stayAreaCopy = getStayAreaCopy(dayEstimate.stayDefinition);
     const stayAnchorCopy = getStayAnchorCopy(dayEstimate.stayDefinition);
-    const stayRouteReasonCopy = getStayRouteReasonCopy(dayEstimate.stayDefinition);
-    const stayMetaRows = [
-      stayAreaCopy
-        ? { label: itineraryBudgetLabels.stayAreaLabel, value: stayAreaCopy }
-        : null,
-      stayAnchorCopy
-        ? { label: itineraryBudgetLabels.stayAnchorLabel, value: stayAnchorCopy }
-        : null
-    ].filter(Boolean);
-    const stayMetaMarkup = stayMetaRows.length
+    const stayAnchorMarkup = stayAnchorCopy
       ? `
-        <div class="budget-day-card__stay-meta">
-          ${stayMetaRows
-            .map(
-              (row) => `
-                <p class="budget-day-card__stay-meta-row">
-                  <span class="budget-day-card__stay-meta-label">${renderLocalizedContent(
-                    row.label
-                  )}</span>
-                  <span class="budget-day-card__stay-meta-value">${renderLocalizedContent(
-                    row.value
-                  )}</span>
-                </p>
-              `
-            )
-            .join("")}
-        </div>
-      `
-      : "";
-    const stayRouteMarkup = stayRouteReasonCopy
-      ? `
-        <p class="budget-day-card__stay-route">
-          <span class="budget-day-card__stay-route-label">${renderLocalizedContent(
-            itineraryBudgetLabels.stayWhyLabel
-          )}</span>
-          <span class="budget-day-card__stay-route-value">${renderLocalizedContent(
-            stayRouteReasonCopy
-          )}</span>
+        <p class="budget-day-card__stay-hint">
+          <strong>${renderLocalizedContent(itineraryBudgetLabels.stayAnchorLabel)}:</strong>
+          ${renderLocalizedContent(stayAnchorCopy)}
         </p>
       `
       : "";
@@ -1243,8 +1142,7 @@ const itineraryBudgetLabels = {
               })
               .join("")}
           </div>
-          ${stayMetaMarkup}
-          ${stayRouteMarkup}
+          ${stayAnchorMarkup}
           <p class="budget-day-card__stay-hint">${renderLocalizedContent(
             getStayHintCopy(dayEstimate.stayDefinition)
           )}</p>
@@ -1275,18 +1173,11 @@ const itineraryBudgetLabels = {
                 item.bucket === "free"
                   ? "budget-chip budget-chip--free"
                   : `budget-chip budget-chip--${escapeHtml(item.bucket)}`;
-              const amountCopy =
-                item.itemCost.included || item.bucket === "free"
-                  ? formatCurrencyCopy(item.lineTotal)
-                  : itineraryBudgetLabels.optionalInactive;
+              const amountCopy = formatCurrencyCopy(item.lineTotal);
               const rangeCopy =
-                item.itemCost.included || item.bucket === "free"
-                  ? hasBudgetRangeSpread(item.lineRangeTotals)
-                    ? getCompactRangeCopy(item.lineRangeTotals)
-                    : null
-                  : hasBudgetRangeValue(item.rawRangeTotals)
-                    ? getRangeMetaCopy(item.rawRangeTotals, { available: true })
-                    : null;
+                hasBudgetRangeSpread(item.lineRangeTotals)
+                  ? getCompactRangeCopy(item.lineRangeTotals)
+                  : null;
 
               return `
                 <li class="budget-line-item">
@@ -1344,10 +1235,6 @@ const itineraryBudgetLabels = {
       if (budgetTravelersPerRoomInput.tabIndex < 0) {
         budgetTravelersPerRoomInput.tabIndex = 0;
       }
-    }
-
-    if (budgetIncludeExtrasInput) {
-      budgetIncludeExtrasInput.checked = includeExtras();
     }
 
     budgetResetButtons.forEach((button) => {
@@ -1419,7 +1306,6 @@ const itineraryBudgetLabels = {
       nextTravelers
     );
     setTravelersPerRoom(nextTravelersPerRoom, nextTravelers);
-    budgetNotesState.includeExtras = false;
     storeState();
     syncUI();
   };
@@ -1529,13 +1415,6 @@ const itineraryBudgetLabels = {
       button.dataset.itineraryBudgetBound = "true";
     });
 
-    if (budgetIncludeExtrasInput && budgetIncludeExtrasInput.dataset.itineraryBudgetBound !== "true") {
-      budgetIncludeExtrasInput.addEventListener("change", () => {
-        commitSettings();
-      });
-      budgetIncludeExtrasInput.dataset.itineraryBudgetBound = "true";
-    }
-
     budgetResetButtons.forEach((button) => {
       if (button.dataset.itineraryBudgetBound === "true") {
         return;
@@ -1606,7 +1485,6 @@ const itineraryBudgetLabels = {
   storeBudgetNotesState = storeState;
   getBudgetTravelerCount = getTravelerCount;
   getBudgetTravelersPerRoom = getTravelersPerRoom;
-  shouldIncludeBudgetExtras = includeExtras;
   getBudgetDayState = getDayState;
   updateStoredBudgetDayState = updateDayState;
   getBudgetVisibleDayDefinitions = visibleDays;

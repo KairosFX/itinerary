@@ -55,7 +55,6 @@ const lazyNodeCache = new Map();
 const aggressivePerformanceMode = false;
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
-const finePointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
 const pageTitles = {
   en: "Japan Escape",
@@ -107,7 +106,6 @@ const audioAmbientVolume = 0.085;
 const audioAmbientDuckVolume = 0.05;
 const audioTransitionVolume = 0.28;
 const audioTransitionCooldownMs = 320;
-const bookingOutlineBloomDurationMs = 820;
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
   en:
@@ -1721,8 +1719,6 @@ let sequenceNoticeTimer = 0;
 let lastTimelineFocusDay = null;
 let lastResetTrigger = null;
 const pendingClassRestarts = new WeakMap();
-const timedEffectTimers = new WeakMap();
-const interactionEffectCooldowns = new WeakMap();
 const checklistGroupCompletionState = new WeakMap();
 let deferredGeometryWorkPending = true;
 let deferredGeometryReleaseTimer = 0;
@@ -4042,9 +4038,6 @@ function bindBookingTransitUI() {
         done: nextDoneState
       });
       updateBookingTransitUI();
-      if (nextDoneState) {
-        triggerBookingOutlineBloom(itemElement);
-      }
     });
 
     itemElement.querySelector("[data-transit-detail-trigger]")?.addEventListener("click", (event) => {
@@ -4180,78 +4173,6 @@ function syncChecklistActionButtons(isLocked = isChecklistAccessLocked()) {
 
 function isPackingItemPacked(itemId) {
   return Boolean(packingState[itemId]);
-}
-
-function getTimedEffectTimerBucket(target) {
-  const existingBucket = timedEffectTimers.get(target);
-  if (existingBucket) {
-    return existingBucket;
-  }
-
-  const nextBucket = new Map();
-  timedEffectTimers.set(target, nextBucket);
-  return nextBucket;
-}
-
-function canTriggerInteractionEffect(target, effectKey, cooldownMs = 0) {
-  if (!target || !effectKey || cooldownMs <= 0) {
-    return Boolean(target);
-  }
-
-  const now = window.performance.now();
-  const cooldownState = interactionEffectCooldowns.get(target) || {};
-  if (now - Number(cooldownState[effectKey] || 0) < cooldownMs) {
-    return false;
-  }
-
-  cooldownState[effectKey] = now;
-  interactionEffectCooldowns.set(target, cooldownState);
-  return true;
-}
-
-function triggerTimedClassEffect(
-  target,
-  className,
-  durationMs,
-  { effectKey = className, cooldownMs = 0, force = false } = {}
-) {
-  if (!target) {
-    return false;
-  }
-
-  if (!force && !canTriggerInteractionEffect(target, effectKey, cooldownMs)) {
-    return false;
-  }
-
-  const timerBucket = getTimedEffectTimerBucket(target);
-  const existingTimer = timerBucket.get(className);
-  if (existingTimer) {
-    window.clearTimeout(existingTimer);
-  }
-
-  target.classList.remove(className);
-  restartClassOnNextFrame(target, className);
-
-  const timerId = window.setTimeout(() => {
-    target.classList.remove(className);
-    timerBucket.delete(className);
-  }, durationMs);
-  timerBucket.set(className, timerId);
-  return true;
-}
-
-function triggerBookingOutlineBloom(target) {
-  if (!target || aggressivePerformanceMode || reducedEffectsEnabled) {
-    return;
-  }
-
-  if (!canTriggerInteractionEffect(target, "booking-outline", 520)) {
-    return;
-  }
-
-  triggerTimedClassEffect(target, "is-outline-blooming", bookingOutlineBloomDurationMs, {
-    force: true
-  });
 }
 
 function syncChecklistGroupCompletion(target, isComplete) {
@@ -5092,15 +5013,6 @@ function triggerChecklistInteractionFeedback(input) {
     checkItem.classList.remove("is-feedback-active");
     dayCard.classList.remove("is-check-feedback");
   }, 820);
-}
-
-function isDesktopBambooHammerAvailable(pointerType = "") {
-  return finePointerQuery.matches && !coarsePointerQuery.matches && (!pointerType || pointerType === "mouse");
-}
-
-function syncDesktopBambooHammerState() {
-  const isEnabled = isDesktopBambooHammerAvailable();
-  root.classList.toggle("is-bamboo-hammer-ready", isEnabled);
 }
 
 function handleChecklistPanelPointerMove(event) {
@@ -8731,14 +8643,6 @@ if (transitDetailModal) {
     syncReducedEffectsMode({ force: true });
   });
 });
-
-[finePointerQuery, coarsePointerQuery].forEach((query) => {
-  bindMediaQueryChange(query, () => {
-    syncDesktopBambooHammerState();
-  });
-});
-
-syncDesktopBambooHammerState();
 
 window.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") {

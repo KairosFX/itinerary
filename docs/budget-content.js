@@ -9,12 +9,12 @@ window.__JAPAN_BUDGET_CONTENT__ = {
     "ja": "以前の合計が膨らんでいた主因は、大阪、京都、富士エリア、東京をつなぐ固定7日間の西から東への流れに合わせず、旅程を広げすぎていたことです。"
   },
   "helperCopy": {
-    "en": "Each day now has its own stay selector plus a route-fit area explanation. Paid hotel quotes stay as quoted stay totals, the accommodation split control handles the per-person math, and all booking or fare links now live in Essentials.",
-    "ja": "各日に滞在セレクターと、動線に合うエリア説明を付けました。有料ホテルは見積り総額のまま扱い、宿泊費の分け方コントロールで1人あたり計算を行い、予約や運賃リンクはすべてEssentialsへ移しました。"
+    "en": "Each day keeps its own stay selector, the accommodation split control handles the per-person math, and booking or fare links stay in Essentials.",
+    "ja": "各日に滞在セレクターを残し、宿泊費の分け方コントロールで1人あたり計算を行い、予約や運賃リンクはすべてEssentialsにまとめています。"
   },
   "assumptionCopy": {
-    "en": "The cost model now matches one fixed 7-day route: Osaka, Kyoto, Mt. Fuji area, and Tokyo. Route extras cover luggage forwarding, Fuji visibility pivots, the Tokyo handoff, and a light airport-day buffer.",
-    "ja": "費用モデルは、固定の7日間ルートである大阪、京都、富士エリア、東京に合わせて更新しました。ルート追加費用は、荷物配送、富士山の見え方に応じた動き直し、東京への受け渡し、帰国日の小さな追加費用を想定しています。"
+    "en": "The cost model matches one fixed 7-day route through Osaka, Kyoto, the Mt. Fuji area, and Tokyo.",
+    "ja": "費用モデルは、大阪、京都、富士エリア、東京を回る固定の7日間ルートに合わせています。"
   },
   "costIndex": {
     "osaka-compact-hotel": {
