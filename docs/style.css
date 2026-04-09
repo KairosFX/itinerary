@@ -809,13 +809,26 @@ h3 {
 }
 
 .progress-overview__reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   justify-self: start;
-  padding: 0.56rem 0.92rem;
-  border: 1px solid rgba(31, 37, 39, 0.1);
+  min-height: 2.18rem;
+  padding: 0.52rem 0.88rem;
+  border: 1px solid rgba(103, 77, 62, 0.14);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.62);
-  color: var(--muted);
-  box-shadow: 0 10px 22px rgba(55, 35, 22, 0.04);
+  background:
+    linear-gradient(180deg, rgba(255, 254, 252, 0.94), rgba(249, 243, 237, 0.88)),
+    rgba(255, 252, 248, 0.86);
+  color: rgba(92, 67, 56, 0.96);
+  font-size: 0.79rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  white-space: nowrap;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 10px 22px rgba(55, 35, 22, 0.045);
   transition:
     transform 180ms ease,
     box-shadow 180ms ease,
@@ -827,10 +840,14 @@ h3 {
 .progress-overview__reset:hover,
 .progress-overview__reset:focus-visible {
   transform: translateY(-1px);
-  border-color: rgba(171, 74, 59, 0.18);
-  background: rgba(255, 251, 247, 0.84);
+  border-color: rgba(171, 74, 59, 0.24);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(252, 246, 241, 0.92)),
+    rgba(255, 252, 248, 0.92);
   color: var(--accent-deep);
-  box-shadow: 0 12px 24px rgba(55, 35, 22, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 12px 24px rgba(55, 35, 22, 0.08);
 }
 
 .progress-timeline {
@@ -3618,6 +3635,43 @@ html.has-modal-open body {
   align-items: stretch;
 }
 
+.booking-item__price {
+  display: grid;
+  gap: 0.18rem;
+  margin: 0;
+  padding: 0.54rem 0.72rem;
+  border: 1px solid rgba(171, 74, 59, 0.14);
+  border-radius: calc(var(--radius-sm) + 0.08rem);
+  background:
+    linear-gradient(180deg, rgba(255, 252, 248, 0.94), rgba(249, 240, 234, 0.88)),
+    rgba(255, 248, 242, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  opacity: 0;
+  transform: translateY(-0.18rem);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.booking-item__price.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.booking-item__price-label {
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.booking-item__price-value {
+  font-size: 0.86rem;
+  line-height: 1.25;
+  color: var(--accent-deep);
+}
+
 .booking-item__link-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -4536,6 +4590,22 @@ html[data-theme="dark"] .booking-item__tag--type {
 html[data-theme="dark"] .booking-item[data-booking-state="done"] .booking-item__status {
   color: #d4e8d8;
   background: rgba(96, 136, 108, 0.18);
+}
+
+html[data-theme="dark"] .booking-item__price {
+  border-color: rgba(214, 148, 120, 0.18);
+  background:
+    linear-gradient(180deg, rgba(56, 37, 32, 0.96), rgba(42, 28, 24, 0.92)),
+    rgba(42, 28, 24, 0.9);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+html[data-theme="dark"] .booking-item__price-label {
+  color: rgba(233, 168, 141, 0.94);
+}
+
+html[data-theme="dark"] .booking-item__price-value {
+  color: rgba(247, 229, 221, 0.98);
 }
 
 html[data-theme="dark"] .booking-item__caret {
@@ -8442,6 +8512,29 @@ html[data-theme="dark"] .progress-overview__reset:focus-visible {
   box-shadow: 0 18px 34px rgba(7, 11, 8, 0.22);
 }
 
+html[data-theme="dark"] .progress-overview__reset {
+  border-color: rgba(197, 152, 127, 0.18);
+  background:
+    linear-gradient(180deg, rgba(44, 33, 29, 0.96), rgba(33, 24, 21, 0.92)),
+    rgba(33, 24, 21, 0.9);
+  color: rgba(241, 229, 220, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 14px 28px rgba(7, 11, 8, 0.18);
+}
+
+html[data-theme="dark"] .progress-overview__reset:hover,
+html[data-theme="dark"] .progress-overview__reset:focus-visible {
+  border-color: rgba(214, 148, 120, 0.28);
+  background:
+    linear-gradient(180deg, rgba(52, 38, 33, 0.98), rgba(40, 29, 25, 0.94)),
+    rgba(40, 29, 25, 0.92);
+  color: rgba(247, 238, 231, 0.98);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 18px 34px rgba(7, 11, 8, 0.22);
+}
+
 html[data-theme="dark"] .progress-timeline::before {
   background: linear-gradient(180deg, rgba(137, 179, 151, 0.28), rgba(137, 179, 151, 0.08));
 }
@@ -11778,12 +11871,33 @@ html[data-theme="dark"] .site-transition__line {
 }
 
 .checklist-toolbar__action--reset {
-  border-color: rgba(160, 96, 73, 0.16);
+  min-height: 2.18rem;
+  height: auto;
+  padding: 0.46rem 0.92rem;
+  border-color: rgba(150, 94, 72, 0.18);
   background:
-    linear-gradient(180deg, rgba(255, 252, 249, 0.9), rgba(251, 246, 240, 0.84)),
-    rgba(255, 252, 249, 0.84);
-  color: rgba(103, 56, 43, 0.96);
+    linear-gradient(180deg, rgba(255, 253, 251, 0.94), rgba(250, 244, 239, 0.88)),
+    rgba(255, 251, 247, 0.9);
+  color: rgba(97, 61, 48, 0.96);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   text-transform: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 10px 20px rgba(55, 35, 22, 0.05);
+}
+
+.checklist-toolbar__action--reset:hover,
+.checklist-toolbar__action--reset:focus-visible {
+  border-color: rgba(171, 74, 59, 0.26);
+  background:
+    linear-gradient(180deg, rgba(255, 254, 252, 0.98), rgba(252, 246, 241, 0.92)),
+    rgba(255, 251, 247, 0.94);
+  color: var(--accent-deep);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 14px 28px rgba(55, 35, 22, 0.08);
 }
 
 .checklist-toolbar__action:hover,
@@ -11827,11 +11941,23 @@ html[data-theme="dark"] .checklist-toolbar__action {
 }
 
 html[data-theme="dark"] .checklist-toolbar__action--reset {
-  border-color: rgba(197, 152, 127, 0.16);
+  border-color: rgba(197, 152, 127, 0.18);
   background:
-    linear-gradient(180deg, rgba(41, 31, 27, 0.94), rgba(31, 23, 20, 0.9)),
-    rgba(31, 23, 20, 0.88);
+    linear-gradient(180deg, rgba(44, 33, 29, 0.96), rgba(33, 24, 21, 0.92)),
+    rgba(33, 24, 21, 0.9);
   color: rgba(234, 214, 204, 0.94);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 20px rgba(5, 11, 8, 0.16);
+}
+
+html[data-theme="dark"] .checklist-toolbar__action--reset:hover,
+html[data-theme="dark"] .checklist-toolbar__action--reset:focus-visible {
+  border-color: rgba(214, 148, 120, 0.28);
+  background:
+    linear-gradient(180deg, rgba(52, 38, 33, 0.98), rgba(40, 29, 25, 0.94)),
+    rgba(40, 29, 25, 0.92);
+  color: rgba(247, 229, 221, 0.98);
 }
 
 @media (max-width: 720px) {

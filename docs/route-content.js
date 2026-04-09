@@ -18,7 +18,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 3,
-      title: { en: "Day 3 - Arashiyama", ja: "3日目・嵐山" },
+      title: { en: "Day 3 - Arashiyama to Osaka", ja: "3日目・嵐山から大阪" },
       summary: {
         en: "Start Day 3 in Arashiyama, then head back to Osaka and keep the second half simple with Kaiyukan as the main waterfront stop before the final Kansai night.",
         ja: "3日目は嵐山から始め、そのあと大阪へ戻って海遊館を中心に回り、関西最後の夜へつなげます。"
@@ -215,7 +215,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       id: "kyoto-osaka",
-      title: { en: "Arashiyama -> Osaka", ja: "嵐山 -> 大阪" },
+      title: { en: "Arashiyama to Osaka", ja: "嵐山から大阪" },
       summary: {
         en: "Day 3 starts with Arashiyama, then resets back to Osaka for Kaiyukan and the final Kansai night.",
         ja: "3日目は嵐山から始め、そのあと大阪へ戻って海遊館と関西最後の夜へつなぎます。"

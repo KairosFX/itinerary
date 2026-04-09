@@ -2504,10 +2504,10 @@ html.reduce-effects .site-backdrop__video {
     font-size: 0.64rem !important;
   }
 }</style>
-  <link rel="preload" href="./assets/app/style.0860386710.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.c6544b50e9.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.0860386710.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.0860386710.css"></noscript>
+  <link rel="preload" href="./assets/app/style.5638751ca1.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.e77b0b8b5f.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.5638751ca1.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.5638751ca1.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -2766,8 +2766,8 @@ html.reduce-effects .site-backdrop__video {
                   <span data-language="ja" hidden>3日目</span>
                 </span>
                 <strong class="progress-item__place">
-                  <span data-language="en">Arashiyama -&gt; Osaka</span>
-                  <span data-language="ja" hidden>嵐山 -&gt; 大阪</span>
+                  <span data-language="en">Arashiyama to Osaka</span>
+                  <span data-language="ja" hidden>嵐山から大阪</span>
                 </strong>
               </div>
               <span class="progress-item__meter" aria-hidden="true"><span class="progress-item__meter-fill"></span></span>
@@ -2935,6 +2935,28 @@ html.reduce-effects .site-backdrop__video {
             </p>
           </div>
           <ul class="checklist-list">
+            <li class="checklist-list__item checklist-list__item--with-detail">
+              <label class="check-item" for="day2-transfer-to-kyoto">
+                <input id="day2-transfer-to-kyoto" type="checkbox">
+                <span class="check-copy" data-language="en">Transfer to Kyoto</span>
+                <span class="check-copy" data-language="ja" hidden>京都へ移動</span>
+              </label>
+              <button class="transit-trigger transit-trigger--checklist" type="button" data-transit-detail-trigger="osaka-kyoto-transfer" aria-haspopup="dialog" aria-controls="transit-detail-modal">
+                <span data-language="en">Transit details</span>
+                <span data-language="ja" hidden>移動詳細</span>
+              </button>
+            </li>
+            <li class="checklist-list__item checklist-list__item--with-detail">
+              <label class="check-item" for="day2-hotel-check-in">
+                <input id="day2-hotel-check-in" type="checkbox">
+                <span class="check-copy" data-language="en">Kyoto hotel check-in</span>
+                <span class="check-copy" data-language="ja" hidden>京都ホテルのチェックイン</span>
+              </label>
+              <button class="transit-trigger transit-trigger--checklist" type="button" data-checklist-detail-trigger="kyoto-stay" aria-haspopup="dialog" aria-controls="transit-detail-modal">
+                <span data-language="en">Details</span>
+                <span data-language="ja" hidden>詳細</span>
+              </button>
+            </li>
             <li>
               <label class="check-item" for="day2-kiyomizu">
                 <input id="day2-kiyomizu" type="checkbox">
@@ -2970,28 +2992,6 @@ html.reduce-effects .site-backdrop__video {
                 <span class="check-copy" data-language="ja" hidden>南禅寺</span>
               </label>
             </li>
-            <li class="checklist-list__item checklist-list__item--with-detail">
-              <label class="check-item" for="day2-transfer-to-kyoto">
-                <input id="day2-transfer-to-kyoto" type="checkbox">
-                <span class="check-copy" data-language="en">Transfer to Kyoto</span>
-                <span class="check-copy" data-language="ja" hidden>京都へ移動</span>
-              </label>
-              <button class="transit-trigger transit-trigger--checklist" type="button" data-transit-detail-trigger="osaka-kyoto-transfer" aria-haspopup="dialog" aria-controls="transit-detail-modal">
-                <span data-language="en">Transit details</span>
-                <span data-language="ja" hidden>移動詳細</span>
-              </button>
-            </li>
-            <li class="checklist-list__item checklist-list__item--with-detail">
-              <label class="check-item" for="day2-hotel-check-in">
-                <input id="day2-hotel-check-in" type="checkbox">
-                <span class="check-copy" data-language="en">Hotel check-in</span>
-                <span class="check-copy" data-language="ja" hidden>ホテルチェックイン</span>
-              </label>
-              <button class="transit-trigger transit-trigger--checklist" type="button" data-checklist-detail-trigger="kyoto-stay" aria-haspopup="dialog" aria-controls="transit-detail-modal">
-                <span data-language="en">Details</span>
-                <span data-language="ja" hidden>詳細</span>
-              </button>
-            </li>
           </ul>
         </article>
 
@@ -3002,8 +3002,8 @@ html.reduce-effects .site-backdrop__video {
               <span data-language="ja" hidden>3日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">Arashiyama</span>
-              <span data-language="ja" hidden>嵐山</span>
+              <span data-language="en">Arashiyama to Osaka</span>
+              <span data-language="ja" hidden>嵐山から大阪</span>
             </p>
           </div>
           <ul class="checklist-list">
@@ -3017,7 +3017,7 @@ html.reduce-effects .site-backdrop__video {
             <li>
               <label class="check-item" for="day3-back-to-osaka">
                 <input id="day3-back-to-osaka" type="checkbox">
-                <span class="check-copy" data-language="en">Back to Osaka</span>
+                <span class="check-copy" data-language="en">Return to Osaka</span>
                 <span class="check-copy" data-language="ja" hidden>大阪へ戻る</span>
               </label>
             </li>
@@ -3027,39 +3027,6 @@ html.reduce-effects .site-backdrop__video {
                 <span class="check-copy" data-language="en">Kaiyukan</span>
                 <span class="check-copy" data-language="ja" hidden>海遊館</span>
               </label>
-            </li>
-            <li class="checklist-list__item checklist-list__item--with-detail">
-              <label class="check-item" for="day3-shinkansen-mishima">
-                <input id="day3-shinkansen-mishima" type="checkbox">
-                <span class="check-copy" data-language="en">Shinkansen toward Mishima</span>
-                <span class="check-copy" data-language="ja" hidden>三島方面の新幹線</span>
-              </label>
-              <button class="transit-trigger transit-trigger--checklist" type="button" data-transit-detail-trigger="shin-osaka-fuji-gateway" aria-haspopup="dialog" aria-controls="transit-detail-modal">
-                <span data-language="en">Transit details</span>
-                <span data-language="ja" hidden>移動詳細</span>
-              </button>
-            </li>
-            <li class="checklist-list__item checklist-list__item--with-detail">
-              <label class="check-item" for="day3-transfer-fujikawaguchiko">
-                <input id="day3-transfer-fujikawaguchiko" type="checkbox">
-                <span class="check-copy" data-language="en">Transfer to Fujikawaguchiko</span>
-                <span class="check-copy" data-language="ja" hidden>富士河口湖へ移動</span>
-              </label>
-              <button class="transit-trigger transit-trigger--checklist" type="button" data-transit-detail-trigger="fuji-gateway-kawaguchiko" aria-haspopup="dialog" aria-controls="transit-detail-modal">
-                <span data-language="en">Transit details</span>
-                <span data-language="ja" hidden>移動詳細</span>
-              </button>
-            </li>
-            <li class="checklist-list__item checklist-list__item--with-detail">
-              <label class="check-item" for="day3-onsen-check-in">
-                <input id="day3-onsen-check-in" type="checkbox">
-                <span class="check-copy" data-language="en">Onsen check-in</span>
-                <span class="check-copy" data-language="ja" hidden>温泉チェックイン</span>
-              </label>
-              <button class="transit-trigger transit-trigger--checklist" type="button" data-checklist-detail-trigger="fuji-area-stay" aria-haspopup="dialog" aria-controls="transit-detail-modal">
-                <span data-language="en">Details</span>
-                <span data-language="ja" hidden>詳細</span>
-              </button>
             </li>
           </ul>
         </article>
@@ -3078,11 +3045,44 @@ html.reduce-effects .site-backdrop__video {
           <div class="day-card__body day-card__body--with-aside">
             <div class="day-card__main">
               <ul class="checklist-list">
+                <li class="checklist-list__item checklist-list__item--with-detail">
+                  <label class="check-item" for="day4-shinkansen-mishima">
+                    <input id="day4-shinkansen-mishima" type="checkbox">
+                    <span class="check-copy" data-language="en">Shinkansen toward Mishima</span>
+                    <span class="check-copy" data-language="ja" hidden>三島方面の新幹線</span>
+                  </label>
+                  <button class="transit-trigger transit-trigger--checklist" type="button" data-transit-detail-trigger="shin-osaka-fuji-gateway" aria-haspopup="dialog" aria-controls="transit-detail-modal">
+                    <span data-language="en">Transit details</span>
+                    <span data-language="ja" hidden>移動詳細</span>
+                  </button>
+                </li>
+                <li class="checklist-list__item checklist-list__item--with-detail">
+                  <label class="check-item" for="day4-transfer-fujikawaguchiko">
+                    <input id="day4-transfer-fujikawaguchiko" type="checkbox">
+                    <span class="check-copy" data-language="en">Transfer to Fujikawaguchiko</span>
+                    <span class="check-copy" data-language="ja" hidden>富士河口湖へ移動</span>
+                  </label>
+                  <button class="transit-trigger transit-trigger--checklist" type="button" data-transit-detail-trigger="fuji-gateway-kawaguchiko" aria-haspopup="dialog" aria-controls="transit-detail-modal">
+                    <span data-language="en">Transit details</span>
+                    <span data-language="ja" hidden>移動詳細</span>
+                  </button>
+                </li>
+                <li class="checklist-list__item checklist-list__item--with-detail">
+                  <label class="check-item" for="day4-onsen-check-in">
+                    <input id="day4-onsen-check-in" type="checkbox">
+                    <span class="check-copy" data-language="en">Onsen check-in</span>
+                    <span class="check-copy" data-language="ja" hidden>温泉チェックイン</span>
+                  </label>
+                  <button class="transit-trigger transit-trigger--checklist" type="button" data-checklist-detail-trigger="fuji-area-stay" aria-haspopup="dialog" aria-controls="transit-detail-modal">
+                    <span data-language="en">Details</span>
+                    <span data-language="ja" hidden>詳細</span>
+                  </button>
+                </li>
                 <li>
                   <label class="check-item" for="day4-chureito">
                     <input id="day4-chureito" type="checkbox">
-                    <span class="check-copy" data-language="en">Lake Chureito</span>
-                    <span class="check-copy" data-language="ja" hidden>忠霊塔</span>
+                    <span class="check-copy" data-language="en">Chureito / Shimoyoshida</span>
+                    <span class="check-copy" data-language="ja" hidden>忠霊塔・下吉田</span>
                   </label>
                 </li>
                 <li>
@@ -3135,8 +3135,8 @@ html.reduce-effects .site-backdrop__video {
             <li>
               <label class="check-item" for="day5-fuji-check">
                 <input id="day5-fuji-check" type="checkbox">
-                <span class="check-copy" data-language="en">Hotel check-in</span>
-                <span class="check-copy" data-language="ja" hidden>ホテルチェックイン</span>
+                <span class="check-copy" data-language="en">Tokyo hotel check-in</span>
+                <span class="check-copy" data-language="ja" hidden>東京ホテルのチェックイン</span>
               </label>
             </li>
             <li>
@@ -3228,15 +3228,15 @@ html.reduce-effects .site-backdrop__video {
             <li>
               <label class="check-item" for="day7-bags">
                 <input id="day7-bags" type="checkbox">
-                <span class="check-copy" data-language="en">Bag Pickup</span>
+                <span class="check-copy" data-language="en">Bag pickup</span>
                 <span class="check-copy" data-language="ja" hidden>荷物の回収</span>
               </label>
             </li>
             <li>
               <label class="check-item" for="day7-airport">
                 <input id="day7-airport" type="checkbox">
-                <span class="check-copy" data-language="en">Flight Home</span>
-                <span class="check-copy" data-language="ja" hidden>帰国便</span>
+                <span class="check-copy" data-language="en">Airport transfer</span>
+                <span class="check-copy" data-language="ja" hidden>空港移動</span>
               </label>
             </li>
           </ul>
@@ -4022,10 +4022,10 @@ html.reduce-effects .site-backdrop__video {
   </footer>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/page-background-loop.bcde8dff98.mp3","backgroundLoopAudioCssPath":"./page-background-loop.bcde8dff98.mp3","backgroundLoopAudioHash":"bcde8dff98","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.0860386710.css","styleHash":"0860386710","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.c6544b50e9.js","scriptHash":"c6544b50e9","routeContentPath":"./assets/app/routeContent.f5a38cf4cd.js","routeContentHash":"f5a38cf4cd","budgetUiPath":"./assets/app/budgetUi.456391b1ea.js","budgetUiHash":"456391b1ea","budgetContentPath":"./assets/app/budgetContent.362d120913.js","budgetContentHash":"362d120913","essentialsContentPath":"./assets/app/essentialsContent.9f71cbe550.js","essentialsContentHash":"9f71cbe550","generatedAt":"2026-04-09T03:12:15.806Z","cacheVersion":"0860386710-2d8476cd59-c6544b50e9-f5a38cf4cd-456391b1ea-362d120913-9f71cbe550-bcde8dff98-9afc15ad27"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/page-background-loop.bcde8dff98.mp3","backgroundLoopAudioCssPath":"./page-background-loop.bcde8dff98.mp3","backgroundLoopAudioHash":"bcde8dff98","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.5638751ca1.css","styleHash":"5638751ca1","routeStylePath":"./assets/app/routeStyle.2d8476cd59.css","routeStyleHash":"2d8476cd59","scriptPath":"./assets/app/script.e77b0b8b5f.js","scriptHash":"e77b0b8b5f","routeContentPath":"./assets/app/routeContent.bbce3368c5.js","routeContentHash":"bbce3368c5","budgetUiPath":"./assets/app/budgetUi.456391b1ea.js","budgetUiHash":"456391b1ea","budgetContentPath":"./assets/app/budgetContent.0b78fc2219.js","budgetContentHash":"0b78fc2219","essentialsContentPath":"./assets/app/essentialsContent.e1c49be778.js","essentialsContentHash":"e1c49be778","generatedAt":"2026-04-09T13:23:06.508Z","cacheVersion":"5638751ca1-2d8476cd59-e77b0b8b5f-bbce3368c5-456391b1ea-0b78fc2219-e1c49be778-bcde8dff98-9afc15ad27"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.c6544b50e9.js" defer></script>
+  <script src="./assets/app/script.e77b0b8b5f.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>

@@ -61,7 +61,7 @@ const pageTitles = {
   ja: "日本旅行"
 };
 const storageKey = "japan-trip-language";
-const itineraryStateVersion = "2026-03-27-flight-home-v1";
+const itineraryStateVersion = "2026-04-09-trip-flow-booking-v1";
 const checklistStorageKey = `japan-trip-checklist-state-${itineraryStateVersion}`;
 const completedHistoryStorageKey = `japan-trip-completed-history-${itineraryStateVersion}`;
 const activePanelStorageKey = `japan-trip-active-panel-${itineraryStateVersion}`;
@@ -3786,6 +3786,10 @@ const bookingTransitPrimaryCtaLabel = {
   en: "Book now",
   ja: "Book now"
 };
+const bookingTransitPriceLabel = {
+  en: "Booking.com price",
+  ja: "Booking.com料金"
+};
 
 function renderBookingTransitItem(item) {
   const state = getBookingTransitItemState(item.id);
@@ -3793,6 +3797,20 @@ function renderBookingTransitItem(item) {
   const dayTagMarkup = renderBookingTransitMetaTag(item.dayLabel, "booking-item__tag--day");
   const typeTagMarkup = renderBookingTransitMetaTag(item.typeLabel, "booking-item__tag--type");
   const transitTriggerMarkup = "";
+  const priceMarkup = preferredLink?.price
+    ? `
+          <p class="booking-item__price" data-booking-price hidden>
+            <span class="booking-item__price-label">
+              <span data-language="en">${escapeHtml(bookingTransitPriceLabel.en)}</span>
+              <span data-language="ja" hidden>${escapeHtml(bookingTransitPriceLabel.ja)}</span>
+            </span>
+            <strong class="booking-item__price-value">
+              <span data-language="en">${escapeHtml(preferredLink.price.en)}</span>
+              <span data-language="ja" hidden>${escapeHtml(preferredLink.price.ja)}</span>
+            </strong>
+          </p>
+      `
+    : "";
   const linkMarkup = preferredLink
     ? `
           <div class="booking-item__link-grid">
@@ -3800,7 +3818,8 @@ function renderBookingTransitItem(item) {
               class="booking-item__cta booking-item__cta--primary booking-item__cta--name"
               href="${escapeHtml(preferredLink.href)}"
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+              data-booking-link>
               <span class="booking-item__cta-label">${renderLocalizedContent(bookingTransitPrimaryCtaLabel)}</span>
             </a>
           </div>
@@ -3837,6 +3856,7 @@ function renderBookingTransitItem(item) {
           ${transitTriggerMarkup}
           <div class="booking-item__actions">
             ${linkMarkup}
+            ${priceMarkup}
             <button
               class="booking-item__cta booking-item__cta--secondary"
               type="button"
@@ -4031,6 +4051,16 @@ function bindBookingTransitUI() {
         done: nextDoneState
       });
       updateBookingTransitUI();
+    });
+
+    itemElement.querySelector("[data-booking-link]")?.addEventListener("click", () => {
+      const priceNode = itemElement.querySelector("[data-booking-price]");
+      if (!priceNode) {
+        return;
+      }
+
+      priceNode.hidden = false;
+      priceNode.classList.add("is-visible");
     });
 
     itemElement.querySelector("[data-transit-detail-trigger]")?.addEventListener("click", (event) => {

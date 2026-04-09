@@ -1,8 +1,8 @@
 window.__JAPAN_BUDGET_CONTENT__ = {
-  "lastUpdated": "2026-04-06",
+  "lastUpdated": "2026-04-09",
   "updatedCopy": {
-    "en": "Accommodation, meals, transit, and ticket references updated Apr 6, 2026",
-    "ja": "宿泊・食費・移動・チケットの基準は2026年4月6日更新"
+    "en": "Accommodation, meals, transit, and ticket references updated Apr 9, 2026",
+    "ja": "宿泊・食費・移動・チケットの基準は2026年4月9日更新"
   },
   "metaCopy": {
     "en": "The old total was inflated mainly because the model stretched the route too far instead of matching the fixed 7-day west-to-east flow through Osaka, Kyoto, the Mt. Fuji area, and Tokyo.",
@@ -38,15 +38,15 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目のミナミ散策と3日目の大阪側の動きに合いやすく、無関係な地区のホテルより実用的です。"
       },
       "assumption": {
-        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Hotel Trend Nishi Shinsaibashi is the cheaper BudgetAir hotel-channel fallback that still keeps the Minami side practical.",
-        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。Hotel Trend Nishi Shinsaibashi を、BudgetAir 提携ホテル経由で拾える、ミナミ側の動線に合うより安い代替宿として保存しています。"
+        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Hotel Trend Nishi Shinsaibashi is the Booking.com fallback that still keeps the Minami side practical.",
+        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。Hotel Trend Nishi Shinsaibashi を、ミナミ側の動線に合う Booking.com の代替宿として保存しています。"
       },
       "source": {
         "label": {
           "en": "Hotel Trend Nishi Shinsaibashi",
           "ja": "Hotel Trend Nishi Shinsaibashi"
         },
-        "url": "https://us.trip.com/hotels/osaka-hotel-detail-32615922/hotel-trend-nishi-shinsaibashi/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+        "url": "https://www.booking.com/hotel/jp/hotel-trend-nishi-shinsaibashi.html"
       }
     },
     "kyoto-midrange-hotel": {
@@ -70,15 +70,15 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "四条烏丸は、2日目の京都東側へ出やすく、3日目の嵐山と大阪戻りにも地下鉄・阪急・JRの選択肢を取りやすいため、実際の動線に合います。"
       },
       "assumption": {
-        "en": "Day 2 now uses the cheaper BudgetAir hotel-channel Imu Hotel Kyoto reference for the same Shijo / Karasuma route fit.",
-        "ja": "2日目は、同じ四条烏丸の動線適性を保ちながら、BudgetAir 提携ホテル経由でより安く拾える Imu Hotel Kyoto を基準にしています。"
+        "en": "Day 2 now uses the current Booking.com Imu Hotel Kyoto listing for the same Shijo / Karasuma route fit.",
+        "ja": "2日目は、同じ四条烏丸の動線適性を保ちながら、Booking.com の Imu Hotel Kyoto を基準にしています。"
       },
       "source": {
         "label": {
           "en": "Imu Hotel Kyoto",
           "ja": "Imu Hotel Kyoto"
         },
-        "url": "https://us.trip.com/hotels/kyoto-hotel-detail-21887858/imu-hotel-kyoto/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+        "url": "https://www.booking.com/hotel/jp/imu.html"
       }
     },
     "kawaguchiko-base-hotel": {
@@ -102,15 +102,15 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "このエリアなら、4日目の三島ハンドオフ、忠霊塔・下吉田、河口湖をまとめやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
-        "en": "Day 4 now uses SUPER HOTEL Fujikawaguchiko Natural Hot Spring because it is the cheaper BudgetAir hotel-channel Fuji stay that still keeps the onsen reset and the Tokyo handoff practical.",
-        "ja": "4日目は、温泉で立て直しやすく、東京への受け渡しも崩さない、BudgetAir 提携ホテル経由でより安い SUPER HOTEL Fujikawaguchiko Natural Hot Spring を基準にしています。"
+        "en": "Day 4 now uses the current Booking.com SUPER HOTEL Fujikawaguchiko Natural Hot Spring listing because it still keeps the onsen reset and the Tokyo handoff practical.",
+        "ja": "4日目は、温泉で立て直しやすく、東京への受け渡しも崩さない Booking.com の SUPER HOTEL Fujikawaguchiko Natural Hot Spring を基準にしています。"
       },
       "source": {
         "label": {
           "en": "SUPER HOTEL Fujikawaguchiko Natural Hot Spring",
           "ja": "SUPER HOTEL Fujikawaguchiko Natural Hot Spring"
         },
-        "url": "https://us.trip.com/hotels/fujikawaguchiko-hotel-detail-76325560/super-hotel-fujikawaguchiko-tennen-onsen/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+        "url": "https://www.booking.com/hotel/jp/supahoterufu-shi-he-kou-hu-tian-ran-wen-quan.html"
       }
     },
     "tokyo-base-hotel": {
@@ -134,15 +134,15 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "今回のルートは5日目に渋谷へ入り、東京ホテル泊は5日目と6日目に置くため、渋谷中心部の拠点なら到着夜と観光メイン日を拠点変更なしでまとめやすくなります。"
       },
       "assumption": {
-        "en": "Tokyo now uses The OneFive Tokyo Shibuya as the cheaper BudgetAir hotel-channel Shibuya base for Days 5 and 6, while Day 7 still defaults to no paid stay because it is the flight-home day.",
-        "ja": "東京は、5日目と6日目の渋谷拠点として、BudgetAir 提携ホテル経由でより安い The OneFive Tokyo Shibuya を基準にし、7日目は帰国日のため初期値では有料宿泊を入れていません。"
+        "en": "Tokyo now uses the current Booking.com The OneFive Tokyo Shibuya listing as the Shibuya base for Days 5 and 6, while Day 7 still defaults to no paid stay because it is the flight-home day.",
+        "ja": "東京は、5日目と6日目の渋谷拠点として Booking.com の The OneFive Tokyo Shibuya を基準にし、7日目は帰国日のため初期値では有料宿泊を入れていません。"
       },
       "source": {
         "label": {
           "en": "The OneFive Tokyo Shibuya",
           "ja": "The OneFive Tokyo Shibuya"
         },
-        "url": "https://us.trip.com/hotels/tokyo-hotel-detail-15935455/hotel-emit-shibuya/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+        "url": "https://www.booking.com/hotel/jp/emit-shibuya.html"
       }
     },
     "tokyo-subway-24h": {
@@ -178,31 +178,31 @@ window.__JAPAN_BUDGET_CONTENT__ = {
       "links": [
         {
           "label": {
-            "en": "BudgetAir Osaka fallback stay",
-            "ja": "BudgetAir 大阪代替ホテル"
+            "en": "Booking.com Osaka fallback stay",
+            "ja": "Booking.com 大阪代替ホテル"
           },
-          "url": "https://us.trip.com/hotels/osaka-hotel-detail-32615922/hotel-trend-nishi-shinsaibashi/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+          "url": "https://www.booking.com/hotel/jp/hotel-trend-nishi-shinsaibashi.html"
         },
         {
           "label": {
-            "en": "BudgetAir Kyoto stay",
-            "ja": "BudgetAir 京都ホテル"
+            "en": "Booking.com Kyoto stay",
+            "ja": "Booking.com 京都ホテル"
           },
-          "url": "https://us.trip.com/hotels/kyoto-hotel-detail-21887858/imu-hotel-kyoto/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+          "url": "https://www.booking.com/hotel/jp/imu.html"
         },
         {
           "label": {
-            "en": "BudgetAir Mt. Fuji area stay",
-            "ja": "BudgetAir 富士エリアホテル"
+            "en": "Booking.com Mt. Fuji area stay",
+            "ja": "Booking.com 富士エリアホテル"
           },
-          "url": "https://us.trip.com/hotels/fujikawaguchiko-hotel-detail-76325560/super-hotel-fujikawaguchiko-tennen-onsen/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+          "url": "https://www.booking.com/hotel/jp/supahoterufu-shi-he-kou-hu-tian-ran-wen-quan.html"
         },
         {
           "label": {
-            "en": "BudgetAir Tokyo stay",
-            "ja": "BudgetAir 東京ホテル"
+            "en": "Booking.com Tokyo stay",
+            "ja": "Booking.com 東京ホテル"
           },
-          "url": "https://us.trip.com/hotels/tokyo-hotel-detail-15935455/hotel-emit-shibuya/?locale=en-US&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+          "url": "https://www.booking.com/hotel/jp/emit-shibuya.html"
         }
       ]
     },
@@ -604,8 +604,8 @@ window.__JAPAN_BUDGET_CONTENT__ = {
       "items": [
         {
           "label": {
-            "en": "Osaka -> Kyoto rail",
-            "ja": "大阪 -> 京都の鉄道移動"
+            "en": "Osaka to Kyoto rail",
+            "ja": "大阪から京都の鉄道移動"
           },
           "category": "intercityTransit",
           "bucket": "required",
@@ -722,12 +722,12 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "no-accommodation"
       ],
       "title": {
-        "en": "Arashiyama",
-        "ja": "嵐山"
+        "en": "Day 3 - Arashiyama to Osaka",
+        "ja": "3日目・嵐山から大阪"
       },
       "subtitle": {
-        "en": "Arashiyama in the morning, Osaka waterfront after",
-        "ja": "朝は嵐山、そのあと大阪ベイエリア"
+        "en": "Arashiyama first, then the Osaka waterfront reset",
+        "ja": "先に嵐山、そのあと大阪ベイエリアへ戻る流れ"
       },
       "items": [
         {
@@ -798,18 +798,18 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "no-accommodation"
       ],
       "title": {
-        "en": "Mt. Fuji",
-        "ja": "富士山"
+        "en": "Day 4 - Mt. Fuji",
+        "ja": "4日目・富士山"
       },
       "subtitle": {
-        "en": "Mishima, Chureito / Shimoyoshida, and Lake Kawaguchiko",
-        "ja": "三島、忠霊塔・下吉田、河口湖"
+        "en": "Shinkansen, Kawaguchiko arrival, and Fuji-area stops",
+        "ja": "新幹線、河口湖到着、富士エリアの立ち寄り"
       },
       "items": [
         {
           "label": {
-            "en": "Shinkansen: Kyoto / Shin-Osaka -> Mishima",
-            "ja": "新幹線：京都・新大阪 -> 三島"
+            "en": "Shinkansen: Shin-Osaka to Mishima",
+            "ja": "新幹線：新大阪から三島"
           },
           "category": "intercityTransit",
           "bucket": "booked",
@@ -844,6 +844,19 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         },
         {
           "label": {
+            "en": "Hotel / onsen check-in",
+            "ja": "ホテル・温泉チェックイン"
+          },
+          "category": "ticketsAdmissions",
+          "bucket": "free",
+          "sourceGroup": "assumptions",
+          "cost": {
+            "mode": "none",
+            "amount": 0
+          }
+        },
+        {
+          "label": {
             "en": "Chureito / Shimoyoshida",
             "ja": "忠霊塔・下吉田"
           },
@@ -859,19 +872,6 @@ window.__JAPAN_BUDGET_CONTENT__ = {
           "label": {
             "en": "Lake Kawaguchiko",
             "ja": "河口湖"
-          },
-          "category": "ticketsAdmissions",
-          "bucket": "free",
-          "sourceGroup": "assumptions",
-          "cost": {
-            "mode": "none",
-            "amount": 0
-          }
-        },
-        {
-          "label": {
-            "en": "Hotel / onsen check-in",
-            "ja": "ホテル・温泉チェックイン"
           },
           "category": "ticketsAdmissions",
           "bucket": "free",
