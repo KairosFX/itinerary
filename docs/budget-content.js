@@ -18,11 +18,11 @@ window.__JAPAN_BUDGET_CONTENT__ = {
   },
   "costIndex": {
     "osaka-compact-hotel": {
-      "amount": 5665,
+      "amount": 9542,
       "range": {
-        "lean": 5665,
-        "expected": 5665,
-        "high": 8500
+        "lean": 9542,
+        "expected": 9542,
+        "high": 13000
       },
       "roomCapacity": 2,
       "area": {
@@ -38,23 +38,23 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目のミナミ散策と3日目の大阪側の動きに合いやすく、無関係な地区のホテルより実用的です。"
       },
       "assumption": {
-        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Hotel Trend Nishi Shinsaibashi stays saved as the cheapest reviewed safe Minami-side fallback, and the amount is stored as one shared room quote.",
-        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。Hotel Trend Nishi Shinsaibashi は確認した中で最も安く安全なミナミ側代替のままで、金額も1室を共有する前提の料金で保存しています。"
+        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. With Trip.com removed from hotel sourcing, Booking.com is the cheapest reviewed safe Minami-side fallback for Hotel Trend Nishi Shinsaibashi, and the amount stays stored as one shared-room quote.",
+        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。ホテル導線から Trip.com を外した上で、Hotel Trend Nishi Shinsaibashi は Booking.com が確認した中で最も安く安全なミナミ側代替になり、金額も1室を共有する前提の料金で保存しています。"
       },
       "source": {
         "label": {
           "en": "Hotel Trend Nishi Shinsaibashi",
           "ja": "Hotel Trend Nishi Shinsaibashi"
         },
-        "url": "https://us.trip.com/hotels/osaka-hotel-detail-32615922/hotel-trend-nishi-shinsaibashi/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+        "url": "https://www.booking.com/hotel/jp/hotel-trend-nishi-shinsaibashi.en-gb.html"
       }
     },
     "kyoto-midrange-hotel": {
-      "amount": 7493,
+      "amount": 11476,
       "range": {
-        "lean": 7493,
-        "expected": 7493,
-        "high": 9800
+        "lean": 11476,
+        "expected": 11476,
+        "high": 14500
       },
       "roomCapacity": 2,
       "area": {
@@ -70,23 +70,23 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "四条烏丸は、2日目の京都東側へ出やすく、3日目の嵐山と大阪戻りにも地下鉄・阪急・JRの選択肢を取りやすいため、実際の動線に合います。"
       },
       "assumption": {
-        "en": "Day 2 keeps the current Trip.com hotel page for Imu Hotel Kyoto, and the saved amount now reflects the cheapest reviewed safe shared-room quote that still fits the same Shijo / Karasuma route logic.",
-        "ja": "2日目は Imu Hotel Kyoto の現在の Trip.com ホテルページを維持しつつ、保存金額も同じ四条烏丸の動線に合う中で、確認した最安の安全な共有ルーム料金へ更新しています。"
+        "en": "Day 2 keeps the current Booking.com hotel page for Imu Hotel Kyoto, and the saved amount now reflects the cheapest reviewed safe shared-room quote that still fits the same Shijo / Karasuma route logic after removing Trip.com from hotel sourcing.",
+        "ja": "2日目は Imu Hotel Kyoto の現在の Booking.com ホテルページを使い、保存金額もホテル導線から Trip.com を外した上で、同じ四条烏丸の動線に合う中で確認した最安の安全な共有ルーム料金へ更新しています。"
       },
       "source": {
         "label": {
           "en": "Imu Hotel Kyoto",
           "ja": "Imu Hotel Kyoto"
         },
-        "url": "https://us.trip.com/hotels/kyoto-hotel-detail-21887858/imu-hotel-kyoto/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+        "url": "https://www.booking.com/hotel/jp/imu.html"
       }
     },
     "kawaguchiko-base-hotel": {
-      "amount": 9375,
+      "amount": 11544,
       "range": {
-        "lean": 9375,
-        "expected": 9375,
-        "high": 12500
+        "lean": 11544,
+        "expected": 11544,
+        "high": 15000
       },
       "roomCapacity": 2,
       "area": {
@@ -102,23 +102,23 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "このエリアなら、3日目の三島ハンドオフに加え、4日目の忠霊塔・下吉田と河口湖のまとまりも進めやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
-        "en": "Day 3 keeps the current Trip.com hotel page for SUPER HOTEL Fujikawaguchiko Natural Hot Spring, and the saved amount now reflects the cheapest reviewed safe shared-room quote that still preserves the onsen reset and station-to-lake flow.",
-        "ja": "3日目は SUPER HOTEL Fujikawaguchiko Natural Hot Spring の現在の Trip.com ホテルページを維持しつつ、保存金額も温泉での立て直しと駅から湖側への流れを崩さない範囲で、確認した最安の安全な共有ルーム料金へ更新しています。"
+        "en": "Day 3 keeps the current Booking.com hotel page for SUPER HOTEL Fujikawaguchiko Natural Hot Spring, and the saved amount now reflects the cheapest reviewed safe shared-room quote that still preserves the onsen reset and station-to-lake flow after removing Trip.com from hotel sourcing.",
+        "ja": "3日目は SUPER HOTEL Fujikawaguchiko Natural Hot Spring の現在の Booking.com ホテルページを使い、保存金額もホテル導線から Trip.com を外した上で、温泉での立て直しと駅から湖側への流れを崩さない範囲で確認した最安の安全な共有ルーム料金へ更新しています。"
       },
       "source": {
         "label": {
           "en": "SUPER HOTEL Fujikawaguchiko Natural Hot Spring",
           "ja": "SUPER HOTEL Fujikawaguchiko Natural Hot Spring"
         },
-        "url": "https://us.trip.com/hotels/fujikawaguchiko-hotel-detail-76325560/super-hotel-fujikawaguchiko-natural-hot-spring/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+        "url": "https://www.booking.com/hotel/jp/supahoterufu-shi-he-kou-hu-tian-ran-wen-quan.html"
       }
     },
     "tokyo-base-hotel": {
-      "amount": 10000,
+      "amount": 21988,
       "range": {
-        "lean": 10000,
-        "expected": 10000,
-        "high": 12000
+        "lean": 21988,
+        "expected": 21988,
+        "high": 25000
       },
       "roomCapacity": 2,
       "area": {
@@ -134,15 +134,15 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "今回のルートは4日目に渋谷へ入り、東京ホテル泊は4日目、5日目、6日目に置くため、渋谷中心部の拠点なら到着夜とその後の東京日程を拠点変更なしでまとめやすくなります。"
       },
       "assumption": {
-        "en": "Tokyo keeps the current Trip.com hotel page for The OneFive Tokyo Shibuya as the Day 4-6 base, and the saved amount now reflects the cheapest reviewed safe shared-room quote that still keeps the Shibuya handoff simple.",
-        "ja": "東京は4日目から6日目の拠点として The OneFive Tokyo Shibuya の現在の Trip.com ホテルページを維持しつつ、保存金額も渋谷への受け渡しを崩さない範囲で、確認した最安の安全な共有ルーム料金へ更新しています。"
+        "en": "Tokyo keeps the current Expedia hotel page for The OneFive Tokyo Shibuya as the Day 4-6 base, and the saved amount now reflects the cheapest reviewed safe shared-room quote that still keeps the Shibuya handoff simple after removing Trip.com from hotel sourcing.",
+        "ja": "東京は4日目から6日目の拠点として The OneFive Tokyo Shibuya の現在の Expedia ホテルページを使い、保存金額もホテル導線から Trip.com を外した上で、渋谷への受け渡しを崩さない範囲で確認した最安の安全な共有ルーム料金へ更新しています。"
       },
       "source": {
         "label": {
           "en": "The OneFive Tokyo Shibuya",
           "ja": "The OneFive Tokyo Shibuya"
         },
-        "url": "https://www.trip.com/hotels/tokyo-hotel-detail-15935455/the-onefive-tokyo-shibuya"
+        "url": "https://www.expedia.com/Tokyo-Hotels-HOTEL-EMIT-SHIBUYA.h22869543.Hotel-Information"
       }
     },
     "tokyo-subway-24h": {
@@ -178,31 +178,31 @@ window.__JAPAN_BUDGET_CONTENT__ = {
       "links": [
         {
           "label": {
-            "en": "Trip.com Osaka fallback stay",
-            "ja": "Trip.com 大阪代替ホテル"
+            "en": "Booking.com Osaka fallback stay",
+            "ja": "Booking.com 大阪代替ホテル"
           },
-          "url": "https://us.trip.com/hotels/osaka-hotel-detail-32615922/hotel-trend-nishi-shinsaibashi/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+          "url": "https://www.booking.com/hotel/jp/hotel-trend-nishi-shinsaibashi.en-gb.html"
         },
         {
           "label": {
-            "en": "Trip.com Kyoto stay",
-            "ja": "Trip.com 京都ホテル"
+            "en": "Booking.com Kyoto stay",
+            "ja": "Booking.com 京都ホテル"
           },
-          "url": "https://us.trip.com/hotels/kyoto-hotel-detail-21887858/imu-hotel-kyoto/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+          "url": "https://www.booking.com/hotel/jp/imu.html"
         },
         {
           "label": {
-            "en": "Trip.com Mt. Fuji area stay",
-            "ja": "Trip.com 富士エリアホテル"
+            "en": "Booking.com Mt. Fuji area stay",
+            "ja": "Booking.com 富士エリアホテル"
           },
-          "url": "https://us.trip.com/hotels/fujikawaguchiko-hotel-detail-76325560/super-hotel-fujikawaguchiko-natural-hot-spring/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab"
+          "url": "https://www.booking.com/hotel/jp/supahoterufu-shi-he-kou-hu-tian-ran-wen-quan.html"
         },
         {
           "label": {
-            "en": "Trip.com Tokyo stay",
-            "ja": "Trip.com 東京ホテル"
+            "en": "Expedia Tokyo stay",
+            "ja": "Expedia 東京ホテル"
           },
-          "url": "https://www.trip.com/hotels/tokyo-hotel-detail-15935455/the-onefive-tokyo-shibuya"
+          "url": "https://www.expedia.com/Tokyo-Hotels-HOTEL-EMIT-SHIBUYA.h22869543.Hotel-Information"
         }
       ]
     },
@@ -362,7 +362,7 @@ window.__JAPAN_BUDGET_CONTENT__ = {
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 5665,
+        "amount": 9542,
         "sourceCostId": "osaka-compact-hotel"
       }
     },
@@ -389,7 +389,7 @@ window.__JAPAN_BUDGET_CONTENT__ = {
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 7493,
+        "amount": 11476,
         "sourceCostId": "kyoto-midrange-hotel"
       }
     },
@@ -416,7 +416,7 @@ window.__JAPAN_BUDGET_CONTENT__ = {
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 9375,
+        "amount": 11544,
         "sourceCostId": "kawaguchiko-base-hotel"
       }
     },
@@ -443,7 +443,7 @@ window.__JAPAN_BUDGET_CONTENT__ = {
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 10000,
+        "amount": 21988,
         "sourceCostId": "tokyo-base-hotel"
       }
     },

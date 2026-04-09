@@ -51,15 +51,15 @@
       "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
     },
     "details": {
-      "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama to Osaka much better than staying deep in east Kyoto. Trip.com remained the cheapest safe exact-match hotel page reviewed here, and the saved price is treated as one shared room quote for group splitting rather than a solo-style lead-in rate.",
-      "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山から大阪への流れも東側の奥へ泊まるより整います。ここでは Imu Hotel Kyoto の Trip.com 正確ページが最も安く安全なままで、表示価格も1人用の先頭料金ではなく、グループで割る共有ルーム料金として扱います。"
+      "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama to Osaka much better than staying deep in east Kyoto. With Trip.com removed from hotel sourcing, Booking.com is the cheapest safe exact-match page reviewed here, and the saved price stays one shared-room quote rather than a solo-style lead-in rate.",
+      "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山から大阪への流れも東側の奥へ泊まるより整います。ホテル導線から Trip.com を外した上で、ここでは Booking.com の Imu Hotel Kyoto 正確ページが最も安く安全だったため、表示価格も1人用の先頭料金ではなく、グループで割る共有ルーム料金として扱います。"
     },
     "links": [
       {
-        "href": "https://us.trip.com/hotels/kyoto-hotel-detail-21887858/imu-hotel-kyoto/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab",
-        "label": { "en": "Trip.com hotel page", "ja": "Trip.comホテルページ" },
-        "note": { "en": "Lowest reviewed safe exact-match hotel page; use as a shared-room quote", "ja": "確認した中で最安だった正確一致ホテルページ。共有ルーム料金として使う前提です" },
-        "price": { "en": "From JPY 7,493 / night", "ja": "1泊 JPY 7,493から" },
+        "href": "https://www.booking.com/hotel/jp/imu.html",
+        "label": { "en": "Booking.com hotel page", "ja": "Booking.comホテルページ" },
+        "note": { "en": "Cheapest reviewed safe exact-match Booking.com page; use as a shared-room quote", "ja": "確認した中で最安だった Booking.com の正確一致ホテルページ。共有ルーム料金として使う前提です" },
+        "price": { "en": "From JPY 11,476 / night", "ja": "1泊 JPY 11,476から" },
         "kind": "primary"
       }
     ]
@@ -117,15 +117,15 @@
       "ja": "3日目の河口湖到着を落ち着いて進めつつ、宿で整えたあとに4日目の富士エリア立ち寄りと東京移動まで無理なくつなげられるよう、駅から湖側の動きで拠点を選んでいます。"
     },
     "details": {
-      "en": "A Fujikawaguchiko base with a natural hot spring works better than a remote resort because it keeps the Day 3 station handoff, onsen reset, Day 4 lake-side stops, and the Day 4 Tokyo transfer aligned with the real route. Trip.com remained the cheapest safe exact-match hotel page reviewed here, and the saved price is treated as one shared room quote for group splitting.",
-      "ja": "遠いリゾート立地より、天然温泉付きの富士河口湖拠点の方が、3日目の駅からの受け渡し、温泉での立て直し、4日目の河口湖側の立ち寄り、同日の東京移動までを実際の流れに合わせやすいです。ここでは Trip.com の正確ページが最も安く安全なままで、表示価格もグループで割る共有ルーム料金として扱います。"
+      "en": "A Fujikawaguchiko base with a natural hot spring works better than a remote resort because it keeps the Day 3 station handoff, onsen reset, Day 4 lake-side stops, and the Day 4 Tokyo transfer aligned with the real route. With Trip.com removed from hotel sourcing, Booking.com is the cheapest safe exact-match page reviewed here, and the saved price stays one shared-room quote for group splitting.",
+      "ja": "遠いリゾート立地より、天然温泉付きの富士河口湖拠点の方が、3日目の駅からの受け渡し、温泉での立て直し、4日目の河口湖側の立ち寄り、同日の東京移動までを実際の流れに合わせやすいです。ホテル導線から Trip.com を外した上で、ここでは Booking.com の正確ページが最も安く安全だったため、表示価格もグループで割る共有ルーム料金として扱います。"
     },
     "links": [
       {
-        "href": "https://us.trip.com/hotels/fujikawaguchiko-hotel-detail-76325560/super-hotel-fujikawaguchiko-natural-hot-spring/?locale=en-US&curr=JPY&allianceid=3817871&sid=22541534&ouid=BUAUS_home_page_tab",
-        "label": { "en": "Trip.com hotel page", "ja": "Trip.comホテルページ" },
-        "note": { "en": "Lowest reviewed safe exact-match hotel page; use as a shared-room quote", "ja": "確認した中で最安だった正確一致ホテルページ。共有ルーム料金として使う前提です" },
-        "price": { "en": "From JPY 9,375 / night", "ja": "1泊 JPY 9,375から" },
+        "href": "https://www.booking.com/hotel/jp/supahoterufu-shi-he-kou-hu-tian-ran-wen-quan.html",
+        "label": { "en": "Booking.com hotel page", "ja": "Booking.comホテルページ" },
+        "note": { "en": "Cheapest reviewed safe exact-match Booking.com page; use as a shared-room quote", "ja": "確認した中で最安だった Booking.com の正確一致ホテルページ。共有ルーム料金として使う前提です" },
+        "price": { "en": "From JPY 11,544 / night", "ja": "1泊 JPY 11,544から" },
         "kind": "primary"
       }
     ]
@@ -152,15 +152,15 @@
       "ja": "東京ホテル泊は4日目、5日目、6日目に置き、4日目の渋谷到着、続く観光日、そして帰国前の軽い7日目を同じ拠点で回せるようにします。"
     },
     "details": {
-      "en": "Shibuya access still fits the first Tokyo evening best, and a central Shibuya / Jinnan base keeps Days 5 and 6 plus the Day 7 reset simple without wasting time on a mid-route hotel switch after the Fuji handoff. Trip.com remained the cheapest safe exact-match hotel page reviewed here, and the saved price is treated as one shared room quote for group splitting.",
-      "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、神南寄りの渋谷拠点なら富士側から入ったあとも、5日目と6日目、そして7日目の立て直しまでホテル移動なしで進めやすいです。ここでは Trip.com の正確ページが最も安く安全なままで、表示価格もグループで割る共有ルーム料金として扱います。"
+      "en": "Shibuya access still fits the first Tokyo evening best, and a central Shibuya / Jinnan base keeps Days 5 and 6 plus the Day 7 reset simple without wasting time on a mid-route hotel switch after the Fuji handoff. With Trip.com removed from hotel sourcing, Expedia is the cheapest safe exact-match hotel page reviewed here, and the saved price stays one shared-room quote for group splitting.",
+      "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、神南寄りの渋谷拠点なら富士側から入ったあとも、5日目と6日目、そして7日目の立て直しまでホテル移動なしで進めやすいです。ホテル導線から Trip.com を外した上で、ここでは Expedia の正確ページが最も安く安全だったため、表示価格もグループで割る共有ルーム料金として扱います。"
     },
     "links": [
       {
-        "href": "https://www.trip.com/hotels/tokyo-hotel-detail-15935455/the-onefive-tokyo-shibuya",
-        "label": { "en": "Trip.com hotel page", "ja": "Trip.comホテルページ" },
-        "note": { "en": "Lowest reviewed safe exact-match hotel page; use as a shared-room quote", "ja": "確認した中で最安だった正確一致ホテルページ。共有ルーム料金として使う前提です" },
-        "price": { "en": "From JPY 10,000 / night", "ja": "1泊 JPY 10,000から" },
+        "href": "https://www.expedia.com/Tokyo-Hotels-HOTEL-EMIT-SHIBUYA.h22869543.Hotel-Information",
+        "label": { "en": "Expedia hotel page", "ja": "Expediaホテルページ" },
+        "note": { "en": "Cheapest reviewed safe exact-match Expedia page; use as a shared-room quote", "ja": "確認した中で最安だった Expedia の正確一致ホテルページ。共有ルーム料金として使う前提です" },
+        "price": { "en": "From JPY 21,988 / night", "ja": "1泊 JPY 21,988から" },
         "kind": "primary"
       }
     ]
