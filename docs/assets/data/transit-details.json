@@ -190,7 +190,7 @@
       }
     ],
     "action": {
-      "href": "https://sekitori.jp/en/apps/results/?getOffAreaMiddleGroupId=2&getOffAreaType=1&rideAreaMiddleGroupId=1&rideAreaType=1&rideDate=today",
+      "href": "https://sekitori.jp/en/apps/results/?%5BnextDateFlag=true%5D&getOffAreaMiddleGroupId=2&getOffAreaType=1&nextDateFlag=true&rideAreaType=2&rideBusStopId=8&rideDate=today",
       "label": { "en": "Open Mishima bus booking", "ja": "三島バス予約を開く" }
     }
   },

@@ -9,8 +9,8 @@
     "ja": "以前の合計が膨らんでいた主因は、大阪、京都、富士エリア、東京をつなぐ固定7日間の西から東への流れに合わせず、旅程を広げすぎていたことです。"
   },
   "helperCopy": {
-    "en": "Each day keeps its own stay selector, the accommodation split control handles the per-person math, and the Trip.com hotel pages plus route or ticket links stay in Essentials.",
-    "ja": "各日に滞在セレクターを残し、宿泊費の分け方コントロールで1人あたり計算を行い、Trip.com のホテルページと各種ルート・チケットリンクはすべて Essentials にまとめています。"
+    "en": "Each day keeps its own stay selector, the accommodation split control treats the saved hotel amounts as shared-room quotes for group math, and the live route or official ticket links stay in Essentials.",
+    "ja": "各日に滞在セレクターを残し、宿泊費の分け方コントロールでは保存したホテル金額を共有ルーム料金として扱い、ライブ経路や公式チケットのリンクはすべて Essentials にまとめています。"
   },
   "assumptionCopy": {
     "en": "The cost model matches one fixed 7-day route through Osaka, Kyoto, the Mt. Fuji area, and Tokyo.",
@@ -18,10 +18,10 @@
   },
   "costIndex": {
     "osaka-compact-hotel": {
-      "amount": 6654,
+      "amount": 5665,
       "range": {
-        "lean": 5865,
-        "expected": 6654,
+        "lean": 5665,
+        "expected": 5665,
         "high": 8500
       },
       "roomCapacity": 2,
@@ -30,16 +30,16 @@
         "ja": "四ツ橋・西心斎橋"
       },
       "pricingTier": {
-        "en": "Route-practical Osaka Minami hotel",
-        "ja": "動線に合う大阪ミナミホテル"
+        "en": "Route-practical Osaka shared-room fallback",
+        "ja": "動線に合う大阪の共有ルーム代替"
       },
       "routeReason": {
         "en": "Use this when you need a paid Osaka night. Yotsubashi / Nishi-Shinsaibashi still supports the actual Day 1 Minami walking and Day 3 Osaka-side movement better than a random Osaka district.",
         "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目のミナミ散策と3日目の大阪側の動きに合いやすく、無関係な地区のホテルより実用的です。"
       },
       "assumption": {
-        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Hotel Trend Nishi Shinsaibashi is the Trip.com fallback hotel page that still keeps the Minami side practical.",
-        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。Hotel Trend Nishi Shinsaibashi を、ミナミ側の動線に合う Trip.com の代替ホテルページとして保存しています。"
+        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Hotel Trend Nishi Shinsaibashi stays saved as the cheapest reviewed safe Minami-side fallback, and the amount is stored as one shared room quote.",
+        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。Hotel Trend Nishi Shinsaibashi は確認した中で最も安く安全なミナミ側代替のままで、金額も1室を共有する前提の料金で保存しています。"
       },
       "source": {
         "label": {
@@ -50,11 +50,11 @@
       }
     },
     "kyoto-midrange-hotel": {
-      "amount": 15280,
+      "amount": 7493,
       "range": {
-        "lean": 14336,
-        "expected": 15280,
-        "high": 18500
+        "lean": 7493,
+        "expected": 7493,
+        "high": 9800
       },
       "roomCapacity": 2,
       "area": {
@@ -62,16 +62,16 @@
         "ja": "京都・四条烏丸"
       },
       "pricingTier": {
-        "en": "Current Kyoto mid-range hotel",
-        "ja": "現在の京都中価格帯ホテル"
+        "en": "Current Kyoto group-value room",
+        "ja": "現在の京都のグループ向け高コスパ客室"
       },
       "routeReason": {
         "en": "Shijo / Karasuma fits the route because it keeps Kyoto East convenient on Day 2 while giving cleaner subway, Hankyu, and JR options for Day 3 Arashiyama and the move back to Osaka.",
         "ja": "四条烏丸は、2日目の京都東側へ出やすく、3日目の嵐山と大阪戻りにも地下鉄・阪急・JRの選択肢を取りやすいため、実際の動線に合います。"
       },
       "assumption": {
-        "en": "Day 2 now uses the current Trip.com hotel page for Imu Hotel Kyoto while keeping the same Shijo / Karasuma route fit.",
-        "ja": "2日目は、同じ四条烏丸の動線適性を保ちながら、Imu Hotel Kyoto の Trip.com ホテルページを基準にしています。"
+        "en": "Day 2 keeps the current Trip.com hotel page for Imu Hotel Kyoto, and the saved amount now reflects the cheapest reviewed safe shared-room quote that still fits the same Shijo / Karasuma route logic.",
+        "ja": "2日目は Imu Hotel Kyoto の現在の Trip.com ホテルページを維持しつつ、保存金額も同じ四条烏丸の動線に合う中で、確認した最安の安全な共有ルーム料金へ更新しています。"
       },
       "source": {
         "label": {
@@ -82,11 +82,11 @@
       }
     },
     "kawaguchiko-base-hotel": {
-      "amount": 11656,
+      "amount": 9375,
       "range": {
-        "lean": 11656,
-        "expected": 11656,
-        "high": 14000
+        "lean": 9375,
+        "expected": 9375,
+        "high": 12500
       },
       "roomCapacity": 2,
       "area": {
@@ -94,16 +94,16 @@
         "ja": "船津・河口湖動線"
       },
       "pricingTier": {
-        "en": "Current Mt. Fuji area hotel",
-        "ja": "現在の富士エリアホテル"
+        "en": "Current Mt. Fuji area group-value room",
+        "ja": "現在の富士エリアのグループ向け高コスパ客室"
       },
       "routeReason": {
         "en": "This area keeps the Day 3 Mishima handoff plus the Day 4 Chureito Shimoyoshida and Lake Kawaguchiko block practical without paying for a remote resort that fights the actual route.",
         "ja": "このエリアなら、3日目の三島ハンドオフに加え、4日目の忠霊塔・下吉田と河口湖のまとまりも進めやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
-        "en": "Day 3 now uses the current Trip.com hotel page for SUPER HOTEL Fujikawaguchiko Natural Hot Spring because it still keeps the onsen reset, the Day 4 Fuji block, and the Tokyo handoff practical.",
-        "ja": "3日目は、温泉で立て直しやすく、4日目の富士エリアのまとまりと東京への受け渡しも崩さない SUPER HOTEL Fujikawaguchiko Natural Hot Spring の Trip.com ホテルページを基準にしています。"
+        "en": "Day 3 keeps the current Trip.com hotel page for SUPER HOTEL Fujikawaguchiko Natural Hot Spring, and the saved amount now reflects the cheapest reviewed safe shared-room quote that still preserves the onsen reset and station-to-lake flow.",
+        "ja": "3日目は SUPER HOTEL Fujikawaguchiko Natural Hot Spring の現在の Trip.com ホテルページを維持しつつ、保存金額も温泉での立て直しと駅から湖側への流れを崩さない範囲で、確認した最安の安全な共有ルーム料金へ更新しています。"
       },
       "source": {
         "label": {
@@ -114,11 +114,11 @@
       }
     },
     "tokyo-base-hotel": {
-      "amount": 10865,
+      "amount": 8598,
       "range": {
-        "lean": 10403,
-        "expected": 10865,
-        "high": 13500
+        "lean": 8598,
+        "expected": 8598,
+        "high": 12000
       },
       "roomCapacity": 2,
       "area": {
@@ -126,16 +126,16 @@
         "ja": "渋谷中心部・神南"
       },
       "pricingTier": {
-        "en": "Current Shibuya hotel",
-        "ja": "現在の渋谷ホテル"
+        "en": "Current Shibuya group-value room",
+        "ja": "現在の渋谷のグループ向け高コスパ客室"
       },
       "routeReason": {
         "en": "The route now lands in Shibuya on Day 4 and keeps the hotel nights on Days 4, 5, and 6, so a central Shibuya base supports the arrival evening and the following Tokyo days without switching bases.",
         "ja": "今回のルートは4日目に渋谷へ入り、東京ホテル泊は4日目、5日目、6日目に置くため、渋谷中心部の拠点なら到着夜とその後の東京日程を拠点変更なしでまとめやすくなります。"
       },
       "assumption": {
-        "en": "Tokyo now uses the current Trip.com hotel page for The OneFive Tokyo Shibuya as the Shibuya base for Days 4, 5, and 6, while Day 7 still defaults to no paid stay because it is the flight-home day.",
-        "ja": "東京は、4日目、5日目、6日目の渋谷拠点として The OneFive Tokyo Shibuya の Trip.com ホテルページを基準にし、7日目は帰国日のため初期値では有料宿泊を入れていません。"
+        "en": "Tokyo keeps the current Trip.com hotel page for The OneFive Tokyo Shibuya as the Day 4-6 base, and the saved amount now reflects the cheapest reviewed safe shared-room quote that still keeps the Shibuya handoff simple.",
+        "ja": "東京は4日目から6日目の拠点として The OneFive Tokyo Shibuya の現在の Trip.com ホテルページを維持しつつ、保存金額も渋谷への受け渡しを崩さない範囲で、確認した最安の安全な共有ルーム料金へ更新しています。"
       },
       "source": {
         "label": {
@@ -172,8 +172,8 @@
         "ja": "宿泊予約導線"
       },
       "summary": {
-        "en": "The base stay plan is now explicit: private/local or no-cost Osaka night on Day 1 unless switched, Kyoto hotel on Day 2, one Mt. Fuji area stay on Day 3, Tokyo hotel nights on Days 4-6, and no paid stay by default on the Day 7 flight-home wrap-up.",
-        "ja": "基本の滞在計画を明示しました。1日目の大阪は、切り替えない限りローカル・プライベート滞在または宿泊費なし、2日目は京都ホテル、3日目は富士エリア宿泊、東京ホテルは4日目から6日目で、7日目は帰国日のため初期値では有料宿泊を入れていません。"
+        "en": "The base stay plan is now explicit: private/local or no-cost Osaka night on Day 1 unless switched, Kyoto hotel on Day 2, one Mt. Fuji area stay on Day 3, Tokyo hotel nights on Days 4-6, and no paid stay by default on the Day 7 flight-home wrap-up. Saved hotel amounts are now stored as shared-room quotes before the travellers-per-room split.",
+        "ja": "基本の滞在計画を明示しました。1日目の大阪は、切り替えない限りローカル・プライベート滞在または宿泊費なし、2日目は京都ホテル、3日目は富士エリア宿泊、東京ホテルは4日目から6日目で、7日目は帰国日のため初期値では有料宿泊を入れていません。保存したホテル金額も、1室を何人で分けるかの計算前の共有ルーム料金として扱います。"
       },
       "links": [
         {
@@ -213,8 +213,8 @@
         "ja": "滞在ロジック"
       },
       "summary": {
-        "en": "The old model inflated totals by stretching the mid-route scenic section and the Tokyo finish. The new model stores a reusable stay type per day, so private/local Osaka nights remain free until you deliberately switch them.",
-        "ja": "以前のモデルは、中盤の景色区間と東京の締めを引き延ばして合計を膨らませていました。新しいモデルは日ごとに再利用可能な滞在タイプを持つため、大阪のローカル・プライベート滞在は意図して切り替えるまで無料のままです。"
+        "en": "The old model inflated totals by stretching the mid-route scenic section and the Tokyo finish. The new model stores a reusable stay type per day, and hotel values now stay as shared-room quotes so larger groups scale by room count instead of a solo-style nightly assumption.",
+        "ja": "以前のモデルは、中盤の景色区間と東京の締めを引き延ばして合計を膨らませていました。新しいモデルは日ごとに再利用可能な滞在タイプを持ち、ホテル金額も共有ルーム料金のまま保存するため、大人数でも1人用前提ではなく部屋数ベースで増えるようにしています。"
       },
       "links": []
     },
@@ -248,7 +248,7 @@
             "en": "Mishima -> Kawaguchiko bus",
             "ja": "三島 -> 河口湖バス"
           },
-          "url": "https://sekitori.jp/en/apps/results/?getOffAreaMiddleGroupId=2&getOffAreaType=1&rideAreaMiddleGroupId=1&rideAreaType=1"
+          "url": "https://sekitori.jp/en/apps/results/?%5BnextDateFlag=true%5D&getOffAreaMiddleGroupId=2&getOffAreaType=1&nextDateFlag=true&rideAreaType=2&rideBusStopId=8&rideDate=today"
         },
         {
           "label": {
@@ -273,8 +273,8 @@
         "ja": "チケットと時間帯"
       },
       "summary": {
-        "en": "Shibuya Sky and Tokyo Skytree are the main timed tickets in the fixed route, while Kaiyukan remains a simpler Day 3 same-day ticket check.",
-        "ja": "固定ルートで主な時間指定チケットになるのは渋谷スカイと東京スカイツリーで、海遊館は3日目に当日判断しやすいチケットとして残しています。"
+        "en": "Shibuya Sky and Tokyo Skytree are the main timed tickets in the fixed route, while Kaiyukan remains a simpler Day 3 same-day ticket check. SHIBUYA SKY now points back to the official ticket page instead of a reseller page.",
+        "ja": "固定ルートで主な時間指定チケットになるのは渋谷スカイと東京スカイツリーで、海遊館は3日目に当日判断しやすいチケットとして残しています。SHIBUYA SKY は再販ページではなく公式チケットページへ戻しています。"
       },
       "links": [
         {
@@ -286,10 +286,10 @@
         },
         {
           "label": {
-            "en": "Shibuya Sky tickets via Klook",
-            "ja": "渋谷スカイ Klook チケット"
+            "en": "Shibuya Sky official tickets",
+            "ja": "渋谷スカイ 公式チケット"
           },
-          "url": "https://www.klook.com/activity/70672-shibuya-sky-tokyo/"
+          "url": "https://www.shibuya-scramble-square.com/sky/ticket/"
         },
         {
           "label": {
@@ -362,7 +362,7 @@
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 6654,
+        "amount": 5665,
         "sourceCostId": "osaka-compact-hotel"
       }
     },
@@ -389,7 +389,7 @@
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 15280,
+        "amount": 7493,
         "sourceCostId": "kyoto-midrange-hotel"
       }
     },
@@ -416,7 +416,7 @@
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 11656,
+        "amount": 9375,
         "sourceCostId": "kawaguchiko-base-hotel"
       }
     },
@@ -443,7 +443,7 @@
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 10865,
+        "amount": 8598,
         "sourceCostId": "tokyo-base-hotel"
       }
     },
@@ -1003,10 +1003,10 @@
           "sourceGroup": "tickets",
           "cost": {
             "mode": "perPerson",
-            "amount": 2710,
+            "amount": 2200,
             "range": {
-              "lean": 2710,
-              "expected": 2710,
+              "lean": 2200,
+              "expected": 2200,
               "high": 3000
             }
           }

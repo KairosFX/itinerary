@@ -114,8 +114,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
       },
       "details": {
-        "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama to Osaka much better than staying deep in east Kyoto. Trip.com remained the cheapest safe exact-match hotel page reviewed for Imu Hotel Kyoto, so the route-fit stay stays preselected here.",
-        "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山から大阪への流れも東側の奥へ泊まるより整います。Imu Hotel Kyoto は確認した中で Trip.com の正確なホテルページが最も安く安全だったため、この動線向き宿をそのまま残しています。"
+        "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama to Osaka much better than staying deep in east Kyoto. Trip.com remained the cheapest safe exact-match hotel page reviewed here, and the saved price is treated as one shared room quote for group splitting rather than a solo-style lead-in rate.",
+        "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山から大阪への流れも東側の奥へ泊まるより整います。ここでは Imu Hotel Kyoto の Trip.com 正確ページが最も安く安全なままで、表示価格も1人用の先頭料金ではなく、グループで割る共有ルーム料金として扱います。"
       },
       "links": [
         {
@@ -125,8 +125,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
             "ja": "Trip.comホテルページ"
           },
           "note": {
-            "en": "Lowest reviewed safe Trip.com hotel page for Imu Hotel Kyoto",
-            "ja": "確認した中で最安だった Imu Hotel Kyoto の安全な Trip.com ホテルページ"
+            "en": "Lowest reviewed safe exact-match hotel page; use as a shared-room quote",
+            "ja": "確認した中で最安だった正確一致ホテルページ。共有ルーム料金として使う前提です"
           },
           "price": {
             "en": "From JPY 7,493 / night",
@@ -251,8 +251,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "3日目の河口湖到着を落ち着いて進めつつ、宿で整えたあとに4日目の富士エリア立ち寄りと東京移動まで無理なくつなげられるよう、駅から湖側の動きで拠点を選んでいます。"
       },
       "details": {
-        "en": "A Fujikawaguchiko base with a natural hot spring works better than a remote resort because it keeps the Day 3 station handoff, onsen reset, Day 4 lake-side stops, and the Day 4 Tokyo transfer aligned with the real route. Trip.com remained the cheapest safe exact-match hotel page reviewed for SUPER HOTEL Fujikawaguchiko Natural Hot Spring, so the exact Fuji stay stays preselected.",
-        "ja": "遠いリゾート立地より、天然温泉付きの富士河口湖拠点の方が、3日目の駅からの受け渡し、温泉での立て直し、4日目の河口湖側の立ち寄り、同日の東京移動までを実際の流れに合わせやすいです。SUPER HOTEL Fujikawaguchiko Natural Hot Spring は確認した中で Trip.com の正確なホテルページが最も安く安全だったため、そのまま残しています。"
+        "en": "A Fujikawaguchiko base with a natural hot spring works better than a remote resort because it keeps the Day 3 station handoff, onsen reset, Day 4 lake-side stops, and the Day 4 Tokyo transfer aligned with the real route. Trip.com remained the cheapest safe exact-match hotel page reviewed here, and the saved price is treated as one shared room quote for group splitting.",
+        "ja": "遠いリゾート立地より、天然温泉付きの富士河口湖拠点の方が、3日目の駅からの受け渡し、温泉での立て直し、4日目の河口湖側の立ち寄り、同日の東京移動までを実際の流れに合わせやすいです。ここでは Trip.com の正確ページが最も安く安全なままで、表示価格もグループで割る共有ルーム料金として扱います。"
       },
       "links": [
         {
@@ -262,8 +262,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
             "ja": "Trip.comホテルページ"
           },
           "note": {
-            "en": "Lowest reviewed safe Trip.com hotel page for the Fuji onsen stay",
-            "ja": "確認した中で最安だった富士温泉ホテルの安全な Trip.com ホテルページ"
+            "en": "Lowest reviewed safe exact-match hotel page; use as a shared-room quote",
+            "ja": "確認した中で最安だった正確一致ホテルページ。共有ルーム料金として使う前提です"
           },
           "price": {
             "en": "From JPY 9,375 / night",
@@ -327,8 +327,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "東京ホテル泊は4日目、5日目、6日目に置き、4日目の渋谷到着、続く観光日、そして帰国前の軽い7日目を同じ拠点で回せるようにします。"
       },
       "details": {
-        "en": "Shibuya access still fits the first Tokyo evening best, and a central Shibuya / Jinnan base keeps Days 5 and 6 plus the Day 7 reset simple without wasting time on a mid-route hotel switch after the Fuji handoff. Trip.com remained the cheapest safe exact-match hotel page reviewed for The OneFive Tokyo Shibuya, so the Shibuya base stays preselected.",
-        "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、神南寄りの渋谷拠点なら富士側から入ったあとも、5日目と6日目、そして7日目の立て直しまでホテル移動なしで進めやすいです。The OneFive Tokyo Shibuya は確認した中で Trip.com の正確なホテルページが最も安く安全だったため、そのまま残しています。"
+        "en": "Shibuya access still fits the first Tokyo evening best, and a central Shibuya / Jinnan base keeps Days 5 and 6 plus the Day 7 reset simple without wasting time on a mid-route hotel switch after the Fuji handoff. Trip.com remained the cheapest safe exact-match hotel page reviewed here, and the saved price is treated as one shared room quote for group splitting.",
+        "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、神南寄りの渋谷拠点なら富士側から入ったあとも、5日目と6日目、そして7日目の立て直しまでホテル移動なしで進めやすいです。ここでは Trip.com の正確ページが最も安く安全なままで、表示価格もグループで割る共有ルーム料金として扱います。"
       },
       "links": [
         {
@@ -338,8 +338,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
             "ja": "Trip.comホテルページ"
           },
           "note": {
-            "en": "Lowest reviewed safe Trip.com hotel page for the Shibuya base",
-            "ja": "確認した中で最安だった渋谷拠点ホテルの安全な Trip.com ホテルページ"
+            "en": "Lowest reviewed safe exact-match hotel page; use as a shared-room quote",
+            "ja": "確認した中で最安だった正確一致ホテルページ。共有ルーム料金として使う前提です"
           },
           "price": {
             "en": "From JPY 8,598 / night",
@@ -463,19 +463,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "3日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
       },
       "details": {
-        "en": "Use the official SEKITORI route results page once the shinkansen timing is locked. It keeps Mishima -> Kawaguchiko preselected and shows the live departures, fares, and seat availability for the liner.",
-        "ja": "新幹線時刻が固まったら、SEKITORI の公式検索結果ページを使います。三島 -> 河口湖が最初から選択されていて、ライナーのライブ時刻、運賃、空席をそのまま確認できます。"
+        "en": "Use the working official SEKITORI live-results page once the shinkansen timing is locked. It opens Mishima Station South Exit (Platform 2) -> Kawaguchiko Station on the liner directly instead of the broader non-working area handoff page.",
+        "ja": "新幹線時刻が固まったら、動作する SEKITORI の公式ライブ結果ページを使います。広いエリア指定の動かないページではなく、三島駅南口2番のりば -> 河口湖駅をそのまま開けます。"
       },
       "links": [
         {
-          "href": "https://sekitori.jp/en/apps/results/?getOffAreaMiddleGroupId=2&getOffAreaType=1&rideAreaMiddleGroupId=1&rideAreaType=1",
+          "href": "https://sekitori.jp/en/apps/results/?%5BnextDateFlag=true%5D&getOffAreaMiddleGroupId=2&getOffAreaType=1&nextDateFlag=true&rideAreaType=2&rideBusStopId=8&rideDate=today",
           "label": {
             "en": "SEKITORI bus booking",
             "ja": "SEKITORIバス予約"
           },
           "note": {
-            "en": "Official SEKITORI results for Mishima -> Kawaguchiko",
-            "ja": "三島 -> 河口湖のSEKITORI公式結果"
+            "en": "Working official live results for Mishima Station South Exit -> Kawaguchiko Station",
+            "ja": "三島駅南口 -> 河口湖駅の動作するSEKITORI公式ライブ結果"
           },
           "price": {
             "en": "JPY 2,300 / person",
@@ -654,23 +654,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "SHIBUYA SKY をルートに残すなら、5日目の時間指定チケットとして扱います。"
       },
       "details": {
-        "en": "Use the Klook SHIBUYA SKY ticket page once the Day 5 evening window is clear. It reviewed cheaper than the current Trip.com option while staying safe, relevant, and directly tied to the exact attraction.",
-        "ja": "5日目の夕方以降の時間帯が見えたら、Klook の SHIBUYA SKY チケットページを使います。現在の Trip.com 案より安く、安全で、対象アトラクションに直接ひもづくページでした。"
+        "en": "Use the official SHIBUYA SKY ticket page once the Day 5 timing window is clear. The card now points to the exact official attraction page, and the old third-party price chip was removed so the booking note does not keep stale reseller pricing attached to the official link.",
+        "ja": "5日目の時間帯が見えたら、SHIBUYA SKY の公式チケットページを使います。カードは正確な公式アトラクションページへ変更し、古い外部販売の価格チップも外して、公式リンクに合わない価格を残さないようにしました。"
       },
       "links": [
         {
-          "href": "https://www.klook.com/activity/70672-shibuya-sky-tokyo/",
+          "href": "https://www.shibuya-scramble-square.com/sky/ticket/",
           "label": {
-            "en": "Klook tickets",
-            "ja": "Klookチケット"
+            "en": "Official tickets",
+            "ja": "公式チケット"
           },
           "note": {
-            "en": "Cheaper reviewed Klook SHIBUYA SKY ticket page",
-            "ja": "確認した中でより安かった Klook の SHIBUYA SKY チケットページ"
-          },
-          "price": {
-            "en": "From US$17.65 / adult",
-            "ja": "大人 US$17.65から"
+            "en": "Official SHIBUYA SKY ticket page",
+            "ja": "SHIBUYA SKY 公式チケットページ"
           },
           "kind": "primary"
         }
@@ -965,7 +961,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         }
       ],
       "action": {
-        "href": "https://sekitori.jp/en/apps/results/?getOffAreaMiddleGroupId=2&getOffAreaType=1&rideAreaMiddleGroupId=1&rideAreaType=1&rideDate=today",
+        "href": "https://sekitori.jp/en/apps/results/?%5BnextDateFlag=true%5D&getOffAreaMiddleGroupId=2&getOffAreaType=1&nextDateFlag=true&rideAreaType=2&rideBusStopId=8&rideDate=today",
         "label": {
           "en": "Open Mishima bus booking",
           "ja": "三島バス予約を開く"
