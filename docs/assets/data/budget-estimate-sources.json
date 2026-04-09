@@ -582,19 +582,6 @@
               "high": 1900
             }
           }
-        },
-        {
-          "label": {
-            "en": "Nightlife",
-            "ja": "夜の街歩き"
-          },
-          "category": "optionalExtras",
-          "bucket": "free",
-          "sourceGroup": "assumptions",
-          "cost": {
-            "mode": "none",
-            "amount": 0
-          }
         }
       ]
     },
@@ -911,24 +898,6 @@
               "high": 2400
             }
           }
-        },
-        {
-          "label": {
-            "en": "Luggage handling buffer",
-            "ja": "荷物対応バッファ"
-          },
-          "category": "baggage",
-          "bucket": "optional",
-          "sourceGroup": "assumptions",
-          "cost": {
-            "mode": "perPair",
-            "amount": 2500,
-            "range": {
-              "lean": 2000,
-              "expected": 2500,
-              "high": 3000
-            }
-          }
         }
       ]
     },
@@ -1180,24 +1149,6 @@
           "cost": {
             "mode": "none",
             "amount": 0
-          }
-        },
-        {
-          "label": {
-            "en": "Bag pickup / handoff if needed",
-            "ja": "必要なら荷物預け・受け渡し"
-          },
-          "category": "baggage",
-          "bucket": "optional",
-          "sourceGroup": "assumptions",
-          "cost": {
-            "mode": "perPerson",
-            "amount": 800,
-            "range": {
-              "lean": 500,
-              "expected": 800,
-              "high": 1200
-            }
           }
         },
         {

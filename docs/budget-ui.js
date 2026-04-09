@@ -326,6 +326,10 @@ const itineraryBudgetLabels = {
   const hasBudgetRangeValue = (range) =>
     budgetRangeLevels.some((definition) => getBudgetRangeValue(range, definition.id) > 0);
   const isCoreBudgetBucket = (bucketId) => bucketId === "booked" || bucketId === "required";
+  const getCoreBudgetDayItems = (itemEstimates = []) =>
+    itemEstimates.filter(
+      (item) => item?.itemCost?.included && isCoreBudgetBucket(item.bucket)
+    );
   const getCompactRangeCopy = (range) => ({
     en: `${itineraryBudgetLabels.rangeCompactPrefix.en} ${formatCurrencyForLanguage(
       getBudgetRangeValue(range, "lean"),
@@ -843,30 +847,23 @@ const itineraryBudgetLabels = {
           lineRangeTotals
         };
       });
+      const coreItemEstimates = getCoreBudgetDayItems(itemEstimates);
+      const coreTotal = coreItemEstimates.reduce((sum, item) => sum + item.lineTotal, 0);
+      const coreTotalRange = coreItemEstimates.reduce(
+        (sum, item) => sumBudgetRanges(sum, item.lineRangeTotals),
+        getZeroBudgetRange()
+      );
 
       return {
         ...definition,
         note: dayState.note,
         stayDefinition,
         stayOptions: getDayStayOptions(definition),
-        itemEstimates,
-        total: itemEstimates.reduce((sum, item) => sum + item.lineTotal, 0),
-        totalRange: itemEstimates.reduce(
-          (sum, item) => sumBudgetRanges(sum, item.lineRangeTotals),
-          getZeroBudgetRange()
-        ),
-        coreTotal: itemEstimates.reduce(
-          (sum, item) => sum + (isCoreBudgetBucket(item.bucket) ? item.lineTotal : 0),
-          0
-        ),
-        coreTotalRange: itemEstimates.reduce(
-          (sum, item) =>
-            sumBudgetRanges(
-              sum,
-              isCoreBudgetBucket(item.bucket) ? item.lineRangeTotals : getZeroBudgetRange()
-            ),
-          getZeroBudgetRange()
-        )
+        itemEstimates: coreItemEstimates,
+        total: coreTotal,
+        totalRange: coreTotalRange,
+        coreTotal,
+        coreTotalRange
       };
     };
     const visibleDayEstimates = activeDays.map((definition) => calculateDay(definition));
@@ -1146,7 +1143,6 @@ const itineraryBudgetLabels = {
         ${stayControlMarkup}
         <ul class="budget-day-card__items">
           ${dayEstimate.itemEstimates
-            .filter((item) => !["baggage", "optionalExtras"].includes(item.category))
             .map((item) => {
               const chipClass =
                 item.bucket === "free"

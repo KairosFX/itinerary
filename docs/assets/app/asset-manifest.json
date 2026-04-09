@@ -13,12 +13,12 @@
   "scriptHash": "c6544b50e9",
   "routeContentPath": "./assets/app/routeContent.f5a38cf4cd.js",
   "routeContentHash": "f5a38cf4cd",
-  "budgetUiPath": "./assets/app/budgetUi.46f921dc1c.js",
-  "budgetUiHash": "46f921dc1c",
-  "budgetContentPath": "./assets/app/budgetContent.66be13d8f0.js",
-  "budgetContentHash": "66be13d8f0",
+  "budgetUiPath": "./assets/app/budgetUi.456391b1ea.js",
+  "budgetUiHash": "456391b1ea",
+  "budgetContentPath": "./assets/app/budgetContent.362d120913.js",
+  "budgetContentHash": "362d120913",
   "essentialsContentPath": "./assets/app/essentialsContent.9f71cbe550.js",
   "essentialsContentHash": "9f71cbe550",
-  "generatedAt": "2026-04-09T02:30:33.523Z",
-  "cacheVersion": "0860386710-2d8476cd59-c6544b50e9-f5a38cf4cd-46f921dc1c-66be13d8f0-9f71cbe550-bcde8dff98-9afc15ad27"
+  "generatedAt": "2026-04-09T03:12:15.806Z",
+  "cacheVersion": "0860386710-2d8476cd59-c6544b50e9-f5a38cf4cd-456391b1ea-362d120913-9f71cbe550-bcde8dff98-9afc15ad27"
 }
