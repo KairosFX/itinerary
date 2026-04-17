@@ -3678,6 +3678,24 @@ html.has-modal-open body {
   gap: 0.42rem;
 }
 
+.booking-item__link-grid--stacked {
+  gap: 0.34rem;
+}
+
+.booking-item__link-meta {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.booking-item__link-note {
+  font-size: 0.77rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
 .booking-item__option-list {
   display: grid;
   gap: 0.48rem;

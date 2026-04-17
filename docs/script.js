@@ -3786,35 +3786,60 @@ const bookingTransitHotelVendorLabel = {
   ja: "Booking.com"
 };
 
-function renderBookingTransitAccommodationLinks(item) {
-  const links = Array.isArray(item.links) ? item.links : [];
-  const preferredLink = links.find((link) => link?.kind === "primary") || links[0];
-  if (!preferredLink) {
+function renderBookingTransitPrimaryLink(
+  link,
+  { label = bookingTransitPrimaryCtaLabel, vendorLabel = null, note = null } = {}
+) {
+  if (!link?.href) {
     return "";
   }
 
-  const noteMarkup = preferredLink.note
-    ? `<span class="booking-item__option-note">${renderLocalizedContent(preferredLink.note)}</span>`
+  const hasSupportCopy = Boolean(vendorLabel || note);
+  const supportGridClass = hasSupportCopy ? " booking-item__link-grid--stacked" : "";
+  const vendorMarkup = vendorLabel
+    ? `<span class="booking-item__link-meta">${renderLocalizedContent(vendorLabel)}</span>`
+    : "";
+  const noteMarkup = note
+    ? `<span class="booking-item__link-note">${renderLocalizedContent(note)}</span>`
     : "";
 
   return `
-        <div class="booking-item__option-list">
+        <div class="booking-item__link-grid${supportGridClass}">
+          ${vendorMarkup}
           <a
-            class="booking-item__option"
-            href="${escapeHtml(preferredLink.href)}"
+            class="booking-item__cta booking-item__cta--primary booking-item__cta--name"
+            href="${escapeHtml(link.href)}"
             target="_blank"
             rel="noopener noreferrer"
             data-booking-link>
-            <span class="booking-item__option-vendor">${renderLocalizedContent(
-              bookingTransitHotelVendorLabel
-            )}</span>
-            <span class="booking-item__option-title">${renderLocalizedContent(
-              preferredLink.label
-            )}</span>
-            ${noteMarkup}
+            <span class="booking-item__cta-label">${renderLocalizedContent(label)}</span>
           </a>
+          ${noteMarkup}
         </div>
     `;
+}
+
+function renderBookingTransitAccommodationLinks(item) {
+  const links = Array.isArray(item.links) ? item.links : [];
+  if (!links.length) {
+    return "";
+  }
+
+  const orderedLinks = [...links].sort((left, right) => {
+    const leftPriority = left?.kind === "primary" ? 0 : 1;
+    const rightPriority = right?.kind === "primary" ? 0 : 1;
+    return leftPriority - rightPriority;
+  });
+
+  return orderedLinks
+    .map((link) =>
+      renderBookingTransitPrimaryLink(link, {
+        label: link.label,
+        vendorLabel: bookingTransitHotelVendorLabel,
+        note: link.note
+      })
+    )
+    .join("");
 }
 
 function renderBookingTransitItem(item) {
@@ -3841,18 +3866,7 @@ function renderBookingTransitItem(item) {
   const linkMarkup = isAccommodationItem
     ? renderBookingTransitAccommodationLinks(item)
     : preferredLink
-    ? `
-          <div class="booking-item__link-grid">
-            <a
-              class="booking-item__cta booking-item__cta--primary booking-item__cta--name"
-              href="${escapeHtml(preferredLink.href)}"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-booking-link>
-              <span class="booking-item__cta-label">${renderLocalizedContent(bookingTransitPrimaryCtaLabel)}</span>
-            </a>
-          </div>
-      `
+    ? renderBookingTransitPrimaryLink(preferredLink)
     : "";
 
   return `
