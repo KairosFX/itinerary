@@ -18,7 +18,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 3,
-      title: { en: "Day 3 - Arashiyama to Osaka", ja: "3日目・嵐山から大阪" },
+      title: { en: "Day 3 - Arashiyama", ja: "3日目・嵐山" },
       summary: {
         en: "Run Day 3 in checklist order: Arashiyama first, return to Osaka, stop at Kaiyukan, then lock in the Shin-Osaka to Mishima rail leg, the Fujikawaguchiko transfer, and the onsen check-in.",
         ja: "3日目はチェックリスト順で進め、嵐山、大阪へ戻る流れ、海遊館、そのあと新大阪から三島への新幹線、富士河口湖への移動、温泉チェックインまでを固定でつなげます。"
@@ -215,7 +215,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       id: "kyoto-osaka",
-      title: { en: "Arashiyama to Osaka", ja: "嵐山から大阪" },
+      title: { en: "Arashiyama", ja: "嵐山" },
       summary: {
         en: "Day 3 starts with Arashiyama, then resets back to Osaka for Kaiyukan and the final Kansai night.",
         ja: "3日目は嵐山から始め、そのあと大阪へ戻って海遊館と関西最後の夜へつなぎます。"

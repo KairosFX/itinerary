@@ -134,8 +134,8 @@ const itineraryBudgetLabels = {
   },
   dayViewerHint: { en: "", ja: "" },
   totalMeta: {
-    en: "Combined booked and required costs across every day in the Day Budget Viewer.",
-    ja: "Day Budget Viewer に表示される全日程のうち、予約前提と必須の費用だけを合計しています。"
+    en: "Cheapest practical route-wide total across every day in the Day Budget Viewer.",
+    ja: "Day Budget Viewer に表示される全日程のうち、最も控えめで現実的な合計を表示しています。"
   },
   noPaidAccommodationMeta: {
     en: "No paid hotel or ryokan stays are selected right now.",
@@ -933,8 +933,8 @@ const itineraryBudgetLabels = {
       visibleDayEstimates,
       total,
       totalRange,
-      mainTotal: getBudgetRangeValue(bookedAndFixedTotalRange, "lean"),
-      mainTotalRange: bookedAndFixedTotalRange,
+      mainTotal: getBudgetRangeValue(totalRange, "lean"),
+      mainTotalRange: totalRange,
       perPerson: getBudgetRangeValue(perPersonRange, "expected"),
       perPersonRange,
       bookedAndFixedTotal,

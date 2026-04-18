@@ -7,6 +7,10 @@ const siteHeader = document.querySelector(".site-header");
 const headerAccessoryGroups = Array.from(document.querySelectorAll(".language-switcher"));
 const mainContent = document.querySelector("#main-content");
 const siteFooter = document.querySelector(".site-footer");
+const siteGate = document.querySelector("[data-site-gate]");
+const siteGateForm = document.querySelector("[data-site-gate-form]");
+const siteGateInput = document.querySelector("[data-site-gate-input]");
+const siteGateFeedback = document.querySelector("[data-site-gate-feedback]");
 const siteBackdropVideo = document.querySelector("[data-site-background-video]");
 const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const checklistGateNotice = document.querySelector("[data-checklist-gate]");
@@ -53,8 +57,8 @@ const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
 const pageTitles = {
-  en: "Japan Escape",
-  ja: "日本旅行"
+  en: "Kairos VIII",
+  ja: "Kairos VIII"
 };
 const storageKey = "japan-trip-language";
 const itineraryStateVersion = "2026-04-09-checklist-shift-raf-v2";
@@ -102,6 +106,17 @@ const audioAmbientVolume = 0.085;
 const audioAmbientDuckVolume = 0.05;
 const audioTransitionVolume = 0.28;
 const audioTransitionCooldownMs = 320;
+const siteGatePassword = "kairosviii";
+const siteGateThemeColor = "#050806";
+const siteGateFeedbackCopy = {
+  rejected: {
+    en: "The seal remains closed.",
+    ja: "封はまだ開きません。"
+  }
+};
+let siteGateUnlocked = !siteGate;
+let siteGateUnlockResolver = null;
+let siteGateRejectTimer = 0;
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
   en:
@@ -7356,51 +7371,8 @@ function updateRouteMapMarkerElement(entry, selectionState) {
 }
 
 function installRouteMapMarkers(map) {
-  if (!map || !window.maplibregl?.Marker) {
-    return [];
-  }
-
-  return routeExplorerStopDefinitions
-    .map((stop) => {
-      const lngLat =
-        Array.isArray(stop?.lngLat) &&
-        stop.lngLat.length === 2 &&
-        stop.lngLat.every((value) => Number.isFinite(Number(value)))
-          ? stop.lngLat
-          : null;
-      if (!lngLat) {
-        return null;
-      }
-
-      const { element, labelNode } = createRouteMapMarkerElement(stop);
-      const revealStop = (event) => {
-        event?.preventDefault?.();
-        event?.stopPropagation?.();
-        toggleRouteMapStopSelection(stop.id, {
-          updateCamera: true,
-          animateCamera: true,
-          revealDayRail: true
-        });
-      };
-
-      element.addEventListener("click", revealStop);
-
-      const marker = new window.maplibregl.Marker({
-        element,
-        anchor: "center"
-      })
-        .setLngLat(lngLat)
-        .addTo(map);
-
-      return {
-        marker,
-        element,
-        labelNode,
-        stop,
-        stateKey: ""
-      };
-    })
-    .filter(Boolean);
+  void map;
+  return [];
 }
 
 function setRouteMapInteractionState(map) {
@@ -8317,11 +8289,17 @@ function scheduleDayCardRowHeights() {
 
 function syncModalOpenState() {
   const isModalOpen = Boolean(transitDetailModal && !transitDetailModal.hidden);
+  const isGateBlocking = Boolean(
+    siteGate &&
+      !siteGate.hidden &&
+      (root.classList.contains("gate-active") || root.classList.contains("gate-unlocking"))
+  );
+  const shouldInertShell = isModalOpen || isGateBlocking;
 
   root.classList.toggle("has-modal-open", isModalOpen);
   [siteHeader, mainContent, siteFooter].forEach((node) => {
     if (node) {
-      node.toggleAttribute("inert", isModalOpen);
+      node.toggleAttribute("inert", shouldInertShell);
     }
   });
 }
@@ -8931,6 +8909,165 @@ function getInitialPanelId() {
   return nextPanelId;
 }
 
+function waitForFrame() {
+  return new Promise((resolve) => {
+    window.requestAnimationFrame(() => resolve());
+  });
+}
+
+function waitForDuration(durationMs) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, durationMs);
+  });
+}
+
+function getSiteGateTimings() {
+  const inputRevealDelayMs = reducedEffectsEnabled ? 120 : 680;
+  const unlockDurationMs = reducedEffectsEnabled ? 180 : 780;
+  const rejectDurationMs = reducedEffectsEnabled ? 220 : 720;
+
+  return {
+    inputRevealDelayMs,
+    unlockDurationMs,
+    rejectDurationMs
+  };
+}
+
+function clearSiteGateFeedback() {
+  if (siteGateFeedback) {
+    siteGateFeedback.textContent = "";
+  }
+}
+
+function setSiteGateFeedback(message) {
+  if (siteGateFeedback) {
+    siteGateFeedback.textContent = message;
+  }
+}
+
+function clearSiteGateRejectState() {
+  if (siteGateRejectTimer) {
+    window.clearTimeout(siteGateRejectTimer);
+    siteGateRejectTimer = 0;
+  }
+
+  root.classList.remove("gate-rejected");
+}
+
+function unlockSiteGate() {
+  if (!siteGate || siteGateUnlocked) {
+    return;
+  }
+
+  const { unlockDurationMs } = getSiteGateTimings();
+  siteGateUnlocked = true;
+  clearSiteGateRejectState();
+  clearSiteGateFeedback();
+
+  if (siteGateInput) {
+    siteGateInput.disabled = true;
+  }
+
+  root.classList.remove("gate-active", "gate-ready");
+  root.classList.add("gate-unlocking");
+  syncModalOpenState();
+
+  window.setTimeout(() => {
+    root.classList.remove("gate-unlocking");
+    updateThemeColorMeta(getCurrentTheme());
+
+    if (siteGate) {
+      siteGate.hidden = true;
+      siteGate.setAttribute("aria-hidden", "true");
+    }
+
+    if (siteGateUnlockResolver) {
+      const resolve = siteGateUnlockResolver;
+      siteGateUnlockResolver = null;
+      resolve();
+    }
+  }, unlockDurationMs);
+}
+
+function handleSiteGateSubmit(event) {
+  event.preventDefault();
+
+  if (!siteGate || !siteGateInput || siteGateUnlocked || siteGateInput.disabled) {
+    return;
+  }
+
+  const submittedValue = siteGateInput.value.trim().toLowerCase();
+  if (submittedValue === siteGatePassword) {
+    unlockSiteGate();
+    return;
+  }
+
+  const { rejectDurationMs } = getSiteGateTimings();
+  clearSiteGateRejectState();
+  setSiteGateFeedback(
+    root.lang === "ja" ? siteGateFeedbackCopy.rejected.ja : siteGateFeedbackCopy.rejected.en
+  );
+  siteGateInput.value = "";
+  root.classList.add("gate-rejected");
+
+  siteGateRejectTimer = window.setTimeout(() => {
+    root.classList.remove("gate-rejected");
+    siteGateInput.focus({ preventScroll: true });
+  }, rejectDurationMs);
+}
+
+function handleSiteGateInput() {
+  clearSiteGateRejectState();
+  clearSiteGateFeedback();
+}
+
+async function playSiteGate() {
+  if (!siteGate) {
+    siteGateUnlocked = true;
+    root.classList.remove("gate-active", "gate-ready", "gate-rejected", "gate-unlocking");
+    syncModalOpenState();
+    return;
+  }
+
+  const { inputRevealDelayMs } = getSiteGateTimings();
+  siteGateUnlocked = false;
+  clearSiteGateRejectState();
+  clearSiteGateFeedback();
+
+  siteGate.hidden = false;
+  siteGate.setAttribute("aria-hidden", "false");
+  if (siteGateForm) {
+    siteGateForm.reset();
+  }
+  if (siteGateInput) {
+    siteGateInput.disabled = true;
+  }
+
+  root.classList.remove("gate-ready", "gate-rejected", "gate-unlocking");
+  root.classList.add("gate-active");
+  if (themeColorMeta) {
+    themeColorMeta.setAttribute("content", siteGateThemeColor);
+  }
+  syncModalOpenState();
+
+  await waitForFrame();
+  await waitForFrame();
+
+  if (inputRevealDelayMs > 0) {
+    await waitForDuration(inputRevealDelayMs);
+  }
+
+  root.classList.add("gate-ready");
+  if (siteGateInput) {
+    siteGateInput.disabled = false;
+    siteGateInput.focus({ preventScroll: true });
+  }
+
+  return new Promise((resolve) => {
+    siteGateUnlockResolver = resolve;
+  });
+}
+
 function bindTabNavigation() {
   sectionTabs.forEach((tab) => {
     if (tab.dataset.navigationBound === "true") {
@@ -8987,9 +9124,12 @@ async function bootApp() {
 
   bootOfflineExperience();
   root.classList.remove("intro-pending", "intro-active", "intro-leaving");
-  if (siteAudioState.ambientWanted) {
-    void requestAmbientPlayback();
-  }
+  const gatePromise = playSiteGate();
+  gatePromise.finally(() => {
+    if (siteAudioState.ambientWanted) {
+      void requestAmbientPlayback();
+    }
+  });
   void warmRouteExperience();
   const siteFooter = document.querySelector(".site-footer");
   const initialPanelId = getInitialPanelId();
@@ -9025,6 +9165,8 @@ async function bootApp() {
       scheduleDayCardRowHeights();
     });
   }
+
+  await gatePromise;
 }
 
 function scheduleAppBoot() {
@@ -9086,6 +9228,14 @@ transitDetailCloseButtons.forEach((button) => {
     setTransitModalOpen(false);
   });
 });
+
+if (siteGateForm) {
+  siteGateForm.addEventListener("submit", handleSiteGateSubmit);
+}
+
+if (siteGateInput) {
+  siteGateInput.addEventListener("input", handleSiteGateInput);
+}
 
 if (transitDetailModal) {
   transitDetailModal.addEventListener("click", (event) => {
