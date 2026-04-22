@@ -1,5 +1,5 @@
 const OFFLINE_CACHE_VERSION = "__OFFLINE_CACHE_VERSION__";
-const CACHE_PREFIX = "itinerary-";
+const CACHE_PREFIX = "japan-escape-itinerary-";
 const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
 const APP_SCOPE_URL = new URL("./", self.location);

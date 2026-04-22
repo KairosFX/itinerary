@@ -224,40 +224,47 @@
         "en": "Core transit checks",
         "ja": "主要移動の確認先"
       },
-    "summary": {
-      "en": "Day 3 now carries the full eastbound transfer into the Mt. Fuji base, and Day 4 then keeps Chureito Shimoyoshida, Lake Kawaguchiko, and the Tokyo handoff in one clean sequence. The live links now use Trip.com references for the key rail, bus, and local-transfer checks.",
-      "ja": "3日目は富士エリア拠点までの東向き移動をまとめ、4日目は忠霊塔・下吉田、河口湖、東京への受け渡しを一つの流れに整理しました。ライブリンクも、主要な鉄道、バス、現地移動の確認先を Trip.com にそろえています。"
-    },
-    "links": [
-      {
-        "label": {
-          "en": "Trip.com Shin-Osaka -> Mishima rail",
-          "ja": "Trip.com 新大阪 -> 三島 鉄道"
-        },
-        "url": "https://my.trip.com/trains/japan/route/shin-osaka-to-mishima/"
+      "summary": {
+        "en": "Day 3 now carries the full eastbound transfer into the Mt. Fuji base, and Day 4 then keeps Chureito Shimoyoshida, Lake Kawaguchiko, and the Tokyo handoff in one clean sequence. The live links now prioritize official SmartEX, official highway-bus pages, and working official bus search results where possible.",
+        "ja": "3日目は富士エリア拠点までの東向き移動をまとめ、4日目は忠霊塔・下吉田、河口湖、東京への受け渡しを一つの流れに整理しました。ライブリンクも、可能な限り SmartEX 公式、高速バス公式、動作する公式バス検索結果を優先しています。"
       },
-      {
-        "label": {
-          "en": "Trip.com Mishima -> Kawaguchiko bus",
-          "ja": "Trip.com 三島 -> 河口湖 バス"
+      "links": [
+        {
+          "label": {
+            "en": "SmartEX Shinkansen booking",
+            "ja": "SmartEX 新幹線予約"
+          },
+          "url": "https://smart-ex.jp/en/lp/app/"
         },
-        "url": "https://www.trip.com/things-to-do/experiences/fujikawaguchiko-bus-tickets/"
-      },
-      {
-        "label": {
-          "en": "Trip.com Fuji local transport",
-          "ja": "Trip.com 富士現地移動"
+        {
+          "label": {
+            "en": "Oversized baggage rule",
+            "ja": "特大荷物ルール"
+          },
+          "url": "https://global.jr-central.co.jp/en/info/oversized-baggage/index.html"
         },
-        "url": "https://www.trip.com/things-to-do/experiences/fujikawaguchiko-transportation/"
-      },
-      {
-        "label": {
-          "en": "Trip.com Kawaguchiko -> Tokyo return",
-          "ja": "Trip.com 河口湖 -> 東京 戻り"
+        {
+          "label": {
+            "en": "Mishima -> Kawaguchiko bus",
+            "ja": "三島 -> 河口湖バス"
+          },
+          "url": "https://sekitori.jp/en/apps/results/?%5BnextDateFlag=true%5D&getOffAreaMiddleGroupId=2&getOffAreaType=1&nextDateFlag=true&rideAreaType=2&rideBusStopId=8&rideDate=today"
         },
-        "url": "https://www.trip.com/things-to-do/detail/102425674/"
-      }
-    ]
+        {
+          "label": {
+            "en": "Tokyu Bus Shibuya -> Kawaguchiko",
+            "ja": "Tokyu Bus 渋谷 -> 河口湖"
+          },
+          "url": "https://www.tokyubus.co.jp/tourist/highway/"
+        },
+        {
+          "label": {
+            "en": "Fujikyu Railway fare",
+            "ja": "富士急行線運賃"
+          },
+          "url": "https://e.fujikyu-railway.jp/fare/"
+        }
+      ]
     },
     {
       "id": "tickets",

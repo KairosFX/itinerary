@@ -372,7 +372,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       ],
       notes: [
         {
-          en: "This stop covers Dotonbori, Shinsaibashi, dinner in Minami, nightlife, and the final Osaka night after Kaiyukan.",
+          en: "This marker covers Dotonbori, Shinsaibashi, dinner in Minami, nightlife, and the final Osaka night after Kaiyukan.",
           ja: "この地点は、道頓堀、心斎橋、ミナミでの夕食、夜歩き、そして海遊館後の大阪最後の夜までを含みます。"
         },
         {

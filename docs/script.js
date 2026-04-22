@@ -61,8 +61,8 @@ const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
 const pageTitles = {
-  en: "itinerary",
-  ja: "itinerary"
+  en: "Kairos VII Japan Escape Itinerary",
+  ja: "Kairos VII Japan Escape Itinerary"
 };
 const storageKey = "japan-trip-language";
 const itineraryStateVersion = "2026-04-09-checklist-shift-raf-v2";
@@ -111,7 +111,7 @@ const audioAmbientVolume = 0.085;
 const audioAmbientDuckVolume = 0.05;
 const audioTransitionVolume = 0.28;
 const audioTransitionCooldownMs = 320;
-const siteGatePasswords = new Set(["kairosviii"]);
+const siteGatePasswords = new Set(["kairosvii", "kairosviii"]);
 const siteGateThemeColor = "#050806";
 const siteGateFeedbackCopy = {
   rejected: {
@@ -135,8 +135,6 @@ let budgetDayDefinitions = [];
 let tripNoteDefinitions = [];
 let tripNoteDefinitionMap = new Map();
 let panelTransitionToken = 0;
-let activePanelId = "";
-let continuousLayoutWarmupPromise = null;
 let gsapLoadPromise = null;
 const fujiForecastCacheMaxAgeMs = 45 * 60 * 1000;
 const fujiForecastSourceUrl = "https://open-meteo.com/en/docs";
@@ -454,8 +452,8 @@ const routeMapLabels = {
   tools: { en: "Quick tools", ja: "クイック操作" },
   checklistAction: { en: "Checklist", ja: "チェックリスト" },
   interactiveSurfaceLabel: {
-    en: "Interactive route map. Use the map controls or highlighted route segments to inspect the journey.",
-    ja: "インタラクティブなルート地図です。地図操作や強調されたルート区間で旅程を確認できます。"
+    en: "Interactive route map. Use the map controls, markers, or highlighted route segments to inspect the journey.",
+    ja: "インタラクティブなルート地図です。地図操作、マーカー、強調されたルート区間で旅程を確認できます。"
   },
   sharedLoading: { en: "Preparing live route map...", ja: "ライブ ルート地図を準備中..." },
   sharedLoadingBody: {
@@ -624,8 +622,8 @@ function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
       ja: "日本ルート全体"
     },
     summary: {
-      en: "See the full Osaka-to-Tokyo corridor first, then focus route segments only when needed.",
-      ja: "まず大阪から東京までの全体ルートを見て、必要なときだけルート区間に絞り込みます。"
+      en: "See the full Osaka-to-Tokyo corridor first, then focus markers or route segments only when needed.",
+      ja: "まず大阪から東京までの全体ルートを見て、必要なときだけマーカーやルート区間に絞り込みます。"
     },
     badges: [
       { en: "Overview", ja: "全体" },
@@ -3772,6 +3770,7 @@ function renderTripNotes() {
           <div class="note-card__head">
             <div class="note-card__meta-row">
               <span class="note-card__pill">${root.lang === "ja" ? `${definition.day}日目` : `Day ${definition.day}`}</span>
+              <span class="note-card__pill note-card__pill--route">${root.lang === "ja" ? "順路" : "Sequence"}</span>
             </div>
             <h3>${renderLocalizedContent(definition.title)}</h3>
           </div>
@@ -3800,6 +3799,10 @@ function renderTripNoteStopSummary(routeDay) {
 
   return `
     <p class="note-card__route-line">
+      <span class="note-card__route-label">${renderLocalizedContent({
+        en: "Flow",
+        ja: "流れ"
+      })}</span>
       <span class="note-card__route-stops">
         <span data-language="en">${renderStops("en")}</span>
         <span data-language="ja" hidden>${renderStops("ja")}</span>
@@ -3982,9 +3985,7 @@ function renderBookingTransitAccommodationLinks(item) {
   return orderedLinks
     .map((link) =>
       renderBookingTransitPrimaryLink(link, {
-        label: link.label || bookingTransitPrimaryCtaLabel,
-        vendorLabel: bookingTransitHotelVendorLabel,
-        note: link.note || null
+        label: bookingTransitPrimaryCtaLabel
       })
     )
     .join("");
@@ -4712,10 +4713,6 @@ function getHeaderScrollOffset(extra = 20) {
   return Math.max(baseOffset + extra, measuredHeaderHeight + extra);
 }
 
-function getCompactSectionScrollNudge() {
-  return compactViewportQuery.matches ? 64 : 0;
-}
-
 function syncHeaderAccessoryVisibility(isCondensed) {
   headerAccessoryGroups.forEach((group) => {
     group.toggleAttribute("inert", isCondensed);
@@ -4849,85 +4846,7 @@ function getSectionPanel(sectionName) {
 }
 
 function getActivePanelId() {
-  return (
-    activePanelId ||
-    contentPanels.find((panel) => panel.classList.contains("is-active"))?.dataset.panel ||
-    contentPanels[0]?.dataset.panel ||
-    ""
-  );
-}
-
-function getSectionScrollAnchor(sectionOrPanel) {
-  const panel =
-    typeof sectionOrPanel === "string" ? getSectionPanel(sectionOrPanel) : sectionOrPanel || null;
-  if (!panel) {
-    return null;
-  }
-
-  return panel.querySelector("[data-panel-scroll-anchor]") || panel.querySelector(".section-heading") || panel;
-}
-
-function syncSectionStateFromScroll(scrollY = window.scrollY) {
-  if (!contentPanels.length) {
-    return;
-  }
-
-  const nextScrollY = Math.max(scrollY, 0);
-  const viewportBottom = nextScrollY + window.innerHeight;
-  const preloadTop = nextScrollY - window.innerHeight * 0.2;
-  const preloadBottom = viewportBottom + window.innerHeight * 0.6;
-
-  contentPanels.forEach((panel) => {
-    const panelTop = panel.getBoundingClientRect().top + window.scrollY;
-    const panelBottom = panelTop + panel.offsetHeight;
-    if (panelBottom < preloadTop || panelTop > preloadBottom) {
-      return;
-    }
-
-    void ensureSectionInitialized(panel.dataset.panel || "");
-  });
-
-  const activationLine =
-    nextScrollY + getHeaderScrollOffset(18) + Math.min(window.innerHeight * 0.22, 180);
-  const nearTopActivationBuffer = Math.max(120, Math.min(window.innerHeight * 0.48, 720));
-  let nextActivePanel = contentPanels[0] || null;
-  let firstPanelBelowActivation = null;
-
-  contentPanels.forEach((panel) => {
-    const anchor = getSectionScrollAnchor(panel);
-    if (!anchor) {
-      return;
-    }
-
-    const anchorTop = anchor.getBoundingClientRect().top + window.scrollY;
-    if (activationLine >= anchorTop) {
-      nextActivePanel = panel;
-      return;
-    }
-
-    if (!firstPanelBelowActivation) {
-      firstPanelBelowActivation = { panel, anchorTop };
-    }
-  });
-
-  if (
-    firstPanelBelowActivation &&
-    firstPanelBelowActivation.anchorTop - activationLine <= nearTopActivationBuffer
-  ) {
-    nextActivePanel = firstPanelBelowActivation.panel;
-  }
-
-  if (viewportBottom >= document.documentElement.scrollHeight - 2) {
-    const lastPanel = contentPanels[contentPanels.length - 1] || null;
-    if (lastPanel && lastPanel.getBoundingClientRect().top < window.innerHeight) {
-      nextActivePanel = lastPanel;
-    }
-  }
-
-  const nextPanelId = nextActivePanel?.dataset.panel || "";
-  if (nextPanelId) {
-    setActivePanel(nextPanelId);
-  }
+  return contentPanels.find((panel) => panel.classList.contains("is-active"))?.dataset.panel || "";
 }
 
 function markSectionHydrated(sectionName) {
@@ -7526,8 +7445,51 @@ function updateRouteMapMarkerElement(entry, selectionState) {
 }
 
 function installRouteMapMarkers(map) {
-  void map;
-  return [];
+  if (!map || !window.maplibregl?.Marker) {
+    return [];
+  }
+
+  return routeExplorerStopDefinitions
+    .map((stop) => {
+      const lngLat = getRouteStopLngLat(stop.id);
+      if (!lngLat) {
+        return null;
+      }
+
+      const { element, labelNode } = createRouteMapMarkerElement(stop);
+      const marker = new window.maplibregl.Marker({
+        element,
+        anchor: "center"
+      })
+        .setLngLat(lngLat)
+        .addTo(map);
+
+      const focusStop = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleRouteMapStopSelection(stop.id, {
+          updateCamera: true,
+          animateCamera: true,
+          revealDayRail: false
+        });
+      };
+
+      element.addEventListener("click", focusStop);
+      element.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          focusStop(event);
+        }
+      });
+
+      return {
+        marker,
+        element,
+        labelNode,
+        stop,
+        stateKey: ""
+      };
+    })
+    .filter(Boolean);
 }
 
 function setRouteMapInteractionState(map) {
@@ -7551,7 +7513,7 @@ function setRouteMapInteractionState(map) {
   setHandlerEnabled("dragPan", true);
   setHandlerEnabled("doubleClickZoom", true);
   setHandlerEnabled("keyboard", false);
-  setHandlerEnabled("scrollZoom", false);
+  setHandlerEnabled("scrollZoom", !coarsePointerQuery.matches);
 
   if (map.touchZoomRotate) {
     map.touchZoomRotate.enable();
@@ -8216,60 +8178,66 @@ function cancelWindowScrollAnimation(didReachTarget = false) {
 
 function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}) {
   const clampedTop = clamp(Math.round(nextTop), 0, getMaxWindowScrollTop());
-  cancelWindowScrollAnimation(false);
-  const useSmoothBehavior = behavior === "smooth" && !reducedEffectsEnabled;
-  const startedAt = window.performance.now();
-  const settleDelayMs = useSmoothBehavior ? 180 : 0;
-  const settleTimeoutMs = useSmoothBehavior ? 960 : 420;
+  const currentTop = Math.max(window.scrollY, 0);
+  const shouldAnimate = behavior === "smooth" && !reducedEffectsEnabled;
 
-  window.scrollTo({
-    top: clampedTop,
-    behavior: useSmoothBehavior ? "smooth" : "auto"
+  cancelWindowScrollAnimation(false);
+
+  if (Math.abs(clampedTop - currentTop) < 2) {
+    if (clampedTop !== currentTop) {
+      window.scrollTo({
+        top: clampedTop,
+        behavior: "auto"
+      });
+    }
+    return Promise.resolve(true);
+  }
+
+  if (!shouldAnimate) {
+    window.scrollTo({
+      top: clampedTop,
+      behavior: "auto"
+    });
+    return Promise.resolve(true);
+  }
+
+  const startTop = currentTop;
+  const delta = clampedTop - startTop;
+  const duration = getTimedMotionDuration(delta, {
+    min: 220,
+    max: 680,
+    multiplier: 0.28
   });
 
   return new Promise((resolve) => {
-    let settledFrames = 0;
-
-    const finalize = (didReachTarget) => {
-      activeWindowScrollAnimation = null;
-      window.scrollTo({ top: clampedTop, behavior: "auto" });
-      resolve(didReachTarget);
-    };
-
-    const tick = () => {
-      const elapsed = window.performance.now() - startedAt;
-      const remainingDistance = Math.abs(window.scrollY - clampedTop);
-
-      if (elapsed < settleDelayMs) {
-        activeWindowScrollAnimation = {
-          frameId: window.requestAnimationFrame(tick),
-          resolve
-        };
-        return;
-      }
-
-      if (remainingDistance <= 1) {
-        settledFrames += 1;
-      } else {
-        settledFrames = 0;
-        window.scrollTo({ top: clampedTop, behavior: "auto" });
-      }
-
-      if (settledFrames >= 2 || elapsed >= settleTimeoutMs) {
-        finalize(remainingDistance <= 2);
-        return;
-      }
-
-      activeWindowScrollAnimation = {
-        frameId: window.requestAnimationFrame(tick),
-        resolve
-      };
-    };
-
-    activeWindowScrollAnimation = {
-      frameId: window.requestAnimationFrame(tick),
+    const animationState = {
+      frameId: 0,
       resolve
     };
+    const startTime = window.performance.now();
+
+    const step = (timestamp) => {
+      if (activeWindowScrollAnimation !== animationState) {
+        return;
+      }
+
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easedProgress = easeTimedMotion(progress);
+      const nextScrollTop = startTop + delta * easedProgress;
+      window.scrollTo(0, Math.round(nextScrollTop));
+
+      if (progress < 1) {
+        animationState.frameId = window.requestAnimationFrame(step);
+        return;
+      }
+
+      activeWindowScrollAnimation = null;
+      window.scrollTo(0, clampedTop);
+      resolve(true);
+    };
+
+    activeWindowScrollAnimation = animationState;
+    animationState.frameId = window.requestAnimationFrame(step);
   });
 }
 
@@ -8728,41 +8696,21 @@ async function scrollToChecklistDay(day, { emphasizeCurrentDay = false } = {}) {
 
   await activatePanel("checklist");
 
-  lockHeaderState(720);
-  const scrollToTargetCard = (behavior = getScrollBehavior()) => {
-    const targetTop =
-      targetCard.getBoundingClientRect().top +
-      window.scrollY -
-      getHeaderScrollOffset(24) +
-      getCompactSectionScrollNudge();
-    void smoothlyScrollWindowTo(Math.max(targetTop, 0), { behavior });
-  };
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      lockHeaderState(720);
+      const targetTop =
+        targetCard.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(24);
 
-  scrollToTargetCard(getScrollBehavior());
-  [420, 1100, 2200].forEach((delay) => {
-    window.setTimeout(() => {
-      scrollToTargetCard("auto");
-    }, delay);
+      void smoothlyScrollWindowTo(Math.max(targetTop, 0), { intent: "section" });
+
+      targetCard.classList.remove("is-route-target");
+      restartClassOnNextFrame(targetCard, "is-route-target");
+      window.setTimeout(() => {
+        targetCard.classList.remove("is-route-target");
+      }, 1400);
+    });
   });
-
-  targetCard.classList.remove("is-route-target");
-  restartClassOnNextFrame(targetCard, "is-route-target");
-  window.setTimeout(() => {
-    targetCard.classList.remove("is-route-target");
-  }, 1400);
-}
-
-function ensureContinuousLayoutWarmup() {
-  if (!continuousLayoutWarmupPromise) {
-    continuousLayoutWarmupPromise = Promise.all(
-      ["overview", "checklist", "notes", "budget", "essentials"].map((sectionName) =>
-        ensureSectionInitialized(sectionName)
-      )
-    );
-    void ensureSectionInitialized("route");
-  }
-
-  return continuousLayoutWarmupPromise;
 }
 
 function scrollToPanelStart(panelId) {
@@ -8771,32 +8719,16 @@ function scrollToPanelStart(panelId) {
     return;
   }
 
-  lockHeaderState(760);
-  const scrollToTargetPanel = (behavior = getScrollBehavior()) => {
-    const anchor = getSectionScrollAnchor(panel);
-    const targetTop =
-      anchor.getBoundingClientRect().top +
-      window.scrollY -
-      getHeaderScrollOffset(20) +
-      getCompactSectionScrollNudge();
-    void smoothlyScrollWindowTo(Math.max(targetTop, 0), { behavior });
-  };
+  const anchor = panel.querySelector("[data-panel-scroll-anchor]") || panel.querySelector(".section-heading") || panel;
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      lockHeaderState(760);
+      const targetTop =
+        anchor.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(20);
 
-  scrollToTargetPanel(getScrollBehavior());
-  [420, 1100, 2200].forEach((delay) => {
-    window.setTimeout(() => {
-      scrollToTargetPanel("auto");
-    }, delay);
+      void smoothlyScrollWindowTo(Math.max(targetTop, 0), { intent: "section" });
+    });
   });
-  void ensureContinuousLayoutWarmup().then(() => {
-    scrollToTargetPanel("auto");
-    window.setTimeout(() => {
-      scrollToTargetPanel("auto");
-    }, 220);
-  });
-  if (window.history?.replaceState) {
-    window.history.replaceState(null, "", `#${panelId}`);
-  }
 }
 
 function handleAnchorScrollClick(event) {
@@ -8820,34 +8752,14 @@ function handleAnchorScrollClick(event) {
   }
 
   event.preventDefault();
-  if (targetNode.matches?.("[data-panel]")) {
-    setActivePanel(targetId);
-  }
   if (!targetNode.hasAttribute("tabindex")) {
     targetNode.setAttribute("tabindex", "-1");
   }
 
   targetNode.focus({ preventScroll: true });
-  const scrollToTargetNode = (behavior = getScrollBehavior()) => {
-    const targetTop =
-      targetNode.getBoundingClientRect().top +
-      window.scrollY -
-      getHeaderScrollOffset(18) +
-      getCompactSectionScrollNudge();
-    void smoothlyScrollWindowTo(Math.max(targetTop, 0), { behavior });
-  };
-  scrollToTargetNode(getScrollBehavior());
-  [420, 1100, 2200].forEach((delay) => {
-    window.setTimeout(() => {
-      scrollToTargetNode("auto");
-    }, delay);
-  });
-  void ensureContinuousLayoutWarmup().then(() => {
-    scrollToTargetNode("auto");
-    window.setTimeout(() => {
-      scrollToTargetNode("auto");
-    }, 220);
-  });
+  const targetTop =
+    targetNode.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(18);
+  void smoothlyScrollWindowTo(Math.max(targetTop, 0), { intent: "anchor" });
 
   if (window.history?.replaceState) {
     window.history.replaceState(null, "", `#${targetId}`);
@@ -8965,57 +8877,48 @@ function updateLanguageButtons(language) {
 }
 
 function setActivePanel(panelId) {
-  const hasMatch = contentPanels.some((panel) => panel.dataset.panel === panelId);
-  if (!hasMatch) {
-    return false;
-  }
-
-  const previousPanelId = activePanelId;
-  const hasChanged = previousPanelId !== panelId;
-  activePanelId = panelId;
+  let hasMatch = false;
 
   contentPanels.forEach((panel) => {
     const isActive = panel.dataset.panel === panelId;
     panel.classList.toggle("is-active", isActive);
-    panel.hidden = false;
-    panel.setAttribute("aria-hidden", "false");
-    panel.removeAttribute("inert");
+    panel.hidden = !isActive;
+    panel.setAttribute("aria-hidden", String(!isActive));
+    panel.toggleAttribute("inert", !isActive);
+    hasMatch ||= isActive;
   });
 
   sectionTabs.forEach((tab) => {
     const isActive = tab.dataset.panelTarget === panelId;
     tab.classList.toggle("is-active", isActive);
     tab.setAttribute("aria-selected", String(isActive));
-    if (isActive) {
-      tab.setAttribute("aria-current", "location");
-    } else {
-      tab.removeAttribute("aria-current");
-    }
   });
 
-  syncSectionNavIndicator({ immediate: !hasChanged });
-  if (hasChanged) {
-    scrollSectionTabIntoView();
+  syncSectionNavIndicator();
+  scrollSectionTabIntoView();
+
+  if (hasMatch) {
     if (initializedSections.has(panelId)) {
       refreshRevealPanel(panelId);
     }
+
+    if (panelId === "checklist" && initializedSections.has("checklist")) {
+      void initializeFujiForecast();
+    }
+
+    if (panelId === "route") {
+      window.requestAnimationFrame(() => {
+        resizeRouteMapsIfReady();
+      });
+    }
+
+    syncProgressTimeline();
+    scheduleDayCardRowHeights();
+    storeActivePanel(panelId);
+    updateMaxScrollableY();
   }
 
-  if (!initializedSections.has(panelId)) {
-    void ensureSectionInitialized(panelId);
-  } else if (panelId === "checklist") {
-    void initializeFujiForecast();
-  } else if (panelId === "route") {
-    window.requestAnimationFrame(() => {
-      resizeRouteMapsIfReady();
-    });
-  }
-
-  syncProgressTimeline();
-  scheduleDayCardRowHeights();
-  storeActivePanel(panelId);
-  updateMaxScrollableY();
-  return true;
+  return hasMatch;
 }
 
 function setActiveProgressItem(day) {
@@ -9121,18 +9024,14 @@ function refreshRevealPanel(panelId) {
 }
 
 function getInitialPanelId() {
-  const hashPanelId = window.location.hash
-    ? window.location.hash.replace(/^#/, "").trim().toLowerCase()
-    : "";
-  if (hashPanelId && getSectionPanel(hashPanelId)) {
-    return hashPanelId;
-  }
-
   const defaultPanelId =
     contentPanels.find((panel) => panel.classList.contains("is-active"))?.dataset.panel ??
     contentPanels[0]?.dataset.panel ??
     "overview";
-  return defaultPanelId;
+  const nextPanelId =
+    contentPanels.length === 1 ? defaultPanelId : readStoredActivePanel() || defaultPanelId;
+
+  return nextPanelId;
 }
 
 function waitForFrame() {
@@ -9247,15 +9146,6 @@ function handleSiteGateSubmit(event) {
 function handleSiteGateInput() {
   clearSiteGateRejectState();
   clearSiteGateFeedback();
-}
-
-function handleSiteGateKeydown(event) {
-  if (event.key !== "Enter" || !siteGateForm || !siteGateInput || siteGateInput.disabled) {
-    return;
-  }
-
-  event.preventDefault();
-  siteGateForm.requestSubmit();
 }
 
 async function playSiteGate() {
@@ -9462,8 +9352,7 @@ function bindTabNavigation() {
       return;
     }
 
-    tab.addEventListener("click", async (event) => {
-      event.preventDefault();
+    tab.addEventListener("click", async () => {
       const panelId = tab.dataset.panelTarget;
       if (!panelId) {
         return;
@@ -9575,8 +9464,18 @@ async function activatePanel(panelId) {
   await ensureSectionAssetsReady(panelId);
 
   lockHeaderState(hasChanged ? 620 : 520);
-  setActivePanel(panelId);
-  await ensureSectionInitialized(panelId);
+  if (!hasChanged) {
+    setActivePanel(panelId);
+    await ensureSectionInitialized(panelId);
+    return false;
+  }
+
+  const currentIndex = getPanelIndex(currentPanelId);
+  const nextIndex = getPanelIndex(panelId);
+  root.dataset.siteTransitionMode = "panel";
+  root.dataset.siteTransitionDirection = nextIndex >= currentIndex ? "forward" : "backward";
+  await animatePanelTransition(currentPanelId, panelId);
+  clearSiteTransitionState();
   return hasChanged;
 }
 
@@ -9615,23 +9514,25 @@ async function bootApp() {
   void warmRouteExperience();
   const siteFooter = document.querySelector(".site-footer");
   const initialPanelId = getInitialPanelId();
-  contentPanels.forEach((panel) => {
-    panel.hidden = false;
-    panel.setAttribute("aria-hidden", "false");
-    panel.removeAttribute("inert");
-  });
-  setActivePanel(initialPanelId);
+  if (initialPanelId === "overview") {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        if (siteFooter) {
+          registerRevealBlocks(siteFooter);
+        }
 
-  await Promise.all(
-    ["overview", "checklist", "notes", "budget", "essentials"].map((sectionName) =>
-      ensureSectionInitialized(sectionName)
-    )
-  );
-  void ensureSectionInitialized("route");
-  syncSectionStateFromScroll();
+        void ensureSectionInitialized("overview");
+      });
+    });
+  } else {
+    await ensureSectionAssetsReady(initialPanelId);
+    setActivePanel(initialPanelId);
+    await ensureSectionInitialized(initialPanelId);
+    syncProgressTimeline();
 
-  if (siteFooter) {
-    registerRevealBlocks(siteFooter);
+    if (siteFooter) {
+      registerRevealBlocks(siteFooter);
+    }
   }
 
   scheduleIdleSectionWarmup(initialPanelId);
@@ -9715,7 +9616,6 @@ if (siteGateForm) {
 
 if (siteGateInput) {
   siteGateInput.addEventListener("input", handleSiteGateInput);
-  siteGateInput.addEventListener("keydown", handleSiteGateKeydown);
 }
 
 if (transitDetailModal) {
@@ -9762,7 +9662,6 @@ function syncHeaderState() {
 function runScrollEffects() {
   syncScrollMotionState();
   updateRevealScrollDirection();
-  syncSectionStateFromScroll();
   syncHeaderState();
   scrollTicking = false;
 }
