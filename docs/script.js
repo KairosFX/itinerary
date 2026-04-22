@@ -156,15 +156,19 @@ const fujiForecastSpotConfigs = [
 ];
 const revealScrollDirectionThresholdPx = 6;
 const revealBlockSelector = [
+  ".hero-panel",
   ".trip-stats > *",
   ".progress-card",
-  ".content-section .section-heading",
-  ".essentials-grid > *",
-  ".day-grid > *",
-  ".notes-grid > *",
+  ".content-section > .section-heading",
+  ".checklist-header",
+  ".essentials-grid > .essentials-card",
+  ".day-grid > .day-card",
+  ".notes-grid > .note-card",
   ".budget-panel",
   ".budget-day-card",
   ".route-map",
+  ".route-map__day-browser",
+  ".route-map__detail",
   ".journey-close",
   ".site-footer__lead",
   ".site-footer__aside"
@@ -3758,22 +3762,58 @@ function syncSiteGatePlaceholder(language = root.lang) {
   siteGateInput.setAttribute("placeholder", placeholder || "");
 }
 
+function getChecklistDayTitle(day) {
+  const dayCard = dayCardMap.get(String(Number.parseInt(String(day), 10)));
+  if (!dayCard) {
+    return null;
+  }
+
+  const titleNode = dayCard.querySelector(".day-region");
+  if (!titleNode) {
+    return null;
+  }
+
+  const getLocalizedTitle = (language) =>
+    titleNode.querySelector(`[data-language="${language}"]`)?.textContent?.trim() || "";
+
+  const englishTitle = getLocalizedTitle("en");
+  const japaneseTitle = getLocalizedTitle("ja");
+
+  if (!englishTitle && !japaneseTitle) {
+    return null;
+  }
+
+  return {
+    en: englishTitle || japaneseTitle,
+    ja: japaneseTitle || englishTitle
+  };
+}
+
 function renderTripNotes() {
   if (!tripNotesGridNode) {
     return;
   }
 
+  if (revealObserver) {
+    tripNotesGridNode.querySelectorAll(".reveal-block").forEach((block) => {
+      revealObserver.unobserve(block);
+    });
+  }
+
   const notesMarkup = tripNoteDefinitions
     .map((definition) => {
+      const checklistDayTitle = getChecklistDayTitle(definition.day) || definition.title;
+      const noteBody = definition.note || definition.summary;
+
       return `
         <article class="note-card note-card--trip card" data-trip-note-day="${definition.day}">
           <div class="note-card__head">
             <div class="note-card__meta-row">
               <span class="note-card__pill">${root.lang === "ja" ? `${definition.day}日目` : `Day ${definition.day}`}</span>
             </div>
-            <h3>${renderLocalizedContent(definition.title)}</h3>
+            <h3>${renderLocalizedContent(checklistDayTitle)}</h3>
           </div>
-          <p>${renderLocalizedContent(definition.summary)}</p>
+          <p>${renderLocalizedContent(noteBody)}</p>
         </article>
       `;
     })
@@ -3781,6 +3821,7 @@ function renderTripNotes() {
 
   tripNotesGridNode.innerHTML = notesMarkup;
   syncLocalizedNodes(tripNotesGridNode);
+  registerRevealBlocks(tripNotesGridNode);
 }
 
 function refreshTripNotesIfReady() {
@@ -4937,6 +4978,70 @@ function collectRevealBlocks(scope = document) {
   }
 
   return Array.from(new Set(blocks));
+}
+
+function getRevealGroupChildren(block) {
+  const groupedParent = block?.closest?.(".trip-stats, .day-grid, .notes-grid, .essentials-grid");
+  if (!groupedParent) {
+    return [];
+  }
+
+  const directChildren = Array.from(groupedParent.children);
+
+  if (groupedParent.matches(".trip-stats")) {
+    return directChildren;
+  }
+
+  if (groupedParent.matches(".day-grid")) {
+    return directChildren.filter((child) => child.matches(".day-card"));
+  }
+
+  if (groupedParent.matches(".notes-grid")) {
+    return directChildren.filter((child) => child.matches(".note-card"));
+  }
+
+  if (groupedParent.matches(".essentials-grid")) {
+    return directChildren.filter((child) => child.matches(".essentials-card"));
+  }
+
+  return [];
+}
+
+function getRevealDelayMs(block, fallbackIndex = 0) {
+  if (!block) {
+    return 0;
+  }
+
+  if (block.matches(".section-heading, .checklist-header")) {
+    return 0;
+  }
+
+  if (block.matches(".hero-panel")) {
+    return 30;
+  }
+
+  if (block.matches(".progress-card")) {
+    return 110;
+  }
+
+  const groupedChildren = getRevealGroupChildren(block);
+  if (groupedChildren.length) {
+    const groupedIndex = Math.max(groupedChildren.indexOf(block), 0);
+    const baseDelay = block.closest(".notes-grid, .day-grid, .essentials-grid") ? 140 : 90;
+    return baseDelay + Math.min(groupedIndex, 6) * 90;
+  }
+
+  if (block.matches(".route-map, .route-map__day-browser, .route-map__detail")) {
+    return 140;
+  }
+
+  return Math.min(fallbackIndex, 6) * 86;
+}
+
+function applyRevealDelays(blocks = []) {
+  blocks.forEach((block, index) => {
+    block.style.setProperty("--reveal-delay", `${getRevealDelayMs(block, index)}ms`);
+  });
 }
 
 function updateRevealScrollDirection(scrollY = window.scrollY) {
@@ -8990,9 +9095,9 @@ function registerRevealBlocks(scope = document) {
     return;
   }
 
-  revealBlocks.forEach((block, index) => {
+  applyRevealDelays(revealBlocks);
+  revealBlocks.forEach((block) => {
     block.classList.add("reveal-block");
-    block.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 40}ms`);
   });
 
   if (reducedEffectsEnabled || !("IntersectionObserver" in window)) {
@@ -9037,8 +9142,8 @@ function refreshRevealPanel(panelId) {
     return;
   }
 
-  panelBlocks.forEach((block, index) => {
-    block.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 44}ms`);
+  applyRevealDelays(panelBlocks);
+  panelBlocks.forEach((block) => {
     hideRevealBlock(block);
   });
 

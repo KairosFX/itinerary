@@ -2895,3 +2895,42 @@ html.reduce-effects .site-gate__form-shell {
     min-height: 3.05rem;
   }
 }
+
+/* Final notes, section, and motion refinement pass */
+.hero-panel__copy::after,
+.progress-card__heading::after,
+.section-heading::after {
+  content: none !important;
+  display: none !important;
+}
+
+.reveal-block {
+  --reveal-translate-y: 1rem;
+  --reveal-scale: 0.992;
+  opacity: 0;
+  filter: none;
+  transform: translate3d(0, var(--reveal-translate-y), 0) scale(var(--reveal-scale));
+  transition:
+    opacity 620ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    transform 760ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+.reveal-block[data-reveal-direction="down"] {
+  --reveal-translate-y: -0.88rem;
+}
+
+.reveal-block[data-reveal-direction="up"] {
+  --reveal-translate-y: 1rem;
+}
+
+.reveal-block.is-visible {
+  opacity: 1;
+  filter: none;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+#checklist .day-card[data-day="4"] .day-card__side {
+  padding-top: 0.08rem;
+}

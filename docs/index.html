@@ -2931,18 +2931,53 @@ html.reduce-effects .site-gate__form-shell {
   .site-gate__input {
     min-height: 3.05rem;
   }
+}
+
+/* Final notes, section, and motion refinement pass */
+.hero-panel__copy::after,
+.progress-card__heading::after,
+.section-heading::after {
+  content: none !important;
+  display: none !important;
+}
+
+.reveal-block {
+  --reveal-translate-y: 1rem;
+  --reveal-scale: 0.992;
+  opacity: 0;
+  filter: none;
+  transform: translate3d(0, var(--reveal-translate-y), 0) scale(var(--reveal-scale));
+  transition:
+    opacity 620ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    transform 760ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+.reveal-block[data-reveal-direction="down"] {
+  --reveal-translate-y: -0.88rem;
+}
+
+.reveal-block[data-reveal-direction="up"] {
+  --reveal-translate-y: 1rem;
+}
+
+.reveal-block.is-visible {
+  opacity: 1;
+  filter: none;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+#checklist .day-card[data-day="4"] .day-card__side {
+  padding-top: 0.08rem;
 }</style>
-  <link rel="preload" href="./assets/app/style.a514504308.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.64695fbf4b.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.a514504308.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.a514504308.css"></noscript>
+  <link rel="preload" href="./assets/app/style.32a5e7f114.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.8555792019.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.32a5e7f114.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.32a5e7f114.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
-  <a class="skip-link" href="#main-content">
-    <span data-language="en">Skip to content</span>
-    <span data-language="ja" hidden>本文へ移動</span>
-  </a>
   <div class="site-intro site-gate" data-site-gate aria-hidden="false">
     <div class="site-gate__field" aria-hidden="true">
       <span class="site-gate__noise"></span>
@@ -3548,7 +3583,7 @@ html.reduce-effects .site-gate__form-shell {
           </ul>
         </article>
 
-        <article class="day-card day-card--with-aside" data-day="4">
+        <article class="day-card" data-day="4">
           <div class="day-card__header">
             <p class="day-label">
               <span data-language="en">Day 4</span>
@@ -3559,7 +3594,7 @@ html.reduce-effects .site-gate__form-shell {
               <span data-language="ja" hidden>富士山</span>
             </p>
           </div>
-          <div class="day-card__body day-card__body--with-aside">
+          <div class="day-card__body">
             <div class="day-card__main">
               <ul class="checklist-list">
                 <li>
@@ -4461,10 +4496,10 @@ html.reduce-effects .site-gate__form-shell {
   </div>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/page-background-loop.bcde8dff98.mp3","backgroundLoopAudioCssPath":"./page-background-loop.bcde8dff98.mp3","backgroundLoopAudioHash":"bcde8dff98","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.a514504308.css","styleHash":"a514504308","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.64695fbf4b.js","scriptHash":"64695fbf4b","routeContentPath":"./assets/app/routeContent.570ee7ad5b.js","routeContentHash":"570ee7ad5b","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.3764221ad3.js","budgetContentHash":"3764221ad3","essentialsContentPath":"./assets/app/essentialsContent.39e0d6ba11.js","essentialsContentHash":"39e0d6ba11","generatedAt":"2026-04-22T01:54:20.576Z","cacheVersion":"a514504308-a79b88b908-64695fbf4b-570ee7ad5b-c9b56d76dd-3764221ad3-39e0d6ba11-bcde8dff98-9afc15ad27"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/page-background-loop.bcde8dff98.mp3","backgroundLoopAudioCssPath":"./page-background-loop.bcde8dff98.mp3","backgroundLoopAudioHash":"bcde8dff98","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.32a5e7f114.css","styleHash":"32a5e7f114","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.8555792019.js","scriptHash":"8555792019","routeContentPath":"./assets/app/routeContent.181310886b.js","routeContentHash":"181310886b","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.3764221ad3.js","budgetContentHash":"3764221ad3","essentialsContentPath":"./assets/app/essentialsContent.39e0d6ba11.js","essentialsContentHash":"39e0d6ba11","generatedAt":"2026-04-22T02:13:25.928Z","cacheVersion":"32a5e7f114-a79b88b908-8555792019-181310886b-c9b56d76dd-3764221ad3-39e0d6ba11-bcde8dff98-9afc15ad27"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.64695fbf4b.js" defer></script>
+  <script src="./assets/app/script.8555792019.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>
