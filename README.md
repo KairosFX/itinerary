@@ -1,4 +1,4 @@
-# Kairos VII Japan Escape Itinerary
+# Kairos VIII Japan Escape Itinerary
 
 Live site: https://kairosfx.github.io/itinerary/
 
