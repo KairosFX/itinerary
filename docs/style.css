@@ -14424,6 +14424,77 @@ html.gate-unlocking .site-gate__content {
   min-height: 100%;
 }
 
+.site-gate__form {
+  justify-items: center;
+}
+
+.site-gate__input {
+  max-width: 20.5rem;
+}
+
+.notes-layout--simple {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.notes-layout--simple .notes-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+#checklist .day-card--with-aside,
+#checklist .day-card__body--with-aside {
+  min-width: 0;
+}
+
+#checklist .check-item::after {
+  z-index: 0;
+}
+
+#checklist .check-item input,
+#checklist .check-copy,
+.booking-item summary,
+.booking-item__details,
+.booking-group__summary,
+.booking-group__content,
+.essentials-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.booking-item__details-inner {
+  overflow: visible;
+}
+
+.journey-close {
+  min-block-size: 0;
+}
+
+.journey-close__inner {
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.journey-close__actions {
+  display: grid;
+  gap: 0.62rem;
+  justify-items: center;
+  width: min(100%, 18rem);
+  margin-top: 0.25rem;
+}
+
+.journey-close__copyright {
+  margin: 0;
+  color: rgba(211, 226, 216, 0.72);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.journey-close .footer-link--backtop {
+  width: min(100%, 13.5rem);
+}
+
 html[data-site-transition-mode="panel"] .hyperframe-panel.is-active {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
@@ -14483,5 +14554,9 @@ html[data-site-transition-mode="panel"] .hyperframe-panel.is-active {
 
   .notes-block--trip {
     padding: 1rem 1rem 1.08rem;
+  }
+
+  .notes-layout--simple .notes-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

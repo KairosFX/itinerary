@@ -2922,10 +2922,10 @@ html.reduce-effects .site-gate__form-shell {
     min-height: 3.05rem;
   }
 }</style>
-  <link rel="preload" href="./assets/app/style.fedf763ba9.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.3dc5f345bd.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.fedf763ba9.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.fedf763ba9.css"></noscript>
+  <link rel="preload" href="./assets/app/style.3770a37886.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.1069add304.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.3770a37886.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.3770a37886.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -2946,47 +2946,26 @@ html.reduce-effects .site-gate__form-shell {
         <span class="site-gate__sigil-ring site-gate__sigil-ring--inner"></span>
         <span class="site-gate__sigil-line site-gate__sigil-line--vertical"></span>
         <span class="site-gate__sigil-line site-gate__sigil-line--horizontal"></span>
-        <span class="site-gate__sigil-mark">VII</span>
+        <span class="site-gate__sigil-mark">VIII</span>
       </div>
-      <p class="site-gate__eyebrow">
-        <span data-language="en">Private itinerary access</span>
-        <span data-language="ja" hidden>旅程へのプライベートアクセス</span>
-      </p>
-      <h1 class="site-gate__title">
-        <span data-language="en">Open the itinerary</span>
-        <span data-language="ja" hidden>旅程を開く</span>
-      </h1>
-      <p class="site-gate__support">
-        <span data-language="en">Enter the password to access the route map, day plans, and travel references.</span>
-        <span data-language="ja" hidden>パスワードを入力すると、ルート地図、日別プラン、旅行リファレンスを表示できます。</span>
-      </p>
       <div class="site-gate__form-shell">
         <form class="site-gate__form" data-site-gate-form autocomplete="off">
-          <label class="site-gate__label" for="site-gate-input">
+          <label class="site-gate__label visually-hidden" for="site-gate-input">
             <span data-language="en">Password</span>
             <span data-language="ja" hidden>パスワード</span>
           </label>
-          <div class="site-gate__actions">
-            <input
-              id="site-gate-input"
-              class="site-gate__input"
-              data-site-gate-input
-              type="password"
-              name="password"
-              inputmode="text"
-              autocapitalize="off"
-              autocomplete="off"
-              autocorrect="off"
-              spellcheck="false"
-              placeholder="Password"
-              data-placeholder-en="Password"
-              data-placeholder-ja="パスワード"
-              aria-describedby="site-gate-feedback">
-            <button class="site-gate__submit" type="submit">
-              <span data-language="en">Enter itinerary</span>
-              <span data-language="ja" hidden>旅程を開く</span>
-            </button>
-          </div>
+          <input
+            id="site-gate-input"
+            class="site-gate__input"
+            data-site-gate-input
+            type="password"
+            name="password"
+            inputmode="text"
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+            aria-describedby="site-gate-feedback">
         </form>
         <p
           class="site-gate__feedback"
@@ -3016,10 +2995,6 @@ html.reduce-effects .site-gate__form-shell {
       preload="auto">
       <source src="./assets/media/background.mp4" type="video/mp4">
     </video>
-  </div>
-  <div class="site-frame-title" aria-label="Kairos VII Japan Escape Itinerary">
-    <span class="site-frame-title__eyebrow">Kairos VII</span>
-    <span class="site-frame-title__name">Japan Escape Itinerary</span>
   </div>
   <header class="site-header">
     <div class="header-inner">
@@ -3751,20 +3726,8 @@ html.reduce-effects .site-gate__form-shell {
         </p>
       </div>
 
-      <div class="notes-layout">
-        <section class="notes-block notes-block--trip card" aria-labelledby="notes-reference-title">
-          <div class="notes-block__heading">
-            <h3 id="notes-reference-title">
-              <span data-language="en">Day-by-day reference cards</span>
-              <span data-language="ja" hidden>日ごとの参照カード</span>
-            </h3>
-            <p>
-              <span data-language="en">Quick travel context for each day, arranged for fast desktop scanning and easy handoff between sections.</span>
-              <span data-language="ja" hidden>各日の要点を、デスクトップでも見やすく、ほかのセクションへ移りやすい形で整理しています。</span>
-            </p>
-          </div>
-          <div class="notes-grid" data-trip-notes-grid aria-live="polite"></div>
-        </section>
+      <div class="notes-layout notes-layout--simple">
+        <div class="notes-grid" data-trip-notes-grid aria-live="polite"></div>
       </div>
     </section>
 
@@ -3933,8 +3896,8 @@ html.reduce-effects .site-gate__form-shell {
               <span data-language="ja" hidden>ルート地図</span>
             </h3>
             <p class="route-map__meta">
-              <span data-language="en">The full Osaka-to-Tokyo corridor stays visible by default. Use the map controls, markers, or highlighted rail segments when you want a closer look.</span>
-              <span data-language="ja" hidden>大阪から東京までの全体ルートを初期表示します。詳しく見たいときは、地図操作、マーカー、強調された区間を使ってください。</span>
+              <span data-language="en">The full Osaka-to-Tokyo corridor stays visible by default. Use the map controls or highlighted rail segments when you want a closer look.</span>
+              <span data-language="ja" hidden>大阪から東京までの全体ルートを初期表示します。詳しく見たいときは、地図操作と強調された区間を使ってください。</span>
             </p>
           </div>
           <div class="route-map__header-actions">
@@ -4414,6 +4377,16 @@ html.reduce-effects .site-gate__form-shell {
           <span data-language="en">7 Days • 4 Stops • West-to-East Journey</span>
           <span data-language="ja" hidden>7日間 • 4つの主要地 • 西から東への旅</span>
         </p>
+        <div class="journey-close__actions">
+          <button class="footer-link footer-link--button footer-link--backtop" type="button" data-back-to-top>
+            <span data-language="en">Back to top</span>
+            <span data-language="ja" hidden>ページ上部へ戻る</span>
+          </button>
+          <p class="journey-close__copyright">
+            <span data-language="en">© 2026 Kairos VII. All rights reserved.</span>
+            <span data-language="ja" hidden>© 2026 Kairos VII. 無断転載を禁じます。</span>
+          </p>
+        </div>
       </div>
     </section>
   </main>
@@ -4477,36 +4450,11 @@ html.reduce-effects .site-gate__form-shell {
     </div>
   </div>
 
-  <footer class="site-footer">
-    <div class="site-footer__inner card">
-      <div class="site-footer__lead">
-        <p class="section-tag">
-          <span data-language="en">Next Steps</span>
-          <span data-language="ja" hidden>次の確認</span>
-        </p>
-        <h2>
-          <span data-language="en">Ready for your Japan escape?</span>
-          <span data-language="ja" hidden>日本の旅へ出る準備はできましたか？</span>
-        </h2>
-      </div>
-      <div class="site-footer__aside">
-        <button class="footer-link footer-link--button footer-link--backtop" type="button" data-back-to-top>
-          <span data-language="en">Back to top</span>
-          <span data-language="ja" hidden>ページ上部へ戻る</span>
-        </button>
-        <p class="site-footer__copyright">
-          <span data-language="en">© 2026 Kairos VII. All rights reserved.</span>
-          <span data-language="ja" hidden>© 2026 Kairos VII. 無断転載を禁じます。</span>
-        </p>
-      </div>
-    </div>
-  </footer>
-
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/page-background-loop.bcde8dff98.mp3","backgroundLoopAudioCssPath":"./page-background-loop.bcde8dff98.mp3","backgroundLoopAudioHash":"bcde8dff98","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.fedf763ba9.css","styleHash":"fedf763ba9","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.3dc5f345bd.js","scriptHash":"3dc5f345bd","routeContentPath":"./assets/app/routeContent.1dc928afbe.js","routeContentHash":"1dc928afbe","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.c509ad0380.js","budgetContentHash":"c509ad0380","essentialsContentPath":"./assets/app/essentialsContent.77ad3e9d1b.js","essentialsContentHash":"77ad3e9d1b","generatedAt":"2026-04-22T00:04:23.999Z","cacheVersion":"fedf763ba9-a79b88b908-3dc5f345bd-1dc928afbe-c9b56d76dd-c509ad0380-77ad3e9d1b-bcde8dff98-9afc15ad27"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/page-background-loop.bcde8dff98.mp3","backgroundLoopAudioCssPath":"./page-background-loop.bcde8dff98.mp3","backgroundLoopAudioHash":"bcde8dff98","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.3770a37886.css","styleHash":"3770a37886","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.1069add304.js","scriptHash":"1069add304","routeContentPath":"./assets/app/routeContent.33d7a8b223.js","routeContentHash":"33d7a8b223","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.d431cd887d.js","budgetContentHash":"d431cd887d","essentialsContentPath":"./assets/app/essentialsContent.39e0d6ba11.js","essentialsContentHash":"39e0d6ba11","generatedAt":"2026-04-22T01:19:05.392Z","cacheVersion":"3770a37886-a79b88b908-1069add304-33d7a8b223-c9b56d76dd-d431cd887d-39e0d6ba11-bcde8dff98-9afc15ad27"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.3dc5f345bd.js" defer></script>
+  <script src="./assets/app/script.1069add304.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>

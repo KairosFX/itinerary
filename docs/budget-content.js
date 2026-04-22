@@ -5,12 +5,12 @@ window.__JAPAN_BUDGET_CONTENT__ = {
     "ja": "移動・チケット・予約リンクの基準は2026年4月18日更新"
   },
   "metaCopy": {
-    "en": "The route itself is fixed, but hotel prices remain the unstable part until exact travel dates are locked. This refresh keeps the route-fit stay baselines while replacing the live booking links with current low-cost candidates and official transit sources.",
-    "ja": "ルート自体は固定ですが、宿泊価格は正確な日程を入れない限り変動が大きい部分です。今回の更新では、動線に合う滞在基準額は残しつつ、ライブの予約リンクを現在の低コスト候補と公式移動ソースへ差し替えています。"
+    "en": "The route itself is fixed, but hotel prices remain the unstable part until exact travel dates are locked. This refresh keeps the route-fit stay baselines while sending accommodation links to Booking.com results pages for each stay area.",
+    "ja": "ルート自体は固定ですが、宿泊価格は正確な日程を入れない限り変動が大きい部分です。今回の更新では、動線に合う滞在基準額を残しつつ、宿泊リンクを各滞在エリアの Booking.com 検索結果へ変更しています。"
   },
   "helperCopy": {
-    "en": "Each day still keeps its own stay selector, the accommodation split control still treats the saved hotel amounts as shared-room quotes for group math, and the hotel links now jump directly to one current low-cost route-fit property per stop. Because no exact travel dates are locked, treat the stored hotel figures as baseline planning numbers and verify the live checkout total before booking.",
-    "ja": "各日に滞在セレクターを残し、宿泊費の分け方コントロールでは保存したホテル金額を引き続き共有ルーム料金として扱い、ホテルのライブリンクは各滞在ごとに現在の低コスト候補へ直接飛ぶ形に更新しています。正確な旅行日程が未確定のため、保存しているホテル金額は計画用の基準値として扱い、実際の予約前にライブの合計金額を必ず確認してください。"
+    "en": "Each day still keeps its own stay selector, and the accommodation split control still treats the saved hotel amounts as shared-room quotes for group math. Because no exact travel dates are locked, use the Booking.com results pages to compare options and verify the live checkout total before booking.",
+    "ja": "各日に滞在セレクターを残し、宿泊費の分け方コントロールでは保存したホテル金額を引き続き共有ルーム料金として扱います。正確な旅行日程が未確定のため、Booking.com の検索結果で候補を比較し、実際の予約前にライブの合計金額を必ず確認してください。"
   },
   "assumptionCopy": {
     "en": "The cost model matches one fixed 7-day Osaka -> Kyoto -> Mt. Fuji -> Tokyo route and treats hotel amounts as baseline quotes until your exact stay dates are chosen.",
@@ -38,15 +38,15 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目のミナミ散策と3日目の大阪側の動きに合いやすく、無関係な地区のホテルより実用的です。"
       },
       "assumption": {
-        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. The saved amount still tracks a low-end Minami-side baseline room quote, while the live Booking.com link now jumps straight to Via Inn Prime Shinsaibashi Yotsubashi as the current route-fit value pick.",
-        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。保存金額は引き続きミナミ側の低め基準ルーム料金に合わせつつ、ライブの Booking.com リンクは現在の動線に合う低コスト候補として Via Inn Prime Shinsaibashi Yotsubashi を直接開きます。"
+        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. The saved amount tracks a low-end Minami-side baseline room quote, while the live Booking.com link opens area results so you can compare current options.",
+        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。保存金額はミナミ側の低め基準ルーム料金に合わせ、Booking.com リンクでは周辺候補を比較できる検索結果を開きます。"
       },
       "source": {
         "label": {
-          "en": "Booking.com: Via Inn Prime Shinsaibashi Yotsubashi",
-          "ja": "Booking.com: Via Inn Prime Shinsaibashi Yotsubashi"
+          "en": "Booking.com: Osaka / Shinsaibashi options",
+          "ja": "Booking.com: 大阪・心斎橋周辺候補"
         },
-        "url": "https://www.booking.com/hotel/jp/via-inn-shinsaibashi-yotsubashi.html"
+        "url": "https://www.booking.com/searchresults.html?ss=Yotsubashi%20Nishi-Shinsaibashi%2C%20Osaka%2C%20Japan"
       }
     },
     "kyoto-midrange-hotel": {
@@ -70,15 +70,15 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "四条烏丸は、2日目の京都東側へ出やすく、3日目の嵐山と大阪戻りにも地下鉄・阪急・JRの選択肢を取りやすいため、実際の動線に合います。"
       },
       "assumption": {
-        "en": "Day 2 keeps its saved amount anchored to the Shijo / Karasuma baseline shared-room quote, while the live Booking.com link now opens Keio Prelia Hotel Kyoto Karasuma-Gojo as the current low-cost route-fit pick.",
-        "ja": "2日目の保存金額は引き続き四条烏丸の基準共有ルーム料金に合わせつつ、ライブの Booking.com リンクは現在の低コスト候補として Keio Prelia Hotel Kyoto Karasuma-Gojo を直接開きます。"
+        "en": "Day 2 keeps its saved amount anchored to the Shijo / Karasuma baseline shared-room quote, while the live Booking.com link opens Kyoto area results for comparing route-fit stays.",
+        "ja": "2日目の保存金額は四条烏丸の基準共有ルーム料金に合わせつつ、Booking.com リンクでは動線に合う京都エリア候補を比較できる検索結果を開きます。"
       },
       "source": {
         "label": {
-          "en": "Booking.com: Keio Prelia Hotel Kyoto Karasuma-Gojo",
-          "ja": "Booking.com: Keio Prelia Hotel Kyoto Karasuma-Gojo"
+          "en": "Booking.com: Kyoto / Shijo-Karasuma options",
+          "ja": "Booking.com: 京都・四条烏丸周辺候補"
         },
-        "url": "https://www.booking.com/hotel/jp/keio-prelia-hotel-kyoto-karasuma-gojo.html"
+        "url": "https://www.booking.com/searchresults.html?ss=Shijo%20Karasuma%2C%20Kyoto%2C%20Japan"
       }
     },
     "kawaguchiko-base-hotel": {
@@ -102,23 +102,23 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "このエリアなら、3日目の三島ハンドオフに加え、4日目の忠霊塔・下吉田と河口湖のまとまりも進めやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
-        "en": "Day 3 keeps its saved amount anchored to the Kawaguchiko-side baseline shared-room quote, while the live Booking.com link now opens HaoStay Kawaguchiko Station as the current low-cost practical base near the station and lake access.",
-        "ja": "3日目の保存金額は引き続き河口湖側の基準共有ルーム料金に合わせつつ、ライブの Booking.com リンクは駅と湖側アクセスを両立しやすい現在の低コスト候補として HaoStay Kawaguchiko Station を直接開きます。"
+        "en": "Day 3 keeps its saved amount anchored to the Kawaguchiko-side baseline shared-room quote, while the live Booking.com link opens results for comparing station-to-lake bases.",
+        "ja": "3日目の保存金額は河口湖側の基準共有ルーム料金に合わせつつ、Booking.com リンクでは駅から湖側へ動きやすい候補を比較できる検索結果を開きます。"
       },
       "source": {
         "label": {
-          "en": "Booking.com: HaoStay Kawaguchiko Station",
-          "ja": "Booking.com: HaoStay Kawaguchiko Station"
+          "en": "Booking.com: Kawaguchiko options",
+          "ja": "Booking.com: 河口湖周辺候補"
         },
-        "url": "https://www.booking.com/hotel/jp/haostayhe-kou-hu-yi-qian.html"
+        "url": "https://www.booking.com/searchresults.html?ss=Kawaguchiko%2C%20Fujikawaguchiko%2C%20Yamanashi%2C%20Japan"
       }
     },
     "tokyo-base-hotel": {
-      "amount": 41400,
+      "amount": 13800,
       "range": {
-        "lean": 41400,
-        "expected": 41400,
-        "high": 56000
+        "lean": 13800,
+        "expected": 13800,
+        "high": 18700
       },
       "roomCapacity": 2,
       "area": {
@@ -126,23 +126,23 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "渋谷中心部・神南"
       },
       "pricingTier": {
-        "en": "Current Shibuya group-value room",
-        "ja": "現在の渋谷のグループ向け高コスパ客室"
+        "en": "Current Shibuya group-value nightly room",
+        "ja": "現在の渋谷のグループ向け高コスパ客室（1泊）"
       },
       "routeReason": {
         "en": "The route now lands in Shibuya on Day 4 and keeps the hotel nights on Days 4, 5, and 6, so a central Shibuya base supports the arrival evening and the following Tokyo days without switching bases.",
         "ja": "今回のルートは4日目に渋谷へ入り、東京ホテル泊は4日目、5日目、6日目に置くため、渋谷中心部の拠点なら到着夜とその後の東京日程を拠点変更なしでまとめやすくなります。"
       },
       "assumption": {
-        "en": "Tokyo keeps its saved amount aligned to the Shibuya/Jinnan baseline room quote, while the live Booking.com link now opens The OneFive Tokyo Shibuya as the current low-cost Shibuya-side starting point. Exact Tokyo pricing remains date-sensitive, so confirm the live total before locking it.",
-        "ja": "東京の保存金額は引き続き渋谷・神南側の基準ルーム料金に合わせつつ、ライブの Booking.com リンクは現在の低コストな渋谷側候補として The OneFive Tokyo Shibuya を直接開きます。東京価格は日程依存が特に強いため、確定前にライブの合計額を確認してください。"
+        "en": "Tokyo now uses a nightly Shibuya/Jinnan baseline room quote, so Days 4-6 add up to the intended three-night Tokyo stay instead of repeating a full-stay estimate each day. Use the Booking.com results page to compare current Shibuya-side options before booking.",
+        "ja": "東京は渋谷・神南側の1泊あたり基準ルーム料金として扱うため、4日目から6日目の3泊分が正しく積み上がり、1滞在分の見積りを毎日重複させません。予約前に Booking.com の検索結果で渋谷側候補を比較してください。"
       },
       "source": {
         "label": {
-          "en": "Booking.com: The OneFive Tokyo Shibuya",
-          "ja": "Booking.com: The OneFive Tokyo Shibuya"
+          "en": "Booking.com: Shibuya / Tokyo options",
+          "ja": "Booking.com: 渋谷・東京周辺候補"
         },
-        "url": "https://www.booking.com/hotel/jp/emit-shibuya.html"
+        "url": "https://www.booking.com/searchresults.html?ss=Shibuya%2C%20Tokyo%2C%20Japan"
       }
     },
     "tokyo-subway-24h": {
@@ -172,37 +172,37 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "宿泊予約導線"
       },
       "summary": {
-        "en": "The base stay plan is now explicit: private/local or no-cost Osaka night on Day 1 unless switched, Kyoto hotel on Day 2, one Mt. Fuji area stay on Day 3, Tokyo hotel nights on Days 4-6, and no paid stay by default on the Day 7 flight-home wrap-up. Saved hotel amounts still stay stored as shared-room quotes before the travellers-per-room split, but the live links now open one current low-cost route-fit property per stop instead of a generic area search.",
-        "ja": "基本の滞在計画を明示しました。1日目の大阪は、切り替えない限りローカル・プライベート滞在または宿泊費なし、2日目は京都ホテル、3日目は富士エリア宿泊、東京ホテルは4日目から6日目で、7日目は帰国日のため初期値では有料宿泊を入れていません。保存したホテル金額も引き続き1室を何人で分けるかの計算前の共有ルーム料金として扱い、ライブリンクは汎用的なエリア検索ではなく、各滞在ごとの現在の低コスト候補を直接開く形にしています。"
+        "en": "The base stay plan is explicit: private/local or no-cost Osaka night on Day 1 unless switched, Kyoto hotel on Day 2, one Mt. Fuji area stay on Day 3, Tokyo hotel nights on Days 4-6, and no paid stay by default on the Day 7 flight-home wrap-up. Saved hotel amounts stay stored as shared-room quotes before the travellers-per-room split, and the live links now open Booking.com results pages for each route-fit stay area.",
+        "ja": "基本の滞在計画を明示しています。1日目の大阪は、切り替えない限りローカル・プライベート滞在または宿泊費なし、2日目は京都ホテル、3日目は富士エリア宿泊、東京ホテルは4日目から6日目で、7日目は帰国日のため初期値では有料宿泊を入れていません。保存したホテル金額は1室を何人で分けるかの計算前の共有ルーム料金として扱い、ライブリンクは各滞在エリアの Booking.com 検索結果を開きます。"
       },
       "links": [
         {
           "label": {
-            "en": "Via Inn Prime Shinsaibashi Yotsubashi",
-            "ja": "Via Inn Prime Shinsaibashi Yotsubashi"
+            "en": "Booking.com: Osaka / Shinsaibashi options",
+            "ja": "Booking.com: 大阪・心斎橋周辺候補"
           },
-          "url": "https://www.booking.com/hotel/jp/via-inn-shinsaibashi-yotsubashi.html"
+          "url": "https://www.booking.com/searchresults.html?ss=Yotsubashi%20Nishi-Shinsaibashi%2C%20Osaka%2C%20Japan"
         },
         {
           "label": {
-            "en": "Keio Prelia Hotel Kyoto Karasuma-Gojo",
-            "ja": "Keio Prelia Hotel Kyoto Karasuma-Gojo"
+            "en": "Booking.com: Kyoto / Shijo-Karasuma options",
+            "ja": "Booking.com: 京都・四条烏丸周辺候補"
           },
-          "url": "https://www.booking.com/hotel/jp/keio-prelia-hotel-kyoto-karasuma-gojo.html"
+          "url": "https://www.booking.com/searchresults.html?ss=Shijo%20Karasuma%2C%20Kyoto%2C%20Japan"
         },
         {
           "label": {
-            "en": "HaoStay Kawaguchiko Station",
-            "ja": "HaoStay Kawaguchiko Station"
+            "en": "Booking.com: Kawaguchiko options",
+            "ja": "Booking.com: 河口湖周辺候補"
           },
-          "url": "https://www.booking.com/hotel/jp/haostayhe-kou-hu-yi-qian.html"
+          "url": "https://www.booking.com/searchresults.html?ss=Kawaguchiko%2C%20Fujikawaguchiko%2C%20Yamanashi%2C%20Japan"
         },
         {
           "label": {
-            "en": "The OneFive Tokyo Shibuya",
-            "ja": "The OneFive Tokyo Shibuya"
+            "en": "Booking.com: Shibuya / Tokyo options",
+            "ja": "Booking.com: 渋谷・東京周辺候補"
           },
-          "url": "https://www.booking.com/hotel/jp/emit-shibuya.html"
+          "url": "https://www.booking.com/searchresults.html?ss=Shibuya%2C%20Tokyo%2C%20Japan"
         }
       ]
     },
@@ -443,7 +443,7 @@ window.__JAPAN_BUDGET_CONTENT__ = {
       },
       "cost": {
         "mode": "perGroup",
-        "amount": 41400,
+        "amount": 13800,
         "sourceCostId": "tokyo-base-hotel"
       }
     },

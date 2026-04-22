@@ -114,19 +114,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
       },
       "details": {
-        "en": "Use the direct Booking.com property page for Keio Prelia Hotel Kyoto Karasuma-Gojo as the current low-cost route-fit pick. It stays close to the Karasuma / Gojo side for the Day 2 Higashiyama sweep while still keeping the Day 3 Arashiyama -> Osaka flow practical.",
-        "ja": "現在の低コスト候補として、Keio Prelia Hotel Kyoto Karasuma-Gojo の Booking.com 直リンクを使います。烏丸・五条寄りに置くことで、2日目の東山回遊と3日目の嵐山 -> 大阪の流れをどちらも進めやすくしています。"
+        "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama -> Osaka flow.",
+        "ja": "Booking.com の京都検索結果で、四条・烏丸・五条周辺の動線に合う宿を比較します。2日目の東山回遊と3日目の嵐山 -> 大阪の流れをどちらも進めやすくするためです。"
       },
       "links": [
         {
-          "href": "https://www.booking.com/hotel/jp/keio-prelia-hotel-kyoto-karasuma-gojo.html",
+          "href": "https://www.booking.com/searchresults.html?ss=Shijo%20Karasuma%2C%20Kyoto%2C%20Japan",
           "label": {
-            "en": "Keio Prelia Hotel Kyoto Karasuma-Gojo",
-            "ja": "Keio Prelia Hotel Kyoto Karasuma-Gojo"
+            "en": "Kyoto Booking.com options",
+            "ja": "京都 Booking.com 候補"
           },
           "note": {
-            "en": "Direct Booking.com page for the current low-cost Kyoto route-fit stay.",
-            "ja": "現在の京都の動線向き低コスト候補へ直接飛ぶ Booking.com ページです。"
+            "en": "Booking.com results for Kyoto stays around Shijo / Karasuma / Gojo.",
+            "ja": "四条・烏丸・五条周辺の京都滞在候補を開く Booking.com 検索結果です。"
           },
           "kind": "primary"
         }
@@ -247,19 +247,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "3日目の河口湖到着を落ち着いて進めつつ、宿で整えたあとに4日目の富士エリア立ち寄りと東京移動まで無理なくつなげられるよう、駅から湖側の動きで拠点を選んでいます。"
       },
       "details": {
-        "en": "Use the direct Booking.com property page for HaoStay Kawaguchiko Station as the current low-cost practical base. It keeps the Day 3 Mishima handoff calm and leaves the Day 4 Fuji-area stops plus the Tokyo return easy to sequence from one station-near base.",
-        "ja": "現在の実用的な低コスト候補として、HaoStay Kawaguchiko Station の Booking.com 直リンクを使います。駅に近い拠点に置くことで、3日目の三島ハンドオフを落ち着いて受けつつ、4日目の富士エリア立ち寄りと東京戻りも一つの流れで組みやすくなります。"
+        "en": "Use the Booking.com Kawaguchiko results page to compare practical station-to-lake bases. It keeps the Day 3 Mishima handoff calm and leaves the Day 4 Fuji-area stops plus the Tokyo return easy to sequence.",
+        "ja": "Booking.com の河口湖検索結果で、駅から湖側へ動きやすい実用的な拠点を比較します。3日目の三島ハンドオフを落ち着いて受けつつ、4日目の富士エリア立ち寄りと東京戻りも組みやすくなります。"
       },
       "links": [
         {
-          "href": "https://www.booking.com/hotel/jp/haostayhe-kou-hu-yi-qian.html",
+          "href": "https://www.booking.com/searchresults.html?ss=Kawaguchiko%2C%20Fujikawaguchiko%2C%20Yamanashi%2C%20Japan",
           "label": {
-            "en": "HaoStay Kawaguchiko Station",
-            "ja": "HaoStay Kawaguchiko Station"
+            "en": "Kawaguchiko Booking.com options",
+            "ja": "河口湖 Booking.com 候補"
           },
           "note": {
-            "en": "Direct Booking.com page for the current low-cost Kawaguchiko base near station access.",
-            "ja": "駅アクセスに近い現在の河口湖低コスト候補へ直接飛ぶ Booking.com ページです。"
+            "en": "Booking.com results for Kawaguchiko stays near station and lake access.",
+            "ja": "駅と湖側アクセスに合う河口湖滞在候補を開く Booking.com 検索結果です。"
           },
           "kind": "primary"
         }
@@ -319,19 +319,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "東京ホテル泊は4日目、5日目、6日目に置き、4日目の渋谷到着、続く観光日、そして帰国前の軽い7日目を同じ拠点で回せるようにします。"
       },
       "details": {
-        "en": "Use the direct Booking.com property page for The OneFive Tokyo Shibuya as the current low-cost Shibuya-side base. It keeps the Day 4 arrival, Days 5-6 sightseeing, and the Day 7 exit centered on one practical Tokyo handoff instead of a generic district search.",
-        "ja": "現在の渋谷側低コスト候補として、The OneFive Tokyo Shibuya の Booking.com 直リンクを使います。汎用的な地区検索ではなく、4日目の到着、5-6日目の観光、7日目の出発を一つの実用的な東京拠点でまとめやすくします。"
+        "en": "Use the Booking.com Shibuya results page to compare Tokyo bases for Days 4, 5, and 6. This keeps the Day 4 arrival, Days 5-6 sightseeing, and the Day 7 exit centered on one practical Tokyo handoff.",
+        "ja": "Booking.com の渋谷検索結果で、4日目、5日目、6日目に使う東京拠点を比較します。4日目の到着、5-6日目の観光、7日目の出発を一つの実用的な東京拠点でまとめやすくします。"
       },
       "links": [
         {
-          "href": "https://www.booking.com/hotel/jp/emit-shibuya.html",
+          "href": "https://www.booking.com/searchresults.html?ss=Shibuya%2C%20Tokyo%2C%20Japan",
           "label": {
-            "en": "The OneFive Tokyo Shibuya",
-            "ja": "The OneFive Tokyo Shibuya"
+            "en": "Shibuya Booking.com options",
+            "ja": "渋谷 Booking.com 候補"
           },
           "note": {
-            "en": "Direct Booking.com page for the current low-cost Shibuya-side Tokyo base.",
-            "ja": "現在の渋谷側東京拠点の低コスト候補へ直接飛ぶ Booking.com ページです。"
+            "en": "Booking.com results for Shibuya-side Tokyo stays.",
+            "ja": "渋谷側の東京滞在候補を開く Booking.com 検索結果です。"
           },
           "kind": "primary"
         }

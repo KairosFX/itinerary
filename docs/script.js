@@ -452,8 +452,8 @@ const routeMapLabels = {
   tools: { en: "Quick tools", ja: "クイック操作" },
   checklistAction: { en: "Checklist", ja: "チェックリスト" },
   interactiveSurfaceLabel: {
-    en: "Interactive route map. Use the map controls, markers, or highlighted route segments to inspect the journey.",
-    ja: "インタラクティブなルート地図です。地図操作、マーカー、強調されたルート区間で旅程を確認できます。"
+    en: "Interactive route map. Use the map controls or highlighted route segments to inspect the journey.",
+    ja: "インタラクティブなルート地図です。地図操作と強調されたルート区間で旅程を確認できます。"
   },
   sharedLoading: { en: "Preparing live route map...", ja: "ライブ ルート地図を準備中..." },
   sharedLoadingBody: {
@@ -622,8 +622,8 @@ function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
       ja: "日本ルート全体"
     },
     summary: {
-      en: "See the full Osaka-to-Tokyo corridor first, then focus markers or route segments only when needed.",
-      ja: "まず大阪から東京までの全体ルートを見て、必要なときだけマーカーやルート区間に絞り込みます。"
+      en: "See the full Osaka-to-Tokyo corridor first, then focus route segments only when needed.",
+      ja: "まず大阪から東京までの全体ルートを見て、必要なときだけルート区間に絞り込みます。"
     },
     badges: [
       { en: "Overview", ja: "全体" },
@@ -1747,6 +1747,7 @@ let scrollMotionEconomyTimer = 0;
 let scrollTicking = false;
 let resizeTicking = false;
 let revealObserver = null;
+let sectionInitObserver = null;
 let headerLockReleaseTimer = 0;
 const revealRestartFrames = new WeakMap();
 let completedDays = new Set();
@@ -4856,6 +4857,104 @@ function markSectionHydrated(sectionName) {
   }
 }
 
+function revealAllContentPanels() {
+  contentPanels.forEach((panel) => {
+    panel.hidden = false;
+    panel.setAttribute("aria-hidden", "false");
+    panel.removeAttribute("inert");
+  });
+}
+
+function initializeSectionWhenVisible(sectionName) {
+  if (!sectionName) {
+    return;
+  }
+
+  void ensureSectionAssetsReady(sectionName).then(() => ensureSectionInitialized(sectionName));
+}
+
+function ensureSectionInitObserver() {
+  if (sectionInitObserver || !contentPanels.length) {
+    return;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    contentPanels.forEach((panel) => {
+      initializeSectionWhenVisible(panel.dataset.panel);
+    });
+    return;
+  }
+
+  sectionInitObserver = new window.IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        const sectionName = entry.target?.dataset?.panel;
+        initializeSectionWhenVisible(sectionName);
+        sectionInitObserver.unobserve(entry.target);
+      });
+    },
+    {
+      rootMargin: "360px 0px 420px 0px",
+      threshold: [0, 0.08]
+    }
+  );
+
+  contentPanels.forEach((panel) => {
+    sectionInitObserver.observe(panel);
+  });
+}
+
+function getPanelViewportScore(panel, sampleLine) {
+  const rect = panel.getBoundingClientRect();
+  if (rect.bottom < 0 || rect.top > window.innerHeight) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  if (rect.top <= sampleLine && rect.bottom >= sampleLine) {
+    return 0;
+  }
+
+  return Math.min(Math.abs(rect.top - sampleLine), Math.abs(rect.bottom - sampleLine));
+}
+
+function getSectionInViewPanelId() {
+  if (!contentPanels.length) {
+    return "";
+  }
+
+  const sampleLine = Math.min(
+    window.innerHeight * 0.52,
+    getHeaderScrollOffset(28) + Math.max(120, window.innerHeight * 0.18)
+  );
+  const fallbackPanel = contentPanels[0];
+  const bestPanel = contentPanels.reduce(
+    (best, panel) => {
+      const score = getPanelViewportScore(panel, sampleLine);
+      return score < best.score ? { panel, score } : best;
+    },
+    { panel: fallbackPanel, score: Number.POSITIVE_INFINITY }
+  ).panel;
+
+  return bestPanel?.dataset.panel || fallbackPanel?.dataset.panel || "";
+}
+
+function syncSectionNavToScroll({ force = false } = {}) {
+  const panelId = getSectionInViewPanelId();
+  if (!panelId) {
+    return;
+  }
+
+  if (!force && getActivePanelId() === panelId) {
+    return;
+  }
+
+  setActivePanel(panelId, { syncContent: false, store: false });
+}
+
 function collectRevealBlocks(scope = document) {
   const blocks = [];
   if (scope?.matches?.(revealBlockSelector)) {
@@ -7445,51 +7544,8 @@ function updateRouteMapMarkerElement(entry, selectionState) {
 }
 
 function installRouteMapMarkers(map) {
-  if (!map || !window.maplibregl?.Marker) {
-    return [];
-  }
-
-  return routeExplorerStopDefinitions
-    .map((stop) => {
-      const lngLat = getRouteStopLngLat(stop.id);
-      if (!lngLat) {
-        return null;
-      }
-
-      const { element, labelNode } = createRouteMapMarkerElement(stop);
-      const marker = new window.maplibregl.Marker({
-        element,
-        anchor: "center"
-      })
-        .setLngLat(lngLat)
-        .addTo(map);
-
-      const focusStop = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        toggleRouteMapStopSelection(stop.id, {
-          updateCamera: true,
-          animateCamera: true,
-          revealDayRail: false
-        });
-      };
-
-      element.addEventListener("click", focusStop);
-      element.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          focusStop(event);
-        }
-      });
-
-      return {
-        marker,
-        element,
-        labelNode,
-        stop,
-        stateKey: ""
-      };
-    })
-    .filter(Boolean);
+  void map;
+  return [];
 }
 
 function setRouteMapInteractionState(map) {
@@ -8876,15 +8932,18 @@ function updateLanguageButtons(language) {
   });
 }
 
-function setActivePanel(panelId) {
+function setActivePanel(panelId, options = {}) {
+  const { syncContent = true, store = true } = options;
   let hasMatch = false;
+
+  revealAllContentPanels();
 
   contentPanels.forEach((panel) => {
     const isActive = panel.dataset.panel === panelId;
     panel.classList.toggle("is-active", isActive);
-    panel.hidden = !isActive;
-    panel.setAttribute("aria-hidden", String(!isActive));
-    panel.toggleAttribute("inert", !isActive);
+    panel.hidden = false;
+    panel.setAttribute("aria-hidden", "false");
+    panel.removeAttribute("inert");
     hasMatch ||= isActive;
   });
 
@@ -8897,7 +8956,7 @@ function setActivePanel(panelId) {
   syncSectionNavIndicator();
   scrollSectionTabIntoView();
 
-  if (hasMatch) {
+  if (hasMatch && syncContent) {
     if (initializedSections.has(panelId)) {
       refreshRevealPanel(panelId);
     }
@@ -8914,7 +8973,9 @@ function setActivePanel(panelId) {
 
     syncProgressTimeline();
     scheduleDayCardRowHeights();
-    storeActivePanel(panelId);
+    if (store) {
+      storeActivePanel(panelId);
+    }
     updateMaxScrollableY();
   }
 
@@ -9464,17 +9525,8 @@ async function activatePanel(panelId) {
   await ensureSectionAssetsReady(panelId);
 
   lockHeaderState(hasChanged ? 620 : 520);
-  if (!hasChanged) {
-    setActivePanel(panelId);
-    await ensureSectionInitialized(panelId);
-    return false;
-  }
-
-  const currentIndex = getPanelIndex(currentPanelId);
-  const nextIndex = getPanelIndex(panelId);
-  root.dataset.siteTransitionMode = "panel";
-  root.dataset.siteTransitionDirection = nextIndex >= currentIndex ? "forward" : "backward";
-  await animatePanelTransition(currentPanelId, panelId);
+  setActivePanel(panelId);
+  await ensureSectionInitialized(panelId);
   clearSiteTransitionState();
   return hasChanged;
 }
@@ -9505,6 +9557,8 @@ async function bootApp() {
   });
   bootOfflineExperience();
   root.classList.remove("intro-pending", "intro-active", "intro-leaving");
+  revealAllContentPanels();
+  ensureSectionInitObserver();
   const gatePromise = playSiteGate();
   gatePromise.finally(() => {
     if (siteAudioState.ambientWanted) {
@@ -9512,28 +9566,12 @@ async function bootApp() {
     }
   });
   void warmRouteExperience();
-  const siteFooter = document.querySelector(".site-footer");
   const initialPanelId = getInitialPanelId();
-  if (initialPanelId === "overview") {
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        if (siteFooter) {
-          registerRevealBlocks(siteFooter);
-        }
-
-        void ensureSectionInitialized("overview");
-      });
-    });
-  } else {
-    await ensureSectionAssetsReady(initialPanelId);
-    setActivePanel(initialPanelId);
-    await ensureSectionInitialized(initialPanelId);
-    syncProgressTimeline();
-
-    if (siteFooter) {
-      registerRevealBlocks(siteFooter);
-    }
-  }
+  setActivePanel(initialPanelId, { syncContent: false, store: false });
+  initializeSectionWhenVisible(initialPanelId);
+  window.requestAnimationFrame(() => {
+    syncSectionNavToScroll({ force: true });
+  });
 
   scheduleIdleSectionWarmup(initialPanelId);
   updateMaxScrollableY();
@@ -9663,6 +9701,7 @@ function runScrollEffects() {
   syncScrollMotionState();
   updateRevealScrollDirection();
   syncHeaderState();
+  syncSectionNavToScroll();
   scrollTicking = false;
 }
 
@@ -9733,6 +9772,7 @@ if (siteHeader) {
         scheduleReservedHeaderHeightSync({ forceReset: true });
       }
       updateMaxScrollableY();
+      syncSectionNavToScroll({ force: true });
       syncSectionNavIndicator({ immediate: true });
       syncProgressTimeline();
       scheduleDayCardRowHeights();

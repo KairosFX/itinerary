@@ -2,16 +2,42 @@
   {
     "id": "ic-card",
     "group": "transit",
-    "filters": ["transit"],
+    "filters": [
+      "transit"
+    ],
     "kind": "prep",
-    "dayLabel": { "en": "Before Day 1", "ja": "1日目までに" },
-    "typeLabel": { "en": "Transit", "ja": "移動" },
-    "tone": { "en": "Setup prep", "ja": "事前準備" },
-    "defaultStatus": { "en": "Ready", "ja": "準備OK" },
-    "doneStatus": { "en": "Ready", "ja": "準備済み" },
-    "toggleDefault": { "en": "Mark ready", "ja": "準備完了にする" },
-    "toggleDone": { "en": "Ready", "ja": "準備済み" },
-    "title": { "en": "IC Card", "ja": "ICカード" },
+    "dayLabel": {
+      "en": "Before Day 1",
+      "ja": "1日目までに"
+    },
+    "typeLabel": {
+      "en": "Transit",
+      "ja": "移動"
+    },
+    "tone": {
+      "en": "Setup prep",
+      "ja": "事前準備"
+    },
+    "defaultStatus": {
+      "en": "Ready",
+      "ja": "準備OK"
+    },
+    "doneStatus": {
+      "en": "Ready",
+      "ja": "準備済み"
+    },
+    "toggleDefault": {
+      "en": "Mark ready",
+      "ja": "準備完了にする"
+    },
+    "toggleDone": {
+      "en": "Ready",
+      "ja": "準備済み"
+    },
+    "title": {
+      "en": "IC Card",
+      "ja": "ICカード"
+    },
     "summary": {
       "en": "Start with ICOCA before landing so Kansai transit stays frictionless from Day 1.",
       "ja": "関西スタートに合わせて、到着前から ICOCA を基準にしておくと1日目から現地移動が楽です。"
@@ -23,8 +49,14 @@
     "links": [
       {
         "href": "https://www.westjr.co.jp/global/en/howto/icoca/",
-        "label": { "en": "ICOCA official guide", "ja": "ICOCA公式案内" },
-        "note": { "en": "Official JR-West ICOCA purchase, Apple Pay, and usage guide", "ja": "JR西日本の公式 ICOCA 購入・Apple Pay・利用案内" },
+        "label": {
+          "en": "ICOCA official guide",
+          "ja": "ICOCA公式案内"
+        },
+        "note": {
+          "en": "Official JR-West ICOCA purchase, Apple Pay, and usage guide",
+          "ja": "JR西日本の公式 ICOCA 購入・Apple Pay・利用案内"
+        },
         "kind": "primary"
       }
     ]
@@ -32,33 +64,69 @@
   {
     "id": "kyoto-stay",
     "group": "accommodations",
-    "filters": ["to-book"],
+    "filters": [
+      "to-book"
+    ],
     "kind": "booking",
-    "dayLabel": { "en": "Day 2", "ja": "2日目" },
-    "typeLabel": { "en": "Hotel / Accommodation", "ja": "ホテル・宿泊" },
-    "stayVisibility": {
-      "days": [2],
-      "stayIds": ["kyoto-midrange-hotel"]
+    "dayLabel": {
+      "en": "Day 2",
+      "ja": "2日目"
     },
-    "tone": { "en": "Stay booking", "ja": "宿泊予約" },
-    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
-    "doneStatus": { "en": "Booked", "ja": "予約済み" },
-    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
-    "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Kyoto Hotel", "ja": "京都ホテル" },
+    "typeLabel": {
+      "en": "Hotel / Accommodation",
+      "ja": "ホテル・宿泊"
+    },
+    "stayVisibility": {
+      "days": [
+        2
+      ],
+      "stayIds": [
+        "kyoto-midrange-hotel"
+      ]
+    },
+    "tone": {
+      "en": "Stay booking",
+      "ja": "宿泊予約"
+    },
+    "defaultStatus": {
+      "en": "Not booked",
+      "ja": "未予約"
+    },
+    "doneStatus": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "toggleDefault": {
+      "en": "Mark booked",
+      "ja": "予約済みにする"
+    },
+    "toggleDone": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "title": {
+      "en": "Kyoto Hotel",
+      "ja": "京都ホテル"
+    },
     "summary": {
       "en": "This stay is picked for Shijo / Karasuma route fit, not just because it is in Kyoto.",
       "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
     },
     "details": {
-      "en": "Use the direct Booking.com property page for Keio Prelia Hotel Kyoto Karasuma-Gojo as the current low-cost route-fit pick. It stays close to the Karasuma / Gojo side for the Day 2 Higashiyama sweep while still keeping the Day 3 Arashiyama -> Osaka flow practical.",
-      "ja": "現在の低コスト候補として、Keio Prelia Hotel Kyoto Karasuma-Gojo の Booking.com 直リンクを使います。烏丸・五条寄りに置くことで、2日目の東山回遊と3日目の嵐山 -> 大阪の流れをどちらも進めやすくしています。"
+      "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama -> Osaka flow.",
+      "ja": "Booking.com の京都検索結果で、四条・烏丸・五条周辺の動線に合う宿を比較します。2日目の東山回遊と3日目の嵐山 -> 大阪の流れをどちらも進めやすくするためです。"
     },
     "links": [
       {
-        "href": "https://www.booking.com/hotel/jp/keio-prelia-hotel-kyoto-karasuma-gojo.html",
-        "label": { "en": "Keio Prelia Hotel Kyoto Karasuma-Gojo", "ja": "Keio Prelia Hotel Kyoto Karasuma-Gojo" },
-        "note": { "en": "Direct Booking.com page for the current low-cost Kyoto route-fit stay.", "ja": "現在の京都の動線向き低コスト候補へ直接飛ぶ Booking.com ページです。" },
+        "href": "https://www.booking.com/searchresults.html?ss=Shijo%20Karasuma%2C%20Kyoto%2C%20Japan",
+        "label": {
+          "en": "Kyoto Booking.com options",
+          "ja": "京都 Booking.com 候補"
+        },
+        "note": {
+          "en": "Booking.com results for Kyoto stays around Shijo / Karasuma / Gojo.",
+          "ja": "四条・烏丸・五条周辺の京都滞在候補を開く Booking.com 検索結果です。"
+        },
         "kind": "primary"
       }
     ]
@@ -67,16 +135,42 @@
     "id": "osaka-kyoto-transfer",
     "transitDetailId": "osaka-kyoto-transfer",
     "group": "transit",
-    "filters": ["transit"],
+    "filters": [
+      "transit"
+    ],
     "kind": "reference",
-    "dayLabel": { "en": "Day 2", "ja": "2日目" },
-    "typeLabel": { "en": "Transit", "ja": "移動" },
-    "tone": { "en": "Save route", "ja": "経路保存" },
-    "defaultStatus": { "en": "Ready", "ja": "準備OK" },
-    "doneStatus": { "en": "Saved", "ja": "保存済み" },
-    "toggleDefault": { "en": "Save route", "ja": "経路を保存する" },
-    "toggleDone": { "en": "Saved", "ja": "保存済み" },
-    "title": { "en": "Osaka to Kyoto", "ja": "大阪から京都" },
+    "dayLabel": {
+      "en": "Day 2",
+      "ja": "2日目"
+    },
+    "typeLabel": {
+      "en": "Transit",
+      "ja": "移動"
+    },
+    "tone": {
+      "en": "Save route",
+      "ja": "経路保存"
+    },
+    "defaultStatus": {
+      "en": "Ready",
+      "ja": "準備OK"
+    },
+    "doneStatus": {
+      "en": "Saved",
+      "ja": "保存済み"
+    },
+    "toggleDefault": {
+      "en": "Save route",
+      "ja": "経路を保存する"
+    },
+    "toggleDone": {
+      "en": "Saved",
+      "ja": "保存済み"
+    },
+    "title": {
+      "en": "Osaka to Kyoto",
+      "ja": "大阪から京都"
+    },
     "summary": {
       "en": "Save the Day 2 Osaka-to-Kyoto handoff so the Kyoto East walking day starts cleanly instead of burning time on a messy station decision.",
       "ja": "2日目の大阪から京都への受け渡しを保存しておくと、駅で迷わず京都東側の街歩きを素直に始められます。"
@@ -88,8 +182,14 @@
     "links": [
       {
         "href": "https://www.trip.com/transport/osaka-station-to-kyoto-station/",
-        "label": { "en": "Trip.com route guide", "ja": "Trip.com経路ガイド" },
-        "note": { "en": "Trip.com Osaka Station -> Kyoto Station transport page", "ja": "大阪駅 -> 京都駅の Trip.com 交通ページ" },
+        "label": {
+          "en": "Trip.com route guide",
+          "ja": "Trip.com経路ガイド"
+        },
+        "note": {
+          "en": "Trip.com Osaka Station -> Kyoto Station transport page",
+          "ja": "大阪駅 -> 京都駅の Trip.com 交通ページ"
+        },
         "kind": "primary"
       }
     ]
@@ -97,33 +197,69 @@
   {
     "id": "fuji-area-stay",
     "group": "accommodations",
-    "filters": ["to-book"],
+    "filters": [
+      "to-book"
+    ],
     "kind": "booking",
-    "dayLabel": { "en": "Day 3", "ja": "3日目" },
-    "typeLabel": { "en": "Hotel / Accommodation", "ja": "ホテル・宿泊" },
-    "stayVisibility": {
-      "days": [3],
-      "stayIds": ["kawaguchiko-base-hotel"]
+    "dayLabel": {
+      "en": "Day 3",
+      "ja": "3日目"
     },
-    "tone": { "en": "Stay booking", "ja": "宿泊予約" },
-    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
-    "doneStatus": { "en": "Booked", "ja": "予約済み" },
-    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
-    "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Kawaguchiko Stay", "ja": "河口湖ステイ" },
+    "typeLabel": {
+      "en": "Hotel / Accommodation",
+      "ja": "ホテル・宿泊"
+    },
+    "stayVisibility": {
+      "days": [
+        3
+      ],
+      "stayIds": [
+        "kawaguchiko-base-hotel"
+      ]
+    },
+    "tone": {
+      "en": "Stay booking",
+      "ja": "宿泊予約"
+    },
+    "defaultStatus": {
+      "en": "Not booked",
+      "ja": "未予約"
+    },
+    "doneStatus": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "toggleDefault": {
+      "en": "Mark booked",
+      "ja": "予約済みにする"
+    },
+    "toggleDone": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "title": {
+      "en": "Kawaguchiko Stay",
+      "ja": "河口湖ステイ"
+    },
     "summary": {
       "en": "The base is chosen for station-to-lake practicality so the Day 3 Kawaguchiko arrival stays calm while the Day 4 Fuji-area stops and Tokyo handoff still fit cleanly after the overnight reset.",
       "ja": "3日目の河口湖到着を落ち着いて進めつつ、宿で整えたあとに4日目の富士エリア立ち寄りと東京移動まで無理なくつなげられるよう、駅から湖側の動きで拠点を選んでいます。"
     },
     "details": {
-      "en": "Use the direct Booking.com property page for HaoStay Kawaguchiko Station as the current low-cost practical base. It keeps the Day 3 Mishima handoff calm and leaves the Day 4 Fuji-area stops plus the Tokyo return easy to sequence from one station-near base.",
-      "ja": "現在の実用的な低コスト候補として、HaoStay Kawaguchiko Station の Booking.com 直リンクを使います。駅に近い拠点に置くことで、3日目の三島ハンドオフを落ち着いて受けつつ、4日目の富士エリア立ち寄りと東京戻りも一つの流れで組みやすくなります。"
+      "en": "Use the Booking.com Kawaguchiko results page to compare practical station-to-lake bases. It keeps the Day 3 Mishima handoff calm and leaves the Day 4 Fuji-area stops plus the Tokyo return easy to sequence.",
+      "ja": "Booking.com の河口湖検索結果で、駅から湖側へ動きやすい実用的な拠点を比較します。3日目の三島ハンドオフを落ち着いて受けつつ、4日目の富士エリア立ち寄りと東京戻りも組みやすくなります。"
     },
     "links": [
       {
-        "href": "https://www.booking.com/hotel/jp/haostayhe-kou-hu-yi-qian.html",
-        "label": { "en": "HaoStay Kawaguchiko Station", "ja": "HaoStay Kawaguchiko Station" },
-        "note": { "en": "Direct Booking.com page for the current low-cost Kawaguchiko base near station access.", "ja": "駅アクセスに近い現在の河口湖低コスト候補へ直接飛ぶ Booking.com ページです。" },
+        "href": "https://www.booking.com/searchresults.html?ss=Kawaguchiko%2C%20Fujikawaguchiko%2C%20Yamanashi%2C%20Japan",
+        "label": {
+          "en": "Kawaguchiko Booking.com options",
+          "ja": "河口湖 Booking.com 候補"
+        },
+        "note": {
+          "en": "Booking.com results for Kawaguchiko stays near station and lake access.",
+          "ja": "駅と湖側アクセスに合う河口湖滞在候補を開く Booking.com 検索結果です。"
+        },
         "kind": "primary"
       }
     ]
@@ -131,33 +267,71 @@
   {
     "id": "tokyo-stay",
     "group": "accommodations",
-    "filters": ["to-book"],
+    "filters": [
+      "to-book"
+    ],
     "kind": "booking",
-    "dayLabel": { "en": "Days 4-6", "ja": "4日目-6日目" },
-    "typeLabel": { "en": "Hotel / Accommodation", "ja": "ホテル・宿泊" },
-    "stayVisibility": {
-      "days": [4, 5, 6],
-      "stayIds": ["tokyo-base-hotel"]
+    "dayLabel": {
+      "en": "Days 4-6",
+      "ja": "4日目-6日目"
     },
-    "tone": { "en": "Stay booking", "ja": "宿泊予約" },
-    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
-    "doneStatus": { "en": "Booked", "ja": "予約済み" },
-    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
-    "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Tokyo Hotel", "ja": "東京ホテル" },
+    "typeLabel": {
+      "en": "Hotel / Accommodation",
+      "ja": "ホテル・宿泊"
+    },
+    "stayVisibility": {
+      "days": [
+        4,
+        5,
+        6
+      ],
+      "stayIds": [
+        "tokyo-base-hotel"
+      ]
+    },
+    "tone": {
+      "en": "Stay booking",
+      "ja": "宿泊予約"
+    },
+    "defaultStatus": {
+      "en": "Not booked",
+      "ja": "未予約"
+    },
+    "doneStatus": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "toggleDefault": {
+      "en": "Mark booked",
+      "ja": "予約済みにする"
+    },
+    "toggleDone": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "title": {
+      "en": "Tokyo Hotel",
+      "ja": "東京ホテル"
+    },
     "summary": {
       "en": "Tokyo hotel nights now sit on Days 4, 5, and 6, so the base should support the Day 4 Shibuya arrival, the fuller sightseeing days after, and an easy Day 7 reset before the flight home.",
       "ja": "東京ホテル泊は4日目、5日目、6日目に置き、4日目の渋谷到着、続く観光日、そして帰国前の軽い7日目を同じ拠点で回せるようにします。"
     },
     "details": {
-      "en": "Use the direct Booking.com property page for The OneFive Tokyo Shibuya as the current low-cost Shibuya-side base. It keeps the Day 4 arrival, Days 5-6 sightseeing, and the Day 7 exit centered on one practical Tokyo handoff instead of a generic district search.",
-      "ja": "現在の渋谷側低コスト候補として、The OneFive Tokyo Shibuya の Booking.com 直リンクを使います。汎用的な地区検索ではなく、4日目の到着、5-6日目の観光、7日目の出発を一つの実用的な東京拠点でまとめやすくします。"
+      "en": "Use the Booking.com Shibuya results page to compare Tokyo bases for Days 4, 5, and 6. This keeps the Day 4 arrival, Days 5-6 sightseeing, and the Day 7 exit centered on one practical Tokyo handoff.",
+      "ja": "Booking.com の渋谷検索結果で、4日目、5日目、6日目に使う東京拠点を比較します。4日目の到着、5-6日目の観光、7日目の出発を一つの実用的な東京拠点でまとめやすくします。"
     },
     "links": [
       {
-        "href": "https://www.booking.com/hotel/jp/emit-shibuya.html",
-        "label": { "en": "The OneFive Tokyo Shibuya", "ja": "The OneFive Tokyo Shibuya" },
-        "note": { "en": "Direct Booking.com page for the current low-cost Shibuya-side Tokyo base.", "ja": "現在の渋谷側東京拠点の低コスト候補へ直接飛ぶ Booking.com ページです。" },
+        "href": "https://www.booking.com/searchresults.html?ss=Shibuya%2C%20Tokyo%2C%20Japan",
+        "label": {
+          "en": "Shibuya Booking.com options",
+          "ja": "渋谷 Booking.com 候補"
+        },
+        "note": {
+          "en": "Booking.com results for Shibuya-side Tokyo stays.",
+          "ja": "渋谷側の東京滞在候補を開く Booking.com 検索結果です。"
+        },
         "kind": "primary"
       }
     ]
@@ -166,16 +340,43 @@
     "id": "shin-osaka-fuji-gateway",
     "transitDetailId": "shin-osaka-fuji-gateway",
     "group": "transit",
-    "filters": ["to-book", "transit"],
+    "filters": [
+      "to-book",
+      "transit"
+    ],
     "kind": "booking",
-    "dayLabel": { "en": "Day 3", "ja": "3日目" },
-    "typeLabel": { "en": "Transit", "ja": "移動" },
-    "tone": { "en": "Reserve ahead", "ja": "事前予約" },
-    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
-    "doneStatus": { "en": "Booked", "ja": "予約済み" },
-    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
-    "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Shinkansen to Mishima", "ja": "三島行き新幹線" },
+    "dayLabel": {
+      "en": "Day 3",
+      "ja": "3日目"
+    },
+    "typeLabel": {
+      "en": "Transit",
+      "ja": "移動"
+    },
+    "tone": {
+      "en": "Reserve ahead",
+      "ja": "事前予約"
+    },
+    "defaultStatus": {
+      "en": "Not booked",
+      "ja": "未予約"
+    },
+    "doneStatus": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "toggleDefault": {
+      "en": "Mark booked",
+      "ja": "予約済みにする"
+    },
+    "toggleDone": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "title": {
+      "en": "Shinkansen to Mishima",
+      "ja": "三島行き新幹線"
+    },
     "summary": {
       "en": "Treat this as the fixed intercity booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
       "ja": "3日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
@@ -187,9 +388,18 @@
     "links": [
       {
         "href": "https://smart-ex.jp/en/lp/app/",
-        "label": { "en": "SmartEX official booking", "ja": "SmartEX公式予約" },
-        "note": { "en": "Official JR Central SmartEX route and booking entry for the Shin-Osaka -> Mishima shinkansen leg.", "ja": "新大阪 -> 三島の新幹線区間に使う JR東海 SmartEX の公式予約導線です。" },
-        "price": { "en": "JPY 12,100 / person", "ja": "1人 JPY 12,100" },
+        "label": {
+          "en": "SmartEX official booking",
+          "ja": "SmartEX公式予約"
+        },
+        "note": {
+          "en": "Official JR Central SmartEX route and booking entry for the Shin-Osaka -> Mishima shinkansen leg.",
+          "ja": "新大阪 -> 三島の新幹線区間に使う JR東海 SmartEX の公式予約導線です。"
+        },
+        "price": {
+          "en": "JPY 12,100 / person",
+          "ja": "1人 JPY 12,100"
+        },
         "kind": "primary"
       }
     ]
@@ -198,16 +408,43 @@
     "id": "fuji-area-access",
     "transitDetailId": "fuji-gateway-kawaguchiko",
     "group": "transit",
-    "filters": ["to-book", "transit"],
+    "filters": [
+      "to-book",
+      "transit"
+    ],
     "kind": "booking",
-    "dayLabel": { "en": "Day 3", "ja": "3日目" },
-    "typeLabel": { "en": "Transit", "ja": "移動" },
-    "tone": { "en": "Reserve ahead", "ja": "事前予約" },
-    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
-    "doneStatus": { "en": "Booked", "ja": "予約済み" },
-    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
-    "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Mishima to Kawaguchiko", "ja": "三島から河口湖" },
+    "dayLabel": {
+      "en": "Day 3",
+      "ja": "3日目"
+    },
+    "typeLabel": {
+      "en": "Transit",
+      "ja": "移動"
+    },
+    "tone": {
+      "en": "Reserve ahead",
+      "ja": "事前予約"
+    },
+    "defaultStatus": {
+      "en": "Not booked",
+      "ja": "未予約"
+    },
+    "doneStatus": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "toggleDefault": {
+      "en": "Mark booked",
+      "ja": "予約済みにする"
+    },
+    "toggleDone": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "title": {
+      "en": "Mishima to Kawaguchiko",
+      "ja": "三島から河口湖"
+    },
     "summary": {
       "en": "Treat this as the Day 3 local handoff booking if you want the cleanest Mishima-to-lake transfer.",
       "ja": "3日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
@@ -219,9 +456,18 @@
     "links": [
       {
         "href": "https://sekitori.jp/en/apps/results/?%5BnextDateFlag=true%5D&getOffAreaMiddleGroupId=2&getOffAreaType=1&nextDateFlag=true&rideAreaType=2&rideBusStopId=8&rideDate=today",
-        "label": { "en": "SEKITORI bus booking", "ja": "SEKITORIバス予約" },
-        "note": { "en": "Working official live results for Mishima Station South Exit -> Kawaguchiko Station", "ja": "三島駅南口 -> 河口湖駅の動作するSEKITORI公式ライブ結果" },
-        "price": { "en": "JPY 2,300 / person", "ja": "1人 JPY 2,300" },
+        "label": {
+          "en": "SEKITORI bus booking",
+          "ja": "SEKITORIバス予約"
+        },
+        "note": {
+          "en": "Working official live results for Mishima Station South Exit -> Kawaguchiko Station",
+          "ja": "三島駅南口 -> 河口湖駅の動作するSEKITORI公式ライブ結果"
+        },
+        "price": {
+          "en": "JPY 2,300 / person",
+          "ja": "1人 JPY 2,300"
+        },
         "kind": "primary"
       }
     ]
@@ -230,16 +476,42 @@
     "id": "kawaguchiko-tokyo",
     "transitDetailId": "kawaguchiko-tokyo",
     "group": "transit",
-    "filters": ["transit"],
+    "filters": [
+      "transit"
+    ],
     "kind": "reference",
-    "dayLabel": { "en": "Day 4", "ja": "4日目" },
-    "typeLabel": { "en": "Transit", "ja": "移動" },
-    "tone": { "en": "Save route", "ja": "経路保存" },
-    "defaultStatus": { "en": "Ready", "ja": "準備OK" },
-    "doneStatus": { "en": "Saved", "ja": "保存済み" },
-    "toggleDefault": { "en": "Save route", "ja": "経路を保存する" },
-    "toggleDone": { "en": "Saved", "ja": "保存済み" },
-    "title": { "en": "Mt. Fuji to Shibuya", "ja": "富士山から渋谷" },
+    "dayLabel": {
+      "en": "Day 4",
+      "ja": "4日目"
+    },
+    "typeLabel": {
+      "en": "Transit",
+      "ja": "移動"
+    },
+    "tone": {
+      "en": "Save route",
+      "ja": "経路保存"
+    },
+    "defaultStatus": {
+      "en": "Ready",
+      "ja": "準備OK"
+    },
+    "doneStatus": {
+      "en": "Saved",
+      "ja": "保存済み"
+    },
+    "toggleDefault": {
+      "en": "Save route",
+      "ja": "経路を保存する"
+    },
+    "toggleDone": {
+      "en": "Saved",
+      "ja": "保存済み"
+    },
+    "title": {
+      "en": "Mt. Fuji to Shibuya",
+      "ja": "富士山から渋谷"
+    },
     "summary": {
       "en": "Save the Tokyo handoff you expect to use on Day 4 so the Shibuya arrival and hotel check-in stay easy to land after the Fuji block.",
       "ja": "4日目の東京入りを保存しておき、富士側のまとまりのあとも渋谷到着とホテルチェックインへ入りやすくします。"
@@ -251,8 +523,14 @@
     "links": [
       {
         "href": "https://www.tokyubus.co.jp/tourist/highway/",
-        "label": { "en": "Tokyu Bus highway page", "ja": "Tokyu Bus 高速バス案内" },
-        "note": { "en": "Official Shibuya-side highway bus page for Kawaguchiko-bound service.", "ja": "河口湖方面の渋谷側高速バスを案内する Tokyu Bus 公式ページです。" },
+        "label": {
+          "en": "Tokyu Bus highway page",
+          "ja": "Tokyu Bus 高速バス案内"
+        },
+        "note": {
+          "en": "Official Shibuya-side highway bus page for Kawaguchiko-bound service.",
+          "ja": "河口湖方面の渋谷側高速バスを案内する Tokyu Bus 公式ページです。"
+        },
         "kind": "primary"
       }
     ]
@@ -260,16 +538,42 @@
   {
     "id": "kaiyukan",
     "group": "activities",
-    "filters": ["to-book"],
+    "filters": [
+      "to-book"
+    ],
     "kind": "booking",
-    "dayLabel": { "en": "Day 3", "ja": "3日目" },
-    "typeLabel": { "en": "Activity", "ja": "アクティビティ" },
-    "tone": { "en": "Reserve ahead", "ja": "事前予約" },
-    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
-    "doneStatus": { "en": "Booked", "ja": "予約済み" },
-    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
-    "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Kaiyukan", "ja": "海遊館" },
+    "dayLabel": {
+      "en": "Day 3",
+      "ja": "3日目"
+    },
+    "typeLabel": {
+      "en": "Activity",
+      "ja": "アクティビティ"
+    },
+    "tone": {
+      "en": "Reserve ahead",
+      "ja": "事前予約"
+    },
+    "defaultStatus": {
+      "en": "Not booked",
+      "ja": "未予約"
+    },
+    "doneStatus": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "toggleDefault": {
+      "en": "Mark booked",
+      "ja": "予約済みにする"
+    },
+    "toggleDone": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "title": {
+      "en": "Kaiyukan",
+      "ja": "海遊館"
+    },
     "summary": {
       "en": "Use the current official ticket page for Day 3.",
       "ja": "3日目用に現在の公式チケットページを使います。"
@@ -281,8 +585,14 @@
     "links": [
       {
         "href": "https://www.kaiyukan.com/info/ticket/kaiyukan/",
-        "label": { "en": "Official ticket page", "ja": "公式チケットページ" },
-        "note": { "en": "Safer main-domain official pricing and e-ticket page", "ja": "より安全な公式メインドメインの料金・eチケットページ" },
+        "label": {
+          "en": "Official ticket page",
+          "ja": "公式チケットページ"
+        },
+        "note": {
+          "en": "Safer main-domain official pricing and e-ticket page",
+          "ja": "より安全な公式メインドメインの料金・eチケットページ"
+        },
         "kind": "primary"
       }
     ]
@@ -290,16 +600,42 @@
   {
     "id": "shibuya-sky",
     "group": "activities",
-    "filters": ["to-book"],
+    "filters": [
+      "to-book"
+    ],
     "kind": "booking",
-    "dayLabel": { "en": "Day 5", "ja": "5日目" },
-    "typeLabel": { "en": "Activity", "ja": "アクティビティ" },
-    "tone": { "en": "Reserve ahead", "ja": "事前予約" },
-    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
-    "doneStatus": { "en": "Booked", "ja": "予約済み" },
-    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
-    "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Shibuya Sky", "ja": "渋谷スカイ" },
+    "dayLabel": {
+      "en": "Day 5",
+      "ja": "5日目"
+    },
+    "typeLabel": {
+      "en": "Activity",
+      "ja": "アクティビティ"
+    },
+    "tone": {
+      "en": "Reserve ahead",
+      "ja": "事前予約"
+    },
+    "defaultStatus": {
+      "en": "Not booked",
+      "ja": "未予約"
+    },
+    "doneStatus": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "toggleDefault": {
+      "en": "Mark booked",
+      "ja": "予約済みにする"
+    },
+    "toggleDone": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "title": {
+      "en": "Shibuya Sky",
+      "ja": "渋谷スカイ"
+    },
     "summary": {
       "en": "Treat this as the timed Day 5 skyline ticket if you are keeping SHIBUYA SKY in the route.",
       "ja": "SHIBUYA SKY をルートに残すなら、5日目の時間指定チケットとして扱います。"
@@ -311,8 +647,14 @@
     "links": [
       {
         "href": "https://www.shibuya-scramble-square.com/sky/ticket/",
-        "label": { "en": "Official tickets", "ja": "公式チケット" },
-        "note": { "en": "Official SHIBUYA SKY ticket page", "ja": "SHIBUYA SKY 公式チケットページ" },
+        "label": {
+          "en": "Official tickets",
+          "ja": "公式チケット"
+        },
+        "note": {
+          "en": "Official SHIBUYA SKY ticket page",
+          "ja": "SHIBUYA SKY 公式チケットページ"
+        },
         "kind": "primary"
       }
     ]
@@ -320,16 +662,42 @@
   {
     "id": "tokyo-skytree",
     "group": "activities",
-    "filters": ["to-book"],
+    "filters": [
+      "to-book"
+    ],
     "kind": "booking",
-    "dayLabel": { "en": "Day 6", "ja": "6日目" },
-    "typeLabel": { "en": "Activity", "ja": "アクティビティ" },
-    "tone": { "en": "Reserve ahead", "ja": "事前予約" },
-    "defaultStatus": { "en": "Not booked", "ja": "未予約" },
-    "doneStatus": { "en": "Booked", "ja": "予約済み" },
-    "toggleDefault": { "en": "Mark booked", "ja": "予約済みにする" },
-    "toggleDone": { "en": "Booked", "ja": "予約済み" },
-    "title": { "en": "Tokyo Skytree", "ja": "東京スカイツリー" },
+    "dayLabel": {
+      "en": "Day 6",
+      "ja": "6日目"
+    },
+    "typeLabel": {
+      "en": "Activity",
+      "ja": "アクティビティ"
+    },
+    "tone": {
+      "en": "Reserve ahead",
+      "ja": "事前予約"
+    },
+    "defaultStatus": {
+      "en": "Not booked",
+      "ja": "未予約"
+    },
+    "doneStatus": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "toggleDefault": {
+      "en": "Mark booked",
+      "ja": "予約済みにする"
+    },
+    "toggleDone": {
+      "en": "Booked",
+      "ja": "予約済み"
+    },
+    "title": {
+      "en": "Tokyo Skytree",
+      "ja": "東京スカイツリー"
+    },
     "summary": {
       "en": "Skytree is now part of the fuller Day 6 Tokyo sightseeing block, so keep the official ticket page handy.",
       "ja": "スカイツリーは6日目の観光メイン日に入ったため、公式チケットページをすぐ見られるようにしておきます。"
@@ -341,9 +709,18 @@
     "links": [
       {
         "href": "https://www.tokyo-skytree.jp/en/ticket/individual/",
-        "label": { "en": "Official tickets", "ja": "公式チケット" },
-        "note": { "en": "Timed-entry ticket information", "ja": "時間指定チケット案内" },
-        "price": { "en": "From JPY 1,800 / adult online", "ja": "大人 JPY 1,800から（オンライン）" },
+        "label": {
+          "en": "Official tickets",
+          "ja": "公式チケット"
+        },
+        "note": {
+          "en": "Timed-entry ticket information",
+          "ja": "時間指定チケット案内"
+        },
+        "price": {
+          "en": "From JPY 1,800 / adult online",
+          "ja": "大人 JPY 1,800から（オンライン）"
+        },
         "kind": "primary"
       }
     ]
