@@ -139,7 +139,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       "filters": [
         "transit"
       ],
-      "kind": "reference",
+      "kind": "booking",
       "dayLabel": {
         "en": "Day 2",
         "ja": "2日目"
@@ -149,24 +149,24 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "移動"
       },
       "tone": {
-        "en": "Save route",
-        "ja": "経路保存"
+        "en": "Transit booking",
+        "ja": "移動予約"
       },
       "defaultStatus": {
-        "en": "Ready",
-        "ja": "準備OK"
+        "en": "Not booked",
+        "ja": "未予約"
       },
       "doneStatus": {
-        "en": "Saved",
-        "ja": "保存済み"
+        "en": "Booked",
+        "ja": "予約済み"
       },
       "toggleDefault": {
-        "en": "Save route",
-        "ja": "経路を保存する"
+        "en": "Mark Booked",
+        "ja": "予約済みにする"
       },
       "toggleDone": {
-        "en": "Saved",
-        "ja": "保存済み"
+        "en": "Booked",
+        "ja": "予約済み"
       },
       "title": {
         "en": "Osaka to Kyoto",
@@ -480,7 +480,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       "filters": [
         "transit"
       ],
-      "kind": "reference",
+      "kind": "booking",
       "dayLabel": {
         "en": "Day 4",
         "ja": "4日目"
@@ -490,24 +490,24 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "移動"
       },
       "tone": {
-        "en": "Save route",
-        "ja": "経路保存"
+        "en": "Transit booking",
+        "ja": "移動予約"
       },
       "defaultStatus": {
-        "en": "Ready",
-        "ja": "準備OK"
+        "en": "Not booked",
+        "ja": "未予約"
       },
       "doneStatus": {
-        "en": "Saved",
-        "ja": "保存済み"
+        "en": "Booked",
+        "ja": "予約済み"
       },
       "toggleDefault": {
-        "en": "Save route",
-        "ja": "経路を保存する"
+        "en": "Mark Booked",
+        "ja": "予約済みにする"
       },
       "toggleDone": {
-        "en": "Saved",
-        "ja": "保存済み"
+        "en": "Booked",
+        "ja": "予約済み"
       },
       "title": {
         "en": "Mt. Fuji to Shibuya",

@@ -2452,10 +2452,10 @@ html.reduce-effects .site-backdrop__video {
     gap: 0.1rem !important;
   }
 
-  .section-tab,
-  .site-header.is-condensed .section-tab {
-    padding: 0.28rem 0.44rem !important;
-    font-size: 0.66rem !important;
+.section-tab,
+.site-header.is-condensed .section-tab {
+  padding: 0.28rem 0.44rem !important;
+  font-size: 0.66rem !important;
   }
 
   .language-switcher,
@@ -2468,6 +2468,33 @@ html.reduce-effects .site-backdrop__video {
     padding: 0.2rem 0.42rem !important;
     font-size: 0.64rem !important;
   }
+}
+
+.section-tab,
+.section-tab:hover,
+.section-tab:focus-visible,
+.section-tab.is-active,
+.section-tab[aria-selected="true"],
+.language-button,
+.language-button:hover,
+.language-button:focus-visible,
+.language-button.is-active {
+  text-shadow: none !important;
+}
+
+.language-switcher,
+.site-header.is-condensed .language-switcher {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(5.2rem, 1fr));
+  gap: 0 !important;
+}
+
+.language-button,
+.site-header.is-condensed .language-button {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
 }
 
 /* Ritual gate */

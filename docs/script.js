@@ -294,6 +294,46 @@ const checklistDetailLabels = {
     ja: "参照を開く"
   }
 };
+const checklistBookingDependencyDefinitions = {
+  "day2-transfer-to-kyoto": {
+    bookingId: "osaka-kyoto-transfer",
+    title: { en: "Osaka to Kyoto", ja: "大阪から京都" }
+  },
+  "day2-hotel-check-in": {
+    bookingId: "kyoto-stay",
+    title: { en: "Kyoto Hotel", ja: "京都ホテル" }
+  },
+  "day3-shinkansen-mishima": {
+    bookingId: "shin-osaka-fuji-gateway",
+    title: { en: "Shinkansen to Mishima", ja: "三島行き新幹線" }
+  },
+  "day3-transfer-fujikawaguchiko": {
+    bookingId: "fuji-area-access",
+    title: { en: "Mishima to Kawaguchiko", ja: "三島から河口湖" }
+  },
+  "day3-onsen-check-in": {
+    bookingId: "fuji-area-stay",
+    title: { en: "Kawaguchiko Stay", ja: "河口湖ステイ" }
+  },
+  "day4-tokyo-transfer": {
+    bookingId: "kawaguchiko-tokyo",
+    title: { en: "Mt. Fuji to Shibuya", ja: "富士山から渋谷" }
+  },
+  "day4-tokyo-hotel-check-in": {
+    bookingId: "tokyo-stay",
+    title: { en: "Tokyo Hotel", ja: "東京ホテル" }
+  }
+};
+const checklistBookingLockLabels = {
+  itemMessage: {
+    en: "Mark {booking} booked in Pre-Trip Bookings first.",
+    ja: "先に「{booking}」を事前予約で予約済みにしてください。"
+  },
+  toastMessage: {
+    en: "Mark {booking} booked in Pre-Trip Bookings before checking this item.",
+    ja: "この項目をチェックする前に、事前予約で「{booking}」を予約済みにしてください。"
+  }
+};
 const budgetLevelLabels = {
   low: { en: "Low", ja: "低め" },
   medium: { en: "Expected", ja: "標準" },
@@ -2822,6 +2862,191 @@ function getChecklistInputs() {
   return Array.from(document.querySelectorAll('.day-card input[type="checkbox"]'));
 }
 
+function getChecklistBookingDependency(inputOrId) {
+  const inputId =
+    typeof inputOrId === "string"
+      ? inputOrId
+      : inputOrId?.id || inputOrId?.getAttribute?.("id") || "";
+
+  return checklistBookingDependencyDefinitions[inputId] || null;
+}
+
+function getChecklistBookingItem(dependency) {
+  if (!dependency?.bookingId) {
+    return null;
+  }
+
+  return bookingTransitItemMap.get(dependency.bookingId) || null;
+}
+
+function getChecklistBookingTitle(dependency) {
+  return getChecklistBookingItem(dependency)?.title || dependency?.title || { en: "", ja: "" };
+}
+
+function formatChecklistBookingLockCopy(template, dependency) {
+  const title = getChecklistBookingTitle(dependency);
+  return {
+    en: template.en.replace("{booking}", title.en || ""),
+    ja: template.ja.replace("{booking}", title.ja || title.en || "")
+  };
+}
+
+function isChecklistBookingDependencyMet(dependency) {
+  return !dependency?.bookingId || getBookingTransitItemState(dependency.bookingId).done;
+}
+
+function getUnmetChecklistBookingDependency(inputOrId) {
+  const dependency = getChecklistBookingDependency(inputOrId);
+  return dependency && !isChecklistBookingDependencyMet(dependency) ? dependency : null;
+}
+
+function addInputDescription(input, descriptionId) {
+  if (!input || !descriptionId) {
+    return;
+  }
+
+  const describedBy = new Set(
+    (input.getAttribute("aria-describedby") || "")
+      .split(/\s+/)
+      .map((value) => value.trim())
+      .filter(Boolean)
+  );
+  describedBy.add(descriptionId);
+  input.setAttribute("aria-describedby", Array.from(describedBy).join(" "));
+}
+
+function removeInputDescription(input, descriptionId) {
+  if (!input || !descriptionId) {
+    return;
+  }
+
+  const nextIds = (input.getAttribute("aria-describedby") || "")
+    .split(/\s+/)
+    .map((value) => value.trim())
+    .filter((value) => value && value !== descriptionId);
+
+  if (nextIds.length) {
+    input.setAttribute("aria-describedby", nextIds.join(" "));
+    return;
+  }
+
+  input.removeAttribute("aria-describedby");
+}
+
+function ensureChecklistBookingLockMessage(input, dependency) {
+  const listItem = input?.closest("li");
+  if (!input || !listItem || !dependency) {
+    return;
+  }
+
+  const messageId = `${input.id}-booking-lock`;
+  let messageNode = listItem.querySelector(
+    `.checklist-booking-lock[data-lock-for="${input.id}"]`
+  );
+
+  if (!messageNode) {
+    messageNode = document.createElement("p");
+    messageNode.className = "checklist-booking-lock";
+    messageNode.id = messageId;
+    messageNode.dataset.lockFor = input.id;
+    listItem.append(messageNode);
+  }
+
+  messageNode.innerHTML = renderLocalizedContent(
+    formatChecklistBookingLockCopy(checklistBookingLockLabels.itemMessage, dependency)
+  );
+  syncLocalizedNodes(messageNode);
+  addInputDescription(input, messageId);
+}
+
+function clearChecklistBookingLockMessage(input) {
+  const listItem = input?.closest("li");
+  if (!input || !listItem) {
+    return;
+  }
+
+  const messageId = `${input.id}-booking-lock`;
+  listItem
+    .querySelectorAll(`.checklist-booking-lock[data-lock-for="${input.id}"]`)
+    .forEach((node) => node.remove());
+  removeInputDescription(input, messageId);
+}
+
+function syncChecklistInputVisualState(input) {
+  const checkItem = input?.closest(".check-item");
+  if (!input || !checkItem) {
+    return;
+  }
+
+  checkItem.classList.toggle("is-checked", Boolean(checklistState[input.id]));
+}
+
+function showChecklistBookingLockNotice(dependency) {
+  const message = formatChecklistBookingLockCopy(
+    checklistBookingLockLabels.toastMessage,
+    dependency
+  );
+  showToastNotice(root.lang === "ja" ? message.ja : message.en);
+}
+
+function removeLockedChecklistBookingCompletions() {
+  let didChange = false;
+
+  Object.keys(checklistBookingDependencyDefinitions).forEach((inputId) => {
+    const dependency = getChecklistBookingDependency(inputId);
+    if (!checklistState[inputId] || isChecklistBookingDependencyMet(dependency)) {
+      return;
+    }
+
+    delete checklistState[inputId];
+    didChange = true;
+
+    const input = document.getElementById(inputId);
+    if (input) {
+      input.checked = false;
+      syncChecklistInputVisualState(input);
+    }
+  });
+
+  if (didChange) {
+    storeChecklistState();
+  }
+
+  return didChange;
+}
+
+function syncChecklistInputLockState(input, { dayLocked = false } = {}) {
+  const checkItem = input?.closest(".check-item");
+  if (!input || !checkItem) {
+    return false;
+  }
+
+  const dependency = getUnmetChecklistBookingDependency(input);
+  const bookingLocked = Boolean(dependency);
+  const isLocked = Boolean(dayLocked || bookingLocked);
+
+  input.disabled = isLocked;
+  checkItem.classList.toggle("is-locked", isLocked);
+  checkItem.classList.toggle("is-day-locked", Boolean(dayLocked));
+  checkItem.classList.toggle("is-booking-locked", bookingLocked);
+  syncChecklistInputVisualState(input);
+
+  if (bookingLocked) {
+    ensureChecklistBookingLockMessage(input, dependency);
+  } else {
+    clearChecklistBookingLockMessage(input);
+  }
+
+  if (bookingLocked && checklistState[input.id]) {
+    delete checklistState[input.id];
+    input.checked = false;
+    syncChecklistInputVisualState(input);
+    return true;
+  }
+
+  return false;
+}
+
 function getBookingTransitRoot() {
   return document.querySelector("[data-booking-transit]");
 }
@@ -4256,6 +4481,7 @@ function bindBookingTransitUI() {
         done: nextDoneState
       });
       updateBookingTransitUI();
+      refreshChecklistProgressState({ syncDayCards: initializedSections.has("checklist") });
     });
 
     itemElement.querySelectorAll("[data-booking-link]").forEach((linkNode) => {
@@ -4294,6 +4520,7 @@ function initializeBookingTransit() {
       renderBookingTransitBoard();
       bindBookingTransitUI();
       updateBookingTransitUI();
+      refreshChecklistProgressState({ syncDayCards: initializedSections.has("checklist") });
       setBookingTransitStatus("ready");
       bookingTransitInitialized = true;
     })
@@ -4361,7 +4588,7 @@ function isChecklistGuidanceActive() {
 }
 
 function isChecklistAccessLocked() {
-  return isChecklistGuidanceActive();
+  return false;
 }
 
 function updateChecklistAccessState() {
@@ -4396,9 +4623,12 @@ function syncChecklistActionButtons(isLocked = isChecklistAccessLocked()) {
   }
 
   const checklistInputs = getChecklistInputs();
-  const checkedCount = checklistInputs.filter((input) => Boolean(checklistState[input.id])).length;
+  const actionableInputs = checklistInputs.filter(
+    (input) => !input.disabled && !getUnmetChecklistBookingDependency(input)
+  );
+  const checkedCount = actionableInputs.filter((input) => Boolean(checklistState[input.id])).length;
   checklistMarkAllButton.disabled =
-    isLocked || !checklistInputs.length || checkedCount === checklistInputs.length;
+    isLocked || !actionableInputs.length || checkedCount === actionableInputs.length;
 }
 
 function isPackingItemPacked(itemId) {
@@ -4851,6 +5081,7 @@ function restoreChecklistState(panel = getSectionPanel("checklist")) {
 
   panel.querySelectorAll('.day-card input[type="checkbox"]').forEach((input) => {
     input.checked = Boolean(checklistState[input.id]);
+    syncChecklistInputVisualState(input);
   });
 }
 
@@ -5278,17 +5509,6 @@ function handleChecklistPanelClick(event) {
   const referenceTrigger = transitTrigger || checklistDetailTrigger;
   const dayCard = event.target.closest(".day-card[data-day]");
 
-  if (referenceTrigger && isChecklistAccessLocked()) {
-    event.preventDefault();
-    event.stopPropagation();
-    void openEssentialsReference(
-      transitTrigger?.dataset.transitDetailTrigger ||
-        checklistDetailTrigger?.dataset.checklistDetailTrigger ||
-        ""
-    );
-    return;
-  }
-
   if (isChecklistAccessLocked()) {
     const lockedTarget = event.target.closest(".check-item, .transit-trigger--checklist");
     if (lockedTarget) {
@@ -5320,6 +5540,18 @@ function handleChecklistPanelClick(event) {
         ""
     );
     return;
+  }
+
+  const checkItem = event.target.closest(".check-item");
+  if (checkItem) {
+    const input = checkItem.querySelector('input[type="checkbox"]');
+    const dependency = getUnmetChecklistBookingDependency(input);
+    if (dependency) {
+      event.preventDefault();
+      event.stopPropagation();
+      showChecklistBookingLockNotice(dependency);
+      return;
+    }
   }
 
   if (dayCard) {
@@ -5634,7 +5866,12 @@ function markAllChecklistItemsChecked() {
   }
 
   const checklistInputs = getChecklistInputs();
-  const pendingInputs = checklistInputs.filter((input) => !Boolean(checklistState[input.id]));
+  const pendingInputs = checklistInputs.filter(
+    (input) =>
+      !input.disabled &&
+      !getUnmetChecklistBookingDependency(input) &&
+      !Boolean(checklistState[input.id])
+  );
   if (!pendingInputs.length) {
     syncChecklistActionButtons(false);
     return;
@@ -5644,9 +5881,10 @@ function markAllChecklistItemsChecked() {
   const previousCompletedDays = new Set(completedDays);
   const previousCurrentDay = String(currentProgressDay);
 
-  checklistInputs.forEach((input) => {
+  pendingInputs.forEach((input) => {
     input.checked = true;
     checklistState[input.id] = true;
+    syncChecklistInputVisualState(input);
   });
 
   storeChecklistState();
@@ -5672,6 +5910,19 @@ function handleChecklistPanelChange(event) {
     return;
   }
 
+  const dependency = getUnmetChecklistBookingDependency(input);
+  if (dependency) {
+    event.preventDefault();
+    input.checked = false;
+    delete checklistState[input.id];
+    syncChecklistInputVisualState(input);
+    showChecklistBookingLockNotice(dependency);
+    storeChecklistState();
+    refreshChecklistProgressState({ syncDayCards: true });
+    syncProgressTimeline();
+    return;
+  }
+
   const previousUnlockedDays = new Set(unlockedDays);
   const previousCompletedDays = new Set(completedDays);
   const previousCurrentDay = String(currentProgressDay);
@@ -5681,6 +5932,7 @@ function handleChecklistPanelChange(event) {
   } else {
     delete checklistState[input.id];
   }
+  syncChecklistInputVisualState(input);
 
   triggerChecklistInteractionFeedback(input);
   storeChecklistState();
@@ -8719,6 +8971,7 @@ function scrollProgressTimelineToActive(force = false) {
 
 function refreshChecklistProgressState(options = {}) {
   const { syncDayCards = initializedSections.has("checklist") } = options;
+  removeLockedChecklistBookingCompletions();
   const {
     rawCompleted,
     completedHistory,
@@ -8728,6 +8981,7 @@ function refreshChecklistProgressState(options = {}) {
     currentDay: nextCurrentDay
   } = getJourneyState();
   const checklistLocked = isChecklistAccessLocked();
+  let didRemoveLockedBookingState = false;
 
   if (syncDayCards) {
     dayCards.forEach((card) => {
@@ -8747,13 +9001,19 @@ function refreshChecklistProgressState(options = {}) {
       card.setAttribute("aria-disabled", String(isUnavailable));
       syncChecklistGroupCompletion(card, isComplete);
       getDayInputs(card).forEach((input) => {
-        input.disabled = isUnavailable;
+        didRemoveLockedBookingState =
+          syncChecklistInputLockState(input, { dayLocked: isUnavailable }) ||
+          didRemoveLockedBookingState;
       });
       card.querySelectorAll(".transit-trigger--checklist").forEach((button) => {
-        button.disabled = checklistLocked;
-        button.setAttribute("aria-disabled", String(checklistLocked));
+        button.disabled = false;
+        button.setAttribute("aria-disabled", "false");
       });
     });
+
+    if (didRemoveLockedBookingState) {
+      storeChecklistState();
+    }
   }
 
   progressItems.forEach((item) => {
@@ -8845,7 +9105,8 @@ async function scrollToChecklistDay(day, { emphasizeCurrentDay = false } = {}) {
   });
 }
 
-function scrollToPanelStart(panelId) {
+function scrollToPanelStart(panelId, options = {}) {
+  const { behavior = getScrollBehavior() } = options;
   const panel = Array.from(contentPanels).find((node) => node.dataset.panel === panelId);
   if (!panel) {
     return;
@@ -8853,13 +9114,11 @@ function scrollToPanelStart(panelId) {
 
   const anchor = panel.querySelector("[data-panel-scroll-anchor]") || panel.querySelector(".section-heading") || panel;
   window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      lockHeaderState(760);
-      const targetTop =
-        anchor.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(20);
+    lockHeaderState(320);
+    const targetTop =
+      anchor.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(20);
 
-      void smoothlyScrollWindowTo(Math.max(targetTop, 0), { intent: "section" });
-    });
+    void smoothlyScrollWindowTo(Math.max(targetTop, 0), { behavior });
   });
 }
 
@@ -9506,7 +9765,7 @@ function bindTabNavigation() {
       if (!hasChanged) {
         pulseActiveSectionTab(tab);
       }
-      scrollToPanelStart(panelId);
+      scrollToPanelStart(panelId, { behavior: "auto" });
     });
 
     tab.dataset.navigationBound = "true";
@@ -9620,6 +9879,7 @@ async function bootApp() {
   initializeSiteAudioExperience();
   completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
   checklistState = readStoredChecklistState();
+  bookingTransitState = readStoredBookingTransitState();
   updateChecklistAccessState();
   syncOptionalDaysUI();
   applyTheme("dark", { persist: false });
@@ -9721,7 +9981,7 @@ resetProgressOpenButtons.forEach((button) => {
 
 backToTopButtons.forEach((button) => {
   button.addEventListener("click", async () => {
-    void smoothlyScrollWindowTo(0, { intent: "back-to-top" });
+    void smoothlyScrollWindowTo(0, { behavior: "auto" });
   });
 });
 

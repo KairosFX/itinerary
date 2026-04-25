@@ -2489,10 +2489,10 @@ html.reduce-effects .site-backdrop__video {
     gap: 0.1rem !important;
   }
 
-  .section-tab,
-  .site-header.is-condensed .section-tab {
-    padding: 0.28rem 0.44rem !important;
-    font-size: 0.66rem !important;
+.section-tab,
+.site-header.is-condensed .section-tab {
+  padding: 0.28rem 0.44rem !important;
+  font-size: 0.66rem !important;
   }
 
   .language-switcher,
@@ -2505,6 +2505,33 @@ html.reduce-effects .site-backdrop__video {
     padding: 0.2rem 0.42rem !important;
     font-size: 0.64rem !important;
   }
+}
+
+.section-tab,
+.section-tab:hover,
+.section-tab:focus-visible,
+.section-tab.is-active,
+.section-tab[aria-selected="true"],
+.language-button,
+.language-button:hover,
+.language-button:focus-visible,
+.language-button.is-active {
+  text-shadow: none !important;
+}
+
+.language-switcher,
+.site-header.is-condensed .language-switcher {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(5.2rem, 1fr));
+  gap: 0 !important;
+}
+
+.language-button,
+.site-header.is-condensed .language-button {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
 }
 
 /* Ritual gate */
@@ -2971,10 +2998,10 @@ html.reduce-effects .site-gate__form-shell {
 #checklist .day-card[data-day="4"] .day-card__side {
   padding-top: 0.08rem;
 }</style>
-  <link rel="preload" href="./assets/app/style.32a5e7f114.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.8555792019.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.32a5e7f114.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.32a5e7f114.css"></noscript>
+  <link rel="preload" href="./assets/app/style.5c6ff13014.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.85a079704d.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.5c6ff13014.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.5c6ff13014.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -3020,14 +3047,6 @@ html.reduce-effects .site-gate__form-shell {
           aria-live="polite"></p>
       </div>
     </div>
-    <a
-      class="site-gate__source-link"
-      href="https://github.com/KairosFX/itinerary"
-      target="_blank"
-      rel="noopener noreferrer">
-      <span data-language="en">View Full Source Code</span>
-      <span data-language="ja" hidden>ソースコード全体を見る</span>
-    </a>
   </div>
   <div class="site-backdrop" aria-hidden="true">
     <video
@@ -3622,12 +3641,16 @@ html.reduce-effects .site-gate__form-shell {
                     <span data-language="ja" hidden>東京移動を開く</span>
                   </button>
                 </li>
-                <li>
+                <li class="checklist-list__item checklist-list__item--with-detail">
                   <label class="check-item" for="day4-tokyo-hotel-check-in">
                     <input id="day4-tokyo-hotel-check-in" type="checkbox">
                     <span class="check-copy" data-language="en">Tokyo hotel check-in</span>
                     <span class="check-copy" data-language="ja" hidden>東京ホテルのチェックイン</span>
                   </label>
+                  <button class="transit-trigger transit-trigger--checklist" type="button" data-checklist-detail-trigger="tokyo-stay">
+                    <span data-language="en">Open Tokyo hotel</span>
+                    <span data-language="ja" hidden>東京ホテルを開く</span>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -4496,10 +4519,10 @@ html.reduce-effects .site-gate__form-shell {
   </div>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/page-background-loop.bcde8dff98.mp3","backgroundLoopAudioCssPath":"./page-background-loop.bcde8dff98.mp3","backgroundLoopAudioHash":"bcde8dff98","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.32a5e7f114.css","styleHash":"32a5e7f114","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.8555792019.js","scriptHash":"8555792019","routeContentPath":"./assets/app/routeContent.181310886b.js","routeContentHash":"181310886b","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.3764221ad3.js","budgetContentHash":"3764221ad3","essentialsContentPath":"./assets/app/essentialsContent.39e0d6ba11.js","essentialsContentHash":"39e0d6ba11","generatedAt":"2026-04-22T02:13:25.928Z","cacheVersion":"32a5e7f114-a79b88b908-8555792019-181310886b-c9b56d76dd-3764221ad3-39e0d6ba11-bcde8dff98-9afc15ad27"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/page-background-loop.bcde8dff98.mp3","backgroundLoopAudioCssPath":"./page-background-loop.bcde8dff98.mp3","backgroundLoopAudioHash":"bcde8dff98","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.5c6ff13014.css","styleHash":"5c6ff13014","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.85a079704d.js","scriptHash":"85a079704d","routeContentPath":"./assets/app/routeContent.181310886b.js","routeContentHash":"181310886b","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.3764221ad3.js","budgetContentHash":"3764221ad3","essentialsContentPath":"./assets/app/essentialsContent.5a021db2a9.js","essentialsContentHash":"5a021db2a9","generatedAt":"2026-04-25T01:58:39.719Z","cacheVersion":"5c6ff13014-a79b88b908-85a079704d-181310886b-c9b56d76dd-3764221ad3-5a021db2a9-bcde8dff98-9afc15ad27"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.8555792019.js" defer></script>
+  <script src="./assets/app/script.85a079704d.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>
