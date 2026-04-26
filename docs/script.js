@@ -326,12 +326,12 @@ const checklistBookingDependencyDefinitions = {
 };
 const checklistBookingLockLabels = {
   itemMessage: {
-    en: "Complete {booking} in Pre-Trip Bookings first.",
-    ja: "先に「{booking}」を事前予約で予約済みにしてください。"
+    en: "Book {booking} in Pre-Trip Bookings first.",
+    ja: "先に事前予約で「{booking}」を予約してください。"
   },
   toastMessage: {
-    en: "Complete {booking} in Pre-Trip Bookings before checking this item.",
-    ja: "この項目をチェックする前に、事前予約で「{booking}」を予約済みにしてください。"
+    en: "Book {booking} in Pre-Trip Bookings before checking this item.",
+    ja: "この項目をチェックする前に、事前予約で「{booking}」を予約してください。"
   }
 };
 const budgetLevelLabels = {
@@ -8755,6 +8755,43 @@ function getCurrentProgressDay() {
   return String(currentProgressDay);
 }
 
+function getCurrentChecklistJumpDay() {
+  const fallbackDay = Number.parseInt(getCurrentProgressDay(), 10);
+  const datedChecklistDays = dayCards
+    .map((card) => {
+      const day = Number.parseInt(card.dataset.day || "", 10);
+      const dateKey = String(card.dataset.tripDate || "").trim();
+
+      if (!Number.isFinite(day) || !/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) {
+        return null;
+      }
+
+      return { day, dateKey };
+    })
+    .filter(Boolean)
+    .sort((left, right) => left.day - right.day);
+
+  if (!datedChecklistDays.length) {
+    return Number.isFinite(fallbackDay) ? fallbackDay : 1;
+  }
+
+  const todayKey = formatTokyoDateKey(getTokyoShiftedDate());
+  const exactMatch = datedChecklistDays.find((entry) => entry.dateKey === todayKey);
+  if (exactMatch) {
+    return exactMatch.day;
+  }
+
+  if (todayKey < datedChecklistDays[0].dateKey) {
+    return datedChecklistDays[0].day;
+  }
+
+  if (todayKey > datedChecklistDays[datedChecklistDays.length - 1].dateKey) {
+    return datedChecklistDays[datedChecklistDays.length - 1].day;
+  }
+
+  return Number.isFinite(fallbackDay) ? fallbackDay : datedChecklistDays[0].day;
+}
+
 function getProgressOverviewState() {
   const totalDays = getTrackedDayNumbers().length || 7;
   const completedCount = completedDays.size;
@@ -9028,6 +9065,29 @@ function updateTimelineSpine() {
   lastTimelineSpineFillHeight = fillHeight;
 }
 
+function scheduleScrollToNode(
+  targetNode,
+  {
+    behavior = getScrollBehavior(),
+    extraOffset = 20,
+    headerLockDuration = 320
+  } = {}
+) {
+  if (!targetNode) {
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      lockHeaderState(headerLockDuration);
+      const targetTop =
+        targetNode.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(extraOffset);
+
+      void smoothlyScrollWindowTo(Math.max(targetTop, 0), { behavior });
+    });
+  });
+}
+
 function scrollProgressTimelineToActive(force = false) {
   lastTimelineFocusDay = force ? null : lastTimelineFocusDay;
 }
@@ -9151,26 +9211,24 @@ async function scrollToChecklistDay(day, { emphasizeCurrentDay = false } = {}) {
     syncProgressTimeline();
   }
 
-  const targetCard = getChecklistDayCard(emphasizeCurrentDay ? getCurrentProgressDay() : day);
+  const targetCard = getChecklistDayCard(
+    emphasizeCurrentDay ? getCurrentChecklistJumpDay() : day
+  );
   if (!targetCard) {
     return;
   }
 
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      lockHeaderState(720);
-      const targetTop =
-        targetCard.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(24);
-
-      void smoothlyScrollWindowTo(Math.max(targetTop, 0), { intent: "section" });
-
-      targetCard.classList.remove("is-route-target");
-      restartClassOnNextFrame(targetCard, "is-route-target");
-      window.setTimeout(() => {
-        targetCard.classList.remove("is-route-target");
-      }, 1400);
-    });
+  scheduleScrollToNode(targetCard, {
+    behavior: getScrollBehavior(),
+    extraOffset: 28,
+    headerLockDuration: 720
   });
+
+  targetCard.classList.remove("is-route-target");
+  restartClassOnNextFrame(targetCard, "is-route-target");
+  window.setTimeout(() => {
+    targetCard.classList.remove("is-route-target");
+  }, 1400);
 }
 
 function scrollToPanelStart(panelId, options = {}) {
@@ -9181,12 +9239,10 @@ function scrollToPanelStart(panelId, options = {}) {
   }
 
   const anchor = panel.querySelector("[data-panel-scroll-anchor]") || panel.querySelector(".section-heading") || panel;
-  window.requestAnimationFrame(() => {
-    lockHeaderState(320);
-    const targetTop =
-      anchor.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(20);
-
-    void smoothlyScrollWindowTo(Math.max(targetTop, 0), { behavior });
+  scheduleScrollToNode(anchor, {
+    behavior,
+    extraOffset: 28,
+    headerLockDuration: 360
   });
 }
 
@@ -9216,9 +9272,11 @@ function handleAnchorScrollClick(event) {
   }
 
   targetNode.focus({ preventScroll: true });
-  const targetTop =
-    targetNode.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(18);
-  void smoothlyScrollWindowTo(Math.max(targetTop, 0), { intent: "anchor" });
+  scheduleScrollToNode(targetNode, {
+    behavior: getScrollBehavior(),
+    extraOffset: 24,
+    headerLockDuration: 360
+  });
 
   if (window.history?.replaceState) {
     window.history.replaceState(null, "", `#${targetId}`);
@@ -10029,7 +10087,7 @@ if (document.readyState === "loading") {
 
 if (jumpCurrentDayButton) {
   jumpCurrentDayButton.addEventListener("click", () => {
-    void scrollToChecklistDay(getCurrentProgressDay(), {
+    void scrollToChecklistDay(getCurrentChecklistJumpDay(), {
       emphasizeCurrentDay: true
     });
   });

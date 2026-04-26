@@ -14532,6 +14532,11 @@ body,
   scroll-margin-top: calc(var(--header-reserved-height) + 1.1rem);
 }
 
+.content-panel [data-panel-scroll-anchor],
+#checklist .day-card {
+  scroll-margin-top: calc(var(--header-reserved-height) + 1.25rem);
+}
+
 .section-tab,
 .section-tab:hover,
 .section-tab:focus-visible,
