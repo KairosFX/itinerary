@@ -48,7 +48,7 @@ const assetDefinitions = [
 const staticAssetDefinitions = [
   {
     key: "backgroundLoopAudio",
-    sourcePath: path.join(docsDir, "assets", "audio", "page-background-loop.mp3")
+    sourcePath: path.join(docsDir, "assets", "audio", "music", "lukrembo - castle.mp3")
   },
   {
     key: "transitionAudio",

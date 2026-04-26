@@ -39,3 +39,12 @@ Generate the minified deploy assets used by `docs/index.html`:
 ```bash
 npm run build
 ```
+
+## Music Credit
+
+- Music: Lukrembo - Castle
+- Free Download: https://www.toneden.io/official_lukrembo/post/castle
+- Music by Lukrembo
+- Track: Castle
+
+Source proof is kept in `docs/assets/audio/music/proof/`.
