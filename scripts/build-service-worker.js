@@ -14,7 +14,6 @@ const appShellPaths = [
   "./",
   "./index.html",
   "./404.html",
-  "./travel-sheet.html",
   "./manifest.webmanifest",
   "./assets/icons/apple-touch-icon.png",
   "./assets/icons/icon-192.png",
@@ -34,7 +33,6 @@ const networkFirstPaths = [
   "./",
   "./index.html",
   "./404.html",
-  "./travel-sheet.html",
   "./manifest.webmanifest",
   "./itinerary-offline.html"
 ];

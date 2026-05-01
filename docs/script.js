@@ -11,10 +11,6 @@ const siteHeader = document.querySelector(".site-header");
 const headerAccessoryGroups = Array.from(document.querySelectorAll(".language-switcher"));
 const mainContent = document.querySelector("#main-content");
 const siteFooter = document.querySelector(".site-footer");
-const siteGate = document.querySelector("[data-site-gate]");
-const siteGateForm = document.querySelector("[data-site-gate-form]");
-const siteGateInput = document.querySelector("[data-site-gate-input]");
-const siteGateFeedback = document.querySelector("[data-site-gate-feedback]");
 const siteBackdropVideo = document.querySelector("[data-site-background-video]");
 const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const checklistGateNotice = document.querySelector("[data-checklist-gate]");
@@ -108,21 +104,10 @@ const budgetTravelerCountMax = 24;
 const budgetSharedRoomOccupancy = 2;
 const budgetTravelersPerRoomDefault = budgetSharedRoomOccupancy;
 const serviceWorkerWarmMessageType = "CACHE_URLS";
-const audioAmbientVolume = 0.035;
-const audioAmbientDuckVolume = 0.02;
+const audioAmbientVolume = 0.025;
+const audioAmbientDuckVolume = 0.012;
 const audioTransitionVolume = 0.28;
 const audioTransitionCooldownMs = 320;
-const siteGatePasswords = new Set(["kairosviii"]);
-const siteGateThemeColor = "#050806";
-const siteGateFeedbackCopy = {
-  rejected: {
-    en: "Incorrect password. Try again.",
-    ja: "パスワードが違います。もう一度お試しください。"
-  }
-};
-let siteGateUnlocked = !siteGate;
-let siteGateUnlockResolver = null;
-let siteGateRejectTimer = 0;
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
   en:
@@ -136,6 +121,9 @@ let budgetDayDefinitions = [];
 let tripNoteDefinitions = [];
 let tripNoteDefinitionMap = new Map();
 let panelTransitionToken = 0;
+let panelScrollAlignmentToken = 0;
+let sectionNavScrollLockPanelId = "";
+let sectionNavScrollLockUntil = 0;
 let gsapLoadPromise = null;
 const fujiForecastCacheMaxAgeMs = 45 * 60 * 1000;
 const fujiForecastSourceUrl = "https://open-meteo.com/en/docs";
@@ -326,10 +314,6 @@ const checklistBookingDependencyDefinitions = {
   }
 };
 const checklistBookingLockLabels = {
-  itemMessage: {
-    en: "Book {booking} in Pre-Trip Bookings first.",
-    ja: "先に事前予約で「{booking}」を予約してください。"
-  },
   toastMessage: {
     en: "Book {booking} in Pre-Trip Bookings before checking this item.",
     ja: "この項目をチェックする前に、事前予約で「{booking}」を予約してください。"
@@ -2901,78 +2885,6 @@ function getUnmetChecklistBookingDependency(inputOrId) {
   return dependency && !isChecklistBookingDependencyMet(dependency) ? dependency : null;
 }
 
-function addInputDescription(input, descriptionId) {
-  if (!input || !descriptionId) {
-    return;
-  }
-
-  const describedBy = new Set(
-    (input.getAttribute("aria-describedby") || "")
-      .split(/\s+/)
-      .map((value) => value.trim())
-      .filter(Boolean)
-  );
-  describedBy.add(descriptionId);
-  input.setAttribute("aria-describedby", Array.from(describedBy).join(" "));
-}
-
-function removeInputDescription(input, descriptionId) {
-  if (!input || !descriptionId) {
-    return;
-  }
-
-  const nextIds = (input.getAttribute("aria-describedby") || "")
-    .split(/\s+/)
-    .map((value) => value.trim())
-    .filter((value) => value && value !== descriptionId);
-
-  if (nextIds.length) {
-    input.setAttribute("aria-describedby", nextIds.join(" "));
-    return;
-  }
-
-  input.removeAttribute("aria-describedby");
-}
-
-function ensureChecklistBookingLockMessage(input, dependency) {
-  const listItem = input?.closest("li");
-  if (!input || !listItem || !dependency) {
-    return;
-  }
-
-  const messageId = `${input.id}-booking-lock`;
-  let messageNode = listItem.querySelector(
-    `.checklist-booking-lock[data-lock-for="${input.id}"]`
-  );
-
-  if (!messageNode) {
-    messageNode = document.createElement("p");
-    messageNode.className = "checklist-booking-lock";
-    messageNode.id = messageId;
-    messageNode.dataset.lockFor = input.id;
-    listItem.append(messageNode);
-  }
-
-  messageNode.innerHTML = renderLocalizedContent(
-    formatChecklistBookingLockCopy(checklistBookingLockLabels.itemMessage, dependency)
-  );
-  syncLocalizedNodes(messageNode);
-  addInputDescription(input, messageId);
-}
-
-function clearChecklistBookingLockMessage(input) {
-  const listItem = input?.closest("li");
-  if (!input || !listItem) {
-    return;
-  }
-
-  const messageId = `${input.id}-booking-lock`;
-  listItem
-    .querySelectorAll(`.checklist-booking-lock[data-lock-for="${input.id}"]`)
-    .forEach((node) => node.remove());
-  removeInputDescription(input, messageId);
-}
-
 function syncChecklistInputVisualState(input) {
   const checkItem = input?.closest(".check-item");
   if (!input || !checkItem) {
@@ -3031,12 +2943,6 @@ function syncChecklistInputLockState(input, { dayLocked = false } = {}) {
   checkItem.classList.toggle("is-day-locked", Boolean(dayLocked));
   checkItem.classList.toggle("is-booking-locked", bookingLocked);
   syncChecklistInputVisualState(input);
-
-  if (bookingLocked) {
-    ensureChecklistBookingLockMessage(input, dependency);
-  } else {
-    clearChecklistBookingLockMessage(input);
-  }
 
   if (bookingLocked && checklistState[input.id]) {
     delete checklistState[input.id];
@@ -4090,16 +3996,6 @@ function syncLocalizedDocumentTitle(language = root.lang) {
   if (appleWebAppTitleMeta) {
     appleWebAppTitleMeta.setAttribute("content", nextTitle);
   }
-}
-
-function syncSiteGatePlaceholder(language = root.lang) {
-  if (!siteGateInput) {
-    return;
-  }
-
-  const placeholder =
-    language === "ja" ? siteGateInput.dataset.placeholderJa : siteGateInput.dataset.placeholderEn;
-  siteGateInput.setAttribute("placeholder", placeholder || "");
 }
 
 function getChecklistDayTitle(day) {
@@ -5302,7 +5198,38 @@ function getSectionInViewPanelId() {
   return bestPanel?.dataset.panel || fallbackPanel?.dataset.panel || "";
 }
 
+function lockSectionNavScrollSync(panelId, duration = 1800) {
+  sectionNavScrollLockPanelId = panelId;
+  sectionNavScrollLockUntil = window.performance.now() + duration;
+}
+
+function clearSectionNavScrollSyncLock() {
+  sectionNavScrollLockPanelId = "";
+  sectionNavScrollLockUntil = 0;
+}
+
+function getLockedSectionNavPanelId() {
+  if (!sectionNavScrollLockPanelId) {
+    return "";
+  }
+
+  if (window.performance.now() <= sectionNavScrollLockUntil) {
+    return sectionNavScrollLockPanelId;
+  }
+
+  clearSectionNavScrollSyncLock();
+  return "";
+}
+
 function syncSectionNavToScroll({ force = false } = {}) {
+  const lockedPanelId = force ? "" : getLockedSectionNavPanelId();
+  if (lockedPanelId) {
+    if (getActivePanelId() !== lockedPanelId) {
+      setActivePanel(lockedPanelId, { syncContent: false, store: false });
+    }
+    return;
+  }
+
   const panelId = getSectionInViewPanelId();
   if (!panelId) {
     return;
@@ -8948,17 +8875,11 @@ function scheduleDayCardRowHeights() {
 
 function syncModalOpenState() {
   const isModalOpen = Boolean(transitDetailModal && !transitDetailModal.hidden);
-  const isGateBlocking = Boolean(
-    siteGate &&
-      !siteGate.hidden &&
-      (root.classList.contains("gate-active") || root.classList.contains("gate-unlocking"))
-  );
-  const shouldInertShell = isModalOpen || isGateBlocking;
 
   root.classList.toggle("has-modal-open", isModalOpen);
   [siteHeader, mainContent, siteFooter].forEach((node) => {
     if (node) {
-      node.toggleAttribute("inert", shouldInertShell);
+      node.toggleAttribute("inert", isModalOpen);
     }
   });
 }
@@ -9286,18 +9207,39 @@ async function scrollToChecklistDay(day, { emphasizeCurrentDay = false } = {}) {
 }
 
 function scrollToPanelStart(panelId, options = {}) {
-  const { behavior = getScrollBehavior() } = options;
-  const panel = Array.from(contentPanels).find((node) => node.dataset.panel === panelId);
-  if (!panel) {
-    return;
-  }
+  const { behavior = getScrollBehavior(), realign = true } = options;
+  const alignmentToken = ++panelScrollAlignmentToken;
+  lockSectionNavScrollSync(panelId);
 
-  const anchor = panel.querySelector("[data-panel-scroll-anchor]") || panel.querySelector(".section-heading") || panel;
-  scheduleScrollToNode(anchor, {
-    behavior,
-    extraOffset: 28,
-    headerLockDuration: 360
-  });
+  const alignPanel = (nextBehavior = behavior, headerLockDuration = 360) => {
+    if (alignmentToken !== panelScrollAlignmentToken) {
+      return;
+    }
+
+    const panel = Array.from(contentPanels).find((node) => node.dataset.panel === panelId);
+    if (!panel) {
+      return;
+    }
+
+    const anchor =
+      panel.querySelector("[data-panel-scroll-anchor]") || panel.querySelector(".section-heading") || panel;
+    setActivePanel(panelId, { syncContent: false, store: false });
+    scheduleScrollToNode(anchor, {
+      behavior: nextBehavior,
+      extraOffset: 28,
+      headerLockDuration
+    });
+  };
+
+  alignPanel(behavior, 360);
+
+  if (realign) {
+    [180, 520, 1100].forEach((delay) => {
+      window.setTimeout(() => {
+        alignPanel("auto", 220);
+      }, delay);
+    });
+  }
 }
 
 function handleAnchorScrollClick(event) {
@@ -9407,7 +9349,6 @@ function setLanguage(language) {
   }
 
   updateLanguageButtons(nextLanguage);
-  syncSiteGatePlaceholder(nextLanguage);
 
   storeLanguage(nextLanguage);
   refreshTripNotesIfReady();
@@ -9608,167 +9549,6 @@ function getInitialPanelId() {
     contentPanels.length === 1 ? defaultPanelId : readStoredActivePanel() || defaultPanelId;
 
   return nextPanelId;
-}
-
-function waitForFrame() {
-  return new Promise((resolve) => {
-    window.requestAnimationFrame(() => resolve());
-  });
-}
-
-function waitForDuration(durationMs) {
-  return new Promise((resolve) => {
-    window.setTimeout(resolve, durationMs);
-  });
-}
-
-function getSiteGateTimings() {
-  const inputRevealDelayMs = reducedEffectsEnabled ? 120 : 360;
-  const unlockDurationMs = reducedEffectsEnabled ? 180 : 680;
-  const rejectDurationMs = reducedEffectsEnabled ? 220 : 560;
-
-  return {
-    inputRevealDelayMs,
-    unlockDurationMs,
-    rejectDurationMs
-  };
-}
-
-function clearSiteGateFeedback() {
-  if (siteGateFeedback) {
-    siteGateFeedback.textContent = "";
-  }
-}
-
-function setSiteGateFeedback(message) {
-  if (siteGateFeedback) {
-    siteGateFeedback.textContent = message;
-  }
-}
-
-function clearSiteGateRejectState() {
-  if (siteGateRejectTimer) {
-    window.clearTimeout(siteGateRejectTimer);
-    siteGateRejectTimer = 0;
-  }
-
-  root.classList.remove("gate-rejected");
-}
-
-function unlockSiteGate() {
-  if (!siteGate || siteGateUnlocked) {
-    return;
-  }
-
-  const { unlockDurationMs } = getSiteGateTimings();
-  siteGateUnlocked = true;
-  clearSiteGateRejectState();
-  clearSiteGateFeedback();
-
-  if (siteGateInput) {
-    siteGateInput.disabled = true;
-  }
-
-  root.classList.remove("gate-active", "gate-ready");
-  root.classList.add("gate-unlocking");
-  syncModalOpenState();
-
-  window.setTimeout(() => {
-    root.classList.remove("gate-unlocking");
-    updateThemeColorMeta(getCurrentTheme());
-
-    if (siteGate) {
-      siteGate.hidden = true;
-      siteGate.setAttribute("aria-hidden", "true");
-    }
-
-    syncModalOpenState();
-
-    if (siteGateUnlockResolver) {
-      const resolve = siteGateUnlockResolver;
-      siteGateUnlockResolver = null;
-      resolve();
-    }
-  }, unlockDurationMs);
-}
-
-function handleSiteGateSubmit(event) {
-  event.preventDefault();
-
-  if (!siteGate || !siteGateInput || siteGateUnlocked || siteGateInput.disabled) {
-    return;
-  }
-
-  const submittedValue = siteGateInput.value.trim().toLowerCase();
-  if (siteGatePasswords.has(submittedValue)) {
-    unlockSiteGate();
-    return;
-  }
-
-  const { rejectDurationMs } = getSiteGateTimings();
-  clearSiteGateRejectState();
-  setSiteGateFeedback(
-    root.lang === "ja" ? siteGateFeedbackCopy.rejected.ja : siteGateFeedbackCopy.rejected.en
-  );
-  siteGateInput.value = "";
-  root.classList.add("gate-rejected");
-
-  siteGateRejectTimer = window.setTimeout(() => {
-    root.classList.remove("gate-rejected");
-    siteGateInput.focus({ preventScroll: true });
-  }, rejectDurationMs);
-}
-
-function handleSiteGateInput() {
-  clearSiteGateRejectState();
-  clearSiteGateFeedback();
-}
-
-async function playSiteGate() {
-  if (!siteGate) {
-    siteGateUnlocked = true;
-    root.classList.remove("gate-active", "gate-ready", "gate-rejected", "gate-unlocking");
-    syncModalOpenState();
-    return;
-  }
-
-  const { inputRevealDelayMs } = getSiteGateTimings();
-  siteGateUnlocked = false;
-  clearSiteGateRejectState();
-  clearSiteGateFeedback();
-
-  siteGate.hidden = false;
-  siteGate.setAttribute("aria-hidden", "false");
-  if (siteGateForm) {
-    siteGateForm.reset();
-  }
-  if (siteGateInput) {
-    siteGateInput.disabled = true;
-  }
-
-  root.classList.remove("gate-ready", "gate-rejected", "gate-unlocking");
-  root.classList.add("gate-active");
-  if (themeColorMeta) {
-    themeColorMeta.setAttribute("content", siteGateThemeColor);
-  }
-  syncModalOpenState();
-
-  await waitForFrame();
-  await waitForFrame();
-
-  if (inputRevealDelayMs > 0) {
-    await waitForDuration(inputRevealDelayMs);
-  }
-
-  root.classList.add("gate-ready");
-  if (siteGateInput) {
-    siteGateInput.disabled = false;
-    siteGateInput.focus({ preventScroll: true });
-  }
-
-  return new Promise((resolve) => {
-    siteGateUnlockResolver = resolve;
-  });
 }
 
 function getGsapRuntime() {
@@ -10070,7 +9850,6 @@ async function bootApp() {
     root.lang = "en";
     syncLocalizedDocumentTitle("en");
     updateLanguageButtons("en");
-    syncSiteGatePlaceholder("en");
   }
 
   bindSectionNavMotion();
@@ -10082,12 +9861,10 @@ async function bootApp() {
   root.classList.remove("intro-pending", "intro-active", "intro-leaving");
   revealAllContentPanels();
   ensureSectionInitObserver();
-  const gatePromise = playSiteGate();
-  gatePromise.finally(() => {
-    if (siteAudioState.ambientWanted) {
-      void requestAmbientPlayback();
-    }
-  });
+  syncModalOpenState();
+  if (siteAudioState.ambientWanted) {
+    void requestAmbientPlayback();
+  }
   void warmRouteExperience();
   const initialPanelId = getInitialPanelId();
   setActivePanel(initialPanelId, { syncContent: false, store: false });
@@ -10107,8 +9884,6 @@ async function bootApp() {
       scheduleDayCardRowHeights();
     });
   }
-
-  await gatePromise;
 }
 
 function scheduleAppBoot() {
@@ -10175,14 +9950,6 @@ transitDetailCloseButtons.forEach((button) => {
   });
 });
 
-if (siteGateForm) {
-  siteGateForm.addEventListener("submit", handleSiteGateSubmit);
-}
-
-if (siteGateInput) {
-  siteGateInput.addEventListener("input", handleSiteGateInput);
-}
-
 if (transitDetailModal) {
   transitDetailModal.addEventListener("click", (event) => {
     if (event.target === transitDetailModal) {
@@ -10248,6 +10015,8 @@ window.addEventListener(
 window.addEventListener(
   "wheel",
   () => {
+    panelScrollAlignmentToken += 1;
+    clearSectionNavScrollSyncLock();
     cancelWindowScrollAnimation(false);
   },
   { passive: true }
@@ -10256,6 +10025,8 @@ window.addEventListener(
 window.addEventListener(
   "touchstart",
   () => {
+    panelScrollAlignmentToken += 1;
+    clearSectionNavScrollSyncLock();
     cancelWindowScrollAnimation(false);
   },
   { passive: true }
