@@ -4,84 +4,84 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       day: 1,
       title: { en: "Arrival Night in Osaka", ja: "大阪に着く夜" },
       note: {
-        en: "Land, get settled, then keep the first night easy. Just walk Dotonbori, drift through Shinsaibashi, and eat somewhere simple in Minami instead of trying to force too much on arrival day.",
-        ja: "着いたらまず落ち着いて、初日の夜は無理をしない。道頓堀を歩いて、心斎橋を流して、夕食はミナミで近場にしておけば十分。"
+        en: "Ease into Osaka with Dotonbori first, a Shinsaibashi walk after that, and dinner in Minami nearby. Keep it loose so arrival night stays simple.",
+        ja: "大阪は道頓堀から入り、そのあと心斎橋を歩いて、夕食はミナミの近場で軽くまとめる。到着日の夜は余裕を残しておく。"
       },
       summary: {
-        en: "The trip opens gently in Minami: step into Dotonbori, wander through Shinsaibashi, and keep dinner nearby so the first night stays easy.",
-        ja: "旅の始まりはミナミでゆっくり。道頓堀に入り、心斎橋を歩き、夕食も近場で済ませて初日の夜を軽く整えます。"
+        en: "The trip opens gently in Minami: Dotonbori, Shinsaibashi, and an easy dinner close by.",
+        ja: "旅の始まりはミナミでゆっくり。道頓堀、心斎橋、近場の夕食で軽く整えます。"
       }
     },
     {
       day: 2,
       title: { en: "Kaiyukan and Kyoto East", ja: "海遊館と京都東側" },
       note: {
-        en: "Start with Kaiyukan, then move to Kyoto and get the hotel check-in out of the way. After that the day is basically Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion, with no reason to complicate the route if the pacing already works.",
-        ja: "まず海遊館から始め、そのあと京都へ移動してチェックインを済ませる。そこから清水寺、二年坂、八坂の塔、祇園という流れなので、歩きやすければ無理に崩さないほうがよさそう。"
+        en: "Start at Kaiyukan, transfer to Kyoto, and check into the hotel before the east-side walk. The Kyoto stretch is Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion in that order.",
+        ja: "海遊館から始め、京都へ移動してホテルにチェックイン。その後は清水寺、二年坂、八坂の塔、祇園の順で東側を歩く。"
       },
       summary: {
-        en: "Day 2 starts at Kaiyukan, then moves to Kyoto for hotel check-in and a clean east-side walk through Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion.",
-        ja: "2日目は海遊館から始め、そのあと京都へ移動してホテルに入り、清水寺、二年坂、八坂の塔、祇園へと東側を自然につないで歩きます。"
+        en: "Kaiyukan first, then Kyoto transfer, hotel check-in, and the Kiyomizu-dera to Gion walk.",
+        ja: "海遊館、京都移動、ホテルチェックイン、清水寺から祇園への東側歩き。"
       }
     },
     {
       day: 3,
       title: { en: "Arashiyama to Fuji", ja: "嵐山から富士エリアへ" },
       note: {
-        en: "This is the long one. Start with Arashiyama, head back through Osaka for the Shin-Osaka launch, then commit to the shinkansen toward Mishima and the Fujikawaguchiko transfer. Once the onsen check-in is done, call it there.",
-        ja: "ここが長い日。嵐山から始めて大阪側へ戻り、新大阪から三島方面の新幹線と富士河口湖への乗り継ぎへ進む。温泉宿に入れたら、その日はもう十分。"
+        en: "This is the long movement day. Start with Arashiyama, return to Osaka, take the shinkansen toward Mishima, transfer to Fujikawaguchiko, and finish with the onsen check-in.",
+        ja: "この日は移動が長め。嵐山から始め、大阪へ戻り、三島方面の新幹線、富士河口湖への乗り継ぎ、最後に温泉チェックインまで進む。"
       },
       summary: {
-        en: "This is the long movement day: start with Arashiyama, return through Osaka for the Shin-Osaka handoff, then ride east toward Mishima, Kawaguchiko, and the onsen reset.",
-        ja: "この日は移動が長め。嵐山から始め、大阪側へ戻って新大阪へつなぎ、その後は三島、河口湖、温泉宿へと東へ進みます。"
+        en: "Arashiyama, Osaka return, shinkansen toward Mishima, Fujikawaguchiko transfer, then the onsen reset.",
+        ja: "嵐山、大阪戻り、三島方面の新幹線、富士河口湖への移動、温泉宿でリセット。"
       }
     },
     {
       day: 4,
       title: { en: "Fuji Morning, Tokyo Evening", ja: "富士の朝、東京の夜" },
       note: {
-        en: "Morning is for Chureito Shimoyoshida and Lake Kawaguchiko if the weather cooperates. Keep the Fuji weather check as the last planning note, not the main event. After that it is just the transfer to Shibuya and getting checked into the Tokyo hotel without dragging the move out.",
-        ja: "朝は天気が持てば忠霊塔・下吉田と河口湖。富士山の天気確認は主役ではなく最後の確認くらいで見ておく。そのあとは渋谷へ移動して、東京のホテルに入れば流れとしては十分きれい。"
+        en: "Use the morning for Chureito Shimoyoshida and Lake Kawaguchiko if visibility is good. After that, transfer to Shibuya and get the Tokyo hotel check-in handled.",
+        ja: "視界がよければ朝は忠霊塔・下吉田と河口湖へ。その後は渋谷へ移動して、東京のホテルチェックインを済ませる。"
       },
       summary: {
         en: "Give the morning to Chureito Shimoyoshida and Lake Kawaguchiko, then keep the afternoon practical with the Shibuya transfer and Tokyo hotel check-in.",
-        ja: "午前は忠霊塔・下吉田と河口湖に使い、午後は渋谷への移動と東京ホテルのチェックインを落ち着いて進めます。"
+        ja: "午前は忠霊塔・下吉田と河口湖、午後は渋谷移動と東京ホテルチェックイン。"
       }
     },
     {
       day: 5,
       title: { en: "Shibuya Day", ja: "渋谷の日" },
       note: {
-        en: "Keep this one simple on purpose. Shibuya Crossing, a food walk, then Shibuya Sky later on when the light is better. It already reads like a full day without adding another side trip.",
-        ja: "この日はあえて単純でよさそう。渋谷交差点、食べ歩き、最後に渋谷スカイ。これだけで十分一日になるので、ほかを足しすぎないほうがまとまる。"
+        en: "Keep the Tokyo west-side day focused: Shibuya Crossing, the food walk, and Shibuya Sky later when the view is better. No extra side trip is needed.",
+        ja: "東京西側に絞る日。渋谷交差点、渋谷フードウォーク、最後に渋谷スカイへ進めば、寄り道を足さなくても十分まとまる。"
       },
       summary: {
         en: "Stay west and keep the day simple: cross Shibuya, leave time for the food walk, and finish with Shibuya Sky when the evening view is ready.",
-        ja: "東京西側に絞り、渋谷交差点、食べ歩き、夕方以降の渋谷スカイへ。移動を増やさず一日をまとめます。"
+        ja: "渋谷交差点、フードウォーク、夕方以降の渋谷スカイで一日をまとめます。"
       }
     },
     {
       day: 6,
       title: { en: "East Tokyo Loop", ja: "東京東側の一日" },
       note: {
-        en: "East side only here. Start with Tokyo Skytree, stay around Solamachi while already there, and leave Akihabara for the end instead of bouncing back and forth across the city.",
-        ja: "ここは東側だけでまとめる。最初に東京スカイツリー、そのままソラマチ、最後に秋葉原へ回すくらいで、わざわざ街を行ったり来たりしないほうが楽。"
+        en: "Stay on the east side: Tokyo Skytree first, Solamachi while you are already there, then Akihabara as the final stop. It keeps the day from bouncing across the city.",
+        ja: "東側だけでまとめる。東京スカイツリーから始め、そのままソラマチ、最後に秋葉原へ回すと街を行き来しすぎずに済む。"
       },
       summary: {
         en: "The east-side day stays compact: Tokyo Skytree first, Solamachi below it next, and Akihabara as the final city stop.",
-        ja: "東側の日はコンパクトに。東京スカイツリー、その下のソラマチ、最後に秋葉原へ進みます。"
+        ja: "東京スカイツリー、ソラマチ、秋葉原の順で東側をコンパクトに進みます。"
       }
     },
     {
       day: 7,
       title: { en: "Final Tokyo Reset", ja: "最後の東京調整" },
       note: {
-        en: "Last day should stay practical. Imperial Palace first if it fits, then Shinjuku, pick up the bags, and leave enough room for the airport transfer. No need to sneak in one more heavy stop on the way out.",
-        ja: "最終日は実用優先でよさそう。入るなら皇居、そのあと新宿、荷物回収、空港移動。最後にもう一か所詰め込むより、この流れを崩さないほうが安心。"
+        en: "Keep departure day practical: Imperial Palace if it fits, Shinjuku after that, then bag pickup and the airport transfer. Leave enough room for the exit.",
+        ja: "出発日は実用優先。入るなら皇居、そのあと新宿、荷物回収、空港移動へ進み、最後は余裕を残す。"
       },
       summary: {
-        en: "Use the last day for a measured finish: Imperial Palace, Shinjuku, bag pickup, and the airport transfer without adding another heavy detour.",
-        ja: "最終日は無理を増やさず、皇居、新宿、荷物回収、空港移動へ。落ち着いて旅を締めます。"
+        en: "A measured finish: Imperial Palace, Shinjuku, bag pickup, and the airport transfer.",
+        ja: "皇居、新宿、荷物回収、空港移動で落ち着いて旅を締めます。"
       }
     }
   ];

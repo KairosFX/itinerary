@@ -32,7 +32,6 @@ const checklistPrintPreview = document.querySelector("[data-checklist-print-prev
 const checklistPrintCloseButtons = Array.from(document.querySelectorAll("[data-checklist-print-close]"));
 const checklistPrintConfirmButton = document.querySelector("[data-checklist-print-confirm]");
 const checklistPrintResetButton = document.querySelector("[data-checklist-print-reset]");
-const progressExportButton = document.querySelector("[data-progress-export]");
 const resetProgressOpenButtons = Array.from(document.querySelectorAll("[data-reset-progress-open]"));
 const transitDetailModal = document.querySelector("[data-transit-detail-modal]");
 const transitDetailCloseButtons = Array.from(document.querySelectorAll("[data-transit-detail-close]"));
@@ -124,6 +123,41 @@ const checklistPrintStartTimeOptions = [
   { value: "09:30", label: { en: "9:30 AM", ja: "9:30" } },
   { value: "10:00", label: { en: "10:00 AM", ja: "10:00" } }
 ];
+const checklistPrintFallbackDurationDefinition = {
+  minutes: [30, 30],
+  label: { en: "30 min", ja: "30分" }
+};
+const checklistPrintDurationDefinitions = {
+  "day1-nightlife": { minutes: [60, 120], label: { en: "1-2 hours", ja: "1～2時間" } },
+  "day1-shinsaibashi": { minutes: [45, 60], label: { en: "45-60 min", ja: "45～60分" } },
+  "day1-dinner": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
+  "day2-kaiyukan": { minutes: [150, 180], label: { en: "2.5-3 hours", ja: "2.5～3時間" } },
+  "day2-transfer-to-kyoto": { minutes: [90, 90], label: { en: "1.5 hours", ja: "1.5時間" } },
+  "day2-hotel-check-in": { minutes: [45, 45], label: { en: "45 min", ja: "45分" } },
+  "day2-kiyomizu": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
+  "day2-ninenzaka": { minutes: [45, 60], label: { en: "45-60 min", ja: "45～60分" } },
+  "day2-yasaka": { minutes: [30, 30], label: { en: "30 min", ja: "30分" } },
+  "day2-gion": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
+  "day3-arashiyama": { minutes: [150, 180], label: { en: "2.5-3 hours", ja: "2.5～3時間" } },
+  "day3-back-to-osaka": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
+  "day3-shinkansen-mishima": { minutes: [120, 150], label: { en: "2-2.5 hours", ja: "2～2.5時間" } },
+  "day3-transfer-fujikawaguchiko": { minutes: [90, 120], label: { en: "1.5-2 hours", ja: "1.5～2時間" } },
+  "day3-onsen-check-in": { minutes: [45, 60], label: { en: "45-60 min", ja: "45～60分" } },
+  "day4-chureito": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
+  "day4-kawaguchiko": { minutes: [120, 180], label: { en: "2-3 hours", ja: "2～3時間" } },
+  "day4-tokyo-transfer": { minutes: [150, 180], label: { en: "2.5-3 hours", ja: "2.5～3時間" } },
+  "day4-tokyo-hotel-check-in": { minutes: [45, 45], label: { en: "45 min", ja: "45分" } },
+  "day5-shibuya-crossing": { minutes: [30, 45], label: { en: "30-45 min", ja: "30～45分" } },
+  "day5-shibuya-food-walk": { minutes: [90, 120], label: { en: "1.5-2 hours", ja: "1.5～2時間" } },
+  "day5-sky": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
+  "day6-skytree": { minutes: [90, 120], label: { en: "1.5-2 hours", ja: "1.5～2時間" } },
+  "day6-solamachi": { minutes: [60, 120], label: { en: "1-2 hours", ja: "1～2時間" } },
+  "day6-akihabara": { minutes: [90, 150], label: { en: "1.5-2.5 hours", ja: "1.5～2.5時間" } },
+  "day7-palace": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
+  "day7-shinjuku": { minutes: [90, 120], label: { en: "1.5-2 hours", ja: "1.5～2時間" } },
+  "day7-bags": { minutes: [30, 45], label: { en: "30-45 min", ja: "30～45分" } },
+  "day7-airport": { minutes: [90, 120], label: { en: "1.5-2 hours", ja: "1.5～2時間" } }
+};
 const audioAmbientVolume = 0.03;
 const audioAmbientDuckVolume = 0.02;
 const audioTransitionVolume = 0.28;
@@ -3660,59 +3694,6 @@ function queueStoragePrefixRemovals(prefixes = []) {
   }
 }
 
-function getLocalStorageSnapshot(prefixes = []) {
-  const snapshot = {};
-
-  try {
-    for (let index = 0; index < window.localStorage.length; index += 1) {
-      const key = window.localStorage.key(index);
-      if (key && prefixes.some((prefix) => key.startsWith(prefix))) {
-        snapshot[key] = window.localStorage.getItem(key);
-      }
-    }
-  } catch (error) {
-    // Ignore storage failures and export whatever is available.
-  }
-
-  return snapshot;
-}
-
-function downloadTextFile(fileName, textContent, mimeType = "application/json") {
-  const blob = new Blob([textContent], { type: `${mimeType};charset=utf-8` });
-  const objectUrl = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = objectUrl;
-  link.download = fileName;
-  link.rel = "noopener";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
-}
-
-function exportTripProgressBackup() {
-  flushQueuedStorageWrites();
-
-  const backup = {
-    app: "Kairos VIII Japan Escape Itinerary",
-    exportedAt: new Date().toISOString(),
-    note:
-      "Front-end progress backup only. This file may contain checklist, booking, packing, and budget-note state saved in this browser.",
-    storage: getLocalStorageSnapshot([
-      "japan-trip-checklist-state-",
-      "japan-trip-completed-history-",
-      "japan-trip-bookings-transit-state-",
-      "japan-trip-packing-state-",
-      "japan-trip-budget-notes-"
-    ])
-  };
-
-  downloadTextFile(
-    `kairos-viii-progress-backup-${new Date().toISOString().slice(0, 10)}.json`,
-    JSON.stringify(backup, null, 2)
-  );
-}
-
 function clearStoredTripProgressState() {
   queueStoragePrefixRemovals([
     "japan-trip-checklist-state-",
@@ -3984,7 +3965,9 @@ function getChecklistPrintLabels() {
       specificStartTime: "開始時間",
       startRangeOutput: "開始目安",
       startOutput: "開始",
-      est: "目安"
+      est: "目安",
+      approx: "おおよそ",
+      dependingOnStartTime: "開始時間により変動"
     };
   }
 
@@ -4004,7 +3987,9 @@ function getChecklistPrintLabels() {
     specificStartTime: "Specific start time",
     startRangeOutput: "Start range",
     startOutput: "Start",
-    est: "Est."
+    est: "Est.",
+    approx: "Approx.",
+    dependingOnStartTime: "depending on start time"
   };
 }
 
@@ -4118,73 +4103,99 @@ function buildChecklistPrintTimeOptions(selectedValue = "") {
     .join("");
 }
 
+function getChecklistPrintDurationDefinition(itemId = "") {
+  return checklistPrintDurationDefinitions[itemId] || checklistPrintFallbackDurationDefinition;
+}
+
 function getDefaultChecklistPrintDuration(itemId = "") {
-  const durationMap = {
-    en: {
-      "day1-nightlife": "1-2 hours",
-      "day1-shinsaibashi": "45-60 min",
-      "day1-dinner": "1-1.5 hours",
-      "day2-kaiyukan": "2.5-3 hours",
-      "day2-transfer-to-kyoto": "1.5 hours",
-      "day2-hotel-check-in": "45 min",
-      "day2-kiyomizu": "1-1.5 hours",
-      "day2-ninenzaka": "45-60 min",
-      "day2-yasaka": "30 min",
-      "day2-gion": "1-1.5 hours",
-      "day3-arashiyama": "2.5-3 hours",
-      "day3-back-to-osaka": "1-1.5 hours",
-      "day3-shinkansen-mishima": "2-2.5 hours",
-      "day3-transfer-fujikawaguchiko": "1.5-2 hours",
-      "day3-onsen-check-in": "45-60 min",
-      "day4-chureito": "1-1.5 hours",
-      "day4-kawaguchiko": "2-3 hours",
-      "day4-tokyo-transfer": "2.5-3 hours",
-      "day4-tokyo-hotel-check-in": "45 min",
-      "day5-shibuya-crossing": "30-45 min",
-      "day5-shibuya-food-walk": "1.5-2 hours",
-      "day5-sky": "1-1.5 hours",
-      "day6-skytree": "1.5-2 hours",
-      "day6-solamachi": "1-2 hours",
-      "day6-akihabara": "1.5-2.5 hours",
-      "day7-palace": "1-1.5 hours",
-      "day7-shinjuku": "1.5-2 hours",
-      "day7-bags": "30-45 min",
-      "day7-airport": "1.5-2 hours"
-    },
-    ja: {
-      "day1-nightlife": "1～2時間",
-      "day1-shinsaibashi": "45～60分",
-      "day1-dinner": "1～1.5時間",
-      "day2-kaiyukan": "2.5～3時間",
-      "day2-transfer-to-kyoto": "1.5時間",
-      "day2-hotel-check-in": "45分",
-      "day2-kiyomizu": "1～1.5時間",
-      "day2-ninenzaka": "45～60分",
-      "day2-yasaka": "30分",
-      "day2-gion": "1～1.5時間",
-      "day3-arashiyama": "2.5～3時間",
-      "day3-back-to-osaka": "1～1.5時間",
-      "day3-shinkansen-mishima": "2～2.5時間",
-      "day3-transfer-fujikawaguchiko": "1.5～2時間",
-      "day3-onsen-check-in": "45～60分",
-      "day4-chureito": "1～1.5時間",
-      "day4-kawaguchiko": "2～3時間",
-      "day4-tokyo-transfer": "2.5～3時間",
-      "day4-tokyo-hotel-check-in": "45分",
-      "day5-shibuya-crossing": "30～45分",
-      "day5-shibuya-food-walk": "1.5～2時間",
-      "day5-sky": "1～1.5時間",
-      "day6-skytree": "1.5～2時間",
-      "day6-solamachi": "1～2時間",
-      "day6-akihabara": "1.5～2.5時間",
-      "day7-palace": "1～1.5時間",
-      "day7-shinjuku": "1.5～2時間",
-      "day7-bags": "30～45分",
-      "day7-airport": "1.5～2時間"
-    }
-  };
+  const definition = getChecklistPrintDurationDefinition(itemId);
   const language = getChecklistPrintLanguage();
-  return durationMap[language]?.[itemId] || durationMap.en[itemId] || "30 min";
+  return definition.label?.[language] || definition.label?.en || checklistPrintFallbackDurationDefinition.label.en;
+}
+
+function getDefaultChecklistPrintDurationMinutes(itemId = "") {
+  const definition = getChecklistPrintDurationDefinition(itemId);
+  const [rawMin, rawMax] = Array.isArray(definition.minutes)
+    ? definition.minutes
+    : checklistPrintFallbackDurationDefinition.minutes;
+  const min = Math.max(0, Number(rawMin) || 0);
+  const max = Math.max(min, Number(rawMax) || min);
+
+  return { min, max };
+}
+
+function parseChecklistPrintClockMinutes(value = "") {
+  const match = /^(\d{2}):(\d{2})$/.exec(String(value).trim());
+  if (!match) {
+    return null;
+  }
+
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  if (!Number.isInteger(hours) || !Number.isInteger(minutes) || hours > 23 || minutes > 59) {
+    return null;
+  }
+
+  return hours * 60 + minutes;
+}
+
+function formatChecklistPrintClockMinutes(totalMinutes = 0) {
+  const normalizedTotal = ((Math.round(totalMinutes) % 1440) + 1440) % 1440;
+  const hours = Math.floor(normalizedTotal / 60);
+  const minutes = normalizedTotal % 60;
+
+  if (getChecklistPrintLanguage() === "ja") {
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+  }
+
+  const hour12 = hours % 12 || 12;
+  const suffix = hours < 12 ? "AM" : "PM";
+  return `${hour12}:${String(minutes).padStart(2, "0")} ${suffix}`;
+}
+
+function buildChecklistPrintTimeWindow(startMinutes, endMinutes) {
+  return `${formatChecklistPrintClockMinutes(startMinutes)}–${formatChecklistPrintClockMinutes(endMinutes)}`;
+}
+
+function withChecklistPrintSchedules(days = []) {
+  const settings = getChecklistPrintStartSettings();
+  const rangeStartMinutes = parseChecklistPrintClockMinutes(settings.rangeStart);
+  const rangeEndMinutes = parseChecklistPrintClockMinutes(settings.rangeEnd);
+  const specificStartMinutes = parseChecklistPrintClockMinutes(settings.specificStart);
+
+  return days.map((day) => {
+    let elapsedMin = 0;
+    let elapsedMax = 0;
+    const items = day.items.map((item) => {
+      const durationMinutes = item.durationMinutes || getDefaultChecklistPrintDurationMinutes(item.id);
+      const schedule = {};
+
+      if (settings.startMode === "specific" && specificStartMinutes !== null) {
+        schedule.mode = "specific";
+        schedule.start = formatChecklistPrintClockMinutes(specificStartMinutes + elapsedMax);
+      } else if (rangeStartMinutes !== null && rangeEndMinutes !== null) {
+        schedule.mode = "range";
+        schedule.window = buildChecklistPrintTimeWindow(
+          rangeStartMinutes + elapsedMin,
+          rangeEndMinutes + elapsedMax + durationMinutes.max
+        );
+      }
+
+      elapsedMin += durationMinutes.min;
+      elapsedMax += durationMinutes.max;
+
+      return {
+        ...item,
+        durationMinutes,
+        schedule
+      };
+    });
+
+    return {
+      ...day,
+      items
+    };
+  });
 }
 
 function parseDateInputValue(value = "") {
@@ -4276,7 +4287,8 @@ function getChecklistPrintDefaults(startDate = getChecklistPrintStartDate()) {
           return {
             id: itemId,
             text,
-            duration: getDefaultChecklistPrintDuration(itemId)
+            duration: getDefaultChecklistPrintDuration(itemId),
+            durationMinutes: getDefaultChecklistPrintDurationMinutes(itemId)
           };
         })
         .filter(Boolean);
@@ -4400,7 +4412,8 @@ function getChecklistPrintDraftFromEditor() {
 function buildChecklistPrintMarkup(days = getChecklistPrintDraft()) {
   const labels = getChecklistPrintLabels();
   const startSummary = getChecklistPrintStartSummary();
-  const dayMarkup = days
+  const scheduledDays = withChecklistPrintSchedules(days);
+  const dayMarkup = scheduledDays
     .map((day) => {
       const headingDate = day.date || labels.customDate;
       const dayTitle = day.title ? `<small>${escapeHtml(day.title)}</small>` : "";
@@ -4411,10 +4424,18 @@ function buildChecklistPrintMarkup(days = getChecklistPrintDraft()) {
             return "";
           }
 
+          const timePrefix =
+            item.schedule?.mode === "specific" && item.schedule.start
+              ? `<span class="checklist-print-output__time">${escapeHtml(item.schedule.start)} — </span>`
+              : "";
           const durationText = item.duration
             ? ` <span class="checklist-print-output__duration">— ${escapeHtml(labels.est)} ${escapeHtml(item.duration)}</span>`
             : "";
-          return `<li><span>${escapeHtml(item.text)}</span>${durationText}</li>`;
+          const rangeScheduleText =
+            item.schedule?.mode === "range" && item.schedule.window
+              ? ` <span class="checklist-print-output__schedule">— ${escapeHtml(labels.approx)} ${escapeHtml(item.schedule.window)} ${escapeHtml(labels.dependingOnStartTime)}</span>`
+              : "";
+          return `<li>${timePrefix}<span>${escapeHtml(item.text)}</span>${durationText}${rangeScheduleText}</li>`;
         })
         .filter(Boolean)
         .join("");
@@ -10387,10 +10408,6 @@ if (checklistPrintConfirmButton) {
 
 if (checklistPrintResetButton) {
   checklistPrintResetButton.addEventListener("click", resetChecklistPrintDraft);
-}
-
-if (progressExportButton) {
-  progressExportButton.addEventListener("click", exportTripProgressBackup);
 }
 
 resetProgressOpenButtons.forEach((button) => {
