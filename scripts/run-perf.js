@@ -100,6 +100,14 @@ function isIgnorableChromeKillError(error) {
   return /Chrome could not be killed/i.test(message) || /not found/i.test(message);
 }
 
+function getChromeFlags() {
+  const flags = ["--headless=new", "--disable-dev-shm-usage"];
+  if (process.env.CI === "true") {
+    flags.push("--no-sandbox");
+  }
+  return flags;
+}
+
 function runLhciCommand(command, extraArgs = []) {
   const result = spawnSync(
     process.execPath,
@@ -144,7 +152,7 @@ async function collectLighthouseRuns({ dist, urlPath = "/index.html", runs = 3 }
 
       const chrome = await chromeLauncher.launch({
         chromePath: process.env.CHROME_PATH || defaultChromePath,
-        chromeFlags: ["--headless=new", "--disable-dev-shm-usage"],
+        chromeFlags: getChromeFlags(),
         logLevel: "silent",
         userDataDir: runProfileDir
       });

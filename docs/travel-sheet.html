@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kairos VIII Travel Sheet</title>
+  <meta name="description" content="Printable Kairos VIII route, stay, transit, and emergency-reference sheet.">
+  <link rel="icon" type="image/jpeg" href="./assets/icons/1yegabjjbjp01.jpg">
+  <style>
+    :root {
+      --ink: #1f1b18;
+      --muted: #625a54;
+      --line: #d8cec4;
+      --soft: #f7f1e8;
+      --accent: #6d8a6f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--soft);
+      color: var(--ink);
+      font-family: "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+      line-height: 1.55;
+    }
+
+    main {
+      width: min(100%, 58rem);
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
+    }
+
+    header,
+    section {
+      padding: 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 1.1rem;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    header {
+      display: grid;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      line-height: 1;
+    }
+
+    h2 {
+      margin-bottom: 0.7rem;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    h3 {
+      font-size: 0.95rem;
+    }
+
+    .meta {
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+    }
+
+    a,
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.3rem;
+      padding: 0.52rem 0.82rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fffaf4;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+      gap: 0.75rem;
+    }
+
+    .card {
+      display: grid;
+      gap: 0.25rem;
+      padding: 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 0.9rem;
+      background: #fffaf4;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      main {
+        width: 100%;
+        padding: 0;
+      }
+
+      header,
+      section,
+      .card {
+        break-inside: avoid;
+        background: #fff;
+      }
+
+      .actions {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="grid">
+    <header>
+      <p class="meta">Kairos VIII | Printable route reference</p>
+      <h1>Japan Travel Sheet</h1>
+      <p>Keep this page intentionally non-sensitive. Add real confirmation numbers, passport details, payment details, and emergency contacts only to a private offline document.</p>
+      <div class="actions">
+        <button type="button" onclick="window.print()">Print sheet</button>
+        <a href="./">Back to itinerary</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>Route</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Day 1 | Osaka</h3>
+          <p>Dotonbori, Shinsaibashi, Minami dinner.</p>
+        </article>
+        <article class="card">
+          <h3>Day 2 | Kyoto</h3>
+          <p>Transfer to Kyoto, hotel check-in, Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, Gion, Nanzen-ji.</p>
+        </article>
+        <article class="card">
+          <h3>Day 3 | Arashiyama / Fuji Transfer</h3>
+          <p>Arashiyama, return to Osaka, Kaiyukan, Shinkansen toward Mishima, transfer to Fujikawaguchiko, onsen check-in.</p>
+        </article>
+        <article class="card">
+          <h3>Day 4 | Mt. Fuji to Tokyo</h3>
+          <p>Chureito / Shimoyoshida, Lake Kawaguchiko, transfer to Shibuya, Tokyo hotel check-in.</p>
+        </article>
+        <article class="card">
+          <h3>Day 5 | West Tokyo</h3>
+          <p>Shibuya Crossing, Shibuya food walk, Shibuya Sky.</p>
+        </article>
+        <article class="card">
+          <h3>Day 6 | East Tokyo</h3>
+          <p>Tokyo Skytree, Tokyo Solamachi, Akihabara.</p>
+        </article>
+        <article class="card">
+          <h3>Day 7 | Central Tokyo</h3>
+          <p>Imperial Palace, Shinjuku, bag pickup, airport transfer.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Stays</h2>
+      <ul>
+        <li>Osaka: private/local or no-cost first night unless switched in the budget model.</li>
+        <li>Kyoto: Shijo Karasuma area baseline.</li>
+        <li>Mt. Fuji: Kawaguchiko / Fujikawaguchiko area baseline.</li>
+        <li>Tokyo: Shibuya / Jinnan baseline for Days 4-6.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Transit</h2>
+      <ul>
+        <li>Osaka to Kyoto: local rail transfer.</li>
+        <li>Shin-Osaka to Fuji gateway: Shinkansen toward Mishima, then transfer toward Kawaguchiko.</li>
+        <li>Kawaguchiko to Tokyo: transfer to Shibuya.</li>
+        <li>Day 7: allow extra buffer for bag pickup and airport transfer.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Emergency Notes</h2>
+      <ul>
+        <li>Japan emergency police: 110.</li>
+        <li>Japan fire / ambulance: 119.</li>
+        <li>Keep embassy, airline, insurance, hotel phone numbers, and real booking references in a private offline copy.</li>
+        <li>If phone data fails, use station staff, hotel front desk, or a koban police box for route help.</li>
+      </ul>
+      <p class="note">This page avoids private travel data because the public site is not authenticated.</p>
+    </section>
+  </main>
+</body>
+</html>

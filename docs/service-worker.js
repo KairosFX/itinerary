@@ -1,4 +1,4 @@
-const OFFLINE_CACHE_VERSION = "bebc8757a5-a79b88b908-34ae15ed30-181310886b-c9b56d76dd-3764221ad3-5a021db2a9-95c09e1b03-9afc15ad27";
+const OFFLINE_CACHE_VERSION = "d9b86c0255-a79b88b908-c9323398bd-181310886b-c9b56d76dd-3764221ad3-5a021db2a9-95c09e1b03-9afc15ad27";
 const CACHE_PREFIX = "japan-escape-itinerary-";
 const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
@@ -7,14 +7,16 @@ const APP_SCOPE_PATH = APP_SCOPE_URL.pathname;
 const APP_SHELL_PATHS = [
   "./",
   "./index.html",
+  "./404.html",
+  "./travel-sheet.html",
   "./manifest.webmanifest",
   "./assets/icons/apple-touch-icon.png",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
   "./assets/app/lukrembo - castle.95c09e1b03.mp3",
   "./assets/app/transition.9afc15ad27.mp3",
-  "./assets/app/style.bebc8757a5.css",
-  "./assets/app/script.34ae15ed30.js",
+  "./assets/app/style.d9b86c0255.css",
+  "./assets/app/script.c9323398bd.js",
   "./assets/app/routeStyle.a79b88b908.css",
   "./assets/app/routeContent.181310886b.js",
   "./assets/app/budgetUi.c9b56d76dd.js",
@@ -24,6 +26,8 @@ const APP_SHELL_PATHS = [
 const NETWORK_FIRST_PATHS = [
   "./",
   "./index.html",
+  "./404.html",
+  "./travel-sheet.html",
   "./manifest.webmanifest",
   "./itinerary-offline.html"
 ];

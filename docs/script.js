@@ -28,6 +28,7 @@ const progressOverviewFill = document.querySelector("[data-progress-overview-fil
 const progressOverviewCaptions = document.querySelectorAll(".progress-overview__caption [data-language]");
 const jumpCurrentDayButton = document.querySelector("[data-jump-current-day]");
 const checklistMarkAllButton = document.querySelector("[data-checklist-mark-all]");
+const progressExportButton = document.querySelector("[data-progress-export]");
 const resetProgressOpenButtons = Array.from(document.querySelectorAll("[data-reset-progress-open]"));
 const transitDetailModal = document.querySelector("[data-transit-detail-modal]");
 const transitDetailCloseButtons = Array.from(document.querySelectorAll("[data-transit-detail-close]"));
@@ -61,8 +62,8 @@ const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
 const pageTitles = {
-  en: "",
-  ja: ""
+  en: "Kairos VIII Japan Escape Itinerary",
+  ja: "Kairos VIII Japan Escape Itinerary"
 };
 const storageKey = "japan-trip-language";
 const itineraryStateVersion = "2026-04-09-checklist-shift-raf-v2";
@@ -111,7 +112,7 @@ const audioAmbientVolume = 0.035;
 const audioAmbientDuckVolume = 0.02;
 const audioTransitionVolume = 0.28;
 const audioTransitionCooldownMs = 320;
-const siteGatePasswords = new Set(["kairosvii", "kairosviii"]);
+const siteGatePasswords = new Set(["kairosviii"]);
 const siteGateThemeColor = "#050806";
 const siteGateFeedbackCopy = {
   rejected: {
@@ -3844,6 +3845,59 @@ function queueStoragePrefixRemovals(prefixes = []) {
   } catch (error) {
     // Ignore storage failures and keep the page usable.
   }
+}
+
+function getLocalStorageSnapshot(prefixes = []) {
+  const snapshot = {};
+
+  try {
+    for (let index = 0; index < window.localStorage.length; index += 1) {
+      const key = window.localStorage.key(index);
+      if (key && prefixes.some((prefix) => key.startsWith(prefix))) {
+        snapshot[key] = window.localStorage.getItem(key);
+      }
+    }
+  } catch (error) {
+    // Ignore storage failures and export whatever is available.
+  }
+
+  return snapshot;
+}
+
+function downloadTextFile(fileName, textContent, mimeType = "application/json") {
+  const blob = new Blob([textContent], { type: `${mimeType};charset=utf-8` });
+  const objectUrl = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = objectUrl;
+  link.download = fileName;
+  link.rel = "noopener";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+}
+
+function exportTripProgressBackup() {
+  flushQueuedStorageWrites();
+
+  const backup = {
+    app: "Kairos VIII Japan Escape Itinerary",
+    exportedAt: new Date().toISOString(),
+    note:
+      "Front-end progress backup only. This file may contain checklist, booking, packing, and budget-note state saved in this browser.",
+    storage: getLocalStorageSnapshot([
+      "japan-trip-checklist-state-",
+      "japan-trip-completed-history-",
+      "japan-trip-bookings-transit-state-",
+      "japan-trip-packing-state-",
+      "japan-trip-budget-notes-"
+    ])
+  };
+
+  downloadTextFile(
+    `kairos-viii-progress-backup-${new Date().toISOString().slice(0, 10)}.json`,
+    JSON.stringify(backup, null, 2)
+  );
 }
 
 function clearStoredTripProgressState() {
@@ -10097,6 +10151,10 @@ if (checklistMarkAllButton) {
   checklistMarkAllButton.addEventListener("click", () => {
     markAllChecklistItemsChecked();
   });
+}
+
+if (progressExportButton) {
+  progressExportButton.addEventListener("click", exportTripProgressBackup);
 }
 
 resetProgressOpenButtons.forEach((button) => {

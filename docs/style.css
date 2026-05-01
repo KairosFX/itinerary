@@ -12111,6 +12111,24 @@ html[data-theme="dark"] .site-transition__line {
   text-transform: none;
 }
 
+.checklist-toolbar__action[data-progress-export] {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 3px solid rgba(78, 122, 93, 0.3);
+  outline-offset: 3px;
+}
+
+html[data-theme="dark"] textarea:focus-visible,
+html[data-theme="dark"] select:focus-visible,
+html[data-theme="dark"] summary:focus-visible {
+  outline-color: rgba(186, 224, 194, 0.36);
+}
+
 .checklist-toolbar__action--reset {
   min-height: 2.18rem;
   height: auto;
