@@ -543,8 +543,8 @@
     ],
     "kind": "booking",
     "dayLabel": {
-      "en": "Day 3",
-      "ja": "3日目"
+      "en": "Day 2",
+      "ja": "2日目"
     },
     "typeLabel": {
       "en": "Activity",
@@ -575,8 +575,8 @@
       "ja": "海遊館"
     },
     "summary": {
-      "en": "Use the current official ticket page for Day 3.",
-      "ja": "3日目用に現在の公式チケットページを使います。"
+      "en": "Use the current official ticket page for Day 2.",
+      "ja": "2日目用に現在の公式チケットページを使います。"
     },
     "details": {
       "en": "The previous Kaiyukan link was replaced with the safer main-domain official ticket page. Use it for the current dynamic pricing calendar and official e-ticket guidance.",

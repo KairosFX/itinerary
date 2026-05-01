@@ -14,26 +14,26 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 2,
-      title: { en: "Kyoto East Side Walk", ja: "京都東側を歩く日" },
+      title: { en: "Kaiyukan and Kyoto East", ja: "海遊館と京都東側" },
       note: {
-        en: "Need to move to Kyoto first and get the hotel check-in out of the way. After that the day is basically Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, Gion, and Nanzen-ji, with no reason to complicate the route if the pacing already works.",
-        ja: "先に京都へ移動してチェックインを済ませる。そのあとが清水寺、二年坂、八坂の塔、祇園、南禅寺という流れなので、歩きやすければ無理に崩さないほうがよさそう。"
+        en: "Start with Kaiyukan, then move to Kyoto and get the hotel check-in out of the way. After that the day is basically Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion, with no reason to complicate the route if the pacing already works.",
+        ja: "まず海遊館から始め、そのあと京都へ移動してチェックインを済ませる。そこから清水寺、二年坂、八坂の塔、祇園という流れなので、歩きやすければ無理に崩さないほうがよさそう。"
       },
       summary: {
-        en: "After the move to Kyoto and hotel check-in, the day becomes a clean east-side walk through Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, Gion, and Nanzen-ji.",
-        ja: "京都へ移動してホテルに入ったら、清水寺、二年坂、八坂の塔、祇園、南禅寺へと東側を自然につないで歩きます。"
+        en: "Day 2 starts at Kaiyukan, then moves to Kyoto for hotel check-in and a clean east-side walk through Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion.",
+        ja: "2日目は海遊館から始め、そのあと京都へ移動してホテルに入り、清水寺、二年坂、八坂の塔、祇園へと東側を自然につないで歩きます。"
       }
     },
     {
       day: 3,
       title: { en: "Arashiyama to Fuji", ja: "嵐山から富士エリアへ" },
       note: {
-        en: "This is the long one. Start with Arashiyama, head back to Osaka, fit Kaiyukan in if timing still feels sane, then commit to the shinkansen toward Mishima and the Fujikawaguchiko transfer. Once the onsen check-in is done, call it there.",
-        ja: "ここが長い日。嵐山から始めて大阪へ戻り、時間がまだ大丈夫なら海遊館、そのあと三島方面の新幹線と富士河口湖への乗り継ぎ。温泉宿に入れたら、その日はもう十分。"
+        en: "This is the long one. Start with Arashiyama, head back through Osaka for the Shin-Osaka launch, then commit to the shinkansen toward Mishima and the Fujikawaguchiko transfer. Once the onsen check-in is done, call it there.",
+        ja: "ここが長い日。嵐山から始めて大阪側へ戻り、新大阪から三島方面の新幹線と富士河口湖への乗り継ぎへ進む。温泉宿に入れたら、その日はもう十分。"
       },
       summary: {
-        en: "This is the long movement day: start with Arashiyama, return through Osaka for Kaiyukan, then ride east toward Mishima, Kawaguchiko, and the onsen reset.",
-        ja: "この日は移動が長め。嵐山から始め、大阪へ戻って海遊館に寄り、その後は三島、河口湖、温泉宿へと東へ進みます。"
+        en: "This is the long movement day: start with Arashiyama, return through Osaka for the Shin-Osaka handoff, then ride east toward Mishima, Kawaguchiko, and the onsen reset.",
+        ja: "この日は移動が長め。嵐山から始め、大阪側へ戻って新大阪へつなぎ、その後は三島、河口湖、温泉宿へと東へ進みます。"
       }
     },
     {
@@ -218,10 +218,10 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
   const routeSegments = [
     {
       id: "osaka-kyoto",
-      title: { en: "Osaka -> Kyoto East", ja: "大阪 -> 京都東側" },
+      title: { en: "Kaiyukan -> Kyoto East", ja: "海遊館 -> 京都東側" },
       summary: {
-        en: "Day 2 moves cleanly from Osaka into the east-side Kyoto walking cluster.",
-        ja: "2日目は大阪から京都東側の徒歩中心エリアへ、分かりやすく移る区間です。"
+        en: "Day 2 moves cleanly from Kaiyukan into the east-side Kyoto walking cluster.",
+        ja: "2日目は海遊館から京都東側の徒歩中心エリアへ、分かりやすく移る区間です。"
       },
       badges: [
         { en: "Day 2", ja: "2日目" },
@@ -229,8 +229,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       ],
       notes: [
         {
-          en: "This segment is about reaching Kiyomizu-dera, Ninenzaka, Gion, and Nanzen-ji without turning it into a luggage day.",
-          ja: "この区間は、清水寺、二寧坂、祇園、南禅寺へ入りやすくする移動で、荷物中心の日にはしない前提です。"
+          en: "This segment is about reaching Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion without turning it into a luggage day.",
+          ja: "この区間は、清水寺、二寧坂、八坂の塔、祇園へ入りやすくする移動で、荷物中心の日にはしない前提です。"
         },
         {
           en: "Keeping the Osaka return separate makes the Kyoto East day easier to read.",
@@ -245,8 +245,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "kyoto-osaka",
       title: { en: "Arashiyama", ja: "嵐山" },
       summary: {
-        en: "Day 3 starts with Arashiyama, then resets back to Osaka for Kaiyukan and the final Kansai night.",
-        ja: "3日目は嵐山から始め、そのあと大阪へ戻って海遊館と関西最後の夜へつなぎます。"
+        en: "Day 3 starts with Arashiyama, then resets back through Osaka for the Shin-Osaka launch.",
+        ja: "3日目は嵐山から始め、そのあと大阪側へ戻って新大阪からの出発へつなぎます。"
       },
       badges: [
         { en: "Day 3", ja: "3日目" },
@@ -391,24 +391,24 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "osaka",
       title: { en: "Osaka", ja: "大阪" },
       summary: {
-        en: "Osaka handles the easy Minami arrival, the Day 3 return, and the final Kansai reset before moving east.",
-        ja: "大阪は、ミナミ中心の到着日、3日目の戻り先、そして東へ移る前の関西側の締めをまとめる拠点です。"
+        en: "Osaka handles the easy Minami arrival, the Day 2 Kaiyukan start, and the Day 3 return before moving east.",
+        ja: "大阪は、ミナミ中心の到着日、2日目の海遊館スタート、そして東へ移る前の3日目の戻りをまとめる拠点です。"
       },
       badges: [
-        { en: "Days 1 + 3", ja: "1日目・3日目" },
+        { en: "Days 1-3", ja: "1-3日目" },
         { en: "Base stay", ja: "滞在拠点" }
       ],
       notes: [
         {
-          en: "This stop covers Dotonbori, Shinsaibashi, dinner in Minami, nightlife, and the final Osaka night after Kaiyukan.",
-          ja: "この地点は、道頓堀、心斎橋、ミナミでの夕食、夜歩き、そして海遊館後の大阪最後の夜までを含みます。"
+          en: "This stop covers Dotonbori, Shinsaibashi, dinner in Minami, nightlife, and the Day 2 Kaiyukan visit before Kyoto.",
+          ja: "この地点は、道頓堀、心斎橋、ミナミでの夕食、夜歩き、そして京都へ向かう前の2日目の海遊館までを含みます。"
         },
         {
           en: "It also sets up the Day 3 launch without forcing Kyoto to carry the onward transfer logic.",
           ja: "同時に3日目の出発も支えますが、その先の移動ロジックを京都側へ持たせない形にしています。"
         }
       ],
-      dayLinks: [{ day: 1 }, { day: 3 }],
+      dayLinks: [{ day: 1 }, { day: 2 }, { day: 3 }],
       primaryDay: 1,
       segmentIds: ["osaka-kyoto", "kyoto-osaka", "osaka-shin-osaka"],
       lngLat: [135.5023, 34.6938],
@@ -427,8 +427,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       ],
       notes: [
         {
-          en: "Day 2 stays focused on Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, Gion, and Nanzen-ji.",
-          ja: "2日目は清水寺、二寧坂、八坂の塔、祇園、南禅寺に集中する構成です。"
+          en: "Day 2 stays focused on Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion after the Kaiyukan-to-Kyoto handoff.",
+          ja: "2日目は海遊館から京都へ移ったあと、清水寺、二寧坂、八坂の塔、祇園に集中する構成です。"
         },
         {
           en: "Arashiyama is separated into Day 3 so Kyoto East does not get overloaded.",
@@ -584,8 +584,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       stopIds: ["osaka", "kyoto"],
       segmentIds: ["osaka-kyoto"],
       badges: [
-        { en: "Kyoto East", ja: "京都東側" },
-        { en: "Walking day", ja: "街歩き中心" }
+        { en: "Kaiyukan + Kyoto", ja: "海遊館＋京都" },
+        { en: "Aquarium then walk", ja: "水族館から街歩き" }
       ]
     },
     {
@@ -593,7 +593,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       stopIds: ["kyoto", "osaka", "shin-osaka", "fuji-gateway", "fuji"],
       segmentIds: ["kyoto-osaka", "osaka-shin-osaka", "shin-osaka-fuji-gateway", "fuji-gateway-kawaguchiko"],
       badges: [
-        { en: "Arashiyama + Osaka", ja: "嵐山＋大阪" },
+        { en: "Arashiyama + transfer", ja: "嵐山＋移動" },
         { en: "Fuji transfer night", ja: "富士への移動日" }
       ],
       transitActions: [
@@ -658,8 +658,10 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       { en: "Shinsaibashi", ja: "心斎橋" }
     ],
     2: [
+      { en: "Kaiyukan", ja: "海遊館" },
       { en: "Kiyomizu-dera", ja: "清水寺" },
       { en: "Ninenzaka", ja: "二年坂" },
+      { en: "Yasaka Pagoda", ja: "八坂の塔" },
       { en: "Gion", ja: "祇園" }
     ],
     3: [

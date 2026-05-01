@@ -235,6 +235,10 @@ input:focus-visible {
   transform: translate(-50%, 0);
 }
 
+.checklist-print-sheet {
+  display: none;
+}
+
 .site-header {
   position: sticky;
   top: 0;
@@ -12126,6 +12130,11 @@ html[data-theme="dark"] .site-transition__line {
   text-transform: none;
 }
 
+.checklist-toolbar__action[data-checklist-print] {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
 textarea:focus-visible,
 select:focus-visible,
 summary:focus-visible {
@@ -14101,19 +14110,6 @@ html[data-theme="dark"] #checklist .check-item input:checked ~ .check-copy {
   opacity: 0.68;
 }
 
-#checklist .check-item.is-booking-locked {
-  cursor: not-allowed;
-  border-color: rgba(157, 126, 76, 0.24);
-  background:
-    linear-gradient(180deg, rgba(250, 244, 232, 0.82), rgba(247, 240, 226, 0.72)),
-    rgba(255, 251, 244, 0.68);
-}
-
-#checklist .check-item.is-booking-locked .check-copy,
-#checklist .check-item.is-booking-locked .check-item__icon {
-  opacity: 0.58;
-}
-
 html[data-theme="dark"] #checklist .check-item.is-checked {
   border-color: rgba(117, 198, 144, 0.24);
   background:
@@ -14121,17 +14117,74 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
     rgba(21, 28, 24, 0.86);
 }
 
-html[data-theme="dark"] #checklist .check-item.is-booking-locked {
-  border-color: rgba(214, 176, 107, 0.28);
-  background:
-    linear-gradient(180deg, rgba(49, 42, 30, 0.92), rgba(36, 32, 25, 0.88)),
-    rgba(31, 27, 22, 0.86);
-}
-
 @media (max-width: 720px) {
   .language-switcher,
   .site-header.is-condensed .language-switcher {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media print {
+  @page {
+    margin: 0.65in;
+  }
+
+  html,
+  body {
+    width: auto !important;
+    min-height: auto !important;
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  body {
+    margin: 0 !important;
+    font: 11pt/1.45 Arial, sans-serif !important;
+  }
+
+  body > :not(.checklist-print-sheet) {
+    display: none !important;
+  }
+
+  .checklist-print-sheet {
+    display: block !important;
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .checklist-print-sheet h1,
+  .checklist-print-sheet h2 {
+    margin: 0;
+    color: #111 !important;
+    font-family: Arial, sans-serif !important;
+    letter-spacing: 0;
+  }
+
+  .checklist-print-sheet h1 {
+    margin-bottom: 1rem;
+    font-size: 18pt;
+    line-height: 1.2;
+  }
+
+  .checklist-print-sheet__day {
+    break-inside: avoid;
+    margin: 0 0 0.72rem;
+  }
+
+  .checklist-print-sheet h2 {
+    margin-bottom: 0.22rem;
+    font-size: 13pt;
+    line-height: 1.25;
+  }
+
+  .checklist-print-sheet ul {
+    margin: 0 0 0 1.1rem;
+    padding: 0;
+  }
+
+  .checklist-print-sheet li {
+    margin: 0 0 0.08rem;
+    padding: 0;
   }
 }
 

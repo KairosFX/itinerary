@@ -2695,10 +2695,10 @@ html.reduce-effects .site-backdrop__video {
     font-size: 0.66rem !important;
   }
 }</style>
-  <link rel="preload" href="./assets/app/style.fb41c4e994.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.6c43a37c2f.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.fb41c4e994.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.fb41c4e994.css"></noscript>
+  <link rel="preload" href="./assets/app/style.f28e837e09.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.5ceece7766.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.f28e837e09.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.f28e837e09.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -2806,6 +2806,7 @@ html.reduce-effects .site-backdrop__video {
   </header>
 
   <div class="sequence-notice-toast" data-sequence-notice hidden role="status" aria-live="polite"></div>
+  <section class="checklist-print-sheet" data-checklist-print-sheet aria-hidden="true"></section>
 
   <main class="page-shell" id="main-content">
     <section
@@ -3068,6 +3069,10 @@ html.reduce-effects .site-backdrop__video {
             <span data-language="en">Export backup</span>
             <span data-language="ja" hidden>バックアップを書き出し</span>
           </button>
+          <button class="checklist-toolbar__action" type="button" data-checklist-print>
+            <span data-language="en">Print checklist</span>
+            <span data-language="ja" hidden>チェックリストを印刷</span>
+          </button>
           <button
             class="checklist-toolbar__action checklist-toolbar__action--reset"
             type="button"
@@ -3122,11 +3127,18 @@ html.reduce-effects .site-backdrop__video {
               <span data-language="ja" hidden>2日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">Kyoto</span>
-              <span data-language="ja" hidden>京都</span>
+              <span data-language="en">Osaka + Kyoto</span>
+              <span data-language="ja" hidden>大阪・京都</span>
             </p>
           </div>
           <ul class="checklist-list">
+            <li>
+              <label class="check-item" for="day2-kaiyukan">
+                <input id="day2-kaiyukan" type="checkbox">
+                <span class="check-copy" data-language="en">Kaiyukan</span>
+                <span class="check-copy" data-language="ja" hidden>海遊館</span>
+              </label>
+            </li>
             <li class="checklist-list__item checklist-list__item--with-detail">
               <label class="check-item" for="day2-transfer-to-kyoto">
                 <input id="day2-transfer-to-kyoto" type="checkbox">
@@ -3177,13 +3189,6 @@ html.reduce-effects .site-backdrop__video {
                 <span class="check-copy" data-language="ja" hidden>祇園</span>
               </label>
             </li>
-            <li>
-              <label class="check-item" for="day2-nanzenji">
-                <input id="day2-nanzenji" type="checkbox">
-                <span class="check-copy" data-language="en">Nanzen-ji</span>
-                <span class="check-copy" data-language="ja" hidden>南禅寺</span>
-              </label>
-            </li>
           </ul>
         </article>
 
@@ -3211,13 +3216,6 @@ html.reduce-effects .site-backdrop__video {
                 <input id="day3-back-to-osaka" type="checkbox">
                 <span class="check-copy" data-language="en">Return to Osaka</span>
                 <span class="check-copy" data-language="ja" hidden>大阪へ戻る</span>
-              </label>
-            </li>
-            <li>
-              <label class="check-item" for="day3-kaiyukan">
-                <input id="day3-kaiyukan" type="checkbox">
-                <span class="check-copy" data-language="en">Kaiyukan</span>
-                <span class="check-copy" data-language="ja" hidden>海遊館</span>
               </label>
             </li>
             <li class="checklist-list__item checklist-list__item--with-detail">
@@ -4173,10 +4171,10 @@ html.reduce-effects .site-backdrop__video {
   </div>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/lukrembo - castle.95c09e1b03.mp3","backgroundLoopAudioCssPath":"./lukrembo - castle.95c09e1b03.mp3","backgroundLoopAudioHash":"95c09e1b03","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.fb41c4e994.css","styleHash":"fb41c4e994","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.6c43a37c2f.js","scriptHash":"6c43a37c2f","routeContentPath":"./assets/app/routeContent.181310886b.js","routeContentHash":"181310886b","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.3764221ad3.js","budgetContentHash":"3764221ad3","essentialsContentPath":"./assets/app/essentialsContent.5a021db2a9.js","essentialsContentHash":"5a021db2a9","generatedAt":"2026-05-01T18:35:35.245Z","cacheVersion":"fb41c4e994-a79b88b908-6c43a37c2f-181310886b-c9b56d76dd-3764221ad3-5a021db2a9-95c09e1b03-9afc15ad27"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"backgroundLoopAudioPath":"./assets/app/lukrembo - castle.95c09e1b03.mp3","backgroundLoopAudioCssPath":"./lukrembo - castle.95c09e1b03.mp3","backgroundLoopAudioHash":"95c09e1b03","transitionAudioPath":"./assets/app/transition.9afc15ad27.mp3","transitionAudioCssPath":"./transition.9afc15ad27.mp3","transitionAudioHash":"9afc15ad27","stylePath":"./assets/app/style.f28e837e09.css","styleHash":"f28e837e09","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.5ceece7766.js","scriptHash":"5ceece7766","routeContentPath":"./assets/app/routeContent.7d0356f87c.js","routeContentHash":"7d0356f87c","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.308daf06b7.js","budgetContentHash":"308daf06b7","essentialsContentPath":"./assets/app/essentialsContent.3071d94aaf.js","essentialsContentHash":"3071d94aaf","generatedAt":"2026-05-01T19:24:35.709Z","cacheVersion":"f28e837e09-a79b88b908-5ceece7766-7d0356f87c-c9b56d76dd-308daf06b7-3071d94aaf-95c09e1b03-9afc15ad27"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.6c43a37c2f.js" defer></script>
+  <script src="./assets/app/script.5ceece7766.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>

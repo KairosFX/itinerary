@@ -273,8 +273,8 @@
         "ja": "チケットと時間帯"
       },
       "summary": {
-        "en": "Shibuya Sky and Tokyo Skytree are the main timed tickets in the fixed route, while Kaiyukan remains a simpler Day 3 same-day ticket check. The current official Tokyo Skytree deck ticket now starts from JPY 1,800 online, while Kaiyukan's current official adult ticket remains JPY 2,700.",
-        "ja": "固定ルートで主な時間指定チケットになるのは渋谷スカイと東京スカイツリーで、海遊館は3日目に当日判断しやすいチケットとして残しています。現在の東京スカイツリー公式天望デッキ券はオンラインで JPY 1,800 から、海遊館の公式大人料金は JPY 2,700 のままです。"
+        "en": "Shibuya Sky and Tokyo Skytree are the main timed tickets in the fixed route, while Kaiyukan remains a simpler Day 2 same-day ticket check. The current official Tokyo Skytree deck ticket now starts from JPY 1,800 online, while Kaiyukan's current official adult ticket remains JPY 2,700.",
+        "ja": "固定ルートで主な時間指定チケットになるのは渋谷スカイと東京スカイツリーで、海遊館は2日目に当日判断しやすいチケットとして残しています。現在の東京スカイツリー公式天望デッキ券はオンラインで JPY 1,800 から、海遊館の公式大人料金は JPY 2,700 のままです。"
       },
       "links": [
         {
@@ -594,14 +594,40 @@
         "no-accommodation"
       ],
       "title": {
-        "en": "Day 2 - Kyoto",
-        "ja": "2日目・京都"
+        "en": "Day 2 - Osaka + Kyoto",
+        "ja": "2日目・大阪と京都"
       },
       "subtitle": {
-        "en": "Kyoto hotel night after the east-side temple cluster",
-        "ja": "東山の日を終えて京都ホテルへ泊まる"
+        "en": "Kaiyukan, Kyoto hotel check-in, then the east-side temple cluster",
+        "ja": "海遊館、京都ホテルのチェックイン、東山エリアへ進む日"
       },
       "items": [
+        {
+          "label": {
+            "en": "Kaiyukan",
+            "ja": "海遊館"
+          },
+          "category": "ticketsAdmissions",
+          "bucket": "booked",
+          "sourceGroup": "tickets",
+          "cost": {
+            "mode": "perPerson",
+            "amount": 2700
+          }
+        },
+        {
+          "label": {
+            "en": "Tempozan local hop",
+            "ja": "天保山周辺の市内移動"
+          },
+          "category": "localTransit",
+          "bucket": "required",
+          "sourceGroup": "core-transit",
+          "cost": {
+            "mode": "perPerson",
+            "amount": 300
+          }
+        },
         {
           "label": {
             "en": "Osaka to Kyoto rail",
@@ -682,19 +708,6 @@
         },
         {
           "label": {
-            "en": "Nanzen-ji",
-            "ja": "南禅寺"
-          },
-          "category": "ticketsAdmissions",
-          "bucket": "free",
-          "sourceGroup": "assumptions",
-          "cost": {
-            "mode": "none",
-            "amount": 0
-          }
-        },
-        {
-          "label": {
             "en": "Kyoto sightseeing meals + snacks",
             "ja": "京都観光日の食事と軽食"
           },
@@ -722,12 +735,12 @@
         "no-accommodation"
       ],
       "title": {
-        "en": "Day 3 - Arashiyama to Osaka",
-        "ja": "3日目・嵐山から大阪"
+        "en": "Day 3 - Arashiyama to Fuji",
+        "ja": "3日目・嵐山から富士"
       },
       "subtitle": {
-        "en": "Arashiyama, Osaka waterfront reset, then the Fuji transfer night",
-        "ja": "嵐山、大阪ベイエリア、そして富士への移動で締める日"
+        "en": "Arashiyama, Shin-Osaka handoff, then the Fuji transfer night",
+        "ja": "嵐山、新大阪への受け渡し、そして富士への移動で締める日"
       },
       "items": [
         {
@@ -741,32 +754,6 @@
           "cost": {
             "mode": "perPerson",
             "amount": 980
-          }
-        },
-        {
-          "label": {
-            "en": "Tempozan local hop",
-            "ja": "天保山周辺の市内移動"
-          },
-          "category": "localTransit",
-          "bucket": "required",
-          "sourceGroup": "core-transit",
-          "cost": {
-            "mode": "perPerson",
-            "amount": 300
-          }
-        },
-        {
-          "label": {
-            "en": "Kaiyukan",
-            "ja": "海遊館"
-          },
-          "category": "ticketsAdmissions",
-          "bucket": "booked",
-          "sourceGroup": "tickets",
-          "cost": {
-            "mode": "perPerson",
-            "amount": 2700
           }
         },
         {
