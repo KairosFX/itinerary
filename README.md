@@ -68,14 +68,6 @@ npm run perf
 
 Source proof is kept in `docs/assets/audio/music/proof/`.
 
-## Known Issues / Roadmap
-
-- Offline mode should be checked after each asset-version change.
-- The booking gate is only a front-end experience gate, not authentication.
-- Mobile spacing and map controls should be rechecked on real devices.
-- Route map polish can continue as transit assumptions change.
-- Use release tags such as `v1.0-kairos-viii` for stable checkpoints.
-
 ## License
 
 All rights reserved. See `LICENSE`.
