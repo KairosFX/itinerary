@@ -112,17 +112,8 @@ const budgetSharedRoomOccupancy = 2;
 const budgetTravelersPerRoomDefault = budgetSharedRoomOccupancy;
 const serviceWorkerWarmMessageType = "CACHE_URLS";
 const checklistPrintDefaultStartDate = "2026-03-10";
-const checklistPrintDefaultStartMode = "range";
-const checklistPrintDefaultRangeStart = "08:00";
-const checklistPrintDefaultRangeEnd = "10:00";
 const checklistPrintDefaultSpecificStart = "09:00";
-const checklistPrintStartTimeOptions = [
-  { value: "08:00", label: { en: "8:00 AM", ja: "8:00" } },
-  { value: "08:30", label: { en: "8:30 AM", ja: "8:30" } },
-  { value: "09:00", label: { en: "9:00 AM", ja: "9:00" } },
-  { value: "09:30", label: { en: "9:30 AM", ja: "9:30" } },
-  { value: "10:00", label: { en: "10:00 AM", ja: "10:00" } }
-];
+const checklistPrintStartTimeOptions = buildChecklistPrintStartTimeOptions(30);
 const checklistPrintFallbackDurationDefinition = {
   minutes: [30, 30],
   label: { en: "30 min", ja: "30分" }
@@ -165,8 +156,7 @@ const checklistPrintTimingTypeProfiles = {
     crowd: [10, 30],
     rest: [10, 20],
     weather: [5, 20],
-    unpredictable: [10, 25],
-    rangeStartOffset: [15, 15]
+    unpredictable: [10, 25]
   },
   "aquarium-museum": {
     transit: [20, 45],
@@ -174,8 +164,7 @@ const checklistPrintTimingTypeProfiles = {
     crowd: [20, 45],
     rest: [10, 20],
     weather: [0, 10],
-    unpredictable: [10, 25],
-    rangeStartOffset: [30, 15]
+    unpredictable: [10, 25]
   },
   "shopping-street-food": {
     transit: [10, 25],
@@ -183,8 +172,7 @@ const checklistPrintTimingTypeProfiles = {
     crowd: [10, 35],
     rest: [15, 30],
     weather: [5, 15],
-    unpredictable: [10, 25],
-    rangeStartOffset: [15, 15]
+    unpredictable: [10, 25]
   },
   "viewpoint-photo": {
     transit: [10, 30],
@@ -192,8 +180,7 @@ const checklistPrintTimingTypeProfiles = {
     crowd: [15, 40],
     rest: [15, 30],
     weather: [10, 25],
-    unpredictable: [10, 25],
-    rangeStartOffset: [15, 15]
+    unpredictable: [10, 25]
   },
   "hotel-transit-admin": {
     transit: [15, 45],
@@ -201,8 +188,7 @@ const checklistPrintTimingTypeProfiles = {
     crowd: [5, 20],
     rest: [5, 15],
     weather: [0, 15],
-    unpredictable: [10, 30],
-    rangeStartOffset: [0, 0]
+    unpredictable: [10, 30]
   }
 };
 const checklistPrintDayTimingProfiles = {
@@ -219,8 +205,7 @@ const checklistPrintTimingDefinitions = {
     type: "shopping-street-food",
     anchor: "standard",
     preferred: "evening",
-    crowd: [15, 35],
-    rangeStartOffset: [0, 0]
+    crowd: [15, 35]
   },
   "day1-shinsaibashi": {
     type: "shopping-street-food",
@@ -240,8 +225,7 @@ const checklistPrintTimingDefinitions = {
     type: "aquarium-museum",
     anchor: "major",
     preferred: "morning",
-    crowd: [25, 50],
-    rangeStartOffset: [30, 15]
+    crowd: [25, 50]
   },
   "day2-transfer-to-kyoto": {
     type: "hotel-transit-admin",
@@ -292,8 +276,7 @@ const checklistPrintTimingDefinitions = {
     preferred: "morning",
     transit: [20, 40],
     crowd: [25, 55],
-    weather: [10, 25],
-    rangeStartOffset: [15, 15]
+    weather: [10, 25]
   },
   "day3-back-to-osaka": {
     type: "hotel-transit-admin",
@@ -2190,9 +2173,6 @@ let checklistPointerGlowFrame = 0;
 let pendingChecklistPointerGlow = null;
 let checklistPrintDraft = null;
 let checklistPrintStartDate = "";
-let checklistPrintStartMode = "";
-let checklistPrintRangeStart = "";
-let checklistPrintRangeEnd = "";
 let checklistPrintSpecificStart = "";
 let checklistPrintLastFocusedElement = null;
 let sequenceNoticeTimer = 0;
@@ -4340,17 +4320,9 @@ function getChecklistPrintLabels() {
       item: "チェック項目",
       duration: "目安時間",
       customDate: "日付を選択",
-      startMode: "開始時間の表示",
-      useStartRange: "開始時間の幅を使う",
-      useSpecificStartTime: "特定の開始時間を使う",
-      startRange: "開始時間の幅",
-      rangeStart: "開始",
-      rangeEnd: "終了",
       specificStartTime: "開始時間",
-      startRangeOutput: "開始枠",
       startOutput: "開始",
-      est: "目安",
-      approx: "おおよそ"
+      est: "目安"
     };
   }
 
@@ -4361,103 +4333,74 @@ function getChecklistPrintLabels() {
     item: "Checklist item",
     duration: "Est. duration",
     customDate: "Select start date",
-    startMode: "Start time display",
-    useStartRange: "Use start range",
-    useSpecificStartTime: "Use specific start time",
-    startRange: "Start range",
-    rangeStart: "Range start",
-    rangeEnd: "Range end",
     specificStartTime: "Specific start time",
-    startRangeOutput: "Start window",
     startOutput: "Start",
-    est: "Est.",
-    approx: "Approx."
+    est: "Est."
   };
 }
 
-function getChecklistPrintTimeLabel(value = "") {
-  const language = getChecklistPrintLanguage();
-  const option = checklistPrintStartTimeOptions.find((entry) => entry.value === value);
-  return option?.label?.[language] || option?.label?.en || "";
+function formatChecklistPrintStartTimeOption(totalMinutes = 0) {
+  const normalizedTotal = ((Math.round(totalMinutes) % 1440) + 1440) % 1440;
+  const hours = Math.floor(normalizedTotal / 60);
+  const minutes = normalizedTotal % 60;
+  const value = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+  const hour12 = hours % 12 || 12;
+  const suffix = hours < 12 ? "AM" : "PM";
+
+  return {
+    value,
+    label: `${hour12}:${String(minutes).padStart(2, "0")} ${suffix}`
+  };
 }
 
-function getChecklistPrintTimeOptionIndex(value = "") {
-  return checklistPrintStartTimeOptions.findIndex((entry) => entry.value === value);
+function buildChecklistPrintStartTimeOptions(intervalMinutes = 30) {
+  const step = Math.max(1, Number(intervalMinutes) || 30);
+  const options = [];
+
+  for (let totalMinutes = 0; totalMinutes < 24 * 60; totalMinutes += step) {
+    options.push(formatChecklistPrintStartTimeOption(totalMinutes));
+  }
+
+  return options;
+}
+
+function getChecklistPrintTimeLabel(value = "") {
+  const option = checklistPrintStartTimeOptions.find((entry) => entry.value === value);
+  return option?.label || "";
 }
 
 function isChecklistPrintTimeOption(value = "") {
-  return getChecklistPrintTimeOptionIndex(value) >= 0;
+  return checklistPrintStartTimeOptions.some((entry) => entry.value === value);
 }
 
 function getChecklistPrintDefaultStartSettings() {
   return {
-    startMode: checklistPrintDefaultStartMode,
-    rangeStart: checklistPrintDefaultRangeStart,
-    rangeEnd: checklistPrintDefaultRangeEnd,
     specificStart: checklistPrintDefaultSpecificStart
   };
 }
 
-function normalizeChecklistPrintStartMode(value = "") {
-  return value === "specific" ? "specific" : checklistPrintDefaultStartMode;
-}
-
 function normalizeChecklistPrintStartSettings(settings = {}) {
   const defaults = getChecklistPrintDefaultStartSettings();
-  const normalized = {
-    startMode: normalizeChecklistPrintStartMode(settings.startMode),
-    rangeStart: isChecklistPrintTimeOption(settings.rangeStart)
-      ? settings.rangeStart
-      : defaults.rangeStart,
-    rangeEnd: isChecklistPrintTimeOption(settings.rangeEnd)
-      ? settings.rangeEnd
-      : defaults.rangeEnd,
-    specificStart: isChecklistPrintTimeOption(settings.specificStart)
-      ? settings.specificStart
-      : defaults.specificStart
-  };
+  const specificStart = isChecklistPrintTimeOption(settings.specificStart)
+    ? settings.specificStart
+    : defaults.specificStart;
 
-  const rangeStartIndex = getChecklistPrintTimeOptionIndex(normalized.rangeStart);
-  const rangeEndIndex = getChecklistPrintTimeOptionIndex(normalized.rangeEnd);
-  if (rangeStartIndex >= rangeEndIndex) {
-    const nextEnd = checklistPrintStartTimeOptions[rangeStartIndex + 1]?.value;
-    if (nextEnd) {
-      normalized.rangeEnd = nextEnd;
-    } else {
-      normalized.rangeStart = defaults.rangeStart;
-      normalized.rangeEnd = defaults.rangeEnd;
-    }
-  }
-
-  return normalized;
+  return { specificStart };
 }
 
 function applyChecklistPrintStartSettings(settings = {}) {
   const normalized = normalizeChecklistPrintStartSettings(settings);
-  checklistPrintStartMode = normalized.startMode;
-  checklistPrintRangeStart = normalized.rangeStart;
-  checklistPrintRangeEnd = normalized.rangeEnd;
   checklistPrintSpecificStart = normalized.specificStart;
   return normalized;
 }
 
 function hasChecklistPrintStartSettings() {
-  return (
-    (checklistPrintStartMode === "range" || checklistPrintStartMode === "specific") &&
-    isChecklistPrintTimeOption(checklistPrintRangeStart) &&
-    isChecklistPrintTimeOption(checklistPrintRangeEnd) &&
-    getChecklistPrintTimeOptionIndex(checklistPrintRangeStart) <
-      getChecklistPrintTimeOptionIndex(checklistPrintRangeEnd) &&
-    isChecklistPrintTimeOption(checklistPrintSpecificStart)
-  );
+  return isChecklistPrintTimeOption(checklistPrintSpecificStart);
 }
 
 function getChecklistPrintStartSettings({ reset = false } = {}) {
   if (!reset && hasChecklistPrintStartSettings()) {
     return {
-      startMode: checklistPrintStartMode,
-      rangeStart: checklistPrintRangeStart,
-      rangeEnd: checklistPrintRangeEnd,
       specificStart: checklistPrintSpecificStart
     };
   }
@@ -4468,12 +4411,7 @@ function getChecklistPrintStartSettings({ reset = false } = {}) {
 
 function getChecklistPrintStartSummary(settings = getChecklistPrintStartSettings()) {
   const labels = getChecklistPrintLabels();
-
-  if (settings.startMode === "specific") {
-    return `${labels.startOutput}: ${getChecklistPrintTimeLabel(settings.specificStart)}`;
-  }
-
-  return `${labels.startRangeOutput}: ${getChecklistPrintTimeLabel(settings.rangeStart)}–${getChecklistPrintTimeLabel(settings.rangeEnd)}`;
+  return `${labels.startOutput}: ${getChecklistPrintTimeLabel(settings.specificStart)}`;
 }
 
 function buildChecklistPrintTimeOptions(selectedValue = "") {
@@ -4525,11 +4463,6 @@ function formatChecklistPrintClockMinutes(totalMinutes = 0) {
   const normalizedTotal = ((Math.round(totalMinutes) % 1440) + 1440) % 1440;
   const hours = Math.floor(normalizedTotal / 60);
   const minutes = normalizedTotal % 60;
-
-  if (getChecklistPrintLanguage() === "ja") {
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
-  }
-
   const hour12 = hours % 12 || 12;
   const suffix = hours < 12 ? "AM" : "PM";
   return `${hour12}:${String(minutes).padStart(2, "0")} ${suffix}`;
@@ -4542,16 +4475,6 @@ function normalizeChecklistPrintTimingRange(value, fallback = [0, 0]) {
   const min = Math.max(0, Number.isFinite(rawMin) ? rawMin : 0);
   const max = Math.max(min, Number.isFinite(rawMax) ? rawMax : min);
   return [min, max];
-}
-
-function normalizeChecklistPrintTimingPair(value, fallback = [0, 0]) {
-  const source = Array.isArray(value) ? value : fallback;
-  const first = Number(source[0]);
-  const second = Number(source[1]);
-  return [
-    Math.max(0, Number.isFinite(first) ? first : 0),
-    Math.max(0, Number.isFinite(second) ? second : 0)
-  ];
 }
 
 function getChecklistPrintDayTimingProfile(dayId = "") {
@@ -4615,31 +4538,6 @@ function scaleChecklistPrintTimingRange(value, dayProfile, anchor = "standard", 
     roundChecklistPrintMinutes(min * multiplier, 5, "nearest"),
     roundChecklistPrintMinutes(max * multiplier, 5, "nearest")
   ];
-}
-
-function getChecklistPrintPreferredStartMinutes(timing, variant = "earliest") {
-  if (timing.preferred === "afternoon") {
-    return variant === "latest" ? 13 * 60 : 12 * 60;
-  }
-
-  if (timing.preferred === "evening") {
-    return variant === "latest" ? 18 * 60 : 17 * 60 + 30;
-  }
-
-  return null;
-}
-
-function alignChecklistPrintStartToPreference(startMinutes, timing, variant = "earliest") {
-  const preferredStart = getChecklistPrintPreferredStartMinutes(timing, variant);
-  if (preferredStart === null || startMinutes >= preferredStart) {
-    return startMinutes;
-  }
-
-  if (timing.preferred === "evening" || timing.anchor === "major") {
-    return preferredStart;
-  }
-
-  return startMinutes;
 }
 
 function getChecklistPrintMealBreakRange(previousTiming, nextTiming, earliestEnd, latestEnd) {
@@ -4721,79 +4619,32 @@ function getChecklistPrintBufferBetween(previousItem, nextItem, day, earliestEnd
   };
 }
 
-function getChecklistPrintRangeStartOffset(itemId = "") {
-  const timing = getChecklistPrintTimingDefinition(itemId);
-  return normalizeChecklistPrintTimingPair(timing.rangeStartOffset, [0, 0]);
-}
-
 function buildChecklistPrintTimeWindow(startMinutes, endMinutes) {
   return `${formatChecklistPrintClockMinutes(startMinutes)}–${formatChecklistPrintClockMinutes(endMinutes)}`;
 }
 
 function withChecklistPrintSchedules(days = []) {
   const settings = getChecklistPrintStartSettings();
-  const rangeStartMinutes = parseChecklistPrintClockMinutes(settings.rangeStart);
-  const rangeEndMinutes = parseChecklistPrintClockMinutes(settings.rangeEnd);
-  const specificStartMinutes = parseChecklistPrintClockMinutes(settings.specificStart);
+  const fallbackStartMinutes = parseChecklistPrintClockMinutes(checklistPrintDefaultSpecificStart) ?? 9 * 60;
+  const selectedStartMinutes =
+    parseChecklistPrintClockMinutes(settings.specificStart) ?? fallbackStartMinutes;
 
   return days.map((day) => {
-    let earliestCursor = rangeStartMinutes ?? 0;
-    let latestCursor = rangeEndMinutes ?? earliestCursor;
-    let specificCursor = specificStartMinutes ?? 0;
-    const dayProfile = getChecklistPrintDayTimingProfile(day.id);
-    const selectedStartSpread =
-      rangeStartMinutes !== null && rangeEndMinutes !== null
-        ? Math.max(0, rangeEndMinutes - rangeStartMinutes)
-        : 0;
+    let cursor = selectedStartMinutes;
     const items = day.items.map((item, itemIndex) => {
       const durationMinutes = item.durationMinutes || getDefaultChecklistPrintDurationMinutes(item.id);
-      const timing = getChecklistPrintTimingDefinition(item.id);
       const nextItem = day.items[itemIndex + 1];
-      const schedule = {};
-
-      if (settings.startMode === "specific" && specificStartMinutes !== null) {
-        const startMinutes = alignChecklistPrintStartToPreference(specificCursor, timing, "earliest");
-        const endMinutes = startMinutes + durationMinutes.max;
-        schedule.mode = "specific";
-        schedule.window = buildChecklistPrintTimeWindow(
+      const startMinutes = cursor;
+      const endMinutes = startMinutes + durationMinutes.max;
+      const schedule = {
+        window: buildChecklistPrintTimeWindow(
           roundChecklistPrintMinutes(startMinutes, 15, "floor"),
           roundChecklistPrintMinutes(endMinutes, 15, "ceil")
-        );
+        )
+      };
 
-        const buffer = getChecklistPrintBufferBetween(item, nextItem, day, endMinutes, endMinutes);
-        specificCursor = endMinutes + buffer.typical;
-      } else if (rangeStartMinutes !== null && rangeEndMinutes !== null) {
-        if (itemIndex === 0) {
-          const startOffset = getChecklistPrintRangeStartOffset(item.id);
-          earliestCursor += startOffset[0];
-          latestCursor += startOffset[1];
-        }
-
-        const startMin = alignChecklistPrintStartToPreference(earliestCursor, timing, "earliest");
-        const startMax = Math.max(
-          startMin,
-          alignChecklistPrintStartToPreference(latestCursor, timing, "latest")
-        );
-        const endMin = startMin + durationMinutes.min;
-        const endMax = startMax + durationMinutes.max;
-        const rangeSlack =
-          selectedStartSpread +
-          (dayProfile.intensity === "packed" ? 75 : dayProfile.intensity === "light" ? 45 : 60) +
-          (timing.anchor === "major" ? 30 : timing.anchor === "quick" ? -15 : 0);
-        const cappedEndMax = Math.max(
-          endMin,
-          Math.min(endMax, startMin + durationMinutes.max + rangeSlack)
-        );
-        schedule.mode = "range";
-        schedule.window = buildChecklistPrintTimeWindow(
-          roundChecklistPrintMinutes(startMin, 15, "floor"),
-          roundChecklistPrintMinutes(cappedEndMax, 15, "ceil")
-        );
-
-        const buffer = getChecklistPrintBufferBetween(item, nextItem, day, endMin, cappedEndMax);
-        earliestCursor = endMin + buffer.min;
-        latestCursor = cappedEndMax + Math.min(buffer.typical, buffer.max);
-      }
+      const buffer = getChecklistPrintBufferBetween(item, nextItem, day, endMinutes, endMinutes);
+      cursor = endMinutes + buffer.typical;
 
       return {
         ...item,
@@ -4951,9 +4802,6 @@ function storeChecklistPrintDraft() {
         language: getChecklistPrintLanguage(),
         updatedAt: new Date().toISOString(),
         startDate: checklistPrintStartDate,
-        startMode: settings.startMode,
-        rangeStart: settings.rangeStart,
-        rangeEnd: settings.rangeEnd,
         specificStart: settings.specificStart
       })
     );
@@ -4983,9 +4831,6 @@ function getChecklistPrintDraft({ reset = false } = {}) {
 
 function getChecklistPrintDraftFromEditor() {
   const startDateInput = checklistPrintForm?.querySelector("[data-print-start-date]");
-  const startModeInput = checklistPrintForm?.querySelector("[data-print-start-mode]");
-  const rangeStartInput = checklistPrintForm?.querySelector("[data-print-range-start]");
-  const rangeEndInput = checklistPrintForm?.querySelector("[data-print-range-end]");
   const specificStartInput = checklistPrintForm?.querySelector("[data-print-specific-start]");
   const nextStartDate = startDateInput?.value.trim() || "";
 
@@ -4998,21 +4843,9 @@ function getChecklistPrintDraftFromEditor() {
   }
 
   const settings = applyChecklistPrintStartSettings({
-    startMode: startModeInput?.value,
-    rangeStart: rangeStartInput?.value,
-    rangeEnd: rangeEndInput?.value,
     specificStart: specificStartInput?.value
   });
 
-  if (startModeInput) {
-    startModeInput.value = settings.startMode;
-  }
-  if (rangeStartInput) {
-    rangeStartInput.value = settings.rangeStart;
-  }
-  if (rangeEndInput) {
-    rangeEndInput.value = settings.rangeEnd;
-  }
   if (specificStartInput) {
     specificStartInput.value = settings.specificStart;
   }
@@ -5036,17 +4869,13 @@ function buildChecklistPrintMarkup(days = getChecklistPrintDraft()) {
           }
 
           const timePrefix =
-            item.schedule?.mode === "specific" && item.schedule.window
+            item.schedule?.window
               ? `<span class="checklist-print-output__time">${escapeHtml(item.schedule.window)} — </span>`
               : "";
           const durationText = item.duration
             ? ` <span class="checklist-print-output__duration">— ${escapeHtml(labels.est)} ${escapeHtml(item.duration)}</span>`
             : "";
-          const rangeScheduleText =
-            item.schedule?.mode === "range" && item.schedule.window
-              ? ` <span class="checklist-print-output__schedule">— ${escapeHtml(labels.approx)} ${escapeHtml(item.schedule.window)}</span>`
-              : "";
-          return `<li>${timePrefix}<span>${escapeHtml(item.text)}</span>${durationText}${rangeScheduleText}</li>`;
+          return `<li>${timePrefix}<span>${escapeHtml(item.text)}</span>${durationText}</li>`;
         })
         .filter(Boolean)
         .join("");
@@ -5091,17 +4920,6 @@ function renderChecklistPrintEditor(days = getChecklistPrintDraft()) {
   const labels = getChecklistPrintLabels();
   const startDate = getChecklistPrintStartDate();
   const startSettings = getChecklistPrintStartSettings();
-  const startModeOptions = [
-    { value: "range", label: labels.useStartRange },
-    { value: "specific", label: labels.useSpecificStartTime }
-  ]
-    .map((option) => {
-      const selected = option.value === startSettings.startMode ? " selected" : "";
-      return `<option value="${escapeHtml(option.value)}"${selected}>${escapeHtml(option.label)}</option>`;
-    })
-    .join("");
-  const rangeHidden = startSettings.startMode === "range" ? "" : " hidden";
-  const specificHidden = startSettings.startMode === "specific" ? "" : " hidden";
   const dayMarkup = days
     .map((day) => {
       const itemMarkup = day.items
@@ -5134,28 +4952,7 @@ function renderChecklistPrintEditor(days = getChecklistPrintDraft()) {
         <span>${escapeHtml(labels.startDate)}</span>
         <input type="date" value="${escapeHtml(startDate)}" data-print-start-date>
       </label>
-      <label class="checklist-print-editor__field checklist-print-editor__field--start-mode">
-        <span>${escapeHtml(labels.startMode)}</span>
-        <select data-print-start-mode>
-          ${startModeOptions}
-        </select>
-      </label>
-      <fieldset class="checklist-print-editor__time-group" data-print-range-fields${rangeHidden}>
-        <legend>${escapeHtml(labels.startRange)}</legend>
-        <label class="checklist-print-editor__field">
-          <span>${escapeHtml(labels.rangeStart)}</span>
-          <select data-print-range-start>
-            ${buildChecklistPrintTimeOptions(startSettings.rangeStart)}
-          </select>
-        </label>
-        <label class="checklist-print-editor__field">
-          <span>${escapeHtml(labels.rangeEnd)}</span>
-          <select data-print-range-end>
-            ${buildChecklistPrintTimeOptions(startSettings.rangeEnd)}
-          </select>
-        </label>
-      </fieldset>
-      <label class="checklist-print-editor__field checklist-print-editor__field--specific-start" data-print-specific-field${specificHidden}>
+      <label class="checklist-print-editor__field checklist-print-editor__field--specific-start">
         <span>${escapeHtml(labels.specificStartTime)}</span>
         <select data-print-specific-start>
           ${buildChecklistPrintTimeOptions(startSettings.specificStart)}
@@ -5169,25 +4966,8 @@ function renderChecklistPrintEditor(days = getChecklistPrintDraft()) {
 function syncChecklistPrintDraftFromEditor() {
   checklistPrintDraft = getChecklistPrintDraftFromEditor();
   storeChecklistPrintDraft();
-  updateChecklistPrintStartModeControls();
   updateChecklistPrintEditorDateDisplays(checklistPrintDraft);
   renderChecklistPrintPreview(checklistPrintDraft);
-}
-
-function updateChecklistPrintStartModeControls() {
-  if (!checklistPrintForm) {
-    return;
-  }
-
-  const settings = getChecklistPrintStartSettings();
-  const rangeFields = checklistPrintForm.querySelector("[data-print-range-fields]");
-  const specificField = checklistPrintForm.querySelector("[data-print-specific-field]");
-  if (rangeFields) {
-    rangeFields.hidden = settings.startMode !== "range";
-  }
-  if (specificField) {
-    specificField.hidden = settings.startMode !== "specific";
-  }
 }
 
 function updateChecklistPrintEditorDateDisplays(days = checklistPrintDraft || []) {
@@ -5237,7 +5017,7 @@ function openChecklistPrintFlow() {
   checklistPrintModal.hidden = false;
   root.classList.add("checklist-print-open");
   window.requestAnimationFrame(() => {
-    checklistPrintForm.querySelector("[data-print-start-mode]")?.focus({ preventScroll: true });
+    checklistPrintForm.querySelector("[data-print-specific-start]")?.focus({ preventScroll: true });
   });
 }
 

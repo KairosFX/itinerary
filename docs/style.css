@@ -441,28 +441,8 @@ html.checklist-print-open body {
   color: var(--text);
 }
 
-.checklist-print-editor__time-group {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.62rem;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.checklist-print-editor__time-group[hidden],
 .checklist-print-editor__field[hidden] {
   display: none !important;
-}
-
-.checklist-print-editor__time-group legend {
-  grid-column: 1 / -1;
-  margin: 0 0 -0.34rem;
-  padding: 0;
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 700;
 }
 
 .checklist-print-editor__items {
@@ -564,8 +544,7 @@ html.checklist-print-open body {
 }
 
 .checklist-print-output__time,
-.checklist-print-output__duration,
-.checklist-print-output__schedule {
+.checklist-print-output__duration {
   color: #333;
   font-weight: 600;
 }
@@ -3380,7 +3359,7 @@ html.has-modal-open body {
 
 .packing-section__meta {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(5.4rem, auto) minmax(0, 1fr);
   justify-items: start;
   align-content: start;
   align-items: start;
@@ -3414,12 +3393,20 @@ html.has-modal-open body {
 }
 
 .packing-section__progress {
+  min-width: 5.4rem;
   margin: 0;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.08em;
+  line-height: 1.35;
   text-transform: uppercase;
   color: var(--accent);
+}
+
+.essentials-card .packing-section__progress {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 .packing-section[data-packing-complete="true"] .packing-section__progress {
@@ -14584,7 +14571,6 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
   }
 
   .checklist-print-editor__fields,
-  .checklist-print-editor__time-group,
   .checklist-print-editor__item {
     grid-template-columns: 1fr;
   }
@@ -14665,8 +14651,7 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
   }
 
   .checklist-print-output__time,
-  .checklist-print-output__duration,
-  .checklist-print-output__schedule {
+  .checklist-print-output__duration {
     color: #222 !important;
     font-weight: 600;
   }
