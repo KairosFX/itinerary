@@ -128,40 +128,320 @@ const checklistPrintFallbackDurationDefinition = {
   label: { en: "30 min", ja: "30分" }
 };
 const checklistPrintDurationDefinitions = {
-  "day1-nightlife": { minutes: [60, 120], label: { en: "1-2 hours", ja: "1～2時間" } },
-  "day1-shinsaibashi": { minutes: [45, 60], label: { en: "45-60 min", ja: "45～60分" } },
-  "day1-dinner": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
-  "day2-kaiyukan": { minutes: [150, 180], label: { en: "2.5-3 hours", ja: "2.5～3時間" } },
-  "day2-transfer-to-kyoto": { minutes: [90, 90], label: { en: "1.5 hours", ja: "1.5時間" } },
+  "day1-nightlife": { minutes: [60, 120], label: { en: "1–2 hr", ja: "1～2時間" } },
+  "day1-shinsaibashi": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
+  "day1-dinner": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
+  "day2-kaiyukan": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
+  "day2-transfer-to-kyoto": { minutes: [90, 90], label: { en: "1.5 hr", ja: "1.5時間" } },
   "day2-hotel-check-in": { minutes: [45, 45], label: { en: "45 min", ja: "45分" } },
-  "day2-kiyomizu": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
-  "day2-ninenzaka": { minutes: [45, 60], label: { en: "45-60 min", ja: "45～60分" } },
+  "day2-kiyomizu": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
+  "day2-ninenzaka": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
   "day2-yasaka": { minutes: [30, 30], label: { en: "30 min", ja: "30分" } },
-  "day2-gion": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
-  "day3-arashiyama": { minutes: [150, 180], label: { en: "2.5-3 hours", ja: "2.5～3時間" } },
-  "day3-back-to-osaka": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
-  "day3-shinkansen-mishima": { minutes: [120, 150], label: { en: "2-2.5 hours", ja: "2～2.5時間" } },
-  "day3-transfer-fujikawaguchiko": { minutes: [90, 120], label: { en: "1.5-2 hours", ja: "1.5～2時間" } },
-  "day3-onsen-check-in": { minutes: [45, 60], label: { en: "45-60 min", ja: "45～60分" } },
-  "day4-chureito": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
-  "day4-kawaguchiko": { minutes: [120, 180], label: { en: "2-3 hours", ja: "2～3時間" } },
-  "day4-tokyo-transfer": { minutes: [150, 180], label: { en: "2.5-3 hours", ja: "2.5～3時間" } },
+  "day2-gion": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
+  "day3-arashiyama": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
+  "day3-back-to-osaka": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
+  "day3-shinkansen-mishima": { minutes: [120, 150], label: { en: "2–2.5 hr", ja: "2～2.5時間" } },
+  "day3-transfer-fujikawaguchiko": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
+  "day3-onsen-check-in": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
+  "day4-chureito": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
+  "day4-kawaguchiko": { minutes: [120, 180], label: { en: "2–3 hr", ja: "2～3時間" } },
+  "day4-tokyo-transfer": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
   "day4-tokyo-hotel-check-in": { minutes: [45, 45], label: { en: "45 min", ja: "45分" } },
-  "day5-shibuya-crossing": { minutes: [30, 45], label: { en: "30-45 min", ja: "30～45分" } },
-  "day5-shibuya-food-walk": { minutes: [90, 120], label: { en: "1.5-2 hours", ja: "1.5～2時間" } },
-  "day5-sky": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
-  "day6-skytree": { minutes: [90, 120], label: { en: "1.5-2 hours", ja: "1.5～2時間" } },
-  "day6-solamachi": { minutes: [60, 120], label: { en: "1-2 hours", ja: "1～2時間" } },
-  "day6-akihabara": { minutes: [90, 150], label: { en: "1.5-2.5 hours", ja: "1.5～2.5時間" } },
-  "day7-palace": { minutes: [60, 90], label: { en: "1-1.5 hours", ja: "1～1.5時間" } },
-  "day7-shinjuku": { minutes: [90, 120], label: { en: "1.5-2 hours", ja: "1.5～2時間" } },
-  "day7-bags": { minutes: [30, 45], label: { en: "30-45 min", ja: "30～45分" } },
-  "day7-airport": { minutes: [90, 120], label: { en: "1.5-2 hours", ja: "1.5～2時間" } }
+  "day5-shibuya-crossing": { minutes: [30, 45], label: { en: "30–45 min", ja: "30～45分" } },
+  "day5-shibuya-food-walk": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
+  "day5-sky": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
+  "day6-skytree": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
+  "day6-solamachi": { minutes: [60, 120], label: { en: "1–2 hr", ja: "1～2時間" } },
+  "day6-akihabara": { minutes: [90, 150], label: { en: "1.5–2.5 hr", ja: "1.5～2.5時間" } },
+  "day7-palace": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
+  "day7-shinjuku": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
+  "day7-bags": { minutes: [30, 45], label: { en: "30–45 min", ja: "30～45分" } },
+  "day7-airport": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } }
 };
-const audioAmbientVolume = 0.03;
-const audioAmbientDuckVolume = 0.02;
+const checklistPrintTimingTypeProfiles = {
+  "temple-shrine": {
+    transit: [10, 25],
+    walk: [10, 20],
+    crowd: [10, 30],
+    rest: [10, 20],
+    weather: [5, 20],
+    unpredictable: [10, 25],
+    rangeStartOffset: [15, 15]
+  },
+  "aquarium-museum": {
+    transit: [20, 45],
+    walk: [10, 20],
+    crowd: [20, 45],
+    rest: [10, 20],
+    weather: [0, 10],
+    unpredictable: [10, 25],
+    rangeStartOffset: [30, 15]
+  },
+  "shopping-street-food": {
+    transit: [10, 25],
+    walk: [10, 20],
+    crowd: [10, 35],
+    rest: [15, 30],
+    weather: [5, 15],
+    unpredictable: [10, 25],
+    rangeStartOffset: [15, 15]
+  },
+  "viewpoint-photo": {
+    transit: [10, 30],
+    walk: [10, 20],
+    crowd: [15, 40],
+    rest: [15, 30],
+    weather: [10, 25],
+    unpredictable: [10, 25],
+    rangeStartOffset: [15, 15]
+  },
+  "hotel-transit-admin": {
+    transit: [15, 45],
+    walk: [5, 15],
+    crowd: [5, 20],
+    rest: [5, 15],
+    weather: [0, 15],
+    unpredictable: [10, 30],
+    rangeStartOffset: [0, 0]
+  }
+};
+const checklistPrintDayTimingProfiles = {
+  "1": { intensity: "light", multiplier: 0.85 },
+  "2": { intensity: "packed", multiplier: 1.2 },
+  "3": { intensity: "packed", multiplier: 1.25 },
+  "4": { intensity: "medium", multiplier: 1.05 },
+  "5": { intensity: "light", multiplier: 0.9 },
+  "6": { intensity: "medium", multiplier: 1 },
+  "7": { intensity: "medium", multiplier: 1.05 }
+};
+const checklistPrintTimingDefinitions = {
+  "day1-nightlife": {
+    type: "shopping-street-food",
+    anchor: "standard",
+    preferred: "evening",
+    crowd: [15, 35],
+    rangeStartOffset: [0, 0]
+  },
+  "day1-shinsaibashi": {
+    type: "shopping-street-food",
+    anchor: "standard",
+    preferred: "evening",
+    walk: [5, 15],
+    crowd: [10, 25]
+  },
+  "day1-dinner": {
+    type: "shopping-street-food",
+    anchor: "major",
+    preferred: "evening",
+    crowd: [15, 35],
+    rest: [10, 20]
+  },
+  "day2-kaiyukan": {
+    type: "aquarium-museum",
+    anchor: "major",
+    preferred: "morning",
+    crowd: [25, 50],
+    rangeStartOffset: [30, 15]
+  },
+  "day2-transfer-to-kyoto": {
+    type: "hotel-transit-admin",
+    anchor: "major",
+    preferred: "afternoon",
+    transit: [25, 45],
+    crowd: [10, 25]
+  },
+  "day2-hotel-check-in": {
+    type: "hotel-transit-admin",
+    anchor: "standard",
+    preferred: "afternoon",
+    transit: [10, 20],
+    crowd: [5, 15],
+    rest: [5, 15]
+  },
+  "day2-kiyomizu": {
+    type: "temple-shrine",
+    anchor: "major",
+    preferred: "afternoon",
+    crowd: [20, 45],
+    weather: [10, 25]
+  },
+  "day2-ninenzaka": {
+    type: "shopping-street-food",
+    anchor: "standard",
+    preferred: "afternoon",
+    walk: [5, 15],
+    crowd: [15, 35]
+  },
+  "day2-yasaka": {
+    type: "temple-shrine",
+    anchor: "quick",
+    preferred: "evening",
+    walk: [5, 15],
+    crowd: [10, 25]
+  },
+  "day2-gion": {
+    type: "shopping-street-food",
+    anchor: "major",
+    preferred: "evening",
+    walk: [5, 15],
+    crowd: [20, 45]
+  },
+  "day3-arashiyama": {
+    type: "temple-shrine",
+    anchor: "major",
+    preferred: "morning",
+    transit: [20, 40],
+    crowd: [25, 55],
+    weather: [10, 25],
+    rangeStartOffset: [15, 15]
+  },
+  "day3-back-to-osaka": {
+    type: "hotel-transit-admin",
+    anchor: "standard",
+    preferred: "afternoon",
+    transit: [20, 40],
+    crowd: [10, 25]
+  },
+  "day3-shinkansen-mishima": {
+    type: "hotel-transit-admin",
+    anchor: "major",
+    preferred: "afternoon",
+    transit: [25, 45],
+    crowd: [15, 35]
+  },
+  "day3-transfer-fujikawaguchiko": {
+    type: "hotel-transit-admin",
+    anchor: "major",
+    preferred: "afternoon",
+    transit: [20, 45],
+    crowd: [10, 30],
+    weather: [5, 20]
+  },
+  "day3-onsen-check-in": {
+    type: "hotel-transit-admin",
+    anchor: "standard",
+    preferred: "evening",
+    transit: [10, 20],
+    crowd: [5, 15],
+    rest: [15, 30]
+  },
+  "day4-chureito": {
+    type: "viewpoint-photo",
+    anchor: "major",
+    preferred: "morning",
+    crowd: [20, 45],
+    weather: [15, 35]
+  },
+  "day4-kawaguchiko": {
+    type: "viewpoint-photo",
+    anchor: "major",
+    preferred: "afternoon",
+    transit: [15, 35],
+    crowd: [15, 35],
+    weather: [15, 35]
+  },
+  "day4-tokyo-transfer": {
+    type: "hotel-transit-admin",
+    anchor: "major",
+    preferred: "afternoon",
+    transit: [25, 50],
+    crowd: [15, 35]
+  },
+  "day4-tokyo-hotel-check-in": {
+    type: "hotel-transit-admin",
+    anchor: "standard",
+    preferred: "evening",
+    transit: [10, 20],
+    crowd: [5, 15]
+  },
+  "day5-shibuya-crossing": {
+    type: "viewpoint-photo",
+    anchor: "quick",
+    preferred: "afternoon",
+    walk: [5, 15],
+    crowd: [15, 35]
+  },
+  "day5-shibuya-food-walk": {
+    type: "shopping-street-food",
+    anchor: "major",
+    preferred: "afternoon",
+    walk: [5, 20],
+    crowd: [20, 45]
+  },
+  "day5-sky": {
+    type: "viewpoint-photo",
+    anchor: "major",
+    preferred: "evening",
+    transit: [10, 25],
+    crowd: [20, 45]
+  },
+  "day6-skytree": {
+    type: "viewpoint-photo",
+    anchor: "major",
+    preferred: "morning",
+    transit: [15, 35],
+    crowd: [20, 45]
+  },
+  "day6-solamachi": {
+    type: "shopping-street-food",
+    anchor: "standard",
+    preferred: "afternoon",
+    walk: [5, 15],
+    crowd: [15, 35]
+  },
+  "day6-akihabara": {
+    type: "shopping-street-food",
+    anchor: "major",
+    preferred: "afternoon",
+    transit: [10, 25],
+    crowd: [20, 45]
+  },
+  "day7-palace": {
+    type: "temple-shrine",
+    anchor: "standard",
+    preferred: "morning",
+    transit: [10, 25],
+    crowd: [10, 30],
+    weather: [10, 25]
+  },
+  "day7-shinjuku": {
+    type: "shopping-street-food",
+    anchor: "major",
+    preferred: "afternoon",
+    transit: [15, 35],
+    crowd: [20, 45]
+  },
+  "day7-bags": {
+    type: "hotel-transit-admin",
+    anchor: "quick",
+    preferred: "afternoon",
+    transit: [10, 25],
+    crowd: [5, 15]
+  },
+  "day7-airport": {
+    type: "hotel-transit-admin",
+    anchor: "major",
+    preferred: "evening",
+    transit: [25, 50],
+    crowd: [10, 30],
+    unpredictable: [15, 35]
+  }
+};
+const audioAmbientVolume = 0.001;
+const audioAmbientDuckVolume = 0.001;
+const audioSynthMasterGain = 0.001;
 const audioTransitionVolume = 0.28;
 const audioTransitionCooldownMs = 320;
+const audioAmbientVolumeStorageKey = `japan-trip-background-audio-volume-${itineraryStateVersion}`;
+const audioAmbientVolumeMigrationKey = `japan-trip-background-audio-volume-migration-2026-05-01-v1`;
+const legacyAudioVolumeStorageKeys = [
+  "japan-trip-audio-volume",
+  "japan-trip-music-volume",
+  "japan-trip-background-audio-volume",
+  "japan-trip-background-volume",
+  "kairos-viii-audio-volume",
+  "kairos-viii-music-volume"
+];
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
   en:
@@ -841,6 +1121,97 @@ function getAudioAssetConfig(manifest = getResolvedAppAssetManifest()) {
   };
 }
 
+function getNormalizedManagedVolume(value, fallback = audioAmbientVolume, max = 1) {
+  const parsed = Number(value);
+  const fallbackVolume = Number.isFinite(Number(fallback)) ? Number(fallback) : 0;
+  const maxVolume = Number.isFinite(Number(max)) ? Number(max) : 1;
+  return clamp(Number.isFinite(parsed) ? parsed : fallbackVolume, 0, maxVolume);
+}
+
+function isAmbientAudioVolumeStorageKey(key = "") {
+  const normalizedKey = String(key || "").toLowerCase();
+  if (!normalizedKey || normalizedKey === audioAmbientVolumeMigrationKey.toLowerCase()) {
+    return false;
+  }
+
+  return (
+    key === audioAmbientVolumeStorageKey ||
+    legacyAudioVolumeStorageKeys.includes(key) ||
+    (
+      /(audio|music|ambient|background)/.test(normalizedKey) &&
+      /volume/.test(normalizedKey)
+    )
+  );
+}
+
+function migrateAmbientAudioVolumeStorageArea(storage) {
+  if (!storage) {
+    return;
+  }
+
+  try {
+    const alreadyMigrated = storage.getItem(audioAmbientVolumeMigrationKey) === "true";
+    if (alreadyMigrated) {
+      return;
+    }
+
+    for (let index = storage.length - 1; index >= 0; index -= 1) {
+      const key = storage.key(index);
+      if (!isAmbientAudioVolumeStorageKey(key)) {
+        continue;
+      }
+
+      const storedVolume = Number(storage.getItem(key));
+      if (Number.isFinite(storedVolume) && storedVolume > audioAmbientVolume) {
+        storage.setItem(key, String(audioAmbientVolume));
+      }
+    }
+
+    storage.setItem(audioAmbientVolumeStorageKey, String(audioAmbientVolume));
+    storage.setItem(audioAmbientVolumeMigrationKey, "true");
+  } catch {
+    // Ignore private-mode or blocked-storage failures.
+  }
+}
+
+function migrateStoredAmbientAudioVolume() {
+  migrateAmbientAudioVolumeStorageArea(window.localStorage);
+  migrateAmbientAudioVolumeStorageArea(window.sessionStorage);
+}
+
+function getAmbientAudioVolume() {
+  migrateStoredAmbientAudioVolume();
+  return audioAmbientVolume;
+}
+
+function applyAmbientAudioVolume(audio) {
+  if (!audio) {
+    return 0;
+  }
+
+  const volume = getNormalizedManagedVolume(
+    getAmbientAudioVolume(),
+    audioAmbientVolume,
+    audioAmbientVolume
+  );
+  audio.volume = volume;
+  return volume;
+}
+
+function clampAmbientAudioIfReady() {
+  if (siteAudioNodes?.ambient) {
+    applyAmbientAudioVolume(siteAudioNodes.ambient);
+  }
+
+  if (siteAudioSynthMaster?.gain) {
+    try {
+      siteAudioSynthMaster.gain.value = audioSynthMasterGain;
+    } catch {
+      // Ignore Web Audio assignment failures.
+    }
+  }
+}
+
 function createManagedAudioNode(url, { loop = false, preload = "metadata", volume = 1 } = {}) {
   if (!url) {
     return null;
@@ -849,7 +1220,7 @@ function createManagedAudioNode(url, { loop = false, preload = "metadata", volum
   const audio = new Audio(url);
   audio.loop = loop;
   audio.preload = preload;
-  audio.volume = volume;
+  audio.volume = getNormalizedManagedVolume(volume, 1, 1);
 
   try {
     audio.playsInline = true;
@@ -885,6 +1256,7 @@ function createManagedNoiseBuffer(context) {
 
 function ensureManagedAudioContext() {
   if (siteAudioContext && siteAudioSynthMaster && siteAudioSynthLimiter) {
+    clampAmbientAudioIfReady();
     return siteAudioContext;
   }
 
@@ -911,9 +1283,11 @@ function ensureManagedAudioContext() {
 
   if (!siteAudioSynthMaster) {
     siteAudioSynthMaster = siteAudioContext.createGain();
-    siteAudioSynthMaster.gain.value = 0.92;
+    siteAudioSynthMaster.gain.value = audioSynthMasterGain;
     siteAudioSynthMaster.connect(siteAudioSynthLimiter);
   }
+
+  clampAmbientAudioIfReady();
 
   if (!siteAudioNoiseBuffer) {
     siteAudioNoiseBuffer = createManagedNoiseBuffer(siteAudioContext);
@@ -1037,6 +1411,7 @@ function scheduleManagedNoiseBurst(
 
 function ensureSiteAudioNodes() {
   if (siteAudioNodes) {
+    clampAmbientAudioIfReady();
     return siteAudioNodes;
   }
 
@@ -1053,6 +1428,7 @@ function ensureSiteAudioNodes() {
     })
   };
 
+  applyAmbientAudioVolume(siteAudioNodes.ambient);
   return siteAudioNodes;
 }
 
@@ -1089,13 +1465,14 @@ function requestAmbientPlayback() {
   }
 
   clearAmbientAudioResumeTimer();
-  ambient.volume = audioAmbientVolume;
+  applyAmbientAudioVolume(ambient);
 
   if (!ambient.paused && !ambient.ended) {
     siteAudioState.pendingAmbientStart = false;
     return Promise.resolve(true);
   }
 
+  applyAmbientAudioVolume(ambient);
   const playResult = ambient.play();
   if (!playResult || typeof playResult.then !== "function") {
     siteAudioState.pendingAmbientStart = false;
@@ -1125,6 +1502,7 @@ function pauseAmbientPlayback({ keepIntent = true } = {}) {
   }
 
   clearAmbientAudioResumeTimer();
+  applyAmbientAudioVolume(ambient);
   pauseManagedAudio(ambient, { resetTime: false });
 }
 
@@ -1135,11 +1513,14 @@ function duckAmbientLoop(durationMs = 520) {
   }
 
   clearAmbientAudioResumeTimer();
-  ambient.volume = Math.min(ambient.volume, audioAmbientDuckVolume);
+  ambient.volume = Math.min(
+    getNormalizedManagedVolume(ambient.volume, audioAmbientVolume, audioAmbientVolume),
+    audioAmbientDuckVolume
+  );
   ambientAudioResumeTimer = window.setTimeout(() => {
     ambientAudioResumeTimer = 0;
     if (!ambient.paused) {
-      ambient.volume = audioAmbientVolume;
+      applyAmbientAudioVolume(ambient);
     }
   }, durationMs);
 }
@@ -1276,12 +1657,15 @@ function playTransitionSound() {
 }
 
 function initializeSiteAudioExperience() {
+  migrateStoredAmbientAudioVolume();
   bindSiteAudioGestureListeners();
   bindSiteAudioAutoplayListeners();
   primeCriticalAudioAssets();
   ensureSiteAudioNodes();
+  clampAmbientAudioIfReady();
   requestImmediateSiteAudioStart();
   window.requestAnimationFrame(() => {
+    clampAmbientAudioIfReady();
     requestImmediateSiteAudioStart();
   });
 }
@@ -3963,11 +4347,10 @@ function getChecklistPrintLabels() {
       rangeStart: "開始",
       rangeEnd: "終了",
       specificStartTime: "開始時間",
-      startRangeOutput: "開始目安",
+      startRangeOutput: "開始枠",
       startOutput: "開始",
       est: "目安",
-      approx: "おおよそ",
-      dependingOnStartTime: "開始時間により変動"
+      approx: "おおよそ"
     };
   }
 
@@ -3985,11 +4368,10 @@ function getChecklistPrintLabels() {
     rangeStart: "Range start",
     rangeEnd: "Range end",
     specificStartTime: "Specific start time",
-    startRangeOutput: "Start range",
+    startRangeOutput: "Start window",
     startOutput: "Start",
     est: "Est.",
-    approx: "Approx.",
-    dependingOnStartTime: "depending on start time"
+    approx: "Approx."
   };
 }
 
@@ -4091,7 +4473,7 @@ function getChecklistPrintStartSummary(settings = getChecklistPrintStartSettings
     return `${labels.startOutput}: ${getChecklistPrintTimeLabel(settings.specificStart)}`;
   }
 
-  return `${labels.startRangeOutput}: ${getChecklistPrintTimeLabel(settings.rangeStart)} – ${getChecklistPrintTimeLabel(settings.rangeEnd)}`;
+  return `${labels.startRangeOutput}: ${getChecklistPrintTimeLabel(settings.rangeStart)}–${getChecklistPrintTimeLabel(settings.rangeEnd)}`;
 }
 
 function buildChecklistPrintTimeOptions(selectedValue = "") {
@@ -4153,6 +4535,197 @@ function formatChecklistPrintClockMinutes(totalMinutes = 0) {
   return `${hour12}:${String(minutes).padStart(2, "0")} ${suffix}`;
 }
 
+function normalizeChecklistPrintTimingRange(value, fallback = [0, 0]) {
+  const source = Array.isArray(value) ? value : fallback;
+  const rawMin = Number(source[0]);
+  const rawMax = Number(source[1]);
+  const min = Math.max(0, Number.isFinite(rawMin) ? rawMin : 0);
+  const max = Math.max(min, Number.isFinite(rawMax) ? rawMax : min);
+  return [min, max];
+}
+
+function normalizeChecklistPrintTimingPair(value, fallback = [0, 0]) {
+  const source = Array.isArray(value) ? value : fallback;
+  const first = Number(source[0]);
+  const second = Number(source[1]);
+  return [
+    Math.max(0, Number.isFinite(first) ? first : 0),
+    Math.max(0, Number.isFinite(second) ? second : 0)
+  ];
+}
+
+function getChecklistPrintDayTimingProfile(dayId = "") {
+  return checklistPrintDayTimingProfiles[String(dayId)] || {
+    intensity: "medium",
+    multiplier: 1
+  };
+}
+
+function getChecklistPrintTimingDefinition(itemId = "") {
+  const itemTiming = checklistPrintTimingDefinitions[itemId] || {};
+  const type = itemTiming.type || "shopping-street-food";
+  const typeProfile =
+    checklistPrintTimingTypeProfiles[type] || checklistPrintTimingTypeProfiles["shopping-street-food"];
+
+  return {
+    ...typeProfile,
+    ...itemTiming,
+    type,
+    anchor: itemTiming.anchor || "standard",
+    preferred: itemTiming.preferred || "flex"
+  };
+}
+
+function getChecklistPrintAnchorBufferFactor(anchor = "standard") {
+  if (anchor === "major") {
+    return 1.16;
+  }
+
+  if (anchor === "quick") {
+    return 0.78;
+  }
+
+  return 1;
+}
+
+function roundChecklistPrintMinutes(value, step = 5, mode = "nearest") {
+  const minutes = Number(value) || 0;
+  const interval = Math.max(1, Number(step) || 5);
+  const scaled = minutes / interval;
+
+  if (mode === "floor") {
+    return Math.floor(scaled) * interval;
+  }
+
+  if (mode === "ceil") {
+    return Math.ceil(scaled) * interval;
+  }
+
+  return Math.round(scaled) * interval;
+}
+
+function scaleChecklistPrintTimingRange(value, dayProfile, anchor = "standard", factor = 1) {
+  const [min, max] = normalizeChecklistPrintTimingRange(value);
+  const multiplier =
+    (Number(dayProfile?.multiplier) || 1) *
+    getChecklistPrintAnchorBufferFactor(anchor) *
+    (Number(factor) || 1);
+
+  return [
+    roundChecklistPrintMinutes(min * multiplier, 5, "nearest"),
+    roundChecklistPrintMinutes(max * multiplier, 5, "nearest")
+  ];
+}
+
+function getChecklistPrintPreferredStartMinutes(timing, variant = "earliest") {
+  if (timing.preferred === "afternoon") {
+    return variant === "latest" ? 13 * 60 : 12 * 60;
+  }
+
+  if (timing.preferred === "evening") {
+    return variant === "latest" ? 18 * 60 : 17 * 60 + 30;
+  }
+
+  return null;
+}
+
+function alignChecklistPrintStartToPreference(startMinutes, timing, variant = "earliest") {
+  const preferredStart = getChecklistPrintPreferredStartMinutes(timing, variant);
+  if (preferredStart === null || startMinutes >= preferredStart) {
+    return startMinutes;
+  }
+
+  if (timing.preferred === "evening" || timing.anchor === "major") {
+    return preferredStart;
+  }
+
+  return startMinutes;
+}
+
+function getChecklistPrintMealBreakRange(previousTiming, nextTiming, earliestEnd, latestEnd) {
+  const isFoodStop =
+    previousTiming?.type === "shopping-street-food" ||
+    nextTiming?.type === "shopping-street-food";
+  const lunchWindowStart = 11 * 60 + 20;
+  const lunchWindowEnd = 13 * 60 + 30;
+  const dinnerWindowStart = 17 * 60 + 20;
+  const dinnerWindowEnd = 19 * 60 + 30;
+  const crossesLunch = earliestEnd < lunchWindowEnd && latestEnd > lunchWindowStart;
+  const crossesDinner = earliestEnd < dinnerWindowEnd && latestEnd > dinnerWindowStart;
+
+  if (!crossesLunch && !crossesDinner) {
+    return [0, 0];
+  }
+
+  return isFoodStop ? [10, 30] : [30, 75];
+}
+
+function getChecklistPrintBufferBetween(previousItem, nextItem, day, earliestEnd, latestEnd) {
+  if (!previousItem || !nextItem) {
+    return { min: 0, max: 0, typical: 0 };
+  }
+
+  const dayProfile = getChecklistPrintDayTimingProfile(day.id);
+  const previousTiming = getChecklistPrintTimingDefinition(previousItem.id);
+  const nextTiming = getChecklistPrintTimingDefinition(nextItem.id);
+  const nextAnchor = nextTiming.anchor || "standard";
+  const transitFactor = nextTiming.type === "hotel-transit-admin" ? 0.35 : 0.7;
+  const transit = scaleChecklistPrintTimingRange(nextTiming.transit, dayProfile, nextAnchor, transitFactor);
+  const walk = scaleChecklistPrintTimingRange(nextTiming.walk, dayProfile, nextAnchor, 0.55);
+  const crowd = scaleChecklistPrintTimingRange(nextTiming.crowd, dayProfile, nextAnchor, 0.35);
+  const rest = scaleChecklistPrintTimingRange(previousTiming.rest, dayProfile, previousTiming.anchor, 0.5);
+  const weather = scaleChecklistPrintTimingRange(nextTiming.weather, dayProfile, nextAnchor, 0.35);
+  const unpredictable = scaleChecklistPrintTimingRange(
+    nextTiming.unpredictable,
+    dayProfile,
+    nextAnchor,
+    dayProfile.intensity === "packed" ? 0.75 : 0.55
+  );
+  const meal = scaleChecklistPrintTimingRange(
+    getChecklistPrintMealBreakRange(previousTiming, nextTiming, earliestEnd, latestEnd),
+    dayProfile,
+    "standard",
+    1
+  );
+
+  const minRaw =
+    transit[0] +
+    Math.round(walk[0] * 0.35) +
+    Math.round(crowd[0] * 0.15) +
+    Math.round(rest[0] * 0.25) +
+    Math.round(weather[0] * 0.15) +
+    Math.round(unpredictable[0] * 0.3) +
+    meal[0];
+  const maxRaw =
+    transit[1] +
+    Math.round(walk[1] * 0.45) +
+    Math.round(crowd[1] * 0.22) +
+    Math.round(rest[1] * 0.35) +
+    Math.round(weather[1] * 0.22) +
+    Math.round(unpredictable[1] * 0.42) +
+    meal[1];
+  const baseCap =
+    dayProfile.intensity === "packed" ? 85 : dayProfile.intensity === "light" ? 55 : 70;
+  const anchorCap = nextTiming.anchor === "major" ? 15 : nextTiming.anchor === "quick" ? -10 : 0;
+  const transitCap = nextTiming.type === "hotel-transit-admin" ? 15 : 0;
+  const mealCap = meal[1] > 0 ? 30 : 0;
+  const cap = Math.max(baseCap + anchorCap + transitCap + mealCap, transit[1] + meal[1] + 15);
+  const min = Math.min(Math.max(5, roundChecklistPrintMinutes(minRaw, 5, "nearest")), cap);
+  const max = Math.max(min, Math.min(roundChecklistPrintMinutes(maxRaw, 5, "nearest"), cap));
+  const typical = roundChecklistPrintMinutes(min + (max - min) * 0.58, 15, "nearest");
+
+  return {
+    min: roundChecklistPrintMinutes(min, 5, "nearest"),
+    max: roundChecklistPrintMinutes(max, 5, "nearest"),
+    typical
+  };
+}
+
+function getChecklistPrintRangeStartOffset(itemId = "") {
+  const timing = getChecklistPrintTimingDefinition(itemId);
+  return normalizeChecklistPrintTimingPair(timing.rangeStartOffset, [0, 0]);
+}
+
 function buildChecklistPrintTimeWindow(startMinutes, endMinutes) {
   return `${formatChecklistPrintClockMinutes(startMinutes)}–${formatChecklistPrintClockMinutes(endMinutes)}`;
 }
@@ -4164,25 +4737,63 @@ function withChecklistPrintSchedules(days = []) {
   const specificStartMinutes = parseChecklistPrintClockMinutes(settings.specificStart);
 
   return days.map((day) => {
-    let elapsedMin = 0;
-    let elapsedMax = 0;
-    const items = day.items.map((item) => {
+    let earliestCursor = rangeStartMinutes ?? 0;
+    let latestCursor = rangeEndMinutes ?? earliestCursor;
+    let specificCursor = specificStartMinutes ?? 0;
+    const dayProfile = getChecklistPrintDayTimingProfile(day.id);
+    const selectedStartSpread =
+      rangeStartMinutes !== null && rangeEndMinutes !== null
+        ? Math.max(0, rangeEndMinutes - rangeStartMinutes)
+        : 0;
+    const items = day.items.map((item, itemIndex) => {
       const durationMinutes = item.durationMinutes || getDefaultChecklistPrintDurationMinutes(item.id);
+      const timing = getChecklistPrintTimingDefinition(item.id);
+      const nextItem = day.items[itemIndex + 1];
       const schedule = {};
 
       if (settings.startMode === "specific" && specificStartMinutes !== null) {
+        const startMinutes = alignChecklistPrintStartToPreference(specificCursor, timing, "earliest");
+        const endMinutes = startMinutes + durationMinutes.max;
         schedule.mode = "specific";
-        schedule.start = formatChecklistPrintClockMinutes(specificStartMinutes + elapsedMax);
+        schedule.window = buildChecklistPrintTimeWindow(
+          roundChecklistPrintMinutes(startMinutes, 15, "floor"),
+          roundChecklistPrintMinutes(endMinutes, 15, "ceil")
+        );
+
+        const buffer = getChecklistPrintBufferBetween(item, nextItem, day, endMinutes, endMinutes);
+        specificCursor = endMinutes + buffer.typical;
       } else if (rangeStartMinutes !== null && rangeEndMinutes !== null) {
+        if (itemIndex === 0) {
+          const startOffset = getChecklistPrintRangeStartOffset(item.id);
+          earliestCursor += startOffset[0];
+          latestCursor += startOffset[1];
+        }
+
+        const startMin = alignChecklistPrintStartToPreference(earliestCursor, timing, "earliest");
+        const startMax = Math.max(
+          startMin,
+          alignChecklistPrintStartToPreference(latestCursor, timing, "latest")
+        );
+        const endMin = startMin + durationMinutes.min;
+        const endMax = startMax + durationMinutes.max;
+        const rangeSlack =
+          selectedStartSpread +
+          (dayProfile.intensity === "packed" ? 75 : dayProfile.intensity === "light" ? 45 : 60) +
+          (timing.anchor === "major" ? 30 : timing.anchor === "quick" ? -15 : 0);
+        const cappedEndMax = Math.max(
+          endMin,
+          Math.min(endMax, startMin + durationMinutes.max + rangeSlack)
+        );
         schedule.mode = "range";
         schedule.window = buildChecklistPrintTimeWindow(
-          rangeStartMinutes + elapsedMin,
-          rangeEndMinutes + elapsedMax + durationMinutes.max
+          roundChecklistPrintMinutes(startMin, 15, "floor"),
+          roundChecklistPrintMinutes(cappedEndMax, 15, "ceil")
         );
-      }
 
-      elapsedMin += durationMinutes.min;
-      elapsedMax += durationMinutes.max;
+        const buffer = getChecklistPrintBufferBetween(item, nextItem, day, endMin, cappedEndMax);
+        earliestCursor = endMin + buffer.min;
+        latestCursor = cappedEndMax + Math.min(buffer.typical, buffer.max);
+      }
 
       return {
         ...item,
@@ -4425,15 +5036,15 @@ function buildChecklistPrintMarkup(days = getChecklistPrintDraft()) {
           }
 
           const timePrefix =
-            item.schedule?.mode === "specific" && item.schedule.start
-              ? `<span class="checklist-print-output__time">${escapeHtml(item.schedule.start)} — </span>`
+            item.schedule?.mode === "specific" && item.schedule.window
+              ? `<span class="checklist-print-output__time">${escapeHtml(item.schedule.window)} — </span>`
               : "";
           const durationText = item.duration
             ? ` <span class="checklist-print-output__duration">— ${escapeHtml(labels.est)} ${escapeHtml(item.duration)}</span>`
             : "";
           const rangeScheduleText =
             item.schedule?.mode === "range" && item.schedule.window
-              ? ` <span class="checklist-print-output__schedule">— ${escapeHtml(labels.approx)} ${escapeHtml(item.schedule.window)} ${escapeHtml(labels.dependingOnStartTime)}</span>`
+              ? ` <span class="checklist-print-output__schedule">— ${escapeHtml(labels.approx)} ${escapeHtml(item.schedule.window)}</span>`
               : "";
           return `<li>${timePrefix}<span>${escapeHtml(item.text)}</span>${durationText}${rangeScheduleText}</li>`;
         })
@@ -9988,6 +10599,7 @@ function setActivePanel(panelId, options = {}) {
   const { syncContent = true, store = true } = options;
   let hasMatch = false;
 
+  clampAmbientAudioIfReady();
   revealAllContentPanels();
 
   contentPanels.forEach((panel) => {
@@ -10300,6 +10912,7 @@ async function activatePanel(panelId) {
 
 async function bootApp() {
   syncReducedEffectsMode({ force: true });
+  migrateStoredAmbientAudioVolume();
   initializeDecorativeMediaExperience();
   initializeSiteAudioExperience();
   completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
@@ -10324,6 +10937,7 @@ async function bootApp() {
   revealAllContentPanels();
   ensureSectionInitObserver();
   syncModalOpenState();
+  clampAmbientAudioIfReady();
   if (siteAudioState.ambientWanted) {
     void requestAmbientPlayback();
   }
@@ -10606,6 +11220,7 @@ document.addEventListener("visibilitychange", () => {
   }
 
   syncDecorativeVideoPlayback();
+  clampAmbientAudioIfReady();
   if (siteAudioState.ambientWanted) {
     void requestAmbientPlayback();
   }

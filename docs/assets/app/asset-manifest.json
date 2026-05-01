@@ -9,8 +9,8 @@
   "styleHash": "22f21d7f11",
   "routeStylePath": "./assets/app/routeStyle.a79b88b908.css",
   "routeStyleHash": "a79b88b908",
-  "scriptPath": "./assets/app/script.3c84950118.js",
-  "scriptHash": "3c84950118",
+  "scriptPath": "./assets/app/script.a12c1c0fa0.js",
+  "scriptHash": "a12c1c0fa0",
   "routeContentPath": "./assets/app/routeContent.aa57c6c681.js",
   "routeContentHash": "aa57c6c681",
   "budgetUiPath": "./assets/app/budgetUi.c9b56d76dd.js",
@@ -19,6 +19,6 @@
   "budgetContentHash": "308daf06b7",
   "essentialsContentPath": "./assets/app/essentialsContent.3071d94aaf.js",
   "essentialsContentHash": "3071d94aaf",
-  "generatedAt": "2026-05-01T21:38:35.109Z",
-  "cacheVersion": "22f21d7f11-a79b88b908-3c84950118-aa57c6c681-c9b56d76dd-308daf06b7-3071d94aaf-95c09e1b03-9afc15ad27"
+  "generatedAt": "2026-05-01T22:03:01.670Z",
+  "cacheVersion": "22f21d7f11-a79b88b908-a12c1c0fa0-aa57c6c681-c9b56d76dd-308daf06b7-3071d94aaf-95c09e1b03-9afc15ad27"
 }
