@@ -26,6 +26,12 @@ const jumpCurrentDayButton = document.querySelector("[data-jump-current-day]");
 const checklistMarkAllButton = document.querySelector("[data-checklist-mark-all]");
 const checklistPrintButton = document.querySelector("[data-checklist-print]");
 const checklistPrintSheet = document.querySelector("[data-checklist-print-sheet]");
+const checklistPrintModal = document.querySelector("[data-checklist-print-modal]");
+const checklistPrintForm = document.querySelector("[data-checklist-print-form]");
+const checklistPrintPreview = document.querySelector("[data-checklist-print-preview]");
+const checklistPrintCloseButtons = Array.from(document.querySelectorAll("[data-checklist-print-close]"));
+const checklistPrintConfirmButton = document.querySelector("[data-checklist-print-confirm]");
+const checklistPrintResetButton = document.querySelector("[data-checklist-print-reset]");
 const progressExportButton = document.querySelector("[data-progress-export]");
 const resetProgressOpenButtons = Array.from(document.querySelectorAll("[data-reset-progress-open]"));
 const transitDetailModal = document.querySelector("[data-transit-detail-modal]");
@@ -71,6 +77,7 @@ const activePanelStorageKey = `japan-trip-active-panel-${itineraryStateVersion}`
 const bookingTransitStorageKey = `japan-trip-bookings-transit-state-${itineraryStateVersion}`;
 const packingStorageKey = `japan-trip-packing-state-${itineraryStateVersion}`;
 const budgetNotesStorageKey = `japan-trip-budget-notes-${itineraryStateVersion}`;
+const checklistPrintStorageKey = `japan-trip-checklist-print-draft-${itineraryStateVersion}`;
 const fujiForecastSessionKey = `japan-trip-fuji-forecast-${itineraryStateVersion}`;
 const queuedStorageWrites = new Map();
 const headerReservedHeightFallbackPx = 156;
@@ -1754,6 +1761,8 @@ let currentProgressDay = 1;
 let activeChecklistHoverItem = null;
 let checklistPointerGlowFrame = 0;
 let pendingChecklistPointerGlow = null;
+let checklistPrintDraft = null;
+let checklistPrintLastFocusedElement = null;
 let sequenceNoticeTimer = 0;
 let lastTimelineFocusDay = null;
 const pendingClassRestarts = new WeakMap();
@@ -3935,30 +3944,299 @@ function getChecklistPrintNodeText(node, language = root.lang) {
   return (localizedNode || fallbackNode || node).textContent.trim();
 }
 
-function renderChecklistPrintSheet() {
-  if (!checklistPrintSheet) {
+function getChecklistPrintLanguage() {
+  return root.lang === "ja" ? "ja" : "en";
+}
+
+function getChecklistPrintStorageKey(language = getChecklistPrintLanguage()) {
+  return `${checklistPrintStorageKey}-${language}`;
+}
+
+function getChecklistPrintLabels() {
+  if (getChecklistPrintLanguage() === "ja") {
+    return {
+      date: "日付",
+      dayTitle: "日タイトル",
+      item: "チェック項目",
+      duration: "目安時間",
+      customDate: "日付を入力",
+      est: "目安",
+      durationPlaceholder: "30分",
+      dayTitlePlaceholder: "任意のタイトル"
+    };
+  }
+
+  return {
+    date: "Date",
+    dayTitle: "Day title",
+    item: "Checklist item",
+    duration: "Est. duration",
+    customDate: "Custom date",
+    est: "Est.",
+    durationPlaceholder: "30 min",
+    dayTitlePlaceholder: "Optional title"
+  };
+}
+
+function getChecklistPrintDurationDefaults() {
+  if (getChecklistPrintLanguage() === "ja") {
+    return {
+      short: "30分",
+      medium: "45分",
+      hour: "1時間",
+      long: "2時間"
+    };
+  }
+
+  return {
+    short: "30 min",
+    medium: "45 min",
+    hour: "1 hour",
+    long: "2 hours"
+  };
+}
+
+function getDefaultChecklistPrintDuration(itemId = "") {
+  const durations = getChecklistPrintDurationDefaults();
+  const longItems = new Set([
+    "day3-shinkansen-mishima",
+    "day3-transfer-fujikawaguchiko",
+    "day4-tokyo-transfer"
+  ]);
+  const hourItems = new Set([
+    "day1-dinner",
+    "day2-kaiyukan",
+    "day2-transfer-to-kyoto",
+    "day2-kiyomizu",
+    "day3-arashiyama",
+    "day3-back-to-osaka",
+    "day3-onsen-check-in",
+    "day4-chureito",
+    "day4-kawaguchiko",
+    "day5-shibuya-food-walk",
+    "day5-sky",
+    "day6-skytree",
+    "day7-palace",
+    "day7-airport"
+  ]);
+  const mediumItems = new Set([
+    "day1-nightlife",
+    "day1-shinsaibashi",
+    "day2-ninenzaka",
+    "day2-yasaka",
+    "day2-gion",
+    "day5-shibuya-crossing",
+    "day6-solamachi",
+    "day6-akihabara",
+    "day7-shinjuku"
+  ]);
+
+  if (longItems.has(itemId)) {
+    return durations.long;
+  }
+
+  if (hourItems.has(itemId)) {
+    return durations.hour;
+  }
+
+  if (mediumItems.has(itemId)) {
+    return durations.medium;
+  }
+
+  return durations.short;
+}
+
+function getChecklistPrintDefaults() {
+  const language = getChecklistPrintLanguage();
+  return dayCards
+    .map((card) => {
+      const dayId = String(card.dataset.day || "").trim();
+      const dayLabel = getChecklistPrintNodeText(card.querySelector(".day-label"), language);
+      const dayTitle = getChecklistPrintNodeText(card.querySelector(".day-region"), language);
+      const date = String(card.dataset.tripDate || "").trim();
+      const items = Array.from(card.querySelectorAll(".check-item"))
+        .map((item, index) => {
+          const input = item.querySelector("input");
+          const itemId = input?.id || `${dayId}-${index + 1}`;
+          const text = getChecklistPrintNodeText(item, language);
+
+          if (!text) {
+            return null;
+          }
+
+          return {
+            id: itemId,
+            text,
+            duration: getDefaultChecklistPrintDuration(itemId)
+          };
+        })
+        .filter(Boolean);
+
+      if (!dayId || !dayLabel || !items.length) {
+        return null;
+      }
+
+      return {
+        id: dayId,
+        label: dayLabel,
+        date,
+        title: dayTitle,
+        items
+      };
+    })
+    .filter(Boolean);
+}
+
+function readStoredChecklistPrintDraft() {
+  try {
+    const parsed = JSON.parse(
+      window.sessionStorage.getItem(getChecklistPrintStorageKey()) || "null"
+    );
+    if (!parsed || !Array.isArray(parsed.days)) {
+      return null;
+    }
+
+    return parsed.days;
+  } catch {
+    return null;
+  }
+}
+
+function storeChecklistPrintDraft() {
+  if (!checklistPrintDraft) {
     return;
   }
 
-  const title = root.lang === "ja" ? "Kairos VIII チェックリスト" : "Kairos VIII Checklist";
-  const dayMarkup = dayCards
-    .map((card) => {
-      const dayTitle = getChecklistPrintNodeText(card.querySelector(".day-label"));
-      const itemMarkup = Array.from(card.querySelectorAll(".check-item"))
+  try {
+    window.sessionStorage.setItem(
+      getChecklistPrintStorageKey(),
+      JSON.stringify({
+        language: getChecklistPrintLanguage(),
+        updatedAt: new Date().toISOString(),
+        days: checklistPrintDraft
+      })
+    );
+  } catch {
+    // Ignore session-only draft storage failures.
+  }
+}
+
+function mergeChecklistPrintDraft(defaultDays, storedDays) {
+  if (!Array.isArray(storedDays) || !storedDays.length) {
+    return defaultDays;
+  }
+
+  const storedDayMap = new Map(
+    storedDays.map((day) => [String(day?.id || ""), day]).filter(([id]) => id)
+  );
+
+  return defaultDays.map((day) => {
+    const storedDay = storedDayMap.get(day.id) || {};
+    const storedItemMap = new Map(
+      Array.isArray(storedDay.items)
+        ? storedDay.items.map((item) => [String(item?.id || ""), item]).filter(([id]) => id)
+        : []
+    );
+
+    return {
+      ...day,
+      date: typeof storedDay.date === "string" ? storedDay.date : day.date,
+      title: typeof storedDay.title === "string" ? storedDay.title : day.title,
+      items: day.items.map((item) => {
+        const storedItem = storedItemMap.get(item.id) || {};
+        return {
+          ...item,
+          text: typeof storedItem.text === "string" ? storedItem.text : item.text,
+          duration:
+            typeof storedItem.duration === "string" ? storedItem.duration : item.duration
+        };
+      })
+    };
+  });
+}
+
+function getChecklistPrintDraft({ reset = false } = {}) {
+  if (!reset && checklistPrintDraft) {
+    return checklistPrintDraft;
+  }
+
+  const defaults = getChecklistPrintDefaults();
+  checklistPrintDraft = reset
+    ? defaults
+    : mergeChecklistPrintDraft(defaults, readStoredChecklistPrintDraft());
+  return checklistPrintDraft;
+}
+
+function getChecklistPrintDraftFromEditor() {
+  if (!checklistPrintForm) {
+    return getChecklistPrintDraft();
+  }
+
+  const currentDraft = getChecklistPrintDraft();
+  const dayMap = new Map(currentDraft.map((day) => [day.id, day]));
+
+  return Array.from(checklistPrintForm.querySelectorAll("[data-print-day]"))
+    .map((dayNode) => {
+      const dayId = String(dayNode.dataset.dayId || "").trim();
+      const baseDay = dayMap.get(dayId);
+      if (!baseDay) {
+        return null;
+      }
+
+      const itemMap = new Map(baseDay.items.map((item) => [item.id, item]));
+      const items = Array.from(dayNode.querySelectorAll("[data-print-item]"))
+        .map((itemNode) => {
+          const itemId = String(itemNode.dataset.itemId || "").trim();
+          const baseItem = itemMap.get(itemId);
+          if (!baseItem) {
+            return null;
+          }
+
+          return {
+            ...baseItem,
+            text: itemNode.querySelector("[data-print-item-text]")?.value.trim() || "",
+            duration: itemNode.querySelector("[data-print-item-duration]")?.value.trim() || ""
+          };
+        })
+        .filter(Boolean);
+
+      return {
+        ...baseDay,
+        date: dayNode.querySelector("[data-print-date]")?.value.trim() || "",
+        title: dayNode.querySelector("[data-print-day-title]")?.value.trim() || "",
+        items
+      };
+    })
+    .filter(Boolean);
+}
+
+function buildChecklistPrintMarkup(days = getChecklistPrintDraft()) {
+  const labels = getChecklistPrintLabels();
+  const dayMarkup = days
+    .map((day) => {
+      const headingDate = day.date || labels.customDate;
+      const dayTitle = day.title ? `<small>${escapeHtml(day.title)}</small>` : "";
+      const itemMarkup = day.items
         .map((item) => {
-          const itemText = getChecklistPrintNodeText(item, root.lang);
-          return itemText ? `<li>${escapeHtml(itemText)}</li>` : "";
+          if (!item.text) {
+            return "";
+          }
+
+          const durationText = item.duration
+            ? ` <span class="checklist-print-output__duration">— ${escapeHtml(labels.est)} ${escapeHtml(item.duration)}</span>`
+            : "";
+          return `<li><span>${escapeHtml(item.text)}</span>${durationText}</li>`;
         })
         .filter(Boolean)
         .join("");
 
-      if (!dayTitle || !itemMarkup) {
+      if (!itemMarkup) {
         return "";
       }
 
       return `
-        <section class="checklist-print-sheet__day">
-          <h2>${escapeHtml(dayTitle)}</h2>
+        <section class="checklist-print-output__day checklist-print-sheet__day">
+          <h2><span>${escapeHtml(day.label)} — ${escapeHtml(headingDate)}</span>${dayTitle}</h2>
           <ul>${itemMarkup}</ul>
         </section>
       `;
@@ -3966,14 +4244,125 @@ function renderChecklistPrintSheet() {
     .filter(Boolean)
     .join("");
 
-  checklistPrintSheet.innerHTML = `
-    <h1>${escapeHtml(title)}</h1>
-    ${dayMarkup}
-  `;
+  return `<div class="checklist-print-output">${dayMarkup}</div>`;
+}
+
+function renderChecklistPrintSheet(days = getChecklistPrintDraft()) {
+  if (!checklistPrintSheet) {
+    return;
+  }
+
+  checklistPrintSheet.innerHTML = buildChecklistPrintMarkup(days);
+}
+
+function renderChecklistPrintPreview(days = getChecklistPrintDraft()) {
+  if (checklistPrintPreview) {
+    checklistPrintPreview.innerHTML = buildChecklistPrintMarkup(days);
+  }
+  renderChecklistPrintSheet(days);
+}
+
+function renderChecklistPrintEditor(days = getChecklistPrintDraft()) {
+  if (!checklistPrintForm) {
+    return;
+  }
+
+  const labels = getChecklistPrintLabels();
+  checklistPrintForm.innerHTML = days
+    .map((day) => {
+      const itemMarkup = day.items
+        .map((item) => `
+          <article class="checklist-print-editor__item" data-print-item data-item-id="${escapeHtml(item.id)}">
+            <label class="checklist-print-editor__field">
+              <span>${escapeHtml(labels.item)}</span>
+              <input type="text" value="${escapeHtml(item.text)}" data-print-item-text>
+            </label>
+            <label class="checklist-print-editor__field">
+              <span>${escapeHtml(labels.duration)}</span>
+              <input type="text" value="${escapeHtml(item.duration)}" placeholder="${escapeHtml(labels.durationPlaceholder)}" data-print-item-duration>
+            </label>
+          </article>
+        `)
+        .join("");
+
+      return `
+        <section class="checklist-print-editor__day" data-print-day data-day-id="${escapeHtml(day.id)}">
+          <div class="checklist-print-editor__day-head">
+            <p class="checklist-print-editor__day-label">${escapeHtml(day.label)}</p>
+          </div>
+          <div class="checklist-print-editor__fields">
+            <label class="checklist-print-editor__field">
+              <span>${escapeHtml(labels.date)}</span>
+              <input type="text" value="${escapeHtml(day.date)}" placeholder="${escapeHtml(labels.customDate)}" data-print-date>
+            </label>
+            <label class="checklist-print-editor__field">
+              <span>${escapeHtml(labels.dayTitle)}</span>
+              <input type="text" value="${escapeHtml(day.title)}" placeholder="${escapeHtml(labels.dayTitlePlaceholder)}" data-print-day-title>
+            </label>
+          </div>
+          <div class="checklist-print-editor__items">
+            ${itemMarkup}
+          </div>
+        </section>
+      `;
+    })
+    .join("");
+}
+
+function syncChecklistPrintDraftFromEditor() {
+  checklistPrintDraft = getChecklistPrintDraftFromEditor();
+  storeChecklistPrintDraft();
+  renderChecklistPrintPreview(checklistPrintDraft);
+}
+
+function resetChecklistPrintDraft() {
+  try {
+    window.sessionStorage.removeItem(getChecklistPrintStorageKey());
+  } catch {
+    // Ignore session-only draft storage failures.
+  }
+
+  checklistPrintDraft = getChecklistPrintDraft({ reset: true });
+  renderChecklistPrintEditor(checklistPrintDraft);
+  renderChecklistPrintPreview(checklistPrintDraft);
+  checklistPrintForm?.querySelector("input")?.focus({ preventScroll: true });
+}
+
+function openChecklistPrintFlow() {
+  if (!checklistPrintModal || !checklistPrintForm) {
+    renderChecklistPrintSheet();
+    window.print();
+    return;
+  }
+
+  checklistPrintLastFocusedElement = document.activeElement instanceof HTMLElement
+    ? document.activeElement
+    : null;
+  checklistPrintDraft = getChecklistPrintDraft();
+  renderChecklistPrintEditor(checklistPrintDraft);
+  renderChecklistPrintPreview(checklistPrintDraft);
+  checklistPrintModal.hidden = false;
+  root.classList.add("checklist-print-open");
+  window.requestAnimationFrame(() => {
+    checklistPrintForm.querySelector("input")?.focus({ preventScroll: true });
+  });
+}
+
+function closeChecklistPrintFlow() {
+  if (!checklistPrintModal) {
+    return;
+  }
+
+  syncChecklistPrintDraftFromEditor();
+  checklistPrintModal.hidden = true;
+  root.classList.remove("checklist-print-open");
+  checklistPrintLastFocusedElement?.focus?.({ preventScroll: true });
+  checklistPrintLastFocusedElement = null;
 }
 
 function printChecklistBreakdown() {
-  renderChecklistPrintSheet();
+  syncChecklistPrintDraftFromEditor();
+  renderChecklistPrintSheet(checklistPrintDraft);
   window.print();
 }
 
@@ -9270,6 +9659,12 @@ function setLanguage(language) {
   updateLanguageButtons(nextLanguage);
 
   storeLanguage(nextLanguage);
+  checklistPrintDraft = null;
+  if (checklistPrintModal && !checklistPrintModal.hidden) {
+    checklistPrintDraft = getChecklistPrintDraft();
+    renderChecklistPrintEditor(checklistPrintDraft);
+    renderChecklistPrintPreview(checklistPrintDraft);
+  }
   refreshTripNotesIfReady();
   refreshBudgetNotesIfReady();
   refreshBookingTransitIfReady();
@@ -9848,7 +10243,23 @@ if (checklistMarkAllButton) {
 }
 
 if (checklistPrintButton) {
-  checklistPrintButton.addEventListener("click", printChecklistBreakdown);
+  checklistPrintButton.addEventListener("click", openChecklistPrintFlow);
+}
+
+if (checklistPrintForm) {
+  checklistPrintForm.addEventListener("input", syncChecklistPrintDraftFromEditor);
+}
+
+checklistPrintCloseButtons.forEach((button) => {
+  button.addEventListener("click", closeChecklistPrintFlow);
+});
+
+if (checklistPrintConfirmButton) {
+  checklistPrintConfirmButton.addEventListener("click", printChecklistBreakdown);
+}
+
+if (checklistPrintResetButton) {
+  checklistPrintResetButton.addEventListener("click", resetChecklistPrintDraft);
 }
 
 if (progressExportButton) {
@@ -9881,6 +10292,14 @@ if (transitDetailModal) {
   });
 }
 
+if (checklistPrintModal) {
+  checklistPrintModal.addEventListener("click", (event) => {
+    if (event.target === checklistPrintModal) {
+      closeChecklistPrintFlow();
+    }
+  });
+}
+
 [reducedMotionQuery, coarsePointerQuery, compactViewportQuery].forEach((query) => {
   bindMediaQueryChange(query, () => {
     syncReducedEffectsMode({ force: true });
@@ -9897,6 +10316,10 @@ window.addEventListener("keydown", (event) => {
 
   if (transitDetailModal && !transitDetailModal.hidden) {
     setTransitModalOpen(false);
+  }
+
+  if (checklistPrintModal && !checklistPrintModal.hidden) {
+    closeChecklistPrintFlow();
   }
 });
 
@@ -9955,7 +10378,14 @@ window.addEventListener(
   { passive: true }
 );
 
-window.addEventListener("beforeprint", renderChecklistPrintSheet);
+window.addEventListener("beforeprint", () => {
+  if (checklistPrintModal && !checklistPrintModal.hidden) {
+    syncChecklistPrintDraftFromEditor();
+    return;
+  }
+
+  renderChecklistPrintSheet(getChecklistPrintDraft());
+});
 
 updateMaxScrollableY();
 
