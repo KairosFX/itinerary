@@ -56,12 +56,6 @@ npm run build
 npm run perf
 ```
 
-## Screenshots
-
-![Kairos VIII Lighthouse capture](docs/assets/readme/kairos-viii-lighthouse.jpg)
-
-Capture source: latest local Lighthouse final screenshot. Add fresh captures under `docs/assets/readme/` when the visual state changes.
-
 ## Credits
 
 - Music: Lukrembo - Castle
