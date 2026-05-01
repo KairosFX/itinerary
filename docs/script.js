@@ -60,8 +60,8 @@ const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
 const pageTitles = {
-  en: "Kairos VIII Japan Escape Itinerary",
-  ja: "Kairos VIII Japan Escape Itinerary"
+  en: "",
+  ja: ""
 };
 const storageKey = "japan-trip-language";
 const itineraryStateVersion = "2026-04-09-checklist-shift-raf-v2";
@@ -106,8 +106,8 @@ const budgetTravelerCountMax = 24;
 const budgetSharedRoomOccupancy = 2;
 const budgetTravelersPerRoomDefault = budgetSharedRoomOccupancy;
 const serviceWorkerWarmMessageType = "CACHE_URLS";
-const audioAmbientVolume = 0.025;
-const audioAmbientDuckVolume = 0.012;
+const audioAmbientVolume = 0.05;
+const audioAmbientDuckVolume = 0.02;
 const audioTransitionVolume = 0.28;
 const audioTransitionCooldownMs = 320;
 let budgetSourceUpdatedAt = "2026-03-27";
