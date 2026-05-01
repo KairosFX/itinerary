@@ -45,16 +45,7 @@ const assetDefinitions = [
   }
 ];
 
-const staticAssetDefinitions = [
-  {
-    key: "backgroundLoopAudio",
-    sourcePath: path.join(docsDir, "assets", "audio", "music", "lukrembo - castle.mp3")
-  },
-  {
-    key: "transitionAudio",
-    sourcePath: path.join(docsDir, "assets", "audio", "transition.mp3")
-  }
-];
+const staticAssetDefinitions = [];
 
 function createAssetHash(buffer) {
   return crypto.createHash("sha256").update(buffer).digest("hex").slice(0, 10);
@@ -114,9 +105,7 @@ manifest.cacheVersion = [
   manifest.routeContentHash,
   manifest.budgetUiHash,
   manifest.budgetContentHash,
-  manifest.essentialsContentHash,
-  manifest.backgroundLoopAudioHash,
-  manifest.transitionAudioHash
+  manifest.essentialsContentHash
 ]
   .filter(Boolean)
   .join("-");

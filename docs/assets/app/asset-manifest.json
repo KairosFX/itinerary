@@ -1,16 +1,10 @@
 {
-  "backgroundLoopAudioPath": "./assets/app/lukrembo - castle.95c09e1b03.mp3",
-  "backgroundLoopAudioCssPath": "./lukrembo - castle.95c09e1b03.mp3",
-  "backgroundLoopAudioHash": "95c09e1b03",
-  "transitionAudioPath": "./assets/app/transition.9afc15ad27.mp3",
-  "transitionAudioCssPath": "./transition.9afc15ad27.mp3",
-  "transitionAudioHash": "9afc15ad27",
-  "stylePath": "./assets/app/style.1e8d6948b6.css",
-  "styleHash": "1e8d6948b6",
+  "stylePath": "./assets/app/style.0dc412923f.css",
+  "styleHash": "0dc412923f",
   "routeStylePath": "./assets/app/routeStyle.a79b88b908.css",
   "routeStyleHash": "a79b88b908",
-  "scriptPath": "./assets/app/script.e2e53b5854.js",
-  "scriptHash": "e2e53b5854",
+  "scriptPath": "./assets/app/script.07009bb520.js",
+  "scriptHash": "07009bb520",
   "routeContentPath": "./assets/app/routeContent.aa57c6c681.js",
   "routeContentHash": "aa57c6c681",
   "budgetUiPath": "./assets/app/budgetUi.c9b56d76dd.js",
@@ -19,6 +13,6 @@
   "budgetContentHash": "308daf06b7",
   "essentialsContentPath": "./assets/app/essentialsContent.3071d94aaf.js",
   "essentialsContentHash": "3071d94aaf",
-  "generatedAt": "2026-05-01T22:32:35.752Z",
-  "cacheVersion": "1e8d6948b6-a79b88b908-e2e53b5854-aa57c6c681-c9b56d76dd-308daf06b7-3071d94aaf-95c09e1b03-9afc15ad27"
+  "generatedAt": "2026-05-01T23:15:16.472Z",
+  "cacheVersion": "0dc412923f-a79b88b908-07009bb520-aa57c6c681-c9b56d76dd-308daf06b7-3071d94aaf"
 }
