@@ -34,8 +34,8 @@
         "ja": "動線に合う大阪の共有ルーム代替"
       },
       "routeReason": {
-        "en": "Use this when you need a paid Osaka night. Yotsubashi / Nishi-Shinsaibashi still supports the actual Day 1 Minami walking and Day 3 Osaka-side movement better than a random Osaka district.",
-        "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目のミナミ散策と3日目の大阪側の動きに合いやすく、無関係な地区のホテルより実用的です。"
+        "en": "Use this when you need a paid Osaka night. Yotsubashi / Nishi-Shinsaibashi still supports the actual Day 1 Minami walking and the Day 2 Kaiyukan start better than a random Osaka district.",
+        "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目のミナミ散策と2日目の海遊館スタートに合いやすく、無関係な地区のホテルより実用的です。"
       },
       "assumption": {
         "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. The saved amount tracks a low-end Minami-side baseline room quote, while the live Booking.com link opens area results so you can compare current options.",
@@ -66,8 +66,8 @@
         "ja": "現在の京都のグループ向け高コスパ客室"
       },
       "routeReason": {
-        "en": "Shijo / Karasuma fits the route because it keeps Kyoto East convenient on Day 2 while giving cleaner subway, Hankyu, and JR options for Day 3 Arashiyama and the move back to Osaka.",
-        "ja": "四条烏丸は、2日目の京都東側へ出やすく、3日目の嵐山と大阪戻りにも地下鉄・阪急・JRの選択肢を取りやすいため、実際の動線に合います。"
+        "en": "Shijo / Karasuma fits the route because it keeps Kyoto East convenient on Day 2 while giving cleaner subway, Hankyu, and JR options for the Day 3 Arashiyama start.",
+        "ja": "四条烏丸は、2日目の京都東側へ出やすく、3日目の嵐山スタートにも地下鉄・阪急・JRの選択肢を取りやすいため、実際の動線に合います。"
       },
       "assumption": {
         "en": "Day 2 keeps its saved amount anchored to the Shijo / Karasuma baseline shared-room quote, while the live Booking.com link opens Kyoto area results for comparing route-fit stays.",
@@ -357,8 +357,8 @@
         "ja": "大阪ホテル"
       },
       "routeReason": {
-        "en": "Use this when you need a paid Osaka night. Yotsubashi / Nishi-Shinsaibashi keeps Day 1 Minami walking and Day 3 Osaka-side movement practical while cutting the fallback room cost.",
-        "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目のミナミ散策と3日目の大阪側の動きをまとめやすく、代替宿の費用も抑えやすくなります。"
+        "en": "Use this when you need a paid Osaka night. Yotsubashi / Nishi-Shinsaibashi keeps Day 1 Minami walking and the Day 2 Kaiyukan start practical while cutting the fallback room cost.",
+        "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目のミナミ散策と2日目の海遊館スタートをまとめやすく、代替宿の費用も抑えやすくなります。"
       },
       "cost": {
         "mode": "perGroup",
@@ -384,8 +384,8 @@
         "ja": "京都ホテル"
       },
       "routeReason": {
-        "en": "Shijo / Karasuma works better than a generic Kyoto stay because it keeps the Day 2 Higashiyama side simple while giving cleaner subway, Hankyu, and JR options for Day 3 Arashiyama and the move back to Osaka.",
-        "ja": "四条烏丸は、ただの京都泊よりも実際の動線に合います。2日目の東山側へ動きやすく、3日目の嵐山と大阪戻りにも地下鉄・阪急・JRの選択肢を取りやすいからです。"
+        "en": "Shijo / Karasuma works better than a generic Kyoto stay because it keeps the Day 2 Higashiyama side simple while giving cleaner subway, Hankyu, and JR options for the Day 3 Arashiyama start.",
+        "ja": "四条烏丸は、ただの京都泊よりも実際の動線に合います。2日目の東山側へ動きやすく、3日目の嵐山スタートにも地下鉄・阪急・JRの選択肢を取りやすいからです。"
       },
       "cost": {
         "mode": "perGroup",
@@ -739,14 +739,14 @@
         "ja": "3日目・嵐山から富士"
       },
       "subtitle": {
-        "en": "Arashiyama, Shin-Osaka handoff, then the Fuji transfer night",
-        "ja": "嵐山、新大阪への受け渡し、そして富士への移動で締める日"
+        "en": "Arashiyama, Tokyo → Mishima by Shinkansen, then the Fuji transfer night",
+        "ja": "嵐山、東京から三島への新幹線、そして富士への移動で締める日"
       },
       "items": [
         {
           "label": {
-            "en": "Kyoto -> Arashiyama + Osaka rail",
-            "ja": "京都 -> 嵐山と大阪への鉄道移動"
+            "en": "Kyoto -> Arashiyama local rail",
+            "ja": "京都 -> 嵐山のローカル鉄道"
           },
           "category": "intercityTransit",
           "bucket": "required",
@@ -758,19 +758,19 @@
         },
         {
           "label": {
-            "en": "Shinkansen: Shin-Osaka to Mishima",
-            "ja": "新幹線：新大阪から三島"
+            "en": "Shinkansen: Tokyo → Mishima",
+            "ja": "新幹線：東京から三島"
           },
           "category": "intercityTransit",
           "bucket": "booked",
           "sourceGroup": "core-transit",
           "cost": {
             "mode": "perPerson",
-            "amount": 12100,
+            "amount": 4600,
             "range": {
-              "lean": 11900,
-              "expected": 12100,
-              "high": 12500
+              "lean": 4000,
+              "expected": 4600,
+              "high": 5200
             }
           }
         },

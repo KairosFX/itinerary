@@ -22,6 +22,8 @@ const radioVolumeInput = document.querySelector("[data-radio-volume]");
 const radioVolumeLabel = document.querySelector("[data-radio-volume-label]");
 const radioStatusNode = document.querySelector("[data-radio-status]");
 const radioPlaylistLink = document.querySelector("[data-radio-playlist-link]");
+const radioHideButton = document.querySelector("[data-radio-hide]");
+const radioShowButton = document.querySelector("[data-radio-show]");
 const checklistGateNotice = document.querySelector("[data-checklist-gate]");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
 const dayGrids = Array.from(document.querySelectorAll(".day-grid"));
@@ -116,7 +118,9 @@ const radioPlaylistUrl =
   "https://music.youtube.com/playlist?list=PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa&si=SCzLKIUBGwHVxivZ";
 const radioYouTubeApiUrl = "https://www.youtube.com/iframe_api";
 const radioDefaultVolume = 1;
+const radioMaxVolume = 20;
 const radioVolumeStorageKey = `kairos-viii-radio-volume-${itineraryStateVersion}`;
+const radioVisibilityStorageKey = `kairos-viii-radio-hidden-${itineraryStateVersion}`;
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const budgetDefaultTravelerCount = 2;
 const budgetTravelerCountMin = 1;
@@ -143,8 +147,7 @@ const checklistPrintDurationDefinitions = {
   "day2-yasaka": { minutes: [30, 30], label: { en: "30 min", ja: "30分" } },
   "day2-gion": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
   "day3-arashiyama": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
-  "day3-back-to-osaka": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
-  "day3-shinkansen-mishima": { minutes: [120, 150], label: { en: "2–2.5 hr", ja: "2～2.5時間" } },
+  "day3-shinkansen-mishima": { minutes: [75, 105], label: { en: "75–105 min", ja: "75～105分" } },
   "day3-transfer-fujikawaguchiko": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
   "day3-onsen-check-in": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
   "day4-chureito": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
@@ -290,13 +293,6 @@ const checklistPrintTimingDefinitions = {
     transit: [20, 40],
     crowd: [25, 55],
     weather: [10, 25]
-  },
-  "day3-back-to-osaka": {
-    type: "hotel-transit-admin",
-    anchor: "standard",
-    preferred: "afternoon",
-    transit: [20, 40],
-    crowd: [10, 25]
   },
   "day3-shinkansen-mishima": {
     type: "hotel-transit-admin",
@@ -822,7 +818,8 @@ const radioState = {
   isReady: false,
   isPlaying: false,
   loadFailed: false,
-  pendingPlay: false
+  pendingPlay: false,
+  isHidden: false
 };
 
 function configureManagedVideoNode(video, { playbackRate = 1, loop = true, preload = "metadata" } = {}) {
@@ -924,8 +921,8 @@ function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
       ja: "日本ルート全体"
     },
     summary: {
-      en: "View the full route from Osaka through Kyoto and Mt. Fuji to Tokyo.",
-      ja: "大阪から京都、富士山エリアを経て東京へ進む全体ルートを確認します。"
+      en: "View the full route with the Tokyo → Mishima shinkansen handoff, Mt. Fuji, and the Tokyo finish.",
+      ja: "東京から三島への新幹線ハンドオフ、富士山エリア、東京での締めまで全体ルートを確認します。"
     },
     badges: [
       { en: "Overview", ja: "全体" },
@@ -1101,7 +1098,9 @@ function getRadioLabels() {
     fallback: { en: "Open playlist", ja: "プレイリストを開く" },
     play: { en: "Play playlist", ja: "プレイリストを再生" },
     pause: { en: "Pause playlist", ja: "プレイリストを一時停止" },
-    next: { en: "Next track", ja: "次の曲" }
+    next: { en: "Next track", ja: "次の曲" },
+    hide: { en: "Hide radio", ja: "ラジオを隠す" },
+    show: { en: "Show radio", ja: "ラジオを表示" }
   };
 }
 
@@ -1118,7 +1117,7 @@ function getStoredRadioVolume() {
     }
     const storedVolume = Number(storedValue);
     return Number.isFinite(storedVolume)
-      ? clamp(Math.round(storedVolume), 0, 100)
+      ? clamp(Math.round(storedVolume), 0, radioMaxVolume)
       : radioDefaultVolume;
   } catch {
     return radioDefaultVolume;
@@ -1133,8 +1132,24 @@ function storeRadioVolume(value) {
   }
 }
 
+function getStoredRadioHidden() {
+  try {
+    return window.localStorage.getItem(radioVisibilityStorageKey) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function storeRadioHidden(value) {
+  try {
+    window.localStorage.setItem(radioVisibilityStorageKey, value ? "true" : "false");
+  } catch {
+    // Ignore private-mode or blocked-storage failures.
+  }
+}
+
 function syncRadioVolumeUi() {
-  const nextVolume = clamp(Math.round(Number(radioVolume) || 0), 0, 100);
+  const nextVolume = clamp(Math.round(Number(radioVolume) || 0), 0, radioMaxVolume);
   radioVolume = nextVolume;
   if (radioVolumeInput && radioVolumeInput.value !== String(nextVolume)) {
     radioVolumeInput.value = String(nextVolume);
@@ -1156,6 +1171,24 @@ function setRadioState(nextState) {
   setRadioStatus(nextState);
 }
 
+function syncRadioVisibilityUi() {
+  if (!radioPlayerNode) {
+    return;
+  }
+
+  radioPlayerNode.dataset.radioCollapsed = radioState.isHidden ? "true" : "false";
+  if (radioHideButton) {
+    radioHideButton.hidden = radioState.isHidden;
+    radioHideButton.setAttribute("aria-label", getRadioLabel("hide"));
+  }
+  if (radioShowButton) {
+    radioShowButton.hidden = !radioState.isHidden;
+    radioShowButton.setAttribute("aria-label", getRadioLabel("show"));
+    radioShowButton.dataset.ariaLabelEn = getRadioLabels().show.en;
+    radioShowButton.dataset.ariaLabelJa = getRadioLabels().show.ja;
+  }
+}
+
 function syncRadioControls() {
   if (radioToggleButton) {
     const labelKey = radioState.loadFailed ? "fallback" : radioState.isPlaying ? "pause" : "play";
@@ -1170,6 +1203,12 @@ function syncRadioControls() {
     radioNextButton.disabled = !radioState.isReady || radioState.loadFailed;
     radioNextButton.setAttribute("aria-label", getRadioLabel("next"));
   }
+  if (radioHideButton) {
+    radioHideButton.setAttribute("aria-label", getRadioLabel("hide"));
+    radioHideButton.dataset.ariaLabelEn = getRadioLabels().hide.en;
+    radioHideButton.dataset.ariaLabelJa = getRadioLabels().hide.ja;
+  }
+  syncRadioVisibilityUi();
 }
 
 function applyRadioVolume() {
@@ -1273,13 +1312,17 @@ function ensureRadioPlayer() {
       }, 9000);
 
       radioPlayer = new YT.Player(radioFrameNode, {
-        width: "220",
-        height: "124",
+        width: "160",
+        height: "90",
         playerVars: {
           listType: "playlist",
           list: radioPlaylistId,
+          autoplay: 0,
+          enablejsapi: 1,
           playsinline: 1,
           controls: 0,
+          disablekb: 1,
+          iv_load_policy: 3,
           rel: 0,
           modestbranding: 1,
           origin: window.location.origin
@@ -1379,8 +1422,16 @@ function skipRadioTrack() {
   }
 }
 
+function setRadioHidden(nextHidden, { persist = true } = {}) {
+  radioState.isHidden = Boolean(nextHidden);
+  if (persist) {
+    storeRadioHidden(radioState.isHidden);
+  }
+  syncRadioVisibilityUi();
+}
+
 function handleRadioVolumeInput() {
-  radioVolume = clamp(Math.round(Number(radioVolumeInput?.value) || 0), 0, 100);
+  radioVolume = clamp(Math.round(Number(radioVolumeInput?.value) || 0), 0, radioMaxVolume);
   storeRadioVolume(radioVolume);
   applyRadioVolume();
 }
@@ -1404,11 +1455,15 @@ function initializeRadioStation() {
   }
 
   radioVolume = getStoredRadioVolume();
+  radioState.isHidden = getStoredRadioHidden();
   syncRadioVolumeUi();
+  syncRadioVisibilityUi();
   radioPlaylistLink?.setAttribute("href", radioPlaylistUrl);
   radioToggleButton?.addEventListener("click", toggleRadioPlayback);
   radioNextButton?.addEventListener("click", skipRadioTrack);
   radioVolumeInput?.addEventListener("input", handleRadioVolumeInput);
+  radioHideButton?.addEventListener("click", () => setRadioHidden(true));
+  radioShowButton?.addEventListener("click", () => setRadioHidden(false));
   setRadioState("idle");
   syncRadioControls();
 }
@@ -6557,7 +6612,6 @@ const checklistItemIconMap = {
   "day2-yasaka": "pagoda",
   "day2-gion": "lantern",
   "day3-arashiyama": "bamboo",
-  "day3-back-to-osaka": "return",
   "day3-shinkansen-mishima": "shinkansen",
   "day3-transfer-fujikawaguchiko": "bus",
   "day3-onsen-check-in": "onsen",

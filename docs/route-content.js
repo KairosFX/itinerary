@@ -28,12 +28,12 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       day: 3,
       title: { en: "Arashiyama to Fuji", ja: "嵐山から富士エリアへ" },
       note: {
-        en: "This is the long movement day. Start with Arashiyama, return to Osaka, take the shinkansen toward Mishima, transfer to Fujikawaguchiko, and finish with the onsen check-in.",
-        ja: "この日は移動が長め。嵐山から始め、大阪へ戻り、三島方面の新幹線、富士河口湖への乗り継ぎ、最後に温泉チェックインまで進む。"
+        en: "This is the long movement day. Start with Arashiyama, then keep the rail plan simple: Tokyo → Mishima by shinkansen, Fujikawaguchiko transfer, and the onsen check-in.",
+        ja: "この日は移動が長め。嵐山から始め、その後の鉄道はシンプルに東京から三島へ新幹線。富士河口湖への乗り継ぎ、最後に温泉チェックインまで進む。"
       },
       summary: {
-        en: "Arashiyama, Osaka return, shinkansen toward Mishima, Fujikawaguchiko transfer, then the onsen reset.",
-        ja: "嵐山、大阪戻り、三島方面の新幹線、富士河口湖への移動、温泉宿でリセット。"
+        en: "Arashiyama, Tokyo → Mishima by shinkansen, Fujikawaguchiko transfer, then the onsen reset.",
+        ja: "嵐山、東京から三島への新幹線、富士河口湖への移動、温泉宿でリセット。"
       }
     },
     {
@@ -107,64 +107,11 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       [135.768966, 35.012023],
       [135.768191, 35.012098]
     ],
-    kyotoOsakaViaArashiyama: [
-      [135.768191, 35.012098],
-      [135.765029, 35.012183],
-      [135.765017, 35.010873],
-      [135.752294, 35.010945],
-      [135.752055, 35.003648],
-      [135.706224, 35.003631],
-      [135.700728, 34.994107],
-      [135.690969, 34.994525],
-      [135.691886, 34.993562],
-      [135.685341, 34.992068],
-      [135.683865, 34.99156],
-      [135.679688, 34.99146],
-      [135.689899, 34.993277],
-      [135.689836, 34.99455],
-      [135.690969, 34.994525],
-      [135.693206, 34.982585],
-      [135.689161, 34.978195],
-      [135.661435, 34.976363],
-      [135.656981, 34.965958],
-      [135.654331, 34.962611],
-      [135.693602, 34.903681],
-      [135.688428, 34.903383],
-      [135.46614, 34.754197],
-      [135.464885, 34.751093],
-      [135.463683, 34.748763],
-      [135.499739, 34.695017],
-      [135.504887, 34.694403],
-      [135.50774, 34.693616],
-      [135.508011, 34.69403],
-      [135.507348, 34.694349],
-      [135.507023, 34.693888],
-      [135.505086, 34.694769],
-      [135.504733, 34.693932],
-      [135.502339, 34.694211]
-    ],
-    osakaShinOsaka: [
-      [135.502339, 34.694211],
-      [135.504659, 34.693824],
-      [135.505086, 34.694769],
-      [135.502269, 34.695186],
-      [135.502474, 34.695831],
-      [135.501387, 34.696743],
-      [135.501915, 34.699601],
-      [135.501761, 34.702923],
-      [135.498841, 34.722808],
-      [135.498396, 34.729415],
-      [135.49825, 34.734677],
-      [135.498798, 34.734866],
-      [135.498955, 34.733873],
-      [135.498921, 34.733862]
-    ],
-    shinOsakaMishima: [
-      [135.499434, 34.733432],
-      [135.75909, 34.984721],
-      [136.880843, 35.170984],
-      [137.735494, 34.703999],
-      [138.389566, 34.971944],
+    tokyoMishima: [
+      [139.767125, 35.681236],
+      [139.73876, 35.628471],
+      [139.617585, 35.466188],
+      [139.155861, 35.256447],
       [138.91012, 35.126899]
     ],
     mishimaKawaguchiko: [
@@ -233,8 +180,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
           ja: "この区間は、清水寺、二寧坂、八坂の塔、祇園へ入りやすくする移動で、荷物中心の日にはしない前提です。"
         },
         {
-          en: "Keeping the Osaka return separate makes the Kyoto East day easier to read.",
-          ja: "大阪へ戻る動きを別区間に分けることで、京都東側の日程を素直に見やすくしています。"
+          en: "Keeping this as a Kyoto-focused handoff makes the east-side walk easier to read.",
+          ja: "ここを京都側の受け渡しとしてまとめることで、京都東側の日程を素直に見やすくしています。"
         }
       ],
       dayLinks: [{ day: 2 }],
@@ -242,61 +189,11 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       coordinates: routeSegmentCoordinateDefinitions.osakaKyoto
     },
     {
-      id: "kyoto-osaka",
-      title: { en: "Arashiyama", ja: "嵐山" },
+      id: "tokyo-mishima-shinkansen",
+      title: { en: "Tokyo → Mishima", ja: "東京 → 三島" },
       summary: {
-        en: "Day 3 starts with Arashiyama, then resets back through Osaka for the Shin-Osaka launch.",
-        ja: "3日目は嵐山から始め、そのあと大阪側へ戻って新大阪からの出発へつなぎます。"
-      },
-      badges: [
-        { en: "Day 3", ja: "3日目" },
-        { en: "Return leg", ja: "戻り区間" }
-      ],
-      notes: [
-        {
-          en: "This keeps Arashiyama separate from Kyoto East while still closing the day in Osaka.",
-          ja: "嵐山を京都東側の日から分けつつ、その日の締めを大阪に戻して整えています。"
-        },
-        {
-          en: "Use this leg when you want the Osaka-side reset before the long move east.",
-          ja: "東へ大きく移る前に、大阪側へ戻る流れを見たいときの区間です。"
-        }
-      ],
-      dayLinks: [{ day: 3 }],
-      stopIds: ["kyoto", "osaka"],
-      coordinates: routeSegmentCoordinateDefinitions.kyotoOsakaViaArashiyama
-    },
-    {
-      id: "osaka-shin-osaka",
-      title: { en: "Osaka city -> Shin-Osaka", ja: "大阪市内 -> 新大阪" },
-      summary: {
-        en: "This short launch step turns the Osaka stay into the Day 3 eastbound transfer.",
-        ja: "この短い出発区間で、大阪滞在から3日目の東行き移動へ切り替えます。"
-      },
-      badges: [
-        { en: "Day 3", ja: "3日目" },
-        { en: "Launch step", ja: "出発準備" }
-      ],
-      notes: [
-        {
-          en: "It is mostly a handoff move before the long bullet-train segment.",
-          ja: "本格的な長距離新幹線区間へ入る前の引き継ぎ移動です。"
-        },
-        {
-          en: "Use it when you want the Day 3 departure flow without reopening the Osaka sightseeing context.",
-          ja: "大阪観光の文脈を開き直さずに、3日目の出発動線だけ見たいときに使えます。"
-        }
-      ],
-      dayLinks: [{ day: 3 }],
-      stopIds: ["osaka", "shin-osaka"],
-      coordinates: routeSegmentCoordinateDefinitions.osakaShinOsaka
-    },
-    {
-      id: "shin-osaka-fuji-gateway",
-      title: { en: "Shin-Osaka -> Mishima", ja: "新大阪 -> 三島" },
-      summary: {
-        en: "This is the longest rail segment in the route and the clean handoff from Kansai into the Mt. Fuji side.",
-        ja: "この区間が旅程で最長の鉄道移動で、関西から富士側へ切り替える基幹の受け渡しです。"
+        en: "This is the clean shinkansen handoff from Tokyo Station into the Mt. Fuji side.",
+        ja: "東京駅から富士側へ入るための、分かりやすい新幹線の受け渡しです。"
       },
       badges: [
         { en: "Day 3", ja: "3日目" },
@@ -315,12 +212,12 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       dayLinks: [{ day: 3 }],
       transitActions: [
         {
-          id: "shin-osaka-fuji-gateway",
+          id: "tokyo-mishima-shinkansen",
           label: { en: "Shinkansen detail", ja: "新幹線詳細" }
         }
       ],
-      stopIds: ["shin-osaka", "fuji-gateway"],
-      coordinates: routeSegmentCoordinateDefinitions.shinOsakaMishima
+      stopIds: ["tokyo", "fuji-gateway"],
+      coordinates: routeSegmentCoordinateDefinitions.tokyoMishima
     },
     {
       id: "fuji-gateway-kawaguchiko",
@@ -391,8 +288,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "osaka",
       title: { en: "Osaka", ja: "大阪" },
       summary: {
-        en: "Osaka handles the easy Minami arrival, the Day 2 Kaiyukan start, and the Day 3 return before moving east.",
-        ja: "大阪は、ミナミ中心の到着日、2日目の海遊館スタート、そして東へ移る前の3日目の戻りをまとめる拠点です。"
+        en: "Osaka handles the easy Minami arrival and the Day 2 Kaiyukan start before the route moves into Kyoto.",
+        ja: "大阪は、ミナミ中心の到着日と2日目の海遊館スタートをまとめ、その後は京都側へ進みます。"
       },
       badges: [
         { en: "Days 1-3", ja: "1-3日目" },
@@ -408,9 +305,9 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
           ja: "同時に3日目の出発も支えますが、その先の移動ロジックを京都側へ持たせない形にしています。"
         }
       ],
-      dayLinks: [{ day: 1 }, { day: 2 }, { day: 3 }],
+      dayLinks: [{ day: 1 }, { day: 2 }],
       primaryDay: 1,
-      segmentIds: ["osaka-kyoto", "kyoto-osaka", "osaka-shin-osaka"],
+      segmentIds: ["osaka-kyoto"],
       lngLat: [135.5023, 34.6938],
       labelPosition: "sw"
     },
@@ -418,8 +315,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "kyoto",
       title: { en: "Kyoto", ja: "京都" },
       summary: {
-        en: "Kyoto covers the east-side temple day and the early Arashiyama branch before the Osaka return.",
-        ja: "京都は、東側の寺社日と、朝の嵐山から大阪へ戻る流れをまとめる地点です。"
+        en: "Kyoto covers the east-side temple day and the early Arashiyama branch before the Mishima rail handoff.",
+        ja: "京都は、東側の寺社日と、朝の嵐山をまとめ、その後の三島方面の鉄道移動へつなげる地点です。"
       },
       badges: [
         { en: "Days 2 + 3", ja: "2日目・3日目" },
@@ -437,42 +334,9 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       ],
       dayLinks: [{ day: 2 }, { day: 3 }],
       primaryDay: 2,
-      segmentIds: ["osaka-kyoto", "kyoto-osaka"],
+      segmentIds: ["osaka-kyoto"],
       lngLat: [135.7681, 35.0116],
       labelPosition: "n"
-    },
-    {
-      id: "shin-osaka",
-      title: { en: "Shin-Osaka", ja: "新大阪" },
-      summary: {
-        en: "This is the clean launch point for the main Kansai-to-Fuji transfer day.",
-        ja: "ここが、関西から富士側へ渡る主要移動日の分かりやすい出発点です。"
-      },
-      badges: [
-        { en: "Day 3", ja: "3日目" },
-        { en: "Shinkansen pivot", ja: "新幹線起点" }
-      ],
-      notes: [
-        {
-          en: "Use this stop when you want the long eastbound handoff rather than the Osaka city details.",
-          ja: "大阪市内の細かい動きではなく、東へ伸びる大きな移動に集中したいときの起点です。"
-        },
-        {
-          en: "It connects directly to the saved shinkansen detail for Mishima.",
-          ja: "三島へ向かう新幹線詳細に、そのままつなげられます。"
-        }
-      ],
-      dayLinks: [{ day: 3 }],
-      primaryDay: 3,
-      transitActions: [
-        {
-          id: "shin-osaka-fuji-gateway",
-          label: { en: "Shinkansen detail", ja: "新幹線詳細" }
-        }
-      ],
-      segmentIds: ["osaka-shin-osaka", "shin-osaka-fuji-gateway"],
-      lngLat: [135.5007, 34.7335],
-      labelPosition: "ne"
     },
     {
       id: "fuji-gateway",
@@ -503,7 +367,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
           label: { en: "Fuji access detail", ja: "富士アクセス詳細" }
         }
       ],
-      segmentIds: ["shin-osaka-fuji-gateway", "fuji-gateway-kawaguchiko"],
+      segmentIds: ["tokyo-mishima-shinkansen", "fuji-gateway-kawaguchiko"],
       lngLat: [138.9208, 35.1265],
       labelPosition: "nw"
     },
@@ -544,26 +408,26 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "tokyo",
       title: { en: "Tokyo", ja: "東京" },
       summary: {
-        en: "Tokyo now absorbs the Shibuya arrival, one fuller east-side sightseeing day, and a lighter Imperial Palace/Shinjuku departure-day wrap-up into the same main-route finish.",
-        ja: "東京は、渋谷到着、東側の観光本番日、そして皇居と新宿を軽く回る帰国日までをまとめて、本編ルート終盤のひとまとまりにしています。"
+        en: "Tokyo now anchors the Mishima shinkansen handoff, the Shibuya arrival, one fuller east-side sightseeing day, and the departure-day wrap-up.",
+        ja: "東京は、三島への新幹線ハンドオフ、渋谷到着、東側の観光本番日、そして帰国日の調整までをまとめています。"
       },
       badges: [
-        { en: "Days 4-7", ja: "4日目-7日目" },
+        { en: "Days 3-7", ja: "3日目-7日目" },
         { en: "Main-route finish", ja: "本編の締め" }
       ],
       notes: [
         {
-          en: "Day 4 now lands in Shibuya for the hotel check-in, and Day 5 handles the crossing, food walk, and Shibuya Sky.",
-          ja: "4日目に渋谷へ入りホテルチェックインまで済ませ、5日目にスクランブル交差点、食べ歩き、渋谷スカイへつなげます。"
+          en: "Use Tokyo Station for the Day 3 shinkansen to Mishima, then come back into Shibuya on Day 4 for the hotel check-in.",
+          ja: "3日目は東京駅から三島へ新幹線で入り、4日目は渋谷へ戻ってホテルチェックインまで進めます。"
         },
         {
           en: "Day 6 carries the Skytree, Solamachi, and Akihabara cluster, while Day 7 keeps the Imperial Palace, a short Shinjuku stop, bag pickup or handoff, and the airport transfer tidy.",
           ja: "6日目にスカイツリー、ソラマチ、秋葉原をまとめ、7日目は皇居、新宿、荷物、空港移動を軽めに組んでいます。"
         }
       ],
-      dayLinks: [{ day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }],
+      dayLinks: [{ day: 3 }, { day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }],
       primaryDay: 4,
-      segmentIds: ["fuji-tokyo"],
+      segmentIds: ["tokyo-mishima-shinkansen", "fuji-tokyo"],
       lngLat: [139.7017, 35.658],
       labelPosition: "ne"
     }
@@ -590,15 +454,15 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 3,
-      stopIds: ["kyoto", "osaka", "shin-osaka", "fuji-gateway", "fuji"],
-      segmentIds: ["kyoto-osaka", "osaka-shin-osaka", "shin-osaka-fuji-gateway", "fuji-gateway-kawaguchiko"],
+      stopIds: ["kyoto", "tokyo", "fuji-gateway", "fuji"],
+      segmentIds: ["tokyo-mishima-shinkansen", "fuji-gateway-kawaguchiko"],
       badges: [
         { en: "Arashiyama + transfer", ja: "嵐山＋移動" },
         { en: "Fuji transfer night", ja: "富士への移動日" }
       ],
       transitActions: [
         {
-          id: "shin-osaka-fuji-gateway",
+          id: "tokyo-mishima-shinkansen",
           label: { en: "Shinkansen detail", ja: "新幹線詳細" }
         },
         {
@@ -666,7 +530,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     ],
     3: [
       { en: "Arashiyama", ja: "嵐山" },
-      { en: "Osaka", ja: "大阪" },
+      { en: "Tokyo → Mishima", ja: "東京 → 三島" },
       { en: "Kawaguchiko", ja: "河口湖" }
     ],
     4: [

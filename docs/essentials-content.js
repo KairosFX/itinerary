@@ -338,8 +338,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ]
     },
     {
-      "id": "shin-osaka-fuji-gateway",
-      "transitDetailId": "shin-osaka-fuji-gateway",
+      "id": "tokyo-mishima-shinkansen",
+      "transitDetailId": "tokyo-mishima-shinkansen",
       "group": "transit",
       "filters": [
         "to-book",
@@ -375,16 +375,16 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "予約済み"
       },
       "title": {
-        "en": "Shinkansen to Mishima",
-        "ja": "三島行き新幹線"
+        "en": "Tokyo → Mishima Shinkansen",
+        "ja": "東京 → 三島 新幹線"
       },
       "summary": {
         "en": "Treat this as the fixed intercity booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
         "ja": "3日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
       },
       "details": {
-        "en": "Use SmartEX once Day 3 timing is fixed. The official current baseline for a Shin-Osaka -> Mishima reserved seat on Hikari or Kodama is JPY 12,100 in regular season, so this card now points to the official booking flow instead of a reseller route page.",
-        "ja": "3日目の時刻が固まったら SmartEX を使います。新大阪 -> 三島の Hikari または Kodama 指定席は、現在の通常期基準で JPY 12,100 なので、このカードも外部販売ページではなく公式予約導線へ変更しています。"
+        "en": "Use SmartEX once Day 3 timing is fixed. Keep this card focused on Tokyo → Mishima by shinkansen, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
+        "ja": "3日目の時刻が固まったら SmartEX を使います。このカードは東京 → 三島の新幹線に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
       },
       "links": [
         {
@@ -394,12 +394,12 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
             "ja": "SmartEX公式予約"
           },
           "note": {
-            "en": "Official JR Central SmartEX route and booking entry for the Shin-Osaka -> Mishima shinkansen leg.",
-            "ja": "新大阪 -> 三島の新幹線区間に使う JR東海 SmartEX の公式予約導線です。"
+            "en": "Official JR Central SmartEX route and booking entry for the Tokyo → Mishima shinkansen leg.",
+            "ja": "東京 → 三島の新幹線区間に使う JR東海 SmartEX の公式予約導線です。"
           },
           "price": {
-            "en": "JPY 12,100 / person",
-            "ja": "1人 JPY 12,100"
+            "en": "Approx. JPY 4,600 / person",
+            "ja": "目安 1人 JPY 4,600"
           },
           "kind": "primary"
         }
@@ -759,8 +759,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "朝の大阪側の出発地点に合う鉄道ルートを使い、基本は大阪・梅田側から JR または阪急で京都へ入り、最後の京都側だけをバス・地下鉄・タクシーで短くつなぎます。大きな荷物移動ではなく、日帰り荷物での受け渡しとして考えます。"
       },
       "why": {
-        "en": "It lets Day 2 start with Kaiyukan, then keeps Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion in one Kyoto-side sweep while the Kyoto hotel still supports the Day 3 Arashiyama start and Osaka return.",
-        "ja": "2日目を海遊館から始め、そのあと清水寺、二年坂、八坂の塔、祇園を京都側でまとめつつ、京都ホテルは3日目の嵐山と大阪戻りにも合う位置に残せます。"
+        "en": "It lets Day 2 start with Kaiyukan, then keeps Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion in one Kyoto-side sweep while the Kyoto hotel still supports the Day 3 Arashiyama start.",
+        "ja": "2日目を海遊館から始め、そのあと清水寺、二年坂、八坂の塔、祇園を京都側でまとめつつ、京都ホテルは3日目の嵐山スタートにも合う位置に残せます。"
       },
       "practicalNotes": [
         {
@@ -805,34 +805,34 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       }
     },
     {
-      "id": "shin-osaka-fuji-gateway",
+      "id": "tokyo-mishima-shinkansen",
       "tag": {
         "en": "Day 3 transfer",
         "ja": "3日目の移動"
       },
       "title": {
-        "en": "Shin-Osaka -> Mishima shinkansen handoff",
-        "ja": "新大阪 -> 三島 新幹線ハンドオフ"
+        "en": "Tokyo → Mishima shinkansen handoff",
+        "ja": "東京 → 三島 新幹線ハンドオフ"
       },
       "summary": {
-        "en": "This is the fixed long-distance rail leg that pushes the route straight from Kansai into the Mt. Fuji side.",
-        "ja": "関西からそのまま富士側へ入るための、固定の長距離新幹線区間です。"
+        "en": "This is the fixed rail leg that carries the route from Tokyo Station into the Mt. Fuji side.",
+        "ja": "東京駅から富士側へ入るための、固定の新幹線区間です。"
       },
       "segment": {
-        "en": "Kansai side -> Mishima Station",
-        "ja": "関西側 -> 三島駅"
+        "en": "Tokyo Station → Mishima Station",
+        "ja": "東京駅 → 三島駅"
       },
       "from": {
-        "en": "Shin-Osaka Station",
-        "ja": "新大阪駅"
+        "en": "Tokyo Station",
+        "ja": "東京駅"
       },
       "to": {
         "en": "Mishima Station",
         "ja": "三島駅"
       },
       "transport": {
-        "en": "Tokaido Shinkansen via SmartEX or JR Central's online flow. The current regular-season reserved-seat baseline for Shin-Osaka -> Mishima on Hikari or Kodama is JPY 12,100, so treat this as the fixed Day 3 rail commitment and keep the train details saved in one place.",
-        "ja": "SmartEX または JR東海のオンライン導線で押さえる東海道新幹線です。新大阪 -> 三島の Hikari または Kodama 指定席は、現在の通常期基準で JPY 12,100 なので、これを3日目の固定鉄道移動として扱い、列車情報は一か所にまとめて保存します。"
+        "en": "Tokaido Shinkansen via SmartEX or JR Central's online flow. Plan it as Tokyo → Mishima by shinkansen, then keep the Mishima-to-lake transfer saved separately.",
+        "ja": "SmartEX または JR東海のオンライン導線で押さえる東海道新幹線です。東京 → 三島の新幹線として扱い、三島から湖側への移動は別に保存しておきます。"
       },
       "why": {
         "en": "It keeps Day 3 as one clear eastbound move, shortens the long leg, and leaves the local Kawaguchiko access decisions for after the rail arrival.",
@@ -844,8 +844,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
           "ja": "接続を詰めすぎず、少し余裕が残る便を基準にします。"
         },
         {
-          "en": "Lock the seat in SmartEX once the morning Osaka departure flow is fixed, and keep Mishima as the fixed handoff point.",
-          "ja": "朝の大阪側の出発動線が固まったら SmartEX で新大阪発の座席を押さえ、受け渡し先は三島で固定しておきます。"
+          "en": "Lock the seat in SmartEX once the Tokyo Station departure window is fixed, and keep Mishima as the handoff point.",
+          "ja": "東京駅の出発時間帯が固まったら SmartEX で座席を押さえ、受け渡し先は三島で固定しておきます。"
         },
         {
           "en": "Keep seats, train number, and luggage notes saved in one place on your phone.",
@@ -854,8 +854,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "prepReminders": [
         {
-          "en": "Book in SmartEX once Day 3 is fixed rather than leaving the Kansai-to-Fuji handoff to the last minute.",
-          "ja": "3日目が固まったら SmartEX で予約し、関西から富士側への受け渡しを直前判断にしないようにします。"
+          "en": "Book in SmartEX once Day 3 is fixed rather than leaving the Tokyo-to-Mishima handoff to the last minute.",
+          "ja": "3日目が固まったら SmartEX で予約し、東京から三島への受け渡しを直前判断にしないようにします。"
         },
         {
           "en": "Save the next local step toward Kawaguchiko so the arrival platform decision stays simple.",

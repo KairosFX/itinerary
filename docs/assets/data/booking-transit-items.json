@@ -337,8 +337,8 @@
     ]
   },
   {
-    "id": "shin-osaka-fuji-gateway",
-    "transitDetailId": "shin-osaka-fuji-gateway",
+    "id": "tokyo-mishima-shinkansen",
+    "transitDetailId": "tokyo-mishima-shinkansen",
     "group": "transit",
     "filters": [
       "to-book",
@@ -374,16 +374,16 @@
       "ja": "予約済み"
     },
     "title": {
-      "en": "Shinkansen to Mishima",
-      "ja": "三島行き新幹線"
+      "en": "Tokyo → Mishima Shinkansen",
+      "ja": "東京 → 三島 新幹線"
     },
     "summary": {
       "en": "Treat this as the fixed intercity booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
       "ja": "3日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
     },
     "details": {
-      "en": "Use SmartEX once Day 3 timing is fixed. The official current baseline for a Shin-Osaka -> Mishima reserved seat on Hikari or Kodama is JPY 12,100 in regular season, so this card now points to the official booking flow instead of a reseller route page.",
-      "ja": "3日目の時刻が固まったら SmartEX を使います。新大阪 -> 三島の Hikari または Kodama 指定席は、現在の通常期基準で JPY 12,100 なので、このカードも外部販売ページではなく公式予約導線へ変更しています。"
+      "en": "Use SmartEX once Day 3 timing is fixed. Keep this card focused on Tokyo → Mishima by shinkansen, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
+      "ja": "3日目の時刻が固まったら SmartEX を使います。このカードは東京 → 三島の新幹線に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
     },
     "links": [
       {
@@ -393,12 +393,12 @@
           "ja": "SmartEX公式予約"
         },
         "note": {
-          "en": "Official JR Central SmartEX route and booking entry for the Shin-Osaka -> Mishima shinkansen leg.",
-          "ja": "新大阪 -> 三島の新幹線区間に使う JR東海 SmartEX の公式予約導線です。"
+          "en": "Official JR Central SmartEX route and booking entry for the Tokyo → Mishima shinkansen leg.",
+          "ja": "東京 → 三島の新幹線区間に使う JR東海 SmartEX の公式予約導線です。"
         },
         "price": {
-          "en": "JPY 12,100 / person",
-          "ja": "1人 JPY 12,100"
+          "en": "Approx. JPY 4,600 / person",
+          "ja": "目安 1人 JPY 4,600"
         },
         "kind": "primary"
       }

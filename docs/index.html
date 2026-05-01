@@ -2695,10 +2695,10 @@ html.reduce-effects .site-backdrop__video {
     font-size: 0.66rem !important;
   }
 }</style>
-  <link rel="preload" href="./assets/app/style.0dc412923f.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.07009bb520.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.0dc412923f.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.0dc412923f.css"></noscript>
+  <link rel="preload" href="./assets/app/style.434d3cd5b7.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.568a20d9e2.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.434d3cd5b7.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.434d3cd5b7.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -2814,6 +2814,16 @@ html.reduce-effects .site-backdrop__video {
     data-aria-label-en="Kairos VIII radio station"
     data-aria-label-ja="Kairos VIII ラジオステーション">
     <div class="travel-radio__signal" data-radio-frame aria-label="Embedded YouTube playlist player"></div>
+    <button
+      class="travel-radio__restore"
+      type="button"
+      data-radio-show
+      hidden
+      aria-label="Show radio"
+      data-aria-label-en="Show radio"
+      data-aria-label-ja="ラジオを表示">
+      <span aria-hidden="true">♪</span>
+    </button>
     <div class="travel-radio__body">
       <div class="travel-radio__copy">
         <p class="travel-radio__eyebrow">Kairos FM</p>
@@ -2850,9 +2860,18 @@ html.reduce-effects .site-backdrop__video {
         </button>
         <label class="travel-radio__volume">
           <span>VOL</span>
-          <input type="range" min="0" max="100" step="1" value="1" data-radio-volume>
+          <input type="range" min="0" max="20" step="1" value="1" data-radio-volume>
           <output data-radio-volume-label>1%</output>
         </label>
+        <button
+          class="travel-radio__button travel-radio__button--hide"
+          type="button"
+          data-radio-hide
+          aria-label="Hide radio"
+          data-aria-label-en="Hide radio"
+          data-aria-label-ja="ラジオを隠す">
+          <span aria-hidden="true">−</span>
+        </button>
       </div>
     </div>
   </aside>
@@ -3310,20 +3329,13 @@ html.reduce-effects .site-backdrop__video {
                 <span class="check-copy" data-language="ja" hidden>嵐山</span>
               </label>
             </li>
-            <li>
-              <label class="check-item" for="day3-back-to-osaka">
-                <input id="day3-back-to-osaka" type="checkbox">
-                <span class="check-copy" data-language="en">Return to Osaka</span>
-                <span class="check-copy" data-language="ja" hidden>大阪へ戻る</span>
-              </label>
-            </li>
             <li class="checklist-list__item checklist-list__item--with-detail">
               <label class="check-item" for="day3-shinkansen-mishima">
                 <input id="day3-shinkansen-mishima" type="checkbox">
-                <span class="check-copy" data-language="en">Shinkansen toward Mishima</span>
-                <span class="check-copy" data-language="ja" hidden>三島方面の新幹線</span>
+                <span class="check-copy" data-language="en">Tokyo → Mishima by Shinkansen</span>
+                <span class="check-copy" data-language="ja" hidden>東京から三島へ新幹線</span>
               </label>
-              <button class="transit-trigger transit-trigger--checklist" type="button" data-transit-detail-trigger="shin-osaka-fuji-gateway">
+              <button class="transit-trigger transit-trigger--checklist" type="button" data-transit-detail-trigger="tokyo-mishima-shinkansen">
                 <span data-language="en">Open Shinkansen</span>
                 <span data-language="ja" hidden>新幹線を開く</span>
               </button>
@@ -3715,14 +3727,14 @@ html.reduce-effects .site-backdrop__video {
               <span data-language="ja" hidden>ルート地図</span>
             </h3>
             <p class="route-map__meta">
-              <span data-language="en">A simple map of the route from Osaka through Kyoto and Mt. Fuji to Tokyo.</span>
-              <span data-language="ja" hidden>大阪から京都、富士山エリアを経て東京へ進むシンプルなルート地図です。</span>
+              <span data-language="en">A simple map of the route, including Tokyo → Mishima by Shinkansen and the Fuji handoff.</span>
+              <span data-language="ja" hidden>東京から三島への新幹線と富士エリアへの受け渡しを含むシンプルなルート地図です。</span>
             </p>
           </div>
           <div class="route-map__header-actions">
             <a
               class="booking-item__cta booking-item__cta--primary route-map__header-action"
-              href="https://www.google.com/maps/dir/Osaka/Kyoto/Shin-Osaka+Station/Mishima+Station/Kawaguchiko/Tokyo"
+              href="https://www.google.com/maps/dir/Osaka/Kyoto/Tokyo+Station/Mishima+Station/Kawaguchiko/Tokyo"
               target="_blank"
               rel="noopener noreferrer">
               <span data-language="en">Open in Google Maps</span>
@@ -4270,10 +4282,10 @@ html.reduce-effects .site-backdrop__video {
   </div>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.0dc412923f.css","styleHash":"0dc412923f","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.07009bb520.js","scriptHash":"07009bb520","routeContentPath":"./assets/app/routeContent.aa57c6c681.js","routeContentHash":"aa57c6c681","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.308daf06b7.js","budgetContentHash":"308daf06b7","essentialsContentPath":"./assets/app/essentialsContent.3071d94aaf.js","essentialsContentHash":"3071d94aaf","generatedAt":"2026-05-01T23:15:16.472Z","cacheVersion":"0dc412923f-a79b88b908-07009bb520-aa57c6c681-c9b56d76dd-308daf06b7-3071d94aaf"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.434d3cd5b7.css","styleHash":"434d3cd5b7","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.568a20d9e2.js","scriptHash":"568a20d9e2","routeContentPath":"./assets/app/routeContent.05763f8e75.js","routeContentHash":"05763f8e75","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.df7c63bbe0.js","budgetContentHash":"df7c63bbe0","essentialsContentPath":"./assets/app/essentialsContent.1eda687ab3.js","essentialsContentHash":"1eda687ab3","generatedAt":"2026-05-01T23:57:52.308Z","cacheVersion":"434d3cd5b7-a79b88b908-568a20d9e2-05763f8e75-c9b56d76dd-df7c63bbe0-1eda687ab3"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.07009bb520.js" defer></script>
+  <script src="./assets/app/script.568a20d9e2.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>
