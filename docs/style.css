@@ -11389,6 +11389,7 @@ html[data-theme="dark"] .site-intro__title {
 }
 
 .travel-radio__source {
+  margin: 0;
   min-width: 0;
   overflow: hidden;
   color: rgba(244, 251, 245, 0.88);
@@ -11397,14 +11398,6 @@ html[data-theme="dark"] .site-intro__title {
   line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.travel-radio__source:hover,
-.travel-radio__source:focus-visible {
-  color: #fff;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
 }
 
 .travel-radio__status {

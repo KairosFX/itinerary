@@ -18,7 +18,6 @@ const radioArtworkNode = document.querySelector("[data-radio-artwork]");
 const radioToggleButton = document.querySelector("[data-radio-toggle]");
 const radioToggleIconNode = document.querySelector("[data-radio-toggle-icon]");
 const radioPreviousButton = document.querySelector("[data-radio-previous]");
-const radioRewindButton = document.querySelector("[data-radio-rewind]");
 const radioNextButton = document.querySelector("[data-radio-next]");
 const radioVolumeInput = document.querySelector("[data-radio-volume]");
 const radioVolumeLabel = document.querySelector("[data-radio-volume-label]");
@@ -117,17 +116,16 @@ const routeMapOriginUrl = "https://tiles.openfreemap.org";
 const routeMapStyleUrl = "https://tiles.openfreemap.org/styles/positron";
 const radioPlaylistId = "PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa";
 const radioYoutubePlayerHost = "https://www.youtube-nocookie.com";
+const radioYoutubePlayerId = "kairos-viii-radio-player";
 const radioStationMeta = {
   title: "Kairos VIII Radio",
   artist: "Kairos playlist",
   album: "Kairos VIII"
 };
-const radioDefaultArtworkUrl = "./assets/readme/kairos-viii-lighthouse.jpg";
 const radioDefaultVolume = 12;
 const radioMinVolume = 1;
 const radioMaxVolume = 100;
-const radioRewindSeconds = 10;
-const radioPreviousRestartThresholdSeconds = 5;
+const radioPreviousDoubleActionWindowMs = 3000;
 const radioLegacyVolumeStorageKey = `kairos-viii-radio-volume-${itineraryStateVersion}`;
 const radioVolumeStorageKey = `kairos-viii-radio-site-volume-v2-${itineraryStateVersion}`;
 const radioShuffleHistoryMin = 3;
@@ -1099,6 +1097,8 @@ let radioCurrentTimeAnchorMs = 0;
 let radioCurrentTrackTitle = "";
 let radioCurrentArtworkUrl = "";
 let radioPendingPlaybackHistoryIndex = null;
+let radioPreviousActionUntilMs = 0;
+let radioPreviousActionTrackIndex = -1;
 const radioRecentTrackHistory = [];
 const radioPlaybackTrackHistory = [];
 let radioPlaybackHistoryCursor = -1;
@@ -1388,8 +1388,7 @@ function getRadioLabels() {
     play: { en: "Play playlist", ja: "プレイリストを再生" },
     pause: { en: "Pause playlist", ja: "プレイリストを一時停止" },
     retry: { en: "Retry playlist radio", ja: "プレイリストラジオを再試行" },
-    previous: { en: "Previous track", ja: "前の曲" },
-    rewind: { en: "Rewind 10 seconds", ja: "10秒戻す" },
+    previous: { en: "Restart or previous track", ja: "曲を先頭に戻す / 前の曲" },
     next: { en: "Next track", ja: "次の曲" },
     hide: { en: "Hide radio", ja: "ラジオを隠す" },
     show: { en: "Show radio", ja: "ラジオを表示" }
@@ -1548,12 +1547,6 @@ function syncRadioControls() {
     radioPreviousButton.dataset.ariaLabelEn = getRadioLabels().previous.en;
     radioPreviousButton.dataset.ariaLabelJa = getRadioLabels().previous.ja;
   }
-  if (radioRewindButton) {
-    radioRewindButton.disabled = !canControlPlaybackPosition;
-    radioRewindButton.setAttribute("aria-label", getRadioLabel("rewind"));
-    radioRewindButton.dataset.ariaLabelEn = getRadioLabels().rewind.en;
-    radioRewindButton.dataset.ariaLabelJa = getRadioLabels().rewind.ja;
-  }
   if (radioNextButton) {
     radioNextButton.disabled = !radioState.canSkip || radioState.loadFailed;
     radioNextButton.setAttribute("aria-label", getRadioLabel("next"));
@@ -1587,6 +1580,11 @@ function applyRadioVolume() {
   }
 }
 
+function isRadioVideoId(value) {
+  const videoId = String(value || "").trim();
+  return /^[\w-]{11}$/.test(videoId) && videoId.toLowerCase() !== "videoseries";
+}
+
 function getRadioVideoIdFromInfo(info = {}) {
   const videoData = info.videoData && typeof info.videoData === "object" ? info.videoData : {};
   const rawVideoId =
@@ -1594,15 +1592,28 @@ function getRadioVideoIdFromInfo(info = {}) {
     videoData.videoId ||
     info.video_id ||
     info.videoId ||
+    info.currentVideoId ||
+    info.current_video_id ||
     "";
   const directVideoId = String(rawVideoId || "").trim();
-  if (/^[\w-]{6,}$/.test(directVideoId)) {
+  if (isRadioVideoId(directVideoId)) {
     return directVideoId;
   }
 
-  const videoUrl = String(videoData.video_url || videoData.videoUrl || info.videoUrl || "");
-  const videoUrlMatch = videoUrl.match(/[?&]v=([\w-]{6,})/) || videoUrl.match(/\/embed\/([\w-]{6,})/);
-  return videoUrlMatch?.[1] || "";
+  const videoUrl = String(
+    videoData.video_url ||
+    videoData.videoUrl ||
+    info.video_url ||
+    info.videoUrl ||
+    info.url ||
+    ""
+  );
+  const videoUrlMatch =
+    videoUrl.match(/[?&]v=([\w-]{11})/) ||
+    videoUrl.match(/\/embed\/([\w-]{11})/) ||
+    videoUrl.match(/\/shorts\/([\w-]{11})/) ||
+    videoUrl.match(/youtu\.be\/([\w-]{11})/);
+  return isRadioVideoId(videoUrlMatch?.[1]) ? videoUrlMatch[1] : "";
 }
 
 function getRadioTrackTitleFromInfo(info = {}) {
@@ -1611,7 +1622,7 @@ function getRadioTrackTitleFromInfo(info = {}) {
 }
 
 function getRadioArtworkUrlForVideo(videoId) {
-  return videoId ? `https://i.ytimg.com/vi/${encodeURIComponent(videoId)}/hqdefault.jpg` : "";
+  return videoId ? `https://img.youtube.com/vi/${encodeURIComponent(videoId)}/hqdefault.jpg` : "";
 }
 
 function showRadioArtworkFallback() {
@@ -1645,23 +1656,17 @@ function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
 }
 
 function setRadioDefaultArtwork() {
-  setRadioArtworkSource(radioDefaultArtworkUrl, {
-    kind: "default",
-    title: radioStationMeta.title
-  });
+  showRadioArtworkFallback();
+  updateRadioMediaSessionMetadata();
 }
 
 function handleRadioArtworkError() {
-  if (radioArtworkNode?.dataset.radioArtworkKind !== "default" && radioDefaultArtworkUrl) {
-    setRadioDefaultArtwork();
-    return;
-  }
-
   showRadioArtworkFallback();
   updateRadioMediaSessionMetadata();
 }
 
 function updateRadioArtworkFromInfo(info = {}) {
+  const previousTrackTitle = radioCurrentTrackTitle;
   const trackTitle = getRadioTrackTitleFromInfo(info);
   if (trackTitle) {
     radioCurrentTrackTitle = trackTitle;
@@ -1676,7 +1681,7 @@ function updateRadioArtworkFromInfo(info = {}) {
     return;
   }
 
-  if (!radioCurrentArtworkUrl) {
+  if (!radioCurrentArtworkUrl || (trackTitle && trackTitle !== previousTrackTitle)) {
     setRadioDefaultArtwork();
     return;
   }
@@ -1821,11 +1826,13 @@ function ensureRadioYoutubeIframe() {
   const mountNode = getRadioYoutubeMountNode();
   const existingIframe = mountNode?.querySelector("iframe");
   if (existingIframe instanceof HTMLIFrameElement) {
+    existingIframe.id = radioYoutubePlayerId;
     radioYoutubeIframe = existingIframe;
     return radioYoutubeIframe;
   }
 
   const iframe = document.createElement("iframe");
+  iframe.id = radioYoutubePlayerId;
   iframe.title = "Kairos VIII playlist radio";
   iframe.src = getRadioYoutubeEmbedUrl();
   iframe.width = "1";
@@ -1848,8 +1855,23 @@ function postRadioYoutubeCommand(func, args = []) {
   radioYoutubeIframe.contentWindow.postMessage(
     JSON.stringify({
       event: "command",
+      id: radioYoutubePlayerId,
       func,
       args
+    }),
+    radioYoutubePlayerHost
+  );
+}
+
+function requestRadioYoutubeInfoDelivery() {
+  if (!radioYoutubeIframe?.contentWindow) {
+    return;
+  }
+
+  radioYoutubeIframe.contentWindow.postMessage(
+    JSON.stringify({
+      event: "listening",
+      id: radioYoutubePlayerId
     }),
     radioYoutubePlayerHost
   );
@@ -1954,6 +1976,9 @@ function rememberRadioTrackIndex(trackIndex, { updatePlaybackHistory = true } = 
     return;
   }
 
+  if (radioPreviousActionTrackIndex >= 0 && normalizedIndex !== radioPreviousActionTrackIndex) {
+    resetRadioPreviousDoubleAction();
+  }
   radioCurrentTrackIndex = normalizedIndex;
   if (radioRecentTrackHistory[radioRecentTrackHistory.length - 1] !== normalizedIndex) {
     radioRecentTrackHistory.push(normalizedIndex);
@@ -2108,6 +2133,7 @@ function ensureRadioYoutubePlayer() {
           return;
         }
         settled = true;
+        requestRadioYoutubeInfoDelivery();
         handleRadioYoutubeReady({ target: radioYoutubePlayer });
         resolve(radioYoutubePlayer);
       };
@@ -2211,8 +2237,16 @@ function seekRadioTo(seconds) {
   }
 }
 
-function rewindRadioTrack() {
-  seekRadioTo(Math.max(0, getEstimatedRadioCurrentTime() - radioRewindSeconds));
+function resetRadioPreviousDoubleAction() {
+  radioPreviousActionUntilMs = 0;
+  radioPreviousActionTrackIndex = -1;
+}
+
+function restartRadioCurrentTrackForPreviousAction() {
+  const restarted = seekRadioTo(0);
+  radioPreviousActionUntilMs = getRadioClockNow() + radioPreviousDoubleActionWindowMs;
+  radioPreviousActionTrackIndex = radioCurrentTrackIndex;
+  return restarted;
 }
 
 function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
@@ -2245,16 +2279,7 @@ function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
   }
 }
 
-function previousRadioTrack() {
-  if (!radioYoutubePlayer) {
-    return;
-  }
-
-  if (getEstimatedRadioCurrentTime() > radioPreviousRestartThresholdSeconds || !radioState.canSkip) {
-    seekRadioTo(0);
-    return;
-  }
-
+function playPreviousRadioTrackFromHistory() {
   const playlistTrackCount = getKnownRadioPlaylistTrackCount();
   const previousHistoryIndex = getPreviousRadioTrackIndexFromHistory();
   let previousTrackIndex = previousHistoryIndex;
@@ -2263,10 +2288,8 @@ function previousRadioTrack() {
     previousTrackIndex = (radioCurrentTrackIndex - 1 + playlistTrackCount) % playlistTrackCount;
   }
 
-  if (previousTrackIndex !== null && playRadioTrackAt(previousTrackIndex, { fromPlaybackHistory: true })) {
-    syncRadioControls();
-    updateRadioMediaSessionPlaybackState();
-    return;
+  if (previousTrackIndex !== null) {
+    return playRadioTrackAt(previousTrackIndex, { fromPlaybackHistory: true });
   }
 
   try {
@@ -2275,11 +2298,34 @@ function previousRadioTrack() {
       radioYoutubePlayer.previousVideo();
       radioState.isPlaying = true;
       setRadioState("playing");
+      return true;
     }
   } catch {
     markRadioFallback();
+    return false;
+  }
+  return false;
+}
+
+function previousRadioTrack() {
+  if (!radioYoutubePlayer) {
     return;
   }
+
+  const now = getRadioClockNow();
+  const shouldTryPreviousTrack =
+    now <= radioPreviousActionUntilMs &&
+    (radioPreviousActionTrackIndex < 0 || radioPreviousActionTrackIndex === radioCurrentTrackIndex);
+
+  if (shouldTryPreviousTrack) {
+    resetRadioPreviousDoubleAction();
+    if (!radioState.canSkip || !playPreviousRadioTrackFromHistory()) {
+      restartRadioCurrentTrackForPreviousAction();
+    }
+  } else {
+    restartRadioCurrentTrackForPreviousAction();
+  }
+
   syncRadioControls();
   updateRadioMediaSessionPlaybackState();
 }
@@ -2290,6 +2336,7 @@ function nextRadioTrack() {
   }
 
   try {
+    resetRadioPreviousDoubleAction();
     const nextTrackIndex = chooseSmartRadioTrackIndex();
     if (nextTrackIndex !== null && playRadioTrackAt(nextTrackIndex)) {
       radioPendingPlaybackHistoryIndex = null;
@@ -2375,7 +2422,6 @@ function initializeRadioStation() {
   radioArtworkNode?.addEventListener("error", handleRadioArtworkError);
   radioToggleButton?.addEventListener("click", toggleRadioPlayback);
   radioPreviousButton?.addEventListener("click", previousRadioTrack);
-  radioRewindButton?.addEventListener("click", rewindRadioTrack);
   radioNextButton?.addEventListener("click", nextRadioTrack);
   radioVolumeInput?.addEventListener("input", handleRadioVolumeInput);
   radioHideButton?.addEventListener("click", () => setRadioHidden(true));
