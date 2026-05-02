@@ -58,15 +58,10 @@ npm run perf
 
 ## Credits
 
-- Music: Lukrembo - Castle
-- Free Download: https://www.toneden.io/official_lukrembo/post/castle
-- Music by Lukrembo
-- Track: Castle
+- Radio source: Kairos VIII YouTube playlist, embedded through the YouTube iframe player
 - Map tiles/style: OpenFreeMap Positron
 - Map renderer: MapLibre GL JS, with license retained at `docs/assets/vendor/maplibre/LICENSE.txt`
 - App icons and background media: local project assets under `docs/assets/`
-
-Source proof is kept in `docs/assets/audio/music/proof/`.
 
 ## License
 
