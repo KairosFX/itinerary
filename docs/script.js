@@ -123,6 +123,8 @@ const radioDefaultVolume = 0.1;
 const radioMaxVolume = 20;
 const radioLegacyVolumeStorageKey = `kairos-viii-radio-volume-${itineraryStateVersion}`;
 const radioVolumeStorageKey = `kairos-viii-radio-site-volume-v2-${itineraryStateVersion}`;
+const radioShuffleHistoryMin = 3;
+const radioShuffleHistoryMax = 7;
 const radioVisibilityStorageKey = `kairos-viii-radio-hidden-${itineraryStateVersion}`;
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const budgetDefaultTravelerCount = 2;
@@ -1083,6 +1085,9 @@ let radioYoutubePlayerReady = false;
 let radioYoutubeIframe = null;
 let radioMediaSessionReady = false;
 let radioVolume = radioDefaultVolume;
+let radioPlaylistTrackCount = 0;
+let radioCurrentTrackIndex = -1;
+const radioRecentTrackHistory = [];
 const radioState = {
   isReady: false,
   isPlaying: false,
@@ -1366,10 +1371,10 @@ function getRadioLabels() {
     playing: { en: "On air", ja: "再生中" },
     paused: { en: "Paused", ja: "一時停止" },
     fallback: { en: "Unavailable", ja: "利用不可" },
-    play: { en: "Play radio", ja: "ラジオを再生" },
-    pause: { en: "Pause radio", ja: "ラジオを一時停止" },
+    play: { en: "Play playlist", ja: "プレイリストを再生" },
+    pause: { en: "Pause playlist", ja: "プレイリストを一時停止" },
     retry: { en: "Retry playlist radio", ja: "プレイリストラジオを再試行" },
-    next: { en: "Next playlist track", ja: "次の曲へ" },
+    next: { en: "Next track", ja: "次の曲" },
     hide: { en: "Hide radio", ja: "ラジオを隠す" },
     show: { en: "Show radio", ja: "ラジオを表示" }
   };
@@ -1505,7 +1510,6 @@ function syncRadioControls() {
   }
   if (radioNextButton) {
     radioNextButton.disabled = !radioState.canSkip || radioState.loadFailed;
-    radioNextButton.hidden = !radioState.canSkip;
     radioNextButton.setAttribute("aria-label", getRadioLabel("next"));
     radioNextButton.dataset.ariaLabelEn = getRadioLabels().next.en;
     radioNextButton.dataset.ariaLabelJa = getRadioLabels().next.ja;
@@ -1687,8 +1691,125 @@ function createRadioYoutubePlayerProxy() {
     },
     nextVideo() {
       postRadioYoutubeCommand("nextVideo");
+    },
+    playVideoAt(index) {
+      postRadioYoutubeCommand("playVideoAt", [index]);
     }
   };
+}
+
+function getKnownRadioPlaylistTrackCount() {
+  return Number.isInteger(radioPlaylistTrackCount) && radioPlaylistTrackCount > 0
+    ? radioPlaylistTrackCount
+    : 0;
+}
+
+function rememberRadioTrackIndex(trackIndex) {
+  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
+  const normalizedIndex = Number.parseInt(String(trackIndex), 10);
+  if (!Number.isInteger(normalizedIndex) || normalizedIndex < 0) {
+    return;
+  }
+
+  radioCurrentTrackIndex = normalizedIndex;
+  if (radioRecentTrackHistory[radioRecentTrackHistory.length - 1] !== normalizedIndex) {
+    radioRecentTrackHistory.push(normalizedIndex);
+  }
+
+  const historyLimit = playlistTrackCount > 1
+    ? Math.min(playlistTrackCount - 1, radioShuffleHistoryMax)
+    : 1;
+  while (radioRecentTrackHistory.length > Math.max(radioShuffleHistoryMin, historyLimit)) {
+    radioRecentTrackHistory.shift();
+  }
+}
+
+function chooseSmartRadioTrackIndex() {
+  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
+  if (playlistTrackCount <= 1) {
+    return null;
+  }
+
+  const currentIndex =
+    radioCurrentTrackIndex >= 0 && radioCurrentTrackIndex < playlistTrackCount
+      ? radioCurrentTrackIndex
+      : null;
+  const recentWindowSize = Math.min(
+    playlistTrackCount - 1,
+    Math.max(radioShuffleHistoryMin, Math.ceil(playlistTrackCount * 0.36))
+  );
+  const recentSet = new Set(radioRecentTrackHistory.slice(-recentWindowSize));
+  const allCandidates = Array.from({ length: playlistTrackCount }, (_, index) => index).filter(
+    (index) => index !== currentIndex
+  );
+  let candidates = allCandidates.filter((index) => !recentSet.has(index));
+
+  if (!candidates.length) {
+    const lastPlayedIndex = radioRecentTrackHistory[radioRecentTrackHistory.length - 1];
+    candidates = allCandidates.filter((index) => index !== lastPlayedIndex);
+  }
+
+  if (!candidates.length) {
+    candidates = allCandidates;
+  }
+
+  const weightedCandidates = candidates.flatMap((index) => {
+    const lastSeenFromEnd = radioRecentTrackHistory
+      .slice()
+      .reverse()
+      .findIndex((historyIndex) => historyIndex === index);
+    const weight = lastSeenFromEnd === -1 ? 4 : Math.max(1, lastSeenFromEnd + 1);
+    return Array.from({ length: weight }, () => index);
+  });
+
+  return weightedCandidates[Math.floor(Math.random() * weightedCandidates.length)] ?? candidates[0];
+}
+
+function handleRadioYoutubeMessage(event) {
+  if (!radioYoutubeIframe?.contentWindow || event.source !== radioYoutubeIframe.contentWindow) {
+    return;
+  }
+
+  if (event.origin !== radioYoutubePlayerHost && event.origin !== "https://www.youtube.com") {
+    return;
+  }
+
+  let payload = event.data;
+  if (typeof payload === "string") {
+    try {
+      payload = JSON.parse(payload);
+    } catch {
+      return;
+    }
+  }
+
+  const info = payload?.info;
+  if (!info || typeof info !== "object") {
+    return;
+  }
+
+  if (Array.isArray(info.playlist) && info.playlist.length) {
+    radioPlaylistTrackCount = info.playlist.length;
+    radioState.canSkip = radioPlaylistTrackCount > 1;
+  }
+
+  const playlistIndex = Number.parseInt(String(info.playlistIndex), 10);
+  if (Number.isInteger(playlistIndex) && playlistIndex >= 0) {
+    rememberRadioTrackIndex(playlistIndex);
+  }
+
+  const playerState = Number(info.playerState);
+  if (playerState === 1) {
+    radioState.pendingPlay = false;
+    radioState.isPlaying = true;
+    setRadioState("playing");
+  } else if ((playerState === 0 || playerState === 2) && !radioState.pendingPlay) {
+    radioState.isPlaying = false;
+    setRadioState(radioState.isReady ? "paused" : "ready");
+  }
+
+  syncRadioControls();
+  updateRadioMediaSessionPlaybackState();
 }
 
 function handleRadioYoutubeReady(event = {}) {
@@ -1811,12 +1932,20 @@ function pauseRadio() {
 }
 
 function nextRadioTrack() {
-  if (!radioState.canSkip || !radioYoutubePlayer || typeof radioYoutubePlayer.nextVideo !== "function") {
+  if (!radioState.canSkip || !radioYoutubePlayer) {
     return;
   }
 
   try {
-    radioYoutubePlayer.nextVideo();
+    const nextTrackIndex = chooseSmartRadioTrackIndex();
+    if (nextTrackIndex !== null && typeof radioYoutubePlayer.playVideoAt === "function") {
+      rememberRadioTrackIndex(nextTrackIndex);
+      radioYoutubePlayer.playVideoAt(nextTrackIndex);
+    } else if (typeof radioYoutubePlayer.nextVideo === "function") {
+      radioYoutubePlayer.nextVideo();
+    } else {
+      return;
+    }
     radioState.isPlaying = true;
     setRadioState("playing");
   } catch {
@@ -1888,6 +2017,7 @@ function initializeRadioStation() {
   syncRadioVolumeUi();
   syncRadioVisibilityUi();
   configureRadioMediaSession();
+  window.addEventListener("message", handleRadioYoutubeMessage);
   radioToggleButton?.addEventListener("click", toggleRadioPlayback);
   radioNextButton?.addEventListener("click", nextRadioTrack);
   radioVolumeInput?.addEventListener("input", handleRadioVolumeInput);
@@ -5828,6 +5958,38 @@ function setBookingTransitFilter(nextFilter) {
   updateBookingTransitUI();
 }
 
+function syncBookingTransitItemExpansion(itemElement) {
+  updateStoredBookingTransitItemState(itemElement.dataset.bookingId || "", {
+    expanded: itemElement.open
+  });
+  syncBookingTransitItemUI(itemElement);
+}
+
+function toggleBookingTransitItemExpansionNow(itemElement, summaryElement) {
+  itemElement.open = !itemElement.open;
+  syncBookingTransitItemExpansion(itemElement);
+
+  try {
+    summaryElement?.focus({ preventScroll: true });
+  } catch {
+    summaryElement?.focus();
+  }
+}
+
+function shouldIgnoreInstantBookingPointer(event) {
+  if (event.defaultPrevented) {
+    return true;
+  }
+
+  if (event.pointerType === "mouse" && event.button !== 0) {
+    return true;
+  }
+
+  return Boolean(
+    event.target.closest("a, button, input, label, select, textarea, [role='button']")
+  );
+}
+
 function bindBookingTransitUI() {
   const bookingTransitRoot = getBookingTransitRoot();
   if (!bookingTransitRoot) {
@@ -5849,10 +6011,27 @@ function bindBookingTransitUI() {
     }
 
     itemElement.addEventListener("toggle", () => {
-      updateStoredBookingTransitItemState(itemElement.dataset.bookingId || "", {
-        expanded: itemElement.open
-      });
-      syncBookingTransitItemUI(itemElement);
+      syncBookingTransitItemExpansion(itemElement);
+    });
+
+    const summaryElement = itemElement.querySelector("summary");
+    summaryElement?.addEventListener("pointerdown", (event) => {
+      if (shouldIgnoreInstantBookingPointer(event)) {
+        return;
+      }
+
+      event.preventDefault();
+      summaryElement.dataset.bookingPointerToggled = "true";
+      toggleBookingTransitItemExpansionNow(itemElement, summaryElement);
+    });
+
+    summaryElement?.addEventListener("click", (event) => {
+      if (summaryElement.dataset.bookingPointerToggled !== "true") {
+        return;
+      }
+
+      event.preventDefault();
+      delete summaryElement.dataset.bookingPointerToggled;
     });
 
     itemElement.querySelector("[data-booking-done-toggle]")?.addEventListener("click", (event) => {

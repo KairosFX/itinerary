@@ -3942,8 +3942,8 @@ html.has-modal-open body {
   grid-template-rows: 0fr;
   opacity: 0;
   transition:
-    grid-template-rows 220ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 220ms ease;
+    grid-template-rows 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 120ms ease;
 }
 
 .booking-item[open] .booking-item__details {
