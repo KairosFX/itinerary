@@ -14,10 +14,8 @@ const siteFooter = document.querySelector(".site-footer");
 const siteBackdropVideo = document.querySelector("[data-site-background-video]");
 const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const radioPlayerNode = document.querySelector("[data-radio-player]");
-const radioFrameNode = document.querySelector("[data-radio-frame]");
 const radioToggleButton = document.querySelector("[data-radio-toggle]");
 const radioToggleIconNode = document.querySelector("[data-radio-toggle-icon]");
-const radioNextButton = document.querySelector("[data-radio-next]");
 const radioVolumeInput = document.querySelector("[data-radio-volume]");
 const radioVolumeLabel = document.querySelector("[data-radio-volume-label]");
 const radioStatusNode = document.querySelector("[data-radio-status]");
@@ -113,13 +111,17 @@ const routeContentFallbackScriptUrl = "./route-content.min.js";
 const routeStyleFallbackUrl = "./route.min.css";
 const routeMapOriginUrl = "https://tiles.openfreemap.org";
 const routeMapStyleUrl = "https://tiles.openfreemap.org/styles/positron";
-const radioPlaylistId = "PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa";
 const radioPlaylistUrl =
   "https://music.youtube.com/playlist?list=PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa&si=SCzLKIUBGwHVxivZ";
-const radioYouTubeApiUrl = "https://www.youtube.com/iframe_api";
-const radioDefaultVolume = 1;
+const radioTrack = {
+  title: "Kairos VIII Radio",
+  artist: "Lukrembo",
+  src: "./assets/audio/music/lukrembo%20-%20castle.mp3"
+};
+const radioDefaultVolume = 0.1;
 const radioMaxVolume = 20;
-const radioVolumeStorageKey = `kairos-viii-radio-volume-${itineraryStateVersion}`;
+const radioLegacyVolumeStorageKey = `kairos-viii-radio-volume-${itineraryStateVersion}`;
+const radioVolumeStorageKey = `kairos-viii-radio-site-volume-v2-${itineraryStateVersion}`;
 const radioVisibilityStorageKey = `kairos-viii-radio-hidden-${itineraryStateVersion}`;
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const budgetDefaultTravelerCount = 2;
@@ -810,9 +812,16 @@ let routeSectionStylesheetPromise = null;
 let budgetUiPromise = null;
 let budgetContentPromise = null;
 let essentialsContentPromise = null;
-let radioPlayer = null;
-let radioPlayerPromise = null;
-let radioApiPromise = null;
+let radioAudioElement = null;
+let radioAudioContext = null;
+let radioAudioSourceNode = null;
+let radioVolumeGainNode = null;
+let radioCompressorNode = null;
+let radioLimiterNode = null;
+let radioAudioReadyPromise = null;
+let radioAudioGraphReady = false;
+let radioUsesWebAudio = false;
+let radioMediaSessionReady = false;
 let radioVolume = radioDefaultVolume;
 const radioState = {
   isReady: false,
@@ -1090,15 +1099,15 @@ function getResolvedAppAssetManifest() {
 
 function getRadioLabels() {
   return {
-    idle: { en: "Standby", ja: "待機中" },
-    loading: { en: "Tuning", ja: "接続中" },
+    idle: { en: "Quiet", ja: "待機中" },
+    loading: { en: "Loading", ja: "読み込み中" },
     ready: { en: "Ready", ja: "準備完了" },
     playing: { en: "On air", ja: "再生中" },
     paused: { en: "Paused", ja: "一時停止" },
-    fallback: { en: "Open playlist", ja: "プレイリストを開く" },
-    play: { en: "Play playlist", ja: "プレイリストを再生" },
-    pause: { en: "Pause playlist", ja: "プレイリストを一時停止" },
-    next: { en: "Next track", ja: "次の曲" },
+    fallback: { en: "Open YouTube Music", ja: "YouTube Music を開く" },
+    play: { en: "Play radio", ja: "ラジオを再生" },
+    pause: { en: "Pause radio", ja: "ラジオを一時停止" },
+    next: { en: "Next track unavailable", ja: "次の曲は利用できません" },
     hide: { en: "Hide radio", ja: "ラジオを隠す" },
     show: { en: "Show radio", ja: "ラジオを表示" }
   };
@@ -1109,16 +1118,47 @@ function getRadioLabel(key) {
   return getLocalizedText(labels);
 }
 
+function normalizeRadioVolume(value, { legacy = false } = {}) {
+  const parsedVolume = Number(value);
+  if (!Number.isFinite(parsedVolume)) {
+    return radioDefaultVolume;
+  }
+
+  const clampedVolume = clamp(parsedVolume, 0, radioMaxVolume);
+  if (legacy) {
+    return clampedVolume <= 0 ? 0 : Math.min(clampedVolume, radioDefaultVolume);
+  }
+
+  return Math.round(clampedVolume * 10) / 10;
+}
+
+function formatRadioVolumeLabel(value) {
+  const normalizedVolume = normalizeRadioVolume(value);
+  if (normalizedVolume > 0 && normalizedVolume < 1) {
+    return `${normalizedVolume.toFixed(1)}%`;
+  }
+  return `${Number.isInteger(normalizedVolume) ? normalizedVolume : normalizedVolume.toFixed(1)}%`;
+}
+
+function getRadioGainValue() {
+  return clamp(normalizeRadioVolume(radioVolume) / 100, 0, radioMaxVolume / 100);
+}
+
 function getStoredRadioVolume() {
   try {
     const storedValue = window.localStorage.getItem(radioVolumeStorageKey);
-    if (storedValue === null) {
-      return radioDefaultVolume;
+    if (storedValue !== null) {
+      return normalizeRadioVolume(storedValue);
     }
-    const storedVolume = Number(storedValue);
-    return Number.isFinite(storedVolume)
-      ? clamp(Math.round(storedVolume), 0, radioMaxVolume)
-      : radioDefaultVolume;
+
+    const legacyValue = window.localStorage.getItem(radioLegacyVolumeStorageKey);
+    if (legacyValue !== null) {
+      const migratedVolume = normalizeRadioVolume(legacyValue, { legacy: true });
+      storeRadioVolume(migratedVolume);
+      return migratedVolume;
+    }
+
+    return radioDefaultVolume;
   } catch {
     return radioDefaultVolume;
   }
@@ -1149,14 +1189,20 @@ function storeRadioHidden(value) {
 }
 
 function syncRadioVolumeUi() {
-  const nextVolume = clamp(Math.round(Number(radioVolume) || 0), 0, radioMaxVolume);
+  const nextVolume = normalizeRadioVolume(radioVolume);
   radioVolume = nextVolume;
-  if (radioVolumeInput && radioVolumeInput.value !== String(nextVolume)) {
-    radioVolumeInput.value = String(nextVolume);
+  if (radioVolumeInput) {
+    radioVolumeInput.min = "0";
+    radioVolumeInput.max = String(radioMaxVolume);
+    radioVolumeInput.step = "0.1";
+    if (radioVolumeInput.value !== String(nextVolume)) {
+      radioVolumeInput.value = String(nextVolume);
+    }
   }
   if (radioVolumeLabel) {
-    radioVolumeLabel.value = `${nextVolume}%`;
-    radioVolumeLabel.textContent = `${nextVolume}%`;
+    const volumeLabel = formatRadioVolumeLabel(nextVolume);
+    radioVolumeLabel.value = volumeLabel;
+    radioVolumeLabel.textContent = volumeLabel;
   }
 }
 
@@ -1199,10 +1245,6 @@ function syncRadioControls() {
   if (radioToggleIconNode) {
     radioToggleIconNode.textContent = radioState.loadFailed ? "↗" : radioState.isPlaying ? "⏸" : "▶";
   }
-  if (radioNextButton) {
-    radioNextButton.disabled = !radioState.isReady || radioState.loadFailed;
-    radioNextButton.setAttribute("aria-label", getRadioLabel("next"));
-  }
   if (radioHideButton) {
     radioHideButton.setAttribute("aria-label", getRadioLabel("hide"));
     radioHideButton.dataset.ariaLabelEn = getRadioLabels().hide.en;
@@ -1213,19 +1255,21 @@ function syncRadioControls() {
 
 function applyRadioVolume() {
   syncRadioVolumeUi();
-  if (!radioPlayer || typeof radioPlayer.setVolume !== "function") {
-    return;
+  const gainValue = getRadioGainValue();
+
+  if (radioVolumeGainNode) {
+    try {
+      const currentTime = radioAudioContext?.currentTime || 0;
+      radioVolumeGainNode.gain.cancelScheduledValues(currentTime);
+      radioVolumeGainNode.gain.setTargetAtTime(gainValue, currentTime, 0.015);
+    } catch {
+      radioVolumeGainNode.gain.value = gainValue;
+    }
   }
 
-  try {
-    radioPlayer.setVolume(radioVolume);
-    if (radioVolume <= 0 && typeof radioPlayer.mute === "function") {
-      radioPlayer.mute();
-    } else if (typeof radioPlayer.unMute === "function") {
-      radioPlayer.unMute();
-    }
-  } catch {
-    // Ignore third-party player volume failures.
+  if (radioAudioElement) {
+    radioAudioElement.muted = gainValue <= 0;
+    radioAudioElement.volume = radioUsesWebAudio ? 1 : clamp(gainValue, 0, 1);
   }
 }
 
@@ -1234,8 +1278,10 @@ function markRadioFallback() {
   radioState.isReady = false;
   radioState.isPlaying = false;
   radioState.pendingPlay = false;
+  radioAudioReadyPromise = null;
   setRadioState("fallback");
   syncRadioControls();
+  updateRadioMediaSessionPlaybackState();
 }
 
 function openRadioPlaylist() {
@@ -1245,122 +1291,203 @@ function openRadioPlaylist() {
   window.open(radioPlaylistUrl, "_blank", "noopener");
 }
 
-function loadYouTubeIframeApi() {
-  if (window.YT?.Player) {
-    return Promise.resolve(window.YT);
-  }
-
-  if (radioApiPromise) {
-    return radioApiPromise;
-  }
-
-  radioApiPromise = new Promise((resolve, reject) => {
-    const previousCallback = window.onYouTubeIframeAPIReady;
-    const timeoutId = window.setTimeout(() => {
-      reject(new Error("YouTube iframe API timed out."));
-    }, 9000);
-
-    window.onYouTubeIframeAPIReady = () => {
-      window.clearTimeout(timeoutId);
-      if (typeof previousCallback === "function") {
-        previousCallback();
-      }
-      if (window.YT?.Player) {
-        resolve(window.YT);
-        return;
-      }
-      reject(new Error("YouTube iframe API is unavailable."));
-    };
-
-    if (!document.querySelector(`script[src="${radioYouTubeApiUrl}"]`)) {
-      const script = document.createElement("script");
-      script.src = radioYouTubeApiUrl;
-      script.async = true;
-      script.onerror = () => {
-        window.clearTimeout(timeoutId);
-        reject(new Error("YouTube iframe API failed to load."));
-      };
-      document.head.append(script);
-    }
-  }).catch((error) => {
-    radioApiPromise = null;
-    throw error;
-  });
-
-  return radioApiPromise;
+function getAudioContextConstructor() {
+  return window.AudioContext || window.webkitAudioContext || null;
 }
 
-function ensureRadioPlayer() {
-  if (radioPlayer) {
-    return Promise.resolve(radioPlayer);
+function setAudioParamValue(audioParam, value) {
+  if (!audioParam) {
+    return;
   }
-  if (!radioFrameNode) {
-    return Promise.reject(new Error("Radio frame is missing."));
+
+  try {
+    audioParam.value = value;
+  } catch {
+    // Ignore unsupported Web Audio parameter writes.
   }
-  if (radioPlayerPromise) {
-    return radioPlayerPromise;
+}
+
+function configureRadioDynamicsNode(compressor) {
+  setAudioParamValue(compressor.threshold, -31);
+  setAudioParamValue(compressor.knee, 18);
+  setAudioParamValue(compressor.ratio, 5);
+  setAudioParamValue(compressor.attack, 0.008);
+  setAudioParamValue(compressor.release, 0.24);
+}
+
+function configureRadioLimiterNode(limiter) {
+  setAudioParamValue(limiter.threshold, -8);
+  setAudioParamValue(limiter.knee, 0);
+  setAudioParamValue(limiter.ratio, 18);
+  setAudioParamValue(limiter.attack, 0.002);
+  setAudioParamValue(limiter.release, 0.08);
+}
+
+function ensureRadioAudioElement() {
+  if (radioAudioElement) {
+    return radioAudioElement;
+  }
+
+  const existingAudio = radioPlayerNode?.querySelector("[data-radio-audio]");
+  const audio =
+    existingAudio instanceof HTMLAudioElement ? existingAudio : document.createElement("audio");
+
+  audio.src = radioTrack.src;
+  audio.preload = "auto";
+  audio.loop = true;
+  audio.controls = false;
+  audio.setAttribute("data-radio-audio", "true");
+  audio.setAttribute("aria-hidden", "true");
+  audio.classList.add("travel-radio__audio");
+
+  try {
+    audio.playsInline = true;
+  } catch {
+    // Ignore unsupported playsInline assignments.
+  }
+
+  audio.addEventListener("playing", () => {
+    radioState.isReady = true;
+    radioState.isPlaying = true;
+    radioState.pendingPlay = false;
+    setRadioState("playing");
+    syncRadioControls();
+    updateRadioMediaSessionPlaybackState();
+  });
+
+  audio.addEventListener("pause", () => {
+    radioState.isPlaying = false;
+    radioState.pendingPlay = false;
+    setRadioState(radioState.loadFailed ? "fallback" : "paused");
+    syncRadioControls();
+    updateRadioMediaSessionPlaybackState();
+  });
+
+  audio.addEventListener("error", () => {
+    markRadioFallback();
+  });
+
+  if (!existingAudio) {
+    radioPlayerNode?.append(audio);
+  }
+
+  radioAudioElement = audio;
+  applyRadioVolume();
+  return radioAudioElement;
+}
+
+function ensureRadioAudioGraph(audio = ensureRadioAudioElement()) {
+  if (radioAudioGraphReady) {
+    applyRadioVolume();
+    return;
+  }
+
+  const AudioContextConstructor = getAudioContextConstructor();
+  if (!AudioContextConstructor) {
+    radioUsesWebAudio = false;
+    applyRadioVolume();
+    return;
+  }
+
+  try {
+    radioAudioContext = radioAudioContext || new AudioContextConstructor();
+    radioAudioSourceNode =
+      radioAudioSourceNode || radioAudioContext.createMediaElementSource(audio);
+    radioVolumeGainNode = radioAudioContext.createGain();
+    radioCompressorNode = radioAudioContext.createDynamicsCompressor();
+    radioLimiterNode = radioAudioContext.createDynamicsCompressor();
+
+    configureRadioDynamicsNode(radioCompressorNode);
+    configureRadioLimiterNode(radioLimiterNode);
+    radioVolumeGainNode.gain.value = getRadioGainValue();
+
+    radioAudioSourceNode
+      .connect(radioVolumeGainNode)
+      .connect(radioCompressorNode)
+      .connect(radioLimiterNode)
+      .connect(radioAudioContext.destination);
+
+    radioAudioGraphReady = true;
+    radioUsesWebAudio = true;
+  } catch {
+    radioUsesWebAudio = false;
+  }
+
+  applyRadioVolume();
+}
+
+function updateRadioMediaSessionPlaybackState() {
+  if (!("mediaSession" in navigator)) {
+    return;
+  }
+
+  try {
+    navigator.mediaSession.playbackState = radioState.isPlaying ? "playing" : "paused";
+  } catch {
+    // Ignore unsupported Media Session state updates.
+  }
+}
+
+function configureRadioMediaSession() {
+  if (radioMediaSessionReady || !("mediaSession" in navigator)) {
+    return;
+  }
+
+  try {
+    if ("MediaMetadata" in window) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: "Kairos VIII Radio",
+        artist: radioTrack.artist,
+        album: "Kairos VIII"
+      });
+    }
+    navigator.mediaSession.setActionHandler("play", playRadio);
+    navigator.mediaSession.setActionHandler("pause", pauseRadio);
+    navigator.mediaSession.setActionHandler("nexttrack", null);
+    radioMediaSessionReady = true;
+    updateRadioMediaSessionPlaybackState();
+  } catch {
+    // Ignore browsers with partial Media Session support.
+  }
+}
+
+function ensureRadioAudio() {
+  if (radioAudioReadyPromise) {
+    return radioAudioReadyPromise;
   }
 
   setRadioState("loading");
-  radioPlayerPromise = loadYouTubeIframeApi()
-    .then((YT) => new Promise((resolve, reject) => {
-      let ready = false;
-      const timeoutId = window.setTimeout(() => {
-        if (!ready) {
-          reject(new Error("YouTube playlist player timed out."));
-        }
-      }, 9000);
-
-      radioPlayer = new YT.Player(radioFrameNode, {
-        width: "160",
-        height: "90",
-        playerVars: {
-          listType: "playlist",
-          list: radioPlaylistId,
-          autoplay: 0,
-          enablejsapi: 1,
-          playsinline: 1,
-          controls: 0,
-          disablekb: 1,
-          iv_load_policy: 3,
-          rel: 0,
-          modestbranding: 1,
-          origin: window.location.origin
-        },
-        events: {
-          onReady: (event) => {
-            ready = true;
-            window.clearTimeout(timeoutId);
-            radioState.isReady = true;
-            radioState.loadFailed = false;
-            radioFrameNode
-              ?.querySelector("iframe")
-              ?.setAttribute("title", "Kairos VIII YouTube playlist player");
-            applyRadioVolume();
-            setRadioState("ready");
-            syncRadioControls();
-            resolve(event.target);
-          },
-          onStateChange: (event) => {
-            const playerState = Number(event.data);
-            radioState.isPlaying = playerState === YT.PlayerState.PLAYING;
-            setRadioState(radioState.isPlaying ? "playing" : "paused");
-            syncRadioControls();
-          },
-          onError: () => {
-            window.clearTimeout(timeoutId);
-            markRadioFallback();
-          }
-        }
-      });
-    }))
+  radioAudioReadyPromise = Promise.resolve()
+    .then(() => {
+      const audio = ensureRadioAudioElement();
+      ensureRadioAudioGraph(audio);
+      configureRadioMediaSession();
+      applyRadioVolume();
+      radioState.isReady = true;
+      radioState.loadFailed = false;
+      setRadioState(audio.paused ? "ready" : "playing");
+      syncRadioControls();
+      return audio;
+    })
     .catch((error) => {
-      radioPlayerPromise = null;
+      radioAudioReadyPromise = null;
       markRadioFallback();
       throw error;
     });
 
-  return radioPlayerPromise;
+  return radioAudioReadyPromise;
+}
+
+function resumeRadioAudioContext() {
+  if (!radioAudioContext || radioAudioContext.state !== "suspended") {
+    return Promise.resolve();
+  }
+
+  return radioAudioContext.resume().catch(() => null);
+}
+
+function isRadioPlaybackBlockedError(error) {
+  return error?.name === "NotAllowedError" || error?.name === "AbortError";
 }
 
 function playRadio() {
@@ -1370,27 +1497,47 @@ function playRadio() {
   }
 
   radioState.pendingPlay = true;
-  ensureRadioPlayer()
-    .then((player) => {
-      radioState.pendingPlay = false;
+  ensureRadioAudio()
+    .then((audio) => resumeRadioAudioContext().then(() => audio))
+    .then((audio) => {
       applyRadioVolume();
-      if (typeof player.playVideo === "function") {
-        player.playVideo();
+      const playResult = audio.play();
+      if (playResult && typeof playResult.then === "function") {
+        return playResult;
       }
+      return null;
     })
-    .catch(() => null);
+    .then(() => {
+      radioState.pendingPlay = false;
+      radioState.isPlaying = true;
+      setRadioState("playing");
+      syncRadioControls();
+      updateRadioMediaSessionPlaybackState();
+    })
+    .catch((error) => {
+      radioState.pendingPlay = false;
+      if (!isRadioPlaybackBlockedError(error)) {
+        markRadioFallback();
+        return;
+      }
+      radioState.isPlaying = false;
+      setRadioState("paused");
+      syncRadioControls();
+      updateRadioMediaSessionPlaybackState();
+    });
 }
 
 function pauseRadio() {
   radioState.pendingPlay = false;
   try {
-    radioPlayer?.pauseVideo?.();
+    radioAudioElement?.pause();
   } catch {
-    // Ignore third-party player pause failures.
+    // Ignore media pause failures.
   }
   radioState.isPlaying = false;
   setRadioState(radioState.loadFailed ? "fallback" : "paused");
   syncRadioControls();
+  updateRadioMediaSessionPlaybackState();
 }
 
 function toggleRadioPlayback() {
@@ -1407,21 +1554,6 @@ function toggleRadioPlayback() {
   playRadio();
 }
 
-function skipRadioTrack() {
-  if (!radioState.isReady || !radioPlayer || typeof radioPlayer.nextVideo !== "function") {
-    return;
-  }
-
-  try {
-    radioPlayer.nextVideo();
-    if (!radioState.isPlaying && typeof radioPlayer.playVideo === "function") {
-      radioPlayer.playVideo();
-    }
-  } catch {
-    markRadioFallback();
-  }
-}
-
 function setRadioHidden(nextHidden, { persist = true } = {}) {
   radioState.isHidden = Boolean(nextHidden);
   if (persist) {
@@ -1431,7 +1563,7 @@ function setRadioHidden(nextHidden, { persist = true } = {}) {
 }
 
 function handleRadioVolumeInput() {
-  radioVolume = clamp(Math.round(Number(radioVolumeInput?.value) || 0), 0, radioMaxVolume);
+  radioVolume = normalizeRadioVolume(radioVolumeInput?.value);
   storeRadioVolume(radioVolume);
   applyRadioVolume();
 }
@@ -1459,8 +1591,8 @@ function initializeRadioStation() {
   syncRadioVolumeUi();
   syncRadioVisibilityUi();
   radioPlaylistLink?.setAttribute("href", radioPlaylistUrl);
+  configureRadioMediaSession();
   radioToggleButton?.addEventListener("click", toggleRadioPlayback);
-  radioNextButton?.addEventListener("click", skipRadioTrack);
   radioVolumeInput?.addEventListener("input", handleRadioVolumeInput);
   radioHideButton?.addEventListener("click", () => setRadioHidden(true));
   radioShowButton?.addEventListener("click", () => setRadioHidden(false));
@@ -3922,40 +4054,10 @@ function getJourneyState() {
     completedHistory.add(day);
   });
 
-  const nextUnlockedDays = new Set();
-  if (orderedDays.length) {
-    nextUnlockedDays.add(String(orderedDays[0]));
-  }
-
-  completedHistory.forEach((day) => {
-    if (validDays.has(day)) {
-      nextUnlockedDays.add(day);
-    }
-  });
-
-  orderedDays.forEach((day, index) => {
-    const nextDay = orderedDays[index + 1];
-    if (completedHistory.has(String(day)) && nextDay) {
-      nextUnlockedDays.add(String(nextDay));
-    }
-  });
-
-  let highestUnlockedDay = orderedDays[0] || 1;
-  for (const day of orderedDays) {
-    if (nextUnlockedDays.has(String(day))) {
-      highestUnlockedDay = day;
-    }
-  }
-
-  let nextCurrentDay = highestUnlockedDay;
-  for (let index = orderedDays.length - 1; index >= 0; index -= 1) {
-    const day = orderedDays[index];
-    const dayKey = String(day);
-    if (nextUnlockedDays.has(dayKey) && !rawCompleted.has(dayKey)) {
-      nextCurrentDay = day;
-      break;
-    }
-  }
+  const nextUnlockedDays = new Set(orderedDays.map((day) => String(day)));
+  const highestUnlockedDay = orderedDays.at(-1) || 1;
+  const nextCurrentDay =
+    orderedDays.find((day) => !rawCompleted.has(String(day))) || highestUnlockedDay;
 
   const nextWarningDays = new Set(
     Array.from(completedHistory).filter((day) => !rawCompleted.has(day))
@@ -6393,14 +6495,6 @@ function handleChecklistPanelClick(event) {
       return;
     }
 
-    const day = Number(dayCard.dataset.day);
-    if (day > accessibleDay) {
-      event.preventDefault();
-      event.stopPropagation();
-      showSequenceNotice(accessibleDay);
-      return;
-    }
-
     event.preventDefault();
     event.stopPropagation();
     void openEssentialsReference(
@@ -6414,15 +6508,6 @@ function handleChecklistPanelClick(event) {
   const checkItem = event.target.closest(".check-item");
   if (checkItem) {
     return;
-  }
-
-  if (dayCard) {
-    const day = Number(dayCard.dataset.day);
-    if (day > accessibleDay) {
-      event.preventDefault();
-      event.stopPropagation();
-      showSequenceNotice(accessibleDay);
-    }
   }
 }
 
@@ -9516,14 +9601,6 @@ function showToastNotice(message) {
   }, 2400);
 }
 
-function showSequenceNotice(requiredDay) {
-  showToastNotice(
-    root.lang === "ja"
-      ? `${requiredDay}日目を先に完了してから次の行程へ進めます。`
-      : `Complete Day ${requiredDay} first, then continue to the next part of the trip.`
-  );
-}
-
 function showChecklistLockNotice() {
   showToastNotice(
     root.lang === "ja"
@@ -9912,7 +9989,7 @@ function refreshChecklistProgressState(options = {}) {
     const day = Number(item.dataset.progressItem);
     const card = dayCardMap.get(dayKey);
     const progressRatio = card ? getDayCompletionRatio(card) : 0;
-    const isUnavailable = checklistLocked || !nextUnlockedDays.has(dayKey);
+    const isUnavailable = checklistLocked;
     const isComplete = rawCompleted.has(dayKey);
     const isWarning = nextWarningDays.has(dayKey);
     const isActive = dayKey === String(nextCurrentDay) && !isUnavailable;
@@ -10783,14 +10860,12 @@ if (siteHeader) {
 window.addEventListener("pagehide", () => {
   cancelWindowScrollAnimation(false);
   syncDecorativeVideoPlayback();
-  pauseRadio();
   flushQueuedStorageWrites();
 });
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") {
     cancelWindowScrollAnimation(false);
     syncDecorativeVideoPlayback();
-    pauseRadio();
     if (desktopReverseScrollTimer) {
       window.clearTimeout(desktopReverseScrollTimer);
       desktopReverseScrollTimer = 0;

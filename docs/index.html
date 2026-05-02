@@ -2695,10 +2695,10 @@ html.reduce-effects .site-backdrop__video {
     font-size: 0.66rem !important;
   }
 }</style>
-  <link rel="preload" href="./assets/app/style.434d3cd5b7.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.568a20d9e2.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.434d3cd5b7.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.434d3cd5b7.css"></noscript>
+  <link rel="preload" href="./assets/app/style.447c80ea62.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.55f04806c2.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.447c80ea62.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.447c80ea62.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -2813,7 +2813,7 @@ html.reduce-effects .site-backdrop__video {
     aria-label="Kairos VIII radio station"
     data-aria-label-en="Kairos VIII radio station"
     data-aria-label-ja="Kairos VIII ラジオステーション">
-    <div class="travel-radio__signal" data-radio-frame aria-label="Embedded YouTube playlist player"></div>
+    <div class="travel-radio__signal" aria-label="Kairos VIII local radio audio"></div>
     <button
       class="travel-radio__restore"
       type="button"
@@ -2833,8 +2833,8 @@ html.reduce-effects .site-backdrop__video {
           target="_blank"
           rel="noopener"
           data-radio-playlist-link>
-          <span data-language="en">YouTube Music playlist</span>
-          <span data-language="ja" hidden>YouTube Music プレイリスト</span>
+          <span data-language="en">Open YouTube Music</span>
+          <span data-language="ja" hidden>YouTube Music を開く</span>
         </a>
       </div>
       <p class="travel-radio__status" data-radio-status aria-live="polite"></p>
@@ -2843,25 +2843,27 @@ html.reduce-effects .site-backdrop__video {
           class="travel-radio__button travel-radio__button--primary"
           type="button"
           data-radio-toggle
-          aria-label="Play playlist"
-          data-aria-label-en="Play playlist"
-          data-aria-label-ja="プレイリストを再生">
+          aria-label="Play radio"
+          data-aria-label-en="Play radio"
+          data-aria-label-ja="ラジオを再生">
           <span data-radio-toggle-icon aria-hidden="true">▶</span>
         </button>
-        <button
-          class="travel-radio__button"
-          type="button"
-          data-radio-next
-          disabled
-          aria-label="Next track"
-          data-aria-label-en="Next track"
-          data-aria-label-ja="次の曲">
-          <span aria-hidden="true">⏭</span>
-        </button>
         <label class="travel-radio__volume">
-          <span>VOL</span>
-          <input type="range" min="0" max="20" step="1" value="1" data-radio-volume>
-          <output data-radio-volume-label>1%</output>
+          <span class="travel-radio__volume-label">
+            <span data-language="en">Site volume</span>
+            <span data-language="ja" hidden>サイト音量</span>
+          </span>
+          <input
+            type="range"
+            min="0"
+            max="20"
+            step="0.1"
+            value="0.1"
+            data-radio-volume
+            aria-label="Site volume. Uses your device/browser volume as the base."
+            data-aria-label-en="Site volume. Uses your device/browser volume as the base."
+            data-aria-label-ja="サイト音量。端末またはブラウザの音量を基準にします。">
+          <output data-radio-volume-label>0.1%</output>
         </label>
         <button
           class="travel-radio__button travel-radio__button--hide"
@@ -4282,10 +4284,10 @@ html.reduce-effects .site-backdrop__video {
   </div>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.434d3cd5b7.css","styleHash":"434d3cd5b7","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.568a20d9e2.js","scriptHash":"568a20d9e2","routeContentPath":"./assets/app/routeContent.05763f8e75.js","routeContentHash":"05763f8e75","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.df7c63bbe0.js","budgetContentHash":"df7c63bbe0","essentialsContentPath":"./assets/app/essentialsContent.1eda687ab3.js","essentialsContentHash":"1eda687ab3","generatedAt":"2026-05-01T23:57:52.308Z","cacheVersion":"434d3cd5b7-a79b88b908-568a20d9e2-05763f8e75-c9b56d76dd-df7c63bbe0-1eda687ab3"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.447c80ea62.css","styleHash":"447c80ea62","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.55f04806c2.js","scriptHash":"55f04806c2","routeContentPath":"./assets/app/routeContent.05763f8e75.js","routeContentHash":"05763f8e75","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.df7c63bbe0.js","budgetContentHash":"df7c63bbe0","essentialsContentPath":"./assets/app/essentialsContent.1eda687ab3.js","essentialsContentHash":"1eda687ab3","generatedAt":"2026-05-02T00:58:09.771Z","cacheVersion":"447c80ea62-a79b88b908-55f04806c2-05763f8e75-c9b56d76dd-df7c63bbe0-1eda687ab3"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.568a20d9e2.js" defer></script>
+  <script src="./assets/app/script.55f04806c2.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>
