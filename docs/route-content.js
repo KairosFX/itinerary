@@ -76,8 +76,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       day: 7,
       title: { en: "Final Tokyo Reset", ja: "最後の東京調整" },
       note: {
-        en: "Keep March 16 light for the 7:00 PM flight. Because it is a Monday, treat the palace stop as a quick outer Imperial Palace / Nijubashi photo stop rather than East Gardens. Use Shinjuku or lunch only if it fits, then protect bag pickup and a 3:00–3:30 PM central Tokyo departure for the airport.",
-        ja: "3月16日は19:00の便に合わせて軽めにする。月曜なので皇居は東御苑ではなく、皇居外苑・二重橋の短い写真ストップとして扱う。新宿や昼食は入る場合だけにし、荷物回収と15:00～15:30頃の都心出発を守る。"
+        en: "Keep the departure day light for the 7:00 PM flight. Treat the palace stop as a quick outer Imperial Palace / Nijubashi photo stop unless you separately confirm East Gardens timing. Use Shinjuku or lunch only if it fits, then protect bag pickup and a 3:00-3:30 PM central Tokyo departure for the airport.",
+        ja: "帰国日は19:00の便に合わせて軽めにする。皇居は東御苑の時間を別途確認する場合を除き、皇居外苑・二重橋の短い写真ストップとして扱う。新宿や昼食は入る場合だけにし、荷物回収と15:00～15:30頃の都心出発を守る。"
       },
       summary: {
         en: "Outer palace photo stop, optional Shinjuku/lunch, bag pickup, then protected airport transfer.",

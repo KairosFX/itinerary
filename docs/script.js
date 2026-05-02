@@ -117,6 +117,11 @@ const routeMapStyleUrl = "https://tiles.openfreemap.org/styles/positron";
 const radioPlaylistId = "PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa";
 const radioYoutubePlayerHost = "https://www.youtube-nocookie.com";
 const radioYoutubePlayerId = "kairos-viii-radio-player";
+const radioGithubPagesOrigin = "https://kairosfx.github.io";
+const radioYoutubeReadyTimeoutMs = 5200;
+const radioYoutubeProbeDelayMs = 700;
+const radioYoutubeMaxProbeAttempts = 4;
+const radioPlaybackConfirmTimeoutMs = 6500;
 const radioStationMeta = {
   title: "Kairos VIII Radio",
   artist: "Kairos playlist",
@@ -565,8 +570,8 @@ const checklistPrintLateCutGuidance = {
     ja: "遅れたらスカイツリーの夕方枠を守り、夜が詰まる場合は秋葉原を先に削ります。"
   },
   "7": {
-    en: "March 16, 2026 is a Monday; keep this to the outer palace/Nijubashi photo stop, cut Shinjuku first, and protect the airport buffer.",
-    ja: "2026年3月16日は月曜なので皇居外苑・二重橋の写真だけにし、遅れたら新宿を先に削って空港余裕を守ります。"
+    en: "Keep this light and protect the airport buffer.",
+    ja: "軽めにして空港移動の余裕を守ります。"
   }
 };
 const checklistPrintTimingDefinitions = {
@@ -800,7 +805,7 @@ const checklistPrintTimingDefinitions = {
     preferred: "morning",
     targetStart: "09:30",
     openAccessOnly: true,
-    closedAreaNote: "East Gardens fallback closed Mondays and Fridays; use outer palace/Nijubashi photo stop.",
+    eastGardenClosureWeekdays: [1, 5],
     transit: [10, 25],
     crowd: [10, 30],
     weather: [10, 25]
@@ -1226,7 +1231,15 @@ let radioYoutubePlayerReadyPromise = null;
 let radioYoutubePlayer = null;
 let radioYoutubePlayerReady = false;
 let radioYoutubeIframe = null;
+let radioYoutubeReadyResolve = null;
+let radioYoutubeReadyReject = null;
+let radioYoutubeReadyTimeout = 0;
+let radioYoutubeProbeTimer = 0;
+let radioYoutubeProbeAttempts = 0;
+let radioYoutubeDisabled = false;
+let radioStationInitialized = false;
 let radioMediaSessionReady = false;
+let radioPlaybackConfirmTimeout = 0;
 let radioVolume = radioDefaultVolume;
 let radioPlaylistTrackCount = 0;
 let radioCurrentTrackIndex = -1;
@@ -1522,10 +1535,9 @@ function getRadioLabels() {
     ready: { en: "Ready", ja: "準備完了" },
     playing: { en: "On air", ja: "再生中" },
     paused: { en: "Paused", ja: "一時停止" },
-    fallback: { en: "Unavailable", ja: "利用不可" },
+    fallback: { en: "Radio unavailable in this browser", ja: "このブラウザではラジオを利用できません" },
     play: { en: "Play playlist", ja: "プレイリストを再生" },
     pause: { en: "Pause playlist", ja: "プレイリストを一時停止" },
-    retry: { en: "Retry playlist radio", ja: "プレイリストラジオを再試行" },
     previous: { en: "Restart or previous track", ja: "曲を先頭に戻す / 前の曲" },
     next: { en: "Next track", ja: "次の曲" },
     hide: { en: "Hide radio", ja: "ラジオを隠す" },
@@ -1667,17 +1679,19 @@ function syncRadioVisibilityUi() {
 }
 
 function syncRadioControls() {
+  const radioUnavailable = radioState.loadFailed || radioYoutubeDisabled;
   const canControlPlaybackPosition =
-    radioState.isReady && !radioState.loadFailed && Boolean(radioYoutubePlayer);
+    radioState.isReady && !radioUnavailable && Boolean(radioYoutubePlayer);
 
   if (radioToggleButton) {
-    const labelKey = radioState.loadFailed ? "retry" : radioState.isPlaying ? "pause" : "play";
+    const labelKey = radioUnavailable ? "fallback" : radioState.isPlaying ? "pause" : "play";
     radioToggleButton.setAttribute("aria-label", getRadioLabel(labelKey));
     radioToggleButton.dataset.ariaLabelEn = getRadioLabels()[labelKey].en;
     radioToggleButton.dataset.ariaLabelJa = getRadioLabels()[labelKey].ja;
+    radioToggleButton.disabled = radioUnavailable;
   }
   if (radioToggleIconNode) {
-    radioToggleIconNode.textContent = radioState.loadFailed ? "↻" : radioState.isPlaying ? "⏸" : "▶";
+    radioToggleIconNode.textContent = radioUnavailable ? "!" : radioState.isPlaying ? "⏸" : "▶";
   }
   if (radioPreviousButton) {
     radioPreviousButton.disabled = !canControlPlaybackPosition;
@@ -1686,7 +1700,7 @@ function syncRadioControls() {
     radioPreviousButton.dataset.ariaLabelJa = getRadioLabels().previous.ja;
   }
   if (radioNextButton) {
-    radioNextButton.disabled = !radioState.canSkip || radioState.loadFailed;
+    radioNextButton.disabled = !radioState.canSkip || radioUnavailable;
     radioNextButton.setAttribute("aria-label", getRadioLabel("next"));
     radioNextButton.dataset.ariaLabelEn = getRadioLabels().next.en;
     radioNextButton.dataset.ariaLabelJa = getRadioLabels().next.ja;
@@ -1865,13 +1879,52 @@ function updateRadioMediaSessionMetadata() {
   }
 }
 
+function clearRadioYoutubeReadinessTimers() {
+  if (radioYoutubeReadyTimeout) {
+    window.clearTimeout(radioYoutubeReadyTimeout);
+    radioYoutubeReadyTimeout = 0;
+  }
+  if (radioYoutubeProbeTimer) {
+    window.clearTimeout(radioYoutubeProbeTimer);
+    radioYoutubeProbeTimer = 0;
+  }
+}
+
+function clearRadioPlaybackConfirmation() {
+  if (radioPlaybackConfirmTimeout) {
+    window.clearTimeout(radioPlaybackConfirmTimeout);
+    radioPlaybackConfirmTimeout = 0;
+  }
+}
+
+function clearRadioYoutubeReadinessCallbacks() {
+  clearRadioYoutubeReadinessTimers();
+  radioYoutubeReadyResolve = null;
+  radioYoutubeReadyReject = null;
+  radioYoutubeProbeAttempts = 0;
+}
+
+function disableRadioYoutubeEmbed() {
+  radioYoutubeDisabled = true;
+  radioYoutubePlayerReady = false;
+  radioYoutubePlayer = null;
+  radioYoutubePlayerReadyPromise = null;
+  clearRadioPlaybackConfirmation();
+  clearRadioYoutubeReadinessCallbacks();
+  if (radioYoutubeMountNode) {
+    radioYoutubeMountNode.replaceChildren();
+  }
+  radioYoutubeIframe = null;
+  showRadioArtworkFallback();
+}
+
 function markRadioFallback() {
+  disableRadioYoutubeEmbed();
   radioState.loadFailed = true;
   radioState.isReady = false;
   radioState.isPlaying = false;
   radioState.pendingPlay = false;
   radioState.canSkip = false;
-  radioYoutubePlayerReadyPromise = null;
   setRadioState("fallback");
   syncRadioControls();
   updateRadioMediaSessionPlaybackState();
@@ -1916,6 +1969,10 @@ function configureRadioMediaSession() {
 }
 
 function getRadioYoutubeOrigin() {
+  if (window.location.hostname === "kairosfx.github.io") {
+    return radioGithubPagesOrigin;
+  }
+
   return window.location.origin && window.location.origin !== "null"
     ? window.location.origin
     : "";
@@ -1957,6 +2014,10 @@ function getRadioYoutubeMountNode() {
 }
 
 function ensureRadioYoutubeIframe() {
+  if (radioYoutubeDisabled) {
+    return null;
+  }
+
   if (radioYoutubeIframe) {
     return radioYoutubeIframe;
   }
@@ -1965,6 +2026,11 @@ function ensureRadioYoutubeIframe() {
   const existingIframe = mountNode?.querySelector("iframe");
   if (existingIframe instanceof HTMLIFrameElement) {
     existingIframe.id = radioYoutubePlayerId;
+    mountNode.querySelectorAll("iframe").forEach((iframe) => {
+      if (iframe !== existingIframe) {
+        iframe.remove();
+      }
+    });
     radioYoutubeIframe = existingIframe;
     return radioYoutubeIframe;
   }
@@ -1975,8 +2041,9 @@ function ensureRadioYoutubeIframe() {
   iframe.src = getRadioYoutubeEmbedUrl();
   iframe.width = "1";
   iframe.height = "1";
-  iframe.loading = "lazy";
+  iframe.loading = "eager";
   iframe.allow = "autoplay; encrypted-media";
+  iframe.referrerPolicy = "strict-origin-when-cross-origin";
   iframe.setAttribute("allowfullscreen", "");
   iframe.setAttribute("aria-hidden", "true");
   iframe.setAttribute("tabindex", "-1");
@@ -1985,8 +2052,21 @@ function ensureRadioYoutubeIframe() {
   return radioYoutubeIframe;
 }
 
+function isRadioYoutubeIframePlaceholder(iframe) {
+  if (!iframe?.contentWindow) {
+    return true;
+  }
+
+  try {
+    const iframeHref = String(iframe.contentWindow.location.href || "");
+    return !iframeHref || iframeHref === "about:blank" || iframeHref.startsWith("chrome-error:");
+  } catch {
+    return false;
+  }
+}
+
 function postRadioYoutubeCommand(func, args = []) {
-  if (!radioYoutubeIframe?.contentWindow) {
+  if (radioYoutubeDisabled || !radioYoutubeIframe?.contentWindow) {
     return;
   }
 
@@ -1997,12 +2077,12 @@ function postRadioYoutubeCommand(func, args = []) {
       func,
       args
     }),
-    radioYoutubePlayerHost
+    "*"
   );
 }
 
 function requestRadioYoutubeInfoDelivery() {
-  if (!radioYoutubeIframe?.contentWindow) {
+  if (radioYoutubeDisabled || !radioYoutubeIframe?.contentWindow) {
     return;
   }
 
@@ -2011,8 +2091,18 @@ function requestRadioYoutubeInfoDelivery() {
       event: "listening",
       id: radioYoutubePlayerId
     }),
-    radioYoutubePlayerHost
+    "*"
   );
+}
+
+function scheduleRadioPlaybackConfirmation() {
+  clearRadioPlaybackConfirmation();
+  radioPlaybackConfirmTimeout = window.setTimeout(() => {
+    radioPlaybackConfirmTimeout = 0;
+    if (radioState.pendingPlay) {
+      markRadioFallback();
+    }
+  }, radioPlaybackConfirmTimeoutMs);
 }
 
 function createRadioYoutubePlayerProxy() {
@@ -2175,8 +2265,51 @@ function chooseSmartRadioTrackIndex() {
   return weightedCandidates[Math.floor(Math.random() * weightedCandidates.length)] ?? candidates[0];
 }
 
+function scheduleRadioYoutubeInfoProbe(delay = 0) {
+  if (radioYoutubeDisabled || radioYoutubePlayerReady || !radioYoutubeReadyResolve) {
+    return;
+  }
+
+  if (radioYoutubeProbeTimer) {
+    window.clearTimeout(radioYoutubeProbeTimer);
+  }
+
+  radioYoutubeProbeTimer = window.setTimeout(() => {
+    radioYoutubeProbeTimer = 0;
+    if (radioYoutubeDisabled || radioYoutubePlayerReady || !radioYoutubeReadyResolve) {
+      return;
+    }
+
+    radioYoutubeProbeAttempts += 1;
+    requestRadioYoutubeInfoDelivery();
+    if (radioYoutubeProbeAttempts < radioYoutubeMaxProbeAttempts) {
+      scheduleRadioYoutubeInfoProbe(radioYoutubeProbeDelayMs);
+    }
+  }, Math.max(0, Number(delay) || 0));
+}
+
+function resolveRadioYoutubeReadyFromEmbed() {
+  if (radioYoutubeDisabled || !radioYoutubePlayer || !radioYoutubeReadyResolve) {
+    return;
+  }
+
+  const resolveReady = radioYoutubeReadyResolve;
+  clearRadioYoutubeReadinessCallbacks();
+  handleRadioYoutubeReady({ target: radioYoutubePlayer });
+  resolveReady(radioYoutubePlayer);
+}
+
+function rejectRadioYoutubeReadyFromEmbed(reason = "YouTube radio unavailable") {
+  const rejectReady = radioYoutubeReadyReject;
+  clearRadioYoutubeReadinessCallbacks();
+  markRadioFallback();
+  if (rejectReady) {
+    rejectReady(new Error(reason));
+  }
+}
+
 function handleRadioYoutubeMessage(event) {
-  if (!radioYoutubeIframe?.contentWindow || event.source !== radioYoutubeIframe.contentWindow) {
+  if (radioYoutubeDisabled || !radioYoutubeIframe?.contentWindow || event.source !== radioYoutubeIframe.contentWindow) {
     return;
   }
 
@@ -2193,10 +2326,17 @@ function handleRadioYoutubeMessage(event) {
     }
   }
 
+  if (payload?.event === "onReady") {
+    resolveRadioYoutubeReadyFromEmbed();
+    requestRadioYoutubeInfoDelivery();
+  }
+
   const info = payload?.info;
   if (!info || typeof info !== "object") {
     return;
   }
+
+  resolveRadioYoutubeReadyFromEmbed();
 
   if (Array.isArray(info.playlist) && info.playlist.length) {
     radioPlaylistTrackCount = info.playlist.length;
@@ -2223,6 +2363,7 @@ function handleRadioYoutubeMessage(event) {
 
   const playerState = Number(info.playerState);
   if (playerState === 1) {
+    clearRadioPlaybackConfirmation();
     radioState.pendingPlay = false;
     radioState.isPlaying = true;
     setRadioCurrentTime(getEstimatedRadioCurrentTime());
@@ -2238,6 +2379,10 @@ function handleRadioYoutubeMessage(event) {
 }
 
 function handleRadioYoutubeReady(event = {}) {
+  if (radioYoutubeDisabled) {
+    return;
+  }
+
   radioYoutubePlayerReady = true;
   radioState.isReady = true;
   radioState.loadFailed = false;
@@ -2251,6 +2396,11 @@ function handleRadioYoutubeReady(event = {}) {
 }
 
 function ensureRadioYoutubePlayer() {
+  if (radioYoutubeDisabled || radioState.loadFailed) {
+    markRadioFallback();
+    return Promise.reject(new Error("YouTube radio unavailable"));
+  }
+
   if (radioYoutubePlayerReady && radioYoutubePlayer) {
     return Promise.resolve(radioYoutubePlayer);
   }
@@ -2260,41 +2410,56 @@ function ensureRadioYoutubePlayer() {
   }
 
   setRadioState("loading");
-  radioYoutubePlayerReadyPromise = Promise.resolve()
-    .then(() => new Promise((resolve) => {
+  radioYoutubePlayerReadyPromise = new Promise((resolve, reject) => {
       const iframe = ensureRadioYoutubeIframe();
-      radioYoutubePlayer = createRadioYoutubePlayerProxy();
-      let settled = false;
+      if (!iframe) {
+        rejectRadioYoutubeReadyFromEmbed("YouTube radio unavailable");
+        reject(new Error("YouTube radio unavailable"));
+        return;
+      }
 
-      const markReady = () => {
-        if (settled) {
-          return;
-        }
-        settled = true;
-        requestRadioYoutubeInfoDelivery();
-        handleRadioYoutubeReady({ target: radioYoutubePlayer });
-        resolve(radioYoutubePlayer);
-      };
+      radioYoutubePlayer = createRadioYoutubePlayerProxy();
+      radioYoutubeReadyResolve = resolve;
+      radioYoutubeReadyReject = reject;
+      radioYoutubeProbeAttempts = 0;
 
       if (iframe.dataset.radioReady === "true") {
-        markReady();
+        resolveRadioYoutubeReadyFromEmbed();
         return;
       }
 
       iframe.addEventListener(
         "load",
         () => {
-          iframe.dataset.radioReady = "true";
-          markReady();
+          window.setTimeout(() => {
+            if (isRadioYoutubeIframePlaceholder(iframe)) {
+              rejectRadioYoutubeReadyFromEmbed("YouTube radio blocked");
+              return;
+            }
+
+            iframe.dataset.radioReady = "true";
+            scheduleRadioYoutubeInfoProbe(0);
+            resolveRadioYoutubeReadyFromEmbed();
+          }, 0);
         },
         { once: true }
       );
+      iframe.addEventListener(
+        "error",
+        () => rejectRadioYoutubeReadyFromEmbed("YouTube radio blocked"),
+        { once: true }
+      );
 
-      window.setTimeout(markReady, 2600);
-    }))
+      scheduleRadioYoutubeInfoProbe(250);
+      radioYoutubeReadyTimeout = window.setTimeout(
+        () => rejectRadioYoutubeReadyFromEmbed("YouTube radio blocked or unavailable"),
+        radioYoutubeReadyTimeoutMs
+      );
+    })
     .catch((error) => {
-      radioYoutubePlayerReadyPromise = null;
-      markRadioFallback();
+      if (!radioState.loadFailed) {
+        markRadioFallback();
+      }
       throw error;
     });
 
@@ -2302,10 +2467,9 @@ function ensureRadioYoutubePlayer() {
 }
 
 function playRadio() {
-  if (radioState.loadFailed) {
-    radioState.loadFailed = false;
-    radioYoutubePlayerReady = false;
-    radioYoutubePlayerReadyPromise = null;
+  if (radioState.loadFailed || radioYoutubeDisabled) {
+    markRadioFallback();
+    return;
   }
 
   radioState.pendingPlay = true;
@@ -2318,12 +2482,7 @@ function playRadio() {
         player.playVideo();
       }
       if (player.usesPostMessage) {
-        radioState.pendingPlay = false;
-        radioState.isPlaying = true;
-        setRadioCurrentTime(getEstimatedRadioCurrentTime());
-        setRadioState("playing");
-        syncRadioControls();
-        updateRadioMediaSessionPlaybackState();
+        scheduleRadioPlaybackConfirmation();
         return;
       }
       window.setTimeout(() => {
@@ -2338,6 +2497,7 @@ function playRadio() {
       }, 2600);
     })
     .catch(() => {
+      clearRadioPlaybackConfirmation();
       radioState.pendingPlay = false;
       radioState.isPlaying = false;
       syncRadioControls();
@@ -2347,6 +2507,7 @@ function playRadio() {
 
 function pauseRadio() {
   radioState.pendingPlay = false;
+  clearRadioPlaybackConfirmation();
   try {
     radioYoutubePlayer?.pauseVideo?.();
   } catch {
@@ -2495,19 +2656,6 @@ function nextRadioTrack() {
   updateRadioMediaSessionPlaybackState();
 }
 
-function warmRadioPlaylistPlayer() {
-  const warmPlayer = () => {
-    ensureRadioYoutubePlayer().catch(() => null);
-  };
-
-  if ("requestIdleCallback" in window) {
-    window.requestIdleCallback(warmPlayer, { timeout: 3200 });
-    return;
-  }
-
-  window.setTimeout(warmPlayer, 1800);
-}
-
 function toggleRadioPlayback() {
   if (radioState.isPlaying) {
     pauseRadio();
@@ -2550,6 +2698,10 @@ function initializeRadioStation() {
   if (!radioPlayerNode) {
     return;
   }
+  if (radioStationInitialized) {
+    return;
+  }
+  radioStationInitialized = true;
 
   radioVolume = getStoredRadioVolume();
   radioState.isHidden = getStoredRadioHidden();
@@ -2567,7 +2719,6 @@ function initializeRadioStation() {
   setRadioDefaultArtwork();
   setRadioState("idle");
   syncRadioControls();
-  warmRadioPlaylistPlayer();
 }
 
 function shouldWarmDeferredAssets() {
@@ -5476,8 +5627,37 @@ function getChecklistPrintPreferredStart(item, day, cursor) {
   return earliestStart;
 }
 
-function getChecklistPrintLateCutGuidance(dayId = "") {
-  const guidance = checklistPrintLateCutGuidance[String(dayId)];
+function getChecklistPrintDay7Guidance(day = {}) {
+  const dateInput = String(day.dateInput || "").trim();
+  const date = parseDateInputValue(dateInput);
+  const language = getChecklistPrintLanguage();
+  const baseGuidance = checklistPrintLateCutGuidance["7"];
+
+  if (!date) {
+    return getLocalizedText(baseGuidance);
+  }
+
+  const isEastGardenClosureDay = date.getDay() === 1 || date.getDay() === 5;
+  if (!isEastGardenClosureDay) {
+    return getLocalizedText(baseGuidance);
+  }
+
+  const dateLabel = formatChecklistPrintFullDateLabel(dateInput);
+  const weekdayLabel = formatChecklistPrintWeekdayLabel(dateInput);
+  if (language === "ja") {
+    return `${dateLabel}は${weekdayLabel}です。東御苑に行く場合は休園日を確認。軽めにして空港移動の余裕を守ります。`;
+  }
+
+  return `${dateLabel} is a ${weekdayLabel}; if visiting East Gardens, confirm closures. Keep this light and protect the airport buffer.`;
+}
+
+function getChecklistPrintLateCutGuidance(day = "") {
+  const dayId = String(typeof day === "object" && day ? day.id : day);
+  if (dayId === "7") {
+    return getChecklistPrintDay7Guidance(typeof day === "object" && day ? day : { id: dayId });
+  }
+
+  const guidance = checklistPrintLateCutGuidance[dayId];
   if (!guidance) {
     return "";
   }
@@ -5762,6 +5942,32 @@ function formatChecklistPrintDateLabel(dateInputValue) {
   }).format(date);
 }
 
+function formatChecklistPrintFullDateLabel(dateInputValue) {
+  const date = parseDateInputValue(dateInputValue);
+  if (!date) {
+    return "";
+  }
+
+  const locale = getChecklistPrintLanguage() === "ja" ? "ja-JP" : "en-US";
+  return new Intl.DateTimeFormat(locale, {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  }).format(date);
+}
+
+function formatChecklistPrintWeekdayLabel(dateInputValue) {
+  const date = parseDateInputValue(dateInputValue);
+  if (!date) {
+    return "";
+  }
+
+  const locale = getChecklistPrintLanguage() === "ja" ? "ja-JP" : "en-US";
+  return new Intl.DateTimeFormat(locale, {
+    weekday: "long"
+  }).format(date);
+}
+
 function getDefaultChecklistPrintStartDate() {
   const firstTripDate = dayCards
     .map((card) => String(card.dataset.tripDate || "").trim())
@@ -5929,7 +6135,7 @@ function buildChecklistPrintMarkup(days = getChecklistPrintDraft()) {
         return "";
       }
 
-      const lateCutGuidance = getChecklistPrintLateCutGuidance(day.id);
+      const lateCutGuidance = getChecklistPrintLateCutGuidance(day);
       const lateCutMarkup = lateCutGuidance
         ? `<p class="checklist-print-output__late-cut">${escapeHtml(lateCutGuidance)}</p>`
         : "";
