@@ -11211,6 +11211,7 @@ html[data-theme="dark"] .site-intro__title {
   z-index: 16;
   display: grid;
   grid-template-columns: 8.65rem minmax(0, 1fr);
+  grid-template-areas: "signal body";
   align-items: stretch;
   gap: 0.48rem;
   width: min(28rem, calc(100vw - 1.72rem));
@@ -11225,6 +11226,18 @@ html[data-theme="dark"] .site-intro__title {
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 18px 42px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(18px) saturate(145%);
+}
+
+.travel-radio[data-radio-collapsed="true"] {
+  grid-template-columns: 1fr;
+  grid-template-areas: "restore";
+  align-items: center;
+  width: auto;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .travel-radio__youtube {
@@ -11245,6 +11258,7 @@ html[data-theme="dark"] .site-intro__title {
 
 .travel-radio__signal {
   position: relative;
+  grid-area: signal;
   display: grid;
   place-items: center;
   width: 100%;
@@ -11266,6 +11280,20 @@ html[data-theme="dark"] .site-intro__title {
   letter-spacing: 0.24em;
 }
 
+.travel-radio__artwork {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: rgba(4, 9, 7, 0.84);
+}
+
+.travel-radio__artwork[hidden] {
+  display: none !important;
+}
+
 .travel-radio__signal iframe {
   position: absolute;
   inset: 0;
@@ -11274,7 +11302,56 @@ html[data-theme="dark"] .site-intro__title {
   border: 0;
 }
 
+.travel-radio[data-radio-collapsed="true"] .travel-radio__signal {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  clip-path: inset(50%);
+}
+
+.travel-radio__restore {
+  grid-area: restore;
+  display: inline-grid;
+  place-items: center;
+  width: 2.85rem;
+  min-width: 2.85rem;
+  height: 2.85rem;
+  padding: 0;
+  border: 1px solid rgba(242, 214, 177, 0.3);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(18, 29, 23, 0.94), rgba(10, 17, 14, 0.9)),
+    rgba(12, 20, 16, 0.92);
+  color: #f4fbf5;
+  font-size: 1rem;
+  line-height: 1;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 12px 28px rgba(0, 0, 0, 0.24);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.travel-radio__restore[hidden],
+.travel-radio:not([data-radio-collapsed="true"]) .travel-radio__restore {
+  display: none !important;
+}
+
+.travel-radio__restore:hover,
+.travel-radio__restore:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(242, 214, 177, 0.46);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 14px 30px rgba(0, 0, 0, 0.28);
+}
+
 .travel-radio__body {
+  grid-area: body;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas:
@@ -11284,6 +11361,10 @@ html[data-theme="dark"] .site-intro__title {
   align-items: center;
   gap: 0.34rem 0.5rem;
   min-width: 0;
+}
+
+.travel-radio[data-radio-collapsed="true"] .travel-radio__body {
+  display: none;
 }
 
 .travel-radio__copy {
@@ -11336,8 +11417,8 @@ html[data-theme="dark"] .site-intro__title {
 
 .travel-radio__controls {
   grid-area: controls;
-  display: grid;
-  grid-template-columns: auto auto minmax(6.5rem, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.34rem;
   min-width: 0;
@@ -11371,6 +11452,10 @@ html[data-theme="dark"] .site-intro__title {
     rgba(255, 255, 255, 0.08);
 }
 
+.travel-radio__button--hide {
+  color: rgba(244, 251, 245, 0.84);
+}
+
 .travel-radio__button:hover,
 .travel-radio__button:focus-visible {
   transform: translateY(-1px);
@@ -11388,6 +11473,8 @@ html[data-theme="dark"] .site-intro__title {
   display: grid;
   grid-template-columns: auto minmax(4rem, 1fr) 2.3rem;
   align-items: center;
+  order: 1;
+  flex: 1 1 100%;
   gap: 0.34rem;
   min-width: 0;
   color: rgba(244, 251, 245, 0.72);
@@ -11409,6 +11496,7 @@ html[data-theme="dark"] .site-intro__title {
 @media (max-width: 560px) {
   .travel-radio {
     grid-template-columns: 7.2rem minmax(0, 1fr);
+    grid-template-areas: "signal body";
     width: calc(100vw - 1rem);
     right: max(0.5rem, env(safe-area-inset-right));
     bottom: max(0.5rem, env(safe-area-inset-bottom));
@@ -11427,7 +11515,18 @@ html[data-theme="dark"] .site-intro__title {
   }
 
   .travel-radio__controls {
-    grid-template-columns: auto auto minmax(5.6rem, 1fr);
+    gap: 0.28rem;
+  }
+
+  .travel-radio__button {
+    width: 1.96rem;
+    min-width: 1.96rem;
+    height: 1.96rem;
+  }
+
+  .travel-radio__volume {
+    flex-basis: 100%;
+    grid-template-columns: auto minmax(4.4rem, 1fr) 2.4rem;
   }
 }
 

@@ -14,8 +14,11 @@ const siteFooter = document.querySelector(".site-footer");
 const siteBackdropVideo = document.querySelector("[data-site-background-video]");
 const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const radioPlayerNode = document.querySelector("[data-radio-player]");
+const radioArtworkNode = document.querySelector("[data-radio-artwork]");
 const radioToggleButton = document.querySelector("[data-radio-toggle]");
 const radioToggleIconNode = document.querySelector("[data-radio-toggle-icon]");
+const radioPreviousButton = document.querySelector("[data-radio-previous]");
+const radioRewindButton = document.querySelector("[data-radio-rewind]");
 const radioNextButton = document.querySelector("[data-radio-next]");
 const radioVolumeInput = document.querySelector("[data-radio-volume]");
 const radioVolumeLabel = document.querySelector("[data-radio-volume-label]");
@@ -119,8 +122,12 @@ const radioStationMeta = {
   artist: "Kairos playlist",
   album: "Kairos VIII"
 };
-const radioDefaultVolume = 0.1;
-const radioMaxVolume = 20;
+const radioDefaultArtworkUrl = "./assets/readme/kairos-viii-lighthouse.jpg";
+const radioDefaultVolume = 12;
+const radioMinVolume = 1;
+const radioMaxVolume = 100;
+const radioRewindSeconds = 10;
+const radioPreviousRestartThresholdSeconds = 5;
 const radioLegacyVolumeStorageKey = `kairos-viii-radio-volume-${itineraryStateVersion}`;
 const radioVolumeStorageKey = `kairos-viii-radio-site-volume-v2-${itineraryStateVersion}`;
 const radioShuffleHistoryMin = 3;
@@ -1087,7 +1094,14 @@ let radioMediaSessionReady = false;
 let radioVolume = radioDefaultVolume;
 let radioPlaylistTrackCount = 0;
 let radioCurrentTrackIndex = -1;
+let radioCurrentTime = 0;
+let radioCurrentTimeAnchorMs = 0;
+let radioCurrentTrackTitle = "";
+let radioCurrentArtworkUrl = "";
+let radioPendingPlaybackHistoryIndex = null;
 const radioRecentTrackHistory = [];
+const radioPlaybackTrackHistory = [];
+let radioPlaybackHistoryCursor = -1;
 const radioState = {
   isReady: false,
   isPlaying: false,
@@ -1374,6 +1388,8 @@ function getRadioLabels() {
     play: { en: "Play playlist", ja: "プレイリストを再生" },
     pause: { en: "Pause playlist", ja: "プレイリストを一時停止" },
     retry: { en: "Retry playlist radio", ja: "プレイリストラジオを再試行" },
+    previous: { en: "Previous track", ja: "前の曲" },
+    rewind: { en: "Rewind 10 seconds", ja: "10秒戻す" },
     next: { en: "Next track", ja: "次の曲" },
     hide: { en: "Hide radio", ja: "ラジオを隠す" },
     show: { en: "Show radio", ja: "ラジオを表示" }
@@ -1391,20 +1407,35 @@ function normalizeRadioVolume(value, { legacy = false } = {}) {
     return radioDefaultVolume;
   }
 
-  const clampedVolume = clamp(parsedVolume, 0, radioMaxVolume);
-  if (legacy) {
-    return clampedVolume <= 0 ? 0 : Math.min(clampedVolume, radioDefaultVolume);
-  }
-
-  return Math.round(clampedVolume * 10) / 10;
+  const normalizedVolumeInput =
+    parsedVolume > 0 && (parsedVolume < 1 || (legacy && parsedVolume <= 1))
+      ? parsedVolume * 100
+      : parsedVolume;
+  return clamp(Math.round(normalizedVolumeInput), radioMinVolume, radioMaxVolume);
 }
 
 function formatRadioVolumeLabel(value) {
   const normalizedVolume = normalizeRadioVolume(value);
-  if (normalizedVolume > 0 && normalizedVolume < 1) {
-    return `${normalizedVolume.toFixed(1)}%`;
+  return `${normalizedVolume}%`;
+}
+
+function getRadioClockNow() {
+  return window.performance && typeof window.performance.now === "function"
+    ? window.performance.now()
+    : Date.now();
+}
+
+function setRadioCurrentTime(seconds) {
+  radioCurrentTime = Math.max(0, Number(seconds) || 0);
+  radioCurrentTimeAnchorMs = getRadioClockNow();
+}
+
+function getEstimatedRadioCurrentTime() {
+  if (!radioState.isPlaying || !radioCurrentTimeAnchorMs) {
+    return radioCurrentTime;
   }
-  return `${Number.isInteger(normalizedVolume) ? normalizedVolume : normalizedVolume.toFixed(1)}%`;
+
+  return radioCurrentTime + Math.max(0, getRadioClockNow() - radioCurrentTimeAnchorMs) / 1000;
 }
 
 function getStoredRadioVolume() {
@@ -1455,9 +1486,9 @@ function syncRadioVolumeUi() {
   const nextVolume = normalizeRadioVolume(radioVolume);
   radioVolume = nextVolume;
   if (radioVolumeInput) {
-    radioVolumeInput.min = "0";
+    radioVolumeInput.min = String(radioMinVolume);
     radioVolumeInput.max = String(radioMaxVolume);
-    radioVolumeInput.step = "0.1";
+    radioVolumeInput.step = "1";
     if (radioVolumeInput.value !== String(nextVolume)) {
       radioVolumeInput.value = String(nextVolume);
     }
@@ -1499,6 +1530,9 @@ function syncRadioVisibilityUi() {
 }
 
 function syncRadioControls() {
+  const canControlPlaybackPosition =
+    radioState.isReady && !radioState.loadFailed && Boolean(radioYoutubePlayer);
+
   if (radioToggleButton) {
     const labelKey = radioState.loadFailed ? "retry" : radioState.isPlaying ? "pause" : "play";
     radioToggleButton.setAttribute("aria-label", getRadioLabel(labelKey));
@@ -1507,6 +1541,18 @@ function syncRadioControls() {
   }
   if (radioToggleIconNode) {
     radioToggleIconNode.textContent = radioState.loadFailed ? "↻" : radioState.isPlaying ? "⏸" : "▶";
+  }
+  if (radioPreviousButton) {
+    radioPreviousButton.disabled = !canControlPlaybackPosition;
+    radioPreviousButton.setAttribute("aria-label", getRadioLabel("previous"));
+    radioPreviousButton.dataset.ariaLabelEn = getRadioLabels().previous.en;
+    radioPreviousButton.dataset.ariaLabelJa = getRadioLabels().previous.ja;
+  }
+  if (radioRewindButton) {
+    radioRewindButton.disabled = !canControlPlaybackPosition;
+    radioRewindButton.setAttribute("aria-label", getRadioLabel("rewind"));
+    radioRewindButton.dataset.ariaLabelEn = getRadioLabels().rewind.en;
+    radioRewindButton.dataset.ariaLabelJa = getRadioLabels().rewind.ja;
   }
   if (radioNextButton) {
     radioNextButton.disabled = !radioState.canSkip || radioState.loadFailed;
@@ -1527,9 +1573,9 @@ function applyRadioVolume() {
 
   if (radioYoutubePlayer && typeof radioYoutubePlayer.setVolume === "function") {
     try {
-      radioYoutubePlayer.setVolume(clamp(normalizeRadioVolume(radioVolume), 0, 100));
+      radioYoutubePlayer.setVolume(clamp(normalizeRadioVolume(radioVolume), radioMinVolume, radioMaxVolume));
       if (typeof radioYoutubePlayer.mute === "function" && typeof radioYoutubePlayer.unMute === "function") {
-        if (normalizeRadioVolume(radioVolume) <= 0) {
+        if (normalizeRadioVolume(radioVolume) < radioMinVolume) {
           radioYoutubePlayer.mute();
         } else {
           radioYoutubePlayer.unMute();
@@ -1538,6 +1584,141 @@ function applyRadioVolume() {
     } catch {
       // Ignore partial YouTube player volume implementations.
     }
+  }
+}
+
+function getRadioVideoIdFromInfo(info = {}) {
+  const videoData = info.videoData && typeof info.videoData === "object" ? info.videoData : {};
+  const rawVideoId =
+    videoData.video_id ||
+    videoData.videoId ||
+    info.video_id ||
+    info.videoId ||
+    "";
+  const directVideoId = String(rawVideoId || "").trim();
+  if (/^[\w-]{6,}$/.test(directVideoId)) {
+    return directVideoId;
+  }
+
+  const videoUrl = String(videoData.video_url || videoData.videoUrl || info.videoUrl || "");
+  const videoUrlMatch = videoUrl.match(/[?&]v=([\w-]{6,})/) || videoUrl.match(/\/embed\/([\w-]{6,})/);
+  return videoUrlMatch?.[1] || "";
+}
+
+function getRadioTrackTitleFromInfo(info = {}) {
+  const videoData = info.videoData && typeof info.videoData === "object" ? info.videoData : {};
+  return String(videoData.title || info.title || "").trim();
+}
+
+function getRadioArtworkUrlForVideo(videoId) {
+  return videoId ? `https://i.ytimg.com/vi/${encodeURIComponent(videoId)}/hqdefault.jpg` : "";
+}
+
+function showRadioArtworkFallback() {
+  radioCurrentArtworkUrl = "";
+  radioPlayerNode?.setAttribute("data-radio-artwork-state", "fallback");
+  if (!radioArtworkNode) {
+    return;
+  }
+
+  radioArtworkNode.hidden = true;
+  radioArtworkNode.removeAttribute("src");
+  radioArtworkNode.dataset.radioArtworkKind = "fallback";
+}
+
+function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
+  if (!sourceUrl || !radioArtworkNode) {
+    showRadioArtworkFallback();
+    updateRadioMediaSessionMetadata();
+    return;
+  }
+
+  radioCurrentArtworkUrl = sourceUrl;
+  radioArtworkNode.dataset.radioArtworkKind = kind;
+  radioArtworkNode.alt = title ? `${title} artwork` : "";
+  radioArtworkNode.hidden = false;
+  radioPlayerNode?.setAttribute("data-radio-artwork-state", kind);
+  if (radioArtworkNode.getAttribute("src") !== sourceUrl) {
+    radioArtworkNode.src = sourceUrl;
+  }
+  updateRadioMediaSessionMetadata();
+}
+
+function setRadioDefaultArtwork() {
+  setRadioArtworkSource(radioDefaultArtworkUrl, {
+    kind: "default",
+    title: radioStationMeta.title
+  });
+}
+
+function handleRadioArtworkError() {
+  if (radioArtworkNode?.dataset.radioArtworkKind !== "default" && radioDefaultArtworkUrl) {
+    setRadioDefaultArtwork();
+    return;
+  }
+
+  showRadioArtworkFallback();
+  updateRadioMediaSessionMetadata();
+}
+
+function updateRadioArtworkFromInfo(info = {}) {
+  const trackTitle = getRadioTrackTitleFromInfo(info);
+  if (trackTitle) {
+    radioCurrentTrackTitle = trackTitle;
+  }
+
+  const videoId = getRadioVideoIdFromInfo(info);
+  if (videoId) {
+    setRadioArtworkSource(getRadioArtworkUrlForVideo(videoId), {
+      kind: "track",
+      title: radioCurrentTrackTitle || radioStationMeta.title
+    });
+    return;
+  }
+
+  if (!radioCurrentArtworkUrl) {
+    setRadioDefaultArtwork();
+    return;
+  }
+
+  updateRadioMediaSessionMetadata();
+}
+
+function getResolvedRadioArtworkUrl() {
+  if (!radioCurrentArtworkUrl) {
+    return "";
+  }
+
+  try {
+    return new URL(radioCurrentArtworkUrl, window.location.href).href;
+  } catch {
+    return radioCurrentArtworkUrl;
+  }
+}
+
+function updateRadioMediaSessionMetadata() {
+  if (!("mediaSession" in navigator) || !("MediaMetadata" in window)) {
+    return;
+  }
+
+  const artworkUrl = getResolvedRadioArtworkUrl();
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: radioCurrentTrackTitle || radioStationMeta.title,
+      artist: radioStationMeta.artist,
+      album: radioStationMeta.album,
+      artwork: artworkUrl
+        ? [
+            {
+              src: artworkUrl,
+              sizes: "480x360",
+              type: "image/jpeg"
+            }
+          ]
+        : []
+    });
+  } catch {
+    // Ignore browsers with partial Media Session metadata support.
   }
 }
 
@@ -1565,22 +1746,25 @@ function updateRadioMediaSessionPlaybackState() {
   }
 }
 
+function setRadioMediaSessionAction(action, handler) {
+  try {
+    navigator.mediaSession.setActionHandler(action, handler);
+  } catch {
+    // Ignore browsers that do not support this specific media action.
+  }
+}
+
 function configureRadioMediaSession() {
   if (radioMediaSessionReady || !("mediaSession" in navigator)) {
     return;
   }
 
   try {
-    if ("MediaMetadata" in window) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: radioStationMeta.title,
-        artist: radioStationMeta.artist,
-        album: radioStationMeta.album
-      });
-    }
-    navigator.mediaSession.setActionHandler("play", playRadio);
-    navigator.mediaSession.setActionHandler("pause", pauseRadio);
-    navigator.mediaSession.setActionHandler("nexttrack", nextRadioTrack);
+    updateRadioMediaSessionMetadata();
+    setRadioMediaSessionAction("play", playRadio);
+    setRadioMediaSessionAction("pause", pauseRadio);
+    setRadioMediaSessionAction("previoustrack", previousRadioTrack);
+    setRadioMediaSessionAction("nexttrack", nextRadioTrack);
     radioMediaSessionReady = true;
     updateRadioMediaSessionPlaybackState();
   } catch {
@@ -1689,6 +1873,12 @@ function createRadioYoutubePlayerProxy() {
     pauseVideo() {
       postRadioYoutubeCommand("pauseVideo");
     },
+    seekTo(seconds, allowSeekAhead = true) {
+      postRadioYoutubeCommand("seekTo", [seconds, allowSeekAhead]);
+    },
+    previousVideo() {
+      postRadioYoutubeCommand("previousVideo");
+    },
     nextVideo() {
       postRadioYoutubeCommand("nextVideo");
     },
@@ -1704,7 +1894,60 @@ function getKnownRadioPlaylistTrackCount() {
     : 0;
 }
 
-function rememberRadioTrackIndex(trackIndex) {
+function rememberRadioPlaybackTrackIndex(trackIndex) {
+  if (!Number.isInteger(trackIndex) || trackIndex < 0) {
+    return;
+  }
+
+  if (radioPlaybackHistoryCursor >= 0 && radioPlaybackTrackHistory[radioPlaybackHistoryCursor] === trackIndex) {
+    return;
+  }
+
+  if (radioPlaybackHistoryCursor < radioPlaybackTrackHistory.length - 1) {
+    radioPlaybackTrackHistory.splice(radioPlaybackHistoryCursor + 1);
+  }
+
+  if (radioPlaybackTrackHistory[radioPlaybackTrackHistory.length - 1] !== trackIndex) {
+    radioPlaybackTrackHistory.push(trackIndex);
+  }
+
+  radioPlaybackHistoryCursor = radioPlaybackTrackHistory.length - 1;
+  while (radioPlaybackTrackHistory.length > 24) {
+    radioPlaybackTrackHistory.shift();
+    radioPlaybackHistoryCursor = Math.max(0, radioPlaybackHistoryCursor - 1);
+  }
+}
+
+function setRadioPlaybackHistoryCursorToTrack(trackIndex) {
+  for (let index = radioPlaybackHistoryCursor - 1; index >= 0; index -= 1) {
+    if (radioPlaybackTrackHistory[index] === trackIndex) {
+      radioPlaybackHistoryCursor = index;
+      return;
+    }
+  }
+
+  const existingIndex = radioPlaybackTrackHistory.lastIndexOf(trackIndex);
+  if (existingIndex >= 0) {
+    radioPlaybackHistoryCursor = existingIndex;
+    return;
+  }
+
+  radioPlaybackTrackHistory.push(trackIndex);
+  radioPlaybackHistoryCursor = radioPlaybackTrackHistory.length - 1;
+}
+
+function getPreviousRadioTrackIndexFromHistory() {
+  for (let index = radioPlaybackHistoryCursor - 1; index >= 0; index -= 1) {
+    const trackIndex = radioPlaybackTrackHistory[index];
+    if (Number.isInteger(trackIndex) && trackIndex !== radioCurrentTrackIndex) {
+      return trackIndex;
+    }
+  }
+
+  return null;
+}
+
+function rememberRadioTrackIndex(trackIndex, { updatePlaybackHistory = true } = {}) {
   const playlistTrackCount = getKnownRadioPlaylistTrackCount();
   const normalizedIndex = Number.parseInt(String(trackIndex), 10);
   if (!Number.isInteger(normalizedIndex) || normalizedIndex < 0) {
@@ -1721,6 +1964,10 @@ function rememberRadioTrackIndex(trackIndex) {
     : 1;
   while (radioRecentTrackHistory.length > Math.max(radioShuffleHistoryMin, historyLimit)) {
     radioRecentTrackHistory.shift();
+  }
+
+  if (updatePlaybackHistory) {
+    rememberRadioPlaybackTrackIndex(normalizedIndex);
   }
 }
 
@@ -1793,17 +2040,32 @@ function handleRadioYoutubeMessage(event) {
     radioState.canSkip = radioPlaylistTrackCount > 1;
   }
 
+  const currentTime = Number(info.currentTime);
+  if (Number.isFinite(currentTime) && currentTime >= 0) {
+    setRadioCurrentTime(currentTime);
+  }
+
+  updateRadioArtworkFromInfo(info);
+
   const playlistIndex = Number.parseInt(String(info.playlistIndex), 10);
   if (Number.isInteger(playlistIndex) && playlistIndex >= 0) {
-    rememberRadioTrackIndex(playlistIndex);
+    const isPendingHistoryNavigation = playlistIndex === radioPendingPlaybackHistoryIndex;
+    rememberRadioTrackIndex(playlistIndex, {
+      updatePlaybackHistory: !isPendingHistoryNavigation
+    });
+    if (isPendingHistoryNavigation) {
+      radioPendingPlaybackHistoryIndex = null;
+    }
   }
 
   const playerState = Number(info.playerState);
   if (playerState === 1) {
     radioState.pendingPlay = false;
     radioState.isPlaying = true;
+    setRadioCurrentTime(getEstimatedRadioCurrentTime());
     setRadioState("playing");
   } else if ((playerState === 0 || playerState === 2) && !radioState.pendingPlay) {
+    setRadioCurrentTime(getEstimatedRadioCurrentTime());
     radioState.isPlaying = false;
     setRadioState(radioState.isReady ? "paused" : "ready");
   }
@@ -1894,6 +2156,7 @@ function playRadio() {
       if (player.usesPostMessage) {
         radioState.pendingPlay = false;
         radioState.isPlaying = true;
+        setRadioCurrentTime(getEstimatedRadioCurrentTime());
         setRadioState("playing");
         syncRadioControls();
         updateRadioMediaSessionPlaybackState();
@@ -1925,8 +2188,98 @@ function pauseRadio() {
   } catch {
     // Ignore player pause failures.
   }
+  setRadioCurrentTime(getEstimatedRadioCurrentTime());
   radioState.isPlaying = false;
   setRadioState(radioState.loadFailed ? "fallback" : "paused");
+  syncRadioControls();
+  updateRadioMediaSessionPlaybackState();
+}
+
+function seekRadioTo(seconds) {
+  if (!radioYoutubePlayer || typeof radioYoutubePlayer.seekTo !== "function") {
+    return false;
+  }
+
+  const nextTime = Math.max(0, Number(seconds) || 0);
+  try {
+    radioYoutubePlayer.seekTo(nextTime, true);
+    setRadioCurrentTime(nextTime);
+    return true;
+  } catch {
+    markRadioFallback();
+    return false;
+  }
+}
+
+function rewindRadioTrack() {
+  seekRadioTo(Math.max(0, getEstimatedRadioCurrentTime() - radioRewindSeconds));
+}
+
+function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
+  const normalizedIndex = Number.parseInt(String(trackIndex), 10);
+  if (!Number.isInteger(normalizedIndex) || normalizedIndex < 0 || !radioYoutubePlayer) {
+    return false;
+  }
+
+  if (fromPlaybackHistory) {
+    setRadioPlaybackHistoryCursorToTrack(normalizedIndex);
+    radioPendingPlaybackHistoryIndex = normalizedIndex;
+  }
+
+  try {
+    if (typeof radioYoutubePlayer.playVideoAt === "function") {
+      rememberRadioTrackIndex(normalizedIndex, {
+        updatePlaybackHistory: !fromPlaybackHistory
+      });
+      setRadioCurrentTime(0);
+      radioYoutubePlayer.playVideoAt(normalizedIndex);
+    } else {
+      return false;
+    }
+    radioState.isPlaying = true;
+    setRadioState("playing");
+    return true;
+  } catch {
+    markRadioFallback();
+    return false;
+  }
+}
+
+function previousRadioTrack() {
+  if (!radioYoutubePlayer) {
+    return;
+  }
+
+  if (getEstimatedRadioCurrentTime() > radioPreviousRestartThresholdSeconds || !radioState.canSkip) {
+    seekRadioTo(0);
+    return;
+  }
+
+  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
+  const previousHistoryIndex = getPreviousRadioTrackIndexFromHistory();
+  let previousTrackIndex = previousHistoryIndex;
+
+  if (previousTrackIndex === null && playlistTrackCount > 1 && radioCurrentTrackIndex >= 0) {
+    previousTrackIndex = (radioCurrentTrackIndex - 1 + playlistTrackCount) % playlistTrackCount;
+  }
+
+  if (previousTrackIndex !== null && playRadioTrackAt(previousTrackIndex, { fromPlaybackHistory: true })) {
+    syncRadioControls();
+    updateRadioMediaSessionPlaybackState();
+    return;
+  }
+
+  try {
+    if (typeof radioYoutubePlayer.previousVideo === "function") {
+      setRadioCurrentTime(0);
+      radioYoutubePlayer.previousVideo();
+      radioState.isPlaying = true;
+      setRadioState("playing");
+    }
+  } catch {
+    markRadioFallback();
+    return;
+  }
   syncRadioControls();
   updateRadioMediaSessionPlaybackState();
 }
@@ -1938,10 +2291,11 @@ function nextRadioTrack() {
 
   try {
     const nextTrackIndex = chooseSmartRadioTrackIndex();
-    if (nextTrackIndex !== null && typeof radioYoutubePlayer.playVideoAt === "function") {
-      rememberRadioTrackIndex(nextTrackIndex);
-      radioYoutubePlayer.playVideoAt(nextTrackIndex);
+    if (nextTrackIndex !== null && playRadioTrackAt(nextTrackIndex)) {
+      radioPendingPlaybackHistoryIndex = null;
     } else if (typeof radioYoutubePlayer.nextVideo === "function") {
+      setRadioCurrentTime(0);
+      radioPendingPlaybackHistoryIndex = null;
       radioYoutubePlayer.nextVideo();
     } else {
       return;
@@ -2018,11 +2372,15 @@ function initializeRadioStation() {
   syncRadioVisibilityUi();
   configureRadioMediaSession();
   window.addEventListener("message", handleRadioYoutubeMessage);
+  radioArtworkNode?.addEventListener("error", handleRadioArtworkError);
   radioToggleButton?.addEventListener("click", toggleRadioPlayback);
+  radioPreviousButton?.addEventListener("click", previousRadioTrack);
+  radioRewindButton?.addEventListener("click", rewindRadioTrack);
   radioNextButton?.addEventListener("click", nextRadioTrack);
   radioVolumeInput?.addEventListener("input", handleRadioVolumeInput);
   radioHideButton?.addEventListener("click", () => setRadioHidden(true));
   radioShowButton?.addEventListener("click", () => setRadioHidden(false));
+  setRadioDefaultArtwork();
   setRadioState("idle");
   syncRadioControls();
   warmRadioPlaylistPlayer();
