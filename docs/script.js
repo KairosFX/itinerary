@@ -142,14 +142,14 @@ const checklistPrintDurationDefinitions = {
   "day1-shinsaibashi": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
   "day1-dinner": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
   "day2-kaiyukan": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
-  "day2-transfer-to-kyoto": { minutes: [90, 90], label: { en: "1.5 hr", ja: "1.5時間" } },
-  "day2-hotel-check-in": { minutes: [45, 45], label: { en: "45 min", ja: "45分" } },
+  "day2-transfer-to-kyoto": { minutes: [75, 90], label: { en: "75–90 min", ja: "75～90分" } },
+  "day2-hotel-check-in": { minutes: [25, 35], label: { en: "25–35 min", ja: "25～35分" } },
   "day2-kiyomizu": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
-  "day2-ninenzaka": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
-  "day2-yasaka": { minutes: [30, 30], label: { en: "30 min", ja: "30分" } },
-  "day2-gion": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
+  "day2-ninenzaka": { minutes: [35, 45], label: { en: "35–45 min", ja: "35～45分" } },
+  "day2-yasaka": { minutes: [20, 25], label: { en: "20–25 min", ja: "20～25分" } },
+  "day2-gion": { minutes: [75, 120], label: { en: "1.25–2 hr", ja: "1.25～2時間" } },
   "day3-arashiyama": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
-  "day3-shinkansen-mishima": { minutes: [75, 105], label: { en: "75–105 min", ja: "75～105分" } },
+  "day3-shinkansen-mishima": { minutes: [110, 140], label: { en: "1.8–2.3 hr", ja: "1.8～2.3時間" } },
   "day3-transfer-fujikawaguchiko": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
   "day3-onsen-check-in": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
   "day4-chureito": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
@@ -209,14 +209,265 @@ const checklistPrintTimingTypeProfiles = {
     unpredictable: [10, 30]
   }
 };
+// Practical print timing matrix. These factors are modeled as weighted modifiers, not
+// automatic gaps; unknown live data stays neutral so the schedule stays tight.
+const checklistPrintTimingMatrix = {
+  factorGroups: {
+    dateCalendar: [
+      "exact date",
+      "day of week",
+      "weekend vs weekday",
+      "public holiday",
+      "school break season",
+      "tourist season",
+      "cherry blossom/autumn foliage season",
+      "local festivals/events",
+      "special events",
+      "seasonal darkness"
+    ],
+    openingClosing: [
+      "attraction opening time",
+      "attraction closing time",
+      "last entry time",
+      "shop closing times",
+      "restaurant opening times",
+      "restaurant last order time",
+      "hotel check-in time",
+      "hotel bag-drop policy",
+      "locker availability",
+      "timed tickets/reservations"
+    ],
+    weatherDaylight: [
+      "weather forecast if available",
+      "rain chance",
+      "temperature",
+      "wind",
+      "sunrise time",
+      "sunset time",
+      "daylight hours",
+      "golden hour",
+      "blue hour",
+      "night-viewing availability"
+    ],
+    transit: [
+      "door-to-door time",
+      "train ride time",
+      "direct train vs transfer",
+      "train frequency",
+      "platform walking time",
+      "station size/complexity",
+      "ticket gate time",
+      "IC card balance/top-up time",
+      "ticket purchase time",
+      "finding correct platform",
+      "missing a train",
+      "waiting for next train",
+      "rush hour",
+      "bus delay risk",
+      "taxi availability",
+      "taxi traffic",
+      "walking vs transit choice",
+      "Kyoto buses being crowded",
+      "Osaka/Kyoto station complexity"
+    ],
+    hotelLuggage: [
+      "hotel location",
+      "distance from hotel to station",
+      "distance from hotel to first attraction",
+      "hotel check-in line/wait",
+      "bag drop time",
+      "luggage size",
+      "whether bags are being carried",
+      "locker search time",
+      "time to freshen up",
+      "repacking time"
+    ],
+    walkingRoute: [
+      "walking distance",
+      "walking speed",
+      "uphill walking",
+      "Kiyomizu uphill approach",
+      "stairs",
+      "narrow streets",
+      "traffic lights",
+      "road crossings",
+      "crowded sidewalks",
+      "wrong station exit",
+      "navigation mistakes",
+      "route efficiency",
+      "backtracking",
+      "close-stop clustering"
+    ],
+    crowds: [
+      "tourist crowds",
+      "weekend crowding",
+      "tour groups",
+      "school groups",
+      "lineups for entry",
+      "lineups for food",
+      "lineups for photos",
+      "crowd choke points",
+      "Ninenzaka/Sannenzaka narrow streets",
+      "sunset photo crowds"
+    ],
+    foodRest: [
+      "breakfast plan",
+      "quick lunch vs sit-down lunch",
+      "dinner time",
+      "dinner reservation",
+      "food detours",
+      "convenience store stops",
+      "snack stops",
+      "water breaks",
+      "bathroom breaks",
+      "rest breaks"
+    ],
+    attractionDepth: [
+      "quick look vs full explore",
+      "main area vs side areas",
+      "gift shop time",
+      "souvenir shopping",
+      "photo priority",
+      "video priority",
+      "waiting for clean photos",
+      "personal interest level",
+      "Kaiyukan route length",
+      "temple/shrine depth",
+      "Yasaka Pagoda as a photo/walk stop",
+      "Gion as an evening/night stop"
+    ],
+    personalGroupTech: [
+      "energy level",
+      "sleep quality",
+      "jet lag",
+      "shoe comfort",
+      "physical fitness",
+      "group size",
+      "different group preferences",
+      "decision-making delays",
+      "phone battery",
+      "internet/eSIM reliability",
+      "translation app usage"
+    ],
+    riskBackup: [
+      "backup plan if late",
+      "must-do vs optional stops",
+      "what stop gets cut first if the schedule slips",
+      "train disruption",
+      "bad weather",
+      "full lockers",
+      "restaurant closed",
+      "sold-out tickets",
+      "overcrowding"
+    ]
+  },
+  defaults: {
+    unknownMultiplier: 1,
+    closeWalkCap: 15,
+    photoWalkCap: 20,
+    majorTransitCap: 45,
+    mealOnlyWhenCrossingWindow: true
+  },
+  publicHolidays: {
+    "2026-03-20": { en: "Vernal Equinox Day", ja: "春分の日" }
+  },
+  seasonWindows: [
+    { id: "spring-shoulder", start: "03-01", end: "03-18", crowdMultiplier: 1.02 },
+    { id: "cherry-blossom-watch", start: "03-19", end: "04-10", crowdMultiplier: 1.18 },
+    { id: "autumn-foliage", start: "11-10", end: "12-05", crowdMultiplier: 1.16 },
+    { id: "school-break", start: "03-20", end: "04-07", crowdMultiplier: 1.12 }
+  ],
+  daylightFallbackByMonth: {
+    3: { sunrise: "06:10", sunset: "18:00", goldenHourStart: "17:15", blueHourEnd: "18:35" },
+    4: { sunrise: "05:30", sunset: "18:25", goldenHourStart: "17:40", blueHourEnd: "19:00" },
+    11: { sunrise: "06:25", sunset: "16:55", goldenHourStart: "16:10", blueHourEnd: "17:30" }
+  }
+};
 const checklistPrintDayTimingProfiles = {
   "1": { intensity: "light", multiplier: 0.85 },
-  "2": { intensity: "packed", multiplier: 1.2 },
-  "3": { intensity: "packed", multiplier: 1.25 },
-  "4": { intensity: "medium", multiplier: 1.05 },
+  "2": { intensity: "packed", multiplier: 1.03, city: "osaka-kyoto", fatigue: "medium" },
+  "3": { intensity: "packed", multiplier: 1.08, city: "kyoto-fuji", fatigue: "medium" },
+  "4": { intensity: "medium", multiplier: 1.02 },
   "5": { intensity: "light", multiplier: 0.9 },
   "6": { intensity: "medium", multiplier: 1 },
   "7": { intensity: "medium", multiplier: 1.05 }
+};
+const checklistPrintConnectionOverrides = {
+  "day2-kaiyukan->day2-transfer-to-kyoto": {
+    mode: "majorTransitSetup",
+    minutes: [10, 15],
+    typical: 15
+  },
+  "day2-transfer-to-kyoto->day2-hotel-check-in": {
+    mode: "stationHotelHandoff",
+    minutes: [5, 10],
+    typical: 10
+  },
+  "day2-hotel-check-in->day2-kiyomizu": {
+    mode: "kyotoHillsApproach",
+    minutes: [25, 35],
+    typical: 30
+  },
+  "day2-kiyomizu->day2-ninenzaka": {
+    mode: "closeWalkPhoto",
+    minutes: [8, 12],
+    typical: 10
+  },
+  "day2-ninenzaka->day2-yasaka": {
+    mode: "veryCloseWalkPhoto",
+    minutes: [5, 8],
+    typical: 5
+  },
+  "day2-yasaka->day2-gion": {
+    mode: "closeEveningWalk",
+    minutes: [10, 15],
+    typical: 10
+  },
+  "day3-arashiyama->day3-shinkansen-mishima": {
+    mode: "kyotoStationShinkansenHandoff",
+    minutes: [45, 60],
+    typical: 50
+  },
+  "day3-shinkansen-mishima->day3-transfer-fujikawaguchiko": {
+    mode: "mishimaBusHandoff",
+    minutes: [20, 30],
+    typical: 25
+  },
+  "day3-transfer-fujikawaguchiko->day3-onsen-check-in": {
+    mode: "arrivalHotelHandoff",
+    minutes: [10, 20],
+    typical: 15
+  }
+};
+const checklistPrintLateCutGuidance = {
+  "1": {
+    en: "If late, shorten Shinsaibashi browsing before dinner.",
+    ja: "遅れたら、夕食前の心斎橋散策を短くします。"
+  },
+  "2": {
+    en: "If late, shorten Ninenzaka/Gion photo time before cutting Kiyomizu or Gion.",
+    ja: "遅れたら、清水寺や祇園を切る前に二年坂・祇園の写真時間を短くします。"
+  },
+  "3": {
+    en: "If late, shorten Arashiyama before risking the Kyoto → Mishima handoff.",
+    ja: "遅れたら、京都→三島の移動を崩す前に嵐山を短くします。"
+  },
+  "4": {
+    en: "If late, cut extra lake time before the Tokyo transfer.",
+    ja: "遅れたら、東京移動前に湖畔の追加時間を短くします。"
+  },
+  "5": {
+    en: "If late, shorten the food walk before Shibuya Sky.",
+    ja: "遅れたら、渋谷スカイ前にフードウォークを短くします。"
+  },
+  "6": {
+    en: "If late, shorten Solamachi before cutting Skytree or Akihabara.",
+    ja: "遅れたら、スカイツリーや秋葉原を切る前にソラマチを短くします。"
+  },
+  "7": {
+    en: "If late, cut Shinjuku first and protect bag pickup plus airport time.",
+    ja: "遅れたら新宿を先に削り、荷物回収と空港移動を優先します。"
+  }
 };
 const checklistPrintTimingDefinitions = {
   "day1-nightlife": {
@@ -243,7 +494,9 @@ const checklistPrintTimingDefinitions = {
     type: "aquarium-museum",
     anchor: "major",
     preferred: "morning",
-    crowd: [25, 50]
+    earliestStart: "10:00",
+    openingSource: "fallback-kaiyukan-opening",
+    crowd: [20, 40]
   },
   "day2-transfer-to-kyoto": {
     type: "hotel-transit-admin",
@@ -263,30 +516,41 @@ const checklistPrintTimingDefinitions = {
   "day2-kiyomizu": {
     type: "temple-shrine",
     anchor: "major",
-    preferred: "afternoon",
+    preferred: "pre-evening",
+    latestStart: "16:45",
+    closingFallback: "18:00",
+    nightViewingVerified: false,
     crowd: [20, 45],
-    weather: [10, 25]
+    weather: [5, 15],
+    walkingFriction: "uphill"
   },
   "day2-ninenzaka": {
     type: "shopping-street-food",
     anchor: "standard",
-    preferred: "afternoon",
-    walk: [5, 15],
-    crowd: [15, 35]
+    preferred: "evening-walk",
+    closeStopCluster: "kiyomizu-gion",
+    walk: [5, 10],
+    crowd: [10, 25],
+    shopsMayCloseLate: true
   },
   "day2-yasaka": {
-    type: "temple-shrine",
+    type: "viewpoint-photo",
     anchor: "quick",
-    preferred: "evening",
-    walk: [5, 15],
-    crowd: [10, 25]
+    preferred: "evening-photo",
+    closeStopCluster: "kiyomizu-gion",
+    walk: [5, 8],
+    crowd: [8, 20],
+    nightPhotoFriendly: true
   },
   "day2-gion": {
     type: "shopping-street-food",
     anchor: "major",
     preferred: "evening",
-    walk: [5, 15],
-    crowd: [20, 45]
+    mealRole: "dinner",
+    closeStopCluster: "kiyomizu-gion",
+    walk: [8, 15],
+    crowd: [20, 40],
+    restaurantWindow: ["17:30", "21:00"]
   },
   "day3-arashiyama": {
     type: "temple-shrine",
@@ -930,8 +1194,8 @@ function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
       ja: "日本ルート全体"
     },
     summary: {
-      en: "View the full route with the Tokyo → Mishima shinkansen handoff, Mt. Fuji, and the Tokyo finish.",
-      ja: "東京から三島への新幹線ハンドオフ、富士山エリア、東京での締めまで全体ルートを確認します。"
+      en: "View the full route with the Kyoto → Mishima shinkansen handoff, Mt. Fuji, and the Tokyo finish.",
+      ja: "京都から三島への新幹線ハンドオフ、富士山エリア、東京での締めまで全体ルートを確認します。"
     },
     badges: [
       { en: "Overview", ja: "全体" },
@@ -4383,6 +4647,117 @@ function formatChecklistPrintClockMinutes(totalMinutes = 0) {
   return `${hour12}:${String(minutes).padStart(2, "0")} ${suffix}`;
 }
 
+function getChecklistPrintDurationTypicalMinutes(durationMinutes, timingDefinition = {}) {
+  const min = Number(durationMinutes?.min) || 0;
+  const max = Math.max(min, Number(durationMinutes?.max) || min);
+  const anchor = timingDefinition.anchor || "standard";
+  const weight = anchor === "quick" ? 0.45 : anchor === "major" ? 0.62 : 0.55;
+  return roundChecklistPrintMinutes(min + (max - min) * weight, 5, "nearest");
+}
+
+function getMonthDayKey(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return `${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function isMonthDayInRange(monthDay, start, end) {
+  if (!monthDay || !start || !end) {
+    return false;
+  }
+
+  return start <= end
+    ? monthDay >= start && monthDay <= end
+    : monthDay >= start || monthDay <= end;
+}
+
+function getChecklistPrintMatrixContext(day = {}) {
+  const date = parseDateInputValue(day.dateInput || "");
+  const dayOfWeek = date ? date.getDay() : null;
+  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+  const monthDay = getMonthDayKey(date);
+  const month = date ? date.getMonth() + 1 : null;
+  const seasonMatches = checklistPrintTimingMatrix.seasonWindows.filter((windowConfig) =>
+    isMonthDayInRange(monthDay, windowConfig.start, windowConfig.end)
+  );
+  const seasonCrowdMultiplier = seasonMatches.reduce(
+    (value, windowConfig) => Math.max(value, Number(windowConfig.crowdMultiplier) || 1),
+    1
+  );
+  const publicHoliday = Boolean(
+    day.dateInput && checklistPrintTimingMatrix.publicHolidays[day.dateInput]
+  );
+  const weekendOrHolidayMultiplier = isWeekend || publicHoliday ? 1.1 : 1;
+  const daylightFallback =
+    checklistPrintTimingMatrix.daylightFallbackByMonth[month] ||
+    checklistPrintTimingMatrix.daylightFallbackByMonth[3];
+
+  return {
+    exactDate: day.dateInput || "",
+    dayOfWeek,
+    isWeekend,
+    publicHoliday,
+    seasonMatches,
+    daylightFallback,
+    crowdMultiplier: seasonCrowdMultiplier * weekendOrHolidayMultiplier,
+    transitMultiplier: weekendOrHolidayMultiplier,
+    walkingMultiplier: seasonCrowdMultiplier > 1.1 ? 1.08 : 1,
+    unknownMultiplier: checklistPrintTimingMatrix.defaults.unknownMultiplier
+  };
+}
+
+function getChecklistPrintConnectionKey(previousItem, nextItem) {
+  return `${previousItem?.id || ""}->${nextItem?.id || ""}`;
+}
+
+function getChecklistPrintOverrideBuffer(previousItem, nextItem, day) {
+  const override = checklistPrintConnectionOverrides[getChecklistPrintConnectionKey(previousItem, nextItem)];
+  if (!override) {
+    return null;
+  }
+
+  const context = getChecklistPrintMatrixContext(day);
+  const [baseMin, baseMax] = normalizeChecklistPrintTimingRange(override.minutes, [0, 0]);
+  const isCloseWalk = /close|walk/i.test(override.mode || "");
+  const multiplier = isCloseWalk ? context.walkingMultiplier : context.transitMultiplier;
+  const cap = isCloseWalk
+    ? checklistPrintTimingMatrix.defaults.photoWalkCap
+    : checklistPrintTimingMatrix.defaults.majorTransitCap + 15;
+  const min = Math.min(roundChecklistPrintMinutes(baseMin * multiplier, 5, "nearest"), cap);
+  const max = Math.max(
+    min,
+    Math.min(roundChecklistPrintMinutes(baseMax * multiplier, 5, "nearest"), cap)
+  );
+  const typical = Math.min(
+    cap,
+    roundChecklistPrintMinutes((Number(override.typical) || min + (max - min) * 0.55) * multiplier, 5, "nearest")
+  );
+
+  return { min, max, typical };
+}
+
+function getChecklistPrintEarliestStart(item, day, cursor) {
+  const timingDefinition = getChecklistPrintTimingDefinition(item.id);
+  const earliestStart = parseChecklistPrintClockMinutes(timingDefinition.earliestStart);
+
+  if (Number.isFinite(earliestStart) && cursor < earliestStart) {
+    return earliestStart;
+  }
+
+  return cursor;
+}
+
+function getChecklistPrintLateCutGuidance(dayId = "") {
+  const guidance = checklistPrintLateCutGuidance[String(dayId)];
+  if (!guidance) {
+    return "";
+  }
+
+  return getLocalizedText(guidance);
+}
+
 function normalizeChecklistPrintTimingRange(value, fallback = [0, 0]) {
   const source = Array.isArray(value) ? value : fallback;
   const rawMin = Number(source[0]);
@@ -4459,6 +4834,7 @@ function getChecklistPrintMealBreakRange(previousTiming, nextTiming, earliestEnd
   const isFoodStop =
     previousTiming?.type === "shopping-street-food" ||
     nextTiming?.type === "shopping-street-food";
+  const mealIncludedInStop = Boolean(previousTiming?.mealRole || nextTiming?.mealRole);
   const lunchWindowStart = 11 * 60 + 20;
   const lunchWindowEnd = 13 * 60 + 30;
   const dinnerWindowStart = 17 * 60 + 20;
@@ -4466,11 +4842,15 @@ function getChecklistPrintMealBreakRange(previousTiming, nextTiming, earliestEnd
   const crossesLunch = earliestEnd < lunchWindowEnd && latestEnd > lunchWindowStart;
   const crossesDinner = earliestEnd < dinnerWindowEnd && latestEnd > dinnerWindowStart;
 
-  if (!crossesLunch && !crossesDinner) {
+  if ((!crossesLunch && !crossesDinner) || mealIncludedInStop) {
     return [0, 0];
   }
 
-  return isFoodStop ? [10, 30] : [30, 75];
+  if (isFoodStop) {
+    return [0, 15];
+  }
+
+  return crossesLunch ? [20, 40] : [0, 25];
 }
 
 function getChecklistPrintBufferBetween(previousItem, nextItem, day, earliestEnd, latestEnd) {
@@ -4478,21 +4858,42 @@ function getChecklistPrintBufferBetween(previousItem, nextItem, day, earliestEnd
     return { min: 0, max: 0, typical: 0 };
   }
 
+  const overrideBuffer = getChecklistPrintOverrideBuffer(previousItem, nextItem, day);
+  if (overrideBuffer) {
+    return overrideBuffer;
+  }
+
   const dayProfile = getChecklistPrintDayTimingProfile(day.id);
+  const matrixContext = getChecklistPrintMatrixContext(day);
   const previousTiming = getChecklistPrintTimingDefinition(previousItem.id);
   const nextTiming = getChecklistPrintTimingDefinition(nextItem.id);
   const nextAnchor = nextTiming.anchor || "standard";
-  const transitFactor = nextTiming.type === "hotel-transit-admin" ? 0.35 : 0.7;
-  const transit = scaleChecklistPrintTimingRange(nextTiming.transit, dayProfile, nextAnchor, transitFactor);
-  const walk = scaleChecklistPrintTimingRange(nextTiming.walk, dayProfile, nextAnchor, 0.55);
-  const crowd = scaleChecklistPrintTimingRange(nextTiming.crowd, dayProfile, nextAnchor, 0.35);
-  const rest = scaleChecklistPrintTimingRange(previousTiming.rest, dayProfile, previousTiming.anchor, 0.5);
-  const weather = scaleChecklistPrintTimingRange(nextTiming.weather, dayProfile, nextAnchor, 0.35);
+  const transitFactor = nextTiming.type === "hotel-transit-admin" ? 0.3 : 0.38;
+  const transit = scaleChecklistPrintTimingRange(
+    nextTiming.transit,
+    dayProfile,
+    nextAnchor,
+    transitFactor * matrixContext.transitMultiplier
+  );
+  const walk = scaleChecklistPrintTimingRange(
+    nextTiming.walk,
+    dayProfile,
+    nextAnchor,
+    0.4 * matrixContext.walkingMultiplier
+  );
+  const crowd = scaleChecklistPrintTimingRange(
+    nextTiming.crowd,
+    dayProfile,
+    nextAnchor,
+    0.22 * matrixContext.crowdMultiplier
+  );
+  const rest = scaleChecklistPrintTimingRange(previousTiming.rest, dayProfile, previousTiming.anchor, 0.28);
+  const weather = scaleChecklistPrintTimingRange(nextTiming.weather, dayProfile, nextAnchor, 0.18);
   const unpredictable = scaleChecklistPrintTimingRange(
     nextTiming.unpredictable,
     dayProfile,
     nextAnchor,
-    dayProfile.intensity === "packed" ? 0.75 : 0.55
+    dayProfile.intensity === "packed" ? 0.32 : 0.26
   );
   const meal = scaleChecklistPrintTimingRange(
     getChecklistPrintMealBreakRange(previousTiming, nextTiming, earliestEnd, latestEnd),
@@ -4518,11 +4919,11 @@ function getChecklistPrintBufferBetween(previousItem, nextItem, day, earliestEnd
     Math.round(unpredictable[1] * 0.42) +
     meal[1];
   const baseCap =
-    dayProfile.intensity === "packed" ? 85 : dayProfile.intensity === "light" ? 55 : 70;
-  const anchorCap = nextTiming.anchor === "major" ? 15 : nextTiming.anchor === "quick" ? -10 : 0;
+    dayProfile.intensity === "packed" ? 50 : dayProfile.intensity === "light" ? 35 : 42;
+  const anchorCap = nextTiming.anchor === "major" ? 10 : nextTiming.anchor === "quick" ? -12 : 0;
   const transitCap = nextTiming.type === "hotel-transit-admin" ? 15 : 0;
-  const mealCap = meal[1] > 0 ? 30 : 0;
-  const cap = Math.max(baseCap + anchorCap + transitCap + mealCap, transit[1] + meal[1] + 15);
+  const mealCap = meal[1] > 0 ? 20 : 0;
+  const cap = Math.max(baseCap + anchorCap + transitCap + mealCap, transit[1] + meal[1] + 10);
   const min = Math.min(Math.max(5, roundChecklistPrintMinutes(minRaw, 5, "nearest")), cap);
   const max = Math.max(min, Math.min(roundChecklistPrintMinutes(maxRaw, 5, "nearest"), cap));
   const typical = roundChecklistPrintMinutes(min + (max - min) * 0.58, 15, "nearest");
@@ -4548,13 +4949,15 @@ function withChecklistPrintSchedules(days = []) {
     let cursor = selectedStartMinutes;
     const items = day.items.map((item, itemIndex) => {
       const durationMinutes = item.durationMinutes || getDefaultChecklistPrintDurationMinutes(item.id);
+      const timingDefinition = getChecklistPrintTimingDefinition(item.id);
+      const scheduledDuration = getChecklistPrintDurationTypicalMinutes(durationMinutes, timingDefinition);
       const nextItem = day.items[itemIndex + 1];
-      const startMinutes = cursor;
-      const endMinutes = startMinutes + durationMinutes.max;
+      const startMinutes = getChecklistPrintEarliestStart(item, day, cursor);
+      const endMinutes = startMinutes + scheduledDuration;
       const schedule = {
         window: buildChecklistPrintTimeWindow(
-          roundChecklistPrintMinutes(startMinutes, 15, "floor"),
-          roundChecklistPrintMinutes(endMinutes, 15, "ceil")
+          roundChecklistPrintMinutes(startMinutes, 5, "floor"),
+          roundChecklistPrintMinutes(endMinutes, 5, "ceil")
         )
       };
 
@@ -4799,10 +5202,16 @@ function buildChecklistPrintMarkup(days = getChecklistPrintDraft()) {
         return "";
       }
 
+      const lateCutGuidance = getChecklistPrintLateCutGuidance(day.id);
+      const lateCutMarkup = lateCutGuidance
+        ? `<p class="checklist-print-output__late-cut">${escapeHtml(lateCutGuidance)}</p>`
+        : "";
+
       return `
         <section class="checklist-print-output__day checklist-print-sheet__day">
           <h2><span>${escapeHtml(headingMeta)}</span>${dayTitle}</h2>
           <ul>${itemMarkup}</ul>
+          ${lateCutMarkup}
         </section>
       `;
     })

@@ -553,6 +553,13 @@ html.checklist-print-open body {
   font-weight: 700;
 }
 
+.checklist-print-output__late-cut {
+  margin: 0.22rem 0 0;
+  color: #444;
+  font-size: 0.84rem;
+  font-style: italic;
+}
+
 .checklist-print-modal__footer {
   justify-content: flex-end;
   border-top: 1px solid rgba(63, 47, 40, 0.1);
@@ -14990,6 +14997,13 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
 
   .checklist-print-output__time {
     font-weight: 700;
+  }
+
+  .checklist-print-output__late-cut {
+    margin: 0.18rem 0 0;
+    color: #333 !important;
+    font-size: 9.5pt;
+    font-style: italic;
   }
 }
 

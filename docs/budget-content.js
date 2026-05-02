@@ -739,8 +739,8 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "3日目・嵐山から富士"
       },
       "subtitle": {
-        "en": "Arashiyama, Tokyo → Mishima by Shinkansen, then the Fuji transfer night",
-        "ja": "嵐山、東京から三島への新幹線、そして富士への移動で締める日"
+        "en": "Arashiyama, Kyoto → Mishima by Shinkansen, then the Fuji transfer night",
+        "ja": "嵐山、京都から三島への新幹線、そして富士への移動で締める日"
       },
       "items": [
         {
@@ -758,8 +758,8 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         },
         {
           "label": {
-            "en": "Shinkansen: Tokyo → Mishima",
-            "ja": "新幹線：東京から三島"
+            "en": "Shinkansen: Kyoto → Mishima",
+            "ja": "新幹線：京都から三島"
           },
           "category": "intercityTransit",
           "bucket": "booked",

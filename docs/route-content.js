@@ -16,24 +16,24 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       day: 2,
       title: { en: "Kaiyukan and Kyoto East", ja: "海遊館と京都東側" },
       note: {
-        en: "Start at Kaiyukan, transfer to Kyoto, and check into the hotel before the east-side walk. The Kyoto stretch is Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion in that order.",
-        ja: "海遊館から始め、京都へ移動してホテルにチェックイン。その後は清水寺、二年坂、八坂の塔、祇園の順で東側を歩く。"
+        en: "Start at Kaiyukan, transfer to Kyoto, and check into the hotel before the east-side walk. From Kiyomizu-dera, keep it direct on foot: Ninenzaka, Yasaka Pagoda, then Gion for the evening.",
+        ja: "海遊館から始め、京都へ移動してホテルにチェックイン。その後は清水寺から二年坂、八坂の塔、祇園まで、東側をそのまま歩いてつなぐ。"
       },
       summary: {
-        en: "Kaiyukan first, then Kyoto transfer, hotel check-in, and the Kiyomizu-dera to Gion walk.",
-        ja: "海遊館、京都移動、ホテルチェックイン、清水寺から祇園への東側歩き。"
+        en: "Kaiyukan first, then Kyoto transfer, hotel check-in, and the direct Kiyomizu-dera to Gion walking flow.",
+        ja: "海遊館、京都移動、ホテルチェックイン、清水寺から祇園への徒歩ルート。"
       }
     },
     {
       day: 3,
       title: { en: "Arashiyama to Fuji", ja: "嵐山から富士エリアへ" },
       note: {
-        en: "This is the long movement day. Start with Arashiyama, then keep the rail plan simple: Tokyo → Mishima by shinkansen, Fujikawaguchiko transfer, and the onsen check-in.",
-        ja: "この日は移動が長め。嵐山から始め、その後の鉄道はシンプルに東京から三島へ新幹線。富士河口湖への乗り継ぎ、最後に温泉チェックインまで進む。"
+        en: "This is the long movement day. Start with Arashiyama, then keep the rail plan simple: Kyoto → Mishima by shinkansen, Fujikawaguchiko transfer, and the onsen check-in.",
+        ja: "この日は移動が長め。嵐山から始め、その後の鉄道はシンプルに京都から三島へ新幹線。富士河口湖への乗り継ぎ、最後に温泉チェックインまで進む。"
       },
       summary: {
-        en: "Arashiyama, Tokyo → Mishima by shinkansen, Fujikawaguchiko transfer, then the onsen reset.",
-        ja: "嵐山、東京から三島への新幹線、富士河口湖への移動、温泉宿でリセット。"
+        en: "Arashiyama, Kyoto → Mishima by shinkansen, Fujikawaguchiko transfer, then the onsen reset.",
+        ja: "嵐山、京都から三島への新幹線、富士河口湖への移動、温泉宿でリセット。"
       }
     },
     {
@@ -107,11 +107,11 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       [135.768966, 35.012023],
       [135.768191, 35.012098]
     ],
-    tokyoMishima: [
-      [139.767125, 35.681236],
-      [139.73876, 35.628471],
-      [139.617585, 35.466188],
-      [139.155861, 35.256447],
+    kyotoMishima: [
+      [135.768191, 35.012098],
+      [136.881537, 35.170915],
+      [137.734703, 34.704978],
+      [138.388902, 34.97171],
       [138.91012, 35.126899]
     ],
     mishimaKawaguchiko: [
@@ -189,11 +189,11 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       coordinates: routeSegmentCoordinateDefinitions.osakaKyoto
     },
     {
-      id: "tokyo-mishima-shinkansen",
-      title: { en: "Tokyo → Mishima", ja: "東京 → 三島" },
+      id: "kyoto-mishima-shinkansen",
+      title: { en: "Kyoto → Mishima", ja: "京都 → 三島" },
       summary: {
-        en: "This is the clean shinkansen handoff from Tokyo Station into the Mt. Fuji side.",
-        ja: "東京駅から富士側へ入るための、分かりやすい新幹線の受け渡しです。"
+        en: "This is the clean shinkansen handoff from Kyoto Station into the Mt. Fuji side.",
+        ja: "京都駅から富士側へ入るための、分かりやすい新幹線の受け渡しです。"
       },
       badges: [
         { en: "Day 3", ja: "3日目" },
@@ -212,12 +212,12 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       dayLinks: [{ day: 3 }],
       transitActions: [
         {
-          id: "tokyo-mishima-shinkansen",
+          id: "kyoto-mishima-shinkansen",
           label: { en: "Shinkansen detail", ja: "新幹線詳細" }
         }
       ],
-      stopIds: ["tokyo", "fuji-gateway"],
-      coordinates: routeSegmentCoordinateDefinitions.tokyoMishima
+      stopIds: ["kyoto", "fuji-gateway"],
+      coordinates: routeSegmentCoordinateDefinitions.kyotoMishima
     },
     {
       id: "fuji-gateway-kawaguchiko",
@@ -367,7 +367,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
           label: { en: "Fuji access detail", ja: "富士アクセス詳細" }
         }
       ],
-      segmentIds: ["tokyo-mishima-shinkansen", "fuji-gateway-kawaguchiko"],
+      segmentIds: ["kyoto-mishima-shinkansen", "fuji-gateway-kawaguchiko"],
       lngLat: [138.9208, 35.1265],
       labelPosition: "nw"
     },
@@ -408,26 +408,26 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "tokyo",
       title: { en: "Tokyo", ja: "東京" },
       summary: {
-        en: "Tokyo now anchors the Mishima shinkansen handoff, the Shibuya arrival, one fuller east-side sightseeing day, and the departure-day wrap-up.",
-        ja: "東京は、三島への新幹線ハンドオフ、渋谷到着、東側の観光本番日、そして帰国日の調整までをまとめています。"
+        en: "Tokyo now anchors the Shibuya arrival, one fuller east-side sightseeing day, and the departure-day wrap-up after the Fuji block.",
+        ja: "東京は、富士エリア後の渋谷到着、東側の観光本番日、そして帰国日の調整までをまとめています。"
       },
       badges: [
-        { en: "Days 3-7", ja: "3日目-7日目" },
+        { en: "Days 4-7", ja: "4日目-7日目" },
         { en: "Main-route finish", ja: "本編の締め" }
       ],
       notes: [
         {
-          en: "Use Tokyo Station for the Day 3 shinkansen to Mishima, then come back into Shibuya on Day 4 for the hotel check-in.",
-          ja: "3日目は東京駅から三島へ新幹線で入り、4日目は渋谷へ戻ってホテルチェックインまで進めます。"
+          en: "Use Day 4 to come into Shibuya from the Fuji side, then keep the Tokyo hotel check-in practical.",
+          ja: "4日目は富士側から渋谷へ入り、そのまま東京ホテルのチェックインを実用的に済ませます。"
         },
         {
           en: "Day 6 carries the Skytree, Solamachi, and Akihabara cluster, while Day 7 keeps the Imperial Palace, a short Shinjuku stop, bag pickup or handoff, and the airport transfer tidy.",
           ja: "6日目にスカイツリー、ソラマチ、秋葉原をまとめ、7日目は皇居、新宿、荷物、空港移動を軽めに組んでいます。"
         }
       ],
-      dayLinks: [{ day: 3 }, { day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }],
+      dayLinks: [{ day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }],
       primaryDay: 4,
-      segmentIds: ["tokyo-mishima-shinkansen", "fuji-tokyo"],
+      segmentIds: ["fuji-tokyo"],
       lngLat: [139.7017, 35.658],
       labelPosition: "ne"
     }
@@ -454,15 +454,15 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 3,
-      stopIds: ["kyoto", "tokyo", "fuji-gateway", "fuji"],
-      segmentIds: ["tokyo-mishima-shinkansen", "fuji-gateway-kawaguchiko"],
+      stopIds: ["kyoto", "fuji-gateway", "fuji"],
+      segmentIds: ["kyoto-mishima-shinkansen", "fuji-gateway-kawaguchiko"],
       badges: [
         { en: "Arashiyama + transfer", ja: "嵐山＋移動" },
         { en: "Fuji transfer night", ja: "富士への移動日" }
       ],
       transitActions: [
         {
-          id: "tokyo-mishima-shinkansen",
+          id: "kyoto-mishima-shinkansen",
           label: { en: "Shinkansen detail", ja: "新幹線詳細" }
         },
         {
@@ -530,7 +530,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     ],
     3: [
       { en: "Arashiyama", ja: "嵐山" },
-      { en: "Tokyo → Mishima", ja: "東京 → 三島" },
+      { en: "Kyoto → Mishima", ja: "京都 → 三島" },
       { en: "Kawaguchiko", ja: "河口湖" }
     ],
     4: [

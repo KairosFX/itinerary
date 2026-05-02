@@ -114,8 +114,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
       },
       "details": {
-        "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama -> Osaka flow.",
-        "ja": "Booking.com の京都検索結果で、四条・烏丸・五条周辺の動線に合う宿を比較します。2日目の東山回遊と3日目の嵐山 -> 大阪の流れをどちらも進めやすくするためです。"
+        "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Kyoto → Mishima handoff.",
+        "ja": "Booking.com の京都検索結果で、四条・烏丸・五条周辺の動線に合う宿を比較します。2日目の東山回遊と3日目の嵐山スタート、京都 → 三島の受け渡しをどちらも進めやすくするためです。"
       },
       "links": [
         {
@@ -177,8 +177,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "2日目の大阪から京都への受け渡しを保存しておくと、駅で迷わず京都東側の街歩きを素直に始められます。"
       },
       "details": {
-        "en": "Treat this as a light Kansai city-to-city move, not a luggage-heavy transfer day. Reach Kyoto Station or the Shijo / Karasuma side first, then push east toward Kiyomizu-dera, Gion, and the rest of the Higashiyama cluster. Keep the Trip.com Osaka Station -> Kyoto Station transport page handy once your Osaka starting point for the morning is fixed.",
-        "ja": "この移動は、荷物中心の日ではなく、関西内の軽い都市間移動として扱います。まずは京都駅か四条烏丸側へ入り、そのあと清水寺、祇園、東山エリアへ東へ寄せていく形にします。朝の大阪側の出発地点が固まったら、Trip.com の大阪駅 -> 京都駅 交通ページをすぐ開けるようにしておきます。"
+        "en": "Treat this as a light Kansai city-to-city move, not a luggage-heavy transfer day. Reach Kyoto Station or the Shijo / Karasuma side first, then keep the east-side route direct on foot: Kiyomizu-dera -> Ninenzaka -> Yasaka Pagoda -> Gion. Keep the Trip.com Osaka Station -> Kyoto Station transport page handy once your Osaka starting point for the morning is fixed.",
+        "ja": "この移動は、荷物中心の日ではなく、関西内の軽い都市間移動として扱います。まずは京都駅か四条烏丸側へ入り、そのあとは清水寺 -> 二年坂 -> 八坂の塔 -> 祇園を徒歩で素直につなぎます。朝の大阪側の出発地点が固まったら、Trip.com の大阪駅 -> 京都駅 交通ページをすぐ開けるようにしておきます。"
       },
       "links": [
         {
@@ -338,8 +338,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ]
     },
     {
-      "id": "tokyo-mishima-shinkansen",
-      "transitDetailId": "tokyo-mishima-shinkansen",
+      "id": "kyoto-mishima-shinkansen",
+      "transitDetailId": "kyoto-mishima-shinkansen",
       "group": "transit",
       "filters": [
         "to-book",
@@ -375,16 +375,16 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "予約済み"
       },
       "title": {
-        "en": "Tokyo → Mishima Shinkansen",
-        "ja": "東京 → 三島 新幹線"
+        "en": "Kyoto → Mishima Shinkansen",
+        "ja": "京都 → 三島 新幹線"
       },
       "summary": {
         "en": "Treat this as the fixed intercity booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
         "ja": "3日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
       },
       "details": {
-        "en": "Use SmartEX once Day 3 timing is fixed. Keep this card focused on Tokyo → Mishima by shinkansen, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
-        "ja": "3日目の時刻が固まったら SmartEX を使います。このカードは東京 → 三島の新幹線に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
+        "en": "Use SmartEX once Day 3 timing is fixed. Keep this card focused on Kyoto → Mishima by shinkansen, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
+        "ja": "3日目の時刻が固まったら SmartEX を使います。このカードは京都 → 三島の新幹線に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
       },
       "links": [
         {
@@ -394,8 +394,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
             "ja": "SmartEX公式予約"
           },
           "note": {
-            "en": "Official JR Central SmartEX route and booking entry for the Tokyo → Mishima shinkansen leg.",
-            "ja": "東京 → 三島の新幹線区間に使う JR東海 SmartEX の公式予約導線です。"
+            "en": "Official JR Central SmartEX route and booking entry for the Kyoto → Mishima shinkansen leg.",
+            "ja": "京都 → 三島の新幹線区間に使う JR東海 SmartEX の公式予約導線です。"
           },
           "price": {
             "en": "Approx. JPY 4,600 / person",
@@ -774,6 +774,10 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         {
           "en": "Avoid over-optimizing the perfect rail combo; the cleanest transfer matters more than shaving a small amount of time.",
           "ja": "細かい最短乗り継ぎにこだわりすぎず、数分を削るより分かりやすい移動を優先します。"
+        },
+        {
+          "en": "Once you reach Kiyomizu-dera, keep the rest of the Kyoto East block as a direct walk through Ninenzaka, Yasaka Pagoda, and Gion.",
+          "ja": "清水寺に着いたあとは、二年坂、八坂の塔、祇園まで京都東側をそのまま徒歩でつなぎます。"
         }
       ],
       "prepReminders": [
@@ -805,34 +809,34 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       }
     },
     {
-      "id": "tokyo-mishima-shinkansen",
+      "id": "kyoto-mishima-shinkansen",
       "tag": {
         "en": "Day 3 transfer",
         "ja": "3日目の移動"
       },
       "title": {
-        "en": "Tokyo → Mishima shinkansen handoff",
-        "ja": "東京 → 三島 新幹線ハンドオフ"
+        "en": "Kyoto → Mishima shinkansen handoff",
+        "ja": "京都 → 三島 新幹線ハンドオフ"
       },
       "summary": {
-        "en": "This is the fixed rail leg that carries the route from Tokyo Station into the Mt. Fuji side.",
-        "ja": "東京駅から富士側へ入るための、固定の新幹線区間です。"
+        "en": "This is the fixed rail leg that carries the route from Kyoto Station into the Mt. Fuji side.",
+        "ja": "京都駅から富士側へ入るための、固定の新幹線区間です。"
       },
       "segment": {
-        "en": "Tokyo Station → Mishima Station",
-        "ja": "東京駅 → 三島駅"
+        "en": "Kyoto Station → Mishima Station",
+        "ja": "京都駅 → 三島駅"
       },
       "from": {
-        "en": "Tokyo Station",
-        "ja": "東京駅"
+        "en": "Kyoto Station",
+        "ja": "京都駅"
       },
       "to": {
         "en": "Mishima Station",
         "ja": "三島駅"
       },
       "transport": {
-        "en": "Tokaido Shinkansen via SmartEX or JR Central's online flow. Plan it as Tokyo → Mishima by shinkansen, then keep the Mishima-to-lake transfer saved separately.",
-        "ja": "SmartEX または JR東海のオンライン導線で押さえる東海道新幹線です。東京 → 三島の新幹線として扱い、三島から湖側への移動は別に保存しておきます。"
+        "en": "Tokaido Shinkansen via SmartEX or JR Central's online flow. Plan it as Kyoto → Mishima by shinkansen, then keep the Mishima-to-lake transfer saved separately.",
+        "ja": "SmartEX または JR東海のオンライン導線で押さえる東海道新幹線です。京都 → 三島の新幹線として扱い、三島から湖側への移動は別に保存しておきます。"
       },
       "why": {
         "en": "It keeps Day 3 as one clear eastbound move, shortens the long leg, and leaves the local Kawaguchiko access decisions for after the rail arrival.",
@@ -844,8 +848,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
           "ja": "接続を詰めすぎず、少し余裕が残る便を基準にします。"
         },
         {
-          "en": "Lock the seat in SmartEX once the Tokyo Station departure window is fixed, and keep Mishima as the handoff point.",
-          "ja": "東京駅の出発時間帯が固まったら SmartEX で座席を押さえ、受け渡し先は三島で固定しておきます。"
+          "en": "Lock the seat in SmartEX once the Kyoto Station departure window is fixed, and keep Mishima as the handoff point.",
+          "ja": "京都駅の出発時間帯が固まったら SmartEX で座席を押さえ、受け渡し先は三島で固定しておきます。"
         },
         {
           "en": "Keep seats, train number, and luggage notes saved in one place on your phone.",
@@ -854,8 +858,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "prepReminders": [
         {
-          "en": "Book in SmartEX once Day 3 is fixed rather than leaving the Tokyo-to-Mishima handoff to the last minute.",
-          "ja": "3日目が固まったら SmartEX で予約し、東京から三島への受け渡しを直前判断にしないようにします。"
+          "en": "Book in SmartEX once Day 3 is fixed rather than leaving the Kyoto-to-Mishima handoff to the last minute.",
+          "ja": "3日目が固まったら SmartEX で予約し、京都から三島への受け渡しを直前判断にしないようにします。"
         },
         {
           "en": "Save the next local step toward Kawaguchiko so the arrival platform decision stays simple.",
