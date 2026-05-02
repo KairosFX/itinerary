@@ -146,34 +146,45 @@ const checklistPrintFallbackDurationDefinition = {
   label: { en: "30 min", ja: "30分" }
 };
 const checklistPrintDurationDefinitions = {
-  "day1-nightlife": { minutes: [60, 120], label: { en: "1–2 hr", ja: "1～2時間" } },
+  "day1-arrival-setup": { minutes: [180, 210], label: { en: "3–3.5 hr", ja: "3～3.5時間" } },
+  "day1-kaiyukan": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
+  "day1-nightlife": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
   "day1-shinsaibashi": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
   "day1-dinner": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
-  "day2-kaiyukan": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
   "day2-transfer-to-kyoto": { minutes: [75, 90], label: { en: "75–90 min", ja: "75～90分" } },
   "day2-hotel-check-in": { minutes: [25, 35], label: { en: "25–35 min", ja: "25～35分" } },
   "day2-kiyomizu": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
   "day2-ninenzaka": { minutes: [35, 45], label: { en: "35–45 min", ja: "35～45分" } },
   "day2-yasaka": { minutes: [20, 25], label: { en: "20–25 min", ja: "20～25分" } },
   "day2-gion": { minutes: [75, 120], label: { en: "1.25–2 hr", ja: "1.25～2時間" } },
-  "day3-arashiyama": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
+  "day3-arashiyama": { minutes: [240, 270], label: { en: "4–4.5 hr", ja: "4～4.5時間" } },
   "day3-shinkansen-mishima": { minutes: [110, 140], label: { en: "1.8–2.3 hr", ja: "1.8～2.3時間" } },
   "day3-transfer-fujikawaguchiko": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
   "day3-onsen-check-in": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
-  "day4-chureito": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
+  "day4-chureito": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
   "day4-kawaguchiko": { minutes: [120, 180], label: { en: "2–3 hr", ja: "2～3時間" } },
   "day4-tokyo-transfer": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
   "day4-tokyo-hotel-check-in": { minutes: [45, 45], label: { en: "45 min", ja: "45分" } },
   "day5-shibuya-crossing": { minutes: [30, 45], label: { en: "30–45 min", ja: "30～45分" } },
   "day5-shibuya-food-walk": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
-  "day5-sky": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
-  "day6-skytree": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
-  "day6-solamachi": { minutes: [60, 120], label: { en: "1–2 hr", ja: "1～2時間" } },
-  "day6-akihabara": { minutes: [90, 150], label: { en: "1.5–2.5 hr", ja: "1.5～2.5時間" } },
-  "day7-palace": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
+  "day5-sky": { minutes: [105, 120], label: { en: "1.75–2 hr", ja: "1.75～2時間" } },
+  "day6-skytree": { minutes: [105, 120], label: { en: "1.75–2 hr", ja: "1.75～2時間" } },
+  "day6-solamachi": { minutes: [45, 75], label: { en: "45–75 min", ja: "45～75分" } },
+  "day6-akihabara": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
+  "day7-palace": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
   "day7-shinjuku": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
   "day7-bags": { minutes: [30, 45], label: { en: "30–45 min", ja: "30～45分" } },
   "day7-airport": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } }
+};
+// Fallback planning assumptions. Replace these times with exact opening/event data when locked.
+const checklistPrintDayStartDefaults = {
+  "1": { start: "06:00", reason: "arrival-admin-window" },
+  "2": { start: "11:00", reason: "kyoto-walking-flow" },
+  "3": { start: "07:00", reason: "arashiyama-quiet-photo-window" },
+  "4": { start: "07:30", reason: "fuji-visibility-and-stair-climb" },
+  "5": { start: "16:45", reason: "shibuya-sunset-to-night-flow" },
+  "6": { start: "16:30", reason: "skytree-sunset-to-night-view" },
+  "7": { start: "09:30", reason: "light-departure-day" }
 };
 const checklistPrintTimingTypeProfiles = {
   "temple-shrine": {
@@ -215,6 +226,22 @@ const checklistPrintTimingTypeProfiles = {
     rest: [5, 15],
     weather: [0, 15],
     unpredictable: [10, 30]
+  },
+  "arrival-admin": {
+    transit: [20, 45],
+    walk: [5, 15],
+    crowd: [15, 35],
+    rest: [15, 30],
+    weather: [0, 15],
+    unpredictable: [20, 45]
+  },
+  "departure-admin": {
+    transit: [25, 55],
+    walk: [5, 15],
+    crowd: [10, 35],
+    rest: [10, 25],
+    weather: [0, 20],
+    unpredictable: [25, 55]
   }
 };
 // Practical print timing matrix. These factors are modeled as weighted modifiers, not
@@ -401,10 +428,25 @@ const checklistPrintDayTimingProfiles = {
   "7": { intensity: "medium", multiplier: 1.05 }
 };
 const checklistPrintConnectionOverrides = {
-  "day2-kaiyukan->day2-transfer-to-kyoto": {
-    mode: "majorTransitSetup",
+  "day1-arrival-setup->day1-kaiyukan": {
+    mode: "arrivalToOpeningWindow",
+    minutes: [15, 25],
+    typical: 20
+  },
+  "day1-kaiyukan->day1-shinsaibashi": {
+    mode: "middayResetBeforeEvening",
+    minutes: [60, 120],
+    typical: 90
+  },
+  "day1-shinsaibashi->day1-dinner": {
+    mode: "closeEveningWalk",
     minutes: [10, 15],
     typical: 15
+  },
+  "day1-dinner->day1-nightlife": {
+    mode: "closeNightWalk",
+    minutes: [10, 15],
+    typical: 10
   },
   "day2-transfer-to-kyoto->day2-hotel-check-in": {
     mode: "stationHotelHandoff",
@@ -445,16 +487,66 @@ const checklistPrintConnectionOverrides = {
     mode: "arrivalHotelHandoff",
     minutes: [10, 20],
     typical: 15
+  },
+  "day4-chureito->day4-kawaguchiko": {
+    mode: "fujiLocalAfterClimb",
+    minutes: [25, 40],
+    typical: 30
+  },
+  "day4-kawaguchiko->day4-tokyo-transfer": {
+    mode: "lakeToTokyoHandoff",
+    minutes: [25, 45],
+    typical: 35
+  },
+  "day4-tokyo-transfer->day4-tokyo-hotel-check-in": {
+    mode: "tokyoArrivalHotelHandoff",
+    minutes: [15, 25],
+    typical: 20
+  },
+  "day5-sky->day5-shibuya-crossing": {
+    mode: "closeNightViewWalk",
+    minutes: [5, 12],
+    typical: 10
+  },
+  "day5-shibuya-crossing->day5-shibuya-food-walk": {
+    mode: "closeFoodWalk",
+    minutes: [8, 15],
+    typical: 10
+  },
+  "day6-skytree->day6-solamachi": {
+    mode: "sameComplexWalk",
+    minutes: [5, 10],
+    typical: 5
+  },
+  "day6-solamachi->day6-akihabara": {
+    mode: "eastTokyoEveningTransit",
+    minutes: [20, 35],
+    typical: 25
+  },
+  "day7-palace->day7-shinjuku": {
+    mode: "finalDayLunchTransit",
+    minutes: [25, 40],
+    typical: 30
+  },
+  "day7-shinjuku->day7-bags": {
+    mode: "finalDayBagHandoff",
+    minutes: [25, 40],
+    typical: 30
+  },
+  "day7-bags->day7-airport": {
+    mode: "protectedAirportBuffer",
+    minutes: [35, 55],
+    typical: 45
   }
 };
 const checklistPrintLateCutGuidance = {
   "1": {
-    en: "If late, shorten Shinsaibashi browsing before dinner.",
-    ja: "遅れたら、夕食前の心斎橋散策を短くします。"
+    en: "If late, shorten Shinsaibashi browsing and protect Kaiyukan opening plus Dotonbori after dark.",
+    ja: "遅れたら心斎橋散策を短くし、海遊館の開館時間と夜の道頓堀を優先します。"
   },
   "2": {
-    en: "If late, shorten Ninenzaka/Gion photo time before cutting Kiyomizu or Gion.",
-    ja: "遅れたら、清水寺や祇園を切る前に二年坂・祇園の写真時間を短くします。"
+    en: "If late, shorten photo browsing; keep the direct Kiyomizu to Ninenzaka to Yasaka to Gion walk intact.",
+    ja: "遅れたら写真散策を短くし、清水寺→二年坂→八坂の塔→祇園の直線的な徒歩導線を守ります。"
   },
   "3": {
     en: "If late, shorten Arashiyama before risking Transfer to Mishima.",
@@ -465,29 +557,54 @@ const checklistPrintLateCutGuidance = {
     ja: "遅れたら、東京移動前に湖畔の追加時間を短くします。"
   },
   "5": {
-    en: "If late, shorten the food walk before Shibuya Sky.",
-    ja: "遅れたら、渋谷スカイ前にフードウォークを短くします。"
+    en: "If late, keep Shibuya Sky near sunset and shorten the food walk after the crossing.",
+    ja: "遅れたら渋谷スカイの夕方枠を守り、交差点の後の食べ歩きを短くします。"
   },
   "6": {
-    en: "If late, shorten Solamachi before cutting Skytree or Akihabara.",
-    ja: "遅れたら、スカイツリーや秋葉原を切る前にソラマチを短くします。"
+    en: "If late, keep Skytree near sunset and cut Akihabara first if the evening gets tight.",
+    ja: "遅れたらスカイツリーの夕方枠を守り、夜が詰まる場合は秋葉原を先に削ります。"
   },
   "7": {
-    en: "If late, cut Shinjuku first and protect bag pickup plus airport time.",
-    ja: "遅れたら新宿を先に削り、荷物回収と空港移動を優先します。"
+    en: "March 16, 2026 is a Monday; keep this to the outer palace/Nijubashi photo stop, cut Shinjuku first, and protect the airport buffer.",
+    ja: "2026年3月16日は月曜なので皇居外苑・二重橋の写真だけにし、遅れたら新宿を先に削って空港余裕を守ります。"
   }
 };
 const checklistPrintTimingDefinitions = {
+  "day1-arrival-setup": {
+    type: "arrival-admin",
+    anchor: "major",
+    preferred: "early-arrival",
+    targetStart: "06:00",
+    airportArrivalTime: "06:00",
+    transit: [25, 45],
+    crowd: [20, 35],
+    rest: [20, 35],
+    unpredictable: [25, 45]
+  },
+  "day1-kaiyukan": {
+    type: "aquarium-museum",
+    anchor: "major",
+    preferred: "opening",
+    targetStart: "10:00",
+    earliestStart: "10:00",
+    openingSource: "fallback-kaiyukan-opening",
+    indoor: true,
+    ticketed: true,
+    crowd: [20, 40]
+  },
   "day1-nightlife": {
     type: "shopping-street-food",
     anchor: "standard",
-    preferred: "evening",
-    crowd: [15, 35]
+    preferred: "night",
+    targetStart: "19:30",
+    photoLight: "neon-night",
+    crowd: [20, 40]
   },
   "day1-shinsaibashi": {
     type: "shopping-street-food",
     anchor: "standard",
     preferred: "evening",
+    targetStart: "16:30",
     walk: [5, 15],
     crowd: [10, 25]
   },
@@ -495,21 +612,16 @@ const checklistPrintTimingDefinitions = {
     type: "shopping-street-food",
     anchor: "major",
     preferred: "evening",
+    targetStart: "17:45",
+    mealRole: "dinner",
     crowd: [15, 35],
     rest: [10, 20]
-  },
-  "day2-kaiyukan": {
-    type: "aquarium-museum",
-    anchor: "major",
-    preferred: "morning",
-    earliestStart: "10:00",
-    openingSource: "fallback-kaiyukan-opening",
-    crowd: [20, 40]
   },
   "day2-transfer-to-kyoto": {
     type: "hotel-transit-admin",
     anchor: "major",
-    preferred: "afternoon",
+    preferred: "late-morning",
+    targetStart: "11:00",
     transit: [25, 45],
     crowd: [10, 25]
   },
@@ -525,6 +637,7 @@ const checklistPrintTimingDefinitions = {
     type: "temple-shrine",
     anchor: "major",
     preferred: "pre-evening",
+    targetStart: "14:00",
     latestStart: "16:45",
     closingFallback: "18:00",
     nightViewingVerified: false,
@@ -554,6 +667,7 @@ const checklistPrintTimingDefinitions = {
     type: "shopping-street-food",
     anchor: "major",
     preferred: "evening",
+    targetStart: "17:00",
     mealRole: "dinner",
     closeStopCluster: "kiyomizu-gion",
     walk: [8, 15],
@@ -563,7 +677,10 @@ const checklistPrintTimingDefinitions = {
   "day3-arashiyama": {
     type: "temple-shrine",
     anchor: "major",
-    preferred: "morning",
+    preferred: "early-photo-then-shops",
+    targetStart: "07:00",
+    scenicPhotoWindow: ["06:30", "09:30"],
+    shopsFoodWindow: ["09:00", "11:30"],
     transit: [20, 40],
     crowd: [25, 55],
     weather: [10, 25]
@@ -594,14 +711,18 @@ const checklistPrintTimingDefinitions = {
   "day4-chureito": {
     type: "viewpoint-photo",
     anchor: "major",
-    preferred: "morning",
+    preferred: "early-morning",
+    targetStart: "07:30",
+    scenicPhotoWindow: ["07:00", "09:00"],
+    climb: "398-stairs",
     crowd: [20, 45],
     weather: [15, 35]
   },
   "day4-kawaguchiko": {
     type: "viewpoint-photo",
     anchor: "major",
-    preferred: "afternoon",
+    preferred: "late-morning-after-chureito",
+    targetStart: "10:00",
     transit: [15, 35],
     crowd: [15, 35],
     weather: [15, 35]
@@ -623,49 +744,63 @@ const checklistPrintTimingDefinitions = {
   "day5-shibuya-crossing": {
     type: "viewpoint-photo",
     anchor: "quick",
-    preferred: "afternoon",
+    preferred: "after-dark",
+    targetStart: "18:45",
+    scenicPhotoWindow: ["18:00", "20:30"],
     walk: [5, 15],
     crowd: [15, 35]
   },
   "day5-shibuya-food-walk": {
     type: "shopping-street-food",
     anchor: "major",
-    preferred: "afternoon",
+    preferred: "evening",
+    targetStart: "19:15",
+    mealRole: "dinner",
     walk: [5, 20],
     crowd: [20, 45]
   },
   "day5-sky": {
     type: "viewpoint-photo",
     anchor: "major",
-    preferred: "evening",
+    preferred: "sunset",
+    targetStart: "16:45",
+    timedTicketWindow: ["16:40", "17:00"],
+    scenicPhotoWindow: ["16:45", "18:30"],
     transit: [10, 25],
     crowd: [20, 45]
   },
   "day6-skytree": {
     type: "viewpoint-photo",
     anchor: "major",
-    preferred: "morning",
+    preferred: "sunset",
+    targetStart: "16:30",
+    timedTicketWindow: ["16:30", "17:00"],
+    scenicPhotoWindow: ["16:30", "18:30"],
     transit: [15, 35],
     crowd: [20, 45]
   },
   "day6-solamachi": {
     type: "shopping-street-food",
     anchor: "standard",
-    preferred: "afternoon",
+    preferred: "evening",
     walk: [5, 15],
     crowd: [15, 35]
   },
   "day6-akihabara": {
     type: "shopping-street-food",
     anchor: "major",
-    preferred: "afternoon",
+    preferred: "night-if-fits",
+    cutFirstIfLate: true,
     transit: [10, 25],
     crowd: [20, 45]
   },
   "day7-palace": {
-    type: "temple-shrine",
+    type: "viewpoint-photo",
     anchor: "standard",
     preferred: "morning",
+    targetStart: "09:30",
+    openAccessOnly: true,
+    closedAreaNote: "East Gardens fallback closed Mondays and Fridays; use outer palace/Nijubashi photo stop.",
     transit: [10, 25],
     crowd: [10, 30],
     weather: [10, 25]
@@ -681,13 +816,16 @@ const checklistPrintTimingDefinitions = {
     type: "hotel-transit-admin",
     anchor: "quick",
     preferred: "afternoon",
+    targetStart: "13:15",
     transit: [10, 25],
     crowd: [5, 15]
   },
   "day7-airport": {
-    type: "hotel-transit-admin",
+    type: "departure-admin",
     anchor: "major",
-    preferred: "evening",
+    preferred: "protected-afternoon-transfer",
+    targetStart: "15:10",
+    flightTime: "19:00",
     transit: [25, 50],
     crowd: [10, 30],
     unpredictable: [15, 35]
@@ -4913,7 +5051,8 @@ function readStoredChecklistState() {
     }
 
     const migratedInputIds = {
-      "day3-kaiyukan": "day2-kaiyukan"
+      "day3-kaiyukan": "day1-kaiyukan",
+      "day2-kaiyukan": "day1-kaiyukan"
     };
     const normalized = {};
 
@@ -5067,8 +5206,9 @@ function getChecklistPrintLabels() {
       item: "チェック項目",
       duration: "目安時間",
       customDate: "日付を選択",
-      specificStartTime: "開始時間",
-      startOutput: "開始",
+      specificStartTime: "予備開始時刻",
+      startOutput: "日別最適化",
+      fallbackSuffix: "予備",
       est: "目安"
     };
   }
@@ -5080,8 +5220,9 @@ function getChecklistPrintLabels() {
     item: "Checklist item",
     duration: "Est. duration",
     customDate: "Select start date",
-    specificStartTime: "Specific start time",
-    startOutput: "Start",
+    specificStartTime: "Fallback start",
+    startOutput: "Optimized by day",
+    fallbackSuffix: "fallback",
     est: "Est."
   };
 }
@@ -5158,7 +5299,7 @@ function getChecklistPrintStartSettings({ reset = false } = {}) {
 
 function getChecklistPrintStartSummary(settings = getChecklistPrintStartSettings()) {
   const labels = getChecklistPrintLabels();
-  return `${labels.startOutput}: ${getChecklistPrintTimeLabel(settings.specificStart)}`;
+  return labels.startOutput;
 }
 
 function buildChecklistPrintTimeOptions(selectedValue = "") {
@@ -5306,6 +5447,12 @@ function getChecklistPrintOverrideBuffer(previousItem, nextItem, day) {
   return { min, max, typical };
 }
 
+function getChecklistPrintDayStartMinutes(day = {}, fallbackStartMinutes = 0) {
+  const dayDefault = checklistPrintDayStartDefaults[String(day.id || "")];
+  const defaultStartMinutes = parseChecklistPrintClockMinutes(dayDefault?.start);
+  return Number.isFinite(defaultStartMinutes) ? defaultStartMinutes : fallbackStartMinutes;
+}
+
 function getChecklistPrintEarliestStart(item, day, cursor) {
   const timingDefinition = getChecklistPrintTimingDefinition(item.id);
   const earliestStart = parseChecklistPrintClockMinutes(timingDefinition.earliestStart);
@@ -5315,6 +5462,18 @@ function getChecklistPrintEarliestStart(item, day, cursor) {
   }
 
   return cursor;
+}
+
+function getChecklistPrintPreferredStart(item, day, cursor) {
+  const timingDefinition = getChecklistPrintTimingDefinition(item.id);
+  const earliestStart = getChecklistPrintEarliestStart(item, day, cursor);
+  const targetStart = parseChecklistPrintClockMinutes(timingDefinition.targetStart);
+
+  if (Number.isFinite(targetStart) && earliestStart < targetStart) {
+    return targetStart;
+  }
+
+  return earliestStart;
 }
 
 function getChecklistPrintLateCutGuidance(dayId = "") {
@@ -5514,13 +5673,13 @@ function withChecklistPrintSchedules(days = []) {
     parseChecklistPrintClockMinutes(settings.specificStart) ?? fallbackStartMinutes;
 
   return days.map((day) => {
-    let cursor = selectedStartMinutes;
+    let cursor = getChecklistPrintDayStartMinutes(day, selectedStartMinutes);
     const items = day.items.map((item, itemIndex) => {
       const durationMinutes = item.durationMinutes || getDefaultChecklistPrintDurationMinutes(item.id);
       const timingDefinition = getChecklistPrintTimingDefinition(item.id);
       const scheduledDuration = getChecklistPrintDurationTypicalMinutes(durationMinutes, timingDefinition);
       const nextItem = day.items[itemIndex + 1];
-      const startMinutes = getChecklistPrintEarliestStart(item, day, cursor);
+      const startMinutes = getChecklistPrintPreferredStart(item, day, cursor);
       const endMinutes = startMinutes + scheduledDuration;
       const schedule = {
         window: buildChecklistPrintTimeWindow(
@@ -7712,10 +7871,11 @@ function syncChecklistProgressTransitions({
 }
 
 const checklistItemIconMap = {
+  "day1-arrival-setup": "rail",
+  "day1-kaiyukan": "aquarium",
   "day1-nightlife": "moon",
   "day1-shinsaibashi": "shopping",
   "day1-dinner": "food",
-  "day2-kaiyukan": "aquarium",
   "day2-transfer-to-kyoto": "rail",
   "day2-hotel-check-in": "hotel",
   "day2-kiyomizu": "temple",

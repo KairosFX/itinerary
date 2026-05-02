@@ -2,86 +2,86 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
   const tripNotes = [
     {
       day: 1,
-      title: { en: "Arrival Night in Osaka", ja: "大阪に着く夜" },
+      title: { en: "Osaka Arrival + Opening Kaiyukan", ja: "大阪到着と開館時間の海遊館" },
       note: {
-        en: "Ease into Osaka with Dotonbori first, a Shinsaibashi walk after that, and dinner in Minami nearby. Keep it loose so arrival night stays simple.",
-        ja: "大阪は道頓堀から入り、そのあと心斎橋を歩いて、夕食はミナミの近場で軽くまとめる。到着日の夜は余裕を残しておく。"
+        en: "Use 6:00–9:30 AM for immigration, baggage, breakfast, lockers or hotel bag drop, and transit setup. Put Kaiyukan at opening around 10:00 AM, then save Shinsaibashi, dinner, and Dotonbori for the late afternoon/night.",
+        ja: "6:00～9:30は入国、荷物、朝食、ロッカーまたはホテル荷物預け、移動準備に使う。海遊館は10:00頃の開館時間に合わせ、心斎橋、夕食、道頓堀は午後遅めから夜へ回す。"
       },
       summary: {
-        en: "The trip opens gently in Minami: Dotonbori, Shinsaibashi, and an easy dinner close by.",
-        ja: "旅の始まりはミナミでゆっくり。道頓堀、心斎橋、近場の夕食で軽く整えます。"
+        en: "Arrival admin first, Kaiyukan at opening, then Minami after the city lights come on.",
+        ja: "到着処理を先に済ませ、開館時間に海遊館、その後は明かりが入るミナミへ。"
       }
     },
     {
       day: 2,
       title: { en: "Kyoto", ja: "京都" },
       note: {
-        en: "Keep Day 2 framed as Kyoto: after the morning aquarium stop, settle into the Kyoto hotel before the east-side walk. From Kiyomizu-dera, keep it direct on foot: Ninenzaka, Yasaka Pagoda, then Gion for the evening.",
-        ja: "2日目は京都の日として整理します。朝の水族館のあと京都ホテルへ入り、その後は清水寺から二年坂、八坂の塔、祇園まで東側をそのまま歩いてつなぎます。"
+        en: "Keep Day 2 framed as a tight Kyoto walking flow. Transfer/bag drop first, then Kiyomizu-dera -> Ninenzaka -> Yasaka Pagoda -> Gion with only small walking/photo/crowd buffers.",
+        ja: "2日目は京都の徒歩導線をタイトにまとめる。移動と荷物預けを先に済ませ、清水寺 -> 二年坂 -> 八坂の塔 -> 祇園を、小さな徒歩・写真・混雑バッファだけでつなぐ。"
       },
       summary: {
-        en: "Kyoto hotel check-in and the direct Kiyomizu-dera to Gion walking flow after the morning aquarium stop.",
-        ja: "朝の水族館のあと、京都ホテルのチェックインと清水寺から祇園への徒歩ルート。"
+        en: "Kyoto hotel/bag drop, Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, then Gion into evening.",
+        ja: "京都ホテル／荷物預け、清水寺、二年坂、八坂の塔、夕方以降の祇園。"
       }
     },
     {
       day: 3,
       title: { en: "Transfer to Mishima", ja: "三島へ移動" },
       note: {
-        en: "This is the long movement day. Start with Arashiyama, then keep the plan simple: Transfer to Mishima, continue toward Fujikawaguchiko, and finish with the onsen check-in.",
-        ja: "この日は移動が長めです。嵐山から始め、その後は三島へ移動し、富士河口湖方面へ進み、最後に温泉チェックインまで進みます。"
+        en: "Start Arashiyama early: use roughly 7:00–9:00 AM for Bamboo Grove, Togetsukyo Bridge, and quiet photos, then 9:00–11:30 AM for temples, shops, and food. After that, keep the route correct and simple: Kyoto -> Mishima by Shinkansen, then onward to Fujikawaguchiko.",
+        ja: "嵐山は早めに始める。7:00～9:00頃を竹林、渡月橋、静かな写真時間に使い、9:00～11:30頃を寺社、店、食事に使う。その後は京都 -> 三島を新幹線で進み、富士河口湖へつなぐ。"
       },
       summary: {
-        en: "Arashiyama, Transfer to Mishima, Fujikawaguchiko transfer, then the onsen reset.",
-        ja: "嵐山、三島への移動、富士河口湖への移動、温泉宿でリセット。"
+        en: "Early Arashiyama, Kyoto -> Mishima by Shinkansen, Fujikawaguchiko transfer, then the onsen reset.",
+        ja: "早朝の嵐山、京都 -> 三島の新幹線、富士河口湖への移動、温泉宿でリセット。"
       }
     },
     {
       day: 4,
       title: { en: "Fuji Morning, Tokyo Evening", ja: "富士の朝、東京の夜" },
       note: {
-        en: "Use the morning for Chureito Shimoyoshida and Lake Kawaguchiko if visibility is good. After that, transfer to Shibuya and get the Tokyo hotel check-in handled.",
-        ja: "視界がよければ朝は忠霊塔・下吉田と河口湖へ。その後は渋谷へ移動して、東京のホテルチェックインを済ませる。"
+        en: "Give Chureito Shimoyoshida the early window around 7:30–8:30 AM if visibility cooperates. Build in the 398-stair climb, photo time, and a short rest, then do Lake Kawaguchiko before the Tokyo handoff.",
+        ja: "視界がよければ忠霊塔・下吉田は7:30～8:30頃の早い時間帯へ。398段の階段、写真時間、短い休憩を入れ、その後に河口湖を回して東京へ渡す。"
       },
       summary: {
-        en: "Give the morning to Chureito Shimoyoshida and Lake Kawaguchiko, then keep the afternoon practical with the Shibuya transfer and Tokyo hotel check-in.",
-        ja: "午前は忠霊塔・下吉田と河口湖、午後は渋谷移動と東京ホテルチェックイン。"
+        en: "Early Chureito, Lake Kawaguchiko after, then Shibuya transfer and Tokyo hotel check-in.",
+        ja: "朝の忠霊塔、続けて河口湖、その後は渋谷移動と東京ホテルチェックイン。"
       }
     },
     {
       day: 5,
       title: { en: "Shibuya Day", ja: "渋谷の日" },
       note: {
-        en: "Keep the Tokyo west-side day focused: Shibuya Crossing, the food walk, and Shibuya Sky later when the view is better. No extra side trip is needed.",
-        ja: "東京西側に絞る日。渋谷交差点、渋谷フードウォーク、最後に渋谷スカイへ進めば、寄り道を足さなくても十分まとまる。"
+        en: "Use Shibuya Sky as the sunset anchor, aiming for a 4:40–5:00 PM entry and a 4:45–6:30 PM block. Then drop into Shibuya Crossing after dark and finish with the food walk.",
+        ja: "渋谷スカイを夕方の軸にし、16:40～17:00入場、16:45～18:30の枠を狙う。その後、日没後の渋谷交差点へ下り、最後に食べ歩きへつなぐ。"
       },
       summary: {
-        en: "Stay west and keep the day simple: cross Shibuya, leave time for the food walk, and finish with Shibuya Sky when the evening view is ready.",
-        ja: "渋谷交差点、フードウォーク、夕方以降の渋谷スカイで一日をまとめます。"
+        en: "Shibuya Sky near sunset, Shibuya Crossing after dark, then Shibuya food walk.",
+        ja: "夕方の渋谷スカイ、日没後の渋谷交差点、渋谷フードウォーク。"
       }
     },
     {
       day: 6,
       title: { en: "East Tokyo Loop", ja: "東京東側の一日" },
       note: {
-        en: "Stay on the east side: Tokyo Skytree first, Solamachi while you are already there, then Akihabara as the final stop. It keeps the day from bouncing across the city.",
-        ja: "東側だけでまとめる。東京スカイツリーから始め、そのままソラマチ、最後に秋葉原へ回すと街を行き来しすぎずに済む。"
+        en: "Move Tokyo Skytree to the late afternoon/sunset window if tickets allow: daylight view, sunset, then night lights. Keep Solamachi below it and use Akihabara after Skytree only if the evening still fits.",
+        ja: "チケットが合うなら東京スカイツリーは午後遅めから夕方へ。昼景、夕景、夜景をまとめて見て、その下のソラマチへ進み、秋葉原は夜に余裕がある場合だけ入れる。"
       },
       summary: {
-        en: "The east-side day stays compact: Tokyo Skytree first, Solamachi below it next, and Akihabara as the final city stop.",
-        ja: "東京スカイツリー、ソラマチ、秋葉原の順で東側をコンパクトに進みます。"
+        en: "Skytree near sunset, Solamachi after, and Akihabara only if the night still has room.",
+        ja: "夕方のスカイツリー、続けてソラマチ、夜に余裕があれば秋葉原。"
       }
     },
     {
       day: 7,
       title: { en: "Final Tokyo Reset", ja: "最後の東京調整" },
       note: {
-        en: "Keep departure day practical: Imperial Palace if it fits, Shinjuku after that, then bag pickup and the airport transfer. Leave enough room for the exit.",
-        ja: "出発日は実用優先。入るなら皇居、そのあと新宿、荷物回収、空港移動へ進み、最後は余裕を残す。"
+        en: "Keep March 16 light for the 7:00 PM flight. Because it is a Monday, treat the palace stop as a quick outer Imperial Palace / Nijubashi photo stop rather than East Gardens. Use Shinjuku or lunch only if it fits, then protect bag pickup and a 3:00–3:30 PM central Tokyo departure for the airport.",
+        ja: "3月16日は19:00の便に合わせて軽めにする。月曜なので皇居は東御苑ではなく、皇居外苑・二重橋の短い写真ストップとして扱う。新宿や昼食は入る場合だけにし、荷物回収と15:00～15:30頃の都心出発を守る。"
       },
       summary: {
-        en: "A measured finish: Imperial Palace, Shinjuku, bag pickup, and the airport transfer.",
-        ja: "皇居、新宿、荷物回収、空港移動で落ち着いて旅を締めます。"
+        en: "Outer palace photo stop, optional Shinjuku/lunch, bag pickup, then protected airport transfer.",
+        ja: "皇居外苑の写真、必要なら新宿／昼食、荷物回収、余裕を持った空港移動。"
       }
     }
   ];
@@ -165,10 +165,10 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
   const routeSegments = [
     {
       id: "osaka-kyoto",
-      title: { en: "Kaiyukan -> Kyoto East", ja: "海遊館 -> 京都東側" },
+      title: { en: "Osaka -> Kyoto East", ja: "大阪 -> 京都東側" },
       summary: {
-        en: "Day 2 moves cleanly from Kaiyukan into the east-side Kyoto walking cluster.",
-        ja: "2日目は海遊館から京都東側の徒歩中心エリアへ、分かりやすく移る区間です。"
+        en: "Day 2 moves cleanly from Osaka into the east-side Kyoto walking cluster.",
+        ja: "2日目は大阪から京都東側の徒歩中心エリアへ、分かりやすく移る区間です。"
       },
       badges: [
         { en: "Day 2", ja: "2日目" },
@@ -288,8 +288,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "osaka",
       title: { en: "Osaka", ja: "大阪" },
       summary: {
-        en: "Osaka handles the easy Minami arrival and the Day 2 Kaiyukan start before the route moves into Kyoto.",
-        ja: "大阪は、ミナミ中心の到着日と2日目の海遊館スタートをまとめ、その後は京都側へ進みます。"
+        en: "Osaka handles the early arrival setup, Kaiyukan at opening, and the Minami evening before the route moves into Kyoto.",
+        ja: "大阪は、早朝到着の準備、開館時間の海遊館、ミナミの夜をまとめ、その後は京都側へ進みます。"
       },
       badges: [
         { en: "Days 1-3", ja: "1-3日目" },
@@ -297,8 +297,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       ],
       notes: [
         {
-          en: "This stop covers Dotonbori, Shinsaibashi, dinner in Minami, nightlife, and the Day 2 Kaiyukan visit before Kyoto.",
-          ja: "この地点は、道頓堀、心斎橋、ミナミでの夕食、夜歩き、そして京都へ向かう前の2日目の海遊館までを含みます。"
+          en: "This stop covers arrival admin, Kaiyukan at opening, Shinsaibashi, dinner in Minami, and Dotonbori after dark before Kyoto.",
+          ja: "この地点は、到着準備、開館時間の海遊館、心斎橋、ミナミでの夕食、夜の道頓堀を京都へ向かう前にまとめます。"
         },
         {
           en: "It also sets up the Day 3 launch without forcing Kyoto to carry the onward transfer logic.",
@@ -324,8 +324,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       ],
       notes: [
         {
-          en: "Day 2 stays focused on Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion after the Kaiyukan-to-Kyoto handoff.",
-          ja: "2日目は海遊館から京都へ移ったあと、清水寺、二寧坂、八坂の塔、祇園に集中する構成です。"
+          en: "Day 2 stays focused on the direct Kyoto East chain: Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion.",
+          ja: "2日目は清水寺、二寧坂、八坂の塔、祇園を直接つなぐ京都東側の流れに集中します。"
         },
         {
           en: "Arashiyama is separated into Day 3 so Kyoto East does not get overloaded.",
@@ -421,8 +421,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
           ja: "4日目は富士側から渋谷へ入り、そのまま東京ホテルのチェックインを実用的に済ませます。"
         },
         {
-          en: "Day 6 carries the Skytree, Solamachi, and Akihabara cluster, while Day 7 keeps the Imperial Palace, a short Shinjuku stop, bag pickup or handoff, and the airport transfer tidy.",
-          ja: "6日目にスカイツリー、ソラマチ、秋葉原をまとめ、7日目は皇居、新宿、荷物、空港移動を軽めに組んでいます。"
+          en: "Day 6 uses Skytree near sunset, Solamachi after, and Akihabara only if the evening still fits; Day 7 stays light with the outer palace photo stop, optional Shinjuku/lunch, bags, and airport transfer.",
+          ja: "6日目は夕方のスカイツリー、続けてソラマチ、夜に余裕があれば秋葉原。7日目は皇居外苑の写真、必要なら新宿／昼食、荷物、空港移動を軽めに組みます。"
         }
       ],
       dayLinks: [{ day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }],
@@ -449,7 +449,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       segmentIds: ["osaka-kyoto"],
       badges: [
         { en: "Kyoto", ja: "京都" },
-        { en: "Aquarium then walk", ja: "水族館から街歩き" }
+        { en: "Direct east walk", ja: "東側を直接歩く" }
       ]
     },
     {
@@ -517,12 +517,13 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
 
   const routeDayStops = {
     1: [
+      { en: "Arrival setup", ja: "到着準備" },
+      { en: "Kaiyukan", ja: "海遊館" },
       { en: "Minami", ja: "ミナミ" },
-      { en: "Dotonbori", ja: "道頓堀" },
-      { en: "Shinsaibashi", ja: "心斎橋" }
+      { en: "Shinsaibashi", ja: "心斎橋" },
+      { en: "Dotonbori", ja: "道頓堀" }
     ],
     2: [
-      { en: "Kaiyukan", ja: "海遊館" },
       { en: "Kiyomizu-dera", ja: "清水寺" },
       { en: "Ninenzaka", ja: "二年坂" },
       { en: "Yasaka Pagoda", ja: "八坂の塔" },
@@ -539,16 +540,16 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       { en: "Tokyo / Shibuya", ja: "東京・渋谷" }
     ],
     5: [
+      { en: "Shibuya Sky", ja: "渋谷スカイ" },
       { en: "Shibuya Crossing", ja: "渋谷交差点" },
-      { en: "Shibuya Food Walk", ja: "渋谷フードウォーク" },
-      { en: "Shibuya Sky", ja: "渋谷スカイ" }
+      { en: "Shibuya Food Walk", ja: "渋谷フードウォーク" }
     ],
     6: [
       { en: "Tokyo Skytree", ja: "東京スカイツリー" },
       { en: "Akihabara", ja: "秋葉原" }
     ],
     7: [
-      { en: "Imperial Palace", ja: "皇居" },
+      { en: "Outer Imperial Palace", ja: "皇居外苑" },
       { en: "Shinjuku", ja: "新宿" }
     ]
   };

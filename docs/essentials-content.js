@@ -70,8 +70,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "kind": "booking",
       "dayLabel": {
-        "en": "Day 2",
-        "ja": "2日目"
+        "en": "Day 1",
+        "ja": "1日目"
       },
       "typeLabel": {
         "en": "Hotel / Accommodation",
@@ -544,8 +544,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "kind": "booking",
       "dayLabel": {
-        "en": "Day 2",
-        "ja": "2日目"
+        "en": "Day 1",
+        "ja": "1日目"
       },
       "typeLabel": {
         "en": "Activity",
@@ -576,8 +576,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "海遊館"
       },
       "summary": {
-        "en": "Use the current official ticket page for Day 2.",
-        "ja": "2日目用に現在の公式チケットページを使います。"
+        "en": "Use the current official ticket page for the Day 1 opening-time Kaiyukan block.",
+        "ja": "1日目の開館時間に合わせる海遊館ブロック用に、現在の公式チケットページを使います。"
       },
       "details": {
         "en": "The previous Kaiyukan link was replaced with the safer main-domain official ticket page. Use it for the current dynamic pricing calendar and official e-ticket guidance.",
@@ -759,8 +759,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "朝の大阪側の出発地点に合う鉄道ルートを使い、基本は大阪・梅田側から JR または阪急で京都へ入り、最後の京都側だけをバス・地下鉄・タクシーで短くつなぎます。大きな荷物移動ではなく、日帰り荷物での受け渡しとして考えます。"
       },
       "why": {
-        "en": "It lets Day 2 start with Kaiyukan, then keeps Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion in one Kyoto-side sweep while the Kyoto hotel still supports the Day 3 Arashiyama start.",
-        "ja": "2日目を海遊館から始め、そのあと清水寺、二年坂、八坂の塔、祇園を京都側でまとめつつ、京都ホテルは3日目の嵐山スタートにも合う位置に残せます。"
+        "en": "It lets Day 2 stay focused on the Kyoto East sweep: Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and Gion, while the Kyoto hotel still supports the Day 3 Arashiyama start.",
+        "ja": "2日目を京都東側の流れに集中できます。清水寺、二年坂、八坂の塔、祇園をまとめつつ、京都ホテルは3日目の嵐山スタートにも合う位置に残せます。"
       },
       "practicalNotes": [
         {

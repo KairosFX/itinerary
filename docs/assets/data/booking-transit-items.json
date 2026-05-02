@@ -69,8 +69,8 @@
     ],
     "kind": "booking",
     "dayLabel": {
-      "en": "Day 2",
-      "ja": "2日目"
+      "en": "Day 1",
+      "ja": "1日目"
     },
     "typeLabel": {
       "en": "Hotel / Accommodation",
@@ -543,8 +543,8 @@
     ],
     "kind": "booking",
     "dayLabel": {
-      "en": "Day 2",
-      "ja": "2日目"
+      "en": "Day 1",
+      "ja": "1日目"
     },
     "typeLabel": {
       "en": "Activity",
@@ -575,8 +575,8 @@
       "ja": "海遊館"
     },
     "summary": {
-      "en": "Use the current official ticket page for Day 2.",
-      "ja": "2日目用に現在の公式チケットページを使います。"
+      "en": "Use the current official ticket page for the Day 1 opening-time Kaiyukan block.",
+      "ja": "1日目の開館時間に合わせる海遊館ブロック用に、現在の公式チケットページを使います。"
     },
     "details": {
       "en": "The previous Kaiyukan link was replaced with the safer main-domain official ticket page. Use it for the current dynamic pricing calendar and official e-ticket guidance.",
