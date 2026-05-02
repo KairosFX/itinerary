@@ -74,12 +74,12 @@
     "id": "kyoto-mishima-shinkansen",
     "tag": { "en": "Day 3 transfer", "ja": "3日目の移動" },
     "title": {
-      "en": "Kyoto → Mishima shinkansen handoff",
-      "ja": "京都 → 三島 新幹線ハンドオフ"
+      "en": "Transfer to Mishima",
+      "ja": "三島へ移動"
     },
     "summary": {
-      "en": "This is the fixed rail leg that carries the route from Kyoto Station into the Mt. Fuji side.",
-      "ja": "京都駅から富士側へ入るための、固定の新幹線区間です。"
+      "en": "This is the fixed transfer that carries the route from Kyoto Station into the Mt. Fuji side.",
+      "ja": "京都駅から富士側へ入るための、固定の移動区間です。"
     },
     "segment": {
       "en": "Kyoto Station → Mishima Station",
@@ -88,8 +88,8 @@
     "from": { "en": "Kyoto Station", "ja": "京都駅" },
     "to": { "en": "Mishima Station", "ja": "三島駅" },
     "transport": {
-      "en": "Tokaido Shinkansen via SmartEX or JR Central's online flow. Plan it as Kyoto → Mishima by shinkansen, then keep the Mishima-to-lake transfer saved separately.",
-      "ja": "SmartEX または JR東海のオンライン導線で押さえる東海道新幹線です。京都 → 三島の新幹線として扱い、三島から湖側への移動は別に保存しておきます。"
+      "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 transfer, then keep the Mishima-to-lake transfer saved separately.",
+      "ja": "3日目の固定移動には Trip.com の三島への移動ページを使い、三島から湖側への移動は別に保存しておきます。"
     },
     "why": {
       "en": "It keeps Day 3 as one clear eastbound move, shortens the long leg, and leaves the local Kawaguchiko access decisions for after the rail arrival.",
@@ -101,8 +101,8 @@
         "ja": "接続を詰めすぎず、少し余裕が残る便を基準にします。"
       },
       {
-        "en": "Lock the seat in SmartEX once the Kyoto Station departure window is fixed, and keep Mishima as the handoff point.",
-        "ja": "京都駅の出発時間帯が固まったら SmartEX で座席を押さえ、受け渡し先は三島で固定しておきます。"
+        "en": "Lock the seat once the Kyoto Station departure window is fixed, and keep Mishima as the handoff point.",
+        "ja": "京都駅の出発時間帯が固まったら座席を押さえ、受け渡し先は三島で固定しておきます。"
       },
       {
         "en": "Keep seats, train number, and luggage notes saved in one place on your phone.",
@@ -111,8 +111,8 @@
     ],
     "prepReminders": [
       {
-        "en": "Book in SmartEX once Day 3 is fixed rather than leaving the Kyoto-to-Mishima handoff to the last minute.",
-        "ja": "3日目が固まったら SmartEX で予約し、京都から三島への受け渡しを直前判断にしないようにします。"
+        "en": "Book on Trip.com once Day 3 is fixed rather than leaving Transfer to Mishima to the last minute.",
+        "ja": "3日目が固まったら Trip.com で予約し、三島への移動を直前判断にしないようにします。"
       },
       {
         "en": "Save the next local step toward Kawaguchiko so the arrival platform decision stays simple.",
@@ -130,8 +130,8 @@
       }
     ],
     "action": {
-      "href": "https://smart-ex.jp/en/lp/app/",
-      "label": { "en": "Open SmartEX", "ja": "SmartEXを開く" }
+      "href": "https://www.trip.com/trains/japan/route/kyoto-to-mishima/",
+      "label": { "en": "Open Trip.com trains", "ja": "Trip.com鉄道を開く" }
     }
   },
   {
@@ -175,8 +175,8 @@
     ],
     "prepReminders": [
       {
-        "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the shinkansen seat is fixed.",
-        "ja": "前夜に三島発バスの時刻を確認し、新幹線の席を押さえたあとで当日の最終便を見直します。"
+        "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once Transfer to Mishima is fixed.",
+        "ja": "前夜に三島発バスの時刻を確認し、三島への移動が固まったあとで当日の最終便を見直します。"
       },
       {
         "en": "Keep one simpler fallback route saved in case the preferred handoff becomes awkward.",
@@ -194,8 +194,8 @@
       }
     ],
     "action": {
-      "href": "https://sekitori.jp/en/apps/results/?%5BnextDateFlag=true%5D&getOffAreaMiddleGroupId=2&getOffAreaType=1&nextDateFlag=true&rideAreaType=2&rideBusStopId=8&rideDate=today",
-      "label": { "en": "Open Mishima bus booking", "ja": "三島バス予約を開く" }
+      "href": "https://www.trip.com/things-to-do/experiences/mishima-transportation/",
+      "label": { "en": "Open Trip.com Mishima transport", "ja": "Trip.com三島交通を開く" }
     }
   },
   {
@@ -261,8 +261,8 @@
       }
     ],
     "action": {
-      "href": "https://e.fujikyu-railway.jp/sightseeing/chureito_pagoda.php",
-      "label": { "en": "Open Chureito access guide", "ja": "忠霊塔のアクセス案内を開く" }
+      "href": "https://www.trip.com/things-to-do/experiences/fujikawaguchiko-transportation/",
+      "label": { "en": "Open Trip.com Fujikawaguchiko transport", "ja": "Trip.com富士河口湖交通を開く" }
     }
   },
   {
@@ -283,8 +283,8 @@
     "from": { "en": "Kawaguchiko / Mt. Fuji area", "ja": "河口湖・富士エリア" },
     "to": { "en": "Tokyo / Shibuya side", "ja": "東京・渋谷側" },
     "transport": {
-      "en": "Direct highway bus is the cleanest default if you want the simplest Shibuya arrival, with rail as fallback when timings fit better. The current Tokyu Bus tourist highway page shows Shibuya / Futakotamagawa -> Kawaguchiko fares from JPY 2,000 one way.",
-      "ja": "渋谷到着を最も単純にしたいなら、基本は直通高速バスで、時刻が合いにくい時だけ鉄道を代替にします。現在の Tokyu Bus 観光向け高速バス案内では、渋谷・二子玉川 -> 河口湖が片道 JPY 2,000 からです。"
+      "en": "Direct highway bus is the cleanest default if you want the simplest Shibuya arrival, with rail as fallback when timings fit better. Use the Trip.com Shibuya / Kawaguchiko bus listing to keep this handoff with the other transit searches.",
+      "ja": "渋谷到着を最も単純にしたいなら、基本は直通高速バスで、時刻が合いにくい時だけ鉄道を代替にします。この受け渡しも他の移動検索とそろえて Trip.com の渋谷・河口湖バス候補を使います。"
     },
     "why": {
       "en": "It keeps the west-to-east flow intact, gets you into Tokyo cleanly on Day 4, and leaves Day 5 open for the West Tokyo block while Day 6 stays free for the fuller east-side city day.",
@@ -306,8 +306,8 @@
     ],
     "prepReminders": [
       {
-        "en": "Save the official Tokyu Bus page first if you want the simplest one-step handoff into Tokyo.",
-        "ja": "東京へ一段で入りたいなら、まず Tokyu Bus の公式ページを保存しておきます。"
+        "en": "Save the Trip.com bus listing first if you want the simplest one-step handoff into Tokyo.",
+        "ja": "東京へ一段で入りたいなら、まず Trip.com のバス候補ページを保存しておきます。"
       },
       {
         "en": "Keep one rail fallback saved in case the bus timing stops fitting your day.",
@@ -325,8 +325,8 @@
       }
     ],
     "action": {
-      "href": "https://www.tokyubus.co.jp/tourist/highway/",
-      "label": { "en": "Open Tokyu Bus page", "ja": "Tokyu Bus案内を開く" }
+      "href": "https://www.trip.com/things-to-do/detail/102425674/",
+      "label": { "en": "Open Trip.com bus listing", "ja": "Trip.comバス候補を開く" }
     }
   }
 ]

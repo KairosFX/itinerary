@@ -14,26 +14,26 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 2,
-      title: { en: "Kaiyukan and Kyoto East", ja: "海遊館と京都東側" },
+      title: { en: "Kyoto", ja: "京都" },
       note: {
-        en: "Start at Kaiyukan, transfer to Kyoto, and check into the hotel before the east-side walk. From Kiyomizu-dera, keep it direct on foot: Ninenzaka, Yasaka Pagoda, then Gion for the evening.",
-        ja: "海遊館から始め、京都へ移動してホテルにチェックイン。その後は清水寺から二年坂、八坂の塔、祇園まで、東側をそのまま歩いてつなぐ。"
+        en: "Keep Day 2 framed as Kyoto: after the morning aquarium stop, settle into the Kyoto hotel before the east-side walk. From Kiyomizu-dera, keep it direct on foot: Ninenzaka, Yasaka Pagoda, then Gion for the evening.",
+        ja: "2日目は京都の日として整理します。朝の水族館のあと京都ホテルへ入り、その後は清水寺から二年坂、八坂の塔、祇園まで東側をそのまま歩いてつなぎます。"
       },
       summary: {
-        en: "Kaiyukan first, then Kyoto transfer, hotel check-in, and the direct Kiyomizu-dera to Gion walking flow.",
-        ja: "海遊館、京都移動、ホテルチェックイン、清水寺から祇園への徒歩ルート。"
+        en: "Kyoto hotel check-in and the direct Kiyomizu-dera to Gion walking flow after the morning aquarium stop.",
+        ja: "朝の水族館のあと、京都ホテルのチェックインと清水寺から祇園への徒歩ルート。"
       }
     },
     {
       day: 3,
-      title: { en: "Arashiyama to Fuji", ja: "嵐山から富士エリアへ" },
+      title: { en: "Transfer to Mishima", ja: "三島へ移動" },
       note: {
-        en: "This is the long movement day. Start with Arashiyama, then keep the rail plan simple: Kyoto → Mishima by shinkansen, Fujikawaguchiko transfer, and the onsen check-in.",
-        ja: "この日は移動が長め。嵐山から始め、その後の鉄道はシンプルに京都から三島へ新幹線。富士河口湖への乗り継ぎ、最後に温泉チェックインまで進む。"
+        en: "This is the long movement day. Start with Arashiyama, then keep the plan simple: Transfer to Mishima, continue toward Fujikawaguchiko, and finish with the onsen check-in.",
+        ja: "この日は移動が長めです。嵐山から始め、その後は三島へ移動し、富士河口湖方面へ進み、最後に温泉チェックインまで進みます。"
       },
       summary: {
-        en: "Arashiyama, Kyoto → Mishima by shinkansen, Fujikawaguchiko transfer, then the onsen reset.",
-        ja: "嵐山、京都から三島への新幹線、富士河口湖への移動、温泉宿でリセット。"
+        en: "Arashiyama, Transfer to Mishima, Fujikawaguchiko transfer, then the onsen reset.",
+        ja: "嵐山、三島への移動、富士河口湖への移動、温泉宿でリセット。"
       }
     },
     {
@@ -190,14 +190,14 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       id: "kyoto-mishima-shinkansen",
-      title: { en: "Kyoto → Mishima", ja: "京都 → 三島" },
+      title: { en: "Transfer to Mishima", ja: "三島へ移動" },
       summary: {
-        en: "This is the clean shinkansen handoff from Kyoto Station into the Mt. Fuji side.",
-        ja: "京都駅から富士側へ入るための、分かりやすい新幹線の受け渡しです。"
+        en: "This is the clean Day 3 handoff from Kyoto Station into the Mt. Fuji side.",
+        ja: "京都駅から富士側へ入るための、分かりやすい3日目の受け渡しです。"
       },
       badges: [
         { en: "Day 3", ja: "3日目" },
-        { en: "Shinkansen", ja: "新幹線" }
+        { en: "Transfer", ja: "移動" }
       ],
       notes: [
         {
@@ -213,7 +213,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       transitActions: [
         {
           id: "kyoto-mishima-shinkansen",
-          label: { en: "Shinkansen detail", ja: "新幹線詳細" }
+          label: { en: "Transfer detail", ja: "移動詳細" }
         }
       ],
       stopIds: ["kyoto", "fuji-gateway"],
@@ -223,8 +223,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "fuji-gateway-kawaguchiko",
       title: { en: "Mishima -> Kawaguchiko", ja: "三島 -> 河口湖" },
       summary: {
-        en: "This is the local access leg into the lake base, trading the shinkansen arrival for the quieter Fuji-area night.",
-        ja: "この区間で新幹線到着から湖側の拠点へ移り、静かな富士エリアの夜へつなげます。"
+        en: "This is the local access leg into the lake base, trading the Mishima arrival for the quieter Fuji-area night.",
+        ja: "この区間で三島到着から湖側の拠点へ移り、静かな富士エリアの夜へつなげます。"
       },
       badges: [
         { en: "Day 3", ja: "3日目" },
@@ -343,7 +343,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       title: { en: "Mishima", ja: "三島" },
       summary: {
         en: "This stop marks the rail-to-local gateway into the Kawaguchiko side of the route.",
-        ja: "この地点は、新幹線から河口湖側のローカルアクセスへ切り替わる入口です。"
+        ja: "この地点は、三島到着から河口湖側のローカルアクセスへ切り替わる入口です。"
       },
       badges: [
         { en: "Day 3", ja: "3日目" },
@@ -448,7 +448,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       stopIds: ["osaka", "kyoto"],
       segmentIds: ["osaka-kyoto"],
       badges: [
-        { en: "Kaiyukan + Kyoto", ja: "海遊館＋京都" },
+        { en: "Kyoto", ja: "京都" },
         { en: "Aquarium then walk", ja: "水族館から街歩き" }
       ]
     },
@@ -457,13 +457,13 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       stopIds: ["kyoto", "fuji-gateway", "fuji"],
       segmentIds: ["kyoto-mishima-shinkansen", "fuji-gateway-kawaguchiko"],
       badges: [
-        { en: "Arashiyama + transfer", ja: "嵐山＋移動" },
+        { en: "Transfer to Mishima", ja: "三島へ移動" },
         { en: "Fuji transfer night", ja: "富士への移動日" }
       ],
       transitActions: [
         {
           id: "kyoto-mishima-shinkansen",
-          label: { en: "Shinkansen detail", ja: "新幹線詳細" }
+          label: { en: "Transfer detail", ja: "移動詳細" }
         },
         {
           id: "fuji-gateway-kawaguchiko",
@@ -530,7 +530,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     ],
     3: [
       { en: "Arashiyama", ja: "嵐山" },
-      { en: "Kyoto → Mishima", ja: "京都 → 三島" },
+      { en: "Transfer to Mishima", ja: "三島へ移動" },
       { en: "Kawaguchiko", ja: "河口湖" }
     ],
     4: [

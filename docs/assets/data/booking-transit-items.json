@@ -113,8 +113,8 @@
       "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
     },
     "details": {
-      "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Kyoto → Mishima handoff.",
-      "ja": "Booking.com の京都検索結果で、四条・烏丸・五条周辺の動線に合う宿を比較します。2日目の東山回遊と3日目の嵐山スタート、京都 → 三島の受け渡しをどちらも進めやすくするためです。"
+      "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Transfer to Mishima.",
+      "ja": "Booking.com の京都検索結果で、四条・烏丸・五条周辺の動線に合う宿を比較します。2日目の東山回遊と3日目の嵐山スタート、三島への移動をどちらも進めやすくするためです。"
     },
     "links": [
       {
@@ -374,27 +374,27 @@
       "ja": "予約済み"
     },
     "title": {
-      "en": "Kyoto → Mishima Shinkansen",
-      "ja": "京都 → 三島 新幹線"
+      "en": "Transfer to Mishima",
+      "ja": "三島へ移動"
     },
     "summary": {
       "en": "Treat this as the fixed intercity booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
       "ja": "3日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
     },
     "details": {
-      "en": "Use SmartEX once Day 3 timing is fixed. Keep this card focused on Kyoto → Mishima by shinkansen, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
-      "ja": "3日目の時刻が固まったら SmartEX を使います。このカードは京都 → 三島の新幹線に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
+      "en": "Use the Trip.com Kyoto-to-Mishima train page once Day 3 timing is fixed. Keep this card focused on Transfer to Mishima, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
+      "ja": "3日目の時刻が固まったら Trip.com の三島への移動ページを使います。このカードは三島への移動に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
     },
     "links": [
       {
-        "href": "https://smart-ex.jp/en/lp/app/",
+        "href": "https://www.trip.com/trains/japan/route/kyoto-to-mishima/",
         "label": {
-          "en": "SmartEX official booking",
-          "ja": "SmartEX公式予約"
+          "en": "Trip.com train search",
+          "ja": "Trip.com鉄道検索"
         },
         "note": {
-          "en": "Official JR Central SmartEX route and booking entry for the Kyoto → Mishima shinkansen leg.",
-          "ja": "京都 → 三島の新幹線区間に使う JR東海 SmartEX の公式予約導線です。"
+          "en": "Trip.com train route page for the Kyoto-to-Mishima transfer.",
+          "ja": "三島への移動に使う Trip.com の鉄道路線ページです。"
         },
         "price": {
           "en": "Approx. JPY 4,600 / person",
@@ -450,19 +450,19 @@
       "ja": "3日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
     },
     "details": {
-      "en": "Use the working official SEKITORI live-results page once the shinkansen timing is locked. It opens Mishima Station South Exit (Platform 2) -> Kawaguchiko Station on the liner directly instead of the broader non-working area handoff page.",
-      "ja": "新幹線時刻が固まったら、動作する SEKITORI の公式ライブ結果ページを使います。広いエリア指定の動かないページではなく、三島駅南口2番のりば -> 河口湖駅をそのまま開けます。"
+      "en": "Use the Trip.com Mishima transport page once the Transfer to Mishima timing is locked. Keep the Mishima Station South Exit -> Kawaguchiko Station bus option saved as the practical lake-base handoff.",
+      "ja": "三島への移動時刻が固まったら、Trip.com の三島交通ページを使います。三島駅南口 -> 河口湖駅のバス候補を、湖側拠点へ入る実用的な受け渡しとして保存しておきます。"
     },
     "links": [
       {
-        "href": "https://sekitori.jp/en/apps/results/?%5BnextDateFlag=true%5D&getOffAreaMiddleGroupId=2&getOffAreaType=1&nextDateFlag=true&rideAreaType=2&rideBusStopId=8&rideDate=today",
+        "href": "https://www.trip.com/things-to-do/experiences/mishima-transportation/",
         "label": {
-          "en": "SEKITORI bus booking",
-          "ja": "SEKITORIバス予約"
+          "en": "Trip.com Mishima transport",
+          "ja": "Trip.com 三島交通"
         },
         "note": {
-          "en": "Working official live results for Mishima Station South Exit -> Kawaguchiko Station",
-          "ja": "三島駅南口 -> 河口湖駅の動作するSEKITORI公式ライブ結果"
+          "en": "Trip.com transport results for Mishima-area options.",
+          "ja": "三島周辺の交通候補を確認する Trip.com 交通ページです。"
         },
         "price": {
           "en": "JPY 2,300 / person",
@@ -517,19 +517,19 @@
       "ja": "4日目の東京入りを保存しておき、富士側のまとまりのあとも渋谷到着とホテルチェックインへ入りやすくします。"
     },
     "details": {
-      "en": "Use the official Tokyu Bus highway page for the simplest Shibuya-side return. The current tourist highway listing shows the Shibuya / Futakotamagawa -> Kawaguchiko fare from JPY 2,000 one way, so this card now points to the official bus operator page instead of a reseller ticket page.",
-      "ja": "渋谷側へ最も単純に戻るなら、Tokyu Bus の公式高速バスページを使います。現在の観光向け高速バス案内では、渋谷・二子玉川 -> 河口湖が片道 JPY 2,000 からなので、このカードも外部販売ページではなく公式運行ページへ変更しています。"
+      "en": "Use the Trip.com Shibuya / Kawaguchiko bus listing for the simplest Shibuya-side return. This keeps the Tokyo handoff in the same Trip.com transit flow as the other route bookings.",
+      "ja": "渋谷側へ最も単純に戻るなら、Trip.com の渋谷・河口湖バス候補を使います。他の移動予約と同じ Trip.com の交通導線にそろえます。"
     },
     "links": [
       {
-        "href": "https://www.tokyubus.co.jp/tourist/highway/",
+        "href": "https://www.trip.com/things-to-do/detail/102425674/",
         "label": {
-          "en": "Tokyu Bus highway page",
-          "ja": "Tokyu Bus 高速バス案内"
+          "en": "Trip.com bus listing",
+          "ja": "Trip.comバス候補"
         },
         "note": {
-          "en": "Official Shibuya-side highway bus page for Kawaguchiko-bound service.",
-          "ja": "河口湖方面の渋谷側高速バスを案内する Tokyu Bus 公式ページです。"
+          "en": "Trip.com listing for the Shibuya / Kawaguchiko express bus.",
+          "ja": "渋谷・河口湖高速バスの Trip.com 候補ページです。"
         },
         "kind": "primary"
       }

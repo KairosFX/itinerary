@@ -450,8 +450,8 @@ const checklistPrintLateCutGuidance = {
     ja: "遅れたら、清水寺や祇園を切る前に二年坂・祇園の写真時間を短くします。"
   },
   "3": {
-    en: "If late, shorten Arashiyama before risking the Kyoto → Mishima handoff.",
-    ja: "遅れたら、京都→三島の移動を崩す前に嵐山を短くします。"
+    en: "If late, shorten Arashiyama before risking Transfer to Mishima.",
+    ja: "遅れたら、三島への移動を崩す前に嵐山を短くします。"
   },
   "4": {
     en: "If late, cut extra lake time before the Tokyo transfer.",
@@ -1191,8 +1191,8 @@ function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
       ja: "日本ルート全体"
     },
     summary: {
-      en: "View the full route with the Kyoto → Mishima shinkansen handoff, Mt. Fuji, and the Tokyo finish.",
-      ja: "京都から三島への新幹線ハンドオフ、富士山エリア、東京での締めまで全体ルートを確認します。"
+      en: "View the full route with Transfer to Mishima, Mt. Fuji, and the Tokyo finish.",
+      ja: "三島への移動、富士山エリア、東京での締めまで全体ルートを確認します。"
     },
     badges: [
       { en: "Overview", ja: "全体" },
