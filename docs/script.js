@@ -118,10 +118,12 @@ const radioPlaylistId = "PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa";
 const radioYoutubePlayerHost = "https://www.youtube-nocookie.com";
 const radioYoutubePlayerId = "kairos-viii-radio-player";
 const radioGithubPagesOrigin = "https://kairosfx.github.io";
-const radioYoutubeReadyTimeoutMs = 5200;
+const radioYoutubeReadyTimeoutMs = 9000;
 const radioYoutubeProbeDelayMs = 700;
 const radioYoutubeMaxProbeAttempts = 4;
 const radioPlaybackConfirmTimeoutMs = 6500;
+const radioYoutubeInfoPollIntervalMs = 2400;
+const radioYoutubeWarmupDelayMs = 650;
 const radioStationMeta = {
   title: "Kairos VIII Radio",
   artist: "Kairos playlist",
@@ -166,18 +168,20 @@ const checklistPrintDurationDefinitions = {
   "day3-shinkansen-mishima": { minutes: [110, 140], label: { en: "1.8–2.3 hr", ja: "1.8～2.3時間" } },
   "day3-transfer-fujikawaguchiko": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
   "day3-onsen-check-in": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
-  "day4-chureito": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
-  "day4-kawaguchiko": { minutes: [120, 180], label: { en: "2–3 hr", ja: "2～3時間" } },
-  "day4-tokyo-transfer": { minutes: [150, 180], label: { en: "2.5–3 hr", ja: "2.5～3時間" } },
-  "day4-tokyo-hotel-check-in": { minutes: [45, 45], label: { en: "45 min", ja: "45分" } },
+  "day4-chureito": { minutes: [110, 145], label: { en: "1.8–2.4 hr", ja: "1.8～2.4時間" } },
+  "day4-kawaguchiko": { minutes: [95, 130], label: { en: "1.6–2.2 hr", ja: "1.6～2.2時間" } },
+  "day4-oishi-park": { minutes: [70, 95], label: { en: "70–95 min", ja: "70～95分" } },
+  "day4-panoramic-ropeway": { minutes: [75, 110], label: { en: "1.25–1.8 hr", ja: "1.25～1.8時間" } },
+  "day5-tokyo-transfer": { minutes: [150, 190], label: { en: "2.5–3.2 hr", ja: "2.5～3.2時間" } },
+  "day5-tokyo-hotel-drop": { minutes: [40, 60], label: { en: "40–60 min", ja: "40～60分" } },
   "day5-shibuya-crossing": { minutes: [30, 45], label: { en: "30–45 min", ja: "30～45分" } },
-  "day5-shibuya-food-walk": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
+  "day5-shibuya-food-walk": { minutes: [75, 105], label: { en: "1.25–1.75 hr", ja: "1.25～1.75時間" } },
   "day5-sky": { minutes: [105, 120], label: { en: "1.75–2 hr", ja: "1.75～2時間" } },
-  "day6-skytree": { minutes: [105, 120], label: { en: "1.75–2 hr", ja: "1.75～2時間" } },
-  "day6-solamachi": { minutes: [45, 75], label: { en: "45–75 min", ja: "45～75分" } },
-  "day6-akihabara": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
+  "day6-skytree-solamachi": { minutes: [180, 230], label: { en: "3–3.8 hr", ja: "3～3.8時間" } },
+  "day6-akihabara": { minutes: [90, 135], label: { en: "1.5–2.25 hr", ja: "1.5～2.25時間" } },
+  "day6-shinjuku-night": { minutes: [110, 150], label: { en: "1.8–2.5 hr", ja: "1.8～2.5時間" } },
   "day7-palace": { minutes: [45, 60], label: { en: "45–60 min", ja: "45～60分" } },
-  "day7-shinjuku": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } },
+  "day7-lunch-walk": { minutes: [60, 90], label: { en: "1–1.5 hr", ja: "1～1.5時間" } },
   "day7-bags": { minutes: [30, 45], label: { en: "30–45 min", ja: "30～45分" } },
   "day7-airport": { minutes: [90, 120], label: { en: "1.5–2 hr", ja: "1.5～2時間" } }
 };
@@ -186,10 +190,10 @@ const checklistPrintDayStartDefaults = {
   "1": { start: "06:00", reason: "arrival-admin-window" },
   "2": { start: "11:00", reason: "kyoto-walking-flow" },
   "3": { start: "07:00", reason: "arashiyama-quiet-photo-window" },
-  "4": { start: "07:30", reason: "fuji-visibility-and-stair-climb" },
-  "5": { start: "16:45", reason: "shibuya-sunset-to-night-flow" },
-  "6": { start: "16:30", reason: "skytree-sunset-to-night-view" },
-  "7": { start: "09:30", reason: "light-departure-day" }
+  "4": { start: "07:15", reason: "fuji-visibility-and-stair-climb" },
+  "5": { start: "10:00", reason: "fuji-to-central-tokyo-transfer" },
+  "6": { start: "09:30", reason: "east-tokyo-and-shinjuku-flow" },
+  "7": { start: "10:00", reason: "light-departure-day" }
 };
 const checklistPrintTimingTypeProfiles = {
   "temple-shrine": {
@@ -427,10 +431,10 @@ const checklistPrintDayTimingProfiles = {
   "1": { intensity: "light", multiplier: 0.85 },
   "2": { intensity: "packed", multiplier: 1.03, city: "osaka-kyoto", fatigue: "medium" },
   "3": { intensity: "packed", multiplier: 1.08, city: "kyoto-fuji", fatigue: "medium" },
-  "4": { intensity: "medium", multiplier: 1.02 },
-  "5": { intensity: "light", multiplier: 0.9 },
-  "6": { intensity: "medium", multiplier: 1 },
-  "7": { intensity: "medium", multiplier: 1.05 }
+  "4": { intensity: "medium", multiplier: 1.05, city: "fuji", fatigue: "low" },
+  "5": { intensity: "medium", multiplier: 0.98, city: "fuji-tokyo", fatigue: "medium" },
+  "6": { intensity: "medium", multiplier: 0.96, city: "tokyo", fatigue: "medium" },
+  "7": { intensity: "light", multiplier: 0.9, city: "tokyo-airport", fatigue: "medium" }
 };
 const checklistPrintConnectionOverrides = {
   "day1-arrival-setup->day1-kaiyukan": {
@@ -498,15 +502,25 @@ const checklistPrintConnectionOverrides = {
     minutes: [25, 40],
     typical: 30
   },
-  "day4-kawaguchiko->day4-tokyo-transfer": {
-    mode: "lakeToTokyoHandoff",
+  "day4-kawaguchiko->day4-oishi-park": {
+    mode: "lakeToOishi",
+    minutes: [20, 35],
+    typical: 25
+  },
+  "day4-oishi-park->day4-panoramic-ropeway": {
+    mode: "weatherOptionalFujiHop",
+    minutes: [25, 40],
+    typical: 30
+  },
+  "day5-tokyo-transfer->day5-tokyo-hotel-drop": {
+    mode: "tokyoArrivalHotelHandoff",
+    minutes: [15, 30],
+    typical: 20
+  },
+  "day5-tokyo-hotel-drop->day5-sky": {
+    mode: "centralTokyoToShibuyaSunset",
     minutes: [25, 45],
     typical: 35
-  },
-  "day4-tokyo-transfer->day4-tokyo-hotel-check-in": {
-    mode: "tokyoArrivalHotelHandoff",
-    minutes: [15, 25],
-    typical: 20
   },
   "day5-sky->day5-shibuya-crossing": {
     mode: "closeNightViewWalk",
@@ -518,25 +532,25 @@ const checklistPrintConnectionOverrides = {
     minutes: [8, 15],
     typical: 10
   },
-  "day6-skytree->day6-solamachi": {
-    mode: "sameComplexWalk",
-    minutes: [5, 10],
-    typical: 5
-  },
-  "day6-solamachi->day6-akihabara": {
-    mode: "eastTokyoEveningTransit",
+  "day6-skytree-solamachi->day6-akihabara": {
+    mode: "eastTokyoConnectedTransit",
     minutes: [20, 35],
     typical: 25
   },
-  "day7-palace->day7-shinjuku": {
-    mode: "finalDayLunchTransit",
-    minutes: [25, 40],
-    typical: 30
+  "day6-akihabara->day6-shinjuku-night": {
+    mode: "crossTokyoEveningTransit",
+    minutes: [30, 45],
+    typical: 35
   },
-  "day7-shinjuku->day7-bags": {
+  "day7-palace->day7-lunch-walk": {
+    mode: "nearbyFinalDayWalk",
+    minutes: [5, 15],
+    typical: 10
+  },
+  "day7-lunch-walk->day7-bags": {
     mode: "finalDayBagHandoff",
-    minutes: [25, 40],
-    typical: 30
+    minutes: [20, 35],
+    typical: 25
   },
   "day7-bags->day7-airport": {
     mode: "protectedAirportBuffer",
@@ -558,20 +572,20 @@ const checklistPrintLateCutGuidance = {
     ja: "遅れたら、三島への移動を崩す前に嵐山を短くします。"
   },
   "4": {
-    en: "If late, cut extra lake time before the Tokyo transfer.",
-    ja: "遅れたら、東京移動前に湖畔の追加時間を短くします。"
+    en: "If late or foggy, protect Chureito early if visible, keep Lake Kawaguchiko and Oishi Park, and skip the ropeway first.",
+    ja: "遅れや霧がある場合は、見えるなら朝の忠霊塔を守り、河口湖と大石公園を優先して、ロープウェイから削ります。"
   },
   "5": {
-    en: "If late, keep Shibuya Sky near sunset and shorten the food walk after the crossing.",
-    ja: "遅れたら渋谷スカイの夕方枠を守り、交差点の後の食べ歩きを短くします。"
+    en: "If late, go straight to the central Tokyo bag drop, keep Shibuya Sky near sunset, and shorten the food walk.",
+    ja: "遅れたら東京中心部の荷物預けへ直行し、夕方の渋谷スカイを守って食べ歩きを短くします。"
   },
   "6": {
-    en: "If late, keep Skytree near sunset and cut Akihabara first if the evening gets tight.",
-    ja: "遅れたらスカイツリーの夕方枠を守り、夜が詰まる場合は秋葉原を先に削ります。"
+    en: "If late, keep Skytree/Solamachi together, shorten Akihabara, and still land Shinjuku as the evening food walk.",
+    ja: "遅れたらスカイツリー／ソラマチを一つのまとまりで守り、秋葉原を短くして新宿の夜の食事散歩へ着地します。"
   },
   "7": {
-    en: "Keep this light and protect the airport buffer.",
-    ja: "軽めにして空港移動の余裕を守ります。"
+    en: "Keep this light, make lunch optional, and protect the airport buffer.",
+    ja: "軽めにして昼食は任意にし、空港移動の余裕を守ります。"
   }
 };
 const checklistPrintTimingDefinitions = {
@@ -717,34 +731,60 @@ const checklistPrintTimingDefinitions = {
     type: "viewpoint-photo",
     anchor: "major",
     preferred: "early-morning",
-    targetStart: "07:30",
-    scenicPhotoWindow: ["07:00", "09:00"],
+    targetStart: "07:15",
+    scenicPhotoWindow: ["07:00", "09:15"],
     climb: "398-stairs",
     crowd: [20, 45],
-    weather: [15, 35]
+    rest: [20, 35],
+    weather: [20, 40]
   },
   "day4-kawaguchiko": {
     type: "viewpoint-photo",
     anchor: "major",
     preferred: "late-morning-after-chureito",
-    targetStart: "10:00",
+    targetStart: "10:20",
     transit: [15, 35],
     crowd: [15, 35],
+    rest: [15, 30],
     weather: [15, 35]
   },
-  "day4-tokyo-transfer": {
+  "day4-oishi-park": {
+    type: "viewpoint-photo",
+    anchor: "standard",
+    preferred: "midday-lake-flowers",
+    targetStart: "12:25",
+    transit: [15, 30],
+    crowd: [10, 30],
+    rest: [15, 30],
+    weather: [15, 35]
+  },
+  "day4-panoramic-ropeway": {
+    type: "viewpoint-photo",
+    anchor: "standard",
+    preferred: "optional-weather-dependent",
+    targetStart: "14:30",
+    optionalIfLate: true,
+    transit: [15, 35],
+    crowd: [20, 50],
+    rest: [10, 25],
+    weather: [20, 45]
+  },
+  "day5-tokyo-transfer": {
     type: "hotel-transit-admin",
     anchor: "major",
-    preferred: "afternoon",
+    preferred: "morning-midday",
+    targetStart: "10:00",
     transit: [25, 50],
-    crowd: [15, 35]
+    crowd: [15, 35],
+    weather: [5, 20]
   },
-  "day4-tokyo-hotel-check-in": {
+  "day5-tokyo-hotel-drop": {
     type: "hotel-transit-admin",
     anchor: "standard",
-    preferred: "evening",
+    preferred: "early-afternoon",
     transit: [10, 20],
-    crowd: [5, 15]
+    crowd: [5, 20],
+    rest: [10, 25]
   },
   "day5-shibuya-crossing": {
     type: "viewpoint-photo",
@@ -759,7 +799,7 @@ const checklistPrintTimingDefinitions = {
     type: "shopping-street-food",
     anchor: "major",
     preferred: "evening",
-    targetStart: "19:15",
+    targetStart: "19:00",
     mealRole: "dinner",
     walk: [5, 20],
     crowd: [20, 45]
@@ -774,48 +814,56 @@ const checklistPrintTimingDefinitions = {
     transit: [10, 25],
     crowd: [20, 45]
   },
-  "day6-skytree": {
+  "day6-skytree-solamachi": {
     type: "viewpoint-photo",
     anchor: "major",
-    preferred: "sunset",
-    targetStart: "16:30",
-    timedTicketWindow: ["16:30", "17:00"],
-    scenicPhotoWindow: ["16:30", "18:30"],
+    preferred: "morning-to-midday",
+    targetStart: "10:00",
+    timedTicketWindow: ["10:00", "11:00"],
+    sameAreaBlock: "skytree-solamachi",
     transit: [15, 35],
-    crowd: [20, 45]
-  },
-  "day6-solamachi": {
-    type: "shopping-street-food",
-    anchor: "standard",
-    preferred: "evening",
-    walk: [5, 15],
-    crowd: [15, 35]
+    walk: [10, 25],
+    crowd: [20, 45],
+    rest: [20, 35]
   },
   "day6-akihabara": {
     type: "shopping-street-food",
-    anchor: "major",
-    preferred: "night-if-fits",
-    cutFirstIfLate: true,
+    anchor: "standard",
+    preferred: "short-afternoon",
+    targetStart: "14:15",
     transit: [10, 25],
+    crowd: [15, 35],
+    rest: [10, 25]
+  },
+  "day6-shinjuku-night": {
+    type: "shopping-street-food",
+    anchor: "major",
+    preferred: "evening-city-lights",
+    targetStart: "17:45",
+    mealRole: "dinner",
+    transit: [20, 40],
+    walk: [10, 20],
     crowd: [20, 45]
   },
   "day7-palace": {
     type: "viewpoint-photo",
     anchor: "standard",
     preferred: "morning",
-    targetStart: "09:30",
+    targetStart: "10:00",
     openAccessOnly: true,
-    eastGardenClosureWeekdays: [1, 5],
     transit: [10, 25],
     crowd: [10, 30],
     weather: [10, 25]
   },
-  "day7-shinjuku": {
+  "day7-lunch-walk": {
     type: "shopping-street-food",
-    anchor: "major",
-    preferred: "afternoon",
-    transit: [15, 35],
-    crowd: [20, 45]
+    anchor: "quick",
+    preferred: "optional-nearby-lunch",
+    targetStart: "11:15",
+    optionalIfLate: true,
+    transit: [5, 15],
+    crowd: [10, 25],
+    rest: [10, 20]
   },
   "day7-bags": {
     type: "hotel-transit-admin",
@@ -839,9 +887,9 @@ const checklistPrintTimingDefinitions = {
 let budgetSourceUpdatedAt = "2026-03-27";
 let budgetAssumptionCopy = {
   en:
-    "The cost model follows one fixed 7-day route: Osaka, Kyoto, Mt. Fuji area, and Tokyo. Extras cover luggage forwarding, Fuji weather pivots, the Tokyo transfer, and a light airport-day buffer.",
+    "The cost model follows one fixed 7-day route: Osaka, Kyoto, two Mt. Fuji area nights, and Central Tokyo. Extras cover luggage forwarding, Fuji weather pivots, the Day 5 Tokyo transfer, and a light airport-day buffer.",
   ja:
-    "費用モデルは、大阪、京都、富士エリア、東京を回る固定の7日間ルートに合わせています。追加費用には、荷物配送、富士山の天候による動き直し、東京への移動受け渡し、帰国日の小さな余裕分を含めています。"
+    "費用モデルは、大阪、京都、富士エリア2泊、東京中心部を回る固定の7日間ルートに合わせています。追加費用には、荷物配送、富士山の天候による動き直し、5日目の東京移動、帰国日の小さな余裕分を含めています。"
 };
 let budgetStayDefinitions = {};
 let budgetSourceGroups = [];
@@ -852,6 +900,7 @@ let panelScrollAlignmentToken = 0;
 let sectionNavScrollLockPanelId = "";
 let sectionNavScrollLockUntil = 0;
 const fujiForecastCacheMaxAgeMs = 45 * 60 * 1000;
+const fujiForecastRequestTimeoutMs = 5500;
 const fujiForecastSourceUrl = "https://open-meteo.com/en/docs";
 const fujiForecastApiUrl = "https://api.open-meteo.com/v1/forecast";
 const fujiForecastTimezone = "Asia/Tokyo";
@@ -1235,6 +1284,7 @@ let radioYoutubeReadyResolve = null;
 let radioYoutubeReadyReject = null;
 let radioYoutubeReadyTimeout = 0;
 let radioYoutubeProbeTimer = 0;
+let radioYoutubeInfoPollTimer = 0;
 let radioYoutubeProbeAttempts = 0;
 let radioYoutubeDisabled = false;
 let radioStationInitialized = false;
@@ -1245,6 +1295,7 @@ let radioPlaylistTrackCount = 0;
 let radioCurrentTrackIndex = -1;
 let radioCurrentTime = 0;
 let radioCurrentTimeAnchorMs = 0;
+let radioCurrentVideoId = "";
 let radioCurrentTrackTitle = "";
 let radioCurrentArtworkUrl = "";
 let radioPendingPlaybackHistoryIndex = null;
@@ -1531,7 +1582,7 @@ function getResolvedAppAssetManifest() {
 function getRadioLabels() {
   return {
     idle: { en: "Quiet", ja: "待機中" },
-    loading: { en: "Loading", ja: "読み込み中" },
+    loading: { en: "Tuning...", ja: "チューニング中..." },
     ready: { en: "Ready", ja: "準備完了" },
     playing: { en: "On air", ja: "再生中" },
     paused: { en: "Paused", ja: "一時停止" },
@@ -1684,14 +1735,26 @@ function syncRadioControls() {
     radioState.isReady && !radioUnavailable && Boolean(radioYoutubePlayer);
 
   if (radioToggleButton) {
-    const labelKey = radioUnavailable ? "fallback" : radioState.isPlaying ? "pause" : "play";
+    const labelKey = radioUnavailable
+      ? "fallback"
+      : radioState.pendingPlay
+        ? "loading"
+        : radioState.isPlaying
+          ? "pause"
+          : "play";
     radioToggleButton.setAttribute("aria-label", getRadioLabel(labelKey));
     radioToggleButton.dataset.ariaLabelEn = getRadioLabels()[labelKey].en;
     radioToggleButton.dataset.ariaLabelJa = getRadioLabels()[labelKey].ja;
-    radioToggleButton.disabled = radioUnavailable;
+    radioToggleButton.disabled = radioUnavailable || radioState.pendingPlay;
   }
   if (radioToggleIconNode) {
-    radioToggleIconNode.textContent = radioUnavailable ? "!" : radioState.isPlaying ? "⏸" : "▶";
+    radioToggleIconNode.textContent = radioUnavailable
+      ? "!"
+      : radioState.pendingPlay
+        ? "..."
+        : radioState.isPlaying
+          ? "⏸"
+          : "▶";
   }
   if (radioPreviousButton) {
     radioPreviousButton.disabled = !canControlPlaybackPosition;
@@ -1737,8 +1800,43 @@ function isRadioVideoId(value) {
   return /^[\w-]{11}$/.test(videoId) && videoId.toLowerCase() !== "videoseries";
 }
 
+function getRadioVideoIdFromPlaylistEntry(entry) {
+  if (isRadioVideoId(entry)) {
+    return String(entry).trim();
+  }
+
+  if (typeof entry === "string") {
+    const match =
+      entry.match(/[?&]v=([\w-]{11})/) ||
+      entry.match(/\/embed\/([\w-]{11})/) ||
+      entry.match(/\/shorts\/([\w-]{11})/) ||
+      entry.match(/youtu\.be\/([\w-]{11})/);
+    return isRadioVideoId(match?.[1]) ? match[1] : "";
+  }
+
+  if (!entry || typeof entry !== "object") {
+    return "";
+  }
+
+  const rawVideoId =
+    entry.video_id ||
+    entry.videoId ||
+    entry.id ||
+    entry.video ||
+    "";
+  return isRadioVideoId(rawVideoId) ? String(rawVideoId).trim() : "";
+}
+
 function getRadioVideoIdFromInfo(info = {}) {
   const videoData = info.videoData && typeof info.videoData === "object" ? info.videoData : {};
+  const playlistIndex = Number.parseInt(String(info.playlistIndex), 10);
+  if (Array.isArray(info.playlist) && Number.isInteger(playlistIndex) && playlistIndex >= 0) {
+    const playlistVideoId = getRadioVideoIdFromPlaylistEntry(info.playlist[playlistIndex]);
+    if (playlistVideoId) {
+      return playlistVideoId;
+    }
+  }
+
   const rawVideoId =
     videoData.video_id ||
     videoData.videoId ||
@@ -1778,6 +1876,7 @@ function getRadioArtworkUrlForVideo(videoId) {
 }
 
 function showRadioArtworkFallback() {
+  radioCurrentVideoId = "";
   radioCurrentArtworkUrl = "";
   radioPlayerNode?.setAttribute("data-radio-artwork-state", "fallback");
   if (!radioArtworkNode) {
@@ -1826,6 +1925,7 @@ function updateRadioArtworkFromInfo(info = {}) {
 
   const videoId = getRadioVideoIdFromInfo(info);
   if (videoId) {
+    radioCurrentVideoId = videoId;
     setRadioArtworkSource(getRadioArtworkUrlForVideo(videoId), {
       kind: "track",
       title: radioCurrentTrackTitle || radioStationMeta.title
@@ -1890,6 +1990,13 @@ function clearRadioYoutubeReadinessTimers() {
   }
 }
 
+function clearRadioYoutubeInfoPolling() {
+  if (radioYoutubeInfoPollTimer) {
+    window.clearTimeout(radioYoutubeInfoPollTimer);
+    radioYoutubeInfoPollTimer = 0;
+  }
+}
+
 function clearRadioPlaybackConfirmation() {
   if (radioPlaybackConfirmTimeout) {
     window.clearTimeout(radioPlaybackConfirmTimeout);
@@ -1911,6 +2018,7 @@ function disableRadioYoutubeEmbed() {
   radioYoutubePlayerReadyPromise = null;
   clearRadioPlaybackConfirmation();
   clearRadioYoutubeReadinessCallbacks();
+  clearRadioYoutubeInfoPolling();
   if (radioYoutubeMountNode) {
     radioYoutubeMountNode.replaceChildren();
   }
@@ -2074,6 +2182,7 @@ function postRadioYoutubeCommand(func, args = []) {
     JSON.stringify({
       event: "command",
       id: radioYoutubePlayerId,
+      channel: "widget",
       func,
       args
     }),
@@ -2089,10 +2198,34 @@ function requestRadioYoutubeInfoDelivery() {
   radioYoutubeIframe.contentWindow.postMessage(
     JSON.stringify({
       event: "listening",
-      id: radioYoutubePlayerId
+      id: radioYoutubePlayerId,
+      channel: "widget"
     }),
     "*"
   );
+}
+
+function startRadioYoutubeInfoPolling({ immediate = false } = {}) {
+  if (
+    radioYoutubeDisabled ||
+    radioState.loadFailed ||
+    !radioYoutubeIframe?.contentWindow ||
+    radioYoutubeInfoPollTimer
+  ) {
+    return;
+  }
+
+  if (immediate) {
+    requestRadioYoutubeInfoDelivery();
+  }
+
+  radioYoutubeInfoPollTimer = window.setTimeout(() => {
+    radioYoutubeInfoPollTimer = 0;
+    if (radioState.isPlaying || radioState.pendingPlay) {
+      requestRadioYoutubeInfoDelivery();
+      startRadioYoutubeInfoPolling();
+    }
+  }, radioYoutubeInfoPollIntervalMs);
 }
 
 function scheduleRadioPlaybackConfirmation() {
@@ -2295,6 +2428,9 @@ function resolveRadioYoutubeReadyFromEmbed() {
 
   const resolveReady = radioYoutubeReadyResolve;
   clearRadioYoutubeReadinessCallbacks();
+  if (radioYoutubeIframe) {
+    radioYoutubeIframe.dataset.radioReady = "true";
+  }
   handleRadioYoutubeReady({ target: radioYoutubePlayer });
   resolveReady(radioYoutubePlayer);
 }
@@ -2368,10 +2504,12 @@ function handleRadioYoutubeMessage(event) {
     radioState.isPlaying = true;
     setRadioCurrentTime(getEstimatedRadioCurrentTime());
     setRadioState("playing");
+    startRadioYoutubeInfoPolling();
   } else if ((playerState === 0 || playerState === 2) && !radioState.pendingPlay) {
     setRadioCurrentTime(getEstimatedRadioCurrentTime());
     radioState.isPlaying = false;
     setRadioState(radioState.isReady ? "paused" : "ready");
+    clearRadioYoutubeInfoPolling();
   }
 
   syncRadioControls();
@@ -2390,6 +2528,7 @@ function handleRadioYoutubeReady(event = {}) {
     typeof event.target?.nextVideo === "function" ||
     typeof radioYoutubePlayer?.nextVideo === "function";
   applyRadioVolume();
+  requestRadioYoutubeInfoDelivery();
   setRadioState("ready");
   syncRadioControls();
   updateRadioMediaSessionPlaybackState();
@@ -2437,9 +2576,7 @@ function ensureRadioYoutubePlayer() {
               return;
             }
 
-            iframe.dataset.radioReady = "true";
             scheduleRadioYoutubeInfoProbe(0);
-            resolveRadioYoutubeReadyFromEmbed();
           }, 0);
         },
         { once: true }
@@ -2483,6 +2620,7 @@ function playRadio() {
       }
       if (player.usesPostMessage) {
         scheduleRadioPlaybackConfirmation();
+        startRadioYoutubeInfoPolling({ immediate: true });
         return;
       }
       window.setTimeout(() => {
@@ -2508,6 +2646,7 @@ function playRadio() {
 function pauseRadio() {
   radioState.pendingPlay = false;
   clearRadioPlaybackConfirmation();
+  clearRadioYoutubeInfoPolling();
   try {
     radioYoutubePlayer?.pauseVideo?.();
   } catch {
@@ -2571,6 +2710,7 @@ function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
     }
     radioState.isPlaying = true;
     setRadioState("playing");
+    startRadioYoutubeInfoPolling({ immediate: true });
     return true;
   } catch {
     markRadioFallback();
@@ -2597,6 +2737,7 @@ function playPreviousRadioTrackFromHistory() {
       radioYoutubePlayer.previousVideo();
       radioState.isPlaying = true;
       setRadioState("playing");
+      startRadioYoutubeInfoPolling({ immediate: true });
       return true;
     }
   } catch {
@@ -2648,6 +2789,7 @@ function nextRadioTrack() {
     }
     radioState.isPlaying = true;
     setRadioState("playing");
+    startRadioYoutubeInfoPolling({ immediate: true });
   } catch {
     markRadioFallback();
     return;
@@ -2694,6 +2836,20 @@ function syncRadioStationUi() {
   syncRadioControls();
 }
 
+function warmRadioYoutubePlayer() {
+  if (
+    offlineSnapshotMode ||
+    radioYoutubeDisabled ||
+    radioState.loadFailed ||
+    radioYoutubePlayerReady ||
+    radioYoutubePlayerReadyPromise
+  ) {
+    return;
+  }
+
+  void ensureRadioYoutubePlayer().catch(() => null);
+}
+
 function initializeRadioStation() {
   if (!radioPlayerNode) {
     return;
@@ -2719,6 +2875,7 @@ function initializeRadioStation() {
   setRadioDefaultArtwork();
   setRadioState("idle");
   syncRadioControls();
+  window.setTimeout(warmRadioYoutubePlayer, radioYoutubeWarmupDelayMs);
 }
 
 function shouldWarmDeferredAssets() {
@@ -4496,8 +4653,15 @@ function normalizeFujiSpotForecast(spotConfig, payload) {
 }
 
 function fetchFujiSpotForecast(spotConfig) {
+  const controller =
+    typeof window.AbortController === "function" ? new window.AbortController() : null;
+  const timeout = controller
+    ? window.setTimeout(() => controller.abort(), fujiForecastRequestTimeoutMs)
+    : 0;
+  const fetchOptions = controller ? { signal: controller.signal } : undefined;
+
   return window
-    .fetch(buildFujiForecastUrl(spotConfig))
+    .fetch(buildFujiForecastUrl(spotConfig), fetchOptions)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`Fuji forecast request failed: ${response.status}`);
@@ -4505,7 +4669,12 @@ function fetchFujiSpotForecast(spotConfig) {
 
       return response.json();
     })
-    .then((payload) => normalizeFujiSpotForecast(spotConfig, payload));
+    .then((payload) => normalizeFujiSpotForecast(spotConfig, payload))
+    .finally(() => {
+      if (timeout) {
+        window.clearTimeout(timeout);
+      }
+    });
 }
 
 function scoreFujiSpotWindow(spotForecast, windowHours) {
@@ -4806,8 +4975,8 @@ function renderFujiForecastLoading() {
         ja: "富士山が見えやすい時間"
       })}</p>
       <p class="fuji-forecast__body">${renderLocalizedContent({
-        en: "Checking Kawaguchiko and Chureito morning conditions for the next two days.",
-        ja: "河口湖と忠霊塔の朝の条件を、これから2日分確認しています。"
+        en: "Checking Chureito, Kawaguchiko, and lake-side visibility for the next two mornings.",
+        ja: "忠霊塔、河口湖、湖畔側の見え方を、これから2朝分確認しています。"
       })}</p>
     `;
     syncLocalizedNodes(cardNode);
@@ -4832,8 +5001,8 @@ function renderFujiForecastError() {
         ja: "予報を取得できません"
       })}</p>
       <p class="fuji-forecast__summary-text">${renderLocalizedContent({
-        en: "Forecast unavailable. Keep Chureito optional and protect the Tokyo handoff.",
-        ja: "予報を取得できません。忠霊塔は任意にして、東京への移動を優先しましょう。"
+        en: "Forecast unavailable. Check the sky early and keep the ropeway optional.",
+        ja: "予報を取得できません。朝に空を確認し、ロープウェイは任意にします。"
       })}</p>
     `;
     syncLocalizedNodes(summaryNode);
@@ -4857,12 +5026,12 @@ function renderFujiForecastError() {
         ja: "柔軟な富士山プランを使う"
       })}</h3>
       <p class="fuji-forecast__recommendation">${renderLocalizedContent({
-        en: "Forecast unavailable. Decide after a quick Fuji check, then keep Tokyo timing clean.",
-        ja: "予報を取得できません。富士山を軽く確認してから判断し、そのあと東京移動の時刻を優先しましょう。"
+        en: "Forecast unavailable. Start with a quick Fuji check, then use the lake and Oishi Park as the reliable core.",
+        ja: "予報を取得できません。まず富士山を軽く確認し、河口湖と大石公園を確実な軸にします。"
       })}</p>
       <p class="fuji-forecast__reason">${renderLocalizedContent({
-        en: "Fallback: keep Chureito optional and prioritize the lake or flexible sightseeing.",
-        ja: "代替案: 忠霊塔は任意にして、湖畔や柔軟な観光を優先しましょう。"
+        en: "Fallback: keep Chureito early if visible, skip the ropeway first if fog, crowds, or time tighten.",
+        ja: "代替案: 見えるなら忠霊塔を朝に回し、霧・混雑・時間が厳しければロープウェイから削ります。"
       })}</p>
       <div class="fuji-forecast__meta">
         <span>${renderLocalizedContent({
@@ -5358,7 +5527,7 @@ function getChecklistPrintLabels() {
       duration: "目安時間",
       customDate: "日付を選択",
       specificStartTime: "予備開始時刻",
-      startOutput: "日別最適化",
+      startOutput: "",
       fallbackSuffix: "予備",
       est: "目安"
     };
@@ -5372,7 +5541,7 @@ function getChecklistPrintLabels() {
     duration: "Est. duration",
     customDate: "Select start date",
     specificStartTime: "Fallback start",
-    startOutput: "Optimized by day",
+    startOutput: "",
     fallbackSuffix: "fallback",
     est: "Est."
   };
@@ -5637,18 +5806,13 @@ function getChecklistPrintDay7Guidance(day = {}) {
     return getLocalizedText(baseGuidance);
   }
 
-  const isEastGardenClosureDay = date.getDay() === 1 || date.getDay() === 5;
-  if (!isEastGardenClosureDay) {
-    return getLocalizedText(baseGuidance);
-  }
-
   const dateLabel = formatChecklistPrintFullDateLabel(dateInput);
   const weekdayLabel = formatChecklistPrintWeekdayLabel(dateInput);
   if (language === "ja") {
-    return `${dateLabel}は${weekdayLabel}です。東御苑に行く場合は休園日を確認。軽めにして空港移動の余裕を守ります。`;
+    return `${dateLabel}は${weekdayLabel}です。皇居外苑・二重橋は短い写真ストップにして、空港移動の余裕を守ります。`;
   }
 
-  return `${dateLabel} is a ${weekdayLabel}; if visiting East Gardens, confirm closures. Keep this light and protect the airport buffer.`;
+  return `${dateLabel} is a ${weekdayLabel}; keep the Outer Palace / Nijubashi stop short and protect the airport buffer.`;
 }
 
 function getChecklistPrintLateCutGuidance(day = "") {

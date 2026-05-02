@@ -38,50 +38,50 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 4,
-      title: { en: "Fuji Morning, Tokyo Evening", ja: "富士の朝、東京の夜" },
+      title: { en: "Fuller Fuji Day", ja: "富士エリアをしっかり回る日" },
       note: {
-        en: "Give Chureito Shimoyoshida the early window around 7:30–8:30 AM if visibility cooperates. Build in the 398-stair climb, photo time, and a short rest, then do Lake Kawaguchiko before the Tokyo handoff.",
-        ja: "視界がよければ忠霊塔・下吉田は7:30～8:30頃の早い時間帯へ。398段の階段、写真時間、短い休憩を入れ、その後に河口湖を回して東京へ渡す。"
+        en: "Keep Chureito Shimoyoshida early for the best Fuji odds, with time for the 398 stairs, photos, and a rest. Then move through Lake Kawaguchiko and Oishi Park, leaving the Panoramic Ropeway optional for clear weather, energy, crowds, and time.",
+        ja: "富士山が見えやすい朝に忠霊塔・下吉田を置き、398段の階段、写真、休憩時間を入れる。その後は河口湖と大石公園へ回し、パノラマロープウェイは天気、体力、混雑、時間が合う場合だけにする。"
       },
       summary: {
-        en: "Early Chureito, Lake Kawaguchiko after, then Shibuya transfer and Tokyo hotel check-in.",
-        ja: "朝の忠霊塔、続けて河口湖、その後は渋谷移動と東京ホテルチェックイン。"
+        en: "Chureito early, Lake Kawaguchiko, Oishi Park, optional ropeway, then a second Fuji-area night.",
+        ja: "朝の忠霊塔、河口湖、大石公園、任意のロープウェイ、その後は富士エリア2泊目。"
       }
     },
     {
       day: 5,
-      title: { en: "Shibuya Day", ja: "渋谷の日" },
+      title: { en: "Central Tokyo Transfer + Shibuya Sunset", ja: "東京中心部移動と渋谷の夕景" },
       note: {
-        en: "Use Shibuya Sky as the sunset anchor, aiming for a 4:40–5:00 PM entry and a 4:45–6:30 PM block. Then drop into Shibuya Crossing after dark and finish with the food walk.",
-        ja: "渋谷スカイを夕方の軸にし、16:40～17:00入場、16:45～18:30の枠を狙う。その後、日没後の渋谷交差点へ下り、最後に食べ歩きへつなぐ。"
+        en: "Use the morning or midday to transfer from Kawaguchiko to a Central Tokyo hotel, then check in or drop bags. A central base makes the Tokyo days easier to traverse. Keep Shibuya Sky around sunset, then Shibuya Crossing after dark and a simple Shibuya food walk.",
+        ja: "午前から昼に河口湖から東京中心部のホテルへ移動し、チェックインまたは荷物預けを済ませる。東京中心部の拠点にすると都内を回りやすい。夕方は渋谷スカイ、日没後は渋谷交差点、最後に渋谷で軽く食べ歩く。"
       },
       summary: {
-        en: "Shibuya Sky near sunset, Shibuya Crossing after dark, then Shibuya food walk.",
-        ja: "夕方の渋谷スカイ、日没後の渋谷交差点、渋谷フードウォーク。"
+        en: "Fuji -> Central Tokyo, hotel bag drop, Shibuya Sky near sunset, crossing after dark, food walk.",
+        ja: "富士 -> 東京中心部、ホテル荷物預け、夕方の渋谷スカイ、日没後の交差点、食べ歩き。"
       }
     },
     {
       day: 6,
-      title: { en: "East Tokyo Loop", ja: "東京東側の一日" },
+      title: { en: "East Tokyo + Shinjuku Night", ja: "東京東側と新宿の夜" },
       note: {
-        en: "Move Tokyo Skytree to the late afternoon/sunset window if tickets allow: daylight view, sunset, then night lights. Keep Solamachi below it and use Akihabara after Skytree only if the evening still fits.",
-        ja: "チケットが合うなら東京スカイツリーは午後遅めから夕方へ。昼景、夕景、夜景をまとめて見て、その下のソラマチへ進み、秋葉原は夜に余裕がある場合だけ入れる。"
+        en: "Start earlier and treat Tokyo Skytree plus Solamachi as one connected block. Keep Akihabara short, around 1.5-2.5 hours, then move Shinjuku into the evening for city lights, food, and walking without pushing the night too late.",
+        ja: "早めに始め、東京スカイツリーとソラマチは一つのまとまりとして扱う。秋葉原は1.5～2.5時間程度に短くし、夕方以降は新宿へ移って夜景、食事、散歩を無理に遅くしすぎず楽しむ。"
       },
       summary: {
-        en: "Skytree near sunset, Solamachi after, and Akihabara only if the night still has room.",
-        ja: "夕方のスカイツリー、続けてソラマチ、夜に余裕があれば秋葉原。"
+        en: "Skytree/Solamachi as one block, short Akihabara, then Shinjuku night.",
+        ja: "スカイツリー／ソラマチを一つに、短めの秋葉原、その後は新宿の夜。"
       }
     },
     {
       day: 7,
-      title: { en: "Final Tokyo Reset", ja: "最後の東京調整" },
+      title: { en: "Final Airport Day", ja: "最終空港日" },
       note: {
-        en: "Keep the departure day light for the 7:00 PM flight. Treat the palace stop as a quick outer Imperial Palace / Nijubashi photo stop unless you separately confirm East Gardens timing. Use Shinjuku or lunch only if it fits, then protect bag pickup and a 3:00-3:30 PM central Tokyo departure for the airport.",
-        ja: "帰国日は19:00の便に合わせて軽めにする。皇居は東御苑の時間を別途確認する場合を除き、皇居外苑・二重橋の短い写真ストップとして扱う。新宿や昼食は入る場合だけにし、荷物回収と15:00～15:30頃の都心出発を守る。"
+        en: "Keep the departure day airport-safe. Use the Outer Imperial Palace / Nijubashi area as a quick photo stop, add only a simple lunch or short nearby walk if it fits, then pick up bags and protect a strong airport buffer.",
+        ja: "帰国日は空港優先で軽くする。皇居外苑・二重橋は短い写真ストップにし、合う場合だけ軽い昼食か近場の短い散歩を足す。その後は荷物回収と空港移動の強い余裕を守る。"
       },
       summary: {
-        en: "Outer palace photo stop, optional Shinjuku/lunch, bag pickup, then protected airport transfer.",
-        ja: "皇居外苑の写真、必要なら新宿／昼食、荷物回収、余裕を持った空港移動。"
+        en: "Outer palace / Nijubashi photo stop, optional simple lunch, bag pickup, airport transfer.",
+        ja: "皇居外苑・二重橋の写真、任意の軽い昼食、荷物回収、空港移動。"
       }
     }
   ];
@@ -252,26 +252,26 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       id: "fuji-tokyo",
-      title: { en: "Mt. Fuji area -> Tokyo / Shibuya", ja: "富士エリア -> 東京・渋谷" },
+      title: { en: "Mt. Fuji area -> Central Tokyo", ja: "富士エリア -> 東京中心部" },
       summary: {
-        en: "Day 4 is the clean Tokyo handoff from the Fuji side into Shibuya.",
-        ja: "4日目は富士側から渋谷へ入る、きれいな東京ハンドオフです。"
+        en: "Day 5 is the clean Tokyo handoff from the Fuji side into a central Tokyo base.",
+        ja: "5日目は富士側から東京中心部の拠点へ入る、きれいな東京ハンドオフです。"
       },
       badges: [
-        { en: "Day 4", ja: "4日目" },
+        { en: "Day 5", ja: "5日目" },
         { en: "Tokyo handoff", ja: "東京への受け渡し" }
       ],
       notes: [
         {
-          en: "Use this when you want the Tokyo transfer separated from the Fuji-area local stops earlier on Day 4.",
-          ja: "4日目の前半に置いた富士エリアの立ち寄りと切り分けて、東京への移動だけ見たいときに使います。"
+          en: "Use this when you want the transfer separated from the fuller Fuji-area day before it.",
+          ja: "前日の富士エリアをしっかり回る日と切り分けて、東京への移動だけ見たいときに使います。"
         },
         {
-          en: "The linked transit detail keeps the direct train and highway-bus arrival options together.",
-          ja: "関連詳細には、直通列車と高速バスの到着案をまとめています。"
+          en: "The linked transit detail keeps the highway-bus and rail fallback options together for the central Tokyo bag-drop flow.",
+          ja: "関連詳細には、東京中心部の荷物預けへつなぐ高速バスと鉄道代替案をまとめています。"
         }
       ],
-      dayLinks: [{ day: 4 }],
+      dayLinks: [{ day: 5 }],
       transitActions: [
         {
           id: "kawaguchiko-tokyo",
@@ -375,8 +375,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "fuji",
       title: { en: "Mt. Fuji area", ja: "富士エリア" },
       summary: {
-        en: "This stop groups the Day 3 Mishima handoff, the overnight Fuji base, and the Day 4 Chureito Shimoyoshida and Lake Kawaguchiko block before Tokyo.",
-        ja: "この地点は、3日目の三島ハンドオフ、富士エリア宿泊、そして4日目の忠霊塔・下吉田と河口湖のまとまりを、東京へ向かう前にまとめています。"
+        en: "This stop groups the Day 3 Mishima handoff, two Fuji-area nights, and the fuller Day 4 Chureito, Kawaguchiko, Oishi Park, and optional ropeway block.",
+        ja: "この地点は、3日目の三島ハンドオフ、富士エリア2泊、そして4日目の忠霊塔、河口湖、大石公園、任意のロープウェイをまとめています。"
       },
       badges: [
         { en: "Days 3-4", ja: "3日目-4日目" },
@@ -384,12 +384,12 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       ],
       notes: [
         {
-          en: "The route now reaches the Fuji base on Day 3, then keeps Chureito Shimoyoshida and Lake Kawaguchiko together on Day 4 before Tokyo.",
-          ja: "このルートは3日目に富士エリア拠点へ入り、4日目に忠霊塔・下吉田と河口湖をまとめてから東京へ向かいます。"
+          en: "The route reaches the Fuji base on Day 3 and gives Day 4 enough room for stairs, photos, lake transit, food/rest, and weather flexibility.",
+          ja: "このルートは3日目に富士エリア拠点へ入り、4日目は階段、写真、湖畔移動、食事と休憩、天候の余白まで確保します。"
         },
         {
-          en: "Tokyo now starts on Day 4 after the Fuji block, leaving Day 5 free for the West Tokyo stay.",
-          ja: "東京入りは富士エリアのまとまりのあと4日目に行い、5日目は西東京側を素直に回せるようにしています。"
+          en: "Tokyo starts on Day 5, which keeps the Fuji day from ending too early or forcing a rushed evening transfer.",
+          ja: "東京入りは5日目に移し、富士の日が早く終わりすぎたり、夕方移動で急ぎすぎたりしないようにします。"
         }
       ],
       dayLinks: [{ day: 3 }, { day: 4 }],
@@ -408,25 +408,25 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "tokyo",
       title: { en: "Tokyo", ja: "東京" },
       summary: {
-        en: "Tokyo now anchors the Shibuya arrival, one fuller east-side sightseeing day, and the departure-day wrap-up after the Fuji block.",
-        ja: "東京は、富士エリア後の渋谷到着、東側の観光本番日、そして帰国日の調整までをまとめています。"
+        en: "Tokyo now anchors the Day 5 central hotel handoff, the East Tokyo plus Shinjuku day, and the light departure-day wrap-up.",
+        ja: "東京は、5日目の中心部ホテルへの受け渡し、東京東側と新宿の日、そして軽い帰国日をまとめています。"
       },
       badges: [
-        { en: "Days 4-7", ja: "4日目-7日目" },
+        { en: "Days 5-7", ja: "5日目-7日目" },
         { en: "Main-route finish", ja: "本編の締め" }
       ],
       notes: [
         {
-          en: "Use Day 4 to come into Shibuya from the Fuji side, then keep the Tokyo hotel check-in practical.",
-          ja: "4日目は富士側から渋谷へ入り、そのまま東京ホテルのチェックインを実用的に済ませます。"
+          en: "Move to a central Tokyo hotel on Day 5 so Shibuya, East Tokyo, Shinjuku, and the airport exit are easier to traverse.",
+          ja: "5日目に東京中心部のホテルへ移ることで、渋谷、東京東側、新宿、空港への出発を回りやすくします。"
         },
         {
-          en: "Day 6 uses Skytree near sunset, Solamachi after, and Akihabara only if the evening still fits; Day 7 stays light with the outer palace photo stop, optional Shinjuku/lunch, bags, and airport transfer.",
-          ja: "6日目は夕方のスカイツリー、続けてソラマチ、夜に余裕があれば秋葉原。7日目は皇居外苑の写真、必要なら新宿／昼食、荷物、空港移動を軽めに組みます。"
+          en: "Day 6 keeps Skytree/Solamachi connected, Akihabara short, and Shinjuku for night; Day 7 stays airport-safe with the outer palace photo stop, optional simple lunch, bags, and transfer.",
+          ja: "6日目はスカイツリー／ソラマチをつなげ、秋葉原を短めにし、新宿を夜へ。7日目は皇居外苑の写真、任意の軽い昼食、荷物、空港移動で安全にします。"
         }
       ],
-      dayLinks: [{ day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }],
-      primaryDay: 4,
+      dayLinks: [{ day: 5 }, { day: 6 }, { day: 7 }],
+      primaryDay: 5,
       segmentIds: ["fuji-tokyo"],
       lngLat: [139.7017, 35.658],
       labelPosition: "ne"
@@ -473,26 +473,32 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 4,
-      stopIds: ["fuji", "tokyo"],
-      segmentIds: ["fuji-tokyo"],
+      stopIds: ["fuji"],
+      segmentIds: [],
       badges: [
-        { en: "Fuji day", ja: "富士エリアの日" },
-        { en: "Tokyo handoff", ja: "東京への受け渡し" }
+        { en: "Full Fuji day", ja: "富士エリアの日" },
+        { en: "Second Fuji night", ja: "富士2泊目" }
       ],
       transitActions: [
         {
-          id: "kawaguchiko-tokyo",
-          label: { en: "Tokyo arrival detail", ja: "東京到着詳細" }
+          id: "fuji-local-hops",
+          label: { en: "Fuji local detail", ja: "富士エリア詳細" }
         }
       ]
     },
     {
       day: 5,
-      stopIds: ["tokyo"],
-      segmentIds: [],
+      stopIds: ["fuji", "tokyo"],
+      segmentIds: ["fuji-tokyo"],
       badges: [
-        { en: "West Tokyo", ja: "西東京側" },
-        { en: "Shibuya focus", ja: "渋谷中心" }
+        { en: "Central Tokyo transfer", ja: "東京中心部へ移動" },
+        { en: "Shibuya sunset", ja: "渋谷の夕景" }
+      ],
+      transitActions: [
+        {
+          id: "kawaguchiko-tokyo",
+          label: { en: "Tokyo transfer detail", ja: "東京移動詳細" }
+        }
       ]
     },
     {
@@ -500,8 +506,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       stopIds: ["tokyo"],
       segmentIds: [],
       badges: [
-        { en: "Full Tokyo day", ja: "東京観光メイン日" },
-        { en: "Skytree side", ja: "スカイツリー側" }
+        { en: "East Tokyo", ja: "東京東側" },
+        { en: "Shinjuku night", ja: "新宿の夜" }
       ]
     },
     {
@@ -537,20 +543,25 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     4: [
       { en: "Chureito Shimoyoshida", ja: "忠霊塔・下吉田" },
       { en: "Lake Kawaguchiko", ja: "河口湖" },
-      { en: "Tokyo / Shibuya", ja: "東京・渋谷" }
+      { en: "Oishi Park", ja: "大石公園" },
+      { en: "Optional Panoramic Ropeway", ja: "任意のパノラマロープウェイ" }
     ],
     5: [
+      { en: "Transfer to Central Tokyo", ja: "東京中心部へ移動" },
+      { en: "Hotel bag drop", ja: "ホテル荷物預け" },
       { en: "Shibuya Sky", ja: "渋谷スカイ" },
       { en: "Shibuya Crossing", ja: "渋谷交差点" },
       { en: "Shibuya Food Walk", ja: "渋谷フードウォーク" }
     ],
     6: [
-      { en: "Tokyo Skytree", ja: "東京スカイツリー" },
-      { en: "Akihabara", ja: "秋葉原" }
+      { en: "Tokyo Skytree + Solamachi", ja: "東京スカイツリー＋ソラマチ" },
+      { en: "Akihabara", ja: "秋葉原" },
+      { en: "Shinjuku night", ja: "新宿の夜" }
     ],
     7: [
       { en: "Outer Imperial Palace", ja: "皇居外苑" },
-      { en: "Shinjuku", ja: "新宿" }
+      { en: "Optional simple lunch", ja: "任意の軽い昼食" },
+      { en: "Airport transfer", ja: "空港移動" }
     ]
   };
 

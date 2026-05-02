@@ -2695,10 +2695,10 @@ html.reduce-effects .site-backdrop__video {
     font-size: 0.66rem !important;
   }
 }</style>
-  <link rel="preload" href="./assets/app/style.dddeb48bfd.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.c7710beee0.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.dddeb48bfd.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.dddeb48bfd.css"></noscript>
+  <link rel="preload" href="./assets/app/style.d2edf08acf.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.e0f18ce09c.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.d2edf08acf.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.d2edf08acf.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -3124,8 +3124,8 @@ html.reduce-effects .site-backdrop__video {
                   <span data-language="ja" hidden>5日目</span>
                 </span>
                 <strong class="progress-item__place">
-                  <span data-language="en">West Tokyo</span>
-                  <span data-language="ja" hidden>東京西側</span>
+                  <span data-language="en">Central Tokyo</span>
+                  <span data-language="ja" hidden>東京中心部</span>
                 </strong>
               </div>
               <span class="progress-item__meter" aria-hidden="true"><span class="progress-item__meter-fill"></span></span>
@@ -3143,8 +3143,8 @@ html.reduce-effects .site-backdrop__video {
                   <span data-language="ja" hidden>6日目</span>
                 </span>
                 <strong class="progress-item__place">
-                  <span data-language="en">East Tokyo</span>
-                  <span data-language="ja" hidden>東京東側</span>
+                  <span data-language="en">East Tokyo + Shinjuku</span>
+                  <span data-language="ja" hidden>東京東側＋新宿</span>
                 </strong>
               </div>
               <span class="progress-item__meter" aria-hidden="true"><span class="progress-item__meter-fill"></span></span>
@@ -3162,8 +3162,8 @@ html.reduce-effects .site-backdrop__video {
                   <span data-language="ja" hidden>7日目</span>
                 </span>
                 <strong class="progress-item__place">
-                  <span data-language="en">Central Tokyo</span>
-                  <span data-language="ja" hidden>東京中心部</span>
+                  <span data-language="en">Airport Day</span>
+                  <span data-language="ja" hidden>空港日</span>
                 </strong>
               </div>
               <span class="progress-item__meter" aria-hidden="true"><span class="progress-item__meter-fill"></span></span>
@@ -3409,40 +3409,49 @@ html.reduce-effects .site-backdrop__video {
                     <span class="check-copy" data-language="ja" hidden>河口湖</span>
                   </label>
                 </li>
-                <li class="checklist-list__item checklist-list__item--with-detail">
-                  <label class="check-item" for="day4-tokyo-transfer">
-                    <input id="day4-tokyo-transfer" type="checkbox">
-                    <span class="check-copy" data-language="en">Transfer to Shibuya</span>
-                    <span class="check-copy" data-language="ja" hidden>渋谷へ移動</span>
+                <li>
+                  <label class="check-item" for="day4-oishi-park">
+                    <input id="day4-oishi-park" type="checkbox">
+                    <span class="check-copy" data-language="en">Oishi Park</span>
+                    <span class="check-copy" data-language="ja" hidden>大石公園</span>
                   </label>
-                  <button class="transit-trigger transit-trigger--checklist" type="button" data-transit-detail-trigger="kawaguchiko-tokyo">
-                    <span data-language="en">Open Tokyo transfer</span>
-                    <span data-language="ja" hidden>東京移動を開く</span>
-                  </button>
                 </li>
-                <li class="checklist-list__item checklist-list__item--with-detail">
-                  <label class="check-item" for="day4-tokyo-hotel-check-in">
-                    <input id="day4-tokyo-hotel-check-in" type="checkbox">
-                    <span class="check-copy" data-language="en">Tokyo hotel check-in</span>
-                    <span class="check-copy" data-language="ja" hidden>東京ホテルのチェックイン</span>
+                <li>
+                  <label class="check-item" for="day4-panoramic-ropeway">
+                    <input id="day4-panoramic-ropeway" type="checkbox">
+                    <span class="check-copy" data-language="en">Optional Panoramic Ropeway</span>
+                    <span class="check-copy" data-language="ja" hidden>任意のパノラマロープウェイ</span>
                   </label>
-                  <button class="transit-trigger transit-trigger--checklist" type="button" data-checklist-detail-trigger="tokyo-stay">
-                    <span data-language="en">Open Tokyo hotel</span>
-                    <span data-language="ja" hidden>東京ホテルを開く</span>
-                  </button>
                 </li>
               </ul>
+              <p class="day-card__note">
+                <span data-language="en">If late or foggy, keep the lake and Oishi Park, then skip the ropeway first.</span>
+                <span data-language="ja" hidden>遅れや霧がある場合は河口湖と大石公園を守り、ロープウェイから削ります。</span>
+              </p>
             </div>
 
             <aside class="day-card__side">
               <section
                 class="fuji-forecast fuji-forecast--summary"
+                data-state="loading"
                 data-fuji-forecast-summary
                 data-fuji-forecast-surface
                 aria-live="polite"
                 aria-label="Fuji outlook summary"
                 data-aria-label-en="Fuji outlook summary"
                 data-aria-label-ja="富士山の見え方サマリー">
+                <p class="fuji-forecast__eyebrow">
+                  <span data-language="en">Fuji weather watch</span>
+                  <span data-language="ja" hidden>富士山の見え方チェック</span>
+                </p>
+                <p class="fuji-forecast__summary-window">
+                  <span data-language="en">Checking conditions...</span>
+                  <span data-language="ja" hidden>条件を確認しています...</span>
+                </p>
+                <p class="fuji-forecast__summary-text">
+                  <span data-language="en">If live weather cannot load, use the flexible lake-first fallback.</span>
+                  <span data-language="ja" hidden>天気が読み込めない場合は、湖畔中心の柔軟な代替案を使います。</span>
+                </p>
               </section>
             </aside>
           </div>
@@ -3455,11 +3464,33 @@ html.reduce-effects .site-backdrop__video {
               <span data-language="ja" hidden>5日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">West Tokyo</span>
-              <span data-language="ja" hidden>東京西側</span>
+              <span data-language="en">Central Tokyo + Shibuya</span>
+              <span data-language="ja" hidden>東京中心部＋渋谷</span>
             </p>
           </div>
           <ul class="checklist-list">
+            <li class="checklist-list__item checklist-list__item--with-detail">
+              <label class="check-item" for="day5-tokyo-transfer">
+                <input id="day5-tokyo-transfer" type="checkbox">
+                <span class="check-copy" data-language="en">Transfer to Central Tokyo</span>
+                <span class="check-copy" data-language="ja" hidden>東京中心部へ移動</span>
+              </label>
+              <button class="transit-trigger transit-trigger--checklist" type="button" data-transit-detail-trigger="kawaguchiko-tokyo">
+                <span data-language="en">Open Tokyo transfer</span>
+                <span data-language="ja" hidden>東京移動を開く</span>
+              </button>
+            </li>
+            <li class="checklist-list__item checklist-list__item--with-detail">
+              <label class="check-item" for="day5-tokyo-hotel-drop">
+                <input id="day5-tokyo-hotel-drop" type="checkbox">
+                <span class="check-copy" data-language="en">Central Tokyo hotel check-in / bag drop</span>
+                <span class="check-copy" data-language="ja" hidden>東京中心部ホテルのチェックイン／荷物預け</span>
+              </label>
+              <button class="transit-trigger transit-trigger--checklist" type="button" data-checklist-detail-trigger="tokyo-stay">
+                <span data-language="en">Open Tokyo hotel</span>
+                <span data-language="ja" hidden>東京ホテルを開く</span>
+              </button>
+            </li>
             <li>
               <label class="check-item" for="day5-sky">
                 <input id="day5-sky" type="checkbox">
@@ -3491,23 +3522,16 @@ html.reduce-effects .site-backdrop__video {
               <span data-language="ja" hidden>6日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">East Tokyo</span>
-              <span data-language="ja" hidden>東京東側</span>
+              <span data-language="en">East Tokyo + Shinjuku night</span>
+              <span data-language="ja" hidden>東京東側＋新宿の夜</span>
             </p>
           </div>
           <ul class="checklist-list">
             <li>
-              <label class="check-item" for="day6-skytree">
-                <input id="day6-skytree" type="checkbox">
-                <span class="check-copy" data-language="en">Tokyo Skytree</span>
-                <span class="check-copy" data-language="ja" hidden>東京スカイツリー</span>
-              </label>
-            </li>
-            <li>
-              <label class="check-item" for="day6-solamachi">
-                <input id="day6-solamachi" type="checkbox">
-                <span class="check-copy" data-language="en">Tokyo Solamachi</span>
-                <span class="check-copy" data-language="ja" hidden>東京ソラマチ</span>
+              <label class="check-item" for="day6-skytree-solamachi">
+                <input id="day6-skytree-solamachi" type="checkbox">
+                <span class="check-copy" data-language="en">Tokyo Skytree + Solamachi block</span>
+                <span class="check-copy" data-language="ja" hidden>東京スカイツリー＋ソラマチ</span>
               </label>
             </li>
             <li>
@@ -3515,6 +3539,13 @@ html.reduce-effects .site-backdrop__video {
                 <input id="day6-akihabara" type="checkbox">
                 <span class="check-copy" data-language="en">Akihabara</span>
                 <span class="check-copy" data-language="ja" hidden>秋葉原</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item" for="day6-shinjuku-night">
+                <input id="day6-shinjuku-night" type="checkbox">
+                <span class="check-copy" data-language="en">Shinjuku night walk / food</span>
+                <span class="check-copy" data-language="ja" hidden>新宿の夜散歩／食事</span>
               </label>
             </li>
           </ul>
@@ -3527,8 +3558,8 @@ html.reduce-effects .site-backdrop__video {
               <span data-language="ja" hidden>7日目</span>
             </p>
             <p class="day-region">
-              <span data-language="en">Central Tokyo</span>
-              <span data-language="ja" hidden>東京中心部</span>
+              <span data-language="en">Final airport day</span>
+              <span data-language="ja" hidden>最終空港日</span>
             </p>
           </div>
           <ul class="checklist-list">
@@ -3540,10 +3571,10 @@ html.reduce-effects .site-backdrop__video {
               </label>
             </li>
             <li>
-              <label class="check-item" for="day7-shinjuku">
-                <input id="day7-shinjuku" type="checkbox">
-                <span class="check-copy" data-language="en">Shinjuku</span>
-                <span class="check-copy" data-language="ja" hidden>新宿</span>
+              <label class="check-item" for="day7-lunch-walk">
+                <input id="day7-lunch-walk" type="checkbox">
+                <span class="check-copy" data-language="en">Optional simple lunch / short nearby walk</span>
+                <span class="check-copy" data-language="ja" hidden>任意の軽い昼食／近場の短い散歩</span>
               </label>
             </li>
             <li>
@@ -3976,7 +4007,7 @@ html.reduce-effects .site-backdrop__video {
               <label class="packing-toggle">
                 <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
                 <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Pack Day 3 for the Fuji transfer night and Day 4 for the Tokyo handoff.</span><span data-language="ja" hidden>3日目は富士への移動泊用に、4日目は東京移動用に荷造りします。</span></span>
+                <span class="packing-toggle__copy"><span data-language="en">Pack Day 3 and Day 4 for two Fuji-area nights, then keep Day 5 ready for the Tokyo transfer.</span><span data-language="ja" hidden>3日目と4日目は富士エリア2泊用に、5日目は東京移動用に整えます。</span></span>
               </label>
             </li>
             <li class="packing-item" data-packing-item="luggage-save-ryokan-info">
@@ -4117,14 +4148,14 @@ html.reduce-effects .site-backdrop__video {
               <label class="packing-toggle">
                 <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
                 <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Check Kawaguchiko access, Fuji visibility, and your Tokyo arrival plan the night before.</span><span data-language="ja" hidden>前夜に河口湖アクセス、富士山の見え方、東京到着後の流れを確認します。</span></span>
+                <span class="packing-toggle__copy"><span data-language="en">Check Kawaguchiko access, Fuji visibility, and the Day 5 Tokyo transfer plan the night before.</span><span data-language="ja" hidden>前夜に河口湖アクセス、富士山の見え方、5日目の東京移動を確認します。</span></span>
               </label>
             </li>
             <li class="packing-item" data-packing-item="fuji-tokyo-shibuya-sky-info">
               <label class="packing-toggle">
                 <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
                 <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Keep your Shibuya Sky booking and bag rules handy for the Day 4 Tokyo arrival and the Day 5 Shibuya night.</span><span data-language="ja" hidden>4日目の東京到着と5日目の渋谷夜景に備えて、渋谷スカイの予約情報と荷物ルールをすぐ見られるようにしておく。</span></span>
+                <span class="packing-toggle__copy"><span data-language="en">Keep your Shibuya Sky booking and bag rules handy for the Day 5 Tokyo arrival and Shibuya night.</span><span data-language="ja" hidden>5日目の東京到着と渋谷夜景に備えて、渋谷スカイの予約情報と荷物ルールをすぐ見られるようにしておく。</span></span>
               </label>
             </li>
             <li class="packing-item" data-packing-item="fuji-tokyo-camera">
@@ -4298,10 +4329,10 @@ html.reduce-effects .site-backdrop__video {
   </div>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.dddeb48bfd.css","styleHash":"dddeb48bfd","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.c7710beee0.js","scriptHash":"c7710beee0","routeContentPath":"./assets/app/routeContent.03f91ce58d.js","routeContentHash":"03f91ce58d","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.fb4f1f7cdd.js","budgetContentHash":"fb4f1f7cdd","essentialsContentPath":"./assets/app/essentialsContent.ee6a7aa6b9.js","essentialsContentHash":"ee6a7aa6b9","generatedAt":"2026-05-02T17:27:16.740Z","cacheVersion":"dddeb48bfd-a79b88b908-c7710beee0-03f91ce58d-c9b56d76dd-fb4f1f7cdd-ee6a7aa6b9"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.d2edf08acf.css","styleHash":"d2edf08acf","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.e0f18ce09c.js","scriptHash":"e0f18ce09c","routeContentPath":"./assets/app/routeContent.3a5587be54.js","routeContentHash":"3a5587be54","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.18da69970b.js","budgetContentHash":"18da69970b","essentialsContentPath":"./assets/app/essentialsContent.111b549cd1.js","essentialsContentHash":"111b549cd1","generatedAt":"2026-05-02T23:16:11.854Z","cacheVersion":"d2edf08acf-a79b88b908-e0f18ce09c-3a5587be54-c9b56d76dd-18da69970b-111b549cd1"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.c7710beee0.js" defer></script>
+  <script src="./assets/app/script.e0f18ce09c.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>
