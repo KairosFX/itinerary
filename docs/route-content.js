@@ -26,13 +26,13 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 3,
-      title: { en: "Transfer to Mishima", ja: "三島へ移動" },
+      title: { en: "1 Bullet Train ride to Mishima", ja: "三島へ新幹線移動" },
       note: {
         en: "Start Arashiyama early: use roughly 7:00–9:00 AM for Bamboo Grove, Togetsukyo Bridge, and quiet photos, then 9:00–11:30 AM for temples, shops, and food. After that, keep the route correct and simple: Kyoto -> Mishima by Shinkansen, then onward to Fujikawaguchiko.",
         ja: "嵐山は早めに始める。7:00～9:00頃を竹林、渡月橋、静かな写真時間に使い、9:00～11:30頃を寺社、店、食事に使う。その後は京都 -> 三島を新幹線で進み、富士河口湖へつなぐ。"
       },
       summary: {
-        en: "Early Arashiyama, Kyoto -> Mishima by Shinkansen, Fujikawaguchiko transfer, then the onsen reset.",
+        en: "Early Arashiyama, 1 Bullet Train ride to Mishima, Fujikawaguchiko transfer, then the onsen reset.",
         ja: "早朝の嵐山、京都 -> 三島の新幹線、富士河口湖への移動、温泉宿でリセット。"
       }
     },
@@ -190,14 +190,14 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       id: "kyoto-mishima-shinkansen",
-      title: { en: "Transfer to Mishima", ja: "三島へ移動" },
+      title: { en: "1 Bullet Train ride to Mishima", ja: "三島へ新幹線移動" },
       summary: {
         en: "This is the clean Day 3 handoff from Kyoto Station into the Mt. Fuji side.",
         ja: "京都駅から富士側へ入るための、分かりやすい3日目の受け渡しです。"
       },
       badges: [
         { en: "Day 3", ja: "3日目" },
-        { en: "Transfer", ja: "移動" }
+        { en: "Bullet Train ride", ja: "新幹線移動" }
       ],
       notes: [
         {
@@ -213,7 +213,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       transitActions: [
         {
           id: "kyoto-mishima-shinkansen",
-          label: { en: "Transfer detail", ja: "移動詳細" }
+          label: { en: "Bullet Train detail", ja: "新幹線詳細" }
         }
       ],
       stopIds: ["kyoto", "fuji-gateway"],
@@ -457,13 +457,13 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       stopIds: ["kyoto", "fuji-gateway", "fuji"],
       segmentIds: ["kyoto-mishima-shinkansen", "fuji-gateway-kawaguchiko"],
       badges: [
-        { en: "Transfer to Mishima", ja: "三島へ移動" },
+        { en: "1 Bullet Train ride to Mishima", ja: "三島へ新幹線移動" },
         { en: "Fuji transfer night", ja: "富士への移動日" }
       ],
       transitActions: [
         {
           id: "kyoto-mishima-shinkansen",
-          label: { en: "Transfer detail", ja: "移動詳細" }
+          label: { en: "Bullet Train detail", ja: "新幹線詳細" }
         },
         {
           id: "fuji-gateway-kawaguchiko",
@@ -537,7 +537,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     ],
     3: [
       { en: "Arashiyama", ja: "嵐山" },
-      { en: "Transfer to Mishima", ja: "三島へ移動" },
+      { en: "1 Bullet Train ride to Mishima", ja: "三島へ新幹線移動" },
       { en: "Kawaguchiko", ja: "河口湖" }
     ],
     4: [

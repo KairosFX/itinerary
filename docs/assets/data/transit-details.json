@@ -72,10 +72,10 @@
   },
   {
     "id": "kyoto-mishima-shinkansen",
-    "tag": { "en": "Day 3 transfer", "ja": "3日目の移動" },
+    "tag": { "en": "Day 3 Bullet Train ride", "ja": "3日目の新幹線移動" },
     "title": {
-      "en": "Transfer to Mishima",
-      "ja": "三島へ移動"
+      "en": "1 Bullet Train ride: Kyoto -> Mishima",
+      "ja": "新幹線1本：京都 -> 三島"
     },
     "summary": {
       "en": "This is the fixed transfer that carries the route from Kyoto Station into the Mt. Fuji side.",
@@ -88,7 +88,7 @@
     "from": { "en": "Kyoto Station", "ja": "京都駅" },
     "to": { "en": "Mishima Station", "ja": "三島駅" },
     "transport": {
-      "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 transfer, then keep the Mishima-to-lake transfer saved separately.",
+      "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 Bullet Train ride, then keep the Mishima-to-lake transfer saved separately.",
       "ja": "3日目の固定移動には Trip.com の三島への移動ページを使い、三島から湖側への移動は別に保存しておきます。"
     },
     "why": {
@@ -111,7 +111,7 @@
     ],
     "prepReminders": [
       {
-        "en": "Book on Trip.com once Day 3 is fixed rather than leaving Transfer to Mishima to the last minute.",
+        "en": "Book on Trip.com once Day 3 is fixed rather than leaving the Bullet Train ride to Mishima to the last minute.",
         "ja": "3日目が固まったら Trip.com で予約し、三島への移動を直前判断にしないようにします。"
       },
       {
@@ -175,7 +175,7 @@
     ],
     "prepReminders": [
       {
-        "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once Transfer to Mishima is fixed.",
+        "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the Bullet Train ride to Mishima is fixed.",
         "ja": "前夜に三島発バスの時刻を確認し、三島への移動が固まったあとで当日の最終便を見直します。"
       },
       {

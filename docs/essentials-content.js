@@ -114,7 +114,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
       },
       "details": {
-        "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Transfer to Mishima.",
+        "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Bullet Train ride to Mishima.",
         "ja": "Booking.com の京都検索結果で、四条・烏丸・五条周辺の動線に合う宿を比較します。2日目の東山回遊と3日目の嵐山スタート、三島への移動をどちらも進めやすくするためです。"
       },
       "links": [
@@ -374,15 +374,15 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "予約済み"
       },
       "title": {
-        "en": "Transfer to Mishima",
-        "ja": "三島へ移動"
+        "en": "1 Bullet Train ride to Mishima",
+        "ja": "三島へ新幹線移動"
       },
       "summary": {
-        "en": "Treat this as the fixed intercity booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
+        "en": "Treat this as the fixed Bullet Train booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
         "ja": "3日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
       },
       "details": {
-        "en": "Use the Trip.com Kyoto-to-Mishima train page once Day 3 timing is fixed. Keep this card focused on Transfer to Mishima, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
+        "en": "Use the Trip.com Kyoto-to-Mishima train page once Day 3 timing is fixed. Keep this card focused on the 1 Bullet Train ride to Mishima, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
         "ja": "3日目の時刻が固まったら Trip.com の三島への移動ページを使います。このカードは三島への移動に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
       },
       "links": [
@@ -450,7 +450,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "3日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
       },
       "details": {
-        "en": "Use the Trip.com Mishima transport page once the Transfer to Mishima timing is locked. Keep the Mishima Station South Exit -> Kawaguchiko Station bus option saved as the practical lake-base handoff.",
+        "en": "Use the Trip.com Mishima transport page once the Bullet Train ride to Mishima timing is locked. Keep the Mishima Station South Exit -> Kawaguchiko Station bus option saved as the practical lake-base handoff.",
         "ja": "三島への移動時刻が固まったら、Trip.com の三島交通ページを使います。三島駅南口 -> 河口湖駅のバス候補を、湖側拠点へ入る実用的な受け渡しとして保存しておきます。"
       },
       "links": [
@@ -810,12 +810,12 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     {
       "id": "kyoto-mishima-shinkansen",
       "tag": {
-        "en": "Day 3 transfer",
-        "ja": "3日目の移動"
+        "en": "Day 3 Bullet Train ride",
+        "ja": "3日目の新幹線移動"
       },
       "title": {
-        "en": "Transfer to Mishima",
-        "ja": "三島へ移動"
+        "en": "1 Bullet Train ride: Kyoto -> Mishima",
+        "ja": "新幹線1本：京都 -> 三島"
       },
       "summary": {
         "en": "This is the fixed transfer that carries the route from Kyoto Station into the Mt. Fuji side.",
@@ -834,7 +834,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "三島駅"
       },
       "transport": {
-        "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 transfer, then keep the Mishima-to-lake transfer saved separately.",
+        "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 Bullet Train ride, then keep the Mishima-to-lake transfer saved separately.",
         "ja": "3日目の固定移動には Trip.com の三島への移動ページを使い、三島から湖側への移動は別に保存しておきます。"
       },
       "why": {
@@ -857,7 +857,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "prepReminders": [
         {
-          "en": "Book on Trip.com once Day 3 is fixed rather than leaving Transfer to Mishima to the last minute.",
+          "en": "Book on Trip.com once Day 3 is fixed rather than leaving the Bullet Train ride to Mishima to the last minute.",
           "ja": "3日目が固まったら Trip.com で予約し、三島への移動を直前判断にしないようにします。"
         },
         {
@@ -933,7 +933,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "prepReminders": [
         {
-          "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once Transfer to Mishima is fixed.",
+          "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the Bullet Train ride to Mishima is fixed.",
           "ja": "前夜に三島発バスの時刻を確認し、三島への移動が固まったあとで当日の最終便を見直します。"
         },
         {

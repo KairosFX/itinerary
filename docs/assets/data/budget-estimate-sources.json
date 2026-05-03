@@ -726,7 +726,7 @@
         "ja": "3日目・嵐山から富士"
       },
       "subtitle": {
-        "en": "Arashiyama, Transfer to Mishima, then the Fuji transfer night",
+        "en": "Arashiyama, 1 Bullet Train ride to Mishima, then the Fuji transfer night",
         "ja": "嵐山、三島へ移動、そして富士への移動で締める日"
       },
       "items": [
@@ -745,7 +745,7 @@
         },
         {
           "label": {
-            "en": "Transfer to Mishima",
+            "en": "1 Bullet Train ride to Mishima",
             "ja": "三島へ移動"
           },
           "category": "intercityTransit",

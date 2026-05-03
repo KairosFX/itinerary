@@ -129,12 +129,18 @@ const radioStationMeta = {
   artist: "Kairos playlist",
   album: "Kairos VIII"
 };
-const radioDefaultVolume = 12;
+const radioDefaultVolume = 3;
 const radioMinVolume = 1;
 const radioMaxVolume = 100;
+const radioYoutubeMinPlayerVolume = 1;
+const radioYoutubeMaxPlayerVolume = 60;
+const radioVolumeCurveExponent = 1.65;
+const radioSavedVolumeMigrationMax = 6;
 const radioPreviousDoubleActionWindowMs = 3000;
 const radioLegacyVolumeStorageKey = `kairos-viii-radio-volume-${itineraryStateVersion}`;
-const radioVolumeStorageKey = `kairos-viii-radio-site-volume-v2-${itineraryStateVersion}`;
+const radioPreviousVolumeStorageKey = `kairos-viii-radio-site-volume-v2-${itineraryStateVersion}`;
+const radioVolumeStorageKey = `kairos-viii-radio-site-volume-v3-${itineraryStateVersion}`;
+const radioVolumeMigrationStorageKey = `kairos-viii-radio-volume-safety-v3-${itineraryStateVersion}`;
 const radioShuffleHistoryMin = 3;
 const radioShuffleHistoryMax = 7;
 const radioVisibilityStorageKey = `kairos-viii-radio-hidden-${itineraryStateVersion}`;
@@ -568,7 +574,7 @@ const checklistPrintLateCutGuidance = {
     ja: "遅れたら写真散策を短くし、清水寺→二年坂→八坂の塔→祇園の直線的な徒歩導線を守ります。"
   },
   "3": {
-    en: "If late, shorten Arashiyama before risking Transfer to Mishima.",
+    en: "If late, shorten Arashiyama before risking the Bullet Train ride to Mishima.",
     ja: "遅れたら、三島への移動を崩す前に嵐山を短くします。"
   },
   "4": {
@@ -1412,7 +1418,7 @@ function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
       ja: "日本ルート全体"
     },
     summary: {
-      en: "View the full route with Transfer to Mishima, Mt. Fuji, and the Tokyo finish.",
+      en: "View the full route with the Bullet Train ride to Mishima, Mt. Fuji, and the Tokyo finish.",
       ja: "三島への移動、富士山エリア、東京での締めまで全体ルートを確認します。"
     },
     badges: [
@@ -1619,6 +1625,34 @@ function formatRadioVolumeLabel(value) {
   return `${normalizedVolume}%`;
 }
 
+function getRadioYoutubePlayerVolume(value) {
+  const siteVolume = normalizeRadioVolume(value);
+  const curvedVolume =
+    Math.pow(siteVolume / radioMaxVolume, radioVolumeCurveExponent) *
+    radioYoutubeMaxPlayerVolume;
+  return clamp(
+    Math.ceil(curvedVolume),
+    radioYoutubeMinPlayerVolume,
+    radioYoutubeMaxPlayerVolume
+  );
+}
+
+function getMigratedStoredRadioVolume(value, options = {}) {
+  return clamp(
+    Math.min(normalizeRadioVolume(value, options), radioSavedVolumeMigrationMax),
+    radioMinVolume,
+    radioSavedVolumeMigrationMax
+  );
+}
+
+function markRadioVolumeStorageMigrated() {
+  try {
+    window.localStorage.setItem(radioVolumeMigrationStorageKey, "true");
+  } catch {
+    // Ignore private-mode or blocked-storage failures.
+  }
+}
+
 function getRadioClockNow() {
   return window.performance && typeof window.performance.now === "function"
     ? window.performance.now()
@@ -1645,10 +1679,21 @@ function getStoredRadioVolume() {
       return normalizeRadioVolume(storedValue);
     }
 
+    const previousValue = window.localStorage.getItem(radioPreviousVolumeStorageKey);
+    if (previousValue !== null) {
+      const migratedVolume = getMigratedStoredRadioVolume(previousValue);
+      storeRadioVolume(migratedVolume);
+      storeRadioVolumeAtKey(radioPreviousVolumeStorageKey, migratedVolume);
+      markRadioVolumeStorageMigrated();
+      return migratedVolume;
+    }
+
     const legacyValue = window.localStorage.getItem(radioLegacyVolumeStorageKey);
     if (legacyValue !== null) {
-      const migratedVolume = normalizeRadioVolume(legacyValue, { legacy: true });
+      const migratedVolume = getMigratedStoredRadioVolume(legacyValue, { legacy: true });
       storeRadioVolume(migratedVolume);
+      storeRadioVolumeAtKey(radioLegacyVolumeStorageKey, migratedVolume);
+      markRadioVolumeStorageMigrated();
       return migratedVolume;
     }
 
@@ -1661,6 +1706,14 @@ function getStoredRadioVolume() {
 function storeRadioVolume(value) {
   try {
     window.localStorage.setItem(radioVolumeStorageKey, String(value));
+  } catch {
+    // Ignore private-mode or blocked-storage failures.
+  }
+}
+
+function storeRadioVolumeAtKey(key, value) {
+  try {
+    window.localStorage.setItem(key, String(value));
   } catch {
     // Ignore private-mode or blocked-storage failures.
   }
@@ -1781,13 +1834,16 @@ function applyRadioVolume() {
 
   if (radioYoutubePlayer && typeof radioYoutubePlayer.setVolume === "function") {
     try {
-      radioYoutubePlayer.setVolume(clamp(normalizeRadioVolume(radioVolume), radioMinVolume, radioMaxVolume));
-      if (typeof radioYoutubePlayer.mute === "function" && typeof radioYoutubePlayer.unMute === "function") {
-        if (normalizeRadioVolume(radioVolume) < radioMinVolume) {
-          radioYoutubePlayer.mute();
-        } else {
-          radioYoutubePlayer.unMute();
-        }
+      const playerVolume = getRadioYoutubePlayerVolume(radioVolume);
+      const canMute =
+        typeof radioYoutubePlayer.mute === "function" &&
+        typeof radioYoutubePlayer.unMute === "function";
+      if (canMute && !radioState.isPlaying) {
+        radioYoutubePlayer.mute();
+      }
+      radioYoutubePlayer.setVolume(playerVolume);
+      if (canMute) {
+        radioYoutubePlayer.unMute();
       }
     } catch {
       // Ignore partial YouTube player volume implementations.
@@ -5526,9 +5582,9 @@ function getChecklistPrintLabels() {
       item: "チェック項目",
       duration: "目安時間",
       customDate: "日付を選択",
-      specificStartTime: "予備開始時刻",
+      specificStartTime: "開始時刻",
       startOutput: "",
-      fallbackSuffix: "予備",
+      fallbackSuffix: "",
       est: "目安"
     };
   }
@@ -5540,9 +5596,9 @@ function getChecklistPrintLabels() {
     item: "Checklist item",
     duration: "Est. duration",
     customDate: "Select start date",
-    specificStartTime: "Fallback start",
+    specificStartTime: "Start time",
     startOutput: "",
-    fallbackSuffix: "fallback",
+    fallbackSuffix: "",
     est: "Est."
   };
 }

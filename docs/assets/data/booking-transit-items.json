@@ -113,7 +113,7 @@
       "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
     },
     "details": {
-      "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Transfer to Mishima.",
+      "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Bullet Train ride to Mishima.",
       "ja": "Booking.com の京都検索結果で、四条・烏丸・五条周辺の動線に合う宿を比較します。2日目の東山回遊と3日目の嵐山スタート、三島への移動をどちらも進めやすくするためです。"
     },
     "links": [
@@ -373,15 +373,15 @@
       "ja": "予約済み"
     },
     "title": {
-      "en": "Transfer to Mishima",
-      "ja": "三島へ移動"
+      "en": "1 Bullet Train ride to Mishima",
+      "ja": "三島へ新幹線移動"
     },
     "summary": {
-      "en": "Treat this as the fixed intercity booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
+      "en": "Treat this as the fixed Bullet Train booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
       "ja": "3日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
     },
     "details": {
-      "en": "Use the Trip.com Kyoto-to-Mishima train page once Day 3 timing is fixed. Keep this card focused on Transfer to Mishima, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
+      "en": "Use the Trip.com Kyoto-to-Mishima train page once Day 3 timing is fixed. Keep this card focused on the 1 Bullet Train ride to Mishima, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
       "ja": "3日目の時刻が固まったら Trip.com の三島への移動ページを使います。このカードは三島への移動に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
     },
     "links": [
@@ -449,7 +449,7 @@
       "ja": "3日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
     },
     "details": {
-      "en": "Use the Trip.com Mishima transport page once the Transfer to Mishima timing is locked. Keep the Mishima Station South Exit -> Kawaguchiko Station bus option saved as the practical lake-base handoff.",
+      "en": "Use the Trip.com Mishima transport page once the Bullet Train ride to Mishima timing is locked. Keep the Mishima Station South Exit -> Kawaguchiko Station bus option saved as the practical lake-base handoff.",
       "ja": "三島への移動時刻が固まったら、Trip.com の三島交通ページを使います。三島駅南口 -> 河口湖駅のバス候補を、湖側拠点へ入る実用的な受け渡しとして保存しておきます。"
     },
     "links": [
