@@ -2666,6 +2666,13 @@ html.reduce-effects .site-backdrop__video {
   background: #000 !important;
 }
 
+.site-backdrop::before,
+.site-backdrop::after,
+.site-atmosphere {
+  display: none !important;
+  content: none !important;
+}
+
 .site-backdrop__video,
 html[data-theme="dark"] .site-backdrop__video,
 html.reduce-effects .site-backdrop__video {
@@ -2683,7 +2690,7 @@ html.reduce-effects .site-backdrop__video {
   background-size: cover;
   opacity: 0;
   pointer-events: none;
-  filter: saturate(0.82) brightness(0.46) contrast(1.08);
+  filter: saturate(1.02) brightness(0.9) contrast(1.04);
   transform: scale(1.025);
   transform-origin: center center;
   transition: opacity 2200ms ease;
@@ -2696,28 +2703,12 @@ html.reduce-effects .site-backdrop__video {
 
 .site-backdrop__wash,
 html[data-theme="dark"] .site-backdrop__wash {
-  z-index: 3;
-  display: block !important;
-  content: "";
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.54) 0%,
-      rgba(3, 8, 6, 0.72) 42%,
-      rgba(0, 0, 0, 0.9) 100%
-    ),
-    linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.76) 0%,
-      rgba(0, 0, 0, 0.24) 48%,
-      rgba(0, 0, 0, 0.68) 100%
-    ),
-    radial-gradient(circle at 50% 4%, rgba(214, 180, 118, 0.12), rgba(214, 180, 118, 0) 30%);
+  display: none !important;
+  content: none !important;
 }
 
 html.reduce-effects .site-backdrop__slide {
-  filter: saturate(0.78) brightness(0.42) contrast(1.1);
+  filter: saturate(1.02) brightness(0.9) contrast(1.04);
   transform: none;
   transition: none !important;
 }
@@ -2725,6 +2716,6 @@ html.reduce-effects .site-backdrop__slide {
 @media (max-width: 640px) {
   .site-backdrop__slide {
     inset: -1rem;
-    filter: saturate(0.78) brightness(0.4) contrast(1.12);
+    filter: saturate(1.02) brightness(0.9) contrast(1.04);
   }
 }

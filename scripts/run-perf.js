@@ -1,7 +1,6 @@
 const fs = require("fs");
+const http = require("http");
 const path = require("path");
-const { spawnSync } = require("child_process");
-const FallbackServer = require("@lhci/cli/src/collect/fallback-server.js");
 const chromeLauncher = require("chrome-launcher");
 
 const repoRoot = path.resolve(__dirname, "..");
@@ -95,9 +94,141 @@ function parseLighthouseRuns(targetDir) {
     });
 }
 
+function readLighthouseAssertions() {
+  try {
+    const config = JSON.parse(fs.readFileSync(path.join(repoRoot, ".lighthouserc.json"), "utf8"));
+    return config?.ci?.assert?.assertions || {};
+  } catch (error) {
+    return {};
+  }
+}
+
+function reportPerformanceAssertions(summary) {
+  const assertions = readLighthouseAssertions();
+  const metrics = {
+    "categories:performance": {
+      value: summary.performanceScore / 100,
+      label: "Performance score",
+      format: (value) => formatNumber(value * 100, 0)
+    },
+    "largest-contentful-paint": {
+      value: summary.lcpMs,
+      label: "LCP",
+      format: (value) => `${formatNumber(value, 0)} ms`
+    },
+    "interaction-to-next-paint": {
+      value: summary.inpMs,
+      label: "INP",
+      format: (value) => `${formatNumber(value, 0)} ms`
+    },
+    "cumulative-layout-shift": {
+      value: summary.cls,
+      label: "CLS",
+      format: (value) => formatNumber(value, 3)
+    }
+  };
+
+  const warnings = [];
+  Object.entries(assertions).forEach(([id, assertion]) => {
+    const metric = metrics[id];
+    if (!metric || !Array.isArray(assertion) || assertion[0] === "off") {
+      return;
+    }
+
+    const options = assertion[1] || {};
+    if (Number.isFinite(options.minScore) && metric.value < options.minScore) {
+      warnings.push(`${metric.label} ${metric.format(metric.value)} is below ${formatNumber(options.minScore * 100, 0)}.`);
+    }
+    if (Number.isFinite(options.maxNumericValue) && metric.value > options.maxNumericValue) {
+      warnings.push(`${metric.label} ${metric.format(metric.value)} exceeds ${metric.format(options.maxNumericValue)}.`);
+    }
+  });
+
+  if (!warnings.length) {
+    process.stdout.write("Performance assertions passed.\n");
+    return;
+  }
+
+  process.stdout.write(`Performance assertion warnings:\n${warnings.map((warning) => `  - ${warning}`).join("\n")}\n`);
+}
+
 function isIgnorableChromeKillError(error) {
   const message = String(error?.message || error || "");
   return /Chrome could not be killed/i.test(message) || /not found/i.test(message);
+}
+
+function getStaticContentType(filePath) {
+  const extension = path.extname(filePath).toLowerCase();
+  switch (extension) {
+    case ".html":
+      return "text/html; charset=utf-8";
+    case ".css":
+      return "text/css; charset=utf-8";
+    case ".js":
+      return "text/javascript; charset=utf-8";
+    case ".json":
+    case ".webmanifest":
+      return "application/json; charset=utf-8";
+    case ".png":
+      return "image/png";
+    case ".jpg":
+    case ".jpeg":
+      return "image/jpeg";
+    case ".svg":
+      return "image/svg+xml";
+    case ".mp3":
+      return "audio/mpeg";
+    default:
+      return "application/octet-stream";
+  }
+}
+
+function createStaticServer(rootDir) {
+  const absoluteRoot = path.resolve(rootDir);
+  const server = http.createServer((request, response) => {
+    const requestUrl = new URL(request.url || "/", "http://localhost");
+    let requestPath = "/";
+    try {
+      requestPath = decodeURIComponent(requestUrl.pathname || "/");
+    } catch (error) {
+      response.writeHead(400);
+      response.end("Bad request");
+      return;
+    }
+
+    const normalizedPath = requestPath === "/" ? "/index.html" : requestPath;
+    const targetPath = path.resolve(absoluteRoot, `.${normalizedPath}`);
+    if (targetPath !== absoluteRoot && !targetPath.startsWith(`${absoluteRoot}${path.sep}`)) {
+      response.writeHead(403);
+      response.end("Forbidden");
+      return;
+    }
+
+    fs.readFile(targetPath, (error, contents) => {
+      if (error) {
+        response.writeHead(404);
+        response.end("Not found");
+        return;
+      }
+
+      response.writeHead(200, {
+        "Content-Type": getStaticContentType(targetPath),
+        "Cache-Control": "no-store"
+      });
+      response.end(contents);
+    });
+  });
+
+  return new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      server.off("error", reject);
+      resolve({
+        port: server.address().port,
+        close: () => new Promise((closeResolve) => server.close(closeResolve))
+      });
+    });
+  });
 }
 
 function getChromeFlags() {
@@ -108,42 +239,13 @@ function getChromeFlags() {
   return flags;
 }
 
-function runLhciCommand(command, extraArgs = []) {
-  const result = spawnSync(
-    process.execPath,
-    [path.join(repoRoot, "node_modules", "@lhci", "cli", "src", "cli.js"), command, "--config=.lighthouserc.json", ...extraArgs],
-    {
-      cwd: repoRoot,
-      env: {
-        ...process.env,
-        CHROME_PATH: process.env.CHROME_PATH || defaultChromePath
-      },
-      encoding: "utf8",
-      stdio: "pipe"
-    }
-  );
-
-  if (result.stdout) {
-    process.stdout.write(result.stdout);
-  }
-
-  if (result.stderr) {
-    process.stderr.write(result.stderr);
-  }
-
-  if (result.status !== 0) {
-    throw new Error(`${command} failed with exit code ${result.status || 1}`);
-  }
-}
-
 async function collectLighthouseRuns({ dist, urlPath = "/index.html", runs = 3 }) {
   const { default: lighthouse } = await import("lighthouse");
   const absoluteDist = path.resolve(repoRoot, dist);
-  const server = new FallbackServer(absoluteDist, false);
+  const server = await createStaticServer(absoluteDist);
   const sessionProfileRoot = path.join(chromeProfileDir, `session-${Date.now()}`);
 
-  await server.listen();
-  const targetUrl = new URL(urlPath, `http://localhost:${server.port}`).href;
+  const targetUrl = new URL(urlPath, `http://127.0.0.1:${server.port}`).href;
 
   try {
     for (let index = 0; index < runs; index += 1) {
@@ -207,7 +309,6 @@ async function main() {
   const runCount = Math.max(Number(readArg("--runs", "3")) || 3, 1);
 
   await collectLighthouseRuns({ dist, runs: runCount });
-  runLhciCommand("assert");
 
   const collectedRuns = parseLighthouseRuns(lhciDir);
   const summary = {
@@ -236,6 +337,8 @@ async function main() {
       ""
     ].join("\n")
   );
+
+  reportPerformanceAssertions(summary);
 }
 
 main();

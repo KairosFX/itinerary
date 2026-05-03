@@ -2701,6 +2701,13 @@ html.reduce-effects .site-backdrop__video {
   background: #000 !important;
 }
 
+.site-backdrop::before,
+.site-backdrop::after,
+.site-atmosphere {
+  display: none !important;
+  content: none !important;
+}
+
 .site-backdrop__video,
 html[data-theme="dark"] .site-backdrop__video,
 html.reduce-effects .site-backdrop__video {
@@ -2718,7 +2725,7 @@ html.reduce-effects .site-backdrop__video {
   background-size: cover;
   opacity: 0;
   pointer-events: none;
-  filter: saturate(0.82) brightness(0.46) contrast(1.08);
+  filter: saturate(1.02) brightness(0.9) contrast(1.04);
   transform: scale(1.025);
   transform-origin: center center;
   transition: opacity 2200ms ease;
@@ -2731,28 +2738,12 @@ html.reduce-effects .site-backdrop__video {
 
 .site-backdrop__wash,
 html[data-theme="dark"] .site-backdrop__wash {
-  z-index: 3;
-  display: block !important;
-  content: "";
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.54) 0%,
-      rgba(3, 8, 6, 0.72) 42%,
-      rgba(0, 0, 0, 0.9) 100%
-    ),
-    linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.76) 0%,
-      rgba(0, 0, 0, 0.24) 48%,
-      rgba(0, 0, 0, 0.68) 100%
-    ),
-    radial-gradient(circle at 50% 4%, rgba(214, 180, 118, 0.12), rgba(214, 180, 118, 0) 30%);
+  display: none !important;
+  content: none !important;
 }
 
 html.reduce-effects .site-backdrop__slide {
-  filter: saturate(0.78) brightness(0.42) contrast(1.1);
+  filter: saturate(1.02) brightness(0.9) contrast(1.04);
   transform: none;
   transition: none !important;
 }
@@ -2760,13 +2751,13 @@ html.reduce-effects .site-backdrop__slide {
 @media (max-width: 640px) {
   .site-backdrop__slide {
     inset: -1rem;
-    filter: saturate(0.78) brightness(0.4) contrast(1.12);
+    filter: saturate(1.02) brightness(0.9) contrast(1.04);
   }
 }</style>
-  <link rel="preload" href="./assets/app/style.02c6319834.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.8e3dec38de.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.02c6319834.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.02c6319834.css"></noscript>
+  <link rel="preload" href="./assets/app/style.2b14d50a97.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.ee057f80aa.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.2b14d50a97.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.2b14d50a97.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
@@ -2776,7 +2767,6 @@ html.reduce-effects .site-backdrop__slide {
       data-site-background-slide="current"
       style="background-image: url('./assets/backgrounds/kairos-bg-01.jpg')"></div>
     <div class="site-backdrop__slide" data-site-background-slide="next"></div>
-    <div class="site-backdrop__wash"></div>
   </div>
   <header class="site-header">
     <div class="header-inner">
@@ -2881,14 +2871,13 @@ html.reduce-effects .site-backdrop__slide {
       <img class="travel-radio__artwork" data-radio-artwork alt="" hidden>
     </div>
     <button
-      class="travel-radio__restore"
+      class="travel-radio__edge-toggle"
       type="button"
-      data-radio-show
-      hidden
-      aria-label="Show radio"
-      data-aria-label-en="Show radio"
-      data-aria-label-ja="ラジオを表示">
-      <span aria-hidden="true">♪</span>
+      data-radio-visibility-toggle
+      aria-label="Hide radio"
+      data-aria-label-en="Hide radio"
+      data-aria-label-ja="ラジオを隠す">
+      <span class="travel-radio__edge-icon" data-radio-visibility-icon aria-hidden="true">‹</span>
     </button>
     <div class="travel-radio__body">
       <div class="travel-radio__copy">
@@ -2936,15 +2925,6 @@ html.reduce-effects .site-backdrop__slide {
           <input type="range" min="1" max="100" step="1" value="3" data-radio-volume>
           <output data-radio-volume-label>3%</output>
         </label>
-        <button
-          class="travel-radio__button travel-radio__button--hide"
-          type="button"
-          data-radio-hide
-          aria-label="Hide radio"
-          data-aria-label-en="Hide radio"
-          data-aria-label-ja="ラジオを隠す">
-          <span aria-hidden="true">−</span>
-        </button>
       </div>
     </div>
   </aside>
@@ -3937,370 +3917,6 @@ html.reduce-effects .site-backdrop__slide {
             </p>
           </div>
         </article>
-        <section class="essentials-group essentials-group--packing" aria-labelledby="essentials-packing-title">
-          <div class="essentials-group__header">
-            <p class="essentials-group__eyebrow" id="essentials-packing-title">
-              <span data-language="en">Essentials</span>
-              <span data-language="ja" hidden>持ち物と基本準備</span>
-            </p>
-            <div class="packing-section__actions packing-section__actions--global">
-              <button class="packing-section__action" type="button" data-packing-mark-all-global>
-                <span data-language="en">Mark all packed</span>
-                <span data-language="ja" hidden>すべて完了</span>
-              </button>
-              <button class="packing-section__action packing-section__action--reset" type="button" data-packing-reset-all>
-                <span data-language="en">Reset packing</span>
-                <span data-language="ja" hidden>荷造りをリセット</span>
-              </button>
-            </div>
-          </div>
-          <div class="essentials-grid essentials-grid--packing">
-
-        <article class="essentials-card card packing-section packing-section--compact" data-packing-section="documents-phone">
-          <h4>
-            <span data-language="en">Departure</span>
-            <span data-language="ja" hidden>書類とスマホ準備</span>
-          </h4>
-          <div class="packing-section__meta">
-            <p class="packing-section__progress" aria-live="polite">
-              <span data-language="en" data-packing-progress-language="en"></span>
-              <span data-language="ja" data-packing-progress-language="ja" hidden></span>
-            </p>
-            <div class="packing-section__actions">
-              <button class="packing-section__action" type="button" data-packing-mark-all>
-                <span data-language="en">Mark all packed</span>
-                <span data-language="ja" hidden>すべて完了</span>
-              </button>
-              <button class="packing-section__action" type="button" data-packing-clear-section>
-                <span data-language="en">Clear section</span>
-                <span data-language="ja" hidden>この欄を解除</span>
-              </button>
-            </div>
-          </div>
-          <ul class="essentials-checklist packing-checklist">
-            <li class="packing-item" data-packing-item="documents-phone-passport-copy">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy">
-                  <span data-language="en">Passport with a photo-page backup saved on your phone and cloud.</span>
-                  <span data-language="ja" hidden>パスポート本体と顔写真ページの控えをスマホとクラウドに保存。</span>
-                </span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="documents-phone-confirmations">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy">
-                  <span data-language="en">Flight, hotel, and timed-ticket confirmations saved.</span>
-                  <span data-language="ja" hidden>航空券、宿、時間指定チケットの確認を保存済み。</span>
-                </span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="documents-phone-visit-japan-web">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy">
-                  <span data-language="en">Visit Japan Web completed, with the arrival QR and screenshots saved.</span>
-                  <span data-language="ja" hidden>Visit Japan Web を完了し、到着用QRやスクリーンショットを保存。</span>
-                </span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="documents-phone-payment-insurance">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy">
-                  <span data-language="en">Primary card, backup card, some cash, and insurance details ready.</span>
-                  <span data-language="ja" hidden>メインカード、予備カード、少額の現金、保険情報をすぐ出せる状態にする。</span>
-                </span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="documents-phone-esim">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy">
-                  <span data-language="en">eSIM or SIM tested before landing, with charger or power bank ready.</span>
-                  <span data-language="ja" hidden>到着前に eSIM / SIM を使える状態にし、充電手段も確認。</span>
-                </span>
-              </label>
-            </li>
-          </ul>
-        </article>
-
-        <article class="essentials-card card packing-section" data-packing-section="luggage-strategy">
-          <h4>
-            <span data-language="en">Luggage</span>
-            <span data-language="ja" hidden>荷物戦略</span>
-          </h4>
-          <div class="packing-section__meta">
-            <p class="packing-section__progress" aria-live="polite">
-              <span data-language="en" data-packing-progress-language="en"></span>
-              <span data-language="ja" data-packing-progress-language="ja" hidden></span>
-            </p>
-            <div class="packing-section__actions">
-              <button class="packing-section__action" type="button" data-packing-mark-all>
-                <span data-language="en">Mark all packed</span>
-                <span data-language="ja" hidden>すべて完了</span>
-              </button>
-              <button class="packing-section__action" type="button" data-packing-clear-section>
-                <span data-language="en">Clear section</span>
-                <span data-language="ja" hidden>この欄を解除</span>
-              </button>
-            </div>
-          </div>
-          <ul class="essentials-checklist packing-checklist">
-            <li class="packing-item" data-packing-item="luggage-main-bags">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Main suitcase, small overnight bag, and a light day bag.</span><span data-language="ja" hidden>メインのスーツケース、小さな一泊バッグ、軽いデイバッグ。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="luggage-forward-main-suitcase">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Consider forwarding your main suitcase from Osaka to Tokyo.</span><span data-language="ja" hidden>メインのスーツケースは大阪から東京へ配送するのも有効です。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="luggage-pack-fuji-tokyo-light">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Pack Day 3 and Day 4 for two Fuji-area nights, then keep Day 5 ready for the Tokyo transfer.</span><span data-language="ja" hidden>3日目と4日目は富士エリア2泊用に、5日目は東京移動用に整えます。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="luggage-save-ryokan-info">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Fuji stay address, phone, and check-in window saved.</span><span data-language="ja" hidden>富士エリア宿の住所、電話番号、チェックイン時間を保存済み。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="luggage-oversized-seating-check">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Reserve oversized-baggage seating only if your suitcase is over 160 cm total.</span><span data-language="ja" hidden>特大荷物席は、スーツケースの三辺合計が160cmを超える場合だけ検討。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="luggage-ticket-pouch">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Keep a small zip pouch for tickets, coins, and receipts.</span><span data-language="ja" hidden>チケット、小銭、レシート用の小さなジップポーチを用意。</span></span>
-              </label>
-            </li>
-          </ul>
-        </article>
-
-        <article class="essentials-card card packing-section" data-packing-section="daily-carry">
-          <h4>
-            <span data-language="en">Daily</span>
-            <span data-language="ja" hidden>毎日持つもの</span>
-          </h4>
-          <div class="packing-section__meta">
-            <p class="packing-section__progress" aria-live="polite">
-              <span data-language="en" data-packing-progress-language="en"></span>
-              <span data-language="ja" data-packing-progress-language="ja" hidden></span>
-            </p>
-            <div class="packing-section__actions">
-              <button class="packing-section__action" type="button" data-packing-mark-all>
-                <span data-language="en">Mark all packed</span>
-                <span data-language="ja" hidden>すべて完了</span>
-              </button>
-              <button class="packing-section__action" type="button" data-packing-clear-section>
-                <span data-language="en">Clear section</span>
-                <span data-language="ja" hidden>この欄を解除</span>
-              </button>
-            </div>
-          </div>
-          <ul class="essentials-checklist packing-checklist">
-            <li class="packing-item" data-packing-item="daily-carry-passport">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Actual passport.</span><span data-language="ja" hidden>パスポート本体。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="daily-carry-wallet-phone-ic">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Wallet, phone, and IC card.</span><span data-language="ja" hidden>財布、スマホ、ICカード。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="daily-carry-power-bank">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Power bank and charging cable.</span><span data-language="ja" hidden>モバイルバッテリーと充電ケーブル。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="daily-carry-water-towel-tissues">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Water bottle, hand towel, and tissues.</span><span data-language="ja" hidden>水筒、ハンドタオル、ティッシュ。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="daily-carry-medication-lip-balm">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Medication and lip balm or lotion.</span><span data-language="ja" hidden>薬とリップまたは保湿用品。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="daily-carry-umbrella">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Compact umbrella on uncertain-weather days.</span><span data-language="ja" hidden>天気が怪しい日は折りたたみ傘。</span></span>
-              </label>
-            </li>
-          </ul>
-        </article>
-
-        <article class="essentials-card card packing-section" data-packing-section="fuji-tokyo-transfer-kit">
-          <h4>
-            <span data-language="en">Transfer</span>
-            <span data-language="ja" hidden>富士と東京移動の日用キット</span>
-          </h4>
-          <div class="packing-section__meta">
-            <p class="packing-section__progress" aria-live="polite">
-              <span data-language="en" data-packing-progress-language="en"></span>
-              <span data-language="ja" data-packing-progress-language="ja" hidden></span>
-            </p>
-            <div class="packing-section__actions">
-              <button class="packing-section__action" type="button" data-packing-mark-all>
-                <span data-language="en">Mark all packed</span>
-                <span data-language="ja" hidden>すべて完了</span>
-              </button>
-              <button class="packing-section__action" type="button" data-packing-clear-section>
-                <span data-language="en">Clear section</span>
-                <span data-language="ja" hidden>この欄を解除</span>
-              </button>
-            </div>
-          </div>
-          <ul class="essentials-checklist packing-checklist">
-            <li class="packing-item" data-packing-item="fuji-tokyo-onsen-pouch">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Small onsen pouch and a small towel.</span><span data-language="ja" hidden>温泉用の小ポーチと小タオル。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="fuji-tokyo-backup-socks">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Backup socks and easy-to-remove shoes.</span><span data-language="ja" hidden>替えの靴下と脱ぎやすい靴。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="fuji-tokyo-weather-plan">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Weather-flexible Fuji plan so viewpoints can shift with visibility.</span><span data-language="ja" hidden>視界に応じて展望地を入れ替えられる柔軟な富士プラン。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="fuji-tokyo-status-check">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Check Kawaguchiko access, Fuji visibility, and the Day 5 Tokyo transfer plan the night before.</span><span data-language="ja" hidden>前夜に河口湖アクセス、富士山の見え方、5日目の東京移動を確認します。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="fuji-tokyo-shibuya-sky-info">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Keep your Shibuya Sky booking and bag rules handy for the Day 5 Tokyo arrival and Shibuya night.</span><span data-language="ja" hidden>5日目の東京到着と渋谷夜景に備えて、渋谷スカイの予約情報と荷物ルールをすぐ見られるようにしておく。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="fuji-tokyo-camera">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Bring a camera only if you will actually use it.</span><span data-language="ja" hidden>カメラは本当に使うなら持っていく。</span></span>
-              </label>
-            </li>
-          </ul>
-        </article>
-
-        <article class="essentials-card card packing-section" data-packing-section="clothing">
-          <h4>
-            <span data-language="en">Clothing</span>
-            <span data-language="ja" hidden>服装</span>
-          </h4>
-          <div class="packing-section__meta">
-            <p class="packing-section__progress" aria-live="polite">
-              <span data-language="en" data-packing-progress-language="en"></span>
-              <span data-language="ja" data-packing-progress-language="ja" hidden></span>
-            </p>
-            <div class="packing-section__actions">
-              <button class="packing-section__action" type="button" data-packing-mark-all>
-                <span data-language="en">Mark all packed</span>
-                <span data-language="ja" hidden>すべて完了</span>
-              </button>
-              <button class="packing-section__action" type="button" data-packing-clear-section>
-                <span data-language="en">Clear section</span>
-                <span data-language="ja" hidden>この欄を解除</span>
-              </button>
-            </div>
-          </div>
-          <ul class="essentials-checklist packing-checklist">
-            <li class="packing-item" data-packing-item="clothing-walking-shoes">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">One very comfortable walking pair.</span><span data-language="ja" hidden>とても歩きやすい靴を1足。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="clothing-temple-ryokan-shoes">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">One easy on-and-off pair for temples or ryokan.</span><span data-language="ja" hidden>寺や旅館向けに脱ぎ履きしやすい靴を1足。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="clothing-light-layers">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Light layers for morning and evening temperature changes.</span><span data-language="ja" hidden>朝晩の気温差に対応できる軽い重ね着。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="clothing-compact-jacket">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Compact jacket.</span><span data-language="ja" hidden>コンパクトな上着。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="clothing-rain-layer">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Rain jacket or compact umbrella.</span><span data-language="ja" hidden>レインジャケットまたは折りたたみ傘。</span></span>
-              </label>
-            </li>
-            <li class="packing-item" data-packing-item="clothing-ryokan-outfit">
-              <label class="packing-toggle">
-                <input class="packing-toggle__input" type="checkbox" data-packing-checkbox>
-                <span class="packing-toggle__indicator" aria-hidden="true"></span>
-                <span class="packing-toggle__copy"><span data-language="en">Sleepwear and one simple outfit for ryokan dinner or breakfast.</span><span data-language="ja" hidden>部屋着と、旅館の夕食や朝食用のシンプルな服を1組。</span></span>
-              </label>
-            </li>
-          </ul>
-        </article>
-          </div>
-        </section>
-
       </div>
     </section>
     </div>
@@ -4393,10 +4009,10 @@ html.reduce-effects .site-backdrop__slide {
   </div>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.02c6319834.css","styleHash":"02c6319834","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.8e3dec38de.js","scriptHash":"8e3dec38de","routeContentPath":"./assets/app/routeContent.0a456839b7.js","routeContentHash":"0a456839b7","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.8916d32a7f.js","budgetContentHash":"8916d32a7f","essentialsContentPath":"./assets/app/essentialsContent.558f559e08.js","essentialsContentHash":"558f559e08","generatedAt":"2026-05-03T01:50:57.595Z","cacheVersion":"02c6319834-a79b88b908-8e3dec38de-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.2b14d50a97.css","styleHash":"2b14d50a97","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.ee057f80aa.js","scriptHash":"ee057f80aa","routeContentPath":"./assets/app/routeContent.0a456839b7.js","routeContentHash":"0a456839b7","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.8916d32a7f.js","budgetContentHash":"8916d32a7f","essentialsContentPath":"./assets/app/essentialsContent.558f559e08.js","essentialsContentHash":"558f559e08","generatedAt":"2026-05-03T03:29:32.087Z","cacheVersion":"2b14d50a97-a79b88b908-ee057f80aa-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.8e3dec38de.js" defer></script>
+  <script src="./assets/app/script.ee057f80aa.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>

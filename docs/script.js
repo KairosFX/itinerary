@@ -25,8 +25,8 @@ const radioVolumeInput = document.querySelector("[data-radio-volume]");
 const radioVolumeLabel = document.querySelector("[data-radio-volume-label]");
 const radioStatusNode = document.querySelector("[data-radio-status]");
 let radioYoutubeMountNode = document.querySelector("[data-radio-youtube-player]");
-const radioHideButton = document.querySelector("[data-radio-hide]");
-const radioShowButton = document.querySelector("[data-radio-show]");
+const radioVisibilityToggleButton = document.querySelector("[data-radio-visibility-toggle]");
+const radioVisibilityIconNode = document.querySelector("[data-radio-visibility-icon]");
 const checklistGateNotice = document.querySelector("[data-checklist-gate]");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
 const dayGrids = Array.from(document.querySelectorAll(".day-grid"));
@@ -138,6 +138,7 @@ const radioYoutubeMaxProbeAttempts = 4;
 const radioPlaybackConfirmTimeoutMs = 6500;
 const radioYoutubeInfoPollIntervalMs = 2400;
 const radioYoutubeWarmupDelayMs = 650;
+const radioPlaylistInfoWaitTimeoutMs = 1400;
 const radioStationMeta = {
   title: "Kairos VIII Radio",
   artist: "Kairos playlist",
@@ -155,8 +156,6 @@ const radioLegacyVolumeStorageKey = `kairos-viii-radio-volume-${itineraryStateVe
 const radioPreviousVolumeStorageKey = `kairos-viii-radio-site-volume-v2-${itineraryStateVersion}`;
 const radioVolumeStorageKey = `kairos-viii-radio-site-volume-v3-${itineraryStateVersion}`;
 const radioVolumeMigrationStorageKey = `kairos-viii-radio-volume-safety-v3-${itineraryStateVersion}`;
-const radioShuffleHistoryMin = 3;
-const radioShuffleHistoryMax = 7;
 const radioVisibilityStorageKey = `kairos-viii-radio-hidden-${itineraryStateVersion}`;
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const budgetDefaultTravelerCount = 2;
@@ -1319,7 +1318,9 @@ let radioCurrentArtworkUrl = "";
 let radioPendingPlaybackHistoryIndex = null;
 let radioPreviousActionUntilMs = 0;
 let radioPreviousActionTrackIndex = -1;
-const radioRecentTrackHistory = [];
+let radioNeedsInitialRandomTrack = true;
+let radioShuffleQueue = [];
+let radioPlaylistTrackCountWaiters = [];
 const radioPlaybackTrackHistory = [];
 let radioPlaybackHistoryCursor = -1;
 const radioState = {
@@ -1473,21 +1474,19 @@ function initializeDecorativeMediaExperience() {
     return;
   }
 
+  const initialIndex = getRandomBackdropImageIndex();
   const firstSlide = siteBackdropSlides[0];
-  setBackdropSlideImage(firstSlide, siteBackdropImageUrls[0]);
+  setBackdropSlideImage(firstSlide, siteBackdropImageUrls[initialIndex]);
   siteBackdropSlides.forEach((slide, index) => {
     slide.classList.toggle("is-active", index === 0);
   });
+  siteBackdropCurrentIndex = initialIndex;
+  siteBackdropActiveSlideIndex = 0;
   siteBackdropInitialized = true;
 
   if (shouldAnimateBackdropSlideshow()) {
-    const randomIndex = getRandomBackdropImageIndex();
-    if (randomIndex > 0) {
-      transitionToBackdropImage(randomIndex);
-    } else {
-      warmNextBackdropImage();
-      scheduleBackdropSlideshow();
-    }
+    warmNextBackdropImage();
+    scheduleBackdropSlideshow();
   } else {
     warmNextBackdropImage();
   }
@@ -1857,15 +1856,15 @@ function syncRadioVisibilityUi() {
   }
 
   radioPlayerNode.dataset.radioCollapsed = radioState.isHidden ? "true" : "false";
-  if (radioHideButton) {
-    radioHideButton.hidden = radioState.isHidden;
-    radioHideButton.setAttribute("aria-label", getRadioLabel("hide"));
+  if (radioVisibilityToggleButton) {
+    const labelKey = radioState.isHidden ? "show" : "hide";
+    radioVisibilityToggleButton.setAttribute("aria-label", getRadioLabel(labelKey));
+    radioVisibilityToggleButton.dataset.ariaLabelEn = getRadioLabels()[labelKey].en;
+    radioVisibilityToggleButton.dataset.ariaLabelJa = getRadioLabels()[labelKey].ja;
+    radioVisibilityToggleButton.dataset.radioVisibilityAction = labelKey;
   }
-  if (radioShowButton) {
-    radioShowButton.hidden = !radioState.isHidden;
-    radioShowButton.setAttribute("aria-label", getRadioLabel("show"));
-    radioShowButton.dataset.ariaLabelEn = getRadioLabels().show.en;
-    radioShowButton.dataset.ariaLabelJa = getRadioLabels().show.ja;
+  if (radioVisibilityIconNode) {
+    radioVisibilityIconNode.textContent = radioState.isHidden ? "›" : "‹";
   }
 }
 
@@ -1907,11 +1906,6 @@ function syncRadioControls() {
     radioNextButton.setAttribute("aria-label", getRadioLabel("next"));
     radioNextButton.dataset.ariaLabelEn = getRadioLabels().next.en;
     radioNextButton.dataset.ariaLabelJa = getRadioLabels().next.ja;
-  }
-  if (radioHideButton) {
-    radioHideButton.setAttribute("aria-label", getRadioLabel("hide"));
-    radioHideButton.dataset.ariaLabelEn = getRadioLabels().hide.en;
-    radioHideButton.dataset.ariaLabelJa = getRadioLabels().hide.ja;
   }
   syncRadioVisibilityUi();
 }
@@ -2417,10 +2411,151 @@ function createRadioYoutubePlayerProxy() {
   };
 }
 
+function resolveRadioPlaylistTrackCountWaiters() {
+  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
+  const waiters = radioPlaylistTrackCountWaiters;
+  radioPlaylistTrackCountWaiters = [];
+  waiters.forEach((waiter) => {
+    window.clearTimeout(waiter.timer);
+    waiter.resolve(playlistTrackCount);
+  });
+}
+
+function setRadioPlaylistTrackCount(trackCount) {
+  const normalizedCount = Math.max(0, Number.parseInt(String(trackCount), 10) || 0);
+  if (!normalizedCount) {
+    return;
+  }
+
+  const previousCount = radioPlaylistTrackCount;
+  radioPlaylistTrackCount = normalizedCount;
+  radioState.canSkip = normalizedCount > 1;
+  if (previousCount !== normalizedCount) {
+    radioShuffleQueue = radioShuffleQueue.filter(
+      (trackIndex) => Number.isInteger(trackIndex) && trackIndex >= 0 && trackIndex < normalizedCount
+    );
+  }
+  resolveRadioPlaylistTrackCountWaiters();
+}
+
 function getKnownRadioPlaylistTrackCount() {
   return Number.isInteger(radioPlaylistTrackCount) && radioPlaylistTrackCount > 0
     ? radioPlaylistTrackCount
     : 0;
+}
+
+function waitForRadioPlaylistTrackCount(timeoutMs = radioPlaylistInfoWaitTimeoutMs) {
+  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
+  if (playlistTrackCount > 0) {
+    return Promise.resolve(playlistTrackCount);
+  }
+
+  requestRadioYoutubeInfoDelivery();
+  return new Promise((resolve) => {
+    const waiter = {
+      resolve,
+      timer: window.setTimeout(() => {
+        radioPlaylistTrackCountWaiters = radioPlaylistTrackCountWaiters.filter((entry) => entry !== waiter);
+        resolve(getKnownRadioPlaylistTrackCount());
+      }, Math.max(0, Number(timeoutMs) || 0))
+    };
+    radioPlaylistTrackCountWaiters.push(waiter);
+  });
+}
+
+function normalizeRadioPlaylistTrackIndex(trackIndex) {
+  const normalizedIndex = Number.parseInt(String(trackIndex), 10);
+  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
+  if (!Number.isInteger(normalizedIndex) || normalizedIndex < 0) {
+    return null;
+  }
+  if (playlistTrackCount > 0 && normalizedIndex >= playlistTrackCount) {
+    return null;
+  }
+  return normalizedIndex;
+}
+
+function getRadioPlaylistTrackIndexes() {
+  return Array.from({ length: getKnownRadioPlaylistTrackCount() }, (_, index) => index);
+}
+
+function shuffleRadioTrackIndexes(trackIndexes = []) {
+  const shuffledIndexes = trackIndexes.slice();
+  for (let index = shuffledIndexes.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffledIndexes[index], shuffledIndexes[swapIndex]] = [shuffledIndexes[swapIndex], shuffledIndexes[index]];
+  }
+  return shuffledIndexes;
+}
+
+function refillRadioShuffleQueue({ excludedTrackIndex = radioCurrentTrackIndex } = {}) {
+  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
+  if (playlistTrackCount <= 1) {
+    radioShuffleQueue = [];
+    return;
+  }
+
+  const excludedIndex = normalizeRadioPlaylistTrackIndex(excludedTrackIndex);
+  const candidates = getRadioPlaylistTrackIndexes().filter((trackIndex) => trackIndex !== excludedIndex);
+  radioShuffleQueue = shuffleRadioTrackIndexes(candidates);
+}
+
+function consumeRadioShuffleTrack(trackIndex) {
+  const normalizedIndex = normalizeRadioPlaylistTrackIndex(trackIndex);
+  if (normalizedIndex === null) {
+    return;
+  }
+  radioShuffleQueue = radioShuffleQueue.filter((queuedTrackIndex) => queuedTrackIndex !== normalizedIndex);
+}
+
+function chooseInitialRandomRadioTrackIndex() {
+  const trackIndexes = getRadioPlaylistTrackIndexes();
+  if (!trackIndexes.length) {
+    return null;
+  }
+
+  return trackIndexes[Math.floor(Math.random() * trackIndexes.length)] ?? trackIndexes[0];
+}
+
+function commitInitialRadioShuffleStart(trackIndex) {
+  const normalizedIndex = normalizeRadioPlaylistTrackIndex(trackIndex);
+  if (normalizedIndex === null) {
+    return false;
+  }
+
+  radioNeedsInitialRandomTrack = false;
+  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
+  radioShuffleQueue = playlistTrackCount > 1
+    ? shuffleRadioTrackIndexes(getRadioPlaylistTrackIndexes().filter((index) => index !== normalizedIndex))
+    : [];
+  return true;
+}
+
+function chooseNextRadioTrackIndexFromShuffleQueue() {
+  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
+  if (playlistTrackCount <= 1) {
+    return null;
+  }
+
+  radioShuffleQueue = radioShuffleQueue.filter(
+    (trackIndex) => Number.isInteger(trackIndex) && trackIndex >= 0 && trackIndex < playlistTrackCount
+  );
+  if (!radioShuffleQueue.length) {
+    refillRadioShuffleQueue();
+  }
+
+  let nextTrackIndex = radioShuffleQueue.shift();
+  if (nextTrackIndex === radioCurrentTrackIndex && playlistTrackCount > 1) {
+    if (!radioShuffleQueue.length) {
+      refillRadioShuffleQueue();
+    }
+    if (radioShuffleQueue.length) {
+      radioShuffleQueue.push(nextTrackIndex);
+      nextTrackIndex = radioShuffleQueue.shift();
+    }
+  }
+
+  return normalizeRadioPlaylistTrackIndex(nextTrackIndex);
 }
 
 function rememberRadioPlaybackTrackIndex(trackIndex) {
@@ -2466,20 +2601,28 @@ function setRadioPlaybackHistoryCursorToTrack(trackIndex) {
 }
 
 function getPreviousRadioTrackIndexFromHistory() {
-  for (let index = radioPlaybackHistoryCursor - 1; index >= 0; index -= 1) {
-    const trackIndex = radioPlaybackTrackHistory[index];
-    if (Number.isInteger(trackIndex) && trackIndex !== radioCurrentTrackIndex) {
-      return trackIndex;
-    }
+  const previousHistoryIndex = radioPlaybackHistoryCursor - 1;
+  if (previousHistoryIndex >= 0) {
+    const trackIndex = radioPlaybackTrackHistory[previousHistoryIndex];
+    return Number.isInteger(trackIndex) ? trackIndex : null;
   }
 
   return null;
 }
 
-function rememberRadioTrackIndex(trackIndex, { updatePlaybackHistory = true } = {}) {
-  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
-  const normalizedIndex = Number.parseInt(String(trackIndex), 10);
-  if (!Number.isInteger(normalizedIndex) || normalizedIndex < 0) {
+function getNextRadioTrackIndexFromHistory() {
+  const nextHistoryIndex = radioPlaybackHistoryCursor + 1;
+  if (radioPlaybackHistoryCursor >= 0 && nextHistoryIndex < radioPlaybackTrackHistory.length) {
+    const trackIndex = radioPlaybackTrackHistory[nextHistoryIndex];
+    return Number.isInteger(trackIndex) ? trackIndex : null;
+  }
+
+  return null;
+}
+
+function rememberRadioTrackIndex(trackIndex, { updatePlaybackHistory = true, consumeShuffleQueue = true } = {}) {
+  const normalizedIndex = normalizeRadioPlaylistTrackIndex(trackIndex);
+  if (normalizedIndex === null) {
     return;
   }
 
@@ -2487,61 +2630,12 @@ function rememberRadioTrackIndex(trackIndex, { updatePlaybackHistory = true } = 
     resetRadioPreviousDoubleAction();
   }
   radioCurrentTrackIndex = normalizedIndex;
-  if (radioRecentTrackHistory[radioRecentTrackHistory.length - 1] !== normalizedIndex) {
-    radioRecentTrackHistory.push(normalizedIndex);
+  if (consumeShuffleQueue) {
+    consumeRadioShuffleTrack(normalizedIndex);
   }
-
-  const historyLimit = playlistTrackCount > 1
-    ? Math.min(playlistTrackCount - 1, radioShuffleHistoryMax)
-    : 1;
-  while (radioRecentTrackHistory.length > Math.max(radioShuffleHistoryMin, historyLimit)) {
-    radioRecentTrackHistory.shift();
-  }
-
   if (updatePlaybackHistory) {
     rememberRadioPlaybackTrackIndex(normalizedIndex);
   }
-}
-
-function chooseSmartRadioTrackIndex() {
-  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
-  if (playlistTrackCount <= 1) {
-    return null;
-  }
-
-  const currentIndex =
-    radioCurrentTrackIndex >= 0 && radioCurrentTrackIndex < playlistTrackCount
-      ? radioCurrentTrackIndex
-      : null;
-  const recentWindowSize = Math.min(
-    playlistTrackCount - 1,
-    Math.max(radioShuffleHistoryMin, Math.ceil(playlistTrackCount * 0.36))
-  );
-  const recentSet = new Set(radioRecentTrackHistory.slice(-recentWindowSize));
-  const allCandidates = Array.from({ length: playlistTrackCount }, (_, index) => index).filter(
-    (index) => index !== currentIndex
-  );
-  let candidates = allCandidates.filter((index) => !recentSet.has(index));
-
-  if (!candidates.length) {
-    const lastPlayedIndex = radioRecentTrackHistory[radioRecentTrackHistory.length - 1];
-    candidates = allCandidates.filter((index) => index !== lastPlayedIndex);
-  }
-
-  if (!candidates.length) {
-    candidates = allCandidates;
-  }
-
-  const weightedCandidates = candidates.flatMap((index) => {
-    const lastSeenFromEnd = radioRecentTrackHistory
-      .slice()
-      .reverse()
-      .findIndex((historyIndex) => historyIndex === index);
-    const weight = lastSeenFromEnd === -1 ? 4 : Math.max(1, lastSeenFromEnd + 1);
-    return Array.from({ length: weight }, () => index);
-  });
-
-  return weightedCandidates[Math.floor(Math.random() * weightedCandidates.length)] ?? candidates[0];
 }
 
 function scheduleRadioYoutubeInfoProbe(delay = 0) {
@@ -2619,10 +2713,10 @@ function handleRadioYoutubeMessage(event) {
   }
 
   resolveRadioYoutubeReadyFromEmbed();
+  const wasPlaying = radioState.isPlaying || radioState.pendingPlay;
 
   if (Array.isArray(info.playlist) && info.playlist.length) {
-    radioPlaylistTrackCount = info.playlist.length;
-    radioState.canSkip = radioPlaylistTrackCount > 1;
+    setRadioPlaylistTrackCount(info.playlist.length);
   }
 
   const currentTime = Number(info.currentTime);
@@ -2635,22 +2729,46 @@ function handleRadioYoutubeMessage(event) {
   const playlistIndex = Number.parseInt(String(info.playlistIndex), 10);
   if (Number.isInteger(playlistIndex) && playlistIndex >= 0) {
     const isPendingHistoryNavigation = playlistIndex === radioPendingPlaybackHistoryIndex;
-    rememberRadioTrackIndex(playlistIndex, {
-      updatePlaybackHistory: !isPendingHistoryNavigation
-    });
-    if (isPendingHistoryNavigation) {
-      radioPendingPlaybackHistoryIndex = null;
+    const shouldRememberPlaylistIndex =
+      (!radioNeedsInitialRandomTrack && wasPlaying) ||
+      radioPlaybackTrackHistory.length > 0 ||
+      isPendingHistoryNavigation;
+    if (shouldRememberPlaylistIndex) {
+      rememberRadioTrackIndex(playlistIndex, {
+        updatePlaybackHistory: !isPendingHistoryNavigation,
+        consumeShuffleQueue: !isPendingHistoryNavigation
+      });
+      if (isPendingHistoryNavigation) {
+        radioPendingPlaybackHistoryIndex = null;
+      }
     }
   }
 
   const playerState = Number(info.playerState);
   if (playerState === 1) {
+    if (
+      radioNeedsInitialRandomTrack &&
+      getKnownRadioPlaylistTrackCount() > 0 &&
+      radioPlaybackTrackHistory.length === 0 &&
+      radioYoutubePlayer
+    ) {
+      if (playInitialRandomRadioTrack()) {
+        syncRadioControls();
+        updateRadioMediaSessionPlaybackState();
+        return;
+      }
+    }
     clearRadioPlaybackConfirmation();
     radioState.pendingPlay = false;
     radioState.isPlaying = true;
     setRadioCurrentTime(getEstimatedRadioCurrentTime());
     setRadioState("playing");
     startRadioYoutubeInfoPolling();
+  } else if (playerState === 0 && wasPlaying && radioState.canSkip) {
+    clearRadioPlaybackConfirmation();
+    radioState.pendingPlay = false;
+    nextRadioTrack();
+    return;
   } else if ((playerState === 0 || playerState === 2) && !radioState.pendingPlay) {
     setRadioCurrentTime(getEstimatedRadioCurrentTime());
     radioState.isPlaying = false;
@@ -2670,9 +2788,7 @@ function handleRadioYoutubeReady(event = {}) {
   radioYoutubePlayerReady = true;
   radioState.isReady = true;
   radioState.loadFailed = false;
-  radioState.canSkip =
-    typeof event.target?.nextVideo === "function" ||
-    typeof radioYoutubePlayer?.nextVideo === "function";
+  radioState.canSkip = getKnownRadioPlaylistTrackCount() > 1;
   applyRadioVolume();
   requestRadioYoutubeInfoDelivery();
   setRadioState("ready");
@@ -2759,8 +2875,20 @@ function playRadio() {
   setRadioState("loading");
   syncRadioControls();
   ensureRadioYoutubePlayer()
-    .then((player) => {
+    .then(async (player) => {
       applyRadioVolume();
+      await waitForRadioPlaylistTrackCount();
+      if (!radioState.pendingPlay && !radioState.isPlaying) {
+        return;
+      }
+      if (radioNeedsInitialRandomTrack && getKnownRadioPlaylistTrackCount() > 0) {
+        if (playInitialRandomRadioTrack()) {
+          if (player.usesPostMessage) {
+            scheduleRadioPlaybackConfirmation();
+          }
+          return;
+        }
+      }
       if (typeof player.playVideo === "function") {
         player.playVideo();
       }
@@ -2833,21 +2961,36 @@ function restartRadioCurrentTrackForPreviousAction() {
   return restarted;
 }
 
+function playInitialRandomRadioTrack() {
+  const initialTrackIndex = chooseInitialRandomRadioTrackIndex();
+  if (initialTrackIndex === null || !commitInitialRadioShuffleStart(initialTrackIndex)) {
+    return false;
+  }
+
+  if (playRadioTrackAt(initialTrackIndex)) {
+    return true;
+  }
+
+  radioNeedsInitialRandomTrack = true;
+  refillRadioShuffleQueue();
+  return false;
+}
+
 function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
-  const normalizedIndex = Number.parseInt(String(trackIndex), 10);
-  if (!Number.isInteger(normalizedIndex) || normalizedIndex < 0 || !radioYoutubePlayer) {
+  const normalizedIndex = normalizeRadioPlaylistTrackIndex(trackIndex);
+  if (normalizedIndex === null || !radioYoutubePlayer) {
     return false;
   }
 
   if (fromPlaybackHistory) {
-    setRadioPlaybackHistoryCursorToTrack(normalizedIndex);
     radioPendingPlaybackHistoryIndex = normalizedIndex;
   }
 
   try {
     if (typeof radioYoutubePlayer.playVideoAt === "function") {
       rememberRadioTrackIndex(normalizedIndex, {
-        updatePlaybackHistory: !fromPlaybackHistory
+        updatePlaybackHistory: !fromPlaybackHistory,
+        consumeShuffleQueue: !fromPlaybackHistory
       });
       setRadioCurrentTime(0);
       radioYoutubePlayer.playVideoAt(normalizedIndex);
@@ -2865,31 +3008,70 @@ function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
 }
 
 function playPreviousRadioTrackFromHistory() {
-  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
   const previousHistoryIndex = getPreviousRadioTrackIndexFromHistory();
-  let previousTrackIndex = previousHistoryIndex;
 
-  if (previousTrackIndex === null && playlistTrackCount > 1 && radioCurrentTrackIndex >= 0) {
-    previousTrackIndex = (radioCurrentTrackIndex - 1 + playlistTrackCount) % playlistTrackCount;
+  if (previousHistoryIndex !== null) {
+    const previousCursor = radioPlaybackHistoryCursor;
+    radioPlaybackHistoryCursor = Math.max(0, radioPlaybackHistoryCursor - 1);
+    if (playRadioTrackAt(previousHistoryIndex, { fromPlaybackHistory: true })) {
+      return true;
+    }
+    radioPlaybackHistoryCursor = previousCursor;
   }
 
-  if (previousTrackIndex !== null) {
-    return playRadioTrackAt(previousTrackIndex, { fromPlaybackHistory: true });
+  return false;
+}
+
+function playNextRadioTrackFromHistory() {
+  const nextHistoryIndex = getNextRadioTrackIndexFromHistory();
+  if (nextHistoryIndex === null) {
+    return false;
+  }
+
+  const previousCursor = radioPlaybackHistoryCursor;
+  radioPlaybackHistoryCursor += 1;
+  if (playRadioTrackAt(nextHistoryIndex, { fromPlaybackHistory: true })) {
+    return true;
+  }
+
+  radioPlaybackHistoryCursor = previousCursor;
+  return false;
+}
+
+function playNextRadioTrackFromShuffleQueue() {
+  const nextTrackIndex = chooseNextRadioTrackIndexFromShuffleQueue();
+  if (nextTrackIndex === null) {
+    return false;
+  }
+
+  radioPendingPlaybackHistoryIndex = null;
+  return playRadioTrackAt(nextTrackIndex);
+}
+
+function completeRadioTrackChangeUiSync() {
+  radioState.isPlaying = true;
+  setRadioState("playing");
+  startRadioYoutubeInfoPolling({ immediate: true });
+  syncRadioControls();
+  updateRadioMediaSessionPlaybackState();
+}
+
+function playNextRadioTrack() {
+  if (!radioYoutubePlayer) {
+    return false;
   }
 
   try {
-    if (typeof radioYoutubePlayer.previousVideo === "function") {
-      setRadioCurrentTime(0);
-      radioYoutubePlayer.previousVideo();
-      radioState.isPlaying = true;
-      setRadioState("playing");
-      startRadioYoutubeInfoPolling({ immediate: true });
+    resetRadioPreviousDoubleAction();
+    if (playNextRadioTrackFromHistory() || playNextRadioTrackFromShuffleQueue()) {
+      completeRadioTrackChangeUiSync();
       return true;
     }
   } catch {
     markRadioFallback();
     return false;
   }
+
   return false;
 }
 
@@ -2921,27 +3103,7 @@ function nextRadioTrack() {
     return;
   }
 
-  try {
-    resetRadioPreviousDoubleAction();
-    const nextTrackIndex = chooseSmartRadioTrackIndex();
-    if (nextTrackIndex !== null && playRadioTrackAt(nextTrackIndex)) {
-      radioPendingPlaybackHistoryIndex = null;
-    } else if (typeof radioYoutubePlayer.nextVideo === "function") {
-      setRadioCurrentTime(0);
-      radioPendingPlaybackHistoryIndex = null;
-      radioYoutubePlayer.nextVideo();
-    } else {
-      return;
-    }
-    radioState.isPlaying = true;
-    setRadioState("playing");
-    startRadioYoutubeInfoPolling({ immediate: true });
-  } catch {
-    markRadioFallback();
-    return;
-  }
-  syncRadioControls();
-  updateRadioMediaSessionPlaybackState();
+  playNextRadioTrack();
 }
 
 function toggleRadioPlayback() {
@@ -3016,8 +3178,7 @@ function initializeRadioStation() {
   radioPreviousButton?.addEventListener("click", previousRadioTrack);
   radioNextButton?.addEventListener("click", nextRadioTrack);
   radioVolumeInput?.addEventListener("input", handleRadioVolumeInput);
-  radioHideButton?.addEventListener("click", () => setRadioHidden(true));
-  radioShowButton?.addEventListener("click", () => setRadioHidden(false));
+  radioVisibilityToggleButton?.addEventListener("click", () => setRadioHidden(!radioState.isHidden));
   setRadioDefaultArtwork();
   setRadioState("idle");
   syncRadioControls();
@@ -5448,9 +5609,10 @@ function clearStoredTripProgressState() {
   queueStoragePrefixRemovals([
     "japan-trip-checklist-state-",
     "japan-trip-completed-history-",
-    "japan-trip-bookings-transit-state-"
+    "japan-trip-bookings-transit-state-",
+    "japan-trip-packing-state-"
   ]);
-  [checklistStorageKey, completedHistoryStorageKey, bookingTransitStorageKey].forEach((key) => {
+  [checklistStorageKey, completedHistoryStorageKey, bookingTransitStorageKey, packingStorageKey].forEach((key) => {
     queueStorageRemoval(key);
   });
 
@@ -7357,6 +7519,9 @@ function bindPackingUI() {
 
 function initializePackingToggles() {
   if (!packingSectionCards.length) {
+    queueStoragePrefixRemovals(["japan-trip-packing-state-"]);
+    queueStorageRemoval(packingStorageKey);
+    flushQueuedStorageWrites();
     return;
   }
 

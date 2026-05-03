@@ -11353,43 +11353,72 @@ html[data-theme="dark"] .site-intro__title {
   clip-path: inset(50%);
 }
 
-.travel-radio__restore {
+.travel-radio__edge-toggle {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  z-index: 5;
   grid-area: restore;
   display: inline-grid;
   place-items: center;
-  width: 2.85rem;
-  min-width: 2.85rem;
-  height: 2.85rem;
+  width: 2.5rem;
+  min-width: 2.5rem;
+  height: 3.05rem;
   padding: 0;
   border: 1px solid rgba(242, 214, 177, 0.3);
-  border-radius: 999px;
+  border-right-color: rgba(211, 231, 214, 0.1);
+  border-radius: 999px 0 0 999px;
   background:
     linear-gradient(180deg, rgba(18, 29, 23, 0.94), rgba(10, 17, 14, 0.9)),
     rgba(12, 20, 16, 0.92);
   color: #f4fbf5;
-  font-size: 1rem;
+  font-size: 1.02rem;
+  font-weight: 900;
   line-height: 1;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
     0 12px 28px rgba(0, 0, 0, 0.24);
+  transform: translate(-50%, -50%);
   transition:
     transform 180ms ease,
     border-color 180ms ease,
+    background-color 180ms ease,
     box-shadow 180ms ease;
 }
 
-.travel-radio__restore[hidden],
-.travel-radio:not([data-radio-collapsed="true"]) .travel-radio__restore {
-  display: none !important;
+.travel-radio__edge-icon {
+  transform: translateX(-0.04rem);
 }
 
-.travel-radio__restore:hover,
-.travel-radio__restore:focus-visible {
-  transform: translateY(-1px);
+.travel-radio__edge-toggle:hover,
+.travel-radio__edge-toggle:focus-visible {
+  transform: translate(-58%, -50%);
   border-color: rgba(242, 214, 177, 0.46);
+  background:
+    linear-gradient(180deg, rgba(31, 48, 39, 0.98), rgba(14, 24, 19, 0.94)),
+    rgba(12, 20, 16, 0.96);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.14),
     0 14px 30px rgba(0, 0, 0, 0.28);
+}
+
+.travel-radio[data-radio-collapsed="true"] .travel-radio__edge-toggle {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: 2.72rem;
+  min-width: 2.72rem;
+  height: 3rem;
+  transform: none;
+}
+
+.travel-radio[data-radio-collapsed="true"] .travel-radio__edge-toggle:hover,
+.travel-radio[data-radio-collapsed="true"] .travel-radio__edge-toggle:focus-visible {
+  transform: translateX(-0.12rem);
+}
+
+.travel-radio[data-radio-collapsed="true"] .travel-radio__edge-icon {
+  transform: translateX(-0.02rem);
 }
 
 .travel-radio__body {
@@ -11485,10 +11514,6 @@ html[data-theme="dark"] .site-intro__title {
   background:
     linear-gradient(180deg, rgba(177, 113, 78, 0.36), rgba(155, 60, 51, 0.2)),
     rgba(255, 255, 255, 0.08);
-}
-
-.travel-radio__button--hide {
-  color: rgba(244, 251, 245, 0.84);
 }
 
 .travel-radio__button:hover,
@@ -13655,8 +13680,8 @@ html[data-theme="dark"] #checklist .check-item {
   border: 1px solid var(--app-glass-line);
   border-radius: 2.2rem;
   background:
-    linear-gradient(180deg, rgba(11, 20, 15, 0.82), rgba(8, 14, 11, 0.62)),
-    rgba(7, 12, 9, 0.58);
+    linear-gradient(180deg, rgba(11, 20, 15, 0.9), rgba(8, 14, 11, 0.78)),
+    rgba(7, 12, 9, 0.74);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     var(--app-shadow-strong);
@@ -13678,8 +13703,8 @@ html[data-theme="dark"] #checklist .check-item {
 .budget-source-meta-card {
   border: 1px solid var(--app-glass-line) !important;
   background:
-    linear-gradient(180deg, rgba(21, 34, 27, 0.92), rgba(13, 21, 17, 0.84)),
-    rgba(10, 16, 13, 0.78) !important;
+    linear-gradient(180deg, rgba(21, 34, 27, 0.96), rgba(13, 21, 17, 0.9)),
+    rgba(10, 16, 13, 0.86) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     0 22px 54px rgba(0, 0, 0, 0.2) !important;
@@ -15183,6 +15208,13 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
   background: #000 !important;
 }
 
+.site-backdrop::before,
+.site-backdrop::after,
+.site-atmosphere {
+  display: none !important;
+  content: none !important;
+}
+
 .site-backdrop__video,
 html[data-theme="dark"] .site-backdrop__video,
 html.reduce-effects .site-backdrop__video {
@@ -15200,7 +15232,7 @@ html.reduce-effects .site-backdrop__video {
   background-size: cover;
   opacity: 0;
   pointer-events: none;
-  filter: saturate(0.82) brightness(0.46) contrast(1.08);
+  filter: saturate(1.02) brightness(0.9) contrast(1.04);
   transform: scale(1.025);
   transform-origin: center center;
   transition: opacity 2200ms ease;
@@ -15213,28 +15245,12 @@ html.reduce-effects .site-backdrop__video {
 
 .site-backdrop__wash,
 html[data-theme="dark"] .site-backdrop__wash {
-  z-index: 3;
-  display: block !important;
-  content: "";
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.54) 0%,
-      rgba(3, 8, 6, 0.72) 42%,
-      rgba(0, 0, 0, 0.9) 100%
-    ),
-    linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.76) 0%,
-      rgba(0, 0, 0, 0.24) 48%,
-      rgba(0, 0, 0, 0.68) 100%
-    ),
-    radial-gradient(circle at 50% 4%, rgba(214, 180, 118, 0.12), rgba(214, 180, 118, 0) 30%);
+  display: none !important;
+  content: none !important;
 }
 
 html.reduce-effects .site-backdrop__slide {
-  filter: saturate(0.78) brightness(0.42) contrast(1.1);
+  filter: saturate(1.02) brightness(0.9) contrast(1.04);
   transform: none;
   transition: none !important;
 }
@@ -15242,6 +15258,6 @@ html.reduce-effects .site-backdrop__slide {
 @media (max-width: 640px) {
   .site-backdrop__slide {
     inset: -1rem;
-    filter: saturate(0.78) brightness(0.4) contrast(1.12);
+    filter: saturate(1.02) brightness(0.9) contrast(1.04);
   }
 }
