@@ -15223,20 +15223,36 @@ html.reduce-effects .site-backdrop__video {
 
 .site-backdrop__slide {
   position: absolute;
-  inset: -1.5rem;
+  inset: 0;
   z-index: 1;
   display: block;
-  background-color: #000;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
+  overflow: hidden;
+  background: transparent;
   opacity: 0;
   pointer-events: none;
-  filter: saturate(1.02) brightness(0.9) contrast(1.04);
-  transform: scale(1.025);
+  filter: none;
+  transform: none;
   transform-origin: center center;
-  transition: opacity 2200ms ease;
+  transition: opacity 1600ms ease;
   will-change: opacity;
+}
+
+.site-backdrop__picture,
+.site-backdrop__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.site-backdrop__picture {
+  position: absolute;
+  inset: 0;
+}
+
+.site-backdrop__img {
+  object-fit: cover;
+  object-position: var(--site-backdrop-position, center center);
+  transform: none;
 }
 
 .site-backdrop__slide.is-active {
@@ -15250,24 +15266,21 @@ html[data-theme="dark"] .site-backdrop__wash {
 }
 
 html.reduce-effects .site-backdrop__slide {
-  filter: saturate(1.02) brightness(0.9) contrast(1.04);
+  filter: none;
   transform: none;
   transition: none !important;
 }
 
 @media (max-width: 640px) {
   .site-backdrop__slide {
-    inset: -1rem;
-    filter: saturate(1.02) brightness(0.9) contrast(1.04);
+    filter: none;
   }
 }
 
 /* May 2026 PageSpeed, cover, and mobile paint polish */
 .site-backdrop__slide {
   inset: 0 !important;
-  background-position: center center;
-  background-size: cover;
-  filter: saturate(1.01) brightness(0.88) contrast(1.02);
+  filter: none !important;
   transform: none !important;
   transition: opacity 1600ms ease;
 }

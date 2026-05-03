@@ -78,6 +78,8 @@ const aggressivePerformanceMode = false;
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
+const backdropMobileImageMedia = "(max-width: 720px) and (orientation: portrait)";
+const backdropMobileImageQuery = window.matchMedia(backdropMobileImageMedia);
 const pageTitles = {
   en: "Kairos VIII Japan Itinerary",
   ja: "Kairos VIII Japan Itinerary"
@@ -102,28 +104,54 @@ const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
 const offlineBundleVersion = "2026-05-03-offline-v24";
-const siteBackdropImageUrls = [
-  "./assets/backgrounds/kairos-bg-01.jpg",
-  "./assets/backgrounds/kairos-bg-02.jpg",
-  "./assets/backgrounds/kairos-bg-03.jpg",
-  "./assets/backgrounds/kairos-bg-04.jpg",
-  "./assets/backgrounds/kairos-bg-05.jpg",
-  "./assets/backgrounds/kairos-bg-06.jpg",
-  "./assets/backgrounds/kairos-bg-07.jpg",
-  "./assets/backgrounds/kairos-bg-08.jpg",
-  "./assets/backgrounds/kairos-bg-09.jpg"
+const siteBackdropImages = [
+  {
+    desktop: "./assets/backgrounds/kairos-bg-01.jpg",
+    mobile: "./assets/backgrounds/kairos-bg-01-mobile.jpg",
+    position: "center center"
+  },
+  {
+    desktop: "./assets/backgrounds/kairos-bg-02.jpg",
+    mobile: "./assets/backgrounds/kairos-bg-02-mobile.jpg",
+    position: "center center"
+  },
+  {
+    desktop: "./assets/backgrounds/kairos-bg-03.jpg",
+    mobile: "./assets/backgrounds/kairos-bg-03-mobile.jpg",
+    position: "center center"
+  },
+  {
+    desktop: "./assets/backgrounds/kairos-bg-04.jpg",
+    mobile: "./assets/backgrounds/kairos-bg-04-mobile.jpg",
+    position: "center center"
+  },
+  {
+    desktop: "./assets/backgrounds/kairos-bg-05.jpg",
+    mobile: "./assets/backgrounds/kairos-bg-05-mobile.jpg",
+    position: "center center"
+  },
+  {
+    desktop: "./assets/backgrounds/kairos-bg-06.jpg",
+    mobile: "./assets/backgrounds/kairos-bg-06-mobile.jpg",
+    position: "center center"
+  },
+  {
+    desktop: "./assets/backgrounds/kairos-bg-07.jpg",
+    mobile: "./assets/backgrounds/kairos-bg-07-mobile.jpg",
+    position: "center center"
+  },
+  {
+    desktop: "./assets/backgrounds/kairos-bg-08.jpg",
+    mobile: "./assets/backgrounds/kairos-bg-08-mobile.jpg",
+    position: "center center"
+  },
+  {
+    desktop: "./assets/backgrounds/kairos-bg-09.jpg",
+    mobile: "./assets/backgrounds/kairos-bg-09-mobile.jpg",
+    position: "center center"
+  }
 ];
-const siteBackdropMobileImageUrls = [
-  "./assets/backgrounds/kairos-bg-01-mobile.jpg",
-  "./assets/backgrounds/kairos-bg-02-mobile.jpg",
-  "./assets/backgrounds/kairos-bg-03-mobile.jpg",
-  "./assets/backgrounds/kairos-bg-04-mobile.jpg",
-  "./assets/backgrounds/kairos-bg-05-mobile.jpg",
-  "./assets/backgrounds/kairos-bg-06-mobile.jpg",
-  "./assets/backgrounds/kairos-bg-07-mobile.jpg",
-  "./assets/backgrounds/kairos-bg-08-mobile.jpg",
-  "./assets/backgrounds/kairos-bg-09-mobile.jpg"
-];
+const siteBackdropImageUrls = siteBackdropImages.map((image) => image.desktop);
 const siteBackdropRotationIntervalMs = 10000;
 const appAssetConfigRuntimeGlobal = "__JAPAN_APP_ASSETS__";
 const budgetUiRuntimeGlobal = "__JAPAN_BUDGET_UI__";
@@ -1373,19 +1401,73 @@ function getNextBackdropImageIndex() {
   return (siteBackdropCurrentIndex + 1) % siteBackdropImageUrls.length;
 }
 
-function getBackdropImageUrlForIndex(index = 0) {
-  const normalizedIndex = ((Number(index) || 0) % siteBackdropImageUrls.length + siteBackdropImageUrls.length) %
-    siteBackdropImageUrls.length;
-  const mobileUrl = siteBackdropMobileImageUrls[normalizedIndex];
-  return compactViewportQuery.matches && mobileUrl ? mobileUrl : siteBackdropImageUrls[normalizedIndex];
+function getBackdropImageDefinitionForIndex(index = 0) {
+  const normalizedIndex = ((Number(index) || 0) % siteBackdropImages.length + siteBackdropImages.length) %
+    siteBackdropImages.length;
+  return siteBackdropImages[normalizedIndex] || siteBackdropImages[0] || null;
 }
 
-function setBackdropSlideImage(slide, imageUrl) {
+function getBackdropImageUrlForIndex(index = 0) {
+  const image = getBackdropImageDefinitionForIndex(index);
+  if (!image) {
+    return "";
+  }
+
+  return backdropMobileImageQuery.matches && image.mobile ? image.mobile : image.desktop;
+}
+
+function setBackdropSlideImage(slide, imageUrl, image = null) {
   if (!slide || !imageUrl) {
     return;
   }
 
-  slide.style.backgroundImage = `url("${getResolvedBackdropImageUrl(imageUrl).replace(/"/g, '\\"')}")`;
+  const imageDefinition = image || {
+    desktop: imageUrl,
+    mobile: "",
+    position: "center center"
+  };
+  const desktopUrl = imageDefinition.desktop || imageUrl;
+  const mobileUrl = imageDefinition.mobile || "";
+  const resolvedDesktopUrl = getResolvedBackdropImageUrl(desktopUrl);
+  const resolvedMobileUrl = mobileUrl ? getResolvedBackdropImageUrl(mobileUrl) : "";
+  const position = imageDefinition.position || "center center";
+  let picture = slide.querySelector("[data-site-background-picture]");
+  let mobileSource = slide.querySelector("[data-site-background-mobile-source]");
+  let img = slide.querySelector("[data-site-background-img]");
+
+  if (!picture) {
+    picture = document.createElement("picture");
+    picture.className = "site-backdrop__picture";
+    picture.dataset.siteBackgroundPicture = "";
+    slide.append(picture);
+  }
+
+  if (!mobileSource) {
+    mobileSource = document.createElement("source");
+    mobileSource.dataset.siteBackgroundMobileSource = "";
+    picture.prepend(mobileSource);
+  }
+
+  if (!img) {
+    img = document.createElement("img");
+    img.className = "site-backdrop__img";
+    img.dataset.siteBackgroundImg = "";
+    img.alt = "";
+    img.decoding = "async";
+    img.draggable = false;
+    picture.append(img);
+  }
+
+  mobileSource.media = backdropMobileImageMedia;
+  if (resolvedMobileUrl) {
+    mobileSource.srcset = resolvedMobileUrl;
+  } else {
+    mobileSource.removeAttribute("srcset");
+  }
+
+  img.src = resolvedDesktopUrl;
+  slide.style.removeProperty("background-image");
+  slide.style.setProperty("--site-backdrop-position", position);
 }
 
 function preloadBackdropImage(imageUrl) {
@@ -1453,7 +1535,6 @@ function scheduleBackdropSlideshow() {
 function scheduleDeferredBackdropSlideshowStart() {
   if (
     siteBackdropLazyLoadStarted ||
-    !siteBackdropMotionUnlocked ||
     siteBackdropImageUrls.length <= 1 ||
     reducedEffectsEnabled ||
     offlineSnapshotMode
@@ -1467,6 +1548,7 @@ function scheduleDeferredBackdropSlideshowStart() {
     }
 
     siteBackdropLazyLoadStarted = true;
+    siteBackdropMotionUnlocked = true;
     warmNextBackdropImage();
     scheduleBackdropSlideshow();
   };
@@ -1510,6 +1592,7 @@ function transitionToBackdropImage(nextIndex) {
   const normalizedIndex = ((Number(nextIndex) || 0) % siteBackdropImageUrls.length + siteBackdropImageUrls.length) %
     siteBackdropImageUrls.length;
   const imageUrl = getBackdropImageUrlForIndex(normalizedIndex);
+  const image = getBackdropImageDefinitionForIndex(normalizedIndex);
   const nextSlideIndex = (siteBackdropActiveSlideIndex + 1) % siteBackdropSlides.length;
   const nextSlide = siteBackdropSlides[nextSlideIndex];
   const token = siteBackdropTransitionToken + 1;
@@ -1525,7 +1608,7 @@ function transitionToBackdropImage(nextIndex) {
       return;
     }
 
-    setBackdropSlideImage(nextSlide, imageUrl);
+    setBackdropSlideImage(nextSlide, imageUrl, image);
     siteBackdropSlides.forEach((slide, index) => {
       slide.classList.toggle("is-active", index === nextSlideIndex);
     });
@@ -1558,7 +1641,11 @@ function initializeDecorativeMediaExperience() {
 
   const initialIndex = 0;
   const firstSlide = siteBackdropSlides[0];
-  setBackdropSlideImage(firstSlide, getBackdropImageUrlForIndex(initialIndex));
+  setBackdropSlideImage(
+    firstSlide,
+    getBackdropImageUrlForIndex(initialIndex),
+    getBackdropImageDefinitionForIndex(initialIndex)
+  );
   siteBackdropSlides.forEach((slide, index) => {
     slide.classList.toggle("is-active", index === 0);
   });
