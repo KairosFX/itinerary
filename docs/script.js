@@ -79,8 +79,8 @@ const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
 const pageTitles = {
-  en: "",
-  ja: ""
+  en: "Kairos VIII Japan Itinerary",
+  ja: "Kairos VIII Japan Itinerary"
 };
 const storageKey = "japan-trip-language";
 const itineraryStateVersion = "2026-04-09-checklist-shift-raf-v2";
@@ -101,7 +101,7 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-03-28-offline-v23";
+const offlineBundleVersion = "2026-05-03-offline-v24";
 const siteBackdropImageUrls = [
   "./assets/backgrounds/kairos-bg-01.jpg",
   "./assets/backgrounds/kairos-bg-02.jpg",
@@ -112,6 +112,17 @@ const siteBackdropImageUrls = [
   "./assets/backgrounds/kairos-bg-07.jpg",
   "./assets/backgrounds/kairos-bg-08.jpg",
   "./assets/backgrounds/kairos-bg-09.jpg"
+];
+const siteBackdropMobileImageUrls = [
+  "./assets/backgrounds/kairos-bg-01-mobile.jpg",
+  "./assets/backgrounds/kairos-bg-02-mobile.jpg",
+  "./assets/backgrounds/kairos-bg-03-mobile.jpg",
+  "./assets/backgrounds/kairos-bg-04-mobile.jpg",
+  "./assets/backgrounds/kairos-bg-05-mobile.jpg",
+  "./assets/backgrounds/kairos-bg-06-mobile.jpg",
+  "./assets/backgrounds/kairos-bg-07-mobile.jpg",
+  "./assets/backgrounds/kairos-bg-08-mobile.jpg",
+  "./assets/backgrounds/kairos-bg-09-mobile.jpg"
 ];
 const siteBackdropRotationIntervalMs = 10000;
 const appAssetConfigRuntimeGlobal = "__JAPAN_APP_ASSETS__";
@@ -128,6 +139,7 @@ const routeContentFallbackScriptUrl = "./route-content.min.js";
 const routeStyleFallbackUrl = "./route.min.css";
 const routeMapOriginUrl = "https://tiles.openfreemap.org";
 const routeMapStyleUrl = "https://tiles.openfreemap.org/styles/positron";
+const routeMapInitializeTimeoutMs = 12000;
 const radioPlaylistId = "PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa";
 const radioYoutubePlayerHost = "https://www.youtube-nocookie.com";
 const radioYoutubePlayerId = "kairos-viii-radio-player";
@@ -1118,12 +1130,12 @@ const offlineLabels = {
     ja: "この保存版はオフラインでそのまま使える単体版です。"
   },
   standardMeta: {
-    en: "Cached bundle version 2026-03-27. Includes checklist, packing, upgraded budget notes, route map, and transit details.",
-    ja: "キャッシュ版は 2026-03-27。チェックリスト、荷造り、強化した予算メモ、ルート地図、移動詳細を含みます。"
+    en: "Cached bundle version 2026-05-03. Includes checklist, packing, upgraded budget notes, route map, and transit details.",
+    ja: "キャッシュ版は 2026-05-03。チェックリスト、荷造り、強化した予算メモ、ルート地図、移動詳細を含みます。"
   },
   installHintMeta: {
-    en: "If no install button appears, use your browser menu or iPhone/iPad Share sheet to add the guide to the home screen. Snapshot version: 2026-03-27.",
-    ja: "追加ボタンが出ない場合は、ブラウザーのメニューや iPhone/iPad の共有メニューからホーム画面へ追加できます。保存版は 2026-03-27 です。"
+    en: "If no install button appears, use your browser menu or iPhone/iPad Share sheet to add the guide to the home screen. Snapshot version: 2026-05-03.",
+    ja: "追加ボタンが出ない場合は、ブラウザーのメニューや iPhone/iPad の共有メニューからホーム画面へ追加できます。保存版は 2026-05-03 です。"
   },
   snapshotMeta: {
     en: "This single-file snapshot keeps the local checklist, packing, budget notes, route map, and transit details working without fetches.",
@@ -1245,10 +1257,10 @@ const routeMapLabels = {
     en: "Loading OpenFreeMap Positron and the route overlays.",
     ja: "OpenFreeMap Positron とルート表示を読み込んでいます。"
   },
-  sharedFallbackTitle: { en: "Route map unavailable", ja: "ルート地図を表示できません" },
+  sharedFallbackTitle: { en: "Live map unavailable.", ja: "ライブ地図を表示できません。" },
   sharedFallbackBody: {
-    en: "The live map could not load here. Use the saved itinerary links if you need directions.",
-    ja: "ライブ地図をここでは読み込めませんでした。経路案内が必要なら保存済みの旅程リンクを使ってください。"
+    en: "Use the Google Maps route link instead.",
+    ja: "代わりに Google マップのルートリンクを使ってください。"
   },
   sharedOfflineTitle: {
     en: "Interactive map unavailable offline",
@@ -1352,6 +1364,13 @@ function getNextBackdropImageIndex() {
   return (siteBackdropCurrentIndex + 1) % siteBackdropImageUrls.length;
 }
 
+function getBackdropImageUrlForIndex(index = 0) {
+  const normalizedIndex = ((Number(index) || 0) % siteBackdropImageUrls.length + siteBackdropImageUrls.length) %
+    siteBackdropImageUrls.length;
+  const mobileUrl = siteBackdropMobileImageUrls[normalizedIndex];
+  return compactViewportQuery.matches && mobileUrl ? mobileUrl : siteBackdropImageUrls[normalizedIndex];
+}
+
 function setBackdropSlideImage(slide, imageUrl) {
   if (!slide || !imageUrl) {
     return;
@@ -1380,14 +1399,14 @@ function preloadBackdropImage(imageUrl) {
 }
 
 function warmNextBackdropImage() {
-  if (siteBackdropImageUrls.length <= 1 || reducedEffectsEnabled) {
+  if (siteBackdropImageUrls.length <= 1 || reducedEffectsEnabled || !siteBackdropLazyLoadStarted) {
     siteBackdropPreloadImage = null;
     return;
   }
 
   siteBackdropPreloadImage = new Image();
   siteBackdropPreloadImage.decoding = "async";
-  siteBackdropPreloadImage.src = getResolvedBackdropImageUrl(siteBackdropImageUrls[getNextBackdropImageIndex()]);
+  siteBackdropPreloadImage.src = getResolvedBackdropImageUrl(getBackdropImageUrlForIndex(getNextBackdropImageIndex()));
 }
 
 function clearBackdropSlideshowTimer() {
@@ -1402,6 +1421,8 @@ function shouldAnimateBackdropSlideshow() {
     siteBackdropInitialized &&
     siteBackdropSlides.length > 1 &&
     siteBackdropImageUrls.length > 1 &&
+    siteBackdropLazyLoadStarted &&
+    siteBackdropMotionUnlocked &&
     !reducedEffectsEnabled &&
     !offlineSnapshotMode &&
     document.visibilityState !== "hidden"
@@ -1420,6 +1441,58 @@ function scheduleBackdropSlideshow() {
   }, siteBackdropRotationIntervalMs);
 }
 
+function scheduleDeferredBackdropSlideshowStart() {
+  if (
+    siteBackdropLazyLoadStarted ||
+    !siteBackdropMotionUnlocked ||
+    siteBackdropImageUrls.length <= 1 ||
+    reducedEffectsEnabled ||
+    offlineSnapshotMode
+  ) {
+    return;
+  }
+
+  const startSlideshow = () => {
+    if (siteBackdropLazyLoadStarted || reducedEffectsEnabled || offlineSnapshotMode) {
+      return;
+    }
+
+    siteBackdropLazyLoadStarted = true;
+    warmNextBackdropImage();
+    scheduleBackdropSlideshow();
+  };
+
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(startSlideshow, { timeout: 2200 });
+    return;
+  }
+
+  window.setTimeout(startSlideshow, 1600);
+}
+
+function unlockBackdropSlideshowMotion() {
+  if (siteBackdropMotionUnlocked || reducedEffectsEnabled || offlineSnapshotMode) {
+    return;
+  }
+
+  siteBackdropMotionUnlocked = true;
+  scheduleDeferredBackdropSlideshowStart();
+  scheduleBackdropSlideshow();
+}
+
+function bindBackdropSlideshowMotionUnlock() {
+  if (siteBackdropMotionListenersBound || reducedEffectsEnabled || offlineSnapshotMode) {
+    return;
+  }
+
+  siteBackdropMotionListenersBound = true;
+  const eventOptions = { passive: true, once: true };
+  window.addEventListener("scroll", unlockBackdropSlideshowMotion, eventOptions);
+  window.addEventListener("pointerdown", unlockBackdropSlideshowMotion, eventOptions);
+  window.addEventListener("touchstart", unlockBackdropSlideshowMotion, eventOptions);
+  window.addEventListener("keydown", unlockBackdropSlideshowMotion, { once: true });
+}
+
 function transitionToBackdropImage(nextIndex) {
   if (!shouldAnimateBackdropSlideshow()) {
     return;
@@ -1427,7 +1500,7 @@ function transitionToBackdropImage(nextIndex) {
 
   const normalizedIndex = ((Number(nextIndex) || 0) % siteBackdropImageUrls.length + siteBackdropImageUrls.length) %
     siteBackdropImageUrls.length;
-  const imageUrl = siteBackdropImageUrls[normalizedIndex];
+  const imageUrl = getBackdropImageUrlForIndex(normalizedIndex);
   const nextSlideIndex = (siteBackdropActiveSlideIndex + 1) % siteBackdropSlides.length;
   const nextSlide = siteBackdropSlides[nextSlideIndex];
   const token = siteBackdropTransitionToken + 1;
@@ -1474,21 +1547,21 @@ function initializeDecorativeMediaExperience() {
     return;
   }
 
-  const initialIndex = getRandomBackdropImageIndex();
+  const initialIndex = 0;
   const firstSlide = siteBackdropSlides[0];
-  setBackdropSlideImage(firstSlide, siteBackdropImageUrls[initialIndex]);
+  setBackdropSlideImage(firstSlide, getBackdropImageUrlForIndex(initialIndex));
   siteBackdropSlides.forEach((slide, index) => {
     slide.classList.toggle("is-active", index === 0);
   });
   siteBackdropCurrentIndex = initialIndex;
   siteBackdropActiveSlideIndex = 0;
   siteBackdropInitialized = true;
+  bindBackdropSlideshowMotionUnlock();
 
   if (shouldAnimateBackdropSlideshow()) {
-    warmNextBackdropImage();
     scheduleBackdropSlideshow();
-  } else {
-    warmNextBackdropImage();
+  } else if (!reducedEffectsEnabled && !offlineSnapshotMode) {
+    scheduleDeferredBackdropSlideshowStart();
   }
 }
 
@@ -1679,12 +1752,13 @@ function getRadioLabels() {
     playing: { en: "On air", ja: "再生中" },
     paused: { en: "Paused", ja: "一時停止" },
     fallback: { en: "Radio unavailable in this browser", ja: "このブラウザではラジオを利用できません" },
-    play: { en: "Play playlist", ja: "プレイリストを再生" },
-    pause: { en: "Pause playlist", ja: "プレイリストを一時停止" },
-    previous: { en: "Restart or previous track", ja: "曲を先頭に戻す / 前の曲" },
+    play: { en: "Play radio", ja: "ラジオを再生" },
+    pause: { en: "Pause radio", ja: "ラジオを一時停止" },
+    previous: { en: "Previous track", ja: "曲を先頭に戻す / 前の曲" },
     next: { en: "Next track", ja: "次の曲" },
     hide: { en: "Hide radio", ja: "ラジオを隠す" },
-    show: { en: "Show radio", ja: "ラジオを表示" }
+    show: { en: "Show radio", ja: "ラジオを表示" },
+    volume: { en: "Radio volume", ja: "ラジオ音量" }
   };
 }
 
@@ -1906,6 +1980,11 @@ function syncRadioControls() {
     radioNextButton.setAttribute("aria-label", getRadioLabel("next"));
     radioNextButton.dataset.ariaLabelEn = getRadioLabels().next.en;
     radioNextButton.dataset.ariaLabelJa = getRadioLabels().next.ja;
+  }
+  if (radioVolumeInput) {
+    radioVolumeInput.setAttribute("aria-label", getRadioLabel("volume"));
+    radioVolumeInput.dataset.ariaLabelEn = getRadioLabels().volume.en;
+    radioVolumeInput.dataset.ariaLabelJa = getRadioLabels().volume.ja;
   }
   syncRadioVisibilityUi();
 }
@@ -3182,7 +3261,6 @@ function initializeRadioStation() {
   setRadioDefaultArtwork();
   setRadioState("idle");
   syncRadioControls();
-  window.setTimeout(warmRadioYoutubePlayer, radioYoutubeWarmupDelayMs);
 }
 
 function shouldWarmDeferredAssets() {
@@ -3282,125 +3360,6 @@ function prewarmRouteStaticAssets() {
     primeHeadLink("preload", routeMapLibraryScriptUrl, { as: "script" });
     return manifest;
   });
-}
-
-function warmRouteMapStyleDocument() {
-  if (offlineSnapshotMode) {
-    return Promise.resolve(null);
-  }
-
-  if (routeMapStyleWarmupPromise) {
-    return routeMapStyleWarmupPromise;
-  }
-
-  routeMapStyleWarmupPromise = fetch(routeMapStyleUrl, {
-    mode: "cors",
-    credentials: "omit",
-    cache: "force-cache"
-  })
-    .then((response) => (response.ok ? response.text() : null))
-    .catch(() => null);
-
-  return routeMapStyleWarmupPromise;
-}
-
-function createRouteMapWarmupHost() {
-  if (routeMapWarmupHost?.isConnected) {
-    return routeMapWarmupHost;
-  }
-
-  const host = document.createElement("div");
-  host.setAttribute("aria-hidden", "true");
-  host.dataset.routeMapWarmup = "true";
-  Object.assign(host.style, {
-    position: "fixed",
-    left: "-200vw",
-    top: "-200vh",
-    width: "720px",
-    height: "420px",
-    opacity: "0",
-    pointerEvents: "none",
-    zIndex: "-1"
-  });
-  document.body.append(host);
-  routeMapWarmupHost = host;
-  return host;
-}
-
-function warmOffscreenRouteMap() {
-  if (offlineSnapshotMode) {
-    return Promise.resolve(null);
-  }
-
-  if (routeMapOffscreenWarmupPromise) {
-    return routeMapOffscreenWarmupPromise;
-  }
-
-  routeMapOffscreenWarmupPromise = Promise.all([
-    ensureRouteContentLoaded(),
-    loadRouteMapLibrary(),
-    warmRouteMapStyleDocument()
-  ])
-    .then(async ([, { maplibregl }]) => {
-      const warmupHost = createRouteMapWarmupHost();
-      const warmupMap = new maplibregl.Map({
-        container: warmupHost,
-        style: buildRouteMapBaseStyle(),
-        interactive: false,
-        attributionControl: false,
-        renderWorldCopies: false,
-        center: routeMapInitialView.center,
-        zoom: routeMapInitialView.zoom
-      });
-
-      try {
-        await waitForRouteMapLoad(warmupMap, 14000);
-      } catch (error) {
-        // Ignore warmup errors and let the visible map retry normally.
-      }
-
-      try {
-        warmupMap.remove();
-      } catch (error) {
-        // Ignore cleanup failures for the offscreen warmup map.
-      }
-
-      if (routeMapWarmupHost?.isConnected) {
-        routeMapWarmupHost.remove();
-      }
-      routeMapWarmupHost = null;
-      return null;
-    })
-    .catch(() => null)
-    .finally(() => {
-      routeMapOffscreenWarmupPromise = null;
-    });
-
-  return routeMapOffscreenWarmupPromise;
-}
-
-function warmRouteExperience() {
-  if (offlineSnapshotMode) {
-    return Promise.resolve(null);
-  }
-
-  if (routeExperienceWarmupPromise) {
-    return routeExperienceWarmupPromise;
-  }
-
-  routeMapRequested = true;
-  routeExperienceWarmupPromise = Promise.allSettled([
-    prewarmRouteStaticAssets(),
-    ensureRouteSectionStylesLoaded(),
-    ensureRouteContentLoaded(),
-    loadRouteMapLibrary(),
-    warmRouteMapStyleDocument(),
-    warmOffscreenRouteMap()
-  ]).finally(() => {
-    routeExperienceWarmupPromise = null;
-  });
-
-  return routeExperienceWarmupPromise;
 }
 
 function loadLazyAssetScript(url, dataAttribute, runtimeGlobal, runtimeLabel) {
@@ -3711,6 +3670,9 @@ let siteBackdropActiveSlideIndex = 0;
 let siteBackdropTimer = 0;
 let siteBackdropPreloadImage = null;
 let siteBackdropTransitionToken = 0;
+let siteBackdropLazyLoadStarted = false;
+let siteBackdropMotionUnlocked = false;
+let siteBackdropMotionListenersBound = false;
 let lastTimelineFocusDay = null;
 const pendingClassRestarts = new WeakMap();
 let activeWindowScrollAnimation = null;
@@ -3828,10 +3790,6 @@ let routeMapDayRailScrollLeft = 0;
 let routeMapDayRailStep = 0;
 let routeMapDayRailMaxScroll = 0;
 let routeMapRequested = false;
-let routeMapStyleWarmupPromise = null;
-let routeMapOffscreenWarmupPromise = null;
-let routeExperienceWarmupPromise = null;
-let routeMapWarmupHost = null;
 let pendingRouteMapUISyncOptions = {
   updateCamera: false,
   animateCamera: false,
@@ -5531,6 +5489,10 @@ function syncReducedEffectsMode({ force = false } = {}) {
   }
 
   syncDecorativeVideoPlayback();
+  if (siteBackdropInitialized && !reducedEffectsEnabled) {
+    bindBackdropSlideshowMotionUnlock();
+    scheduleDeferredBackdropSlideshowStart();
+  }
 }
 
 function bindMediaQueryChange(query, handler) {
@@ -7534,8 +7496,8 @@ function initializePackingToggles() {
   syncPackingUI();
 }
 
-let initializeBudgetNotes = () => Promise.resolve();
-let refreshBudgetNotesIfReady = () => {};
+var initializeBudgetNotes = () => Promise.resolve();
+var refreshBudgetNotesIfReady = () => {};
 
 function readStoredLanguage() {
   try {
@@ -8197,23 +8159,7 @@ function ensureSectionInitialized(sectionName) {
 }
 
 function scheduleIdleSectionWarmup(initialSection) {
-  const warm = () => {
-    if (initialSection !== "route") {
-      void warmRouteExperience();
-    } else {
-      void ensureRouteSectionStylesLoaded();
-      void ensureRouteContentLoaded();
-    }
-
-    void warmDeferredExperienceAssets();
-  };
-
-  if (typeof window.requestIdleCallback === "function") {
-    window.requestIdleCallback(warm, { timeout: 1200 });
-    return;
-  }
-
-  window.setTimeout(warm, 260);
+  void initialSection;
 }
 
 function initOverviewSection() {
@@ -10886,7 +10832,7 @@ function ensureRouteMapReady() {
     });
 
     routeMapState.map.resize();
-    await waitForRouteMapLoad(routeMapState.map);
+    await waitForRouteMapLoad(routeMapState.map, routeMapInitializeTimeoutMs);
 
     reduceRouteMapBaseClutter(routeMapState.map);
     ensureRouteMapAttributionControl(routeMapState.map);
@@ -11944,7 +11890,9 @@ function setLanguage(language) {
   syncLocalizedDocumentTitle(nextLanguage);
 
   localizedNodes.forEach((node) => {
-    node.hidden = node.dataset.language !== nextLanguage;
+    const nodeLanguage = node.dataset.language === "ja" ? "ja" : "en";
+    node.hidden = nodeLanguage !== nextLanguage;
+    node.setAttribute("lang", nodeLanguage);
   });
 
   ariaLabelNodes.forEach((node) => {
@@ -12348,9 +12296,7 @@ async function bootApp() {
   if (storedLanguage === "ja") {
     setLanguage("ja");
   } else {
-    root.lang = "en";
-    syncLocalizedDocumentTitle("en");
-    updateLanguageButtons("en");
+    setLanguage("en");
   }
 
   bindSectionNavMotion();
@@ -12360,7 +12306,6 @@ async function bootApp() {
   revealAllContentPanels();
   ensureSectionInitObserver();
   syncModalOpenState();
-  void warmRouteExperience();
   const initialPanelId = getInitialPanelId();
   setActivePanel(initialPanelId, { syncContent: false, store: false });
   initializeSectionWhenVisible(initialPanelId);

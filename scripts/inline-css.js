@@ -3,7 +3,7 @@ const path = require("path");
 
 const repoRoot = path.resolve(__dirname, "..");
 const indexPath = path.join(repoRoot, "docs", "index.html");
-const criticalCssPath = path.join(repoRoot, "docs", "critical.css");
+const criticalCssPath = path.join(repoRoot, "docs", "style.min.css");
 const assetManifestPath = path.join(repoRoot, "docs", "assets", "app", "asset-manifest.json");
 
 const styleStartMarker = "<!-- build:inline-style:start -->";
@@ -24,7 +24,7 @@ if (!stylePath || !scriptPath) {
   throw new Error("Versioned asset paths were not found in docs/assets/app/asset-manifest.json");
 }
 
-const styleBlock = `${styleStartMarker}\n  <style data-critical-style>${criticalCss}</style>\n  <link rel="preload" href="${stylePath}" as="style" fetchpriority="high">\n  <link rel="preload" href="${scriptPath}" as="script" fetchpriority="high">\n  <link rel="stylesheet" href="${stylePath}" media="print" onload="this.media='all'">\n  <noscript><link rel="stylesheet" href="${stylePath}"></noscript>\n  ${styleEndMarker}`;
+const styleBlock = `${styleStartMarker}\n  <style data-critical-style>${criticalCss}</style>\n  ${styleEndMarker}`;
 const dataBlock = `${dataStartMarker}\n  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = ${serializedAssetConfig};</script>\n  ${dataEndMarker}`;
 const scriptBlock = `${scriptStartMarker}\n  <script src="${scriptPath}" defer></script>\n  ${scriptEndMarker}`;
 

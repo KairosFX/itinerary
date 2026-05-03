@@ -4,6 +4,7 @@ const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
 const APP_SCOPE_URL = new URL("./", self.location);
 const APP_SCOPE_PATH = APP_SCOPE_URL.pathname;
+const OFFLINE_FALLBACK_URL = new URL("./itinerary-offline.html", self.location).toString();
 const APP_SHELL_PATHS = __APP_SHELL_PATHS__;
 const NETWORK_FIRST_PATHS = __NETWORK_FIRST_PATHS__;
 const APP_SHELL_URLS = APP_SHELL_PATHS.map((assetPath) => new URL(assetPath, self.location).toString());
@@ -13,7 +14,7 @@ const NETWORK_FIRST_URLS = NETWORK_FIRST_PATHS.map((assetPath) =>
 const APP_SHELL_URL_SET = new Set(APP_SHELL_URLS);
 const NETWORK_FIRST_URL_SET = new Set(NETWORK_FIRST_URLS);
 const STATIC_DESTINATIONS = new Set(["font", "image", "script", "style", "worker"]);
-const NON_CACHEABLE_MEDIA_EXTENSIONS = [".mp4", ".mov", ".lottie"];
+const NON_CACHEABLE_MEDIA_EXTENSIONS = [".mp3", ".mp4", ".mov", ".m4a", ".aac", ".ogg", ".webm", ".lottie"];
 
 function isAppOrigin(url) {
   return url.origin === self.location.origin && url.pathname.startsWith(APP_SCOPE_PATH);
@@ -135,7 +136,8 @@ async function respondToNavigation(event) {
     return (
       (await matchCachedResponse(request)) ||
       (await matchCachedResponse(new Request(new URL("./index.html", self.location).toString()))) ||
-      (await matchCachedResponse(new Request(APP_SCOPE_URL.toString())))
+      (await matchCachedResponse(new Request(APP_SCOPE_URL.toString()))) ||
+      (await matchCachedResponse(new Request(OFFLINE_FALLBACK_URL)))
     );
   }
 }

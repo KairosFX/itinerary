@@ -1,20 +1,26 @@
-const OFFLINE_CACHE_VERSION = "2b14d50a97-a79b88b908-ee057f80aa-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08";
+const OFFLINE_CACHE_VERSION = "102048b8dc-2684b7b71e-d980a6c184-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-716dc14951";
 const CACHE_PREFIX = "japan-escape-itinerary-";
 const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
 const APP_SCOPE_URL = new URL("./", self.location);
 const APP_SCOPE_PATH = APP_SCOPE_URL.pathname;
+const OFFLINE_FALLBACK_URL = new URL("./itinerary-offline.html", self.location).toString();
 const APP_SHELL_PATHS = [
   "./",
   "./index.html",
   "./404.html",
+  "./itinerary-offline.html",
   "./manifest.webmanifest",
   "./assets/icons/apple-touch-icon.png",
-  "./assets/icons/icon-192.png",
-  "./assets/icons/icon-512.png",
-  "./assets/app/style.2b14d50a97.css",
-  "./assets/app/script.ee057f80aa.js",
-  "./assets/app/routeStyle.a79b88b908.css",
+  "./assets/icons/kairos-favicon-48.jpg",
+  "./assets/icons/kairos-icon-192.jpg",
+  "./assets/icons/kairos-icon-512.jpg",
+  "./assets/backgrounds/kairos-bg-01.jpg",
+  "./assets/backgrounds/kairos-bg-01-mobile.jpg",
+  "./assets/images/kairos-viii-magazine-cover-560.jpg",
+  "./assets/app/style.102048b8dc.css",
+  "./assets/app/script.d980a6c184.js",
+  "./assets/app/routeStyle.2684b7b71e.css",
   "./assets/app/routeContent.0a456839b7.js",
   "./assets/app/budgetUi.c9b56d76dd.js",
   "./assets/app/budgetContent.8916d32a7f.js",
@@ -34,7 +40,7 @@ const NETWORK_FIRST_URLS = NETWORK_FIRST_PATHS.map((assetPath) =>
 const APP_SHELL_URL_SET = new Set(APP_SHELL_URLS);
 const NETWORK_FIRST_URL_SET = new Set(NETWORK_FIRST_URLS);
 const STATIC_DESTINATIONS = new Set(["font", "image", "script", "style", "worker"]);
-const NON_CACHEABLE_MEDIA_EXTENSIONS = [".mp4", ".mov", ".lottie"];
+const NON_CACHEABLE_MEDIA_EXTENSIONS = [".mp3", ".mp4", ".mov", ".m4a", ".aac", ".ogg", ".webm", ".lottie"];
 
 function isAppOrigin(url) {
   return url.origin === self.location.origin && url.pathname.startsWith(APP_SCOPE_PATH);
@@ -156,7 +162,8 @@ async function respondToNavigation(event) {
     return (
       (await matchCachedResponse(request)) ||
       (await matchCachedResponse(new Request(new URL("./index.html", self.location).toString()))) ||
-      (await matchCachedResponse(new Request(APP_SCOPE_URL.toString())))
+      (await matchCachedResponse(new Request(APP_SCOPE_URL.toString()))) ||
+      (await matchCachedResponse(new Request(OFFLINE_FALLBACK_URL)))
     );
   }
 }

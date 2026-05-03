@@ -195,6 +195,12 @@
   transform: scale(1.015);
 }
 
+.route-map__map-shell[data-map-state="error"] .route-map__loading-veil {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.015);
+}
+
 .route-map__map-shell .maplibregl-map,
 .route-map__map-shell .maplibregl-canvas,
 .route-map__map-shell .maplibregl-canvas-container {
