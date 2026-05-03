@@ -11,9 +11,11 @@ const siteHeader = document.querySelector(".site-header");
 const headerAccessoryGroups = Array.from(document.querySelectorAll(".language-switcher"));
 const mainContent = document.querySelector("#main-content");
 const siteFooter = document.querySelector(".site-footer");
-const siteBackdropVideo = document.querySelector("[data-site-background-video]");
+const siteBackdrop = document.querySelector("[data-site-background-slideshow]");
+const siteBackdropSlides = Array.from(document.querySelectorAll("[data-site-background-slide]"));
 const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const radioPlayerNode = document.querySelector("[data-radio-player]");
+const radioFrameNode = document.querySelector("[data-radio-frame]");
 const radioArtworkNode = document.querySelector("[data-radio-artwork]");
 const radioToggleButton = document.querySelector("[data-radio-toggle]");
 const radioToggleIconNode = document.querySelector("[data-radio-toggle-icon]");
@@ -100,6 +102,18 @@ const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
 const offlineBundleVersion = "2026-03-28-offline-v23";
+const siteBackdropImageUrls = [
+  "./assets/backgrounds/kairos-bg-01.jpg",
+  "./assets/backgrounds/kairos-bg-02.jpg",
+  "./assets/backgrounds/kairos-bg-03.jpg",
+  "./assets/backgrounds/kairos-bg-04.jpg",
+  "./assets/backgrounds/kairos-bg-05.jpg",
+  "./assets/backgrounds/kairos-bg-06.jpg",
+  "./assets/backgrounds/kairos-bg-07.jpg",
+  "./assets/backgrounds/kairos-bg-08.jpg",
+  "./assets/backgrounds/kairos-bg-09.jpg"
+];
+const siteBackdropRotationIntervalMs = 10000;
 const appAssetConfigRuntimeGlobal = "__JAPAN_APP_ASSETS__";
 const budgetUiRuntimeGlobal = "__JAPAN_BUDGET_UI__";
 const budgetContentRuntimeGlobal = "__JAPAN_BUDGET_CONTENT__";
@@ -152,8 +166,6 @@ const budgetSharedRoomOccupancy = 2;
 const budgetTravelersPerRoomDefault = budgetSharedRoomOccupancy;
 const serviceWorkerWarmMessageType = "CACHE_URLS";
 const checklistPrintDefaultStartDate = "2026-03-10";
-const checklistPrintDefaultSpecificStart = "09:00";
-const checklistPrintStartTimeOptions = buildChecklistPrintStartTimeOptions(30);
 const checklistPrintFallbackDurationDefinition = {
   minutes: [30, 30],
   label: { en: "30 min", ja: "30分" }
@@ -1319,91 +1331,166 @@ const radioState = {
   isHidden: false
 };
 
-function configureManagedVideoNode(video, { playbackRate = 1, loop = true, preload = "metadata" } = {}) {
-  if (!(video instanceof HTMLMediaElement)) {
-    return null;
-  }
-
-  video.loop = loop;
-  video.muted = true;
-  video.defaultMuted = true;
-  video.preload = preload;
-
+function getResolvedBackdropImageUrl(imageUrl = "") {
   try {
-    video.playsInline = true;
+    return new URL(imageUrl, window.location.href).href;
   } catch {
-    // Ignore unsupported playsInline assignments.
+    return imageUrl;
   }
-
-  try {
-    video.disableRemotePlayback = true;
-  } catch {
-    // Ignore unsupported remote playback flags.
-  }
-
-  try {
-    video.playbackRate = playbackRate;
-  } catch {
-    // Ignore unsupported playback rate changes.
-  }
-
-  return video;
 }
 
-function playManagedVideoNode(video, { restart = false } = {}) {
-  if (!(video instanceof HTMLMediaElement)) {
+function getRandomBackdropImageIndex() {
+  return Math.floor(Math.random() * siteBackdropImageUrls.length);
+}
+
+function getNextBackdropImageIndex() {
+  if (siteBackdropImageUrls.length <= 1) {
+    return 0;
+  }
+
+  return (siteBackdropCurrentIndex + 1) % siteBackdropImageUrls.length;
+}
+
+function setBackdropSlideImage(slide, imageUrl) {
+  if (!slide || !imageUrl) {
     return;
   }
 
-  if (restart) {
-    try {
-      video.pause();
-      video.currentTime = 0;
-    } catch {
-      // Ignore media reset failures.
+  slide.style.backgroundImage = `url("${getResolvedBackdropImageUrl(imageUrl).replace(/"/g, '\\"')}")`;
+}
+
+function preloadBackdropImage(imageUrl) {
+  return new Promise((resolve) => {
+    if (!imageUrl) {
+      resolve(false);
+      return;
     }
-  }
 
-  const playResult = video.play();
-  if (playResult && typeof playResult.catch === "function") {
-    playResult.catch(() => null);
-  }
+    const image = new Image();
+    image.decoding = "async";
+    image.onload = () => resolve(true);
+    image.onerror = () => resolve(false);
+    image.src = getResolvedBackdropImageUrl(imageUrl);
+
+    if (image.complete && image.naturalWidth > 0) {
+      resolve(true);
+    }
+  });
 }
 
-function pauseManagedVideoNode(video) {
-  if (!(video instanceof HTMLMediaElement)) {
+function warmNextBackdropImage() {
+  if (siteBackdropImageUrls.length <= 1 || reducedEffectsEnabled) {
+    siteBackdropPreloadImage = null;
     return;
   }
 
-  try {
-    video.pause();
-  } catch {
-    // Ignore media pause failures.
+  siteBackdropPreloadImage = new Image();
+  siteBackdropPreloadImage.decoding = "async";
+  siteBackdropPreloadImage.src = getResolvedBackdropImageUrl(siteBackdropImageUrls[getNextBackdropImageIndex()]);
+}
+
+function clearBackdropSlideshowTimer() {
+  if (siteBackdropTimer) {
+    window.clearTimeout(siteBackdropTimer);
+    siteBackdropTimer = 0;
   }
+}
+
+function shouldAnimateBackdropSlideshow() {
+  return (
+    siteBackdropInitialized &&
+    siteBackdropSlides.length > 1 &&
+    siteBackdropImageUrls.length > 1 &&
+    !reducedEffectsEnabled &&
+    !offlineSnapshotMode &&
+    document.visibilityState !== "hidden"
+  );
+}
+
+function scheduleBackdropSlideshow() {
+  clearBackdropSlideshowTimer();
+  if (!shouldAnimateBackdropSlideshow()) {
+    return;
+  }
+
+  siteBackdropTimer = window.setTimeout(() => {
+    siteBackdropTimer = 0;
+    transitionToBackdropImage(getNextBackdropImageIndex());
+  }, siteBackdropRotationIntervalMs);
+}
+
+function transitionToBackdropImage(nextIndex) {
+  if (!shouldAnimateBackdropSlideshow()) {
+    return;
+  }
+
+  const normalizedIndex = ((Number(nextIndex) || 0) % siteBackdropImageUrls.length + siteBackdropImageUrls.length) %
+    siteBackdropImageUrls.length;
+  const imageUrl = siteBackdropImageUrls[normalizedIndex];
+  const nextSlideIndex = (siteBackdropActiveSlideIndex + 1) % siteBackdropSlides.length;
+  const nextSlide = siteBackdropSlides[nextSlideIndex];
+  const token = siteBackdropTransitionToken + 1;
+  siteBackdropTransitionToken = token;
+
+  preloadBackdropImage(imageUrl).then((loaded) => {
+    if (token !== siteBackdropTransitionToken || !shouldAnimateBackdropSlideshow()) {
+      return;
+    }
+
+    if (!loaded) {
+      scheduleBackdropSlideshow();
+      return;
+    }
+
+    setBackdropSlideImage(nextSlide, imageUrl);
+    siteBackdropSlides.forEach((slide, index) => {
+      slide.classList.toggle("is-active", index === nextSlideIndex);
+    });
+    siteBackdropCurrentIndex = normalizedIndex;
+    siteBackdropActiveSlideIndex = nextSlideIndex;
+    warmNextBackdropImage();
+    scheduleBackdropSlideshow();
+  });
 }
 
 function syncDecorativeVideoPlayback() {
-  const shouldAnimate =
-    !reducedEffectsEnabled && document.visibilityState !== "hidden" && !offlineSnapshotMode;
-
-  if (!siteBackdropVideo) {
+  if (!siteBackdropInitialized) {
     return;
   }
 
-  if (shouldAnimate) {
-    playManagedVideoNode(siteBackdropVideo);
+  if (shouldAnimateBackdropSlideshow()) {
+    warmNextBackdropImage();
+    scheduleBackdropSlideshow();
     return;
   }
 
-  pauseManagedVideoNode(siteBackdropVideo);
+  clearBackdropSlideshowTimer();
+  siteBackdropTransitionToken += 1;
 }
 
 function initializeDecorativeMediaExperience() {
-  configureManagedVideoNode(siteBackdropVideo, {
-    playbackRate: 1,
-    preload: "auto"
+  if (!siteBackdrop || !siteBackdropSlides.length || !siteBackdropImageUrls.length) {
+    return;
+  }
+
+  const firstSlide = siteBackdropSlides[0];
+  setBackdropSlideImage(firstSlide, siteBackdropImageUrls[0]);
+  siteBackdropSlides.forEach((slide, index) => {
+    slide.classList.toggle("is-active", index === 0);
   });
-  syncDecorativeVideoPlayback();
+  siteBackdropInitialized = true;
+
+  if (shouldAnimateBackdropSlideshow()) {
+    const randomIndex = getRandomBackdropImageIndex();
+    if (randomIndex > 0) {
+      transitionToBackdropImage(randomIndex);
+    } else {
+      warmNextBackdropImage();
+      scheduleBackdropSlideshow();
+    }
+  } else {
+    warmNextBackdropImage();
+  }
 }
 
 function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
@@ -1945,19 +2032,19 @@ function showRadioArtworkFallback() {
 }
 
 function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
-  if (!sourceUrl || !radioArtworkNode) {
+  if (!sourceUrl) {
     showRadioArtworkFallback();
     updateRadioMediaSessionMetadata();
     return;
   }
 
   radioCurrentArtworkUrl = sourceUrl;
-  radioArtworkNode.dataset.radioArtworkKind = kind;
-  radioArtworkNode.alt = title ? `${title} artwork` : "";
-  radioArtworkNode.hidden = false;
   radioPlayerNode?.setAttribute("data-radio-artwork-state", kind);
-  if (radioArtworkNode.getAttribute("src") !== sourceUrl) {
-    radioArtworkNode.src = sourceUrl;
+  if (radioArtworkNode) {
+    radioArtworkNode.hidden = true;
+    radioArtworkNode.removeAttribute("src");
+    radioArtworkNode.dataset.radioArtworkKind = kind;
+    radioArtworkNode.alt = title ? `${title} artwork` : "";
   }
   updateRadioMediaSessionMetadata();
 }
@@ -2165,6 +2252,9 @@ function getRadioYoutubeEmbedUrl() {
 
 function getRadioYoutubeMountNode() {
   if (radioYoutubeMountNode) {
+    if (radioFrameNode && radioYoutubeMountNode.parentElement !== radioFrameNode) {
+      radioFrameNode.prepend(radioYoutubeMountNode);
+    }
     return radioYoutubeMountNode;
   }
 
@@ -2172,7 +2262,7 @@ function getRadioYoutubeMountNode() {
   mountNode.className = "travel-radio__youtube";
   mountNode.setAttribute("data-radio-youtube-player", "true");
   mountNode.setAttribute("aria-hidden", "true");
-  radioPlayerNode?.prepend(mountNode);
+  (radioFrameNode || radioPlayerNode)?.prepend(mountNode);
   radioYoutubeMountNode = mountNode;
   return mountNode;
 }
@@ -2203,8 +2293,8 @@ function ensureRadioYoutubeIframe() {
   iframe.id = radioYoutubePlayerId;
   iframe.title = "Kairos VIII playlist radio";
   iframe.src = getRadioYoutubeEmbedUrl();
-  iframe.width = "1";
-  iframe.height = "1";
+  iframe.width = "320";
+  iframe.height = "180";
   iframe.loading = "eager";
   iframe.allow = "autoplay; encrypted-media";
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
@@ -3452,9 +3542,14 @@ let checklistPointerGlowFrame = 0;
 let pendingChecklistPointerGlow = null;
 let checklistPrintDraft = null;
 let checklistPrintStartDate = "";
-let checklistPrintSpecificStart = "";
 let checklistPrintLastFocusedElement = null;
 let sequenceNoticeTimer = 0;
+let siteBackdropInitialized = false;
+let siteBackdropCurrentIndex = 0;
+let siteBackdropActiveSlideIndex = 0;
+let siteBackdropTimer = 0;
+let siteBackdropPreloadImage = null;
+let siteBackdropTransitionToken = 0;
 let lastTimelineFocusDay = null;
 const pendingClassRestarts = new WeakMap();
 let activeWindowScrollAnimation = null;
@@ -5582,9 +5677,6 @@ function getChecklistPrintLabels() {
       item: "チェック項目",
       duration: "目安時間",
       customDate: "日付を選択",
-      specificStartTime: "開始時刻",
-      startOutput: "",
-      fallbackSuffix: "",
       est: "目安"
     };
   }
@@ -5596,95 +5688,8 @@ function getChecklistPrintLabels() {
     item: "Checklist item",
     duration: "Est. duration",
     customDate: "Select start date",
-    specificStartTime: "Start time",
-    startOutput: "",
-    fallbackSuffix: "",
     est: "Est."
   };
-}
-
-function formatChecklistPrintStartTimeOption(totalMinutes = 0) {
-  const normalizedTotal = ((Math.round(totalMinutes) % 1440) + 1440) % 1440;
-  const hours = Math.floor(normalizedTotal / 60);
-  const minutes = normalizedTotal % 60;
-  const value = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
-  const hour12 = hours % 12 || 12;
-  const suffix = hours < 12 ? "AM" : "PM";
-
-  return {
-    value,
-    label: `${hour12}:${String(minutes).padStart(2, "0")} ${suffix}`
-  };
-}
-
-function buildChecklistPrintStartTimeOptions(intervalMinutes = 30) {
-  const step = Math.max(1, Number(intervalMinutes) || 30);
-  const options = [];
-
-  for (let totalMinutes = 0; totalMinutes < 24 * 60; totalMinutes += step) {
-    options.push(formatChecklistPrintStartTimeOption(totalMinutes));
-  }
-
-  return options;
-}
-
-function getChecklistPrintTimeLabel(value = "") {
-  const option = checklistPrintStartTimeOptions.find((entry) => entry.value === value);
-  return option?.label || "";
-}
-
-function isChecklistPrintTimeOption(value = "") {
-  return checklistPrintStartTimeOptions.some((entry) => entry.value === value);
-}
-
-function getChecklistPrintDefaultStartSettings() {
-  return {
-    specificStart: checklistPrintDefaultSpecificStart
-  };
-}
-
-function normalizeChecklistPrintStartSettings(settings = {}) {
-  const defaults = getChecklistPrintDefaultStartSettings();
-  const specificStart = isChecklistPrintTimeOption(settings.specificStart)
-    ? settings.specificStart
-    : defaults.specificStart;
-
-  return { specificStart };
-}
-
-function applyChecklistPrintStartSettings(settings = {}) {
-  const normalized = normalizeChecklistPrintStartSettings(settings);
-  checklistPrintSpecificStart = normalized.specificStart;
-  return normalized;
-}
-
-function hasChecklistPrintStartSettings() {
-  return isChecklistPrintTimeOption(checklistPrintSpecificStart);
-}
-
-function getChecklistPrintStartSettings({ reset = false } = {}) {
-  if (!reset && hasChecklistPrintStartSettings()) {
-    return {
-      specificStart: checklistPrintSpecificStart
-    };
-  }
-
-  const storedSettings = reset ? null : readStoredChecklistPrintDraft();
-  return applyChecklistPrintStartSettings(storedSettings || getChecklistPrintDefaultStartSettings());
-}
-
-function getChecklistPrintStartSummary(settings = getChecklistPrintStartSettings()) {
-  const labels = getChecklistPrintLabels();
-  return labels.startOutput;
-}
-
-function buildChecklistPrintTimeOptions(selectedValue = "") {
-  return checklistPrintStartTimeOptions
-    .map((option) => {
-      const selected = option.value === selectedValue ? " selected" : "";
-      return `<option value="${escapeHtml(option.value)}"${selected}>${escapeHtml(getChecklistPrintTimeLabel(option.value))}</option>`;
-    })
-    .join("");
 }
 
 function getChecklistPrintDurationDefinition(itemId = "") {
@@ -5823,10 +5828,10 @@ function getChecklistPrintOverrideBuffer(previousItem, nextItem, day) {
   return { min, max, typical };
 }
 
-function getChecklistPrintDayStartMinutes(day = {}, fallbackStartMinutes = 0) {
+function getChecklistPrintDayStartMinutes(day = {}) {
   const dayDefault = checklistPrintDayStartDefaults[String(day.id || "")];
   const defaultStartMinutes = parseChecklistPrintClockMinutes(dayDefault?.start);
-  return Number.isFinite(defaultStartMinutes) ? defaultStartMinutes : fallbackStartMinutes;
+  return Number.isFinite(defaultStartMinutes) ? defaultStartMinutes : 9 * 60;
 }
 
 function getChecklistPrintEarliestStart(item, day, cursor) {
@@ -6067,13 +6072,8 @@ function buildChecklistPrintTimeWindow(startMinutes, endMinutes) {
 }
 
 function withChecklistPrintSchedules(days = []) {
-  const settings = getChecklistPrintStartSettings();
-  const fallbackStartMinutes = parseChecklistPrintClockMinutes(checklistPrintDefaultSpecificStart) ?? 9 * 60;
-  const selectedStartMinutes =
-    parseChecklistPrintClockMinutes(settings.specificStart) ?? fallbackStartMinutes;
-
   return days.map((day) => {
-    let cursor = getChecklistPrintDayStartMinutes(day, selectedStartMinutes);
+    let cursor = getChecklistPrintDayStartMinutes(day);
     const items = day.items.map((item, itemIndex) => {
       const durationMinutes = item.durationMinutes || getDefaultChecklistPrintDurationMinutes(item.id);
       const timingDefinition = getChecklistPrintTimingDefinition(item.id);
@@ -6252,8 +6252,7 @@ function readStoredChecklistPrintDraft() {
     }
 
     return {
-      startDate: parsed.startDate,
-      ...normalizeChecklistPrintStartSettings(parsed)
+      startDate: parsed.startDate
     };
   } catch {
     return null;
@@ -6261,7 +6260,6 @@ function readStoredChecklistPrintDraft() {
 }
 
 function storeChecklistPrintDraft() {
-  const settings = getChecklistPrintStartSettings();
   if (!isDateInputValue(checklistPrintStartDate)) {
     return;
   }
@@ -6272,8 +6270,7 @@ function storeChecklistPrintDraft() {
       JSON.stringify({
         language: getChecklistPrintLanguage(),
         updatedAt: new Date().toISOString(),
-        startDate: checklistPrintStartDate,
-        specificStart: settings.specificStart
+        startDate: checklistPrintStartDate
       })
     );
   } catch {
@@ -6295,14 +6292,12 @@ function getChecklistPrintStartDate({ reset = false } = {}) {
 
 function getChecklistPrintDraft({ reset = false } = {}) {
   const startDate = getChecklistPrintStartDate({ reset });
-  getChecklistPrintStartSettings({ reset });
   checklistPrintDraft = getChecklistPrintDefaults(startDate);
   return checklistPrintDraft;
 }
 
 function getChecklistPrintDraftFromEditor() {
   const startDateInput = checklistPrintForm?.querySelector("[data-print-start-date]");
-  const specificStartInput = checklistPrintForm?.querySelector("[data-print-specific-start]");
   const nextStartDate = startDateInput?.value.trim() || "";
 
   checklistPrintStartDate = isDateInputValue(nextStartDate)
@@ -6313,26 +6308,17 @@ function getChecklistPrintDraftFromEditor() {
     startDateInput.value = checklistPrintStartDate;
   }
 
-  const settings = applyChecklistPrintStartSettings({
-    specificStart: specificStartInput?.value
-  });
-
-  if (specificStartInput) {
-    specificStartInput.value = settings.specificStart;
-  }
-
   return getChecklistPrintDefaults(checklistPrintStartDate);
 }
 
 function buildChecklistPrintMarkup(days = getChecklistPrintDraft()) {
   const labels = getChecklistPrintLabels();
-  const startSummary = getChecklistPrintStartSummary();
   const scheduledDays = withChecklistPrintSchedules(days);
   const dayMarkup = scheduledDays
     .map((day) => {
       const headingDate = day.date || labels.customDate;
       const dayTitle = day.title ? `<small>${escapeHtml(day.title)}</small>` : "";
-      const headingMeta = [day.label, headingDate, startSummary].filter(Boolean).join(" — ");
+      const headingMeta = [day.label, headingDate].filter(Boolean).join(" — ");
       const itemMarkup = day.items
         .map((item) => {
           if (!item.text) {
@@ -6396,7 +6382,6 @@ function renderChecklistPrintEditor(days = getChecklistPrintDraft()) {
 
   const labels = getChecklistPrintLabels();
   const startDate = getChecklistPrintStartDate();
-  const startSettings = getChecklistPrintStartSettings();
   const dayMarkup = days
     .map((day) => {
       const itemMarkup = day.items
@@ -6428,12 +6413,6 @@ function renderChecklistPrintEditor(days = getChecklistPrintDraft()) {
       <label class="checklist-print-editor__field checklist-print-editor__field--start-date">
         <span>${escapeHtml(labels.startDate)}</span>
         <input type="date" value="${escapeHtml(startDate)}" data-print-start-date>
-      </label>
-      <label class="checklist-print-editor__field checklist-print-editor__field--specific-start">
-        <span>${escapeHtml(labels.specificStartTime)}</span>
-        <select data-print-specific-start>
-          ${buildChecklistPrintTimeOptions(startSettings.specificStart)}
-        </select>
       </label>
     </div>
     ${dayMarkup}
@@ -6471,7 +6450,6 @@ function resetChecklistPrintDraft() {
   }
 
   checklistPrintStartDate = getDefaultChecklistPrintStartDate();
-  applyChecklistPrintStartSettings(getChecklistPrintDefaultStartSettings());
   checklistPrintDraft = getChecklistPrintDraft({ reset: true });
   renderChecklistPrintEditor(checklistPrintDraft);
   renderChecklistPrintPreview(checklistPrintDraft);
@@ -6494,7 +6472,7 @@ function openChecklistPrintFlow() {
   checklistPrintModal.hidden = false;
   root.classList.add("checklist-print-open");
   window.requestAnimationFrame(() => {
-    checklistPrintForm.querySelector("[data-print-specific-start]")?.focus({ preventScroll: true });
+    checklistPrintForm.querySelector("[data-print-start-date]")?.focus({ preventScroll: true });
   });
 }
 

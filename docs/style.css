@@ -353,10 +353,10 @@ html.checklist-print-open body {
 
 .checklist-print-editor__settings {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   align-items: end;
   gap: 0.72rem;
-  width: min(100%, 39rem);
+  width: min(100%, 20rem);
   padding: 0.86rem 0.9rem;
   border: 1px solid rgba(63, 123, 84, 0.14);
   border-radius: 1rem;
@@ -11259,18 +11259,30 @@ html[data-theme="dark"] .site-intro__title {
 
 .travel-radio__youtube {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  border-radius: inherit;
+  background: #030806;
+  opacity: 0;
   pointer-events: none;
-  clip-path: inset(50%);
+  transition: opacity 220ms ease;
 }
 
 .travel-radio__youtube iframe {
-  width: 1px;
-  height: 1px;
+  display: block;
+  width: 100%;
+  height: 100%;
   border: 0;
+}
+
+.travel-radio[data-radio-state="loading"] .travel-radio__youtube,
+.travel-radio[data-radio-state="ready"] .travel-radio__youtube,
+.travel-radio[data-radio-state="playing"] .travel-radio__youtube,
+.travel-radio[data-radio-state="paused"] .travel-radio__youtube {
+  opacity: 1;
 }
 
 .travel-radio__signal {
@@ -15163,5 +15175,73 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
     min-height: 2.18rem !important;
     padding: 0.42rem 0.54rem !important;
     font-size: 0.66rem !important;
+  }
+}
+
+/* Repository image backdrop slideshow */
+.site-backdrop {
+  background: #000 !important;
+}
+
+.site-backdrop__video,
+html[data-theme="dark"] .site-backdrop__video,
+html.reduce-effects .site-backdrop__video {
+  display: none !important;
+}
+
+.site-backdrop__slide {
+  position: absolute;
+  inset: -1.5rem;
+  z-index: 1;
+  display: block;
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 0;
+  pointer-events: none;
+  filter: saturate(0.82) brightness(0.46) contrast(1.08);
+  transform: scale(1.025);
+  transform-origin: center center;
+  transition: opacity 2200ms ease;
+  will-change: opacity;
+}
+
+.site-backdrop__slide.is-active {
+  opacity: 1;
+}
+
+.site-backdrop__wash,
+html[data-theme="dark"] .site-backdrop__wash {
+  z-index: 3;
+  display: block !important;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.54) 0%,
+      rgba(3, 8, 6, 0.72) 42%,
+      rgba(0, 0, 0, 0.9) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.76) 0%,
+      rgba(0, 0, 0, 0.24) 48%,
+      rgba(0, 0, 0, 0.68) 100%
+    ),
+    radial-gradient(circle at 50% 4%, rgba(214, 180, 118, 0.12), rgba(214, 180, 118, 0) 30%);
+}
+
+html.reduce-effects .site-backdrop__slide {
+  filter: saturate(0.78) brightness(0.42) contrast(1.1);
+  transform: none;
+  transition: none !important;
+}
+
+@media (max-width: 640px) {
+  .site-backdrop__slide {
+    inset: -1rem;
+    filter: saturate(0.78) brightness(0.4) contrast(1.12);
   }
 }

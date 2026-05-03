@@ -2694,25 +2694,89 @@ html.reduce-effects .site-backdrop__video {
     padding: 0.42rem 0.54rem !important;
     font-size: 0.66rem !important;
   }
+}
+
+/* Repository image backdrop slideshow */
+.site-backdrop {
+  background: #000 !important;
+}
+
+.site-backdrop__video,
+html[data-theme="dark"] .site-backdrop__video,
+html.reduce-effects .site-backdrop__video {
+  display: none !important;
+}
+
+.site-backdrop__slide {
+  position: absolute;
+  inset: -1.5rem;
+  z-index: 1;
+  display: block;
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 0;
+  pointer-events: none;
+  filter: saturate(0.82) brightness(0.46) contrast(1.08);
+  transform: scale(1.025);
+  transform-origin: center center;
+  transition: opacity 2200ms ease;
+  will-change: opacity;
+}
+
+.site-backdrop__slide.is-active {
+  opacity: 1;
+}
+
+.site-backdrop__wash,
+html[data-theme="dark"] .site-backdrop__wash {
+  z-index: 3;
+  display: block !important;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.54) 0%,
+      rgba(3, 8, 6, 0.72) 42%,
+      rgba(0, 0, 0, 0.9) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.76) 0%,
+      rgba(0, 0, 0, 0.24) 48%,
+      rgba(0, 0, 0, 0.68) 100%
+    ),
+    radial-gradient(circle at 50% 4%, rgba(214, 180, 118, 0.12), rgba(214, 180, 118, 0) 30%);
+}
+
+html.reduce-effects .site-backdrop__slide {
+  filter: saturate(0.78) brightness(0.42) contrast(1.1);
+  transform: none;
+  transition: none !important;
+}
+
+@media (max-width: 640px) {
+  .site-backdrop__slide {
+    inset: -1rem;
+    filter: saturate(0.78) brightness(0.4) contrast(1.12);
+  }
 }</style>
-  <link rel="preload" href="./assets/app/style.d2edf08acf.css" as="style" fetchpriority="high">
-  <link rel="preload" href="./assets/app/script.3e6c943b13.js" as="script" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/app/style.d2edf08acf.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/app/style.d2edf08acf.css"></noscript>
+  <link rel="preload" href="./assets/app/style.02c6319834.css" as="style" fetchpriority="high">
+  <link rel="preload" href="./assets/app/script.8e3dec38de.js" as="script" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/app/style.02c6319834.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/app/style.02c6319834.css"></noscript>
   <!-- build:inline-style:end -->
 </head>
 <body>
-  <div class="site-backdrop" aria-hidden="true">
-    <video
-      class="site-backdrop__video"
-      data-site-background-video
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="auto">
-      <source src="./assets/media/background.mp4" type="video/mp4">
-    </video>
+  <div class="site-backdrop" data-site-background-slideshow aria-hidden="true">
+    <div
+      class="site-backdrop__slide is-active"
+      data-site-background-slide="current"
+      style="background-image: url('./assets/backgrounds/kairos-bg-01.jpg')"></div>
+    <div class="site-backdrop__slide" data-site-background-slide="next"></div>
+    <div class="site-backdrop__wash"></div>
   </div>
   <header class="site-header">
     <div class="header-inner">
@@ -2813,7 +2877,7 @@ html.reduce-effects .site-backdrop__video {
     aria-label="Kairos VIII radio station"
     data-aria-label-en="Kairos VIII radio station"
     data-aria-label-ja="Kairos VIII ラジオステーション">
-    <div class="travel-radio__signal" data-radio-frame aria-label="Current Radio FM artwork">
+    <div class="travel-radio__signal" data-radio-frame aria-label="Current Kairos FM video player">
       <img class="travel-radio__artwork" data-radio-artwork alt="" hidden>
     </div>
     <button
@@ -4329,10 +4393,10 @@ html.reduce-effects .site-backdrop__video {
   </div>
 
   <!-- build:inline-data:start -->
-  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.d2edf08acf.css","styleHash":"d2edf08acf","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.3e6c943b13.js","scriptHash":"3e6c943b13","routeContentPath":"./assets/app/routeContent.0a456839b7.js","routeContentHash":"0a456839b7","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.8916d32a7f.js","budgetContentHash":"8916d32a7f","essentialsContentPath":"./assets/app/essentialsContent.558f559e08.js","essentialsContentHash":"558f559e08","generatedAt":"2026-05-03T01:13:25.243Z","cacheVersion":"d2edf08acf-a79b88b908-3e6c943b13-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08"};</script>
+  <script data-app-assets>window.__JAPAN_APP_ASSETS__ = {"stylePath":"./assets/app/style.02c6319834.css","styleHash":"02c6319834","routeStylePath":"./assets/app/routeStyle.a79b88b908.css","routeStyleHash":"a79b88b908","scriptPath":"./assets/app/script.8e3dec38de.js","scriptHash":"8e3dec38de","routeContentPath":"./assets/app/routeContent.0a456839b7.js","routeContentHash":"0a456839b7","budgetUiPath":"./assets/app/budgetUi.c9b56d76dd.js","budgetUiHash":"c9b56d76dd","budgetContentPath":"./assets/app/budgetContent.8916d32a7f.js","budgetContentHash":"8916d32a7f","essentialsContentPath":"./assets/app/essentialsContent.558f559e08.js","essentialsContentHash":"558f559e08","generatedAt":"2026-05-03T01:50:57.595Z","cacheVersion":"02c6319834-a79b88b908-8e3dec38de-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08"};</script>
   <!-- build:inline-data:end -->
   <!-- build:inline-script:start -->
-  <script src="./assets/app/script.3e6c943b13.js" defer></script>
+  <script src="./assets/app/script.8e3dec38de.js" defer></script>
   <!-- build:inline-script:end -->
 </body>
 </html>
