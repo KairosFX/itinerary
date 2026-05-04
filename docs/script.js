@@ -36,7 +36,6 @@ const progressCurrentDayNode = document.querySelector("[data-progress-current-da
 const progressTotalDaysNode = document.querySelector("[data-progress-total-days]");
 const progressOverviewFill = document.querySelector("[data-progress-overview-fill]");
 const progressOverviewCaptions = document.querySelectorAll(".progress-overview__caption [data-language]");
-const jumpCurrentDayButton = document.querySelector("[data-jump-current-day]");
 const checklistMarkAllButton = document.querySelector("[data-checklist-mark-all]");
 const checklistPrintButton = document.querySelector("[data-checklist-print]");
 const checklistPrintSheet = document.querySelector("[data-checklist-print-sheet]");
@@ -78,8 +77,10 @@ const aggressivePerformanceMode = false;
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
-const backdropMobileImageMedia = "(max-width: 720px) and (orientation: portrait)";
-const backdropMobileImageQuery = window.matchMedia(backdropMobileImageMedia);
+const backdropMobilePortraitImageMedia = "(max-width: 920px) and (orientation: portrait)";
+const backdropMobileLandscapeImageMedia = "(max-width: 920px) and (orientation: landscape)";
+const backdropMobilePortraitImageQuery = window.matchMedia(backdropMobilePortraitImageMedia);
+const backdropMobileLandscapeImageQuery = window.matchMedia(backdropMobileLandscapeImageMedia);
 const pageTitles = {
   en: "Kairos VIII Japan Itinerary",
   ja: "Kairos VIII Japan Itinerary"
@@ -108,46 +109,55 @@ const siteBackdropImages = [
   {
     desktop: "./assets/backgrounds/kairos-bg-01.jpg",
     mobile: "./assets/backgrounds/kairos-bg-01-mobile.jpg",
+    mobileLandscape: "./assets/backgrounds/kairos-bg-01-mobile-landscape.jpg",
     position: "center center"
   },
   {
     desktop: "./assets/backgrounds/kairos-bg-02.jpg",
     mobile: "./assets/backgrounds/kairos-bg-02-mobile.jpg",
+    mobileLandscape: "./assets/backgrounds/kairos-bg-02-mobile-landscape.jpg",
     position: "center center"
   },
   {
     desktop: "./assets/backgrounds/kairos-bg-03.jpg",
     mobile: "./assets/backgrounds/kairos-bg-03-mobile.jpg",
+    mobileLandscape: "./assets/backgrounds/kairos-bg-03-mobile-landscape.jpg",
     position: "center center"
   },
   {
     desktop: "./assets/backgrounds/kairos-bg-04.jpg",
     mobile: "./assets/backgrounds/kairos-bg-04-mobile.jpg",
+    mobileLandscape: "./assets/backgrounds/kairos-bg-04-mobile-landscape.jpg",
     position: "center center"
   },
   {
     desktop: "./assets/backgrounds/kairos-bg-05.jpg",
     mobile: "./assets/backgrounds/kairos-bg-05-mobile.jpg",
+    mobileLandscape: "./assets/backgrounds/kairos-bg-05-mobile-landscape.jpg",
     position: "center center"
   },
   {
     desktop: "./assets/backgrounds/kairos-bg-06.jpg",
     mobile: "./assets/backgrounds/kairos-bg-06-mobile.jpg",
+    mobileLandscape: "./assets/backgrounds/kairos-bg-06-mobile-landscape.jpg",
     position: "center center"
   },
   {
     desktop: "./assets/backgrounds/kairos-bg-07.jpg",
     mobile: "./assets/backgrounds/kairos-bg-07-mobile.jpg",
+    mobileLandscape: "./assets/backgrounds/kairos-bg-07-mobile-landscape.jpg",
     position: "center center"
   },
   {
     desktop: "./assets/backgrounds/kairos-bg-08.jpg",
     mobile: "./assets/backgrounds/kairos-bg-08-mobile.jpg",
+    mobileLandscape: "./assets/backgrounds/kairos-bg-08-mobile-landscape.jpg",
     position: "center center"
   },
   {
     desktop: "./assets/backgrounds/kairos-bg-09.jpg",
     mobile: "./assets/backgrounds/kairos-bg-09-mobile.jpg",
+    mobileLandscape: "./assets/backgrounds/kairos-bg-09-mobile-landscape.jpg",
     position: "center center"
   }
 ];
@@ -1413,7 +1423,15 @@ function getBackdropImageUrlForIndex(index = 0) {
     return "";
   }
 
-  return backdropMobileImageQuery.matches && image.mobile ? image.mobile : image.desktop;
+  if (backdropMobilePortraitImageQuery.matches && image.mobile) {
+    return image.mobile;
+  }
+
+  if (backdropMobileLandscapeImageQuery.matches && image.mobileLandscape) {
+    return image.mobileLandscape;
+  }
+
+  return image.desktop;
 }
 
 function setBackdropSlideImage(slide, imageUrl, image = null) {
@@ -1427,12 +1445,15 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
     position: "center center"
   };
   const desktopUrl = imageDefinition.desktop || imageUrl;
-  const mobileUrl = imageDefinition.mobile || "";
+  const mobilePortraitUrl = imageDefinition.mobile || "";
+  const mobileLandscapeUrl = imageDefinition.mobileLandscape || "";
   const resolvedDesktopUrl = getResolvedBackdropImageUrl(desktopUrl);
-  const resolvedMobileUrl = mobileUrl ? getResolvedBackdropImageUrl(mobileUrl) : "";
+  const resolvedMobilePortraitUrl = mobilePortraitUrl ? getResolvedBackdropImageUrl(mobilePortraitUrl) : "";
+  const resolvedMobileLandscapeUrl = mobileLandscapeUrl ? getResolvedBackdropImageUrl(mobileLandscapeUrl) : "";
   const position = imageDefinition.position || "center center";
   let picture = slide.querySelector("[data-site-background-picture]");
-  let mobileSource = slide.querySelector("[data-site-background-mobile-source]");
+  let mobilePortraitSource = slide.querySelector("[data-site-background-mobile-source]");
+  let mobileLandscapeSource = slide.querySelector("[data-site-background-mobile-landscape-source]");
   let img = slide.querySelector("[data-site-background-img]");
 
   if (!picture) {
@@ -1442,10 +1463,16 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
     slide.append(picture);
   }
 
-  if (!mobileSource) {
-    mobileSource = document.createElement("source");
-    mobileSource.dataset.siteBackgroundMobileSource = "";
-    picture.prepend(mobileSource);
+  if (!mobilePortraitSource) {
+    mobilePortraitSource = document.createElement("source");
+    mobilePortraitSource.dataset.siteBackgroundMobileSource = "";
+    picture.prepend(mobilePortraitSource);
+  }
+
+  if (!mobileLandscapeSource) {
+    mobileLandscapeSource = document.createElement("source");
+    mobileLandscapeSource.dataset.siteBackgroundMobileLandscapeSource = "";
+    mobilePortraitSource.after(mobileLandscapeSource);
   }
 
   if (!img) {
@@ -1458,11 +1485,18 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
     picture.append(img);
   }
 
-  mobileSource.media = backdropMobileImageMedia;
-  if (resolvedMobileUrl) {
-    mobileSource.srcset = resolvedMobileUrl;
+  mobilePortraitSource.media = backdropMobilePortraitImageMedia;
+  if (resolvedMobilePortraitUrl) {
+    mobilePortraitSource.srcset = resolvedMobilePortraitUrl;
   } else {
-    mobileSource.removeAttribute("srcset");
+    mobilePortraitSource.removeAttribute("srcset");
+  }
+
+  mobileLandscapeSource.media = backdropMobileLandscapeImageMedia;
+  if (resolvedMobileLandscapeUrl) {
+    mobileLandscapeSource.srcset = resolvedMobileLandscapeUrl;
+  } else {
+    mobileLandscapeSource.removeAttribute("srcset");
   }
 
   img.src = resolvedDesktopUrl;
@@ -4664,11 +4698,16 @@ function renderChecklistDetail(item) {
 }
 
 async function openEssentialsReference(referenceId = "") {
-  await activatePanel("essentials");
+  panelScrollAlignmentToken += 1;
+  lockSectionNavScrollSync("essentials");
+  const releaseScrollHold = holdWindowScrollTop(window.scrollY);
+  await activatePanel("essentials", { preserveScroll: true });
   await initializeBookingTransit();
+  await ensurePanelScrollGeometryReady("essentials");
 
   const bookingTransitRoot = getBookingTransitRoot();
   if (!bookingTransitRoot) {
+    releaseScrollHold();
     scrollToPanelStart("essentials");
     return;
   }
@@ -4676,6 +4715,7 @@ async function openEssentialsReference(referenceId = "") {
   setBookingTransitFilter("all");
 
   if (!referenceId) {
+    releaseScrollHold();
     scrollToPanelStart("essentials");
     return;
   }
@@ -4683,6 +4723,7 @@ async function openEssentialsReference(referenceId = "") {
   const item =
     bookingTransitItemMap.get(referenceId) || getBookingTransitItemByDetailId(referenceId);
   if (!item) {
+    releaseScrollHold();
     scrollToPanelStart("essentials");
     return;
   }
@@ -4700,6 +4741,7 @@ async function openEssentialsReference(referenceId = "") {
 
   const itemElement = bookingTransitRoot.querySelector(`[data-booking-id="${item.id}"]`);
   if (!itemElement) {
+    releaseScrollHold();
     scrollToPanelStart("essentials");
     return;
   }
@@ -4720,9 +4762,12 @@ async function openEssentialsReference(referenceId = "") {
     });
   });
 
-  const targetTop =
-    itemElement.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(18);
-  await smoothlyScrollWindowTo(Math.max(targetTop, 0), { behavior: getScrollBehavior() });
+  lockSectionNavScrollSync("essentials");
+  await smoothlyScrollNodeTo(itemElement, {
+    behavior: getScrollBehavior(),
+    extraOffset: 18,
+    releaseScrollHold
+  });
 }
 
 function openChecklistDetail(detailId, triggerElement) {
@@ -8217,6 +8262,10 @@ function ensureSectionInitObserver() {
 }
 
 function getPanelViewportScore(panel, sampleLine) {
+  if (!panel.getClientRects().length) {
+    return Number.POSITIVE_INFINITY;
+  }
+
   const rect = panel.getBoundingClientRect();
   if (rect.bottom < 0 || rect.top > window.innerHeight) {
     return Number.POSITIVE_INFINITY;
@@ -8234,12 +8283,15 @@ function getSectionInViewPanelId() {
     return "";
   }
 
+  const visiblePanels = contentPanels.filter((panel) => panel.getClientRects().length);
+  const activePanel = contentPanels.find((panel) => panel.classList.contains("is-active"));
   const sampleLine = Math.min(
     window.innerHeight * 0.52,
     getHeaderScrollOffset(28) + Math.max(120, window.innerHeight * 0.18)
   );
-  const fallbackPanel = contentPanels[0];
-  const bestPanel = contentPanels.reduce(
+  const fallbackPanel = activePanel || visiblePanels[0] || contentPanels[0];
+  const candidatePanels = visiblePanels.length ? visiblePanels : [fallbackPanel].filter(Boolean);
+  const bestPanel = candidatePanels.reduce(
     (best, panel) => {
       const score = getPanelViewportScore(panel, sampleLine);
       return score < best.score ? { panel, score } : best;
@@ -8250,7 +8302,7 @@ function getSectionInViewPanelId() {
   return bestPanel?.dataset.panel || fallbackPanel?.dataset.panel || "";
 }
 
-function lockSectionNavScrollSync(panelId, duration = 1800) {
+function lockSectionNavScrollSync(panelId, duration = 3600) {
   sectionNavScrollLockPanelId = panelId;
   sectionNavScrollLockUntil = window.performance.now() + duration;
 }
@@ -8565,6 +8617,45 @@ function ensureSectionInitialized(sectionName) {
 
   sectionInitPromises.set(sectionName, promise);
   return promise;
+}
+
+function waitForAnimationFrames(frameCount = 2) {
+  return new Promise((resolve) => {
+    let remainingFrames = Math.max(Math.round(frameCount), 1);
+    const tick = () => {
+      remainingFrames -= 1;
+      if (remainingFrames <= 0) {
+        resolve();
+        return;
+      }
+
+      window.requestAnimationFrame(tick);
+    };
+
+    window.requestAnimationFrame(tick);
+  });
+}
+
+async function ensurePanelScrollGeometryReady(panelId) {
+  const targetIndex = contentPanels.findIndex((panel) => panel.dataset.panel === panelId);
+  if (targetIndex < 0) {
+    return;
+  }
+
+  const panelsToHydrate = contentPanels.slice(0, targetIndex + 1);
+  for (const panel of panelsToHydrate) {
+    const sectionName = panel.dataset.panel;
+    if (!sectionName) {
+      continue;
+    }
+
+    await ensureSectionAssetsReady(sectionName);
+    await ensureSectionInitialized(sectionName);
+  }
+
+  updateMaxScrollableY();
+  await waitForAnimationFrames(3);
+  updateMaxScrollableY();
 }
 
 function scheduleIdleSectionWarmup(initialSection) {
@@ -11664,6 +11755,107 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
   });
 }
 
+function getNodeScrollTop(targetNode, extraOffset = 20) {
+  if (!targetNode) {
+    return window.scrollY;
+  }
+
+  return targetNode.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(extraOffset);
+}
+
+function smoothlyScrollNodeTo(
+  targetNode,
+  { behavior = getScrollBehavior(), extraOffset = 20, releaseScrollHold = null } = {}
+) {
+  if (!targetNode) {
+    releaseScrollHold?.();
+    return Promise.resolve(false);
+  }
+
+  const initialTargetTop = getNodeScrollTop(targetNode, extraOffset);
+  const initialMaxScrollTop = getMaxWindowScrollTop();
+  const initialClampedTop = clamp(Math.round(initialTargetTop), 0, initialMaxScrollTop);
+  const currentTop = Math.max(window.scrollY, 0);
+  const shouldAnimate = behavior === "smooth" && !reducedEffectsEnabled;
+  const targetExceedsCurrentScrollRange = initialTargetTop > initialMaxScrollTop + 2;
+
+  cancelWindowScrollAnimation(false);
+
+  if (Math.abs(initialClampedTop - currentTop) < 2 && !targetExceedsCurrentScrollRange) {
+    releaseScrollHold?.();
+    if (initialClampedTop !== currentTop) {
+      window.scrollTo({
+        top: initialClampedTop,
+        behavior: "auto"
+      });
+    }
+    return Promise.resolve(true);
+  }
+
+  if (!shouldAnimate) {
+    releaseScrollHold?.();
+    window.scrollTo({
+      top: initialClampedTop,
+      behavior: "auto"
+    });
+    return Promise.resolve(true);
+  }
+
+  const startTop = currentTop;
+  const duration = getTimedMotionDuration(initialTargetTop - startTop, {
+    min: 220,
+    max: 760,
+    multiplier: 0.24
+  });
+
+  return new Promise((resolve) => {
+    const animationState = {
+      frameId: 0,
+      resolve
+    };
+    const startTime = window.performance.now();
+    let hasReleasedScrollHold = false;
+
+    const step = (timestamp) => {
+      if (activeWindowScrollAnimation !== animationState) {
+        return;
+      }
+
+      if (!hasReleasedScrollHold) {
+        hasReleasedScrollHold = true;
+        releaseScrollHold?.();
+      }
+
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easedProgress = easeTimedMotion(progress);
+      const liveTargetTop = clamp(
+        Math.round(getNodeScrollTop(targetNode, extraOffset)),
+        0,
+        getMaxWindowScrollTop()
+      );
+      const nextScrollTop = startTop + (liveTargetTop - startTop) * easedProgress;
+      window.scrollTo(0, Math.round(nextScrollTop));
+
+      if (progress < 1) {
+        animationState.frameId = window.requestAnimationFrame(step);
+        return;
+      }
+
+      const finalTargetTop = clamp(
+        Math.round(getNodeScrollTop(targetNode, extraOffset)),
+        0,
+        getMaxWindowScrollTop()
+      );
+      activeWindowScrollAnimation = null;
+      window.scrollTo(0, finalTargetTop);
+      resolve(true);
+    };
+
+    activeWindowScrollAnimation = animationState;
+    animationState.frameId = window.requestAnimationFrame(step);
+  });
+}
+
 function restartClassOnNextFrame(target, className) {
   if (!target) {
     return;
@@ -12032,7 +12224,8 @@ function scheduleScrollToNode(
   {
     behavior = getScrollBehavior(),
     extraOffset = 20,
-    headerLockDuration = 320
+    headerLockDuration = 320,
+    releaseScrollHold = null
   } = {}
 ) {
   if (!targetNode) {
@@ -12042,10 +12235,7 @@ function scheduleScrollToNode(
   window.requestAnimationFrame(() => {
     window.requestAnimationFrame(() => {
       lockHeaderState(headerLockDuration);
-      const targetTop =
-        targetNode.getBoundingClientRect().top + window.scrollY - getHeaderScrollOffset(extraOffset);
-
-      void smoothlyScrollWindowTo(Math.max(targetTop, 0), { behavior });
+      void smoothlyScrollNodeTo(targetNode, { behavior, extraOffset, releaseScrollHold });
     });
   });
 }
@@ -12159,7 +12349,13 @@ async function scrollToChecklistDay(day, { emphasizeCurrentDay = false } = {}) {
     showChecklistLockNotice();
   }
 
-  await activatePanel("checklist");
+  const releaseScrollHold = holdWindowScrollTop(window.scrollY);
+  try {
+    await activatePanel("checklist", { preserveScroll: true });
+    await ensurePanelScrollGeometryReady("checklist");
+  } finally {
+    releaseScrollHold();
+  }
 
   if (emphasizeCurrentDay) {
     refreshChecklistProgressState({ syncDayCards: true });
@@ -12187,39 +12383,63 @@ async function scrollToChecklistDay(day, { emphasizeCurrentDay = false } = {}) {
 }
 
 function scrollToPanelStart(panelId, options = {}) {
-  const { behavior = getScrollBehavior(), realign = true } = options;
+  const {
+    behavior = getScrollBehavior(),
+    realign = false,
+    geometryReady = false,
+    releaseScrollHold: pendingReleaseScrollHold = null
+  } = options;
   const alignmentToken = ++panelScrollAlignmentToken;
   lockSectionNavScrollSync(panelId);
+  let releasePendingScrollHold = pendingReleaseScrollHold;
+
+  const releaseUnusedScrollHold = () => {
+    releasePendingScrollHold?.();
+    releasePendingScrollHold = null;
+  };
 
   const alignPanel = (nextBehavior = behavior, headerLockDuration = 360) => {
     if (alignmentToken !== panelScrollAlignmentToken) {
+      releaseUnusedScrollHold();
       return;
     }
 
     const panel = Array.from(contentPanels).find((node) => node.dataset.panel === panelId);
     if (!panel) {
+      releaseUnusedScrollHold();
       return;
     }
 
     const anchor =
       panel.querySelector("[data-panel-scroll-anchor]") || panel.querySelector(".section-heading") || panel;
+    const releaseScrollHold = releasePendingScrollHold || holdWindowScrollTop(window.scrollY);
+    releasePendingScrollHold = null;
     setActivePanel(panelId, { syncContent: false, store: false });
     scheduleScrollToNode(anchor, {
       behavior: nextBehavior,
       extraOffset: 28,
-      headerLockDuration
+      headerLockDuration,
+      releaseScrollHold
     });
   };
 
-  alignPanel(behavior, 360);
+  const geometryPromise = geometryReady
+    ? Promise.resolve()
+    : ensurePanelScrollGeometryReady(panelId);
 
-  if (realign) {
-    [180, 520, 1100].forEach((delay) => {
-      window.setTimeout(() => {
-        alignPanel("auto", 220);
-      }, delay);
-    });
-  }
+  void geometryPromise.then(() => {
+    alignPanel(behavior, 360);
+
+    if (realign) {
+      [180, 520, 1100].forEach((delay) => {
+        window.setTimeout(() => {
+          alignPanel("auto", 220);
+        }, delay);
+      });
+    }
+  }).catch(() => {
+    releaseUnusedScrollHold();
+  });
 }
 
 function handleAnchorScrollClick(event) {
@@ -12377,9 +12597,62 @@ function updateLanguageButtons(language) {
   });
 }
 
+function restoreWindowScrollTop(scrollTop) {
+  if (!Number.isFinite(scrollTop)) {
+    return;
+  }
+
+  const nextTop = clamp(Math.round(scrollTop), 0, getMaxWindowScrollTop());
+  if (Math.abs(window.scrollY - nextTop) <= 1) {
+    return;
+  }
+
+  window.scrollTo({
+    top: nextTop,
+    behavior: "auto"
+  });
+}
+
+function stabilizeWindowScrollTop(scrollTop) {
+  restoreWindowScrollTop(scrollTop);
+  window.requestAnimationFrame(() => {
+    restoreWindowScrollTop(scrollTop);
+    window.requestAnimationFrame(() => {
+      restoreWindowScrollTop(scrollTop);
+    });
+  });
+}
+
+let windowScrollHoldToken = 0;
+
+function holdWindowScrollTop(scrollTop) {
+  if (!Number.isFinite(scrollTop)) {
+    return () => {};
+  }
+
+  const holdToken = ++windowScrollHoldToken;
+  const maintainScrollTop = () => {
+    if (holdToken !== windowScrollHoldToken) {
+      return;
+    }
+
+    restoreWindowScrollTop(scrollTop);
+    window.requestAnimationFrame(maintainScrollTop);
+  };
+
+  maintainScrollTop();
+
+  return () => {
+    if (holdToken === windowScrollHoldToken) {
+      windowScrollHoldToken += 1;
+    }
+  };
+}
+
 function setActivePanel(panelId, options = {}) {
-  const { syncContent = true, store = true } = options;
+  const { syncContent = true, store = true, preserveScroll = false } = options;
   let hasMatch = false;
+  const previousScrollTop = preserveScroll ? window.scrollY : null;
 
   revealAllContentPanels();
 
@@ -12422,6 +12695,10 @@ function setActivePanel(panelId, options = {}) {
       storeActivePanel(panelId);
     }
     updateMaxScrollableY();
+  }
+
+  if (preserveScroll) {
+    stabilizeWindowScrollTop(previousScrollTop);
   }
 
   return hasMatch;
@@ -12662,11 +12939,27 @@ function bindTabNavigation() {
         return;
       }
 
-      const hasChanged = await activatePanel(panelId);
+      const releaseScrollHold = holdWindowScrollTop(window.scrollY);
+      let hasChanged = false;
+      let shouldReleaseScrollHold = true;
+      try {
+        hasChanged = await activatePanel(panelId, { preserveScroll: true });
+        await ensurePanelScrollGeometryReady(panelId);
+        shouldReleaseScrollHold = false;
+      } finally {
+        if (shouldReleaseScrollHold) {
+          releaseScrollHold();
+        }
+      }
       if (!hasChanged) {
         pulseActiveSectionTab(tab);
       }
-      scrollToPanelStart(panelId, { behavior: "auto" });
+      scrollToPanelStart(panelId, {
+        behavior: getScrollBehavior(),
+        realign: false,
+        geometryReady: true,
+        releaseScrollHold
+      });
     });
 
     tab.dataset.navigationBound = "true";
@@ -12678,15 +12971,20 @@ function clearSiteTransitionState() {
   delete root.dataset.siteTransitionMode;
 }
 
-async function activatePanel(panelId) {
+async function activatePanel(panelId, options = {}) {
+  const { preserveScroll = false } = options;
   const currentPanelId = getActivePanelId();
   const hasChanged = panelId !== currentPanelId;
+  const previousScrollTop = preserveScroll ? window.scrollY : null;
 
   await ensureSectionAssetsReady(panelId);
 
   lockHeaderState(hasChanged ? 620 : 520);
-  setActivePanel(panelId);
+  setActivePanel(panelId, { preserveScroll });
   await ensureSectionInitialized(panelId);
+  if (preserveScroll) {
+    stabilizeWindowScrollTop(previousScrollTop);
+  }
   clearSiteTransitionState();
   return hasChanged;
 }
@@ -12761,14 +13059,6 @@ if (document.readyState === "loading") {
   }, { once: true });
 } else {
   scheduleAppBoot();
-}
-
-if (jumpCurrentDayButton) {
-  jumpCurrentDayButton.addEventListener("click", () => {
-    void scrollToChecklistDay(getCurrentChecklistJumpDay(), {
-      emphasizeCurrentDay: true
-    });
-  });
 }
 
 if (checklistMarkAllButton) {

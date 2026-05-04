@@ -23,6 +23,7 @@ const appShellPaths = [
   "./assets/icons/kairos-icon-512.jpg",
   "./assets/backgrounds/kairos-bg-01.jpg",
   "./assets/backgrounds/kairos-bg-01-mobile.jpg",
+  "./assets/backgrounds/kairos-bg-01-mobile-landscape.jpg",
   "./assets/images/kairos-viii-magazine-cover-560.jpg",
   assetManifest.stylePath,
   assetManifest.scriptPath,
