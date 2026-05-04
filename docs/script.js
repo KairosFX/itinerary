@@ -27,6 +27,8 @@ const radioStatusNode = document.querySelector("[data-radio-status]");
 let radioYoutubeMountNode = document.querySelector("[data-radio-youtube-player]");
 const radioVisibilityToggleButton = document.querySelector("[data-radio-visibility-toggle]");
 const radioVisibilityIconNode = document.querySelector("[data-radio-visibility-icon]");
+const uiVisibilityToggleButton = document.querySelector("[data-ui-visibility-toggle]");
+const uiVisibilityLabelNode = document.querySelector("[data-ui-visibility-label]");
 const checklistGateNotice = document.querySelector("[data-checklist-gate]");
 const dayCards = Array.from(document.querySelectorAll(".day-card[data-day]"));
 const dayGrids = Array.from(document.querySelectorAll(".day-grid"));
@@ -95,6 +97,7 @@ const packingStorageKey = `japan-trip-packing-state-${itineraryStateVersion}`;
 const budgetNotesStorageKey = `japan-trip-budget-notes-${itineraryStateVersion}`;
 const checklistPrintStorageKey = `japan-trip-checklist-print-draft-${itineraryStateVersion}`;
 const fujiForecastSessionKey = `japan-trip-fuji-forecast-${itineraryStateVersion}`;
+const uiVisibilityStorageKey = `kairos-viii-ui-hidden-${itineraryStateVersion}`;
 const queuedStorageWrites = new Map();
 const headerReservedHeightFallbackPx = 156;
 const timelineNodeTopRem = 1.36;
@@ -104,58 +107,58 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-03-offline-v24";
+const offlineBundleVersion = "2026-05-04-offline-v25";
 const siteBackdropImages = [
   {
-    desktop: "./assets/backgrounds/kairos-bg-01.jpg",
-    mobile: "./assets/backgrounds/kairos-bg-01-mobile.jpg",
-    mobileLandscape: "./assets/backgrounds/kairos-bg-01-mobile-landscape.jpg",
+    desktop: "./assets/backgrounds/original/AdobeStock_133085779.jpeg",
+    mobile: "./assets/backgrounds/kairos-bg-01-mobile-fast.jpg",
+    mobileLandscape: "./assets/backgrounds/kairos-bg-01-mobile-landscape-fast.jpg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/kairos-bg-02.jpg",
+    desktop: "./assets/backgrounds/original/AdobeStock_240362026.jpeg",
     mobile: "./assets/backgrounds/kairos-bg-02-mobile.jpg",
     mobileLandscape: "./assets/backgrounds/kairos-bg-02-mobile-landscape.jpg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/kairos-bg-03.jpg",
+    desktop: "./assets/backgrounds/original/AdobeStock_254432280.jpeg",
     mobile: "./assets/backgrounds/kairos-bg-03-mobile.jpg",
     mobileLandscape: "./assets/backgrounds/kairos-bg-03-mobile-landscape.jpg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/kairos-bg-04.jpg",
+    desktop: "./assets/backgrounds/original/AdobeStock_306542962_Editorial_Use_Only.jpeg",
     mobile: "./assets/backgrounds/kairos-bg-04-mobile.jpg",
     mobileLandscape: "./assets/backgrounds/kairos-bg-04-mobile-landscape.jpg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/kairos-bg-05.jpg",
+    desktop: "./assets/backgrounds/original/AdobeStock_412986259_Editorial_Use_Only.jpeg",
     mobile: "./assets/backgrounds/kairos-bg-05-mobile.jpg",
     mobileLandscape: "./assets/backgrounds/kairos-bg-05-mobile-landscape.jpg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/kairos-bg-06.jpg",
+    desktop: "./assets/backgrounds/original/AdobeStock_448171056_Editorial_Use_Only.jpeg",
     mobile: "./assets/backgrounds/kairos-bg-06-mobile.jpg",
     mobileLandscape: "./assets/backgrounds/kairos-bg-06-mobile-landscape.jpg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/kairos-bg-07.jpg",
+    desktop: "./assets/backgrounds/original/AdobeStock_498231018.jpeg",
     mobile: "./assets/backgrounds/kairos-bg-07-mobile.jpg",
     mobileLandscape: "./assets/backgrounds/kairos-bg-07-mobile-landscape.jpg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/kairos-bg-08.jpg",
+    desktop: "./assets/backgrounds/original/AdobeStock_537070829.jpeg",
     mobile: "./assets/backgrounds/kairos-bg-08-mobile.jpg",
     mobileLandscape: "./assets/backgrounds/kairos-bg-08-mobile-landscape.jpg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/kairos-bg-09.jpg",
+    desktop: "./assets/backgrounds/original/AdobeStock_61109814.jpeg",
     mobile: "./assets/backgrounds/kairos-bg-09-mobile.jpg",
     mobileLandscape: "./assets/backgrounds/kairos-bg-09-mobile-landscape.jpg",
     position: "center center"
@@ -1388,8 +1391,9 @@ const radioState = {
   loadFailed: false,
   pendingPlay: false,
   canSkip: false,
-  isHidden: false
+  isHidden: true
 };
+let uiVisibilityLastScrollY = 0;
 
 function getResolvedBackdropImageUrl(imageUrl = "") {
   try {
@@ -1886,14 +1890,26 @@ function getRadioLabels() {
     pause: { en: "Pause radio", ja: "ラジオを一時停止" },
     previous: { en: "Previous track", ja: "曲を先頭に戻す / 前の曲" },
     next: { en: "Next track", ja: "次の曲" },
-    hide: { en: "Hide radio", ja: "ラジオを隠す" },
-    show: { en: "Show radio", ja: "ラジオを表示" },
+    hide: { en: "Hide music player", ja: "音楽プレイヤーを隠す" },
+    show: { en: "Show music player", ja: "音楽プレイヤーを表示" },
     volume: { en: "Radio volume", ja: "ラジオ音量" }
   };
 }
 
 function getRadioLabel(key) {
   const labels = getRadioLabels()[key] || getRadioLabels().idle;
+  return getLocalizedText(labels);
+}
+
+function getUiVisibilityLabels() {
+  return {
+    hide: { en: "Hide UI", ja: "UIを隠す" },
+    show: { en: "Show UI", ja: "UIを表示" }
+  };
+}
+
+function getUiVisibilityLabel(key) {
+  const labels = getUiVisibilityLabels()[key] || getUiVisibilityLabels().hide;
   return getLocalizedText(labels);
 }
 
@@ -2011,9 +2027,16 @@ function storeRadioVolumeAtKey(key, value) {
 
 function getStoredRadioHidden() {
   try {
-    return window.localStorage.getItem(radioVisibilityStorageKey) === "true";
+    const storedValue = window.localStorage.getItem(radioVisibilityStorageKey);
+    if (storedValue === "true") {
+      return true;
+    }
+    if (storedValue === "false") {
+      return false;
+    }
+    return true;
   } catch {
-    return false;
+    return true;
   }
 }
 
@@ -2023,6 +2046,92 @@ function storeRadioHidden(value) {
   } catch {
     // Ignore private-mode or blocked-storage failures.
   }
+}
+
+function getStoredUiHidden() {
+  try {
+    return window.sessionStorage.getItem(uiVisibilityStorageKey) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function storeUiHidden(value) {
+  try {
+    window.sessionStorage.setItem(uiVisibilityStorageKey, value ? "true" : "false");
+  } catch {
+    // Ignore private-mode or blocked-storage failures.
+  }
+}
+
+function syncUiVisibilityButton(isHidden = root.classList.contains("site-ui-hidden")) {
+  if (!uiVisibilityToggleButton) {
+    return;
+  }
+
+  const labelKey = isHidden ? "show" : "hide";
+  const label = getUiVisibilityLabel(labelKey);
+  uiVisibilityToggleButton.setAttribute("aria-label", label);
+  uiVisibilityToggleButton.setAttribute("aria-pressed", String(isHidden));
+  uiVisibilityToggleButton.dataset.uiVisibilityAction = labelKey;
+  if (uiVisibilityLabelNode) {
+    uiVisibilityLabelNode.textContent = label;
+  }
+}
+
+function setMainUiInert(isHidden) {
+  [siteHeader, mainContent].filter(Boolean).forEach((node) => {
+    if (isHidden) {
+      node.setAttribute("inert", "");
+      node.setAttribute("aria-hidden", "true");
+      return;
+    }
+
+    node.removeAttribute("inert");
+    node.removeAttribute("aria-hidden");
+  });
+}
+
+function setMainUiHidden(
+  nextHidden,
+  { persist = true, restoreScroll = true, focusToggle = true } = {}
+) {
+  const isHidden = Boolean(nextHidden);
+  if (isHidden && !root.classList.contains("site-ui-hidden")) {
+    uiVisibilityLastScrollY = window.scrollY;
+  }
+
+  root.classList.toggle("site-ui-hidden", isHidden);
+  document.body.classList.toggle("site-ui-hidden", isHidden);
+  setMainUiInert(isHidden);
+  syncUiVisibilityButton(isHidden);
+
+  if (persist) {
+    storeUiHidden(isHidden);
+  }
+
+  if (!isHidden && restoreScroll) {
+    restoreWindowScrollTop(uiVisibilityLastScrollY);
+  }
+
+  if (focusToggle && uiVisibilityToggleButton && document.activeElement !== uiVisibilityToggleButton) {
+    uiVisibilityToggleButton.focus({ preventScroll: true });
+  }
+}
+
+function initializeUiVisibilityToggle() {
+  if (!uiVisibilityToggleButton) {
+    return;
+  }
+
+  const shouldStartHidden = getStoredUiHidden();
+  if (shouldStartHidden) {
+    uiVisibilityLastScrollY = window.scrollY;
+  }
+  setMainUiHidden(shouldStartHidden, { persist: false, restoreScroll: false, focusToggle: false });
+  uiVisibilityToggleButton.addEventListener("click", () => {
+    setMainUiHidden(!root.classList.contains("site-ui-hidden"));
+  });
 }
 
 function syncRadioVolumeUi() {
@@ -2068,7 +2177,7 @@ function syncRadioVisibilityUi() {
     radioVisibilityToggleButton.dataset.radioVisibilityAction = labelKey;
   }
   if (radioVisibilityIconNode) {
-    radioVisibilityIconNode.textContent = radioState.isHidden ? "›" : "‹";
+    radioVisibilityIconNode.textContent = "♪";
   }
 }
 
@@ -8302,7 +8411,7 @@ function getSectionInViewPanelId() {
   return bestPanel?.dataset.panel || fallbackPanel?.dataset.panel || "";
 }
 
-function lockSectionNavScrollSync(panelId, duration = 3600) {
+function lockSectionNavScrollSync(panelId, duration = 900) {
   sectionNavScrollLockPanelId = panelId;
   sectionNavScrollLockUntil = window.performance.now() + duration;
 }
@@ -11660,7 +11769,7 @@ function getMaxWindowScrollTop() {
 
 function getTimedMotionDuration(
   distance,
-  { min = 180, max = 620, multiplier = 0.32 } = {}
+  { min = 170, max = 390, multiplier = 0.1 } = {}
 ) {
   return clamp(Math.round(min + Math.abs(distance) * multiplier), min, max);
 }
@@ -11718,9 +11827,9 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
   const startTop = currentTop;
   const delta = clampedTop - startTop;
   const duration = getTimedMotionDuration(delta, {
-    min: 220,
-    max: 680,
-    multiplier: 0.28
+    min: 180,
+    max: 420,
+    multiplier: 0.1
   });
 
   return new Promise((resolve) => {
@@ -11803,9 +11912,9 @@ function smoothlyScrollNodeTo(
 
   const startTop = currentTop;
   const duration = getTimedMotionDuration(initialTargetTop - startTop, {
-    min: 220,
-    max: 760,
-    multiplier: 0.24
+    min: 180,
+    max: 390,
+    multiplier: 0.09
   });
 
   return new Promise((resolve) => {
@@ -12225,18 +12334,23 @@ function scheduleScrollToNode(
     behavior = getScrollBehavior(),
     extraOffset = 20,
     headerLockDuration = 320,
-    releaseScrollHold = null
+    releaseScrollHold = null,
+    shouldContinue = null
   } = {}
 ) {
   if (!targetNode) {
+    releaseScrollHold?.();
     return;
   }
 
   window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      lockHeaderState(headerLockDuration);
-      void smoothlyScrollNodeTo(targetNode, { behavior, extraOffset, releaseScrollHold });
-    });
+    if (typeof shouldContinue === "function" && !shouldContinue()) {
+      releaseScrollHold?.();
+      return;
+    }
+
+    lockHeaderState(headerLockDuration);
+    void smoothlyScrollNodeTo(targetNode, { behavior, extraOffset, releaseScrollHold });
   });
 }
 
@@ -12419,7 +12533,8 @@ function scrollToPanelStart(panelId, options = {}) {
       behavior: nextBehavior,
       extraOffset: 28,
       headerLockDuration,
-      releaseScrollHold
+      releaseScrollHold,
+      shouldContinue: () => alignmentToken === panelScrollAlignmentToken
     });
   };
 
@@ -12567,6 +12682,7 @@ function setLanguage(language) {
   syncProgressTimeline();
   refreshRouteMapsIfReady();
   syncRadioStationUi();
+  syncUiVisibilityButton();
   scheduleDayCardRowHeights();
 }
 
@@ -12933,24 +13049,15 @@ function bindTabNavigation() {
       return;
     }
 
-    tab.addEventListener("click", async () => {
+    tab.addEventListener("click", (event) => {
+      event.preventDefault();
       const panelId = tab.dataset.panelTarget;
       if (!panelId) {
         return;
       }
 
       const releaseScrollHold = holdWindowScrollTop(window.scrollY);
-      let hasChanged = false;
-      let shouldReleaseScrollHold = true;
-      try {
-        hasChanged = await activatePanel(panelId, { preserveScroll: true });
-        await ensurePanelScrollGeometryReady(panelId);
-        shouldReleaseScrollHold = false;
-      } finally {
-        if (shouldReleaseScrollHold) {
-          releaseScrollHold();
-        }
-      }
+      const hasChanged = activatePanelForNavigation(panelId);
       if (!hasChanged) {
         pulseActiveSectionTab(tab);
       }
@@ -12969,6 +13076,31 @@ function bindTabNavigation() {
 function clearSiteTransitionState() {
   delete root.dataset.siteTransitionDirection;
   delete root.dataset.siteTransitionMode;
+}
+
+function activatePanelForNavigation(panelId) {
+  const currentPanelId = getActivePanelId();
+  const hasChanged = panelId !== currentPanelId;
+
+  lockHeaderState(hasChanged ? 320 : 240);
+  setActivePanel(panelId, { syncContent: false, store: true });
+  syncSectionNavIndicator({ immediate: true });
+  clearSiteTransitionState();
+
+  void ensureSectionAssetsReady(panelId)
+    .then(() => ensureSectionInitialized(panelId))
+    .then(() => {
+      if (getActivePanelId() !== panelId) {
+        return;
+      }
+
+      setActivePanel(panelId, { syncContent: true, store: false });
+    })
+    .catch((error) => {
+      console.error(`Failed to hydrate section after navigation: ${panelId}`, error);
+    });
+
+  return hasChanged;
 }
 
 async function activatePanel(panelId, options = {}) {
@@ -13006,6 +13138,7 @@ async function bootApp() {
     setLanguage("en");
   }
 
+  initializeUiVisibilityToggle();
   bindSectionNavMotion();
   syncSectionNavIndicator({ immediate: true });
   bootOfflineExperience();

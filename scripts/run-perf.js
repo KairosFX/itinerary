@@ -373,7 +373,11 @@ function runStaticBuildChecks() {
   if (!indexHtml.includes('href="./assets/icons/kairos-favicon-48.jpg"') || indexHtml.includes("1yegabjjbjp01.jpg")) {
     throw new Error("Optimized favicon check failed.");
   }
-  if (!indexHtml.includes('data-first-backdrop') || !indexHtml.includes("kairos-bg-01-mobile.jpg")) {
+  if (
+    !indexHtml.includes('data-first-backdrop') ||
+    !indexHtml.includes("kairos-bg-01-mobile-fast.jpg") ||
+    !indexHtml.includes("assets/backgrounds/original/AdobeStock_133085779.jpeg")
+  ) {
     throw new Error("First backdrop preload/style check failed.");
   }
   if (!indexHtml.includes("kairos-viii-magazine-cover-560.jpg")) {
@@ -393,7 +397,8 @@ function runStaticBuildChecks() {
   }
   if (
     !serviceWorker.includes("./assets/icons/kairos-icon-192.jpg") ||
-    !serviceWorker.includes("./assets/backgrounds/kairos-bg-01-mobile.jpg") ||
+    !serviceWorker.includes("./assets/backgrounds/kairos-bg-01-mobile-fast.jpg") ||
+    !serviceWorker.includes("./assets/backgrounds/original/AdobeStock_133085779.jpeg") ||
     !serviceWorker.includes("./assets/images/kairos-viii-magazine-cover-560.jpg")
   ) {
     throw new Error("Core visual app-shell cache check failed.");
@@ -413,7 +418,8 @@ function runStaticBuildChecks() {
   assertFileExists(path.join("docs", "assets", "images", "kairos-viii-magazine-cover-560.jpg"));
   assertFileExists(path.join("docs", "assets", "images", "kairos-viii-magazine-cover-640.jpg"));
   assertFileExists(path.join("docs", "assets", "icons", "kairos-favicon-48.jpg"));
-  assertFileExists(path.join("docs", "assets", "backgrounds", "kairos-bg-01-mobile.jpg"));
+  assertFileExists(path.join("docs", "assets", "backgrounds", "kairos-bg-01-mobile-fast.jpg"));
+  assertFileExists(path.join("docs", "assets", "backgrounds", "original", "AdobeStock_133085779.jpeg"));
   process.stdout.write("Static SEO/PWA/build-output checks passed.\n");
 }
 
