@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "verify:backgrounds": "node scripts/verify-background-originals.js",
     "build:section-content": "node scripts/build-section-content.js",
     "build:css": "cleancss -o docs/style.min.css docs/style.css",
     "build:route-css": "cleancss -o docs/route.min.css docs/route.css",
@@ -13,7 +14,7 @@
     "build:service-worker": "node scripts/build-service-worker.js",
     "build:html": "node scripts/inline-css.js",
     "build:offline-snapshot": "node scripts/build-offline-snapshot.js",
-    "build": "npm run build:section-content && npm run build:css && npm run build:route-css && npm run build:js && npm run build:route-data && npm run build:budget-ui && npm run build:budget-data && npm run build:essentials-data && npm run build:assets && npm run build:html && npm run build:offline-snapshot && npm run build:service-worker",
+    "build": "npm run verify:backgrounds && npm run build:section-content && npm run build:css && npm run build:route-css && npm run build:js && npm run build:route-data && npm run build:budget-ui && npm run build:budget-data && npm run build:essentials-data && npm run build:assets && npm run build:html && npm run build:offline-snapshot && npm run build:service-worker",
     "perf": "node scripts/run-perf.js"
   },
   "devDependencies": {

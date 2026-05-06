@@ -217,6 +217,7 @@ const radioPreviousVolumeStorageKey = `kairos-viii-radio-site-volume-v2-${itiner
 const radioVolumeStorageKey = `kairos-viii-radio-site-volume-v3-${itineraryStateVersion}`;
 const radioVolumeMigrationStorageKey = `kairos-viii-radio-volume-safety-v3-${itineraryStateVersion}`;
 const radioVisibilityStorageKey = `kairos-viii-radio-hidden-${itineraryStateVersion}`;
+const radioPreviousRestartThresholdSeconds = 4;
 const offlineSnapshotMode = root.hasAttribute("data-offline-snapshot");
 const budgetDefaultTravelerCount = 2;
 const budgetTravelerCountMin = 1;
@@ -1903,8 +1904,8 @@ function getRadioLabel(key) {
 
 function getUiVisibilityLabels() {
   return {
-    hide: { en: "Hide UI", ja: "UIを隠す" },
-    show: { en: "Show UI", ja: "UIを表示" }
+    hide: { en: "Hide interface", ja: "UIを隠す" },
+    show: { en: "Show interface", ja: "UIを表示" }
   };
 }
 
@@ -2072,6 +2073,7 @@ function syncUiVisibilityButton(isHidden = root.classList.contains("site-ui-hidd
   const labelKey = isHidden ? "show" : "hide";
   const label = getUiVisibilityLabel(labelKey);
   uiVisibilityToggleButton.setAttribute("aria-label", label);
+  uiVisibilityToggleButton.title = label;
   uiVisibilityToggleButton.setAttribute("aria-pressed", String(isHidden));
   uiVisibilityToggleButton.dataset.uiVisibilityAction = labelKey;
   if (uiVisibilityLabelNode) {
@@ -2666,8 +2668,8 @@ function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
   radioPlayerNode?.setAttribute("data-radio-artwork-state", kind);
   updateRadioThemeFromArtwork(sourceUrl);
   if (radioArtworkNode) {
-    radioArtworkNode.hidden = true;
-    radioArtworkNode.removeAttribute("src");
+    radioArtworkNode.hidden = false;
+    radioArtworkNode.src = sourceUrl;
     radioArtworkNode.dataset.radioArtworkKind = kind;
     radioArtworkNode.alt = title ? `${title} artwork` : "";
   }
@@ -3528,16 +3530,13 @@ function playRadio() {
         startRadioYoutubeInfoPolling({ immediate: true });
         return;
       }
-      window.setTimeout(() => {
-        if (!radioState.pendingPlay) {
-          return;
-        }
-        radioState.pendingPlay = false;
-        radioState.isPlaying = false;
-        setRadioState(radioState.isReady ? "paused" : "ready");
-        syncRadioControls();
-        updateRadioMediaSessionPlaybackState();
-      }, 2600);
+      clearRadioPlaybackConfirmation();
+      radioState.pendingPlay = false;
+      radioState.isPlaying = true;
+      setRadioState("playing");
+      startRadioYoutubeInfoPolling({ immediate: true });
+      syncRadioControls();
+      updateRadioMediaSessionPlaybackState();
     })
     .catch(() => {
       clearRadioPlaybackConfirmation();
@@ -3628,6 +3627,9 @@ function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
     } else {
       return false;
     }
+    if (!radioYoutubePlayer.usesPostMessage) {
+      radioState.pendingPlay = false;
+    }
     radioState.isPlaying = true;
     setRadioState("playing");
     startRadioYoutubeInfoPolling({ immediate: true });
@@ -3712,6 +3714,7 @@ function previousRadioTrack() {
   }
 
   const now = getRadioClockNow();
+  const currentTime = getEstimatedRadioCurrentTime();
   const shouldTryPreviousTrack =
     now <= radioPreviousActionUntilMs &&
     (radioPreviousActionTrackIndex < 0 || radioPreviousActionTrackIndex === radioCurrentTrackIndex);
@@ -3721,6 +3724,8 @@ function previousRadioTrack() {
     if (!radioState.canSkip || !playPreviousRadioTrackFromHistory()) {
       restartRadioCurrentTrackForPreviousAction();
     }
+  } else if (currentTime < radioPreviousRestartThresholdSeconds && radioState.canSkip && playPreviousRadioTrackFromHistory()) {
+    resetRadioPreviousDoubleAction();
   } else {
     restartRadioCurrentTrackForPreviousAction();
   }
