@@ -33,6 +33,10 @@ function matchesCachedAppAsset(url) {
   );
 }
 
+function isDesktopOriginalBackgroundRequest(url) {
+  return url.pathname.startsWith(`${APP_SCOPE_PATH}assets/backgrounds/original/`);
+}
+
 function isNetworkFirstAppAsset(url) {
   return (
     NETWORK_FIRST_URL_SET.has(url.href) ||
@@ -144,8 +148,8 @@ async function respondToNavigation(event) {
 
 async function fetchAndCache(request) {
   const requestUrl = new URL(request.url);
-  const fetchRequest = shouldPersistInAppShell(requestUrl)
-    ? new Request(request, { cache: "no-cache" })
+  const fetchRequest = shouldPersistInAppShell(requestUrl) || isDesktopOriginalBackgroundRequest(requestUrl)
+    ? new Request(request, { cache: "reload" })
     : request;
   const networkResponse = await fetch(fetchRequest);
   await cacheResponse(request, networkResponse.clone(), requestUrl);

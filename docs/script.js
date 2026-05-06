@@ -1394,6 +1394,8 @@ const radioState = {
   canSkip: false,
   isHidden: true
 };
+let radioLayoutObserver = null;
+let floatingControlLayoutFrame = 0;
 let uiVisibilityLastScrollY = 0;
 
 function getResolvedBackdropImageUrl(imageUrl = "") {
@@ -2081,6 +2083,38 @@ function syncUiVisibilityButton(isHidden = root.classList.contains("site-ui-hidd
   }
 }
 
+function syncFloatingControlLayout() {
+  if (!radioPlayerNode) {
+    return;
+  }
+
+  root.classList.toggle("radio-player-expanded", !radioState.isHidden);
+  const radioHeight = Math.ceil(radioPlayerNode.getBoundingClientRect().height);
+  if (radioHeight > 0) {
+    root.style.setProperty("--radio-player-stack-height", `${radioHeight}px`);
+  }
+}
+
+function scheduleFloatingControlLayoutSync() {
+  if (floatingControlLayoutFrame) {
+    return;
+  }
+
+  floatingControlLayoutFrame = window.requestAnimationFrame(() => {
+    floatingControlLayoutFrame = 0;
+    syncFloatingControlLayout();
+  });
+}
+
+function observeRadioLayout() {
+  if (!radioPlayerNode || radioLayoutObserver || !("ResizeObserver" in window)) {
+    return;
+  }
+
+  radioLayoutObserver = new window.ResizeObserver(scheduleFloatingControlLayoutSync);
+  radioLayoutObserver.observe(radioPlayerNode);
+}
+
 function setMainUiInert(isHidden) {
   [siteHeader, mainContent].filter(Boolean).forEach((node) => {
     if (isHidden) {
@@ -2170,6 +2204,13 @@ function syncRadioVisibilityUi() {
     return;
   }
 
+  const willExpandRadio = !radioState.isHidden;
+  const wasExpandedRadio = radioPlayerNode.dataset.radioCollapsed === "false";
+  const shouldSnapFloatingControls = willExpandRadio && !wasExpandedRadio;
+  if (shouldSnapFloatingControls) {
+    root.classList.add("floating-controls-no-motion");
+  }
+
   radioPlayerNode.dataset.radioCollapsed = radioState.isHidden ? "true" : "false";
   if (radioVisibilityToggleButton) {
     const labelKey = radioState.isHidden ? "show" : "hide";
@@ -2180,6 +2221,14 @@ function syncRadioVisibilityUi() {
   }
   if (radioVisibilityIconNode) {
     radioVisibilityIconNode.textContent = "♪";
+  }
+  syncFloatingControlLayout();
+  scheduleFloatingControlLayoutSync();
+  if (shouldSnapFloatingControls) {
+    uiVisibilityToggleButton?.getBoundingClientRect();
+    window.requestAnimationFrame(() => {
+      root.classList.remove("floating-controls-no-motion");
+    });
   }
 }
 
@@ -3807,6 +3856,7 @@ function initializeRadioStation() {
   radioState.isHidden = getStoredRadioHidden();
   syncRadioVolumeUi();
   syncRadioVisibilityUi();
+  observeRadioLayout();
   configureRadioMediaSession();
   window.addEventListener("message", handleRadioYoutubeMessage);
   radioArtworkNode?.addEventListener("error", handleRadioArtworkError);
@@ -13264,6 +13314,7 @@ if (checklistPrintModal) {
     syncReducedEffectsMode({ force: true });
     window.requestAnimationFrame(() => {
       syncSectionNavIndicator({ immediate: true });
+      syncFloatingControlLayout();
     });
   });
 });
@@ -13389,6 +13440,7 @@ if (siteHeader) {
       syncProgressTimeline();
       scheduleDayCardRowHeights();
       resizeRouteMapsIfReady();
+      scheduleFloatingControlLayoutSync();
       lockHeaderState(220);
     });
   });

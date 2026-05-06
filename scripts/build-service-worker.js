@@ -21,7 +21,6 @@ const appShellPaths = [
   "./assets/icons/kairos-favicon-48.jpg",
   "./assets/icons/kairos-icon-192.jpg",
   "./assets/icons/kairos-icon-512.jpg",
-  "./assets/backgrounds/original/AdobeStock_133085779.jpeg",
   "./assets/backgrounds/kairos-bg-01-mobile-fast.jpg",
   "./assets/backgrounds/kairos-bg-01-mobile-landscape-fast.jpg",
   "./assets/images/kairos-viii-magazine-cover-560.jpg",

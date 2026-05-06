@@ -398,7 +398,6 @@ function runStaticBuildChecks() {
   if (
     !serviceWorker.includes("./assets/icons/kairos-icon-192.jpg") ||
     !serviceWorker.includes("./assets/backgrounds/kairos-bg-01-mobile-fast.jpg") ||
-    !serviceWorker.includes("./assets/backgrounds/original/AdobeStock_133085779.jpeg") ||
     !serviceWorker.includes("./assets/images/kairos-viii-magazine-cover-560.jpg")
   ) {
     throw new Error("Core visual app-shell cache check failed.");

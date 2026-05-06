@@ -1,4 +1,4 @@
-const OFFLINE_CACHE_VERSION = "3ea4a443f0-2684b7b71e-631ccb773e-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-f393e5b453";
+const OFFLINE_CACHE_VERSION = "d39b77c839-2684b7b71e-f666a786a2-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-502689be5a";
 const CACHE_PREFIX = "japan-escape-itinerary-";
 const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
@@ -15,12 +15,11 @@ const APP_SHELL_PATHS = [
   "./assets/icons/kairos-favicon-48.jpg",
   "./assets/icons/kairos-icon-192.jpg",
   "./assets/icons/kairos-icon-512.jpg",
-  "./assets/backgrounds/original/AdobeStock_133085779.jpeg",
   "./assets/backgrounds/kairos-bg-01-mobile-fast.jpg",
   "./assets/backgrounds/kairos-bg-01-mobile-landscape-fast.jpg",
   "./assets/images/kairos-viii-magazine-cover-560.jpg",
-  "./assets/app/style.3ea4a443f0.css",
-  "./assets/app/script.631ccb773e.js",
+  "./assets/app/style.d39b77c839.css",
+  "./assets/app/script.f666a786a2.js",
   "./assets/app/routeStyle.2684b7b71e.css",
   "./assets/app/routeContent.0a456839b7.js",
   "./assets/app/budgetUi.c9b56d76dd.js",
@@ -58,6 +57,10 @@ function matchesCachedAppAsset(url) {
     url.pathname === `${APP_SCOPE_PATH}index.html` ||
     url.pathname.startsWith(`${APP_SCOPE_PATH}assets/`)
   );
+}
+
+function isDesktopOriginalBackgroundRequest(url) {
+  return url.pathname.startsWith(`${APP_SCOPE_PATH}assets/backgrounds/original/`);
 }
 
 function isNetworkFirstAppAsset(url) {
@@ -171,8 +174,8 @@ async function respondToNavigation(event) {
 
 async function fetchAndCache(request) {
   const requestUrl = new URL(request.url);
-  const fetchRequest = shouldPersistInAppShell(requestUrl)
-    ? new Request(request, { cache: "no-cache" })
+  const fetchRequest = shouldPersistInAppShell(requestUrl) || isDesktopOriginalBackgroundRequest(requestUrl)
+    ? new Request(request, { cache: "reload" })
     : request;
   const networkResponse = await fetch(fetchRequest);
   await cacheResponse(request, networkResponse.clone(), requestUrl);

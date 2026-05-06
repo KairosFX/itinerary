@@ -237,17 +237,33 @@ input:focus-visible {
   transform: translate(-50%, 0);
 }
 
+:root {
+  --floating-control-inset-x: max(0.86rem, env(safe-area-inset-right));
+  --floating-control-inset-y: max(0.86rem, env(safe-area-inset-bottom));
+  --floating-control-top-inset: max(0.62rem, env(safe-area-inset-top));
+  --floating-control-button-size: 2.72rem;
+  --floating-control-gap: 0.42rem;
+  --radio-player-stack-height: var(--floating-control-button-size);
+  --background-view-toggle-bottom: calc(
+    var(--floating-control-inset-y) + var(--radio-player-stack-height) + var(--floating-control-gap)
+  );
+}
+
 .background-view-toggle {
   position: fixed;
-  right: max(0.86rem, env(safe-area-inset-right));
-  bottom: calc(max(0.86rem, env(safe-area-inset-bottom)) + 2.72rem + 0.42rem);
+  right: var(--floating-control-inset-x);
+  bottom: calc(var(--floating-control-inset-y) + var(--floating-control-button-size) + var(--floating-control-gap));
+  bottom: min(
+    calc(100svh - var(--floating-control-button-size) - var(--floating-control-top-inset)),
+    var(--background-view-toggle-bottom)
+  );
   z-index: 26;
   display: inline-grid;
   place-items: center;
-  width: 2.72rem;
-  min-width: 2.72rem;
-  height: 2.72rem;
-  min-height: 2.72rem;
+  width: var(--floating-control-button-size);
+  min-width: var(--floating-control-button-size);
+  height: var(--floating-control-button-size);
+  min-height: var(--floating-control-button-size);
   padding: 0;
   border: 1px solid rgba(242, 214, 177, 0.28);
   border-radius: 999px;
@@ -263,6 +279,8 @@ input:focus-visible {
     0 14px 32px rgba(0, 0, 0, 0.22);
   transition:
     transform 160ms ease,
+    right 180ms ease,
+    bottom 180ms ease,
     border-color 160ms ease,
     background-color 160ms ease,
     box-shadow 160ms ease,
@@ -298,6 +316,10 @@ input:focus-visible {
     0 16px 34px rgba(0, 0, 0, 0.28);
 }
 
+html.floating-controls-no-motion .background-view-toggle {
+  transition: none !important;
+}
+
 html.site-ui-hidden,
 html.site-ui-hidden body {
   overflow: hidden;
@@ -311,8 +333,12 @@ html.site-ui-hidden #main-content {
 }
 
 html.site-ui-hidden .background-view-toggle {
-  right: max(0.86rem, env(safe-area-inset-right));
-  bottom: calc(max(0.86rem, env(safe-area-inset-bottom)) + 2.72rem + 0.42rem);
+  right: var(--floating-control-inset-x);
+  bottom: calc(var(--floating-control-inset-y) + var(--floating-control-button-size) + var(--floating-control-gap));
+  bottom: min(
+    calc(100svh - var(--floating-control-button-size) - var(--floating-control-top-inset)),
+    var(--background-view-toggle-bottom)
+  );
 }
 
 .checklist-print-sheet {
@@ -11179,8 +11205,8 @@ html[data-theme="dark"] .site-intro__title {
 
 .travel-radio {
   position: fixed;
-  right: max(0.86rem, env(safe-area-inset-right));
-  bottom: max(0.86rem, env(safe-area-inset-bottom));
+  right: var(--floating-control-inset-x);
+  bottom: var(--floating-control-inset-y);
   z-index: 16;
   display: grid;
   grid-template-columns: 8.65rem minmax(0, 1fr);
@@ -11514,10 +11540,16 @@ html[data-theme="dark"] .site-intro__title {
 }
 
 @media (max-width: 560px) {
+  :root {
+    --floating-control-inset-x: max(0.38rem, env(safe-area-inset-right));
+    --floating-control-inset-y: max(0.38rem, env(safe-area-inset-bottom));
+    --floating-control-top-inset: max(0.5rem, env(safe-area-inset-top));
+    --floating-control-button-size: 2.64rem;
+    --floating-control-gap: 0.38rem;
+  }
+
   .background-view-toggle,
   html.site-ui-hidden .background-view-toggle {
-    right: max(0.38rem, env(safe-area-inset-right));
-    bottom: calc(max(0.38rem, env(safe-area-inset-bottom)) + 2.72rem + 0.38rem);
     width: 2.64rem;
     min-width: 2.64rem;
     height: 2.64rem;
@@ -11528,8 +11560,6 @@ html[data-theme="dark"] .site-intro__title {
     grid-template-columns: 7.2rem minmax(0, 1fr);
     grid-template-areas: "signal body";
     width: calc(100vw - 1rem);
-    right: max(0.5rem, env(safe-area-inset-right));
-    bottom: max(0.5rem, env(safe-area-inset-bottom));
   }
 
   .travel-radio__body {
@@ -15986,8 +16016,6 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
   .travel-radio {
     grid-template-columns: 5.75rem minmax(0, 1fr);
     width: calc(100vw - 0.75rem);
-    right: max(0.38rem, env(safe-area-inset-right));
-    bottom: max(0.38rem, env(safe-area-inset-bottom));
     gap: 0.34rem;
     padding: 0.34rem;
     border-radius: 0.92rem;

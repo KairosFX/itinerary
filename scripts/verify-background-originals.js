@@ -8,8 +8,10 @@ const docsDir = path.join(repoRoot, "docs");
 const defaultDesktopDir = path.join(docsDir, "assets", "backgrounds", "original");
 const scriptPath = path.join(docsDir, "script.js");
 const minimumWidth = 5000;
-const minimumHeight = 2000;
-const lowResolutionMaxEdge = 2600;
+const minimumWideHeight = 2000;
+const wideImageAspectRatio = 1.4;
+const lowResolutionWidthMin = 1900;
+const lowResolutionWidthMax = 2300;
 
 function getArgumentValue(flag) {
   const index = process.argv.indexOf(flag);
@@ -87,12 +89,28 @@ function formatBytes(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-function isDesktopResolutionAcceptable(width, height) {
-  if (Math.max(width, height) <= lowResolutionMaxEdge) {
-    return false;
+function isAroundLowResolutionDesktopWidth(width) {
+  return width >= lowResolutionWidthMin && width <= lowResolutionWidthMax;
+}
+
+function isWideOrPanoramic(width, height) {
+  return height > 0 && width / height >= wideImageAspectRatio;
+}
+
+function getDesktopOriginalStatus(width, height) {
+  if (isAroundLowResolutionDesktopWidth(width)) {
+    return "FAIL too low-res around 2048px wide";
   }
 
-  return width >= minimumWidth || height >= minimumHeight;
+  if (width >= minimumWidth || (height >= minimumWideHeight && isWideOrPanoramic(width, height))) {
+    return "PASS true high-res original";
+  }
+
+  return "FAIL too low-res for desktop original";
+}
+
+function isDesktopResolutionAcceptable(width, height) {
+  return getDesktopOriginalStatus(width, height).startsWith("PASS");
 }
 
 function printDirectoryReport(label, directoryPath, { failOnLowResolution = true } = {}) {
@@ -101,17 +119,15 @@ function printDirectoryReport(label, directoryPath, { failOnLowResolution = true
 
   process.stdout.write(`\n${label}\n`);
   process.stdout.write(`Directory: ${directoryPath}\n`);
-  process.stdout.write("Status  File                                             Width   Height  Size\n");
+  process.stdout.write("filename | width | height | file size | status\n");
 
   files.forEach((filePath) => {
     const stats = fs.statSync(filePath);
     const { width, height } = readJpegDimensions(filePath);
-    const ok = isDesktopResolutionAcceptable(width, height);
-    const status = ok ? "OK    " : "LOW   ";
-    const fileName = path.basename(filePath).padEnd(48, " ");
-    process.stdout.write(`${status} ${fileName} ${String(width).padStart(6, " ")} ${String(height).padStart(7, " ")}  ${formatBytes(stats.size)}\n`);
-    if (!ok && failOnLowResolution) {
-      failures.push(`${path.basename(filePath)} is ${width}x${height}`);
+    const status = getDesktopOriginalStatus(width, height);
+    process.stdout.write(`${path.basename(filePath)} | ${width} | ${height} | ${formatBytes(stats.size)} | ${status}\n`);
+    if (!status.startsWith("PASS") && failOnLowResolution) {
+      failures.push(`${path.basename(filePath)} is ${width}x${height}: ${status}`);
     }
   });
 
