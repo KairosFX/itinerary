@@ -1,4 +1,4 @@
-const OFFLINE_CACHE_VERSION = "d39b77c839-2684b7b71e-f666a786a2-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-502689be5a";
+const OFFLINE_CACHE_VERSION = "e68282d654-2684b7b71e-5d01f419fb-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-0fa6402326";
 const CACHE_PREFIX = "japan-escape-itinerary-";
 const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
@@ -15,11 +15,9 @@ const APP_SHELL_PATHS = [
   "./assets/icons/kairos-favicon-48.jpg",
   "./assets/icons/kairos-icon-192.jpg",
   "./assets/icons/kairos-icon-512.jpg",
-  "./assets/backgrounds/kairos-bg-01-mobile-fast.jpg",
-  "./assets/backgrounds/kairos-bg-01-mobile-landscape-fast.jpg",
   "./assets/images/kairos-viii-magazine-cover-560.jpg",
-  "./assets/app/style.d39b77c839.css",
-  "./assets/app/script.f666a786a2.js",
+  "./assets/app/style.e68282d654.css",
+  "./assets/app/script.5d01f419fb.js",
   "./assets/app/routeStyle.2684b7b71e.css",
   "./assets/app/routeContent.0a456839b7.js",
   "./assets/app/budgetUi.c9b56d76dd.js",
@@ -61,6 +59,14 @@ function matchesCachedAppAsset(url) {
 
 function isDesktopOriginalBackgroundRequest(url) {
   return url.pathname.startsWith(`${APP_SCOPE_PATH}assets/backgrounds/original/`);
+}
+
+function isMobileOptimizedBackgroundRequest(url) {
+  return (
+    url.pathname.startsWith(`${APP_SCOPE_PATH}assets/backgrounds/kairos-bg-`) &&
+    url.pathname.includes("-mobile") &&
+    url.pathname.endsWith(".jpg")
+  );
 }
 
 function isNetworkFirstAppAsset(url) {
@@ -125,6 +131,19 @@ async function addAssetsToCache(cache, urls) {
   );
 }
 
+async function pruneRuntimeMobileBackgrounds() {
+  const runtimeCache = await caches.open(RUNTIME_CACHE_NAME);
+  const cachedRequests = await runtimeCache.keys();
+  await Promise.allSettled(
+    cachedRequests.map((request) => {
+      const requestUrl = new URL(request.url);
+      return isMobileOptimizedBackgroundRequest(requestUrl)
+        ? runtimeCache.delete(request)
+        : Promise.resolve(false);
+    })
+  );
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
@@ -149,6 +168,7 @@ self.addEventListener("activate", (event) => {
           )
           .map((cacheName) => caches.delete(cacheName))
       );
+      await pruneRuntimeMobileBackgrounds();
       await self.clients.claim();
     })()
   );
@@ -212,7 +232,16 @@ async function respondToNetworkFirstAsset(request) {
 
 self.addEventListener("message", (event) => {
   const payload = event.data;
-  if (!payload || payload.type !== "CACHE_URLS" || !Array.isArray(payload.urls)) {
+  if (!payload) {
+    return;
+  }
+
+  if (payload.type === "PRUNE_MOBILE_BACKGROUNDS") {
+    event.waitUntil(pruneRuntimeMobileBackgrounds());
+    return;
+  }
+
+  if (payload.type !== "CACHE_URLS" || !Array.isArray(payload.urls)) {
     return;
   }
 

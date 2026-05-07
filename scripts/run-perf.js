@@ -364,11 +364,19 @@ function runStaticBuildChecks() {
   if (!indexHtml.includes("<title>Kairos VIII Japan Itinerary</title>")) {
     throw new Error("Document title check failed.");
   }
-  if (!indexHtml.includes('rel="canonical" href="https://kairosfx.github.io/itinerary/"')) {
-    throw new Error("Canonical URL check failed.");
+  if (
+    !indexHtml.includes('<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">') ||
+    !indexHtml.includes('<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">')
+  ) {
+    throw new Error("Noindex metadata check failed.");
   }
-  if (!indexHtml.includes('property="og:title"') || !indexHtml.includes('name="twitter:card"')) {
-    throw new Error("Social metadata check failed.");
+  if (
+    indexHtml.includes('rel="canonical"') ||
+    indexHtml.includes('property="og:') ||
+    indexHtml.includes('name="twitter:') ||
+    indexHtml.includes('name="description"')
+  ) {
+    throw new Error("Public search/social metadata removal check failed.");
   }
   if (!indexHtml.includes('href="./assets/icons/kairos-favicon-48.jpg"') || indexHtml.includes("1yegabjjbjp01.jpg")) {
     throw new Error("Optimized favicon check failed.");
@@ -397,10 +405,15 @@ function runStaticBuildChecks() {
   }
   if (
     !serviceWorker.includes("./assets/icons/kairos-icon-192.jpg") ||
-    !serviceWorker.includes("./assets/backgrounds/kairos-bg-01-mobile-fast.jpg") ||
     !serviceWorker.includes("./assets/images/kairos-viii-magazine-cover-560.jpg")
   ) {
     throw new Error("Core visual app-shell cache check failed.");
+  }
+  if (
+    serviceWorker.includes("./assets/backgrounds/kairos-bg-01-mobile-fast.jpg") ||
+    serviceWorker.includes("./assets/backgrounds/kairos-bg-01-mobile-landscape-fast.jpg")
+  ) {
+    throw new Error("Mobile background app-shell precache check failed.");
   }
   if (webManifest.theme_color !== "#18261d" || webManifest.background_color !== "#050906") {
     throw new Error("Manifest Kairos color check failed.");

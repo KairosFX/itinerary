@@ -15999,16 +15999,251 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
   color: var(--theme-muted);
 }
 
+@keyframes kairosPanelEnergyPulse {
+  0%,
+  100% {
+    background-size:
+      115% 115%,
+      var(--panel-energy-ring-size, 22rem) var(--panel-energy-ring-size, 22rem),
+      110% 110%,
+      100% 100%,
+      100% 100%;
+    background-position:
+      center,
+      var(--panel-energy-x, 82%) var(--panel-energy-y, 12%),
+      0% 100%,
+      center,
+      center;
+  }
+
+  45% {
+    background-size:
+      126% 126%,
+      calc(var(--panel-energy-ring-size, 22rem) * 1.28) calc(var(--panel-energy-ring-size, 22rem) * 1.28),
+      118% 118%,
+      100% 100%,
+      100% 100%;
+    background-position:
+      center,
+      calc(var(--panel-energy-x, 82%) - 5%) calc(var(--panel-energy-y, 12%) + 5%),
+      100% 0%,
+      center,
+      center;
+  }
+
+  70% {
+    background-size:
+      120% 120%,
+      calc(var(--panel-energy-ring-size, 22rem) * 0.92) calc(var(--panel-energy-ring-size, 22rem) * 0.92),
+      114% 114%,
+      100% 100%,
+      100% 100%;
+    background-position:
+      center,
+      calc(var(--panel-energy-x, 82%) + 3%) calc(var(--panel-energy-y, 12%) + 2%),
+      46% 70%,
+      center,
+      center;
+  }
+}
+
+:root {
+  --panel-energy-core-opacity: 0.13;
+  --panel-energy-ring-opacity: 0.1;
+  --panel-energy-secondary-opacity: 0.11;
+  --panel-energy-speed: 12s;
+  --panel-energy-ring-size: 22rem;
+}
+
+html[data-radio-playback="playing"] {
+  --panel-energy-core-opacity: 0.2;
+  --panel-energy-ring-opacity: 0.16;
+  --panel-energy-secondary-opacity: 0.15;
+  --panel-energy-speed: 6.8s;
+}
+
+.content-panel,
+.hero-panel,
+.featured-cover,
+.overview-card,
+.stat-card,
+.progress-card,
+.day-card,
+.note-card,
+.essentials-card,
+.budget-panel,
+.budget-notes__settings-panel,
+.budget-notes__day-browser,
+.budget-day-card,
+.budget-source-card,
+.budget-summary-card,
+.budget-breakdown-card,
+.budget-status-card,
+.budget-source-meta-card,
+.booking-group,
+.booking-item,
+.route-map,
+.route-map__surface,
+.route-map__detail-panel,
+.route-map__stops,
+.route-map__explorer,
+.journey-close,
+#checklist .check-item:not(.is-checked) {
+  background:
+    radial-gradient(circle at var(--panel-energy-x, 82%) var(--panel-energy-y, 12%), rgba(var(--theme-accent-rgb), var(--panel-energy-core-opacity)), rgba(var(--theme-accent-rgb), 0) 30%),
+    repeating-radial-gradient(circle at var(--panel-energy-x, 82%) var(--panel-energy-y, 12%), rgba(var(--theme-accent-rgb), var(--panel-energy-ring-opacity)) 0 1px, rgba(var(--theme-secondary-rgb), 0.05) 2px 3px, rgba(var(--theme-accent-rgb), 0) 6px 20px),
+    radial-gradient(circle at 12% 100%, rgba(var(--theme-secondary-rgb), var(--panel-energy-secondary-opacity)), rgba(var(--theme-secondary-rgb), 0) 36%),
+    linear-gradient(180deg, rgba(var(--theme-panel-strong-rgb), 0.94), rgba(var(--theme-panel-rgb), 0.84)),
+    var(--theme-panel) !important;
+  animation: kairosPanelEnergyPulse var(--panel-energy-speed) ease-in-out infinite;
+  background-repeat: no-repeat;
+  transition:
+    border-color var(--theme-transition),
+    box-shadow var(--theme-transition),
+    background-color var(--theme-transition),
+    color 360ms ease;
+}
+
+html.enhanced-effects .content-panel,
+html.enhanced-effects .hero-panel,
+html.enhanced-effects .featured-cover,
+html.enhanced-effects .overview-card,
+html.enhanced-effects .stat-card,
+html.enhanced-effects .progress-card,
+html.enhanced-effects .day-card,
+html.enhanced-effects .note-card,
+html.enhanced-effects .essentials-card,
+html.enhanced-effects .budget-panel,
+html.enhanced-effects .budget-notes__settings-panel,
+html.enhanced-effects .budget-notes__day-browser,
+html.enhanced-effects .budget-day-card,
+html.enhanced-effects .budget-source-card,
+html.enhanced-effects .budget-summary-card,
+html.enhanced-effects .budget-breakdown-card,
+html.enhanced-effects .budget-status-card,
+html.enhanced-effects .budget-source-meta-card,
+html.enhanced-effects .booking-group,
+html.enhanced-effects .booking-item,
+html.enhanced-effects .route-map,
+html.enhanced-effects .route-map__surface,
+html.enhanced-effects .route-map__detail-panel,
+html.enhanced-effects .route-map__stops,
+html.enhanced-effects .route-map__explorer,
+html.enhanced-effects .journey-close,
+html.enhanced-effects #checklist .check-item:not(.is-checked),
+html.enhanced-effects .content-panel.is-active,
+html.enhanced-effects[data-site-transition-mode] .content-panel.is-active,
+html.enhanced-effects[data-site-transition-direction] .content-panel.is-active {
+  animation: kairosPanelEnergyPulse var(--panel-energy-speed) ease-in-out infinite !important;
+}
+
+.content-panel,
+.hero-panel,
+.featured-cover,
+.budget-panel,
+.budget-notes__day-browser,
+.route-map,
+.route-map__surface,
+.journey-close {
+  --panel-energy-ring-size: 34rem;
+  --panel-energy-x: 78%;
+  --panel-energy-y: 8%;
+}
+
+.overview-card,
+.stat-card,
+.progress-card,
+#checklist .check-item:not(.is-checked) {
+  --panel-energy-core-opacity: 0.1;
+  --panel-energy-ring-opacity: 0.075;
+  --panel-energy-secondary-opacity: 0.08;
+  --panel-energy-ring-size: 16rem;
+}
+
+html[data-radio-playback="playing"] .overview-card,
+html[data-radio-playback="playing"] .stat-card,
+html[data-radio-playback="playing"] .progress-card,
+html[data-radio-playback="playing"] #checklist .check-item:not(.is-checked) {
+  --panel-energy-core-opacity: 0.15;
+  --panel-energy-ring-opacity: 0.11;
+  --panel-energy-secondary-opacity: 0.1;
+}
+
+html.enhanced-effects[data-radio-playback="playing"] .content-panel,
+html.enhanced-effects[data-radio-playback="playing"] .hero-panel,
+html.enhanced-effects[data-radio-playback="playing"] .featured-cover,
+html.enhanced-effects[data-radio-playback="playing"] .overview-card,
+html.enhanced-effects[data-radio-playback="playing"] .stat-card,
+html.enhanced-effects[data-radio-playback="playing"] .progress-card,
+html.enhanced-effects[data-radio-playback="playing"] .day-card,
+html.enhanced-effects[data-radio-playback="playing"] .note-card,
+html.enhanced-effects[data-radio-playback="playing"] .essentials-card,
+html.enhanced-effects[data-radio-playback="playing"] .budget-panel,
+html.enhanced-effects[data-radio-playback="playing"] .budget-notes__settings-panel,
+html.enhanced-effects[data-radio-playback="playing"] .budget-notes__day-browser,
+html.enhanced-effects[data-radio-playback="playing"] .budget-day-card,
+html.enhanced-effects[data-radio-playback="playing"] .budget-source-card,
+html.enhanced-effects[data-radio-playback="playing"] .budget-summary-card,
+html.enhanced-effects[data-radio-playback="playing"] .budget-breakdown-card,
+html.enhanced-effects[data-radio-playback="playing"] .budget-status-card,
+html.enhanced-effects[data-radio-playback="playing"] .budget-source-meta-card,
+html.enhanced-effects[data-radio-playback="playing"] .booking-group,
+html.enhanced-effects[data-radio-playback="playing"] .booking-item,
+html.enhanced-effects[data-radio-playback="playing"] .route-map,
+html.enhanced-effects[data-radio-playback="playing"] .route-map__surface,
+html.enhanced-effects[data-radio-playback="playing"] .route-map__detail-panel,
+html.enhanced-effects[data-radio-playback="playing"] .route-map__stops,
+html.enhanced-effects[data-radio-playback="playing"] .route-map__explorer,
+html.enhanced-effects[data-radio-playback="playing"] .journey-close,
+html.enhanced-effects[data-radio-playback="playing"] #checklist .check-item:not(.is-checked) {
+  will-change: background-size, background-position;
+}
+
 @media (max-width: 720px), (pointer: coarse) and (max-width: 920px) {
   :root {
     --theme-shadow: 0 14px 32px rgba(0, 0, 0, 0.24);
     --theme-shadow-strong: 0 18px 42px rgba(0, 0, 0, 0.3);
     --theme-glow: rgba(var(--theme-accent-rgb), 0.16);
     --theme-glow-soft: rgba(var(--theme-accent-rgb), 0.08);
+    --panel-energy-core-opacity: 0.075;
+    --panel-energy-ring-opacity: 0.055;
+    --panel-energy-secondary-opacity: 0.065;
+    --panel-energy-speed: 16s;
   }
 
   .travel-radio::before {
     opacity: 0.42;
+  }
+
+  .content-panel,
+  .hero-panel,
+  .featured-cover,
+  .overview-card,
+  .stat-card,
+  .progress-card,
+  .day-card,
+  .note-card,
+  .essentials-card,
+  .budget-panel,
+  .budget-notes__settings-panel,
+  .budget-notes__day-browser,
+  .budget-day-card,
+  .budget-source-card,
+  .budget-summary-card,
+  .budget-breakdown-card,
+  .budget-status-card,
+  .budget-source-meta-card,
+  .booking-group,
+  .booking-item,
+  .route-map,
+  .route-map__surface,
+  .route-map__detail-panel,
+  .route-map__stops,
+  .route-map__explorer,
+  .journey-close,
+  #checklist .check-item:not(.is-checked) {
+    --panel-energy-ring-size: 14rem;
+    will-change: auto;
   }
 }
 
@@ -16078,7 +16313,20 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
   .card,
   .day-card,
   .note-card,
-  .essentials-card {
+  .essentials-card,
+  .overview-card,
+  .stat-card,
+  .progress-card,
+  .budget-panel,
+  .budget-day-card,
+  .booking-group,
+  .booking-item,
+  .route-map,
+  .route-map__surface,
+  .journey-close,
+  #checklist .check-item {
+    animation: none !important;
     transition-duration: 1ms !important;
+    will-change: auto !important;
   }
 }

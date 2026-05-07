@@ -37,6 +37,14 @@ function isDesktopOriginalBackgroundRequest(url) {
   return url.pathname.startsWith(`${APP_SCOPE_PATH}assets/backgrounds/original/`);
 }
 
+function isMobileOptimizedBackgroundRequest(url) {
+  return (
+    url.pathname.startsWith(`${APP_SCOPE_PATH}assets/backgrounds/kairos-bg-`) &&
+    url.pathname.includes("-mobile") &&
+    url.pathname.endsWith(".jpg")
+  );
+}
+
 function isNetworkFirstAppAsset(url) {
   return (
     NETWORK_FIRST_URL_SET.has(url.href) ||
@@ -99,6 +107,19 @@ async function addAssetsToCache(cache, urls) {
   );
 }
 
+async function pruneRuntimeMobileBackgrounds() {
+  const runtimeCache = await caches.open(RUNTIME_CACHE_NAME);
+  const cachedRequests = await runtimeCache.keys();
+  await Promise.allSettled(
+    cachedRequests.map((request) => {
+      const requestUrl = new URL(request.url);
+      return isMobileOptimizedBackgroundRequest(requestUrl)
+        ? runtimeCache.delete(request)
+        : Promise.resolve(false);
+    })
+  );
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
@@ -123,6 +144,7 @@ self.addEventListener("activate", (event) => {
           )
           .map((cacheName) => caches.delete(cacheName))
       );
+      await pruneRuntimeMobileBackgrounds();
       await self.clients.claim();
     })()
   );
@@ -186,7 +208,16 @@ async function respondToNetworkFirstAsset(request) {
 
 self.addEventListener("message", (event) => {
   const payload = event.data;
-  if (!payload || payload.type !== "CACHE_URLS" || !Array.isArray(payload.urls)) {
+  if (!payload) {
+    return;
+  }
+
+  if (payload.type === "PRUNE_MOBILE_BACKGROUNDS") {
+    event.waitUntil(pruneRuntimeMobileBackgrounds());
+    return;
+  }
+
+  if (payload.type !== "CACHE_URLS" || !Array.isArray(payload.urls)) {
     return;
   }
 

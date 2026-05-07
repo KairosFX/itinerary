@@ -79,8 +79,10 @@ const aggressivePerformanceMode = false;
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
-const backdropMobilePortraitImageMedia = "(max-width: 920px) and (orientation: portrait)";
-const backdropMobileLandscapeImageMedia = "(max-width: 920px) and (orientation: landscape)";
+const desktopBackdropMinWidthPx = 1024;
+const mobileBackdropMaxWidthPx = desktopBackdropMinWidthPx - 1;
+const backdropMobilePortraitImageMedia = `(max-width: ${mobileBackdropMaxWidthPx}px) and (orientation: portrait)`;
+const backdropMobileLandscapeImageMedia = `(max-width: ${mobileBackdropMaxWidthPx}px) and (orientation: landscape)`;
 const backdropMobilePortraitImageQuery = window.matchMedia(backdropMobilePortraitImageMedia);
 const backdropMobileLandscapeImageQuery = window.matchMedia(backdropMobileLandscapeImageMedia);
 const pageTitles = {
@@ -107,7 +109,7 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-04-offline-v25";
+const offlineBundleVersion = "2026-05-06-offline-v26";
 const siteBackdropImages = [
   {
     desktop: "./assets/backgrounds/original/AdobeStock_133085779.jpeg",
@@ -225,6 +227,7 @@ const budgetTravelerCountMax = 24;
 const budgetSharedRoomOccupancy = 2;
 const budgetTravelersPerRoomDefault = budgetSharedRoomOccupancy;
 const serviceWorkerWarmMessageType = "CACHE_URLS";
+const serviceWorkerPruneMobileBackgroundsMessageType = "PRUNE_MOBILE_BACKGROUNDS";
 const checklistPrintDefaultStartDate = "2026-03-10";
 const checklistPrintFallbackDurationDefinition = {
   minutes: [30, 30],
@@ -1424,18 +1427,36 @@ function getBackdropImageDefinitionForIndex(index = 0) {
   return siteBackdropImages[normalizedIndex] || siteBackdropImages[0] || null;
 }
 
+function getBackdropAssetMode() {
+  if (window.innerWidth >= desktopBackdropMinWidthPx) {
+    return "desktop";
+  }
+
+  if (backdropMobileLandscapeImageQuery.matches) {
+    return "mobile-landscape";
+  }
+
+  return "mobile-portrait";
+}
+
+function isDesktopBackdropViewport() {
+  return getBackdropAssetMode() === "desktop";
+}
+
 function getBackdropImageUrlForIndex(index = 0) {
   const image = getBackdropImageDefinitionForIndex(index);
   if (!image) {
     return "";
   }
 
-  if (backdropMobilePortraitImageQuery.matches && image.mobile) {
-    return image.mobile;
+  const assetMode = getBackdropAssetMode();
+
+  if (assetMode === "mobile-landscape" && image.mobileLandscape) {
+    return image.mobileLandscape;
   }
 
-  if (backdropMobileLandscapeImageQuery.matches && image.mobileLandscape) {
-    return image.mobileLandscape;
+  if (assetMode === "mobile-portrait" && image.mobile) {
+    return image.mobile;
   }
 
   return image.desktop;
@@ -1507,8 +1528,33 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
   }
 
   img.src = resolvedDesktopUrl;
+  slide.dataset.siteBackdropAssetMode = getBackdropAssetMode();
+  slide.dataset.siteBackdropDesktopSrc = resolvedDesktopUrl;
   slide.style.removeProperty("background-image");
   slide.style.setProperty("--site-backdrop-position", position);
+}
+
+function syncBackdropSlideSourcesForViewport() {
+  if (!siteBackdropInitialized || !siteBackdropSlides.length) {
+    return;
+  }
+
+  root.dataset.backdropAssetMode = getBackdropAssetMode();
+  siteBackdropSlides.forEach((slide, slideIndex) => {
+    if (!slide.querySelector("[data-site-background-picture]")) {
+      return;
+    }
+
+    const imageIndex = slideIndex === siteBackdropActiveSlideIndex
+      ? siteBackdropCurrentIndex
+      : getNextBackdropImageIndex();
+    setBackdropSlideImage(
+      slide,
+      getBackdropImageUrlForIndex(imageIndex),
+      getBackdropImageDefinitionForIndex(imageIndex)
+    );
+  });
+  warmNextBackdropImage();
 }
 
 function preloadBackdropImage(imageUrl) {
@@ -1693,6 +1739,8 @@ function initializeDecorativeMediaExperience() {
   siteBackdropCurrentIndex = initialIndex;
   siteBackdropActiveSlideIndex = 0;
   siteBackdropInitialized = true;
+  root.dataset.backdropAssetMode = getBackdropAssetMode();
+  pruneMobileBackgroundCachesForDesktop();
   bindBackdropSlideshowMotionUnlock();
 
   if (shouldAnimateBackdropSlideshow()) {
@@ -2196,6 +2244,7 @@ function setRadioStatus(key) {
 
 function setRadioState(nextState) {
   radioPlayerNode?.setAttribute("data-radio-state", nextState);
+  root.dataset.radioPlayback = nextState === "playing" ? "playing" : "calm";
   setRadioStatus(nextState);
 }
 
@@ -3943,6 +3992,32 @@ function warmCachedAppAssets(urls) {
     .catch(() => urls);
 }
 
+function pruneMobileBackgroundCachesForDesktop() {
+  if (
+    offlineSnapshotMode ||
+    !isDesktopBackdropViewport() ||
+    !("serviceWorker" in navigator) ||
+    !window.isSecureContext
+  ) {
+    return Promise.resolve(false);
+  }
+
+  return navigator.serviceWorker.ready
+    .then((registration) => {
+      const target =
+        registration.active ||
+        navigator.serviceWorker.controller ||
+        registration.waiting ||
+        registration.installing;
+
+      target?.postMessage?.({
+        type: serviceWorkerPruneMobileBackgroundsMessageType
+      });
+      return true;
+    })
+    .catch(() => false);
+}
+
 function warmDeferredExperienceAssets() {
   if (!shouldWarmDeferredAssets()) {
     return Promise.resolve([]);
@@ -5329,6 +5404,7 @@ function bootOfflineExperience() {
     .then((registration) => {
       offlineRegistration = registration;
       offlineRegistrationReady = true;
+      pruneMobileBackgroundCachesForDesktop();
       syncOfflineToolsUI();
     })
     .catch(() => {
@@ -13430,6 +13506,8 @@ if (siteHeader) {
     window.requestAnimationFrame(() => {
       resizeTicking = false;
       syncReducedEffectsMode();
+      syncBackdropSlideSourcesForViewport();
+      pruneMobileBackgroundCachesForDesktop();
       setHeaderCondensed(false);
       if (!("ResizeObserver" in window)) {
         scheduleReservedHeaderHeightSync({ forceReset: true });
