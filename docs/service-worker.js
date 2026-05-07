@@ -1,4 +1,4 @@
-const OFFLINE_CACHE_VERSION = "e68282d654-2684b7b71e-5d01f419fb-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-0fa6402326";
+const OFFLINE_CACHE_VERSION = "b376f91f0a-2684b7b71e-0343fa6272-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-9bf8693871";
 const CACHE_PREFIX = "japan-escape-itinerary-";
 const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
@@ -16,8 +16,8 @@ const APP_SHELL_PATHS = [
   "./assets/icons/kairos-icon-192.jpg",
   "./assets/icons/kairos-icon-512.jpg",
   "./assets/images/kairos-viii-magazine-cover-560.jpg",
-  "./assets/app/style.e68282d654.css",
-  "./assets/app/script.5d01f419fb.js",
+  "./assets/app/style.b376f91f0a.css",
+  "./assets/app/script.0343fa6272.js",
   "./assets/app/routeStyle.2684b7b71e.css",
   "./assets/app/routeContent.0a456839b7.js",
   "./assets/app/budgetUi.c9b56d76dd.js",
@@ -131,16 +131,23 @@ async function addAssetsToCache(cache, urls) {
   );
 }
 
-async function pruneRuntimeMobileBackgrounds() {
-  const runtimeCache = await caches.open(RUNTIME_CACHE_NAME);
-  const cachedRequests = await runtimeCache.keys();
+async function pruneMobileBackgroundsFromCaches() {
+  const cacheNames = await caches.keys();
   await Promise.allSettled(
-    cachedRequests.map((request) => {
-      const requestUrl = new URL(request.url);
-      return isMobileOptimizedBackgroundRequest(requestUrl)
-        ? runtimeCache.delete(request)
-        : Promise.resolve(false);
-    })
+    cacheNames
+      .filter((cacheName) => cacheName.startsWith(CACHE_PREFIX))
+      .map(async (cacheName) => {
+        const cache = await caches.open(cacheName);
+        const cachedRequests = await cache.keys();
+        await Promise.allSettled(
+          cachedRequests.map((request) => {
+            const requestUrl = new URL(request.url);
+            return isMobileOptimizedBackgroundRequest(requestUrl)
+              ? cache.delete(request)
+              : Promise.resolve(false);
+          })
+        );
+      })
   );
 }
 
@@ -168,7 +175,7 @@ self.addEventListener("activate", (event) => {
           )
           .map((cacheName) => caches.delete(cacheName))
       );
-      await pruneRuntimeMobileBackgrounds();
+      await pruneMobileBackgroundsFromCaches();
       await self.clients.claim();
     })()
   );
@@ -237,7 +244,7 @@ self.addEventListener("message", (event) => {
   }
 
   if (payload.type === "PRUNE_MOBILE_BACKGROUNDS") {
-    event.waitUntil(pruneRuntimeMobileBackgrounds());
+    event.waitUntil(pruneMobileBackgroundsFromCaches());
     return;
   }
 

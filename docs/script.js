@@ -81,8 +81,10 @@ const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
 const desktopBackdropMinWidthPx = 1024;
 const mobileBackdropMaxWidthPx = desktopBackdropMinWidthPx - 1;
+const desktopBackdropImageMedia = `(min-width: ${desktopBackdropMinWidthPx}px)`;
 const backdropMobilePortraitImageMedia = `(max-width: ${mobileBackdropMaxWidthPx}px) and (orientation: portrait)`;
 const backdropMobileLandscapeImageMedia = `(max-width: ${mobileBackdropMaxWidthPx}px) and (orientation: landscape)`;
+const desktopBackdropImageQuery = window.matchMedia(desktopBackdropImageMedia);
 const backdropMobilePortraitImageQuery = window.matchMedia(backdropMobilePortraitImageMedia);
 const backdropMobileLandscapeImageQuery = window.matchMedia(backdropMobileLandscapeImageMedia);
 const pageTitles = {
@@ -109,7 +111,7 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-06-offline-v26";
+const offlineBundleVersion = "2026-05-06-offline-v27";
 const siteBackdropImages = [
   {
     desktop: "./assets/backgrounds/original/AdobeStock_133085779.jpeg",
@@ -190,6 +192,7 @@ const radioGithubPagesOrigin = "https://kairosfx.github.io";
 const radioYoutubeReadyTimeoutMs = 9000;
 const radioYoutubeProbeDelayMs = 700;
 const radioYoutubeMaxProbeAttempts = 4;
+const radioYoutubeMaxErrorSkips = 6;
 const radioPlaybackConfirmTimeoutMs = 6500;
 const radioYoutubeInfoPollIntervalMs = 2400;
 const radioYoutubeWarmupDelayMs = 650;
@@ -1018,6 +1021,35 @@ const revealBlockSelector = [
   ".site-footer__lead",
   ".site-footer__aside"
 ].join(", ");
+const panelSoundWaveSelector = [
+  ".content-panel",
+  ".hero-panel",
+  ".featured-cover",
+  ".overview-card",
+  ".stat-card",
+  ".progress-card",
+  ".day-card",
+  ".note-card",
+  ".essentials-card",
+  ".budget-panel",
+  ".budget-notes__settings-panel",
+  ".budget-notes__day-browser",
+  ".budget-day-card",
+  ".budget-source-card",
+  ".budget-summary-card",
+  ".budget-breakdown-card",
+  ".budget-status-card",
+  ".budget-source-meta-card",
+  ".booking-group",
+  ".booking-item",
+  ".route-map",
+  ".route-map__surface",
+  ".route-map__detail-panel",
+  ".route-map__stops",
+  ".route-map__explorer",
+  ".journey-close",
+  "#checklist .check-item:not(.is-checked)"
+].join(", ");
 const initializedSections = new Set();
 const sectionInitPromises = new Map();
 const sectionInitializers = {
@@ -1367,6 +1399,7 @@ let radioYoutubeReadyTimeout = 0;
 let radioYoutubeProbeTimer = 0;
 let radioYoutubeInfoPollTimer = 0;
 let radioYoutubeProbeAttempts = 0;
+let radioYoutubeErrorSkipAttempts = 0;
 let radioYoutubeDisabled = false;
 let radioStationInitialized = false;
 let radioMediaSessionReady = false;
@@ -1400,6 +1433,8 @@ const radioState = {
 let radioLayoutObserver = null;
 let floatingControlLayoutFrame = 0;
 let uiVisibilityLastScrollY = 0;
+let panelSoundWaveFrame = 0;
+let panelSoundWaveObserver = null;
 
 function getResolvedBackdropImageUrl(imageUrl = "") {
   try {
@@ -1427,16 +1462,31 @@ function getBackdropImageDefinitionForIndex(index = 0) {
   return siteBackdropImages[normalizedIndex] || siteBackdropImages[0] || null;
 }
 
+function getBackdropViewportWidth() {
+  return Math.max(
+    Number(document.documentElement?.clientWidth) || 0,
+    Number(window.innerWidth) || 0
+  );
+}
+
 function getBackdropAssetMode() {
-  if (window.innerWidth >= desktopBackdropMinWidthPx) {
+  const viewportWidth = getBackdropViewportWidth();
+  if (viewportWidth >= desktopBackdropMinWidthPx || desktopBackdropImageQuery.matches) {
     return "desktop";
   }
 
-  if (backdropMobileLandscapeImageQuery.matches) {
+  const isLandscapeViewport =
+    window.matchMedia("(orientation: landscape)").matches ||
+    (Number(window.innerWidth) || 0) > (Number(window.innerHeight) || 0);
+  if (
+    viewportWidth <= mobileBackdropMaxWidthPx &&
+    isLandscapeViewport &&
+    backdropMobileLandscapeImageQuery.matches
+  ) {
     return "mobile-landscape";
   }
 
-  return "mobile-portrait";
+  return viewportWidth <= mobileBackdropMaxWidthPx ? "mobile-portrait" : "desktop";
 }
 
 function isDesktopBackdropViewport() {
@@ -1480,6 +1530,7 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
   const resolvedMobileLandscapeUrl = mobileLandscapeUrl ? getResolvedBackdropImageUrl(mobileLandscapeUrl) : "";
   const position = imageDefinition.position || "center center";
   let picture = slide.querySelector("[data-site-background-picture]");
+  let desktopSource = slide.querySelector("[data-site-background-desktop-source]");
   let mobilePortraitSource = slide.querySelector("[data-site-background-mobile-source]");
   let mobileLandscapeSource = slide.querySelector("[data-site-background-mobile-landscape-source]");
   let img = slide.querySelector("[data-site-background-img]");
@@ -1491,17 +1542,24 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
     slide.append(picture);
   }
 
+  if (!desktopSource) {
+    desktopSource = document.createElement("source");
+    desktopSource.dataset.siteBackgroundDesktopSource = "";
+  }
+
   if (!mobilePortraitSource) {
     mobilePortraitSource = document.createElement("source");
     mobilePortraitSource.dataset.siteBackgroundMobileSource = "";
-    picture.prepend(mobilePortraitSource);
   }
 
   if (!mobileLandscapeSource) {
     mobileLandscapeSource = document.createElement("source");
     mobileLandscapeSource.dataset.siteBackgroundMobileLandscapeSource = "";
-    mobilePortraitSource.after(mobileLandscapeSource);
   }
+
+  picture.prepend(desktopSource);
+  desktopSource.after(mobileLandscapeSource);
+  mobileLandscapeSource.after(mobilePortraitSource);
 
   if (!img) {
     img = document.createElement("img");
@@ -1512,6 +1570,9 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
     img.draggable = false;
     picture.append(img);
   }
+
+  desktopSource.media = desktopBackdropImageMedia;
+  desktopSource.srcset = resolvedDesktopUrl;
 
   mobilePortraitSource.media = backdropMobilePortraitImageMedia;
   if (resolvedMobilePortraitUrl) {
@@ -1555,6 +1616,30 @@ function syncBackdropSlideSourcesForViewport() {
     );
   });
   warmNextBackdropImage();
+}
+
+function getBackdropDebugInfo() {
+  return {
+    mode: getBackdropAssetMode(),
+    viewportWidth: getBackdropViewportWidth(),
+    desktopBreakpoint: desktopBackdropMinWidthPx,
+    desktopMedia: desktopBackdropImageMedia,
+    mobilePortraitMedia: backdropMobilePortraitImageMedia,
+    mobileLandscapeMedia: backdropMobileLandscapeImageMedia,
+    slides: siteBackdropSlides.map((slide) => {
+      const img = slide.querySelector("[data-site-background-img]");
+      return {
+        state: slide.dataset.siteBackgroundSlide || "",
+        mode: slide.dataset.siteBackdropAssetMode || "",
+        desktopSrc: slide.dataset.siteBackdropDesktopSrc || "",
+        currentSrc: img?.currentSrc || img?.src || ""
+      };
+    })
+  };
+}
+
+function exposeBackdropDebugHelper() {
+  window.kairosBackdropDebug = getBackdropDebugInfo;
 }
 
 function preloadBackdropImage(imageUrl) {
@@ -1933,10 +2018,10 @@ function getRadioLabels() {
   return {
     idle: { en: "Quiet", ja: "待機中" },
     loading: { en: "Tuning...", ja: "チューニング中..." },
-    ready: { en: "Ready", ja: "準備完了" },
+    ready: { en: "Press play", ja: "再生できます" },
     playing: { en: "On air", ja: "再生中" },
     paused: { en: "Paused", ja: "一時停止" },
-    fallback: { en: "Radio unavailable in this browser", ja: "このブラウザではラジオを利用できません" },
+    fallback: { en: "Radio unavailable", ja: "ラジオを利用できません" },
     play: { en: "Play radio", ja: "ラジオを再生" },
     pause: { en: "Pause radio", ja: "ラジオを一時停止" },
     previous: { en: "Previous track", ja: "曲を先頭に戻す / 前の曲" },
@@ -2954,10 +3039,10 @@ function getRadioYoutubeOrigin() {
     : "";
 }
 
-function getRadioYoutubeEmbedUrl() {
+function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
   const params = new URLSearchParams({
     enablejsapi: "1",
-    autoplay: "0",
+    autoplay: autoplay ? "1" : "0",
     controls: "0",
     disablekb: "1",
     fs: "0",
@@ -2986,18 +3071,21 @@ function getRadioYoutubeMountNode() {
   const mountNode = document.createElement("div");
   mountNode.className = "travel-radio__youtube";
   mountNode.setAttribute("data-radio-youtube-player", "true");
-  mountNode.setAttribute("aria-hidden", "true");
   (radioFrameNode || radioPlayerNode)?.prepend(mountNode);
   radioYoutubeMountNode = mountNode;
   return mountNode;
 }
 
-function ensureRadioYoutubeIframe() {
+function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   if (radioYoutubeDisabled) {
     return null;
   }
 
   if (radioYoutubeIframe) {
+    if (autoplay && radioYoutubeIframe.dataset.radioAutoplay !== "true" && !radioYoutubePlayerReady) {
+      radioYoutubeIframe.dataset.radioAutoplay = "true";
+      radioYoutubeIframe.src = getRadioYoutubeEmbedUrl({ autoplay: true });
+    }
     return radioYoutubeIframe;
   }
 
@@ -3005,11 +3093,19 @@ function ensureRadioYoutubeIframe() {
   const existingIframe = mountNode?.querySelector("iframe");
   if (existingIframe instanceof HTMLIFrameElement) {
     existingIframe.id = radioYoutubePlayerId;
+    existingIframe.title = "Kairos VIII playlist radio";
+    existingIframe.allow = "autoplay; encrypted-media; picture-in-picture";
+    existingIframe.referrerPolicy = "strict-origin-when-cross-origin";
+    existingIframe.removeAttribute("aria-hidden");
     mountNode.querySelectorAll("iframe").forEach((iframe) => {
       if (iframe !== existingIframe) {
         iframe.remove();
       }
     });
+    if (autoplay && existingIframe.dataset.radioAutoplay !== "true" && !radioYoutubePlayerReady) {
+      existingIframe.dataset.radioAutoplay = "true";
+      existingIframe.src = getRadioYoutubeEmbedUrl({ autoplay: true });
+    }
     radioYoutubeIframe = existingIframe;
     return radioYoutubeIframe;
   }
@@ -3017,14 +3113,14 @@ function ensureRadioYoutubeIframe() {
   const iframe = document.createElement("iframe");
   iframe.id = radioYoutubePlayerId;
   iframe.title = "Kairos VIII playlist radio";
-  iframe.src = getRadioYoutubeEmbedUrl();
+  iframe.src = getRadioYoutubeEmbedUrl({ autoplay });
+  iframe.dataset.radioAutoplay = autoplay ? "true" : "false";
   iframe.width = "320";
   iframe.height = "180";
   iframe.loading = "eager";
-  iframe.allow = "autoplay; encrypted-media";
+  iframe.allow = "autoplay; encrypted-media; picture-in-picture";
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
   iframe.setAttribute("allowfullscreen", "");
-  iframe.setAttribute("aria-hidden", "true");
   iframe.setAttribute("tabindex", "-1");
   mountNode?.replaceChildren(iframe);
   radioYoutubeIframe = iframe;
@@ -3104,9 +3200,42 @@ function scheduleRadioPlaybackConfirmation() {
   radioPlaybackConfirmTimeout = window.setTimeout(() => {
     radioPlaybackConfirmTimeout = 0;
     if (radioState.pendingPlay) {
+      radioState.pendingPlay = false;
+      radioState.isPlaying = false;
+      if (radioYoutubePlayerReady && radioYoutubePlayer && !radioState.loadFailed) {
+        setRadioState("ready");
+        requestRadioYoutubeInfoDelivery();
+        syncRadioControls();
+        updateRadioMediaSessionPlaybackState();
+        return;
+      }
+
       markRadioFallback();
     }
   }, radioPlaybackConfirmTimeoutMs);
+}
+
+function handleRadioYoutubePlaybackError() {
+  clearRadioPlaybackConfirmation();
+  radioState.pendingPlay = false;
+  radioState.isPlaying = false;
+
+  if (radioState.canSkip && radioYoutubePlayer && radioYoutubeErrorSkipAttempts < radioYoutubeMaxErrorSkips) {
+    radioYoutubeErrorSkipAttempts += 1;
+    setRadioState("loading");
+    if (!playNextRadioTrack()) {
+      try {
+        radioYoutubePlayer.nextVideo?.();
+      } catch {
+        // Ignore partial YouTube player implementations and fall through to fallback if polling fails.
+      }
+    }
+    startRadioYoutubeInfoPolling({ immediate: true });
+    syncRadioControls();
+    return;
+  }
+
+  markRadioFallback();
 }
 
 function createRadioYoutubePlayerProxy() {
@@ -3438,6 +3567,11 @@ function handleRadioYoutubeMessage(event) {
     requestRadioYoutubeInfoDelivery();
   }
 
+  if (payload?.event === "onError") {
+    handleRadioYoutubePlaybackError();
+    return;
+  }
+
   const info = payload?.info;
   if (!info || typeof info !== "object") {
     return;
@@ -3477,6 +3611,7 @@ function handleRadioYoutubeMessage(event) {
 
   const playerState = Number(info.playerState);
   if (playerState === 1) {
+    radioYoutubeErrorSkipAttempts = 0;
     if (
       radioNeedsInitialRandomTrack &&
       getKnownRadioPlaylistTrackCount() > 0 &&
@@ -3538,12 +3673,15 @@ function ensureRadioYoutubePlayer() {
   }
 
   if (radioYoutubePlayerReadyPromise) {
+    if (radioState.pendingPlay) {
+      ensureRadioYoutubeIframe({ autoplay: true });
+    }
     return radioYoutubePlayerReadyPromise;
   }
 
   setRadioState("loading");
   radioYoutubePlayerReadyPromise = new Promise((resolve, reject) => {
-      const iframe = ensureRadioYoutubeIframe();
+      const iframe = ensureRadioYoutubeIframe({ autoplay: radioState.pendingPlay });
       if (!iframe) {
         rejectRadioYoutubeReadyFromEmbed("YouTube radio unavailable");
         reject(new Error("YouTube radio unavailable"));
@@ -3683,7 +3821,11 @@ function resetRadioPreviousDoubleAction() {
 }
 
 function restartRadioCurrentTrackForPreviousAction() {
+  const shouldResumePlayback = radioState.isPlaying || radioState.pendingPlay;
   const restarted = seekRadioTo(0);
+  if (restarted && shouldResumePlayback && typeof radioYoutubePlayer?.playVideo === "function") {
+    radioYoutubePlayer.playVideo();
+  }
   radioPreviousActionUntilMs = getRadioClockNow() + radioPreviousDoubleActionWindowMs;
   radioPreviousActionTrackIndex = radioCurrentTrackIndex;
   return restarted;
@@ -3722,12 +3864,13 @@ function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
       });
       setRadioCurrentTime(0);
       radioYoutubePlayer.playVideoAt(normalizedIndex);
+      if (typeof radioYoutubePlayer.playVideo === "function") {
+        radioYoutubePlayer.playVideo();
+      }
     } else {
       return false;
     }
-    if (!radioYoutubePlayer.usesPostMessage) {
-      radioState.pendingPlay = false;
-    }
+    radioState.pendingPlay = false;
     radioState.isPlaying = true;
     setRadioState("playing");
     startRadioYoutubeInfoPolling({ immediate: true });
@@ -6187,6 +6330,66 @@ function syncReducedEffectsMode({ force = false } = {}) {
     bindBackdropSlideshowMotionUnlock();
     scheduleDeferredBackdropSlideshowStart();
   }
+}
+
+function getPanelSoundWaveTargets(scope = document) {
+  const targets = new Set();
+  if (scope?.matches?.(panelSoundWaveSelector)) {
+    targets.add(scope);
+  }
+
+  scope?.querySelectorAll?.(panelSoundWaveSelector).forEach((node) => {
+    targets.add(node);
+  });
+
+  return Array.from(targets).filter((node) => !node.closest?.(".travel-radio"));
+}
+
+function mountPanelSoundWaveField(surface) {
+  if (!surface || surface.dataset.panelSoundWaveReady === "true") {
+    return;
+  }
+
+  const waveField = document.createElement("span");
+  waveField.className = "kairos-sound-wave";
+  waveField.setAttribute("aria-hidden", "true");
+  surface.prepend(waveField);
+  surface.classList.add("kairos-wave-surface");
+  surface.dataset.panelSoundWaveReady = "true";
+}
+
+function initializePanelSoundWaveFields(scope = document) {
+  if (offlineSnapshotMode) {
+    return;
+  }
+
+  getPanelSoundWaveTargets(scope).forEach(mountPanelSoundWaveField);
+}
+
+function schedulePanelSoundWaveSync(scope = document) {
+  if (panelSoundWaveFrame) {
+    return;
+  }
+
+  panelSoundWaveFrame = window.requestAnimationFrame(() => {
+    panelSoundWaveFrame = 0;
+    initializePanelSoundWaveFields(scope);
+  });
+}
+
+function observePanelSoundWaveTargets() {
+  if (panelSoundWaveObserver || !mainContent || !("MutationObserver" in window)) {
+    return;
+  }
+
+  panelSoundWaveObserver = new MutationObserver((mutations) => {
+    if (!mutations.some((mutation) => mutation.addedNodes.length)) {
+      return;
+    }
+
+    schedulePanelSoundWaveSync(mainContent);
+  });
+  panelSoundWaveObserver.observe(mainContent, { childList: true, subtree: true });
 }
 
 function bindMediaQueryChange(query, handler) {
@@ -8842,6 +9045,7 @@ function ensureSectionInitialized(sectionName) {
     .then(() => {
       initializedSections.add(sectionName);
       markSectionHydrated(sectionName);
+      initializePanelSoundWaveFields(getSectionPanel(sectionName) || document);
       updateMaxScrollableY();
 
       if (getActivePanelId() === sectionName) {
@@ -13254,8 +13458,11 @@ async function activatePanel(panelId, options = {}) {
 
 async function bootApp() {
   syncReducedEffectsMode({ force: true });
+  exposeBackdropDebugHelper();
   initializeDecorativeMediaExperience();
   initializeRadioStation();
+  initializePanelSoundWaveFields();
+  observePanelSoundWaveTargets();
   completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
   checklistState = readStoredChecklistState();
   bookingTransitState = readStoredBookingTransitState();
@@ -13391,6 +13598,15 @@ if (checklistPrintModal) {
     window.requestAnimationFrame(() => {
       syncSectionNavIndicator({ immediate: true });
       syncFloatingControlLayout();
+    });
+  });
+});
+
+[desktopBackdropImageQuery, backdropMobilePortraitImageQuery, backdropMobileLandscapeImageQuery].forEach((query) => {
+  bindMediaQueryChange(query, () => {
+    window.requestAnimationFrame(() => {
+      syncBackdropSlideSourcesForViewport();
+      pruneMobileBackgroundCachesForDesktop();
     });
   });
 });

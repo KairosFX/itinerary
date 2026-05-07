@@ -11248,9 +11248,12 @@ html[data-theme="dark"] .site-intro__title {
   overflow: hidden;
   border-radius: inherit;
   background: #030806;
-  opacity: 0;
+  opacity: 1;
   pointer-events: none;
-  visibility: hidden;
+  visibility: visible;
+  transition:
+    opacity 220ms ease,
+    visibility 220ms ease;
 }
 
 .travel-radio__youtube iframe {
@@ -11260,12 +11263,14 @@ html[data-theme="dark"] .site-intro__title {
   border: 0;
 }
 
-.travel-radio[data-radio-state="loading"] .travel-radio__youtube,
-.travel-radio[data-radio-state="ready"] .travel-radio__youtube,
-.travel-radio[data-radio-state="playing"] .travel-radio__youtube,
-.travel-radio[data-radio-state="paused"] .travel-radio__youtube {
+.travel-radio[data-radio-state="idle"] .travel-radio__youtube,
+.travel-radio[data-radio-state="fallback"] .travel-radio__youtube {
   opacity: 0;
   visibility: hidden;
+}
+
+.travel-radio[data-radio-state="loading"] .travel-radio__youtube {
+  opacity: 0.72;
 }
 
 .travel-radio__signal {
@@ -11319,7 +11324,14 @@ html[data-theme="dark"] .site-intro__title {
   display: none !important;
 }
 
-.travel-radio__signal iframe {
+.travel-radio[data-radio-state="ready"] .travel-radio__artwork,
+.travel-radio[data-radio-state="playing"] .travel-radio__artwork,
+.travel-radio[data-radio-state="paused"] .travel-radio__artwork {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.travel-radio__signal > iframe {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -15999,142 +16011,188 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
   color: var(--theme-muted);
 }
 
-@keyframes kairosPanelEnergyPulse {
+@keyframes kairosWaveOrbit {
+  0% {
+    transform: rotate(0deg) scale(0.985);
+  }
+
+  48% {
+    transform: rotate(182deg) scale(1.02);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(0.985);
+  }
+}
+
+@keyframes kairosWaveBeat {
   0%,
   100% {
-    background-size:
-      115% 115%,
-      var(--panel-energy-ring-size, 22rem) var(--panel-energy-ring-size, 22rem),
-      110% 110%,
-      100% 100%,
-      100% 100%;
-    background-position:
-      center,
-      var(--panel-energy-x, 82%) var(--panel-energy-y, 12%),
-      0% 100%,
-      center,
-      center;
+    opacity: var(--panel-wave-opacity-low, 0.27);
+    transform: scale(0.992);
   }
 
-  45% {
-    background-size:
-      126% 126%,
-      calc(var(--panel-energy-ring-size, 22rem) * 1.28) calc(var(--panel-energy-ring-size, 22rem) * 1.28),
-      118% 118%,
-      100% 100%,
-      100% 100%;
-    background-position:
-      center,
-      calc(var(--panel-energy-x, 82%) - 5%) calc(var(--panel-energy-y, 12%) + 5%),
-      100% 0%,
-      center,
-      center;
+  18% {
+    opacity: var(--panel-wave-opacity-peak, 0.46);
+    transform: scale(1.012);
   }
 
-  70% {
-    background-size:
-      120% 120%,
-      calc(var(--panel-energy-ring-size, 22rem) * 0.92) calc(var(--panel-energy-ring-size, 22rem) * 0.92),
-      114% 114%,
-      100% 100%,
-      100% 100%;
-    background-position:
-      center,
-      calc(var(--panel-energy-x, 82%) + 3%) calc(var(--panel-energy-y, 12%) + 2%),
-      46% 70%,
-      center,
-      center;
+  32% {
+    opacity: var(--panel-wave-opacity-mid, 0.32);
+    transform: scale(0.998);
+  }
+
+  54% {
+    opacity: var(--panel-wave-opacity-strong, 0.5);
+    transform: scale(1.018);
+  }
+}
+
+@keyframes kairosWaveRipple {
+  0% {
+    opacity: 0;
+    transform: scale(0.965);
+    box-shadow:
+      0 0 0 0 rgba(var(--theme-accent-rgb), 0),
+      0 0 0 0 rgba(var(--theme-secondary-rgb), 0),
+      0 0 0 rgba(var(--theme-accent-rgb), 0);
+  }
+
+  18% {
+    opacity: var(--panel-wave-ripple-opacity, 0.42);
+  }
+
+  68% {
+    opacity: var(--panel-wave-ripple-soft, 0.2);
+    transform: scale(1.045);
+    box-shadow:
+      0 0 0 0.34rem rgba(var(--theme-accent-rgb), 0.09),
+      0 0 0 0.92rem rgba(var(--theme-secondary-rgb), 0.055),
+      0 0 1.7rem rgba(var(--theme-accent-rgb), 0.16);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.085);
+    box-shadow:
+      0 0 0 0.72rem rgba(var(--theme-accent-rgb), 0),
+      0 0 0 1.45rem rgba(var(--theme-secondary-rgb), 0),
+      0 0 2.1rem rgba(var(--theme-accent-rgb), 0);
   }
 }
 
 :root {
-  --panel-energy-core-opacity: 0.13;
-  --panel-energy-ring-opacity: 0.1;
-  --panel-energy-secondary-opacity: 0.11;
-  --panel-energy-speed: 12s;
-  --panel-energy-ring-size: 22rem;
+  --panel-wave-bleed: 0.82rem;
+  --panel-wave-inset: -0.82rem;
+  --panel-wave-ripple-inset: 0.32rem;
+  --panel-wave-opacity: 0.42;
+  --panel-wave-opacity-low: 0.27;
+  --panel-wave-opacity-mid: 0.32;
+  --panel-wave-opacity-peak: 0.46;
+  --panel-wave-opacity-strong: 0.5;
+  --panel-wave-ripple-opacity: 0.34;
+  --panel-wave-ripple-soft: 0.2;
+  --panel-wave-speed: 8.8s;
+  --panel-wave-beat-speed: 3.2s;
+  --panel-wave-ripple-speed: 2.65s;
 }
 
 html[data-radio-playback="playing"] {
-  --panel-energy-core-opacity: 0.2;
-  --panel-energy-ring-opacity: 0.16;
-  --panel-energy-secondary-opacity: 0.15;
-  --panel-energy-speed: 6.8s;
+  --panel-wave-opacity: 0.68;
+  --panel-wave-opacity-low: 0.42;
+  --panel-wave-opacity-mid: 0.52;
+  --panel-wave-opacity-peak: 0.74;
+  --panel-wave-opacity-strong: 0.82;
+  --panel-wave-ripple-opacity: 0.56;
+  --panel-wave-ripple-soft: 0.27;
+  --panel-wave-speed: 5.8s;
+  --panel-wave-beat-speed: 1.72s;
+  --panel-wave-ripple-speed: 1.96s;
 }
 
-.content-panel,
-.hero-panel,
-.featured-cover,
-.overview-card,
-.stat-card,
-.progress-card,
-.day-card,
-.note-card,
-.essentials-card,
-.budget-panel,
-.budget-notes__settings-panel,
-.budget-notes__day-browser,
-.budget-day-card,
-.budget-source-card,
-.budget-summary-card,
-.budget-breakdown-card,
-.budget-status-card,
-.budget-source-meta-card,
-.booking-group,
-.booking-item,
-.route-map,
-.route-map__surface,
-.route-map__detail-panel,
-.route-map__stops,
-.route-map__explorer,
-.journey-close,
-#checklist .check-item:not(.is-checked) {
+.kairos-wave-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  contain: layout style;
+}
+
+.kairos-wave-surface > :not(.kairos-sound-wave) {
+  position: relative;
+  z-index: 1;
+}
+
+.kairos-sound-wave {
+  position: absolute;
+  inset: var(--panel-wave-inset, -0.82rem);
+  z-index: 0;
+  display: block;
+  padding: var(--panel-wave-bleed, 0.82rem);
+  border-radius: calc(var(--panel-wave-radius, var(--radius-xl, 1.4rem)) + var(--panel-wave-bleed, 0.82rem));
+  pointer-events: none;
+  opacity: var(--panel-wave-opacity, 0.42);
   background:
-    radial-gradient(circle at var(--panel-energy-x, 82%) var(--panel-energy-y, 12%), rgba(var(--theme-accent-rgb), var(--panel-energy-core-opacity)), rgba(var(--theme-accent-rgb), 0) 30%),
-    repeating-radial-gradient(circle at var(--panel-energy-x, 82%) var(--panel-energy-y, 12%), rgba(var(--theme-accent-rgb), var(--panel-energy-ring-opacity)) 0 1px, rgba(var(--theme-secondary-rgb), 0.05) 2px 3px, rgba(var(--theme-accent-rgb), 0) 6px 20px),
-    radial-gradient(circle at 12% 100%, rgba(var(--theme-secondary-rgb), var(--panel-energy-secondary-opacity)), rgba(var(--theme-secondary-rgb), 0) 36%),
-    linear-gradient(180deg, rgba(var(--theme-panel-strong-rgb), 0.94), rgba(var(--theme-panel-rgb), 0.84)),
-    var(--theme-panel) !important;
-  animation: kairosPanelEnergyPulse var(--panel-energy-speed) ease-in-out infinite;
-  background-repeat: no-repeat;
-  transition:
-    border-color var(--theme-transition),
-    box-shadow var(--theme-transition),
-    background-color var(--theme-transition),
-    color 360ms ease;
+    repeating-radial-gradient(ellipse at center, rgba(var(--theme-accent-rgb), 0.22) 0 1px, rgba(var(--theme-secondary-rgb), 0.08) 2px 3px, transparent 4px 13px),
+    repeating-linear-gradient(90deg, transparent 0 0.54rem, rgba(var(--theme-accent-rgb), 0.22) 0.54rem 0.6rem, transparent 0.6rem 0.86rem),
+    linear-gradient(90deg, rgba(var(--theme-accent-rgb), 0.16), rgba(var(--theme-secondary-rgb), 0.11), rgba(var(--theme-accent-rgb), 0.16));
+  filter: drop-shadow(0 0 0.9rem rgba(var(--theme-accent-rgb), 0.18));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: kairosWaveBeat var(--panel-wave-beat-speed, 3.2s) ease-in-out infinite;
 }
 
-html.enhanced-effects .content-panel,
-html.enhanced-effects .hero-panel,
-html.enhanced-effects .featured-cover,
-html.enhanced-effects .overview-card,
-html.enhanced-effects .stat-card,
-html.enhanced-effects .progress-card,
-html.enhanced-effects .day-card,
-html.enhanced-effects .note-card,
-html.enhanced-effects .essentials-card,
-html.enhanced-effects .budget-panel,
-html.enhanced-effects .budget-notes__settings-panel,
-html.enhanced-effects .budget-notes__day-browser,
-html.enhanced-effects .budget-day-card,
-html.enhanced-effects .budget-source-card,
-html.enhanced-effects .budget-summary-card,
-html.enhanced-effects .budget-breakdown-card,
-html.enhanced-effects .budget-status-card,
-html.enhanced-effects .budget-source-meta-card,
-html.enhanced-effects .booking-group,
-html.enhanced-effects .booking-item,
-html.enhanced-effects .route-map,
-html.enhanced-effects .route-map__surface,
-html.enhanced-effects .route-map__detail-panel,
-html.enhanced-effects .route-map__stops,
-html.enhanced-effects .route-map__explorer,
-html.enhanced-effects .journey-close,
-html.enhanced-effects #checklist .check-item:not(.is-checked),
-html.enhanced-effects .content-panel.is-active,
-html.enhanced-effects[data-site-transition-mode] .content-panel.is-active,
-html.enhanced-effects[data-site-transition-direction] .content-panel.is-active {
-  animation: kairosPanelEnergyPulse var(--panel-energy-speed) ease-in-out infinite !important;
+.kairos-sound-wave::before,
+.kairos-sound-wave::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.kairos-sound-wave::before {
+  padding: var(--panel-wave-bleed, 0.82rem);
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0 8deg,
+      rgba(var(--theme-accent-rgb), 0.54) 10deg 17deg,
+      transparent 20deg 38deg,
+      rgba(var(--theme-secondary-rgb), 0.34) 42deg 50deg,
+      transparent 54deg 78deg,
+      rgba(var(--theme-accent-rgb), 0.42) 82deg 92deg,
+      transparent 96deg 132deg,
+      rgba(var(--theme-secondary-rgb), 0.32) 136deg 144deg,
+      transparent 148deg 180deg,
+      rgba(var(--theme-accent-rgb), 0.48) 184deg 194deg,
+      transparent 198deg 226deg,
+      rgba(var(--theme-secondary-rgb), 0.3) 230deg 238deg,
+      transparent 242deg 284deg,
+      rgba(var(--theme-accent-rgb), 0.38) 288deg 300deg,
+      transparent 304deg 360deg
+    );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: kairosWaveOrbit var(--panel-wave-speed, 8.8s) linear infinite;
+}
+
+.kairos-sound-wave::after {
+  inset: var(--panel-wave-ripple-inset, 0.32rem);
+  border: 1px solid rgba(var(--theme-accent-rgb), 0.24);
+  opacity: var(--panel-wave-ripple-opacity, 0.34);
+  animation: kairosWaveRipple var(--panel-wave-ripple-speed, 2.65s) cubic-bezier(0.2, 0.75, 0.25, 1) infinite;
 }
 
 .content-panel,
@@ -16145,58 +16203,47 @@ html.enhanced-effects[data-site-transition-direction] .content-panel.is-active {
 .route-map,
 .route-map__surface,
 .journey-close {
-  --panel-energy-ring-size: 34rem;
-  --panel-energy-x: 78%;
-  --panel-energy-y: 8%;
+  --panel-wave-bleed: 1rem;
+  --panel-wave-inset: -1rem;
+  --panel-wave-ripple-inset: 0.38rem;
+  --panel-wave-radius: var(--radius-xl);
 }
 
 .overview-card,
 .stat-card,
 .progress-card,
 #checklist .check-item:not(.is-checked) {
-  --panel-energy-core-opacity: 0.1;
-  --panel-energy-ring-opacity: 0.075;
-  --panel-energy-secondary-opacity: 0.08;
-  --panel-energy-ring-size: 16rem;
+  --panel-wave-bleed: 0.56rem;
+  --panel-wave-inset: -0.56rem;
+  --panel-wave-ripple-inset: 0.22rem;
+  --panel-wave-opacity: 0.32;
+  --panel-wave-opacity-low: 0.18;
+  --panel-wave-opacity-mid: 0.24;
+  --panel-wave-opacity-peak: 0.34;
+  --panel-wave-opacity-strong: 0.38;
+  --panel-wave-ripple-opacity: 0.26;
+  --panel-wave-ripple-soft: 0.14;
+  --panel-wave-speed: 10.8s;
 }
 
 html[data-radio-playback="playing"] .overview-card,
 html[data-radio-playback="playing"] .stat-card,
 html[data-radio-playback="playing"] .progress-card,
 html[data-radio-playback="playing"] #checklist .check-item:not(.is-checked) {
-  --panel-energy-core-opacity: 0.15;
-  --panel-energy-ring-opacity: 0.11;
-  --panel-energy-secondary-opacity: 0.1;
+  --panel-wave-opacity: 0.48;
+  --panel-wave-opacity-low: 0.28;
+  --panel-wave-opacity-mid: 0.36;
+  --panel-wave-opacity-peak: 0.52;
+  --panel-wave-opacity-strong: 0.58;
+  --panel-wave-ripple-opacity: 0.38;
+  --panel-wave-ripple-soft: 0.2;
+  --panel-wave-speed: 7s;
 }
 
-html.enhanced-effects[data-radio-playback="playing"] .content-panel,
-html.enhanced-effects[data-radio-playback="playing"] .hero-panel,
-html.enhanced-effects[data-radio-playback="playing"] .featured-cover,
-html.enhanced-effects[data-radio-playback="playing"] .overview-card,
-html.enhanced-effects[data-radio-playback="playing"] .stat-card,
-html.enhanced-effects[data-radio-playback="playing"] .progress-card,
-html.enhanced-effects[data-radio-playback="playing"] .day-card,
-html.enhanced-effects[data-radio-playback="playing"] .note-card,
-html.enhanced-effects[data-radio-playback="playing"] .essentials-card,
-html.enhanced-effects[data-radio-playback="playing"] .budget-panel,
-html.enhanced-effects[data-radio-playback="playing"] .budget-notes__settings-panel,
-html.enhanced-effects[data-radio-playback="playing"] .budget-notes__day-browser,
-html.enhanced-effects[data-radio-playback="playing"] .budget-day-card,
-html.enhanced-effects[data-radio-playback="playing"] .budget-source-card,
-html.enhanced-effects[data-radio-playback="playing"] .budget-summary-card,
-html.enhanced-effects[data-radio-playback="playing"] .budget-breakdown-card,
-html.enhanced-effects[data-radio-playback="playing"] .budget-status-card,
-html.enhanced-effects[data-radio-playback="playing"] .budget-source-meta-card,
-html.enhanced-effects[data-radio-playback="playing"] .booking-group,
-html.enhanced-effects[data-radio-playback="playing"] .booking-item,
-html.enhanced-effects[data-radio-playback="playing"] .route-map,
-html.enhanced-effects[data-radio-playback="playing"] .route-map__surface,
-html.enhanced-effects[data-radio-playback="playing"] .route-map__detail-panel,
-html.enhanced-effects[data-radio-playback="playing"] .route-map__stops,
-html.enhanced-effects[data-radio-playback="playing"] .route-map__explorer,
-html.enhanced-effects[data-radio-playback="playing"] .journey-close,
-html.enhanced-effects[data-radio-playback="playing"] #checklist .check-item:not(.is-checked) {
-  will-change: background-size, background-position;
+html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave,
+html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave::before,
+html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave::after {
+  will-change: transform, opacity, box-shadow;
 }
 
 @media (max-width: 720px), (pointer: coarse) and (max-width: 920px) {
@@ -16205,10 +16252,18 @@ html.enhanced-effects[data-radio-playback="playing"] #checklist .check-item:not(
     --theme-shadow-strong: 0 18px 42px rgba(0, 0, 0, 0.3);
     --theme-glow: rgba(var(--theme-accent-rgb), 0.16);
     --theme-glow-soft: rgba(var(--theme-accent-rgb), 0.08);
-    --panel-energy-core-opacity: 0.075;
-    --panel-energy-ring-opacity: 0.055;
-    --panel-energy-secondary-opacity: 0.065;
-    --panel-energy-speed: 16s;
+    --panel-wave-bleed: 0.42rem;
+    --panel-wave-inset: -0.42rem;
+    --panel-wave-ripple-inset: 0.16rem;
+    --panel-wave-opacity: 0.24;
+    --panel-wave-opacity-low: 0.13;
+    --panel-wave-opacity-mid: 0.18;
+    --panel-wave-opacity-peak: 0.26;
+    --panel-wave-opacity-strong: 0.3;
+    --panel-wave-ripple-opacity: 0.16;
+    --panel-wave-ripple-soft: 0.08;
+    --panel-wave-speed: 14s;
+    --panel-wave-beat-speed: 4.6s;
   }
 
   .travel-radio::before {
@@ -16242,8 +16297,21 @@ html.enhanced-effects[data-radio-playback="playing"] #checklist .check-item:not(
   .route-map__explorer,
   .journey-close,
   #checklist .check-item:not(.is-checked) {
-    --panel-energy-ring-size: 14rem;
+    --panel-wave-bleed: 0.34rem;
+    --panel-wave-inset: -0.34rem;
+    --panel-wave-ripple-inset: 0.12rem;
     will-change: auto;
+  }
+
+  .kairos-sound-wave {
+    background:
+      repeating-radial-gradient(ellipse at center, rgba(var(--theme-accent-rgb), 0.14) 0 1px, transparent 2px 12px),
+      linear-gradient(90deg, rgba(var(--theme-accent-rgb), 0.12), rgba(var(--theme-secondary-rgb), 0.08), rgba(var(--theme-accent-rgb), 0.12));
+    filter: drop-shadow(0 0 0.48rem rgba(var(--theme-accent-rgb), 0.12));
+  }
+
+  .kairos-sound-wave::after {
+    display: none;
   }
 }
 
@@ -16307,6 +16375,9 @@ html.enhanced-effects[data-radio-playback="playing"] #checklist .check-item:not(
   .travel-radio,
   .travel-radio::before,
   .travel-radio__signal,
+  .kairos-sound-wave,
+  .kairos-sound-wave::before,
+  .kairos-sound-wave::after,
   .section-nav__indicator,
   .language-switcher::before,
   .content-panel,
@@ -16328,5 +16399,9 @@ html.enhanced-effects[data-radio-playback="playing"] #checklist .check-item:not(
     animation: none !important;
     transition-duration: 1ms !important;
     will-change: auto !important;
+  }
+
+  .kairos-sound-wave {
+    display: none !important;
   }
 }

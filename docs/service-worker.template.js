@@ -107,16 +107,23 @@ async function addAssetsToCache(cache, urls) {
   );
 }
 
-async function pruneRuntimeMobileBackgrounds() {
-  const runtimeCache = await caches.open(RUNTIME_CACHE_NAME);
-  const cachedRequests = await runtimeCache.keys();
+async function pruneMobileBackgroundsFromCaches() {
+  const cacheNames = await caches.keys();
   await Promise.allSettled(
-    cachedRequests.map((request) => {
-      const requestUrl = new URL(request.url);
-      return isMobileOptimizedBackgroundRequest(requestUrl)
-        ? runtimeCache.delete(request)
-        : Promise.resolve(false);
-    })
+    cacheNames
+      .filter((cacheName) => cacheName.startsWith(CACHE_PREFIX))
+      .map(async (cacheName) => {
+        const cache = await caches.open(cacheName);
+        const cachedRequests = await cache.keys();
+        await Promise.allSettled(
+          cachedRequests.map((request) => {
+            const requestUrl = new URL(request.url);
+            return isMobileOptimizedBackgroundRequest(requestUrl)
+              ? cache.delete(request)
+              : Promise.resolve(false);
+          })
+        );
+      })
   );
 }
 
@@ -144,7 +151,7 @@ self.addEventListener("activate", (event) => {
           )
           .map((cacheName) => caches.delete(cacheName))
       );
-      await pruneRuntimeMobileBackgrounds();
+      await pruneMobileBackgroundsFromCaches();
       await self.clients.claim();
     })()
   );
@@ -213,7 +220,7 @@ self.addEventListener("message", (event) => {
   }
 
   if (payload.type === "PRUNE_MOBILE_BACKGROUNDS") {
-    event.waitUntil(pruneRuntimeMobileBackgrounds());
+    event.waitUntil(pruneMobileBackgroundsFromCaches());
     return;
   }
 
