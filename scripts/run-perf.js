@@ -1,11 +1,12 @@
 const fs = require("fs");
 const http = require("http");
+const os = require("os");
 const path = require("path");
 const chromeLauncher = require("chrome-launcher");
 
 const repoRoot = path.resolve(__dirname, "..");
 const lhciDir = path.join(repoRoot, ".lighthouseci");
-const chromeProfileDir = path.join(lhciDir, "chrome-profile");
+const chromeProfileDir = path.join(os.tmpdir(), "kairos-viii-lighthouse-profile");
 const defaultChromePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
 const argv = process.argv.slice(2);
 const lighthouseCategories = ["performance", "accessibility", "best-practices", "seo"];
@@ -281,7 +282,18 @@ function createStaticServer(rootDir) {
 }
 
 function getChromeFlags() {
-  const flags = ["--headless=new", "--disable-dev-shm-usage"];
+  const flags = [
+    "--headless=new",
+    "--disable-background-networking",
+    "--disable-component-update",
+    "--disable-default-apps",
+    "--disable-dev-shm-usage",
+    "--disable-extensions",
+    "--disable-sync",
+    "--no-default-browser-check",
+    "--no-first-run",
+    "--remote-debugging-address=127.0.0.1"
+  ];
   if (process.env.CI === "true") {
     flags.push("--no-sandbox");
   }
@@ -360,7 +372,7 @@ function runStaticBuildChecks() {
   const serviceWorker = fs.readFileSync(path.join(repoRoot, "docs", "service-worker.js"), "utf8");
   const webManifest = JSON.parse(fs.readFileSync(path.join(repoRoot, "docs", "manifest.webmanifest"), "utf8"));
   const assetManifest = JSON.parse(fs.readFileSync(path.join(repoRoot, "docs", "assets", "app", "asset-manifest.json"), "utf8"));
-  const legacyMobileBackgroundNeedle = "kairos-bg-01" + "-mobile";
+  const legacyMobileBackgroundPattern = new RegExp(["kairos-bg", "\\d{2}", "mobile"].join("-"), "i");
 
   if (!indexHtml.includes("<title>Kairos VIII Japan Itinerary</title>")) {
     throw new Error("Document title check failed.");
@@ -385,12 +397,15 @@ function runStaticBuildChecks() {
   if (
     !indexHtml.includes('data-first-backdrop') ||
     !indexHtml.includes("assets/backgrounds/original/AdobeStock_133085779.jpeg") ||
-    indexHtml.includes(legacyMobileBackgroundNeedle)
+    legacyMobileBackgroundPattern.test(indexHtml)
   ) {
     throw new Error("First backdrop preload/style check failed.");
   }
   if (!indexHtml.includes("kairos-viii-magazine-cover-560.jpg")) {
     throw new Error("Responsive magazine cover check failed.");
+  }
+  if (!indexHtml.includes("./assets/radio/playlist-thumbnail.jpg")) {
+    throw new Error("Radio playlist thumbnail check failed.");
   }
   if (indexHtml.includes('as="style" fetchpriority="high"')) {
     throw new Error("High-priority non-critical stylesheet preload check failed.");
@@ -406,6 +421,7 @@ function runStaticBuildChecks() {
   }
   if (
     !serviceWorker.includes("./assets/icons/kairos-icon-192.jpg") ||
+    !serviceWorker.includes("./assets/radio/playlist-thumbnail.jpg") ||
     !serviceWorker.includes("./assets/images/kairos-viii-magazine-cover-560.jpg")
   ) {
     throw new Error("Core visual app-shell cache check failed.");
@@ -427,6 +443,7 @@ function runStaticBuildChecks() {
   assertFileExists(path.join("docs", "assets", "images", "kairos-viii-magazine-cover.jpg"));
   assertFileExists(path.join("docs", "assets", "images", "kairos-viii-magazine-cover-560.jpg"));
   assertFileExists(path.join("docs", "assets", "images", "kairos-viii-magazine-cover-640.jpg"));
+  assertFileExists(path.join("docs", "assets", "radio", "playlist-thumbnail.jpg"));
   assertFileExists(path.join("docs", "assets", "icons", "kairos-favicon-48.jpg"));
   assertFileExists(path.join("docs", "assets", "backgrounds", "original", "AdobeStock_133085779.jpeg"));
   process.stdout.write("Static SEO/PWA/build-output checks passed.\n");

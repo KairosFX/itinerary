@@ -16147,6 +16147,7 @@ html[data-radio-playback="playing"] {
     0 0 0 1px rgba(var(--theme-accent-rgb), 0.06),
     0 0 0 0.36rem rgba(var(--theme-accent-rgb), 0.045);
   animation: kairosWaveBeat var(--panel-wave-beat-speed, 3.2s) ease-in-out infinite;
+  animation-play-state: paused;
 }
 
 .kairos-sound-wave::before,
@@ -16162,6 +16163,7 @@ html[data-radio-playback="playing"] {
   inset: var(--panel-wave-ripple-inset, -0.42rem);
   border: 1px solid rgba(var(--theme-accent-rgb), 0.3);
   animation: kairosWaveRipple var(--panel-wave-ripple-speed, 2.65s) cubic-bezier(0.2, 0.75, 0.25, 1) infinite;
+  animation-play-state: paused;
 }
 
 .kairos-sound-wave::after {
@@ -16170,6 +16172,19 @@ html[data-radio-playback="playing"] {
   opacity: var(--panel-wave-ripple-soft, 0.12);
   animation: kairosWaveRipple var(--panel-wave-ripple-speed, 2.65s) cubic-bezier(0.2, 0.75, 0.25, 1) infinite;
   animation-delay: calc(var(--panel-wave-ripple-speed, 2.65s) * -0.48);
+  animation-play-state: paused;
+}
+
+html[data-radio-playback="playing"] .kairos-sound-wave,
+html[data-radio-playback="playing"] .kairos-sound-wave::before,
+html[data-radio-playback="playing"] .kairos-sound-wave::after {
+  animation-play-state: running;
+}
+
+html.site-ui-hidden .kairos-sound-wave,
+html.site-ui-hidden .kairos-sound-wave::before,
+html.site-ui-hidden .kairos-sound-wave::after {
+  animation-play-state: paused !important;
 }
 
 .content-panel,

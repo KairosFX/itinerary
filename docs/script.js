@@ -78,7 +78,7 @@ const lazyNodeCache = new Map();
 const aggressivePerformanceMode = false;
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
-const compactViewportQuery = window.matchMedia("(max-width: 920px)");
+const compactViewportQuery = window.matchMedia("(width <= 920px)");
 const originalBackdropAssetMode = "original";
 const pageTitles = {
   en: "Kairos VIII Japan Itinerary",
@@ -104,43 +104,34 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-08-offline-v28";
+const offlineBundleVersion = "2026-05-08-offline-v29";
 const siteBackdropImages = [
   {
-    src: "./assets/backgrounds/original/AdobeStock_133085779.jpeg",
-    position: "center center"
+    src: "./assets/backgrounds/original/AdobeStock_133085779.jpeg"
   },
   {
-    src: "./assets/backgrounds/original/AdobeStock_240362026.jpeg",
-    position: "center center"
+    src: "./assets/backgrounds/original/AdobeStock_240362026.jpeg"
   },
   {
-    src: "./assets/backgrounds/original/AdobeStock_254432280.jpeg",
-    position: "center center"
+    src: "./assets/backgrounds/original/AdobeStock_254432280.jpeg"
   },
   {
-    src: "./assets/backgrounds/original/AdobeStock_306542962_Editorial_Use_Only.jpeg",
-    position: "center center"
+    src: "./assets/backgrounds/original/AdobeStock_306542962_Editorial_Use_Only.jpeg"
   },
   {
-    src: "./assets/backgrounds/original/AdobeStock_412986259_Editorial_Use_Only.jpeg",
-    position: "center center"
+    src: "./assets/backgrounds/original/AdobeStock_412986259_Editorial_Use_Only.jpeg"
   },
   {
-    src: "./assets/backgrounds/original/AdobeStock_448171056_Editorial_Use_Only.jpeg",
-    position: "center center"
+    src: "./assets/backgrounds/original/AdobeStock_448171056_Editorial_Use_Only.jpeg"
   },
   {
-    src: "./assets/backgrounds/original/AdobeStock_498231018.jpeg",
-    position: "center center"
+    src: "./assets/backgrounds/original/AdobeStock_498231018.jpeg"
   },
   {
-    src: "./assets/backgrounds/original/AdobeStock_537070829.jpeg",
-    position: "center center"
+    src: "./assets/backgrounds/original/AdobeStock_537070829.jpeg"
   },
   {
-    src: "./assets/backgrounds/original/AdobeStock_61109814.jpeg",
-    position: "center center"
+    src: "./assets/backgrounds/original/AdobeStock_61109814.jpeg"
   }
 ];
 const siteBackdropImageUrls = siteBackdropImages.map((image) => image.src);
@@ -161,7 +152,7 @@ const routeMapOriginUrl = "https://tiles.openfreemap.org";
 const routeMapStyleUrl = "https://tiles.openfreemap.org/styles/positron";
 const routeMapInitializeTimeoutMs = 12000;
 const radioPlaylistId = "PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa";
-const radioPlaylistArtworkUrl = "./assets/images/kairos-viii-magazine-cover-560.jpg";
+const radioPlaylistArtworkUrl = "./assets/radio/playlist-thumbnail.jpg";
 const radioYoutubePlayerHost = "https://www.youtube-nocookie.com";
 const radioYoutubePlayerId = "kairos-viii-radio-player";
 const radioGithubPagesOrigin = "https://kairosfx.github.io";
@@ -1190,12 +1181,12 @@ const offlineLabels = {
     ja: "この保存版はオフラインでそのまま使える単体版です。"
   },
   standardMeta: {
-    en: "Cached bundle version 2026-05-03. Includes checklist, packing, upgraded budget notes, route map, and transit details.",
-    ja: "キャッシュ版は 2026-05-03。チェックリスト、荷造り、強化した予算メモ、ルート地図、移動詳細を含みます。"
+    en: "Cached bundle version 2026-05-08. Includes checklist, packing, upgraded budget notes, route map, and transit details.",
+    ja: "キャッシュ版は 2026-05-08。チェックリスト、荷造り、強化した予算メモ、ルート地図、移動詳細を含みます。"
   },
   installHintMeta: {
-    en: "If no install button appears, use your browser menu or iPhone/iPad Share sheet to add the guide to the home screen. Snapshot version: 2026-05-03.",
-    ja: "追加ボタンが出ない場合は、ブラウザーのメニューや iPhone/iPad の共有メニューからホーム画面へ追加できます。保存版は 2026-05-03 です。"
+    en: "If no install button appears, use your browser menu or iPhone/iPad Share sheet to add the guide to the home screen. Snapshot version: 2026-05-08.",
+    ja: "追加ボタンが出ない場合は、ブラウザーのメニューや iPhone/iPad の共有メニューからホーム画面へ追加できます。保存版は 2026-05-08 です。"
   },
   snapshotMeta: {
     en: "This single-file snapshot keeps the local checklist, packing, budget notes, route map, and transit details working without fetches.",
@@ -1411,6 +1402,7 @@ let floatingControlLayoutFrame = 0;
 let uiVisibilityLastScrollY = 0;
 let panelSoundWaveFrame = 0;
 let panelSoundWaveObserver = null;
+let panelSoundWaveIntersectionObserver = null;
 
 function getResolvedBackdropImageUrl(imageUrl = "") {
   try {
@@ -6258,6 +6250,9 @@ function syncReducedEffectsMode({ force = false } = {}) {
     bindBackdropSlideshowMotionUnlock();
     scheduleDeferredBackdropSlideshowStart();
   }
+  if (!reducedEffectsEnabled) {
+    initializePanelSoundWaveFields();
+  }
 }
 
 function getPanelSoundWaveTargets(scope = document) {
@@ -6286,12 +6281,52 @@ function mountPanelSoundWaveField(surface) {
   surface.dataset.panelSoundWaveReady = "true";
 }
 
-function initializePanelSoundWaveFields(scope = document) {
-  if (offlineSnapshotMode) {
+function ensurePanelSoundWaveIntersectionObserver() {
+  if (panelSoundWaveIntersectionObserver || !("IntersectionObserver" in window)) {
     return;
   }
 
-  getPanelSoundWaveTargets(scope).forEach(mountPanelSoundWaveField);
+  panelSoundWaveIntersectionObserver = new window.IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        panelSoundWaveIntersectionObserver.unobserve(entry.target);
+        mountPanelSoundWaveField(entry.target);
+      });
+    },
+    {
+      rootMargin: "420px 0px 520px 0px",
+      threshold: [0, 0.01]
+    }
+  );
+}
+
+function queuePanelSoundWaveField(surface) {
+  if (!surface || surface.dataset.panelSoundWaveReady === "true" || reducedEffectsEnabled) {
+    return;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    mountPanelSoundWaveField(surface);
+    return;
+  }
+
+  ensurePanelSoundWaveIntersectionObserver();
+  if (panelSoundWaveIntersectionObserver && surface.dataset.panelSoundWaveObserved !== "true") {
+    surface.dataset.panelSoundWaveObserved = "true";
+    panelSoundWaveIntersectionObserver.observe(surface);
+  }
+}
+
+function initializePanelSoundWaveFields(scope = document) {
+  if (offlineSnapshotMode || reducedEffectsEnabled) {
+    return;
+  }
+
+  getPanelSoundWaveTargets(scope).forEach(queuePanelSoundWaveField);
 }
 
 function schedulePanelSoundWaveSync(scope = document) {
