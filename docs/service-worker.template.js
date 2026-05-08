@@ -33,14 +33,13 @@ function matchesCachedAppAsset(url) {
   );
 }
 
-function isDesktopOriginalBackgroundRequest(url) {
+function isOriginalBackgroundRequest(url) {
   return url.pathname.startsWith(`${APP_SCOPE_PATH}assets/backgrounds/original/`);
 }
 
-function isMobileOptimizedBackgroundRequest(url) {
+function isLegacyOptimizedBackgroundRequest(url) {
   return (
     url.pathname.startsWith(`${APP_SCOPE_PATH}assets/backgrounds/kairos-bg-`) &&
-    url.pathname.includes("-mobile") &&
     url.pathname.endsWith(".jpg")
   );
 }
@@ -107,7 +106,7 @@ async function addAssetsToCache(cache, urls) {
   );
 }
 
-async function pruneMobileBackgroundsFromCaches() {
+async function pruneLegacyBackgroundsFromCaches() {
   const cacheNames = await caches.keys();
   await Promise.allSettled(
     cacheNames
@@ -118,7 +117,7 @@ async function pruneMobileBackgroundsFromCaches() {
         await Promise.allSettled(
           cachedRequests.map((request) => {
             const requestUrl = new URL(request.url);
-            return isMobileOptimizedBackgroundRequest(requestUrl)
+            return isLegacyOptimizedBackgroundRequest(requestUrl)
               ? cache.delete(request)
               : Promise.resolve(false);
           })
@@ -151,7 +150,7 @@ self.addEventListener("activate", (event) => {
           )
           .map((cacheName) => caches.delete(cacheName))
       );
-      await pruneMobileBackgroundsFromCaches();
+      await pruneLegacyBackgroundsFromCaches();
       await self.clients.claim();
     })()
   );
@@ -177,7 +176,7 @@ async function respondToNavigation(event) {
 
 async function fetchAndCache(request) {
   const requestUrl = new URL(request.url);
-  const fetchRequest = shouldPersistInAppShell(requestUrl) || isDesktopOriginalBackgroundRequest(requestUrl)
+  const fetchRequest = shouldPersistInAppShell(requestUrl) || isOriginalBackgroundRequest(requestUrl)
     ? new Request(request, { cache: "reload" })
     : request;
   const networkResponse = await fetch(fetchRequest);
@@ -219,8 +218,8 @@ self.addEventListener("message", (event) => {
     return;
   }
 
-  if (payload.type === "PRUNE_MOBILE_BACKGROUNDS") {
-    event.waitUntil(pruneMobileBackgroundsFromCaches());
+  if (payload.type === "PRUNE_LEGACY_BACKGROUNDS") {
+    event.waitUntil(pruneLegacyBackgroundsFromCaches());
     return;
   }
 

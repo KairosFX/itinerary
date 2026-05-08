@@ -1,4 +1,4 @@
-const OFFLINE_CACHE_VERSION = "b376f91f0a-2684b7b71e-0343fa6272-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-9bf8693871";
+const OFFLINE_CACHE_VERSION = "bfdc5bdfcc-2684b7b71e-7ac1be501d-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-406bd1902a";
 const CACHE_PREFIX = "japan-escape-itinerary-";
 const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
@@ -16,8 +16,8 @@ const APP_SHELL_PATHS = [
   "./assets/icons/kairos-icon-192.jpg",
   "./assets/icons/kairos-icon-512.jpg",
   "./assets/images/kairos-viii-magazine-cover-560.jpg",
-  "./assets/app/style.b376f91f0a.css",
-  "./assets/app/script.0343fa6272.js",
+  "./assets/app/style.bfdc5bdfcc.css",
+  "./assets/app/script.7ac1be501d.js",
   "./assets/app/routeStyle.2684b7b71e.css",
   "./assets/app/routeContent.0a456839b7.js",
   "./assets/app/budgetUi.c9b56d76dd.js",
@@ -57,14 +57,13 @@ function matchesCachedAppAsset(url) {
   );
 }
 
-function isDesktopOriginalBackgroundRequest(url) {
+function isOriginalBackgroundRequest(url) {
   return url.pathname.startsWith(`${APP_SCOPE_PATH}assets/backgrounds/original/`);
 }
 
-function isMobileOptimizedBackgroundRequest(url) {
+function isLegacyOptimizedBackgroundRequest(url) {
   return (
     url.pathname.startsWith(`${APP_SCOPE_PATH}assets/backgrounds/kairos-bg-`) &&
-    url.pathname.includes("-mobile") &&
     url.pathname.endsWith(".jpg")
   );
 }
@@ -131,7 +130,7 @@ async function addAssetsToCache(cache, urls) {
   );
 }
 
-async function pruneMobileBackgroundsFromCaches() {
+async function pruneLegacyBackgroundsFromCaches() {
   const cacheNames = await caches.keys();
   await Promise.allSettled(
     cacheNames
@@ -142,7 +141,7 @@ async function pruneMobileBackgroundsFromCaches() {
         await Promise.allSettled(
           cachedRequests.map((request) => {
             const requestUrl = new URL(request.url);
-            return isMobileOptimizedBackgroundRequest(requestUrl)
+            return isLegacyOptimizedBackgroundRequest(requestUrl)
               ? cache.delete(request)
               : Promise.resolve(false);
           })
@@ -175,7 +174,7 @@ self.addEventListener("activate", (event) => {
           )
           .map((cacheName) => caches.delete(cacheName))
       );
-      await pruneMobileBackgroundsFromCaches();
+      await pruneLegacyBackgroundsFromCaches();
       await self.clients.claim();
     })()
   );
@@ -201,7 +200,7 @@ async function respondToNavigation(event) {
 
 async function fetchAndCache(request) {
   const requestUrl = new URL(request.url);
-  const fetchRequest = shouldPersistInAppShell(requestUrl) || isDesktopOriginalBackgroundRequest(requestUrl)
+  const fetchRequest = shouldPersistInAppShell(requestUrl) || isOriginalBackgroundRequest(requestUrl)
     ? new Request(request, { cache: "reload" })
     : request;
   const networkResponse = await fetch(fetchRequest);
@@ -243,8 +242,8 @@ self.addEventListener("message", (event) => {
     return;
   }
 
-  if (payload.type === "PRUNE_MOBILE_BACKGROUNDS") {
-    event.waitUntil(pruneMobileBackgroundsFromCaches());
+  if (payload.type === "PRUNE_LEGACY_BACKGROUNDS") {
+    event.waitUntil(pruneLegacyBackgroundsFromCaches());
     return;
   }
 

@@ -138,20 +138,20 @@ function printDirectoryReport(label, directoryPath, { failOnLowResolution = true
   return failures;
 }
 
-function readDesktopBackdropReferences() {
+function readOriginalBackdropReferences() {
   const script = fs.readFileSync(scriptPath, "utf8");
-  const matches = [...script.matchAll(/desktop:\s*"([^"]+)"/g)];
+  const matches = [...script.matchAll(/src:\s*"([^"]+)"/g)];
   return matches.map((match) => match[1]);
 }
 
-function verifyDesktopBackdropReferences(desktopDir) {
+function verifyOriginalBackdropReferences(desktopDir) {
   const failures = [];
-  const references = readDesktopBackdropReferences();
+  const references = readOriginalBackdropReferences();
   const originalPrefix = "./assets/backgrounds/original/";
 
-  process.stdout.write("\nDesktop slideshow references\n");
+  process.stdout.write("\nOriginal slideshow references\n");
   if (!references.length) {
-    return ["No desktop backdrop references were found in docs/script.js."];
+    return ["No original backdrop references were found in docs/script.js."];
   }
 
   references.forEach((reference) => {
@@ -161,13 +161,13 @@ function verifyDesktopBackdropReferences(desktopDir) {
     const withinDesktopDir = path.dirname(filePath) === desktopDir;
     process.stdout.write(`${isOriginal && exists && withinDesktopDir ? "OK " : "BAD"} ${reference}\n`);
     if (!isOriginal) {
-      failures.push(`Desktop reference is not in ${originalPrefix}: ${reference}`);
+      failures.push(`Slideshow reference is not in ${originalPrefix}: ${reference}`);
     }
     if (!exists) {
-      failures.push(`Desktop reference is missing: ${reference}`);
+      failures.push(`Slideshow reference is missing: ${reference}`);
     }
     if (exists && !withinDesktopDir) {
-      failures.push(`Desktop reference is outside the verified originals folder: ${reference}`);
+      failures.push(`Slideshow reference is outside the verified originals folder: ${reference}`);
     }
   });
 
@@ -188,7 +188,7 @@ function main() {
   }
 
   failures.push(...printDirectoryReport("Desktop original background report", desktopDir));
-  failures.push(...verifyDesktopBackdropReferences(desktopDir));
+  failures.push(...verifyOriginalBackdropReferences(desktopDir));
 
   if (failures.length) {
     process.stderr.write("\nBackground original verification failed:\n");

@@ -79,14 +79,7 @@ const aggressivePerformanceMode = false;
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(max-width: 920px)");
-const desktopBackdropMinWidthPx = 1024;
-const mobileBackdropMaxWidthPx = desktopBackdropMinWidthPx - 1;
-const desktopBackdropImageMedia = `(min-width: ${desktopBackdropMinWidthPx}px)`;
-const backdropMobilePortraitImageMedia = `(max-width: ${mobileBackdropMaxWidthPx}px) and (orientation: portrait)`;
-const backdropMobileLandscapeImageMedia = `(max-width: ${mobileBackdropMaxWidthPx}px) and (orientation: landscape)`;
-const desktopBackdropImageQuery = window.matchMedia(desktopBackdropImageMedia);
-const backdropMobilePortraitImageQuery = window.matchMedia(backdropMobilePortraitImageMedia);
-const backdropMobileLandscapeImageQuery = window.matchMedia(backdropMobileLandscapeImageMedia);
+const originalBackdropAssetMode = "original";
 const pageTitles = {
   en: "Kairos VIII Japan Itinerary",
   ja: "Kairos VIII Japan Itinerary"
@@ -111,64 +104,46 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-06-offline-v27";
+const offlineBundleVersion = "2026-05-08-offline-v28";
 const siteBackdropImages = [
   {
-    desktop: "./assets/backgrounds/original/AdobeStock_133085779.jpeg",
-    mobile: "./assets/backgrounds/kairos-bg-01-mobile-fast.jpg",
-    mobileLandscape: "./assets/backgrounds/kairos-bg-01-mobile-landscape-fast.jpg",
+    src: "./assets/backgrounds/original/AdobeStock_133085779.jpeg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/original/AdobeStock_240362026.jpeg",
-    mobile: "./assets/backgrounds/kairos-bg-02-mobile.jpg",
-    mobileLandscape: "./assets/backgrounds/kairos-bg-02-mobile-landscape.jpg",
+    src: "./assets/backgrounds/original/AdobeStock_240362026.jpeg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/original/AdobeStock_254432280.jpeg",
-    mobile: "./assets/backgrounds/kairos-bg-03-mobile.jpg",
-    mobileLandscape: "./assets/backgrounds/kairos-bg-03-mobile-landscape.jpg",
+    src: "./assets/backgrounds/original/AdobeStock_254432280.jpeg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/original/AdobeStock_306542962_Editorial_Use_Only.jpeg",
-    mobile: "./assets/backgrounds/kairos-bg-04-mobile.jpg",
-    mobileLandscape: "./assets/backgrounds/kairos-bg-04-mobile-landscape.jpg",
+    src: "./assets/backgrounds/original/AdobeStock_306542962_Editorial_Use_Only.jpeg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/original/AdobeStock_412986259_Editorial_Use_Only.jpeg",
-    mobile: "./assets/backgrounds/kairos-bg-05-mobile.jpg",
-    mobileLandscape: "./assets/backgrounds/kairos-bg-05-mobile-landscape.jpg",
+    src: "./assets/backgrounds/original/AdobeStock_412986259_Editorial_Use_Only.jpeg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/original/AdobeStock_448171056_Editorial_Use_Only.jpeg",
-    mobile: "./assets/backgrounds/kairos-bg-06-mobile.jpg",
-    mobileLandscape: "./assets/backgrounds/kairos-bg-06-mobile-landscape.jpg",
+    src: "./assets/backgrounds/original/AdobeStock_448171056_Editorial_Use_Only.jpeg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/original/AdobeStock_498231018.jpeg",
-    mobile: "./assets/backgrounds/kairos-bg-07-mobile.jpg",
-    mobileLandscape: "./assets/backgrounds/kairos-bg-07-mobile-landscape.jpg",
+    src: "./assets/backgrounds/original/AdobeStock_498231018.jpeg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/original/AdobeStock_537070829.jpeg",
-    mobile: "./assets/backgrounds/kairos-bg-08-mobile.jpg",
-    mobileLandscape: "./assets/backgrounds/kairos-bg-08-mobile-landscape.jpg",
+    src: "./assets/backgrounds/original/AdobeStock_537070829.jpeg",
     position: "center center"
   },
   {
-    desktop: "./assets/backgrounds/original/AdobeStock_61109814.jpeg",
-    mobile: "./assets/backgrounds/kairos-bg-09-mobile.jpg",
-    mobileLandscape: "./assets/backgrounds/kairos-bg-09-mobile-landscape.jpg",
+    src: "./assets/backgrounds/original/AdobeStock_61109814.jpeg",
     position: "center center"
   }
 ];
-const siteBackdropImageUrls = siteBackdropImages.map((image) => image.desktop);
+const siteBackdropImageUrls = siteBackdropImages.map((image) => image.src);
 const siteBackdropRotationIntervalMs = 10000;
 const appAssetConfigRuntimeGlobal = "__JAPAN_APP_ASSETS__";
 const budgetUiRuntimeGlobal = "__JAPAN_BUDGET_UI__";
@@ -186,6 +161,7 @@ const routeMapOriginUrl = "https://tiles.openfreemap.org";
 const routeMapStyleUrl = "https://tiles.openfreemap.org/styles/positron";
 const routeMapInitializeTimeoutMs = 12000;
 const radioPlaylistId = "PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa";
+const radioPlaylistArtworkUrl = "./assets/images/kairos-viii-magazine-cover-560.jpg";
 const radioYoutubePlayerHost = "https://www.youtube-nocookie.com";
 const radioYoutubePlayerId = "kairos-viii-radio-player";
 const radioGithubPagesOrigin = "https://kairosfx.github.io";
@@ -230,7 +206,7 @@ const budgetTravelerCountMax = 24;
 const budgetSharedRoomOccupancy = 2;
 const budgetTravelersPerRoomDefault = budgetSharedRoomOccupancy;
 const serviceWorkerWarmMessageType = "CACHE_URLS";
-const serviceWorkerPruneMobileBackgroundsMessageType = "PRUNE_MOBILE_BACKGROUNDS";
+const serviceWorkerPruneLegacyBackgroundsMessageType = "PRUNE_LEGACY_BACKGROUNDS";
 const checklistPrintDefaultStartDate = "2026-03-10";
 const checklistPrintFallbackDurationDefinition = {
   minutes: [30, 30],
@@ -1470,46 +1446,12 @@ function getBackdropViewportWidth() {
 }
 
 function getBackdropAssetMode() {
-  const viewportWidth = getBackdropViewportWidth();
-  if (viewportWidth >= desktopBackdropMinWidthPx || desktopBackdropImageQuery.matches) {
-    return "desktop";
-  }
-
-  const isLandscapeViewport =
-    window.matchMedia("(orientation: landscape)").matches ||
-    (Number(window.innerWidth) || 0) > (Number(window.innerHeight) || 0);
-  if (
-    viewportWidth <= mobileBackdropMaxWidthPx &&
-    isLandscapeViewport &&
-    backdropMobileLandscapeImageQuery.matches
-  ) {
-    return "mobile-landscape";
-  }
-
-  return viewportWidth <= mobileBackdropMaxWidthPx ? "mobile-portrait" : "desktop";
-}
-
-function isDesktopBackdropViewport() {
-  return getBackdropAssetMode() === "desktop";
+  return originalBackdropAssetMode;
 }
 
 function getBackdropImageUrlForIndex(index = 0) {
   const image = getBackdropImageDefinitionForIndex(index);
-  if (!image) {
-    return "";
-  }
-
-  const assetMode = getBackdropAssetMode();
-
-  if (assetMode === "mobile-landscape" && image.mobileLandscape) {
-    return image.mobileLandscape;
-  }
-
-  if (assetMode === "mobile-portrait" && image.mobile) {
-    return image.mobile;
-  }
-
-  return image.desktop;
+  return image?.src || "";
 }
 
 function setBackdropSlideImage(slide, imageUrl, image = null) {
@@ -1518,21 +1460,13 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
   }
 
   const imageDefinition = image || {
-    desktop: imageUrl,
-    mobile: "",
+    src: imageUrl,
     position: "center center"
   };
-  const desktopUrl = imageDefinition.desktop || imageUrl;
-  const mobilePortraitUrl = imageDefinition.mobile || "";
-  const mobileLandscapeUrl = imageDefinition.mobileLandscape || "";
-  const resolvedDesktopUrl = getResolvedBackdropImageUrl(desktopUrl);
-  const resolvedMobilePortraitUrl = mobilePortraitUrl ? getResolvedBackdropImageUrl(mobilePortraitUrl) : "";
-  const resolvedMobileLandscapeUrl = mobileLandscapeUrl ? getResolvedBackdropImageUrl(mobileLandscapeUrl) : "";
+  const sourceUrl = imageDefinition.src || imageUrl;
+  const resolvedSourceUrl = getResolvedBackdropImageUrl(sourceUrl);
   const position = imageDefinition.position || "center center";
   let picture = slide.querySelector("[data-site-background-picture]");
-  let desktopSource = slide.querySelector("[data-site-background-desktop-source]");
-  let mobilePortraitSource = slide.querySelector("[data-site-background-mobile-source]");
-  let mobileLandscapeSource = slide.querySelector("[data-site-background-mobile-landscape-source]");
   let img = slide.querySelector("[data-site-background-img]");
 
   if (!picture) {
@@ -1542,24 +1476,7 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
     slide.append(picture);
   }
 
-  if (!desktopSource) {
-    desktopSource = document.createElement("source");
-    desktopSource.dataset.siteBackgroundDesktopSource = "";
-  }
-
-  if (!mobilePortraitSource) {
-    mobilePortraitSource = document.createElement("source");
-    mobilePortraitSource.dataset.siteBackgroundMobileSource = "";
-  }
-
-  if (!mobileLandscapeSource) {
-    mobileLandscapeSource = document.createElement("source");
-    mobileLandscapeSource.dataset.siteBackgroundMobileLandscapeSource = "";
-  }
-
-  picture.prepend(desktopSource);
-  desktopSource.after(mobileLandscapeSource);
-  mobileLandscapeSource.after(mobilePortraitSource);
+  picture.querySelectorAll("source").forEach((source) => source.remove());
 
   if (!img) {
     img = document.createElement("img");
@@ -1571,26 +1488,9 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
     picture.append(img);
   }
 
-  desktopSource.media = desktopBackdropImageMedia;
-  desktopSource.srcset = resolvedDesktopUrl;
-
-  mobilePortraitSource.media = backdropMobilePortraitImageMedia;
-  if (resolvedMobilePortraitUrl) {
-    mobilePortraitSource.srcset = resolvedMobilePortraitUrl;
-  } else {
-    mobilePortraitSource.removeAttribute("srcset");
-  }
-
-  mobileLandscapeSource.media = backdropMobileLandscapeImageMedia;
-  if (resolvedMobileLandscapeUrl) {
-    mobileLandscapeSource.srcset = resolvedMobileLandscapeUrl;
-  } else {
-    mobileLandscapeSource.removeAttribute("srcset");
-  }
-
-  img.src = resolvedDesktopUrl;
+  img.src = resolvedSourceUrl;
   slide.dataset.siteBackdropAssetMode = getBackdropAssetMode();
-  slide.dataset.siteBackdropDesktopSrc = resolvedDesktopUrl;
+  slide.dataset.siteBackdropSrc = resolvedSourceUrl;
   slide.style.removeProperty("background-image");
   slide.style.setProperty("--site-backdrop-position", position);
 }
@@ -1622,16 +1522,12 @@ function getBackdropDebugInfo() {
   return {
     mode: getBackdropAssetMode(),
     viewportWidth: getBackdropViewportWidth(),
-    desktopBreakpoint: desktopBackdropMinWidthPx,
-    desktopMedia: desktopBackdropImageMedia,
-    mobilePortraitMedia: backdropMobilePortraitImageMedia,
-    mobileLandscapeMedia: backdropMobileLandscapeImageMedia,
     slides: siteBackdropSlides.map((slide) => {
       const img = slide.querySelector("[data-site-background-img]");
       return {
         state: slide.dataset.siteBackgroundSlide || "",
         mode: slide.dataset.siteBackdropAssetMode || "",
-        desktopSrc: slide.dataset.siteBackdropDesktopSrc || "",
+        src: slide.dataset.siteBackdropSrc || "",
         currentSrc: img?.currentSrc || img?.src || ""
       };
     })
@@ -1825,7 +1721,7 @@ function initializeDecorativeMediaExperience() {
   siteBackdropActiveSlideIndex = 0;
   siteBackdropInitialized = true;
   root.dataset.backdropAssetMode = getBackdropAssetMode();
-  pruneMobileBackgroundCachesForDesktop();
+  pruneLegacyBackgroundCaches();
   bindBackdropSlideshowMotionUnlock();
 
   if (shouldAnimateBackdropSlideshow()) {
@@ -2390,7 +2286,7 @@ function syncRadioControls() {
       : radioState.pendingPlay
         ? "..."
         : radioState.isPlaying
-          ? "⏸"
+          ? "II"
           : "▶";
   }
   if (radioPreviousButton) {
@@ -2667,6 +2563,27 @@ function setRadioThemePalette(palette = kairosRadioFallbackTheme, { source = "fa
   radioPlayerNode?.setAttribute("data-radio-theme-source", root.dataset.songTheme);
 }
 
+function getRadioWaveSeedValue(seed = "") {
+  const text = String(seed || radioPlaylistId || radioStationMeta.title);
+  let hash = 0;
+  for (let index = 0; index < text.length; index += 1) {
+    hash = (hash * 31 + text.charCodeAt(index)) >>> 0;
+  }
+  return hash;
+}
+
+function setRadioWaveSignature(seed = "") {
+  const hash = getRadioWaveSeedValue(seed);
+  const rhythm = hash % 1000;
+  const beatSpeed = 1.82 + (rhythm % 36) / 100;
+  const waveSpeed = 6.1 + ((rhythm >> 2) % 54) / 10;
+  const rippleSpeed = 2.18 + ((rhythm >> 4) % 32) / 100;
+
+  root.style.setProperty("--song-wave-beat-speed", `${beatSpeed.toFixed(2)}s`);
+  root.style.setProperty("--song-wave-speed", `${waveSpeed.toFixed(2)}s`);
+  root.style.setProperty("--song-wave-ripple-speed", `${rippleSpeed.toFixed(2)}s`);
+}
+
 function applyRadioFallbackTheme() {
   radioThemeExtractionToken += 1;
   setRadioThemePalette(kairosRadioFallbackTheme, { source: "fallback" });
@@ -2860,11 +2777,21 @@ function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
 }
 
 function setRadioDefaultArtwork() {
-  showRadioArtworkFallback();
-  updateRadioMediaSessionMetadata();
+  radioCurrentVideoId = "";
+  radioCurrentTrackTitle = radioCurrentTrackTitle || radioStationMeta.title;
+  setRadioWaveSignature(radioPlaylistId);
+  setRadioArtworkSource(radioPlaylistArtworkUrl, {
+    kind: "playlist",
+    title: "Kairos VIII playlist"
+  });
 }
 
 function handleRadioArtworkError() {
+  if (radioArtworkNode?.dataset.radioArtworkKind !== "playlist") {
+    setRadioDefaultArtwork();
+    return;
+  }
+
   showRadioArtworkFallback();
   updateRadioMediaSessionMetadata();
 }
@@ -2879,6 +2806,7 @@ function updateRadioArtworkFromInfo(info = {}) {
   const videoId = getRadioVideoIdFromInfo(info);
   if (videoId) {
     radioCurrentVideoId = videoId;
+    setRadioWaveSignature(`${videoId}:${radioCurrentTrackTitle || ""}`);
     setRadioArtworkSource(getRadioArtworkUrlForVideo(videoId), {
       kind: "track",
       title: radioCurrentTrackTitle || radioStationMeta.title
@@ -2887,6 +2815,7 @@ function updateRadioArtworkFromInfo(info = {}) {
   }
 
   if (!radioCurrentArtworkUrl || (trackTitle && trackTitle !== previousTrackTitle)) {
+    setRadioWaveSignature(trackTitle || radioPlaylistId);
     setRadioDefaultArtwork();
     return;
   }
@@ -4135,10 +4064,9 @@ function warmCachedAppAssets(urls) {
     .catch(() => urls);
 }
 
-function pruneMobileBackgroundCachesForDesktop() {
+function pruneLegacyBackgroundCaches() {
   if (
     offlineSnapshotMode ||
-    !isDesktopBackdropViewport() ||
     !("serviceWorker" in navigator) ||
     !window.isSecureContext
   ) {
@@ -4154,7 +4082,7 @@ function pruneMobileBackgroundCachesForDesktop() {
         registration.installing;
 
       target?.postMessage?.({
-        type: serviceWorkerPruneMobileBackgroundsMessageType
+        type: serviceWorkerPruneLegacyBackgroundsMessageType
       });
       return true;
     })
@@ -5547,7 +5475,7 @@ function bootOfflineExperience() {
     .then((registration) => {
       offlineRegistration = registration;
       offlineRegistrationReady = true;
-      pruneMobileBackgroundCachesForDesktop();
+      pruneLegacyBackgroundCaches();
       syncOfflineToolsUI();
     })
     .catch(() => {
@@ -12104,7 +12032,7 @@ function getMaxWindowScrollTop() {
 
 function getTimedMotionDuration(
   distance,
-  { min = 170, max = 390, multiplier = 0.1 } = {}
+  { min = 190, max = 500, multiplier = 0.12 } = {}
 ) {
   return clamp(Math.round(min + Math.abs(distance) * multiplier), min, max);
 }
@@ -12118,9 +12046,7 @@ function easeTimedMotion(progress) {
     return 1;
   }
 
-  return progress < 0.5
-    ? 4 * progress * progress * progress
-    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+  return 1 - Math.pow(1 - progress, 3);
 }
 
 function cancelWindowScrollAnimation(didReachTarget = false) {
@@ -12162,9 +12088,9 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
   const startTop = currentTop;
   const delta = clampedTop - startTop;
   const duration = getTimedMotionDuration(delta, {
-    min: 180,
-    max: 420,
-    multiplier: 0.1
+    min: 190,
+    max: 520,
+    multiplier: 0.13
   });
 
   return new Promise((resolve) => {
@@ -12247,9 +12173,9 @@ function smoothlyScrollNodeTo(
 
   const startTop = currentTop;
   const duration = getTimedMotionDuration(initialTargetTop - startTop, {
-    min: 180,
-    max: 390,
-    multiplier: 0.09
+    min: 190,
+    max: 500,
+    multiplier: 0.12
   });
 
   return new Promise((resolve) => {
@@ -13602,15 +13528,6 @@ if (checklistPrintModal) {
   });
 });
 
-[desktopBackdropImageQuery, backdropMobilePortraitImageQuery, backdropMobileLandscapeImageQuery].forEach((query) => {
-  bindMediaQueryChange(query, () => {
-    window.requestAnimationFrame(() => {
-      syncBackdropSlideSourcesForViewport();
-      pruneMobileBackgroundCachesForDesktop();
-    });
-  });
-});
-
 window.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") {
     return;
@@ -13723,7 +13640,7 @@ if (siteHeader) {
       resizeTicking = false;
       syncReducedEffectsMode();
       syncBackdropSlideSourcesForViewport();
-      pruneMobileBackgroundCachesForDesktop();
+      pruneLegacyBackgroundCaches();
       setHeaderCondensed(false);
       if (!("ResizeObserver" in window)) {
         scheduleReservedHeaderHeightSync({ forceReset: true });

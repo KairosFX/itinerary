@@ -360,6 +360,7 @@ function runStaticBuildChecks() {
   const serviceWorker = fs.readFileSync(path.join(repoRoot, "docs", "service-worker.js"), "utf8");
   const webManifest = JSON.parse(fs.readFileSync(path.join(repoRoot, "docs", "manifest.webmanifest"), "utf8"));
   const assetManifest = JSON.parse(fs.readFileSync(path.join(repoRoot, "docs", "assets", "app", "asset-manifest.json"), "utf8"));
+  const legacyMobileBackgroundNeedle = "kairos-bg-01" + "-mobile";
 
   if (!indexHtml.includes("<title>Kairos VIII Japan Itinerary</title>")) {
     throw new Error("Document title check failed.");
@@ -383,8 +384,8 @@ function runStaticBuildChecks() {
   }
   if (
     !indexHtml.includes('data-first-backdrop') ||
-    !indexHtml.includes("kairos-bg-01-mobile-fast.jpg") ||
-    !indexHtml.includes("assets/backgrounds/original/AdobeStock_133085779.jpeg")
+    !indexHtml.includes("assets/backgrounds/original/AdobeStock_133085779.jpeg") ||
+    indexHtml.includes(legacyMobileBackgroundNeedle)
   ) {
     throw new Error("First backdrop preload/style check failed.");
   }
@@ -409,11 +410,8 @@ function runStaticBuildChecks() {
   ) {
     throw new Error("Core visual app-shell cache check failed.");
   }
-  if (
-    serviceWorker.includes("./assets/backgrounds/kairos-bg-01-mobile-fast.jpg") ||
-    serviceWorker.includes("./assets/backgrounds/kairos-bg-01-mobile-landscape-fast.jpg")
-  ) {
-    throw new Error("Mobile background app-shell precache check failed.");
+  if (serviceWorker.includes("./assets/backgrounds/kairos-bg-01")) {
+    throw new Error("Legacy background app-shell precache check failed.");
   }
   if (webManifest.theme_color !== "#18261d" || webManifest.background_color !== "#050906") {
     throw new Error("Manifest Kairos color check failed.");
@@ -430,7 +428,6 @@ function runStaticBuildChecks() {
   assertFileExists(path.join("docs", "assets", "images", "kairos-viii-magazine-cover-560.jpg"));
   assertFileExists(path.join("docs", "assets", "images", "kairos-viii-magazine-cover-640.jpg"));
   assertFileExists(path.join("docs", "assets", "icons", "kairos-favicon-48.jpg"));
-  assertFileExists(path.join("docs", "assets", "backgrounds", "kairos-bg-01-mobile-fast.jpg"));
   assertFileExists(path.join("docs", "assets", "backgrounds", "original", "AdobeStock_133085779.jpeg"));
   process.stdout.write("Static SEO/PWA/build-output checks passed.\n");
 }

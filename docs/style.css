@@ -11264,6 +11264,7 @@ html[data-theme="dark"] .site-intro__title {
 }
 
 .travel-radio[data-radio-state="idle"] .travel-radio__youtube,
+.travel-radio[data-radio-state="ready"] .travel-radio__youtube,
 .travel-radio[data-radio-state="fallback"] .travel-radio__youtube {
   opacity: 0;
   visibility: hidden;
@@ -11324,7 +11325,6 @@ html[data-theme="dark"] .site-intro__title {
   display: none !important;
 }
 
-.travel-radio[data-radio-state="ready"] .travel-radio__artwork,
 .travel-radio[data-radio-state="playing"] .travel-radio__artwork,
 .travel-radio[data-radio-state="paused"] .travel-radio__artwork {
   opacity: 0;
@@ -11498,6 +11498,8 @@ html[data-theme="dark"] .site-intro__title {
   background: rgba(255, 255, 255, 0.08);
   color: #f4fbf5;
   font-size: 0.86rem;
+  font-weight: 800;
+  font-family: var(--font-sans);
   line-height: 1;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transition:
@@ -11510,8 +11512,12 @@ html[data-theme="dark"] .site-intro__title {
 .travel-radio__button--primary {
   border-color: rgba(242, 214, 177, 0.28);
   background:
-    linear-gradient(180deg, rgba(177, 113, 78, 0.36), rgba(155, 60, 51, 0.2)),
-    rgba(255, 255, 255, 0.08);
+    linear-gradient(180deg, rgba(18, 26, 35, 0.98), rgba(5, 8, 12, 0.94)),
+    rgba(9, 15, 21, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px rgba(242, 214, 177, 0.08),
+    0 0 18px rgba(242, 214, 177, 0.1);
 }
 
 .travel-radio__button:hover,
@@ -15987,11 +15993,24 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
 .travel-radio__button--primary {
   border-color: rgba(var(--theme-accent-rgb), 0.38);
   background:
-    linear-gradient(180deg, rgba(var(--theme-accent-rgb), 0.34), rgba(var(--theme-secondary-rgb), 0.13)),
-    rgba(255, 255, 255, 0.08);
+    linear-gradient(180deg, rgba(19, 27, 36, 0.98), rgba(5, 8, 12, 0.94)),
+    rgba(var(--theme-panel-rgb), 0.96);
+  color: var(--theme-text);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(var(--theme-accent-rgb), 0.08),
     0 0 24px var(--theme-glow-soft);
+}
+
+.travel-radio[data-radio-state="playing"] .travel-radio__button--primary {
+  border-color: rgba(var(--theme-accent-rgb), 0.42);
+  background:
+    linear-gradient(180deg, rgba(23, 32, 42, 0.98), rgba(7, 11, 17, 0.96)),
+    rgba(var(--theme-panel-rgb), 0.98);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px rgba(var(--theme-accent-rgb), 0.1),
+    0 0 28px var(--theme-glow-soft);
 }
 
 .travel-radio__button:hover,
@@ -16007,54 +16026,50 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
     0 0 26px var(--theme-glow-soft);
 }
 
-.travel-radio__volume {
-  color: var(--theme-muted);
+.travel-radio__button--primary:hover,
+.travel-radio__button--primary:focus-visible {
+  background:
+    linear-gradient(180deg, rgba(27, 37, 48, 0.98), rgba(8, 13, 19, 0.96)),
+    rgba(var(--theme-panel-rgb), 0.98);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 1px rgba(var(--theme-accent-rgb), 0.12),
+    0 0 30px var(--theme-glow-soft);
 }
 
-@keyframes kairosWaveOrbit {
-  0% {
-    transform: rotate(0deg) scale(0.985);
-  }
-
-  48% {
-    transform: rotate(182deg) scale(1.02);
-  }
-
-  100% {
-    transform: rotate(360deg) scale(0.985);
-  }
+.travel-radio__volume {
+  color: var(--theme-muted);
 }
 
 @keyframes kairosWaveBeat {
   0%,
   100% {
     opacity: var(--panel-wave-opacity-low, 0.27);
-    transform: scale(0.992);
+    transform: scale(0.996);
   }
 
   18% {
     opacity: var(--panel-wave-opacity-peak, 0.46);
-    transform: scale(1.012);
+    transform: scale(1.01);
   }
 
   32% {
     opacity: var(--panel-wave-opacity-mid, 0.32);
-    transform: scale(0.998);
+    transform: scale(1.002);
   }
 
   54% {
     opacity: var(--panel-wave-opacity-strong, 0.5);
-    transform: scale(1.018);
+    transform: scale(1.014);
   }
 }
 
 @keyframes kairosWaveRipple {
   0% {
     opacity: 0;
-    transform: scale(0.965);
+    transform: scale(0.988);
     box-shadow:
       0 0 0 0 rgba(var(--theme-accent-rgb), 0),
-      0 0 0 0 rgba(var(--theme-secondary-rgb), 0),
       0 0 0 rgba(var(--theme-accent-rgb), 0);
   }
 
@@ -16062,52 +16077,48 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
     opacity: var(--panel-wave-ripple-opacity, 0.42);
   }
 
-  68% {
+  72% {
     opacity: var(--panel-wave-ripple-soft, 0.2);
-    transform: scale(1.045);
+    transform: scale(1.028);
     box-shadow:
       0 0 0 0.34rem rgba(var(--theme-accent-rgb), 0.09),
-      0 0 0 0.92rem rgba(var(--theme-secondary-rgb), 0.055),
-      0 0 1.7rem rgba(var(--theme-accent-rgb), 0.16);
+      0 0 0 0.86rem rgba(var(--theme-accent-rgb), 0.045);
   }
 
   100% {
     opacity: 0;
-    transform: scale(1.085);
+    transform: scale(1.052);
     box-shadow:
       0 0 0 0.72rem rgba(var(--theme-accent-rgb), 0),
-      0 0 0 1.45rem rgba(var(--theme-secondary-rgb), 0),
-      0 0 2.1rem rgba(var(--theme-accent-rgb), 0);
+      0 0 0 1.42rem rgba(var(--theme-accent-rgb), 0);
   }
 }
 
 :root {
-  --panel-wave-bleed: 0.82rem;
-  --panel-wave-inset: -0.82rem;
-  --panel-wave-ripple-inset: 0.32rem;
-  --panel-wave-opacity: 0.42;
-  --panel-wave-opacity-low: 0.27;
-  --panel-wave-opacity-mid: 0.32;
-  --panel-wave-opacity-peak: 0.46;
-  --panel-wave-opacity-strong: 0.5;
-  --panel-wave-ripple-opacity: 0.34;
-  --panel-wave-ripple-soft: 0.2;
-  --panel-wave-speed: 8.8s;
-  --panel-wave-beat-speed: 3.2s;
-  --panel-wave-ripple-speed: 2.65s;
+  --panel-wave-bleed: 0.72rem;
+  --panel-wave-inset: -0.72rem;
+  --panel-wave-ripple-inset: -0.42rem;
+  --panel-wave-opacity: 0.34;
+  --panel-wave-opacity-low: 0.16;
+  --panel-wave-opacity-mid: 0.24;
+  --panel-wave-opacity-peak: 0.4;
+  --panel-wave-opacity-strong: 0.46;
+  --panel-wave-ripple-opacity: 0.28;
+  --panel-wave-ripple-soft: 0.12;
+  --panel-wave-beat-speed: 3.4s;
+  --panel-wave-ripple-speed: 3.1s;
 }
 
 html[data-radio-playback="playing"] {
-  --panel-wave-opacity: 0.68;
-  --panel-wave-opacity-low: 0.42;
-  --panel-wave-opacity-mid: 0.52;
-  --panel-wave-opacity-peak: 0.74;
-  --panel-wave-opacity-strong: 0.82;
-  --panel-wave-ripple-opacity: 0.56;
-  --panel-wave-ripple-soft: 0.27;
-  --panel-wave-speed: 5.8s;
-  --panel-wave-beat-speed: 1.72s;
-  --panel-wave-ripple-speed: 1.96s;
+  --panel-wave-opacity: 0.56;
+  --panel-wave-opacity-low: 0.28;
+  --panel-wave-opacity-mid: 0.42;
+  --panel-wave-opacity-peak: 0.62;
+  --panel-wave-opacity-strong: 0.68;
+  --panel-wave-ripple-opacity: 0.48;
+  --panel-wave-ripple-soft: 0.2;
+  --panel-wave-beat-speed: var(--song-wave-beat-speed, 1.94s);
+  --panel-wave-ripple-speed: var(--song-wave-ripple-speed, 2.28s);
 }
 
 .kairos-wave-surface {
@@ -16127,23 +16138,14 @@ html[data-radio-playback="playing"] {
   inset: var(--panel-wave-inset, -0.82rem);
   z-index: 0;
   display: block;
-  padding: var(--panel-wave-bleed, 0.82rem);
   border-radius: calc(var(--panel-wave-radius, var(--radius-xl, 1.4rem)) + var(--panel-wave-bleed, 0.82rem));
   pointer-events: none;
   opacity: var(--panel-wave-opacity, 0.42);
-  background:
-    repeating-radial-gradient(ellipse at center, rgba(var(--theme-accent-rgb), 0.22) 0 1px, rgba(var(--theme-secondary-rgb), 0.08) 2px 3px, transparent 4px 13px),
-    repeating-linear-gradient(90deg, transparent 0 0.54rem, rgba(var(--theme-accent-rgb), 0.22) 0.54rem 0.6rem, transparent 0.6rem 0.86rem),
-    linear-gradient(90deg, rgba(var(--theme-accent-rgb), 0.16), rgba(var(--theme-secondary-rgb), 0.11), rgba(var(--theme-accent-rgb), 0.16));
-  filter: drop-shadow(0 0 0.9rem rgba(var(--theme-accent-rgb), 0.18));
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
+  border: 1px solid rgba(var(--theme-accent-rgb), 0.42);
+  background: transparent;
+  box-shadow:
+    0 0 0 1px rgba(var(--theme-accent-rgb), 0.06),
+    0 0 0 0.36rem rgba(var(--theme-accent-rgb), 0.045);
   animation: kairosWaveBeat var(--panel-wave-beat-speed, 3.2s) ease-in-out infinite;
 }
 
@@ -16157,42 +16159,17 @@ html[data-radio-playback="playing"] {
 }
 
 .kairos-sound-wave::before {
-  padding: var(--panel-wave-bleed, 0.82rem);
-  background:
-    conic-gradient(
-      from 0deg,
-      transparent 0 8deg,
-      rgba(var(--theme-accent-rgb), 0.54) 10deg 17deg,
-      transparent 20deg 38deg,
-      rgba(var(--theme-secondary-rgb), 0.34) 42deg 50deg,
-      transparent 54deg 78deg,
-      rgba(var(--theme-accent-rgb), 0.42) 82deg 92deg,
-      transparent 96deg 132deg,
-      rgba(var(--theme-secondary-rgb), 0.32) 136deg 144deg,
-      transparent 148deg 180deg,
-      rgba(var(--theme-accent-rgb), 0.48) 184deg 194deg,
-      transparent 198deg 226deg,
-      rgba(var(--theme-secondary-rgb), 0.3) 230deg 238deg,
-      transparent 242deg 284deg,
-      rgba(var(--theme-accent-rgb), 0.38) 288deg 300deg,
-      transparent 304deg 360deg
-    );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  animation: kairosWaveOrbit var(--panel-wave-speed, 8.8s) linear infinite;
+  inset: var(--panel-wave-ripple-inset, -0.42rem);
+  border: 1px solid rgba(var(--theme-accent-rgb), 0.3);
+  animation: kairosWaveRipple var(--panel-wave-ripple-speed, 2.65s) cubic-bezier(0.2, 0.75, 0.25, 1) infinite;
 }
 
 .kairos-sound-wave::after {
-  inset: var(--panel-wave-ripple-inset, 0.32rem);
-  border: 1px solid rgba(var(--theme-accent-rgb), 0.24);
-  opacity: var(--panel-wave-ripple-opacity, 0.34);
+  inset: calc(var(--panel-wave-ripple-inset, -0.42rem) * 1.9);
+  border: 1px solid rgba(var(--theme-accent-rgb), 0.2);
+  opacity: var(--panel-wave-ripple-soft, 0.12);
   animation: kairosWaveRipple var(--panel-wave-ripple-speed, 2.65s) cubic-bezier(0.2, 0.75, 0.25, 1) infinite;
+  animation-delay: calc(var(--panel-wave-ripple-speed, 2.65s) * -0.48);
 }
 
 .content-panel,
@@ -16205,7 +16182,7 @@ html[data-radio-playback="playing"] {
 .journey-close {
   --panel-wave-bleed: 1rem;
   --panel-wave-inset: -1rem;
-  --panel-wave-ripple-inset: 0.38rem;
+  --panel-wave-ripple-inset: -0.48rem;
   --panel-wave-radius: var(--radius-xl);
 }
 
@@ -16215,15 +16192,14 @@ html[data-radio-playback="playing"] {
 #checklist .check-item:not(.is-checked) {
   --panel-wave-bleed: 0.56rem;
   --panel-wave-inset: -0.56rem;
-  --panel-wave-ripple-inset: 0.22rem;
-  --panel-wave-opacity: 0.32;
-  --panel-wave-opacity-low: 0.18;
-  --panel-wave-opacity-mid: 0.24;
+  --panel-wave-ripple-inset: -0.26rem;
+  --panel-wave-opacity: 0.28;
+  --panel-wave-opacity-low: 0.14;
+  --panel-wave-opacity-mid: 0.2;
   --panel-wave-opacity-peak: 0.34;
   --panel-wave-opacity-strong: 0.38;
-  --panel-wave-ripple-opacity: 0.26;
-  --panel-wave-ripple-soft: 0.14;
-  --panel-wave-speed: 10.8s;
+  --panel-wave-ripple-opacity: 0.22;
+  --panel-wave-ripple-soft: 0.1;
 }
 
 html[data-radio-playback="playing"] .overview-card,
@@ -16237,7 +16213,6 @@ html[data-radio-playback="playing"] #checklist .check-item:not(.is-checked) {
   --panel-wave-opacity-strong: 0.58;
   --panel-wave-ripple-opacity: 0.38;
   --panel-wave-ripple-soft: 0.2;
-  --panel-wave-speed: 7s;
 }
 
 html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave,
@@ -16254,16 +16229,16 @@ html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave::after {
     --theme-glow-soft: rgba(var(--theme-accent-rgb), 0.08);
     --panel-wave-bleed: 0.42rem;
     --panel-wave-inset: -0.42rem;
-    --panel-wave-ripple-inset: 0.16rem;
-    --panel-wave-opacity: 0.24;
-    --panel-wave-opacity-low: 0.13;
-    --panel-wave-opacity-mid: 0.18;
-    --panel-wave-opacity-peak: 0.26;
-    --panel-wave-opacity-strong: 0.3;
-    --panel-wave-ripple-opacity: 0.16;
-    --panel-wave-ripple-soft: 0.08;
-    --panel-wave-speed: 14s;
+    --panel-wave-ripple-inset: -0.18rem;
+    --panel-wave-opacity: 0.2;
+    --panel-wave-opacity-low: 0.1;
+    --panel-wave-opacity-mid: 0.15;
+    --panel-wave-opacity-peak: 0.24;
+    --panel-wave-opacity-strong: 0.28;
+    --panel-wave-ripple-opacity: 0.14;
+    --panel-wave-ripple-soft: 0.06;
     --panel-wave-beat-speed: 4.6s;
+    --panel-wave-ripple-speed: 3.8s;
   }
 
   .travel-radio::before {
@@ -16299,15 +16274,12 @@ html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave::after {
   #checklist .check-item:not(.is-checked) {
     --panel-wave-bleed: 0.34rem;
     --panel-wave-inset: -0.34rem;
-    --panel-wave-ripple-inset: 0.12rem;
+    --panel-wave-ripple-inset: -0.14rem;
     will-change: auto;
   }
 
   .kairos-sound-wave {
-    background:
-      repeating-radial-gradient(ellipse at center, rgba(var(--theme-accent-rgb), 0.14) 0 1px, transparent 2px 12px),
-      linear-gradient(90deg, rgba(var(--theme-accent-rgb), 0.12), rgba(var(--theme-secondary-rgb), 0.08), rgba(var(--theme-accent-rgb), 0.12));
-    filter: drop-shadow(0 0 0.48rem rgba(var(--theme-accent-rgb), 0.12));
+    box-shadow: 0 0 0 0.24rem rgba(var(--theme-accent-rgb), 0.035);
   }
 
   .kairos-sound-wave::after {
