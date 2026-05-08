@@ -176,7 +176,7 @@ async function respondToNavigation(event) {
 
 async function fetchAndCache(request) {
   const requestUrl = new URL(request.url);
-  const fetchRequest = shouldPersistInAppShell(requestUrl) || isOriginalBackgroundRequest(requestUrl)
+  const fetchRequest = shouldPersistInAppShell(requestUrl)
     ? new Request(request, { cache: "reload" })
     : request;
   const networkResponse = await fetch(fetchRequest);
@@ -185,11 +185,14 @@ async function fetchAndCache(request) {
 }
 
 async function respondToCachedAsset(event) {
+  const requestUrl = new URL(event.request.url);
   const cachedResponse = await matchCachedResponse(event.request);
   if (cachedResponse) {
-    event.waitUntil(
-      fetchAndCache(event.request).catch(() => null)
-    );
+    if (!isOriginalBackgroundRequest(requestUrl)) {
+      event.waitUntil(
+        fetchAndCache(event.request).catch(() => null)
+      );
+    }
     return cachedResponse;
   }
 

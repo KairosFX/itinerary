@@ -1,4 +1,4 @@
-const OFFLINE_CACHE_VERSION = "5f87a7f86b-2684b7b71e-137c67fc27-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-b88f5bc579";
+const OFFLINE_CACHE_VERSION = "bf08af980f-2684b7b71e-30fccb5c5f-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08-8d7acd383b";
 const CACHE_PREFIX = "japan-escape-itinerary-";
 const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
@@ -17,8 +17,8 @@ const APP_SHELL_PATHS = [
   "./assets/icons/kairos-icon-512.jpg",
   "./assets/radio/playlist-thumbnail.jpg",
   "./assets/images/kairos-viii-magazine-cover-560.jpg",
-  "./assets/app/style.5f87a7f86b.css",
-  "./assets/app/script.137c67fc27.js",
+  "./assets/app/style.bf08af980f.css",
+  "./assets/app/script.30fccb5c5f.js",
   "./assets/app/routeStyle.2684b7b71e.css",
   "./assets/app/routeContent.0a456839b7.js",
   "./assets/app/budgetUi.c9b56d76dd.js",
@@ -201,7 +201,7 @@ async function respondToNavigation(event) {
 
 async function fetchAndCache(request) {
   const requestUrl = new URL(request.url);
-  const fetchRequest = shouldPersistInAppShell(requestUrl) || isOriginalBackgroundRequest(requestUrl)
+  const fetchRequest = shouldPersistInAppShell(requestUrl)
     ? new Request(request, { cache: "reload" })
     : request;
   const networkResponse = await fetch(fetchRequest);
@@ -210,11 +210,14 @@ async function fetchAndCache(request) {
 }
 
 async function respondToCachedAsset(event) {
+  const requestUrl = new URL(event.request.url);
   const cachedResponse = await matchCachedResponse(event.request);
   if (cachedResponse) {
-    event.waitUntil(
-      fetchAndCache(event.request).catch(() => null)
-    );
+    if (!isOriginalBackgroundRequest(requestUrl)) {
+      event.waitUntil(
+        fetchAndCache(event.request).catch(() => null)
+      );
+    }
     return cachedResponse;
   }
 

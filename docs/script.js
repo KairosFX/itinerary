@@ -104,7 +104,7 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-08-offline-v30";
+const offlineBundleVersion = "2026-05-08-offline-v31";
 const siteBackdropImages = [
   {
     src: "./assets/backgrounds/original/AdobeStock_133085779.jpeg"
@@ -1374,6 +1374,9 @@ const radioState = {
 let radioLayoutObserver = null;
 let floatingControlLayoutFrame = 0;
 let uiVisibilityLastScrollY = 0;
+let controlHighlightSyncFrame = 0;
+let controlHighlightResizeObserver = null;
+let navigationHydrationToken = 0;
 
 function getResolvedDocumentUrl(resourceUrl = "") {
   try {
@@ -1474,6 +1477,9 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
     picture.append(img);
   }
 
+  const isInitialVisibleBackdrop = !siteBackdropInitialized || slide.classList.contains("is-active");
+  img.loading = isInitialVisibleBackdrop ? "eager" : "lazy";
+  img.fetchPriority = "low";
   setImageSourceIfChanged(img, resolvedSourceUrl);
   slide.dataset.siteBackdropAssetMode = getBackdropAssetMode();
   slide.dataset.siteBackdropSrc = resolvedSourceUrl;
@@ -1551,6 +1557,7 @@ function warmNextBackdropImage() {
 
   siteBackdropPreloadImage = new Image();
   siteBackdropPreloadImage.decoding = "async";
+  siteBackdropPreloadImage.fetchPriority = "low";
   siteBackdropPreloadImage.src = getResolvedBackdropImageUrl(getBackdropImageUrlForIndex(getNextBackdropImageIndex()));
 }
 
@@ -2738,12 +2745,28 @@ function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
     updateRadioThemeFromArtwork(sourceUrl);
   }
   if (radioArtworkNode) {
-    radioArtworkNode.hidden = false;
-    setImageSourceIfChanged(radioArtworkNode, sourceUrl);
+    radioArtworkNode.dataset.radioArtworkSrc = sourceUrl;
     radioArtworkNode.dataset.radioArtworkKind = kind;
     radioArtworkNode.alt = title ? `${title} artwork` : "";
+    if (radioState.isHidden && !radioState.isPlaying && !radioState.pendingPlay) {
+      radioArtworkNode.hidden = true;
+      radioArtworkNode.removeAttribute("src");
+    } else {
+      radioArtworkNode.hidden = false;
+      setImageSourceIfChanged(radioArtworkNode, sourceUrl);
+    }
   }
   updateRadioMediaSessionMetadata();
+}
+
+function ensureRadioArtworkImageLoaded() {
+  if (!radioArtworkNode || !radioCurrentArtworkUrl) {
+    return;
+  }
+
+  radioArtworkNode.hidden = false;
+  radioArtworkNode.dataset.radioArtworkSrc = radioCurrentArtworkUrl;
+  setImageSourceIfChanged(radioArtworkNode, radioCurrentArtworkUrl);
 }
 
 function setRadioDefaultArtwork() {
@@ -2945,6 +2968,7 @@ function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
     controls: "0",
     disablekb: "1",
     fs: "0",
+    html5: "1",
     iv_load_policy: "3",
     list: radioPlaylistId,
     listType: "playlist",
@@ -2956,6 +2980,7 @@ function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
   const origin = getRadioYoutubeOrigin();
   if (origin) {
     params.set("origin", origin);
+    params.set("widget_referrer", origin);
   }
   return `${radioYoutubePlayerHost}/embed/videoseries?${params.toString()}`;
 }
@@ -3641,6 +3666,7 @@ function playRadio() {
     return;
   }
 
+  ensureRadioArtworkImageLoaded();
   radioState.pendingPlay = true;
   setRadioState("loading");
   syncRadioControls();
@@ -3900,6 +3926,7 @@ function setRadioHidden(nextHidden, { persist = true } = {}) {
   }
   syncRadioVisibilityUi();
   if (!radioState.isHidden && radioCurrentArtworkUrl) {
+    ensureRadioArtworkImageLoaded();
     updateRadioThemeFromArtwork(radioCurrentArtworkUrl);
   }
 }
@@ -12884,6 +12911,7 @@ function setLanguage(language) {
   syncRadioStationUi();
   syncUiVisibilityButton();
   scheduleDayCardRowHeights();
+  scheduleControlHighlightSync({ immediate: true, doubleFrame: true });
 }
 
 function applyTheme(theme, options = {}) {
@@ -12911,6 +12939,82 @@ function updateLanguageButtons(language) {
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
+
+  syncLanguageSwitcherHighlight({ immediate: true });
+}
+
+function syncLanguageSwitcherHighlight({ immediate = false } = {}) {
+  headerAccessoryGroups.forEach((switcher) => {
+    const activeButton =
+      switcher.querySelector(".language-button.is-active") ||
+      switcher.querySelector(`[data-set-language="${root.lang === "ja" ? "ja" : "en"}"]`) ||
+      switcher.querySelector(".language-button");
+
+    if (!activeButton) {
+      switcher.style.removeProperty("--language-highlight-opacity");
+      return;
+    }
+
+    const switcherRect = switcher.getBoundingClientRect();
+    const buttonRect = activeButton.getBoundingClientRect();
+    if (!switcherRect.width || !buttonRect.width) {
+      return;
+    }
+
+    const nextX = Math.max(0, buttonRect.left - switcherRect.left);
+    const nextWidth = Math.max(0, buttonRect.width);
+    if (immediate) {
+      switcher.classList.add("is-measuring");
+    }
+    switcher.style.setProperty("--language-highlight-x", `${Math.round(nextX)}px`);
+    switcher.style.setProperty("--language-highlight-width", `${Math.round(nextWidth)}px`);
+    switcher.style.setProperty("--language-highlight-opacity", "1");
+    if (immediate) {
+      switcher.offsetWidth;
+      switcher.classList.remove("is-measuring");
+    }
+  });
+}
+
+function syncControlHighlights({ immediate = false } = {}) {
+  syncLanguageSwitcherHighlight({ immediate });
+  syncSectionNavIndicator({ immediate });
+  scrollSectionTabIntoView();
+}
+
+function scheduleControlHighlightSync({ immediate = false, doubleFrame = false } = {}) {
+  if (controlHighlightSyncFrame) {
+    window.cancelAnimationFrame(controlHighlightSyncFrame);
+  }
+
+  controlHighlightSyncFrame = window.requestAnimationFrame(() => {
+    controlHighlightSyncFrame = 0;
+    syncControlHighlights({ immediate });
+    if (doubleFrame) {
+      window.requestAnimationFrame(() => {
+        syncControlHighlights({ immediate: true });
+      });
+    }
+  });
+}
+
+function initializeControlHighlightResizeSync() {
+  if (controlHighlightResizeObserver || !("ResizeObserver" in window)) {
+    return;
+  }
+
+  controlHighlightResizeObserver = new window.ResizeObserver(() => {
+    scheduleControlHighlightSync({ immediate: true });
+  });
+
+  [
+    ...headerAccessoryGroups,
+    ...languageButtons,
+    sectionNavTrack,
+    ...sectionTabs
+  ]
+    .filter(Boolean)
+    .forEach((node) => controlHighlightResizeObserver.observe(node));
 }
 
 function restoreWindowScrollTop(scrollTop) {
@@ -13287,20 +13391,50 @@ function activatePanelForNavigation(panelId) {
   syncSectionNavIndicator({ immediate: true });
   clearSiteTransitionState();
 
-  void ensureSectionAssetsReady(panelId)
-    .then(() => ensureSectionInitialized(panelId))
-    .then(() => {
-      if (getActivePanelId() !== panelId) {
-        return;
-      }
-
-      setActivePanel(panelId, { syncContent: true, store: false });
-    })
-    .catch((error) => {
-      console.error(`Failed to hydrate section after navigation: ${panelId}`, error);
-    });
+  scheduleSectionHydrationAfterNavigation(panelId);
 
   return hasChanged;
+}
+
+function scheduleSectionHydrationAfterNavigation(panelId) {
+  const token = ++navigationHydrationToken;
+  const runHydration = () => {
+    if (token !== navigationHydrationToken || getActivePanelId() !== panelId) {
+      return;
+    }
+
+    void ensureSectionAssetsReady(panelId)
+      .then(() => ensureSectionInitialized(panelId))
+      .then(() => {
+        if (token !== navigationHydrationToken || getActivePanelId() !== panelId) {
+          return;
+        }
+
+        setActivePanel(panelId, { syncContent: true, store: false });
+        scheduleControlHighlightSync({ immediate: true });
+      })
+      .catch((error) => {
+        console.error(`Failed to hydrate section after navigation: ${panelId}`, error);
+      });
+  };
+
+  if (initializedSections.has(panelId)) {
+    runHydration();
+    return;
+  }
+
+  window.setTimeout(() => {
+    if (token !== navigationHydrationToken || getActivePanelId() !== panelId) {
+      return;
+    }
+
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(runHydration, { timeout: 420 });
+      return;
+    }
+
+    runHydration();
+  }, 120);
 }
 
 async function activatePanel(panelId, options = {}) {
@@ -13342,7 +13476,9 @@ async function bootApp() {
 
   initializeUiVisibilityToggle();
   bindSectionNavMotion();
+  initializeControlHighlightResizeSync();
   syncSectionNavIndicator({ immediate: true });
+  scheduleControlHighlightSync({ immediate: true, doubleFrame: true });
   bootOfflineExperience();
   root.classList.remove("intro-pending", "intro-active", "intro-leaving");
   revealAllContentPanels();
@@ -13364,6 +13500,7 @@ async function bootApp() {
   if (document.fonts?.ready) {
     document.fonts.ready.then(() => {
       scheduleDayCardRowHeights();
+      scheduleControlHighlightSync({ immediate: true, doubleFrame: true });
     });
   }
 }
@@ -13460,7 +13597,7 @@ if (checklistPrintModal) {
   bindMediaQueryChange(query, () => {
     syncReducedEffectsMode({ force: true });
     window.requestAnimationFrame(() => {
-      syncSectionNavIndicator({ immediate: true });
+      syncControlHighlights({ immediate: true });
       syncFloatingControlLayout();
     });
   });
@@ -13585,7 +13722,7 @@ if (siteHeader) {
       }
       updateMaxScrollableY();
       syncSectionNavToScroll({ force: true });
-      syncSectionNavIndicator({ immediate: true });
+      syncControlHighlights({ immediate: true });
       syncProgressTimeline();
       scheduleDayCardRowHeights();
       resizeRouteMapsIfReady();

@@ -16212,3 +16212,122 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
     will-change: auto !important;
   }
 }
+
+/* Final resize-sync and media-embed polish */
+.language-switcher,
+.site-header.is-condensed .language-switcher {
+  --language-highlight-x: 0.12rem;
+  --language-highlight-width: calc((100% - 0.24rem) / 2);
+  --language-highlight-opacity: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.language-switcher::before,
+html[lang="ja"] .language-switcher::before {
+  left: 0 !important;
+  right: auto !important;
+  width: var(--language-highlight-width) !important;
+  transform: translate3d(var(--language-highlight-x), 0, 0) !important;
+  opacity: var(--language-highlight-opacity) !important;
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 120ms ease !important;
+  will-change: transform, width;
+}
+
+.language-switcher.is-measuring::before {
+  transition: none !important;
+}
+
+.language-button,
+.section-tab,
+.checklist-toolbar__action,
+.checklist-print-modal__button,
+.checklist-print-modal__close,
+.transit-trigger,
+.booking-item__cta,
+.booking-transit__filter,
+.budget-day-selector__button,
+.note-card__pill,
+.booking-item__status,
+.booking-item__tag,
+.booking-item__tone {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  background-clip: padding-box;
+}
+
+.language-button,
+.section-tab,
+.checklist-toolbar__action,
+.checklist-print-modal__button,
+.checklist-print-modal__close,
+.transit-trigger,
+.booking-transit__filter,
+.budget-day-selector__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.section-nav__indicator {
+  max-width: calc(100% - 0.16rem);
+  transform-origin: left center;
+}
+
+.travel-radio__youtube iframe {
+  width: 172%;
+  height: 172%;
+}
+
+.travel-radio[data-radio-state="paused"] .travel-radio__youtube {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.travel-radio[data-radio-state="paused"] .travel-radio__artwork {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 560px) {
+  .travel-radio__youtube iframe {
+    width: 184%;
+    height: 184%;
+  }
+}
+
+@media (max-width: 720px), (pointer: coarse) and (max-width: 920px) {
+  .site-backdrop__slide {
+    transition-duration: 520ms !important;
+    will-change: auto !important;
+  }
+
+  .site-header,
+  .section-nav,
+  .language-switcher,
+  .content-panel,
+  .card,
+  .stat-card,
+  .progress-card,
+  .overview-card,
+  .day-card,
+  .note-card,
+  .essentials-card,
+  .budget-day-card,
+  .budget-source-card,
+  .budget-summary-card,
+  .budget-breakdown-card,
+  .budget-status-card,
+  .budget-source-meta-card,
+  .travel-radio,
+  .travel-radio__signal {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 8px 18px rgba(0, 0, 0, 0.16) !important;
+  }
+}
