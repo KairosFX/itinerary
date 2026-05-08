@@ -11260,18 +11260,23 @@ html[data-theme="dark"] .site-intro__title {
   display: block;
   width: 100%;
   height: 100%;
+  aspect-ratio: 16 / 9;
   border: 0;
+  object-fit: cover;
 }
 
 .travel-radio[data-radio-state="idle"] .travel-radio__youtube,
 .travel-radio[data-radio-state="ready"] .travel-radio__youtube,
+.travel-radio[data-radio-state="loading"] .travel-radio__youtube,
 .travel-radio[data-radio-state="fallback"] .travel-radio__youtube {
   opacity: 0;
   visibility: hidden;
 }
 
-.travel-radio[data-radio-state="loading"] .travel-radio__youtube {
-  opacity: 0.72;
+.travel-radio[data-radio-state="playing"] .travel-radio__youtube,
+.travel-radio[data-radio-state="paused"] .travel-radio__youtube {
+  opacity: 1;
+  visibility: visible;
 }
 
 .travel-radio__signal {
@@ -16041,264 +16046,16 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
   color: var(--theme-muted);
 }
 
-@keyframes kairosWaveBeat {
-  0%,
-  100% {
-    opacity: var(--panel-wave-opacity-low, 0.27);
-    transform: scale(0.996);
-  }
-
-  18% {
-    opacity: var(--panel-wave-opacity-peak, 0.46);
-    transform: scale(1.01);
-  }
-
-  32% {
-    opacity: var(--panel-wave-opacity-mid, 0.32);
-    transform: scale(1.002);
-  }
-
-  54% {
-    opacity: var(--panel-wave-opacity-strong, 0.5);
-    transform: scale(1.014);
-  }
-}
-
-@keyframes kairosWaveRipple {
-  0% {
-    opacity: 0;
-    transform: scale(0.988);
-    box-shadow:
-      0 0 0 0 rgba(var(--theme-accent-rgb), 0),
-      0 0 0 rgba(var(--theme-accent-rgb), 0);
-  }
-
-  18% {
-    opacity: var(--panel-wave-ripple-opacity, 0.42);
-  }
-
-  72% {
-    opacity: var(--panel-wave-ripple-soft, 0.2);
-    transform: scale(1.028);
-    box-shadow:
-      0 0 0 0.34rem rgba(var(--theme-accent-rgb), 0.09),
-      0 0 0 0.86rem rgba(var(--theme-accent-rgb), 0.045);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(1.052);
-    box-shadow:
-      0 0 0 0.72rem rgba(var(--theme-accent-rgb), 0),
-      0 0 0 1.42rem rgba(var(--theme-accent-rgb), 0);
-  }
-}
-
-:root {
-  --panel-wave-bleed: 0.72rem;
-  --panel-wave-inset: -0.72rem;
-  --panel-wave-ripple-inset: -0.42rem;
-  --panel-wave-opacity: 0.34;
-  --panel-wave-opacity-low: 0.16;
-  --panel-wave-opacity-mid: 0.24;
-  --panel-wave-opacity-peak: 0.4;
-  --panel-wave-opacity-strong: 0.46;
-  --panel-wave-ripple-opacity: 0.28;
-  --panel-wave-ripple-soft: 0.12;
-  --panel-wave-beat-speed: 3.4s;
-  --panel-wave-ripple-speed: 3.1s;
-}
-
-html[data-radio-playback="playing"] {
-  --panel-wave-opacity: 0.56;
-  --panel-wave-opacity-low: 0.28;
-  --panel-wave-opacity-mid: 0.42;
-  --panel-wave-opacity-peak: 0.62;
-  --panel-wave-opacity-strong: 0.68;
-  --panel-wave-ripple-opacity: 0.48;
-  --panel-wave-ripple-soft: 0.2;
-  --panel-wave-beat-speed: var(--song-wave-beat-speed, 1.94s);
-  --panel-wave-ripple-speed: var(--song-wave-ripple-speed, 2.28s);
-}
-
-.kairos-wave-surface {
-  position: relative;
-  isolation: isolate;
-  overflow: visible;
-  contain: layout style;
-}
-
-.kairos-wave-surface > :not(.kairos-sound-wave) {
-  position: relative;
-  z-index: 1;
-}
-
-.kairos-sound-wave {
-  position: absolute;
-  inset: var(--panel-wave-inset, -0.82rem);
-  z-index: 0;
-  display: block;
-  border-radius: calc(var(--panel-wave-radius, var(--radius-xl, 1.4rem)) + var(--panel-wave-bleed, 0.82rem));
-  pointer-events: none;
-  opacity: var(--panel-wave-opacity, 0.42);
-  border: 1px solid rgba(var(--theme-accent-rgb), 0.42);
-  background: transparent;
-  box-shadow:
-    0 0 0 1px rgba(var(--theme-accent-rgb), 0.06),
-    0 0 0 0.36rem rgba(var(--theme-accent-rgb), 0.045);
-  animation: kairosWaveBeat var(--panel-wave-beat-speed, 3.2s) ease-in-out infinite;
-  animation-play-state: paused;
-}
-
-.kairos-sound-wave::before,
-.kairos-sound-wave::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-.kairos-sound-wave::before {
-  inset: var(--panel-wave-ripple-inset, -0.42rem);
-  border: 1px solid rgba(var(--theme-accent-rgb), 0.3);
-  animation: kairosWaveRipple var(--panel-wave-ripple-speed, 2.65s) cubic-bezier(0.2, 0.75, 0.25, 1) infinite;
-  animation-play-state: paused;
-}
-
-.kairos-sound-wave::after {
-  inset: calc(var(--panel-wave-ripple-inset, -0.42rem) * 1.9);
-  border: 1px solid rgba(var(--theme-accent-rgb), 0.2);
-  opacity: var(--panel-wave-ripple-soft, 0.12);
-  animation: kairosWaveRipple var(--panel-wave-ripple-speed, 2.65s) cubic-bezier(0.2, 0.75, 0.25, 1) infinite;
-  animation-delay: calc(var(--panel-wave-ripple-speed, 2.65s) * -0.48);
-  animation-play-state: paused;
-}
-
-html[data-radio-playback="playing"] .kairos-sound-wave,
-html[data-radio-playback="playing"] .kairos-sound-wave::before,
-html[data-radio-playback="playing"] .kairos-sound-wave::after {
-  animation-play-state: running;
-}
-
-html.site-ui-hidden .kairos-sound-wave,
-html.site-ui-hidden .kairos-sound-wave::before,
-html.site-ui-hidden .kairos-sound-wave::after {
-  animation-play-state: paused !important;
-}
-
-.content-panel,
-.hero-panel,
-.featured-cover,
-.budget-panel,
-.budget-notes__day-browser,
-.route-map,
-.route-map__surface,
-.journey-close {
-  --panel-wave-bleed: 1rem;
-  --panel-wave-inset: -1rem;
-  --panel-wave-ripple-inset: -0.48rem;
-  --panel-wave-radius: var(--radius-xl);
-}
-
-.overview-card,
-.stat-card,
-.progress-card,
-#checklist .check-item:not(.is-checked) {
-  --panel-wave-bleed: 0.56rem;
-  --panel-wave-inset: -0.56rem;
-  --panel-wave-ripple-inset: -0.26rem;
-  --panel-wave-opacity: 0.28;
-  --panel-wave-opacity-low: 0.14;
-  --panel-wave-opacity-mid: 0.2;
-  --panel-wave-opacity-peak: 0.34;
-  --panel-wave-opacity-strong: 0.38;
-  --panel-wave-ripple-opacity: 0.22;
-  --panel-wave-ripple-soft: 0.1;
-}
-
-html[data-radio-playback="playing"] .overview-card,
-html[data-radio-playback="playing"] .stat-card,
-html[data-radio-playback="playing"] .progress-card,
-html[data-radio-playback="playing"] #checklist .check-item:not(.is-checked) {
-  --panel-wave-opacity: 0.48;
-  --panel-wave-opacity-low: 0.28;
-  --panel-wave-opacity-mid: 0.36;
-  --panel-wave-opacity-peak: 0.52;
-  --panel-wave-opacity-strong: 0.58;
-  --panel-wave-ripple-opacity: 0.38;
-  --panel-wave-ripple-soft: 0.2;
-}
-
-html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave,
-html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave::before,
-html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave::after {
-  will-change: transform, opacity, box-shadow;
-}
-
 @media (max-width: 720px), (pointer: coarse) and (max-width: 920px) {
   :root {
     --theme-shadow: 0 14px 32px rgba(0, 0, 0, 0.24);
     --theme-shadow-strong: 0 18px 42px rgba(0, 0, 0, 0.3);
     --theme-glow: rgba(var(--theme-accent-rgb), 0.16);
     --theme-glow-soft: rgba(var(--theme-accent-rgb), 0.08);
-    --panel-wave-bleed: 0.42rem;
-    --panel-wave-inset: -0.42rem;
-    --panel-wave-ripple-inset: -0.18rem;
-    --panel-wave-opacity: 0.2;
-    --panel-wave-opacity-low: 0.1;
-    --panel-wave-opacity-mid: 0.15;
-    --panel-wave-opacity-peak: 0.24;
-    --panel-wave-opacity-strong: 0.28;
-    --panel-wave-ripple-opacity: 0.14;
-    --panel-wave-ripple-soft: 0.06;
-    --panel-wave-beat-speed: 4.6s;
-    --panel-wave-ripple-speed: 3.8s;
   }
 
   .travel-radio::before {
     opacity: 0.42;
-  }
-
-  .content-panel,
-  .hero-panel,
-  .featured-cover,
-  .overview-card,
-  .stat-card,
-  .progress-card,
-  .day-card,
-  .note-card,
-  .essentials-card,
-  .budget-panel,
-  .budget-notes__settings-panel,
-  .budget-notes__day-browser,
-  .budget-day-card,
-  .budget-source-card,
-  .budget-summary-card,
-  .budget-breakdown-card,
-  .budget-status-card,
-  .budget-source-meta-card,
-  .booking-group,
-  .booking-item,
-  .route-map,
-  .route-map__surface,
-  .route-map__detail-panel,
-  .route-map__stops,
-  .route-map__explorer,
-  .journey-close,
-  #checklist .check-item:not(.is-checked) {
-    --panel-wave-bleed: 0.34rem;
-    --panel-wave-inset: -0.34rem;
-    --panel-wave-ripple-inset: -0.14rem;
-    will-change: auto;
-  }
-
-  .kairos-sound-wave {
-    box-shadow: 0 0 0 0.24rem rgba(var(--theme-accent-rgb), 0.035);
-  }
-
-  .kairos-sound-wave::after {
-    display: none;
   }
 }
 
@@ -16362,9 +16119,6 @@ html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave::after {
   .travel-radio,
   .travel-radio::before,
   .travel-radio__signal,
-  .kairos-sound-wave,
-  .kairos-sound-wave::before,
-  .kairos-sound-wave::after,
   .section-nav__indicator,
   .language-switcher::before,
   .content-panel,
@@ -16386,9 +16140,5 @@ html.enhanced-effects[data-radio-playback="playing"] .kairos-sound-wave::after {
     animation: none !important;
     transition-duration: 1ms !important;
     will-change: auto !important;
-  }
-
-  .kairos-sound-wave {
-    display: none !important;
   }
 }

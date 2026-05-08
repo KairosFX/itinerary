@@ -198,7 +198,9 @@ const budgetSharedRoomOccupancy = 2;
 const budgetTravelersPerRoomDefault = budgetSharedRoomOccupancy;
 const serviceWorkerWarmMessageType = "CACHE_URLS";
 const serviceWorkerPruneLegacyBackgroundsMessageType = "PRUNE_LEGACY_BACKGROUNDS";
-const checklistPrintDefaultStartDate = "2026-03-10";
+const checklistTripDurationDays = 7;
+const checklistTripDefaultStartMonthIndex = 0;
+const checklistTripDefaultStartDay = 1;
 const checklistPrintFallbackDurationDefinition = {
   minutes: [30, 30],
   label: { en: "30 min", ja: "30分" }
@@ -988,35 +990,6 @@ const revealBlockSelector = [
   ".site-footer__lead",
   ".site-footer__aside"
 ].join(", ");
-const panelSoundWaveSelector = [
-  ".content-panel",
-  ".hero-panel",
-  ".featured-cover",
-  ".overview-card",
-  ".stat-card",
-  ".progress-card",
-  ".day-card",
-  ".note-card",
-  ".essentials-card",
-  ".budget-panel",
-  ".budget-notes__settings-panel",
-  ".budget-notes__day-browser",
-  ".budget-day-card",
-  ".budget-source-card",
-  ".budget-summary-card",
-  ".budget-breakdown-card",
-  ".budget-status-card",
-  ".budget-source-meta-card",
-  ".booking-group",
-  ".booking-item",
-  ".route-map",
-  ".route-map__surface",
-  ".route-map__detail-panel",
-  ".route-map__stops",
-  ".route-map__explorer",
-  ".journey-close",
-  "#checklist .check-item:not(.is-checked)"
-].join(", ");
 const initializedSections = new Set();
 const sectionInitPromises = new Map();
 const sectionInitializers = {
@@ -1400,9 +1373,6 @@ const radioState = {
 let radioLayoutObserver = null;
 let floatingControlLayoutFrame = 0;
 let uiVisibilityLastScrollY = 0;
-let panelSoundWaveFrame = 0;
-let panelSoundWaveObserver = null;
-let panelSoundWaveIntersectionObserver = null;
 
 function getResolvedBackdropImageUrl(imageUrl = "") {
   try {
@@ -2217,7 +2187,6 @@ function setRadioStatus(key) {
 
 function setRadioState(nextState) {
   radioPlayerNode?.setAttribute("data-radio-state", nextState);
-  root.dataset.radioPlayback = nextState === "playing" ? "playing" : "calm";
   setRadioStatus(nextState);
 }
 
@@ -2555,27 +2524,6 @@ function setRadioThemePalette(palette = kairosRadioFallbackTheme, { source = "fa
   radioPlayerNode?.setAttribute("data-radio-theme-source", root.dataset.songTheme);
 }
 
-function getRadioWaveSeedValue(seed = "") {
-  const text = String(seed || radioPlaylistId || radioStationMeta.title);
-  let hash = 0;
-  for (let index = 0; index < text.length; index += 1) {
-    hash = (hash * 31 + text.charCodeAt(index)) >>> 0;
-  }
-  return hash;
-}
-
-function setRadioWaveSignature(seed = "") {
-  const hash = getRadioWaveSeedValue(seed);
-  const rhythm = hash % 1000;
-  const beatSpeed = 1.82 + (rhythm % 36) / 100;
-  const waveSpeed = 6.1 + ((rhythm >> 2) % 54) / 10;
-  const rippleSpeed = 2.18 + ((rhythm >> 4) % 32) / 100;
-
-  root.style.setProperty("--song-wave-beat-speed", `${beatSpeed.toFixed(2)}s`);
-  root.style.setProperty("--song-wave-speed", `${waveSpeed.toFixed(2)}s`);
-  root.style.setProperty("--song-wave-ripple-speed", `${rippleSpeed.toFixed(2)}s`);
-}
-
 function applyRadioFallbackTheme() {
   radioThemeExtractionToken += 1;
   setRadioThemePalette(kairosRadioFallbackTheme, { source: "fallback" });
@@ -2771,7 +2719,6 @@ function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
 function setRadioDefaultArtwork() {
   radioCurrentVideoId = "";
   radioCurrentTrackTitle = radioCurrentTrackTitle || radioStationMeta.title;
-  setRadioWaveSignature(radioPlaylistId);
   setRadioArtworkSource(radioPlaylistArtworkUrl, {
     kind: "playlist",
     title: "Kairos VIII playlist"
@@ -2798,7 +2745,6 @@ function updateRadioArtworkFromInfo(info = {}) {
   const videoId = getRadioVideoIdFromInfo(info);
   if (videoId) {
     radioCurrentVideoId = videoId;
-    setRadioWaveSignature(`${videoId}:${radioCurrentTrackTitle || ""}`);
     setRadioArtworkSource(getRadioArtworkUrlForVideo(videoId), {
       kind: "track",
       title: radioCurrentTrackTitle || radioStationMeta.title
@@ -2807,7 +2753,6 @@ function updateRadioArtworkFromInfo(info = {}) {
   }
 
   if (!radioCurrentArtworkUrl || (trackTitle && trackTitle !== previousTrackTitle)) {
-    setRadioWaveSignature(trackTitle || radioPlaylistId);
     setRadioDefaultArtwork();
     return;
   }
@@ -2964,6 +2909,7 @@ function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
   const params = new URLSearchParams({
     enablejsapi: "1",
     autoplay: autoplay ? "1" : "0",
+    cc_load_policy: "0",
     controls: "0",
     disablekb: "1",
     fs: "0",
@@ -3017,6 +2963,7 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
     existingIframe.title = "Kairos VIII playlist radio";
     existingIframe.allow = "autoplay; encrypted-media; picture-in-picture";
     existingIframe.referrerPolicy = "strict-origin-when-cross-origin";
+    existingIframe.removeAttribute("allowfullscreen");
     existingIframe.removeAttribute("aria-hidden");
     mountNode.querySelectorAll("iframe").forEach((iframe) => {
       if (iframe !== existingIframe) {
@@ -3041,7 +2988,6 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   iframe.loading = "eager";
   iframe.allow = "autoplay; encrypted-media; picture-in-picture";
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
-  iframe.setAttribute("allowfullscreen", "");
   iframe.setAttribute("tabindex", "-1");
   mountNode?.replaceChildren(iframe);
   radioYoutubeIframe = iframe;
@@ -6250,109 +6196,6 @@ function syncReducedEffectsMode({ force = false } = {}) {
     bindBackdropSlideshowMotionUnlock();
     scheduleDeferredBackdropSlideshowStart();
   }
-  if (!reducedEffectsEnabled) {
-    initializePanelSoundWaveFields();
-  }
-}
-
-function getPanelSoundWaveTargets(scope = document) {
-  const targets = new Set();
-  if (scope?.matches?.(panelSoundWaveSelector)) {
-    targets.add(scope);
-  }
-
-  scope?.querySelectorAll?.(panelSoundWaveSelector).forEach((node) => {
-    targets.add(node);
-  });
-
-  return Array.from(targets).filter((node) => !node.closest?.(".travel-radio"));
-}
-
-function mountPanelSoundWaveField(surface) {
-  if (!surface || surface.dataset.panelSoundWaveReady === "true") {
-    return;
-  }
-
-  const waveField = document.createElement("span");
-  waveField.className = "kairos-sound-wave";
-  waveField.setAttribute("aria-hidden", "true");
-  surface.prepend(waveField);
-  surface.classList.add("kairos-wave-surface");
-  surface.dataset.panelSoundWaveReady = "true";
-}
-
-function ensurePanelSoundWaveIntersectionObserver() {
-  if (panelSoundWaveIntersectionObserver || !("IntersectionObserver" in window)) {
-    return;
-  }
-
-  panelSoundWaveIntersectionObserver = new window.IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          return;
-        }
-
-        panelSoundWaveIntersectionObserver.unobserve(entry.target);
-        mountPanelSoundWaveField(entry.target);
-      });
-    },
-    {
-      rootMargin: "420px 0px 520px 0px",
-      threshold: [0, 0.01]
-    }
-  );
-}
-
-function queuePanelSoundWaveField(surface) {
-  if (!surface || surface.dataset.panelSoundWaveReady === "true" || reducedEffectsEnabled) {
-    return;
-  }
-
-  if (!("IntersectionObserver" in window)) {
-    mountPanelSoundWaveField(surface);
-    return;
-  }
-
-  ensurePanelSoundWaveIntersectionObserver();
-  if (panelSoundWaveIntersectionObserver && surface.dataset.panelSoundWaveObserved !== "true") {
-    surface.dataset.panelSoundWaveObserved = "true";
-    panelSoundWaveIntersectionObserver.observe(surface);
-  }
-}
-
-function initializePanelSoundWaveFields(scope = document) {
-  if (offlineSnapshotMode || reducedEffectsEnabled) {
-    return;
-  }
-
-  getPanelSoundWaveTargets(scope).forEach(queuePanelSoundWaveField);
-}
-
-function schedulePanelSoundWaveSync(scope = document) {
-  if (panelSoundWaveFrame) {
-    return;
-  }
-
-  panelSoundWaveFrame = window.requestAnimationFrame(() => {
-    panelSoundWaveFrame = 0;
-    initializePanelSoundWaveFields(scope);
-  });
-}
-
-function observePanelSoundWaveTargets() {
-  if (panelSoundWaveObserver || !mainContent || !("MutationObserver" in window)) {
-    return;
-  }
-
-  panelSoundWaveObserver = new MutationObserver((mutations) => {
-    if (!mutations.some((mutation) => mutation.addedNodes.length)) {
-      return;
-    }
-
-    schedulePanelSoundWaveSync(mainContent);
-  });
-  panelSoundWaveObserver.observe(mainContent, { childList: true, subtree: true });
 }
 
 function bindMediaQueryChange(query, handler) {
@@ -7123,6 +6966,16 @@ function toDateInputValue(date) {
   ].join("-");
 }
 
+function getCurrentYearChecklistTripStartDate(referenceDate = new Date()) {
+  const year = referenceDate instanceof Date && !Number.isNaN(referenceDate.getTime())
+    ? referenceDate.getFullYear()
+    : new Date().getFullYear();
+
+  return toDateInputValue(
+    new Date(year, checklistTripDefaultStartMonthIndex, checklistTripDefaultStartDay)
+  );
+}
+
 function offsetDateInputValue(startDate, dayOffset = 0) {
   const date = parseDateInputValue(startDate);
   if (!date) {
@@ -7173,11 +7026,31 @@ function formatChecklistPrintWeekdayLabel(dateInputValue) {
 }
 
 function getDefaultChecklistPrintStartDate() {
-  const firstTripDate = dayCards
-    .map((card) => String(card.dataset.tripDate || "").trim())
-    .find(isDateInputValue);
+  return getCurrentYearChecklistTripStartDate();
+}
 
-  return firstTripDate || checklistPrintDefaultStartDate;
+function getChecklistTripDateInputValue(dayNumber, startDate = getDefaultChecklistPrintStartDate()) {
+  const normalizedDay = Number.parseInt(String(dayNumber || ""), 10);
+  if (
+    !Number.isInteger(normalizedDay) ||
+    normalizedDay < 1 ||
+    normalizedDay > checklistTripDurationDays
+  ) {
+    return "";
+  }
+
+  return offsetDateInputValue(startDate, normalizedDay - 1);
+}
+
+function syncChecklistTripDateAttributes(startDate = getDefaultChecklistPrintStartDate()) {
+  dayCards.forEach((card) => {
+    const dateInput = getChecklistTripDateInputValue(card.dataset.day, startDate);
+    if (dateInput) {
+      card.dataset.tripDate = dateInput;
+    } else {
+      delete card.dataset.tripDate;
+    }
+  });
 }
 
 function getChecklistPrintDefaults(startDate = getChecklistPrintStartDate()) {
@@ -7189,6 +7062,9 @@ function getChecklistPrintDefaults(startDate = getChecklistPrintStartDate()) {
       const dayTitle = getChecklistPrintNodeText(card.querySelector(".day-region"), language);
       const dayNumber = Number.parseInt(dayId, 10);
       const dayOffset = Number.isFinite(dayNumber) ? dayNumber - 1 : index;
+      if (dayOffset < 0 || dayOffset >= checklistTripDurationDays) {
+        return null;
+      }
       const dateInput = offsetDateInputValue(startDate, dayOffset);
       const date = formatChecklistPrintDateLabel(dateInput);
       const items = Array.from(card.querySelectorAll(".check-item"))
@@ -9008,7 +8884,6 @@ function ensureSectionInitialized(sectionName) {
     .then(() => {
       initializedSections.add(sectionName);
       markSectionHydrated(sectionName);
-      initializePanelSoundWaveFields(getSectionPanel(sectionName) || document);
       updateMaxScrollableY();
 
       if (getActivePanelId() === sectionName) {
@@ -13419,11 +13294,10 @@ async function activatePanel(panelId, options = {}) {
 
 async function bootApp() {
   syncReducedEffectsMode({ force: true });
+  syncChecklistTripDateAttributes();
   exposeBackdropDebugHelper();
   initializeDecorativeMediaExperience();
   initializeRadioStation();
-  initializePanelSoundWaveFields();
-  observePanelSoundWaveTargets();
   completedHistoryDays = readStoredDaySet(completedHistoryStorageKey);
   checklistState = readStoredChecklistState();
   bookingTransitState = readStoredBookingTransitState();
