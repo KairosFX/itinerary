@@ -11243,8 +11243,11 @@ html[data-theme="dark"] .site-intro__title {
   position: absolute;
   inset: 0;
   z-index: 2;
+  display: grid;
+  place-items: center;
   width: 100%;
   height: 100%;
+  contain: layout paint;
   overflow: hidden;
   border-radius: inherit;
   background: #030806;
@@ -11257,12 +11260,20 @@ html[data-theme="dark"] .site-intro__title {
 }
 
 .travel-radio__youtube iframe {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 145%;
+  max-width: none;
+  height: 145%;
+  max-height: none;
   aspect-ratio: 16 / 9;
   border: 0;
   object-fit: cover;
+  pointer-events: none;
+  transform: translate3d(-50%, -50%, 0);
+  transform-origin: center center;
 }
 
 .travel-radio[data-radio-state="idle"] .travel-radio__youtube,
@@ -11287,6 +11298,7 @@ html[data-theme="dark"] .site-intro__title {
   width: 100%;
   min-width: 0;
   aspect-ratio: 16 / 9;
+  contain: layout paint;
   overflow: hidden;
   border: 1px solid rgba(211, 231, 214, 0.14);
   border-radius: 0.72rem;
@@ -16072,6 +16084,11 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
     border-radius: 0.62rem;
   }
 
+  .travel-radio__youtube iframe {
+    width: 158%;
+    height: 158%;
+  }
+
   .travel-radio__body {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
@@ -16108,6 +16125,59 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
     grid-template-columns: auto minmax(3.5rem, 1fr) 2rem;
     gap: 0.26rem;
     font-size: 0.56rem;
+  }
+}
+
+@media (max-width: 720px), (pointer: coarse) and (max-width: 920px) {
+  :root {
+    --theme-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+    --theme-shadow-strong: 0 14px 30px rgba(0, 0, 0, 0.24);
+    --theme-glow: rgba(var(--theme-accent-rgb), 0.12);
+    --theme-glow-soft: rgba(var(--theme-accent-rgb), 0.06);
+  }
+
+  .travel-radio,
+  .travel-radio__signal,
+  .site-header,
+  .section-nav,
+  .language-switcher,
+  .content-panel,
+  .card,
+  .day-card,
+  .note-card,
+  .essentials-card,
+  .overview-card,
+  .stat-card,
+  .progress-card,
+  .budget-day-card,
+  .booking-group,
+  .booking-item,
+  .route-map__surface {
+    backdrop-filter: none !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 10px 24px rgba(0, 0, 0, 0.18) !important;
+  }
+
+  .travel-radio::before,
+  .site-intro__glow,
+  .section-tab::before,
+  .section-tab::after {
+    opacity: 0 !important;
+    filter: none !important;
+    box-shadow: none !important;
+  }
+
+  .section-nav__indicator,
+  .travel-radio__button,
+  .travel-radio__edge-toggle,
+  .travel-radio__button--primary {
+    box-shadow: none !important;
+  }
+
+  .reveal-block {
+    filter: none !important;
+    will-change: auto !important;
   }
 }
 

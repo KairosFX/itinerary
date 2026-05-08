@@ -104,7 +104,7 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-08-offline-v29";
+const offlineBundleVersion = "2026-05-08-offline-v30";
 const siteBackdropImages = [
   {
     src: "./assets/backgrounds/original/AdobeStock_133085779.jpeg"
@@ -136,6 +136,7 @@ const siteBackdropImages = [
 ];
 const siteBackdropImageUrls = siteBackdropImages.map((image) => image.src);
 const siteBackdropRotationIntervalMs = 10000;
+const siteBackdropLazyLoadDelayMs = 5600;
 const appAssetConfigRuntimeGlobal = "__JAPAN_APP_ASSETS__";
 const budgetUiRuntimeGlobal = "__JAPAN_BUDGET_UI__";
 const budgetContentRuntimeGlobal = "__JAPAN_BUDGET_CONTENT__";
@@ -1374,11 +1375,34 @@ let radioLayoutObserver = null;
 let floatingControlLayoutFrame = 0;
 let uiVisibilityLastScrollY = 0;
 
-function getResolvedBackdropImageUrl(imageUrl = "") {
+function getResolvedDocumentUrl(resourceUrl = "") {
   try {
-    return new URL(imageUrl, window.location.href).href;
+    return new URL(resourceUrl, window.location.href).href;
   } catch {
-    return imageUrl;
+    return resourceUrl;
+  }
+}
+
+function getResolvedBackdropImageUrl(imageUrl = "") {
+  return getResolvedDocumentUrl(imageUrl);
+}
+
+function isSameDocumentResourceUrl(currentUrl = "", nextUrl = "") {
+  return getResolvedDocumentUrl(currentUrl) === getResolvedDocumentUrl(nextUrl);
+}
+
+function setImageSourceIfChanged(imageNode, sourceUrl) {
+  if (!imageNode || !sourceUrl) {
+    return;
+  }
+
+  const currentSource =
+    imageNode.getAttribute("src") ||
+    imageNode.currentSrc ||
+    imageNode.src ||
+    "";
+  if (!currentSource || !isSameDocumentResourceUrl(currentSource, sourceUrl)) {
+    imageNode.src = sourceUrl;
   }
 }
 
@@ -1450,7 +1474,7 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
     picture.append(img);
   }
 
-  img.src = resolvedSourceUrl;
+  setImageSourceIfChanged(img, resolvedSourceUrl);
   slide.dataset.siteBackdropAssetMode = getBackdropAssetMode();
   slide.dataset.siteBackdropSrc = resolvedSourceUrl;
   slide.style.removeProperty("background-image");
@@ -1583,12 +1607,14 @@ function scheduleDeferredBackdropSlideshowStart() {
     scheduleBackdropSlideshow();
   };
 
-  if (typeof window.requestIdleCallback === "function") {
-    window.requestIdleCallback(startSlideshow, { timeout: 2200 });
-    return;
-  }
+  window.setTimeout(() => {
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(startSlideshow, { timeout: 1400 });
+      return;
+    }
 
-  window.setTimeout(startSlideshow, 1600);
+    startSlideshow();
+  }, siteBackdropLazyLoadDelayMs);
 }
 
 function unlockBackdropSlideshowMotion() {
@@ -2706,10 +2732,14 @@ function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
 
   radioCurrentArtworkUrl = sourceUrl;
   radioPlayerNode?.setAttribute("data-radio-artwork-state", kind);
-  updateRadioThemeFromArtwork(sourceUrl);
+  if (radioState.isHidden && !radioState.isPlaying && !radioState.pendingPlay) {
+    applyRadioFallbackTheme();
+  } else {
+    updateRadioThemeFromArtwork(sourceUrl);
+  }
   if (radioArtworkNode) {
     radioArtworkNode.hidden = false;
-    radioArtworkNode.src = sourceUrl;
+    setImageSourceIfChanged(radioArtworkNode, sourceUrl);
     radioArtworkNode.dataset.radioArtworkKind = kind;
     radioArtworkNode.alt = title ? `${title} artwork` : "";
   }
@@ -2909,7 +2939,9 @@ function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
   const params = new URLSearchParams({
     enablejsapi: "1",
     autoplay: autoplay ? "1" : "0",
+    autohide: "1",
     cc_load_policy: "0",
+    color: "white",
     controls: "0",
     disablekb: "1",
     fs: "0",
@@ -2918,7 +2950,8 @@ function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
     listType: "playlist",
     modestbranding: "1",
     playsinline: "1",
-    rel: "0"
+    rel: "0",
+    showinfo: "0"
   });
   const origin = getRadioYoutubeOrigin();
   if (origin) {
@@ -2963,6 +2996,7 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
     existingIframe.title = "Kairos VIII playlist radio";
     existingIframe.allow = "autoplay; encrypted-media; picture-in-picture";
     existingIframe.referrerPolicy = "strict-origin-when-cross-origin";
+    existingIframe.loading = "lazy";
     existingIframe.removeAttribute("allowfullscreen");
     existingIframe.removeAttribute("aria-hidden");
     mountNode.querySelectorAll("iframe").forEach((iframe) => {
@@ -2985,7 +3019,7 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   iframe.dataset.radioAutoplay = autoplay ? "true" : "false";
   iframe.width = "320";
   iframe.height = "180";
-  iframe.loading = "eager";
+  iframe.loading = "lazy";
   iframe.allow = "autoplay; encrypted-media; picture-in-picture";
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
   iframe.setAttribute("tabindex", "-1");
@@ -3865,6 +3899,9 @@ function setRadioHidden(nextHidden, { persist = true } = {}) {
     storeRadioHidden(radioState.isHidden);
   }
   syncRadioVisibilityUi();
+  if (!radioState.isHidden && radioCurrentArtworkUrl) {
+    updateRadioThemeFromArtwork(radioCurrentArtworkUrl);
+  }
 }
 
 function handleRadioVolumeInput() {
@@ -11942,7 +11979,7 @@ function getMaxWindowScrollTop() {
 
 function getTimedMotionDuration(
   distance,
-  { min = 190, max = 500, multiplier = 0.12 } = {}
+  { min = 340, max = 580, multiplier = 0.1 } = {}
 ) {
   return clamp(Math.round(min + Math.abs(distance) * multiplier), min, max);
 }
@@ -11997,11 +12034,7 @@ function smoothlyScrollWindowTo(nextTop, { behavior = getScrollBehavior() } = {}
 
   const startTop = currentTop;
   const delta = clampedTop - startTop;
-  const duration = getTimedMotionDuration(delta, {
-    min: 190,
-    max: 520,
-    multiplier: 0.13
-  });
+  const duration = getTimedMotionDuration(delta);
 
   return new Promise((resolve) => {
     const animationState = {
@@ -12082,11 +12115,7 @@ function smoothlyScrollNodeTo(
   }
 
   const startTop = currentTop;
-  const duration = getTimedMotionDuration(initialTargetTop - startTop, {
-    min: 190,
-    max: 500,
-    multiplier: 0.12
-  });
+  const duration = getTimedMotionDuration(initialTargetTop - startTop);
 
   return new Promise((resolve) => {
     const animationState = {
@@ -13401,7 +13430,7 @@ resetProgressOpenButtons.forEach((button) => {
 
 backToTopButtons.forEach((button) => {
   button.addEventListener("click", async () => {
-    void smoothlyScrollWindowTo(0, { behavior: "auto" });
+    void smoothlyScrollWindowTo(0);
   });
 });
 
