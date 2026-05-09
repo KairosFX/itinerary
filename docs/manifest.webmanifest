@@ -5,8 +5,8 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#050906",
-  "theme_color": "#18261d",
+  "background_color": "#020605",
+  "theme_color": "#020605",
   "icons": [
     {
       "src": "./assets/icons/kairos-icon-192.jpg",

@@ -104,7 +104,7 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-09-offline-v32";
+const offlineBundleVersion = "2026-05-09-offline-v33";
 const siteBackdropImages = [
   {
     src: "./assets/backgrounds/original/AdobeStock_133085779.jpeg"
@@ -172,8 +172,8 @@ const radioStationMeta = {
   album: "Kairos VIII"
 };
 const kairosRadioFallbackTheme = {
-  accent: [218, 132, 65],
-  secondary: [96, 125, 158]
+  accent: [127, 183, 255],
+  secondary: [255, 155, 74]
 };
 const radioDefaultVolume = 3;
 const radioMinVolume = 1;
@@ -6070,7 +6070,7 @@ function updateThemeColorMeta(theme) {
     return;
   }
 
-  themeColorMeta.content = "#070b10";
+  themeColorMeta.content = "#020605";
 }
 
 function isLikelyLowerPowerDevice() {

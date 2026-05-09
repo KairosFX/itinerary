@@ -16401,3 +16401,512 @@ html[lang="ja"] .language-switcher::before {
     box-shadow: none !important;
   }
 }
+
+/* OLED final pass: palette, radio fit, and paint economy */
+:root {
+  --bg-deep: #020605;
+  --panel-dark: rgba(3, 10, 9, 0.88);
+  --panel-soft: rgba(8, 20, 18, 0.78);
+  --text-main: #f4efe2;
+  --text-muted: #b6c4b8;
+  --accent-cyan: #61f4ff;
+  --accent-flame: #ff9b4a;
+  --accent-violet: #a970ff;
+  --accent-sakura: #ff7ab6;
+  --accent-fuji: #7fb7ff;
+  --accent-primary: var(--accent-fuji);
+  --accent-secondary: var(--accent-flame);
+  --accent-glow: rgba(97, 244, 255, 0.18);
+  --border-soft: rgba(127, 183, 255, 0.16);
+  --theme-bg: var(--bg-deep);
+  --theme-panel-rgb: 3, 10, 9;
+  --theme-panel-strong-rgb: 8, 20, 18;
+  --theme-panel: var(--panel-soft);
+  --theme-panel-strong: var(--panel-dark);
+  --theme-text: var(--text-main);
+  --theme-muted: rgba(182, 196, 184, 0.78);
+  --theme-muted-strong: rgba(244, 239, 226, 0.9);
+  --theme-accent-rgb: 127, 183, 255;
+  --theme-accent: rgb(var(--theme-accent-rgb));
+  --theme-accent-soft: rgba(var(--theme-accent-rgb), 0.14);
+  --theme-accent-faint: rgba(var(--theme-accent-rgb), 0.07);
+  --theme-secondary-rgb: 255, 155, 74;
+  --theme-secondary: rgb(var(--theme-secondary-rgb));
+  --theme-secondary-soft: rgba(var(--theme-secondary-rgb), 0.13);
+  --theme-border: var(--border-soft);
+  --theme-border-strong: rgba(var(--theme-accent-rgb), 0.28);
+  --theme-glow: rgba(var(--theme-accent-rgb), 0.18);
+  --theme-glow-soft: rgba(var(--theme-accent-rgb), 0.09);
+  --theme-glow-strong: rgba(var(--theme-accent-rgb), 0.28);
+  --theme-focus: rgba(var(--theme-accent-rgb), 0.9);
+  --theme-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+  --theme-shadow-strong: 0 18px 44px rgba(0, 0, 0, 0.36);
+  --bg: var(--bg-deep);
+  --bg-accent: #06100f;
+  --surface: var(--panel-soft);
+  --surface-strong: var(--panel-dark);
+  --text: var(--text-main);
+  --muted: var(--text-muted);
+  --line: var(--border-soft);
+  --line-strong: rgba(var(--theme-accent-rgb), 0.28);
+  --accent: var(--accent-primary);
+  --accent-deep: var(--accent-fuji);
+  --accent-soft: rgba(var(--theme-accent-rgb), 0.14);
+  --accent-gold: var(--accent-flame);
+  --accent-indigo: var(--accent-violet);
+  --green: var(--accent-cyan);
+  --shadow: var(--theme-shadow);
+  --shadow-hover: var(--theme-shadow-strong);
+}
+
+html,
+body {
+  background: var(--bg-deep) !important;
+  color: var(--text-main);
+}
+
+.site-backdrop__slide {
+  transition-duration: 1100ms !important;
+}
+
+.site-header {
+  background:
+    linear-gradient(180deg, rgba(2, 6, 5, 0.9), rgba(2, 6, 5, 0.66)),
+    rgba(2, 6, 5, 0.62) !important;
+  border-bottom-color: rgba(127, 183, 255, 0.12) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24) !important;
+}
+
+.content-panel,
+.card,
+.stat-card,
+.progress-card,
+.overview-card,
+.day-card,
+.note-card,
+.essentials-card,
+.featured-cover,
+.journey-close,
+.budget-notes__settings-panel,
+.budget-notes__day-browser,
+.budget-day-card,
+.budget-source-card,
+.budget-summary-card,
+.budget-breakdown-card,
+.budget-status-card,
+.budget-source-meta-card,
+.booking-group,
+.booking-item,
+.route-map__surface,
+.route-map__detail-panel,
+.route-map__stops,
+.route-map__explorer,
+.notes-editor__input,
+#checklist .check-item {
+  border-color: var(--border-soft) !important;
+  background:
+    linear-gradient(180deg, rgba(8, 20, 18, 0.86), rgba(3, 10, 9, 0.82)),
+    var(--panel-soft) !important;
+  color: var(--text-main);
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.055),
+    0 12px 28px rgba(0, 0, 0, 0.26) !important;
+}
+
+.content-panel {
+  background:
+    linear-gradient(180deg, rgba(8, 20, 18, 0.8), rgba(3, 10, 9, 0.74)),
+    rgba(3, 10, 9, 0.72) !important;
+}
+
+html.enhanced-effects .card:hover,
+html.enhanced-effects .stat-card:hover,
+html.enhanced-effects .progress-card:hover,
+html.enhanced-effects .overview-card:hover,
+html.enhanced-effects .day-card:hover,
+html.enhanced-effects .note-card:hover,
+html.enhanced-effects .essentials-card:hover,
+html.enhanced-effects .booking-item:hover {
+  border-color: rgba(var(--theme-accent-rgb), 0.26) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.07),
+    0 16px 34px rgba(0, 0, 0, 0.3),
+    0 0 18px var(--theme-glow-soft) !important;
+}
+
+.hero-copy,
+.section-intro,
+.featured-cover__copy p:not(.section-tag),
+.note-card p,
+.notes-block__heading p,
+.notes-editor__label,
+.notes-editor__status,
+.journey-close__copyright,
+.site-footer p {
+  color: var(--text-muted) !important;
+}
+
+.site-frame-title__eyebrow,
+.header-brand-kicker,
+.eyebrow,
+.overview-label,
+.section-tag,
+.day-label,
+.notes-studio__eyebrow,
+.note-card__route-label {
+  color: rgba(var(--theme-accent-rgb), 0.9) !important;
+}
+
+.hero-panel__copy::after,
+.progress-card__heading::after,
+.section-heading::after {
+  background: linear-gradient(90deg, var(--accent-cyan), rgba(127, 183, 255, 0)) !important;
+  box-shadow: 0 0 16px rgba(97, 244, 255, 0.16);
+}
+
+.progress-overview__bar,
+html[data-theme="dark"] .progress-overview__bar {
+  border-color: rgba(var(--theme-accent-rgb), 0.16) !important;
+  background: rgba(2, 6, 5, 0.72) !important;
+}
+
+.progress-overview__bar-fill,
+.progress-item__meter-fill,
+html[data-theme="dark"] .progress-overview__bar-fill,
+html[data-theme="dark"] .progress-item__meter-fill {
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-fuji), var(--accent-violet)) !important;
+  box-shadow: 0 0 18px rgba(97, 244, 255, 0.18) !important;
+}
+
+.section-nav,
+.site-header.is-condensed .section-nav,
+.language-switcher,
+.site-header.is-condensed .language-switcher {
+  border-color: rgba(var(--theme-accent-rgb), 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(8, 20, 18, 0.82), rgba(3, 10, 9, 0.72)),
+    rgba(3, 10, 9, 0.74) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.05),
+    0 10px 26px rgba(0, 0, 0, 0.22) !important;
+}
+
+.section-nav__viewport {
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.section-nav__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.section-nav__track {
+  display: inline-flex !important;
+  min-width: max-content !important;
+  gap: 0.08rem !important;
+}
+
+.section-tab,
+.site-header.is-condensed .section-tab {
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 10rem;
+  min-height: 2.18rem !important;
+  padding: 0.44rem 0.64rem !important;
+  border-color: rgba(244, 239, 226, 0.08) !important;
+  color: rgba(244, 239, 226, 0.7) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.section-tab:hover,
+.section-tab:focus-visible,
+.section-tab.is-active,
+.section-tab[aria-selected="true"] {
+  border-color: rgba(var(--theme-accent-rgb), 0.3) !important;
+  background:
+    linear-gradient(180deg, rgba(var(--theme-accent-rgb), 0.16), rgba(97, 244, 255, 0.06)),
+    rgba(3, 10, 9, 0.76) !important;
+  color: var(--text-main) !important;
+}
+
+.section-nav__indicator {
+  background:
+    linear-gradient(180deg, rgba(var(--theme-accent-rgb), 0.24), rgba(97, 244, 255, 0.08)),
+    rgba(var(--theme-accent-rgb), 0.08) !important;
+  box-shadow:
+    0 0 0 1px rgba(var(--theme-accent-rgb), 0.14),
+    0 0 18px var(--theme-glow-soft) !important;
+}
+
+.checklist-toolbar__action,
+.booking-item__cta,
+.transit-trigger,
+.budget-day-selector__button {
+  border-color: rgba(var(--theme-accent-rgb), 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(var(--theme-accent-rgb), 0.11), rgba(255, 155, 74, 0.05)),
+    rgba(3, 10, 9, 0.72) !important;
+  color: var(--text-main) !important;
+}
+
+.checklist-toolbar__action:hover,
+.checklist-toolbar__action:focus-visible,
+.booking-item__cta:hover,
+.booking-item__cta:focus-visible,
+.transit-trigger:hover,
+.transit-trigger:focus-visible,
+.budget-day-selector__button:hover,
+.budget-day-selector__button:focus-visible,
+.budget-day-selector__button.is-active {
+  border-color: rgba(var(--theme-accent-rgb), 0.32) !important;
+  box-shadow:
+    0 0 0 1px rgba(var(--theme-accent-rgb), 0.08),
+    0 12px 28px rgba(0, 0, 0, 0.24),
+    0 0 18px var(--theme-glow-soft) !important;
+}
+
+.notes-studio__chip,
+.note-card__pill,
+.booking-item__tag,
+.booking-item__tone,
+.booking-item__status,
+.budget-pill,
+.budget-chip {
+  border-color: rgba(var(--theme-accent-rgb), 0.16) !important;
+  background: rgba(var(--theme-accent-rgb), 0.08) !important;
+  color: rgba(244, 239, 226, 0.88) !important;
+}
+
+.travel-radio {
+  grid-template-columns: minmax(7.8rem, 0.42fr) minmax(0, 1fr);
+  width: min(27rem, calc(100vw - 1.25rem));
+  gap: 0.42rem;
+  overflow: visible;
+  border-color: rgba(var(--theme-accent-rgb), 0.24) !important;
+  background:
+    linear-gradient(120deg, rgba(var(--theme-accent-rgb), 0.12), rgba(97, 244, 255, 0.035) 42%, rgba(255, 155, 74, 0.075)),
+    linear-gradient(180deg, rgba(8, 20, 18, 0.92), rgba(3, 10, 9, 0.9)),
+    var(--panel-dark) !important;
+  color: var(--text-main);
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.06),
+    0 12px 30px rgba(0, 0, 0, 0.3),
+    0 0 18px var(--theme-glow-soft) !important;
+}
+
+.travel-radio::before,
+.travel-radio[data-radio-state="playing"]::before,
+.travel-radio[data-radio-collapsed="true"]::before {
+  content: none !important;
+  display: none !important;
+}
+
+.travel-radio[data-radio-collapsed="true"] {
+  width: auto;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.travel-radio__signal {
+  border-color: rgba(var(--theme-accent-rgb), 0.2) !important;
+  background:
+    linear-gradient(135deg, rgba(var(--theme-accent-rgb), 0.1), rgba(255, 155, 74, 0.07)),
+    #020605 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.055),
+    0 0 0 1px rgba(var(--theme-accent-rgb), 0.04) !important;
+}
+
+.travel-radio[data-radio-state="playing"] .travel-radio__signal {
+  border-color: rgba(var(--theme-accent-rgb), 0.34) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.07),
+    0 0 20px var(--theme-glow-soft) !important;
+}
+
+.travel-radio__youtube,
+.travel-radio__artwork {
+  background: #020605 !important;
+}
+
+.travel-radio__artwork {
+  object-fit: contain !important;
+}
+
+.travel-radio__youtube iframe {
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  transform: none !important;
+  transform-origin: center center !important;
+  background: #020605;
+}
+
+.travel-radio__edge-toggle {
+  left: 0;
+  top: 50%;
+  width: 2.36rem;
+  min-width: 2.36rem;
+  height: 3.05rem;
+  border-color: rgba(var(--theme-accent-rgb), 0.24) !important;
+  border-right-color: rgba(var(--theme-accent-rgb), 0.16) !important;
+  border-radius: 0.86rem 0 0 0.86rem;
+  background:
+    linear-gradient(180deg, rgba(8, 20, 18, 0.96), rgba(3, 10, 9, 0.94)),
+    var(--panel-dark) !important;
+  color: var(--text-main);
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.24) !important;
+  transform: translate(calc(-100% + 1px), -50%);
+}
+
+.travel-radio__edge-toggle:hover,
+.travel-radio__edge-toggle:focus-visible {
+  border-color: rgba(var(--theme-accent-rgb), 0.42) !important;
+  transform: translate(calc(-100% - 0.08rem), -50%);
+}
+
+.travel-radio[data-radio-collapsed="true"] .travel-radio__edge-toggle {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: var(--floating-control-button-size);
+  min-width: var(--floating-control-button-size);
+  height: var(--floating-control-button-size);
+  border-radius: 999px;
+  transform: none;
+}
+
+.travel-radio[data-radio-collapsed="true"] .travel-radio__edge-toggle:hover,
+.travel-radio[data-radio-collapsed="true"] .travel-radio__edge-toggle:focus-visible {
+  transform: translateY(-1px);
+}
+
+.travel-radio__button,
+.travel-radio__edge-toggle {
+  border-color: rgba(var(--theme-accent-rgb), 0.2) !important;
+}
+
+.travel-radio__button:hover,
+.travel-radio__button:focus-visible,
+.travel-radio__edge-toggle:hover,
+.travel-radio__edge-toggle:focus-visible {
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.08),
+    0 0 18px var(--theme-glow-soft) !important;
+}
+
+.checklist-print-modal__backdrop {
+  background: rgba(0, 0, 0, 0.66) !important;
+  backdrop-filter: none !important;
+}
+
+.checklist-print-modal__sheet,
+.checklist-print-editor__settings,
+.checklist-print-editor__day {
+  border-color: var(--border-soft) !important;
+  background:
+    linear-gradient(180deg, rgba(8, 20, 18, 0.94), rgba(3, 10, 9, 0.9)),
+    var(--panel-dark) !important;
+  color: var(--text-main) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.055),
+    0 16px 34px rgba(0, 0, 0, 0.28) !important;
+}
+
+.checklist-print-modal__header,
+.checklist-print-modal__footer {
+  border-color: rgba(var(--theme-accent-rgb), 0.12) !important;
+  background: rgba(3, 10, 9, 0.72) !important;
+}
+
+.checklist-print-editor__field input,
+.checklist-print-editor__field select,
+.checklist-print-editor__item {
+  border-color: rgba(var(--theme-accent-rgb), 0.12) !important;
+  background: rgba(2, 6, 5, 0.72) !important;
+  color: var(--text-main) !important;
+}
+
+.checklist-print-preview__paper {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28) !important;
+}
+
+@media (max-width: 720px), (pointer: coarse) and (max-width: 920px) {
+  :root {
+    --theme-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    --theme-shadow-strong: 0 12px 24px rgba(0, 0, 0, 0.24);
+    --theme-glow: rgba(var(--theme-accent-rgb), 0.1);
+    --theme-glow-soft: rgba(var(--theme-accent-rgb), 0.05);
+  }
+
+  .site-backdrop__slide {
+    transition-duration: 520ms !important;
+    will-change: auto !important;
+  }
+
+  .site-header,
+  .section-nav,
+  .language-switcher,
+  .content-panel,
+  .card,
+  .stat-card,
+  .progress-card,
+  .overview-card,
+  .day-card,
+  .note-card,
+  .essentials-card,
+  .budget-day-card,
+  .budget-source-card,
+  .budget-summary-card,
+  .budget-breakdown-card,
+  .budget-status-card,
+  .budget-source-meta-card,
+  .travel-radio,
+  .travel-radio__signal {
+    backdrop-filter: none !important;
+    box-shadow:
+      inset 0 1px 0 rgba(244, 239, 226, 0.04),
+      0 8px 18px rgba(0, 0, 0, 0.18) !important;
+  }
+
+  .section-nav__indicator,
+  .travel-radio__button,
+  .travel-radio__button--primary,
+  .travel-radio__edge-toggle {
+    box-shadow: none !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .travel-radio {
+    grid-template-columns: minmax(6.25rem, 0.42fr) minmax(0, 1fr);
+    width: calc(100vw - 0.72rem);
+    gap: 0.3rem;
+    padding: 0.34rem;
+  }
+
+  .travel-radio__edge-toggle {
+    width: 2.18rem;
+    min-width: 2.18rem;
+    height: 2.8rem;
+  }
+
+  .travel-radio__youtube {
+    --radio-youtube-crop-scale: 100%;
+    --radio-youtube-crop-y: 0;
+  }
+
+  .section-tab,
+  .site-header.is-condensed .section-tab {
+    max-width: 8.4rem;
+    padding-inline: 0.52rem !important;
+  }
+}
