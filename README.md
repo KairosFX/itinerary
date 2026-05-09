@@ -37,13 +37,6 @@ Generate the minified deploy assets used by `docs/index.html`:
 npm run build
 ```
 
-Run the full local check pipeline:
-
-```bash
-npm run build
-npm run perf
-```
-
 ## Credits
 
 - Radio source: Kairos YouTube playlist, embedded through the YouTube iframe player

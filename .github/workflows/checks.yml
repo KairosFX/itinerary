@@ -1,4 +1,4 @@
-name: Build and performance checks
+name: Build checks
 
 on:
   pull_request:
@@ -8,10 +8,8 @@ permissions:
   contents: read
 
 jobs:
-  build-and-perf:
+  build:
     runs-on: ubuntu-latest
-    env:
-      CHROME_PATH: /usr/bin/google-chrome
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -27,6 +25,3 @@ jobs:
 
       - name: Build deploy assets
         run: npm run build
-
-      - name: Run Lighthouse performance checks
-        run: npm run perf

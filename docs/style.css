@@ -11279,13 +11279,13 @@ html[data-theme="dark"] .site-intro__title {
 .travel-radio[data-radio-state="idle"] .travel-radio__youtube,
 .travel-radio[data-radio-state="ready"] .travel-radio__youtube,
 .travel-radio[data-radio-state="loading"] .travel-radio__youtube,
-.travel-radio[data-radio-state="fallback"] .travel-radio__youtube {
+.travel-radio[data-radio-state="fallback"] .travel-radio__youtube,
+.travel-radio[data-radio-state="paused"] .travel-radio__youtube {
   opacity: 0;
   visibility: hidden;
 }
 
-.travel-radio[data-radio-state="playing"] .travel-radio__youtube,
-.travel-radio[data-radio-state="paused"] .travel-radio__youtube {
+.travel-radio[data-radio-state="playing"][data-radio-video-visible="true"] .travel-radio__youtube {
   opacity: 1;
   visibility: visible;
 }
@@ -11321,8 +11321,7 @@ html[data-theme="dark"] .site-intro__title {
   display: none !important;
 }
 
-.travel-radio[data-radio-state="playing"] .travel-radio__artwork,
-.travel-radio[data-radio-state="paused"] .travel-radio__artwork {
+.travel-radio[data-radio-state="playing"][data-radio-video-visible="true"] .travel-radio__artwork {
   opacity: 0;
   visibility: hidden;
 }
@@ -16307,35 +16306,46 @@ html[lang="ja"] .language-switcher::before {
   display: none !important;
 }
 
+.travel-radio__youtube {
+  --radio-youtube-crop-scale: 400%;
+  --radio-youtube-crop-y: -25%;
+}
+
 .travel-radio__youtube iframe {
-  width: 196%;
-  height: 196%;
+  width: var(--radio-youtube-crop-scale);
+  height: var(--radio-youtube-crop-scale);
+  transform: translate3d(-50%, var(--radio-youtube-crop-y), 0);
 }
 
 .travel-radio[data-radio-state="idle"] .travel-radio__youtube,
 .travel-radio[data-radio-state="ready"] .travel-radio__youtube,
 .travel-radio[data-radio-state="loading"] .travel-radio__youtube,
-.travel-radio[data-radio-state="fallback"] .travel-radio__youtube {
+.travel-radio[data-radio-state="fallback"] .travel-radio__youtube,
+.travel-radio[data-radio-state="paused"] .travel-radio__youtube,
+.travel-radio[data-radio-state="playing"]:not([data-radio-video-visible="true"]) .travel-radio__youtube {
   opacity: 0;
   visibility: hidden;
+  transition-delay: 0ms;
+  transition-duration: 1ms;
 }
 
 .travel-radio[data-radio-state="idle"] .travel-radio__artwork,
 .travel-radio[data-radio-state="ready"] .travel-radio__artwork,
 .travel-radio[data-radio-state="loading"] .travel-radio__artwork,
-.travel-radio[data-radio-state="fallback"] .travel-radio__artwork {
+.travel-radio[data-radio-state="fallback"] .travel-radio__artwork,
+.travel-radio[data-radio-state="paused"] .travel-radio__artwork,
+.travel-radio[data-radio-state="playing"]:not([data-radio-video-visible="true"]) .travel-radio__artwork {
   opacity: 1;
   visibility: visible;
 }
 
-.travel-radio[data-radio-state="playing"] .travel-radio__youtube,
-.travel-radio[data-radio-state="paused"] .travel-radio__youtube {
+.travel-radio[data-radio-state="playing"][data-radio-video-visible="true"] .travel-radio__youtube {
   opacity: 1;
   visibility: visible;
+  transition-delay: 420ms, 0ms;
 }
 
-.travel-radio[data-radio-state="playing"] .travel-radio__artwork,
-.travel-radio[data-radio-state="paused"] .travel-radio__artwork {
+.travel-radio[data-radio-state="playing"][data-radio-video-visible="true"] .travel-radio__artwork {
   opacity: 0;
   visibility: hidden;
 }
@@ -16368,9 +16378,9 @@ html[lang="ja"] .language-switcher::before {
 }
 
 @media (max-width: 560px) {
-  .travel-radio__youtube iframe {
-    width: 212%;
-    height: 212%;
+  .travel-radio__youtube {
+    --radio-youtube-crop-scale: 420%;
+    --radio-youtube-crop-y: -25%;
   }
 }
 

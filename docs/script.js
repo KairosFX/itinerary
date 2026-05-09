@@ -164,6 +164,7 @@ const radioYoutubeMaxErrorSkips = 6;
 const radioPlaybackConfirmTimeoutMs = 6500;
 const radioYoutubeInfoPollIntervalMs = 2400;
 const radioYoutubeWarmupDelayMs = 650;
+const radioYoutubeVideoRevealDelayMs = 1200;
 const radioPlaylistInfoWaitTimeoutMs = 1400;
 const radioStationMeta = {
   title: "Kairos VIII Radio",
@@ -1336,6 +1337,7 @@ let radioYoutubeReadyReject = null;
 let radioYoutubeReadyTimeout = 0;
 let radioYoutubeProbeTimer = 0;
 let radioYoutubeInfoPollTimer = 0;
+let radioYoutubeVideoRevealTimer = 0;
 let radioYoutubeProbeAttempts = 0;
 let radioYoutubeErrorSkipAttempts = 0;
 let radioYoutubeDisabled = false;
@@ -2215,6 +2217,10 @@ function setRadioStatus(key) {
 
 function setRadioState(nextState) {
   radioPlayerNode?.setAttribute("data-radio-state", nextState);
+  if (nextState !== "playing") {
+    clearRadioYoutubeVideoReveal();
+    setRadioYoutubeVideoVisible(false);
+  }
   setRadioStatus(nextState);
 }
 
@@ -2705,6 +2711,33 @@ function clearRadioYoutubeInfoPolling() {
   }
 }
 
+function clearRadioYoutubeVideoReveal() {
+  if (radioYoutubeVideoRevealTimer) {
+    window.clearTimeout(radioYoutubeVideoRevealTimer);
+    radioYoutubeVideoRevealTimer = 0;
+  }
+}
+
+function setRadioYoutubeVideoVisible(isVisible) {
+  radioPlayerNode?.setAttribute("data-radio-video-visible", isVisible ? "true" : "false");
+}
+
+function scheduleRadioYoutubeVideoReveal(delay = radioYoutubeVideoRevealDelayMs) {
+  clearRadioYoutubeVideoReveal();
+  if (delay <= 0) {
+    setRadioYoutubeVideoVisible(true);
+    return;
+  }
+
+  setRadioYoutubeVideoVisible(false);
+  radioYoutubeVideoRevealTimer = window.setTimeout(() => {
+    radioYoutubeVideoRevealTimer = 0;
+    if (radioState.isPlaying && !radioState.loadFailed) {
+      setRadioYoutubeVideoVisible(true);
+    }
+  }, Math.max(0, Number(delay) || 0));
+}
+
 function clearRadioPlaybackConfirmation() {
   if (radioPlaybackConfirmTimeout) {
     window.clearTimeout(radioPlaybackConfirmTimeout);
@@ -2725,6 +2758,8 @@ function disableRadioYoutubeEmbed() {
   radioYoutubePlayer = null;
   radioYoutubePlayerReadyPromise = null;
   clearRadioPlaybackConfirmation();
+  clearRadioYoutubeVideoReveal();
+  setRadioYoutubeVideoVisible(false);
   clearRadioYoutubeReadinessCallbacks();
   clearRadioYoutubeInfoPolling();
   if (radioYoutubeMountNode) {
@@ -3391,6 +3426,7 @@ function handleRadioYoutubeMessage(event) {
     radioState.isPlaying = true;
     setRadioCurrentTime(getEstimatedRadioCurrentTime());
     setRadioState("playing");
+    scheduleRadioYoutubeVideoReveal(260);
     startRadioYoutubeInfoPolling();
   } else if (playerState === 0 && wasPlaying && radioState.canSkip) {
     clearRadioPlaybackConfirmation();
@@ -3533,6 +3569,7 @@ function playRadio() {
       radioState.pendingPlay = false;
       radioState.isPlaying = true;
       setRadioState("playing");
+      setRadioYoutubeVideoVisible(true);
       startRadioYoutubeInfoPolling({ immediate: true });
       syncRadioControls();
       updateRadioMediaSessionPlaybackState();
@@ -3636,6 +3673,7 @@ function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
     radioState.pendingPlay = false;
     radioState.isPlaying = true;
     setRadioState("playing");
+    scheduleRadioYoutubeVideoReveal();
     startRadioYoutubeInfoPolling({ immediate: true });
     return true;
   } catch {
@@ -3688,6 +3726,7 @@ function playNextRadioTrackFromShuffleQueue() {
 function completeRadioTrackChangeUiSync() {
   radioState.isPlaying = true;
   setRadioState("playing");
+  scheduleRadioYoutubeVideoReveal();
   startRadioYoutubeInfoPolling({ immediate: true });
   syncRadioControls();
   updateRadioMediaSessionPlaybackState();
