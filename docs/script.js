@@ -150,6 +150,16 @@ const radioPlaylistId = "PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa";
 const radioPlaylistArtworkUrl = "./assets/radio/playlist-thumbnail.jpg";
 const radioYoutubePlayerHost = "https://www.youtube-nocookie.com";
 const radioYoutubePlayerId = "kairos-viii-radio-player";
+const radioYoutubeRequiredParams = [
+  "controls",
+  "modestbranding",
+  "rel",
+  "playsinline",
+  "enablejsapi",
+  "iv_load_policy",
+  "disablekb",
+  "fs"
+];
 const radioGithubPagesOrigin = "https://kairosfx.github.io";
 const radioYoutubeReadyTimeoutMs = 9000;
 const radioYoutubeProbeDelayMs = 700;
@@ -3021,6 +3031,40 @@ function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
   return `${radioYoutubePlayerHost}/embed/videoseries?${params.toString()}`;
 }
 
+function getRadioYoutubeUrlSignature(sourceUrl) {
+  if (!sourceUrl) {
+    return "";
+  }
+
+  try {
+    const url = new URL(sourceUrl, window.location.href);
+    return [
+      url.pathname,
+      radioYoutubeRequiredParams
+        .map((key) => `${key}=${url.searchParams.get(key) || ""}`)
+        .join("&"),
+      `listType=${url.searchParams.get("listType") || ""}`,
+      `list=${url.searchParams.get("list") || ""}`
+    ].join("|");
+  } catch {
+    return "";
+  }
+}
+
+function syncRadioYoutubeIframeSource(iframe, { autoplay = false } = {}) {
+  if (!(iframe instanceof HTMLIFrameElement)) {
+    return;
+  }
+
+  const nextSrc = getRadioYoutubeEmbedUrl({ autoplay });
+  const currentSignature = getRadioYoutubeUrlSignature(iframe.getAttribute("src") || iframe.src);
+  const nextSignature = getRadioYoutubeUrlSignature(nextSrc);
+  if (!currentSignature || currentSignature !== nextSignature) {
+    iframe.src = nextSrc;
+    iframe.dataset.radioAutoplay = autoplay ? "true" : "false";
+  }
+}
+
 function getRadioYoutubeMountNode() {
   if (radioYoutubeMountNode) {
     if (radioFrameNode && radioYoutubeMountNode.parentElement !== radioFrameNode) {
@@ -3043,6 +3087,9 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   }
 
   if (radioYoutubeIframe) {
+    syncRadioYoutubeIframeSource(radioYoutubeIframe, {
+      autoplay: autoplay || radioYoutubeIframe.dataset.radioAutoplay === "true"
+    });
     if (autoplay && radioYoutubeIframe.dataset.radioAutoplay !== "true" && !radioYoutubePlayerReady) {
       radioYoutubeIframe.dataset.radioAutoplay = "true";
       radioYoutubeIframe.src = getRadioYoutubeEmbedUrl({ autoplay: true });
@@ -3065,6 +3112,9 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
         iframe.remove();
       }
     });
+    syncRadioYoutubeIframeSource(existingIframe, {
+      autoplay: autoplay || existingIframe.dataset.radioAutoplay === "true"
+    });
     if (autoplay && existingIframe.dataset.radioAutoplay !== "true" && !radioYoutubePlayerReady) {
       existingIframe.dataset.radioAutoplay = "true";
       existingIframe.src = getRadioYoutubeEmbedUrl({ autoplay: true });
@@ -3084,6 +3134,7 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   iframe.allow = "autoplay; encrypted-media; picture-in-picture";
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
   iframe.setAttribute("tabindex", "-1");
+  iframe.removeAttribute("allowfullscreen");
   mountNode?.replaceChildren(iframe);
   radioYoutubeIframe = iframe;
   return radioYoutubeIframe;
@@ -3591,7 +3642,7 @@ function handleRadioYoutubeMessage(event) {
     radioState.isPlaying = true;
     setRadioCurrentTime(getEstimatedRadioCurrentTime());
     setRadioState("playing");
-    scheduleRadioYoutubeVideoReveal(760);
+    scheduleRadioYoutubeVideoReveal();
     startRadioYoutubeInfoPolling();
   } else if (playerState === 0 && wasPlaying && radioState.canSkip) {
     clearRadioPlaybackConfirmation();
