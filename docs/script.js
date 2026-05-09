@@ -2701,18 +2701,34 @@ function applyRadioFallbackTheme() {
   setRadioThemePalette(kairosRadioFallbackTheme, { source: "fallback" });
 }
 
-function showRadioArtworkFallback() {
+function showRadioArtworkFallback({ showPlaylist = true } = {}) {
   radioCurrentVideoId = "";
-  radioCurrentArtworkUrl = "";
-  radioPlayerNode?.setAttribute("data-radio-artwork-state", "fallback");
+  radioCurrentArtworkUrl = showPlaylist ? radioPlaylistArtworkUrl : "";
+  radioPlayerNode?.setAttribute("data-radio-artwork-state", showPlaylist ? "playlist" : "fallback");
   applyRadioFallbackTheme();
   if (!radioArtworkNode) {
     return;
   }
 
-  radioArtworkNode.hidden = true;
-  radioArtworkNode.removeAttribute("src");
-  radioArtworkNode.dataset.radioArtworkKind = "fallback";
+  if (!showPlaylist) {
+    radioArtworkNode.hidden = true;
+    radioArtworkNode.removeAttribute("src");
+    radioArtworkNode.dataset.radioArtworkKind = "fallback";
+    updateRadioMediaSessionMetadata();
+    return;
+  }
+
+  radioArtworkNode.dataset.radioArtworkSrc = radioPlaylistArtworkUrl;
+  radioArtworkNode.dataset.radioArtworkKind = "playlist";
+  radioArtworkNode.alt = "Kairos VIII playlist artwork";
+  if (radioState.isHidden && !radioState.isPlaying && !radioState.pendingPlay) {
+    radioArtworkNode.hidden = true;
+    radioArtworkNode.removeAttribute("src");
+  } else {
+    radioArtworkNode.hidden = false;
+    setImageSourceIfChanged(radioArtworkNode, radioPlaylistArtworkUrl);
+  }
+  updateRadioMediaSessionMetadata();
 }
 
 function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
@@ -2768,7 +2784,7 @@ function handleRadioArtworkError() {
     return;
   }
 
-  showRadioArtworkFallback();
+  showRadioArtworkFallback({ showPlaylist: false });
   updateRadioMediaSessionMetadata();
 }
 
@@ -2782,10 +2798,17 @@ function updateRadioArtworkFromInfo(info = {}) {
   const videoId = getRadioVideoIdFromInfo(info);
   if (videoId) {
     radioCurrentVideoId = videoId;
-    setRadioArtworkSource(getRadioArtworkUrlForVideo(videoId), {
-      kind: "track",
-      title: radioCurrentTrackTitle || radioStationMeta.title
-    });
+    if (radioState.isPlaying) {
+      setRadioArtworkSource(getRadioArtworkUrlForVideo(videoId), {
+        kind: "track",
+        title: radioCurrentTrackTitle || radioStationMeta.title
+      });
+      return;
+    }
+  }
+
+  if (!radioState.isPlaying && radioArtworkNode?.dataset.radioArtworkKind !== "playlist") {
+    setRadioDefaultArtwork();
     return;
   }
 
