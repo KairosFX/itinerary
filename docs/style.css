@@ -11307,27 +11307,6 @@ html[data-theme="dark"] .site-intro__title {
     rgba(4, 9, 7, 0.84);
 }
 
-.travel-radio__signal::before {
-  content: "KAIROS FM";
-  z-index: 0;
-  color: rgba(244, 251, 245, 0.5);
-  font-size: 0.66rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-}
-
-.travel-radio__signal::after {
-  content: "";
-  position: absolute;
-  inset: auto 14% 18%;
-  height: 0.34rem;
-  border-radius: 999px;
-  background:
-    linear-gradient(90deg, rgba(244, 251, 245, 0.12), rgba(244, 251, 245, 0.38), rgba(244, 251, 245, 0.12)),
-    repeating-linear-gradient(90deg, rgba(244, 251, 245, 0.42) 0 0.12rem, transparent 0.12rem 0.42rem);
-  opacity: 0.5;
-}
-
 .travel-radio__artwork {
   position: absolute;
   inset: 0;
@@ -15975,17 +15954,6 @@ html[data-theme="dark"] #checklist .check-item.is-checked {
   background: var(--theme-bg);
 }
 
-.travel-radio__signal::before,
-.travel-radio__signal::after {
-  color: rgba(247, 237, 219, 0.5);
-}
-
-.travel-radio__signal::after {
-  background:
-    linear-gradient(90deg, rgba(var(--theme-accent-rgb), 0.1), rgba(var(--theme-accent-rgb), 0.42), rgba(var(--theme-accent-rgb), 0.1)),
-    repeating-linear-gradient(90deg, rgba(247, 237, 219, 0.42) 0 0.12rem, transparent 0.12rem 0.42rem);
-}
-
 .travel-radio__eyebrow {
   color: rgb(var(--theme-accent-rgb));
 }
@@ -16329,5 +16297,97 @@ html[lang="ja"] .language-switcher::before {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.04),
       0 8px 18px rgba(0, 0, 0, 0.16) !important;
+  }
+}
+
+/* Final privacy/performance polish */
+.travel-radio__signal::before,
+.travel-radio__signal::after {
+  content: none !important;
+  display: none !important;
+}
+
+.travel-radio__youtube iframe {
+  width: 196%;
+  height: 196%;
+}
+
+.travel-radio[data-radio-state="idle"] .travel-radio__youtube,
+.travel-radio[data-radio-state="ready"] .travel-radio__youtube,
+.travel-radio[data-radio-state="loading"] .travel-radio__youtube,
+.travel-radio[data-radio-state="fallback"] .travel-radio__youtube {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.travel-radio[data-radio-state="idle"] .travel-radio__artwork,
+.travel-radio[data-radio-state="ready"] .travel-radio__artwork,
+.travel-radio[data-radio-state="loading"] .travel-radio__artwork,
+.travel-radio[data-radio-state="fallback"] .travel-radio__artwork {
+  opacity: 1;
+  visibility: visible;
+}
+
+.travel-radio[data-radio-state="playing"] .travel-radio__youtube,
+.travel-radio[data-radio-state="paused"] .travel-radio__youtube {
+  opacity: 1;
+  visibility: visible;
+}
+
+.travel-radio[data-radio-state="playing"] .travel-radio__artwork,
+.travel-radio[data-radio-state="paused"] .travel-radio__artwork {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.budget-notes__day-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 0.64rem;
+  align-items: stretch;
+}
+
+.budget-day-selector__button {
+  display: grid !important;
+  justify-items: start;
+  align-content: center;
+  gap: 0.24rem;
+  min-width: 0;
+  min-height: 3.1rem;
+  padding: 0.62rem 0.72rem;
+  text-align: left;
+  white-space: normal !important;
+}
+
+.budget-day-selector__button-day,
+.budget-day-selector__button-title {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.22;
+}
+
+@media (max-width: 560px) {
+  .travel-radio__youtube iframe {
+    width: 212%;
+    height: 212%;
+  }
+}
+
+@media (max-width: 720px), (pointer: coarse) and (max-width: 920px) {
+  .travel-radio::before,
+  .site-intro__glow,
+  .section-tab::before,
+  .section-tab::after {
+    opacity: 0 !important;
+    filter: none !important;
+    box-shadow: none !important;
+  }
+
+  .section-nav__indicator,
+  .travel-radio__button,
+  .travel-radio__edge-toggle,
+  .travel-radio__button--primary {
+    box-shadow: none !important;
   }
 }

@@ -1220,3 +1220,49 @@ html[data-theme="dark"] .route-reference__day::before {
     width: 100%;
   }
 }
+
+/* Final route day tab spacing */
+.route-map__day-rail {
+  display: grid;
+  grid-auto-flow: row;
+  grid-auto-columns: initial;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 0.64rem;
+  align-items: stretch;
+  overflow-x: visible;
+  padding: 0.02rem 0.02rem 0.24rem;
+}
+
+.route-reference__day {
+  width: 100%;
+  min-width: 0;
+}
+
+.route-reference__day-trigger {
+  min-height: 100%;
+  white-space: normal;
+}
+
+.route-reference__day-step,
+.route-reference__day-title,
+.route-reference__day-meta,
+.route-reference__day-meta-line {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  .route-map__day-rail {
+    display: flex;
+    gap: 0.6rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 0.28rem;
+  }
+
+  .route-reference__day {
+    flex: 0 0 min(78vw, 14rem);
+    scroll-snap-align: start;
+  }
+}

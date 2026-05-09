@@ -104,7 +104,7 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-08-offline-v31";
+const offlineBundleVersion = "2026-05-09-offline-v32";
 const siteBackdropImages = [
   {
     src: "./assets/backgrounds/original/AdobeStock_133085779.jpeg"
@@ -174,9 +174,6 @@ const kairosRadioFallbackTheme = {
   accent: [218, 132, 65],
   secondary: [96, 125, 158]
 };
-const radioThemeCanvasSize = 28;
-const radioThemeLoadTimeoutMs = 5500;
-const radioThemeMinimumSampleWeight = 3;
 const radioDefaultVolume = 3;
 const radioMinVolume = 1;
 const radioMaxVolume = 100;
@@ -1353,7 +1350,6 @@ let radioCurrentTimeAnchorMs = 0;
 let radioCurrentVideoId = "";
 let radioCurrentTrackTitle = "";
 let radioCurrentArtworkUrl = "";
-let radioThemeExtractionToken = 0;
 let radioPendingPlaybackHistoryIndex = null;
 let radioPreviousActionUntilMs = 0;
 let radioPreviousActionTrackIndex = -1;
@@ -1361,7 +1357,6 @@ let radioNeedsInitialRandomTrack = true;
 let radioShuffleQueue = [];
 let radioPlaylistTrackCountWaiters = [];
 const radioPlaybackTrackHistory = [];
-const radioThemePaletteCache = new Map();
 let radioPlaybackHistoryCursor = -1;
 const radioState = {
   isReady: false,
@@ -1479,7 +1474,7 @@ function setBackdropSlideImage(slide, imageUrl, image = null) {
 
   const isInitialVisibleBackdrop = !siteBackdropInitialized || slide.classList.contains("is-active");
   img.loading = isInitialVisibleBackdrop ? "eager" : "lazy";
-  img.fetchPriority = "low";
+  img.fetchPriority = isInitialVisibleBackdrop ? "high" : "low";
   setImageSourceIfChanged(img, resolvedSourceUrl);
   slide.dataset.siteBackdropAssetMode = getBackdropAssetMode();
   slide.dataset.siteBackdropSrc = resolvedSourceUrl;
@@ -2558,162 +2553,7 @@ function setRadioThemePalette(palette = kairosRadioFallbackTheme, { source = "fa
 }
 
 function applyRadioFallbackTheme() {
-  radioThemeExtractionToken += 1;
   setRadioThemePalette(kairosRadioFallbackTheme, { source: "fallback" });
-}
-
-function loadRadioThemeImage(sourceUrl) {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    let settled = false;
-    const timeout = window.setTimeout(() => {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      reject(new Error("Radio artwork color extraction timed out"));
-    }, radioThemeLoadTimeoutMs);
-    const finish = (callback, value) => {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      window.clearTimeout(timeout);
-      callback(value);
-    };
-
-    image.crossOrigin = "anonymous";
-    image.decoding = "async";
-    image.referrerPolicy = "no-referrer";
-    image.onload = () => {
-      if (!image.naturalWidth || !image.naturalHeight) {
-        finish(reject, new Error("Radio artwork did not load"));
-        return;
-      }
-      finish(resolve, image);
-    };
-    image.onerror = () => finish(reject, new Error("Radio artwork is unavailable"));
-    image.src = sourceUrl;
-  });
-}
-
-function addRadioThemeSample(accumulator, red, green, blue, weight) {
-  accumulator.red += red * weight;
-  accumulator.green += green * weight;
-  accumulator.blue += blue * weight;
-  accumulator.weight += weight;
-}
-
-function getRadioThemeAverageSample(accumulator) {
-  if (!accumulator.weight) {
-    return null;
-  }
-
-  return [
-    accumulator.red / accumulator.weight,
-    accumulator.green / accumulator.weight,
-    accumulator.blue / accumulator.weight
-  ];
-}
-
-function getRadioThemePaletteFromImage(image) {
-  const canvas = document.createElement("canvas");
-  canvas.width = radioThemeCanvasSize;
-  canvas.height = radioThemeCanvasSize;
-  const context = canvas.getContext("2d", { willReadFrequently: true });
-  if (!context) {
-    return null;
-  }
-
-  let imageData;
-  try {
-    context.drawImage(image, 0, 0, radioThemeCanvasSize, radioThemeCanvasSize);
-    imageData = context.getImageData(0, 0, radioThemeCanvasSize, radioThemeCanvasSize).data;
-  } catch {
-    return null;
-  }
-
-  const accentSample = { red: 0, green: 0, blue: 0, weight: 0 };
-  const dominantSample = { red: 0, green: 0, blue: 0, weight: 0 };
-
-  for (let index = 0; index < imageData.length; index += 4) {
-    const alpha = imageData[index + 3];
-    if (alpha < 160) {
-      continue;
-    }
-
-    const red = imageData[index];
-    const green = imageData[index + 1];
-    const blue = imageData[index + 2];
-    const hsl = rgbToHsl(red, green, blue);
-    if (hsl.l <= 0.08 || hsl.l >= 0.92) {
-      continue;
-    }
-
-    const contrastWeight = 1 - Math.min(1, Math.abs(hsl.l - 0.54) / 0.54);
-    const dominantWeight = (0.4 + contrastWeight) * (0.55 + hsl.s);
-    addRadioThemeSample(dominantSample, red, green, blue, dominantWeight);
-
-    if (hsl.s >= 0.16) {
-      const accentWeight = dominantWeight * (0.75 + hsl.s * 2);
-      addRadioThemeSample(accentSample, red, green, blue, accentWeight);
-    }
-  }
-
-  if (
-    accentSample.weight < radioThemeMinimumSampleWeight &&
-    dominantSample.weight < radioThemeMinimumSampleWeight
-  ) {
-    return null;
-  }
-
-  const accent = getRadioThemeAverageSample(
-    accentSample.weight >= radioThemeMinimumSampleWeight ? accentSample : dominantSample
-  );
-  const secondary = getRadioThemeAverageSample(
-    dominantSample.weight >= radioThemeMinimumSampleWeight ? dominantSample : accentSample
-  );
-
-  return { accent, secondary };
-}
-
-function extractRadioThemePaletteFromArtwork(sourceUrl) {
-  return loadRadioThemeImage(sourceUrl).then((image) => getRadioThemePaletteFromImage(image));
-}
-
-function updateRadioThemeFromArtwork(sourceUrl) {
-  const extractionToken = radioThemeExtractionToken + 1;
-  radioThemeExtractionToken = extractionToken;
-  if (!sourceUrl) {
-    setRadioThemePalette(kairosRadioFallbackTheme, { source: "fallback" });
-    return;
-  }
-
-  if (radioThemePaletteCache.has(sourceUrl)) {
-    const cachedPalette = radioThemePaletteCache.get(sourceUrl);
-    setRadioThemePalette(cachedPalette || kairosRadioFallbackTheme, {
-      source: cachedPalette ? "artwork" : "fallback"
-    });
-    return;
-  }
-
-  extractRadioThemePaletteFromArtwork(sourceUrl)
-    .then((palette) => {
-      if (radioThemeExtractionToken !== extractionToken) {
-        return;
-      }
-      radioThemePaletteCache.set(sourceUrl, palette || null);
-      setRadioThemePalette(palette || kairosRadioFallbackTheme, {
-        source: palette ? "artwork" : "fallback"
-      });
-    })
-    .catch(() => {
-      if (radioThemeExtractionToken !== extractionToken) {
-        return;
-      }
-      radioThemePaletteCache.set(sourceUrl, null);
-      setRadioThemePalette(kairosRadioFallbackTheme, { source: "fallback" });
-    });
 }
 
 function showRadioArtworkFallback() {
@@ -2739,11 +2579,7 @@ function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
 
   radioCurrentArtworkUrl = sourceUrl;
   radioPlayerNode?.setAttribute("data-radio-artwork-state", kind);
-  if (radioState.isHidden && !radioState.isPlaying && !radioState.pendingPlay) {
-    applyRadioFallbackTheme();
-  } else {
-    updateRadioThemeFromArtwork(sourceUrl);
-  }
+  applyRadioFallbackTheme();
   if (radioArtworkNode) {
     radioArtworkNode.dataset.radioArtworkSrc = sourceUrl;
     radioArtworkNode.dataset.radioArtworkKind = kind;
@@ -3927,7 +3763,7 @@ function setRadioHidden(nextHidden, { persist = true } = {}) {
   syncRadioVisibilityUi();
   if (!radioState.isHidden && radioCurrentArtworkUrl) {
     ensureRadioArtworkImageLoaded();
-    updateRadioThemeFromArtwork(radioCurrentArtworkUrl);
+    applyRadioFallbackTheme();
   }
 }
 
@@ -4102,18 +3938,6 @@ function warmDeferredExperienceAssets() {
     });
 
     return warmCachedAppAssets(getWarmCacheAssetUrls(manifest));
-  });
-}
-
-function prewarmRouteStaticAssets() {
-  return loadAppAssetManifest().then((manifest) => {
-    primeHeadLink("dns-prefetch", `//${new URL(routeMapOriginUrl).host}`);
-    primeHeadLink("preconnect", routeMapOriginUrl, { crossorigin: "anonymous" });
-    primeHeadLink("preload", manifest.routeStylePath || routeStyleFallbackUrl, { as: "style" });
-    primeHeadLink("preload", manifest.routeContentPath || routeContentFallbackScriptUrl, { as: "script" });
-    primeHeadLink("preload", routeMapLibraryStyleUrl, { as: "style" });
-    primeHeadLink("preload", routeMapLibraryScriptUrl, { as: "script" });
-    return manifest;
   });
 }
 
@@ -4365,8 +4189,7 @@ function ensureSectionAssetsReady(sectionName) {
   if (sectionName === "route") {
     return Promise.all([
       ensureRouteSectionStylesLoaded(),
-      ensureRouteContentLoaded(),
-      prewarmRouteStaticAssets()
+      ensureRouteContentLoaded()
     ]);
   }
 
@@ -12142,7 +11965,8 @@ function smoothlyScrollNodeTo(
   }
 
   const startTop = currentTop;
-  const duration = getTimedMotionDuration(initialTargetTop - startTop);
+  const targetTop = initialClampedTop;
+  const duration = getTimedMotionDuration(targetTop - startTop);
 
   return new Promise((resolve) => {
     const animationState = {
@@ -12164,12 +11988,7 @@ function smoothlyScrollNodeTo(
 
       const progress = Math.min((timestamp - startTime) / duration, 1);
       const easedProgress = easeTimedMotion(progress);
-      const liveTargetTop = clamp(
-        Math.round(getNodeScrollTop(targetNode, extraOffset)),
-        0,
-        getMaxWindowScrollTop()
-      );
-      const nextScrollTop = startTop + (liveTargetTop - startTop) * easedProgress;
+      const nextScrollTop = startTop + (targetTop - startTop) * easedProgress;
       window.scrollTo(0, Math.round(nextScrollTop));
 
       if (progress < 1) {
@@ -12177,13 +11996,8 @@ function smoothlyScrollNodeTo(
         return;
       }
 
-      const finalTargetTop = clamp(
-        Math.round(getNodeScrollTop(targetNode, extraOffset)),
-        0,
-        getMaxWindowScrollTop()
-      );
       activeWindowScrollAnimation = null;
-      window.scrollTo(0, finalTargetTop);
+      window.scrollTo(0, targetTop);
       resolve(true);
     };
 
@@ -12753,7 +12567,7 @@ function scrollToPanelStart(panelId, options = {}) {
 
     const anchor =
       panel.querySelector("[data-panel-scroll-anchor]") || panel.querySelector(".section-heading") || panel;
-    const releaseScrollHold = releasePendingScrollHold || holdWindowScrollTop(window.scrollY);
+    const releaseScrollHold = releasePendingScrollHold;
     releasePendingScrollHold = null;
     setActivePanel(panelId, { syncContent: false, store: false });
     scheduleScrollToNode(anchor, {
@@ -12765,9 +12579,12 @@ function scrollToPanelStart(panelId, options = {}) {
     });
   };
 
-  const geometryPromise = geometryReady
-    ? Promise.resolve()
-    : ensurePanelScrollGeometryReady(panelId);
+  if (geometryReady) {
+    alignPanel(behavior, 360);
+    return;
+  }
+
+  const geometryPromise = ensurePanelScrollGeometryReady(panelId);
 
   void geometryPromise.then(() => {
     alignPanel(behavior, 360);
@@ -13360,7 +13177,6 @@ function bindTabNavigation() {
         return;
       }
 
-      const releaseScrollHold = holdWindowScrollTop(window.scrollY);
       const hasChanged = activatePanelForNavigation(panelId);
       if (!hasChanged) {
         pulseActiveSectionTab(tab);
@@ -13368,8 +13184,7 @@ function bindTabNavigation() {
       scrollToPanelStart(panelId, {
         behavior: getScrollBehavior(),
         realign: false,
-        geometryReady: true,
-        releaseScrollHold
+        geometryReady: true
       });
     });
 

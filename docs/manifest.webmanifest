@@ -1,18 +1,12 @@
 {
   "name": "Kairos VIII Japan Itinerary",
   "short_name": "Kairos VIII",
-  "description": "A bilingual Japan travel itinerary with checklist, route map, budget planner, transit notes, and offline access.",
   "lang": "en",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#050906",
   "theme_color": "#18261d",
-  "categories": [
-    "travel",
-    "navigation",
-    "productivity"
-  ],
   "icons": [
     {
       "src": "./assets/icons/kairos-icon-192.jpg",
