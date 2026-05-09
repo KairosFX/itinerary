@@ -16910,3 +16910,287 @@ html[data-theme="dark"] .progress-item__meter-fill {
     padding-inline: 0.52rem !important;
   }
 }
+
+/* Final May 2026 performance, navigation, and radio corrections */
+:root {
+  --radio-accent: var(--accent-primary);
+  --panel-border-accent: rgba(var(--theme-accent-rgb), 0.22);
+  --accent-glow: rgba(var(--theme-accent-rgb), 0.16);
+}
+
+html[data-song-theme="artwork"] {
+  --panel-border-accent: rgba(var(--theme-accent-rgb), 0.28);
+}
+
+.site-header {
+  top: max(0.42rem, env(safe-area-inset-top)) !important;
+  background: transparent !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.section-nav,
+.site-header.is-condensed .section-nav {
+  padding: 0 !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+}
+
+.section-nav__viewport {
+  padding: 0.08rem !important;
+}
+
+.section-nav__track {
+  gap: 0.1rem !important;
+}
+
+.section-nav__indicator {
+  top: 0.08rem !important;
+  bottom: 0.08rem !important;
+  z-index: 0;
+  border-radius: 0.84rem !important;
+  background:
+    linear-gradient(180deg, rgba(var(--theme-accent-rgb), 0.2), rgba(var(--theme-secondary-rgb), 0.08)),
+    rgba(var(--theme-accent-rgb), 0.1) !important;
+  box-shadow:
+    0 0 0 1px rgba(var(--theme-accent-rgb), 0.16),
+    0 0 14px rgba(var(--theme-accent-rgb), 0.11) !important;
+}
+
+.section-tab,
+.site-header.is-condensed .section-tab {
+  z-index: 1;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.section-tab::before,
+.section-tab::after {
+  content: none !important;
+  display: none !important;
+}
+
+.section-tab:hover:not(.is-active):not([aria-selected="true"]),
+.section-tab:focus-visible:not(.is-active):not([aria-selected="true"]) {
+  border-color: rgba(var(--theme-accent-rgb), 0.16) !important;
+  background: rgba(var(--theme-accent-rgb), 0.08) !important;
+  box-shadow: none !important;
+}
+
+.section-tab.is-active,
+.section-tab[aria-selected="true"],
+.section-tab.is-active:hover,
+.section-tab[aria-selected="true"]:hover,
+.section-tab.is-active:focus-visible,
+.section-tab[aria-selected="true"]:focus-visible {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--theme-text) !important;
+}
+
+.language-switcher,
+.site-header.is-condensed .language-switcher {
+  border-color: rgba(var(--theme-accent-rgb), 0.14) !important;
+  background: rgba(2, 6, 5, 0.48) !important;
+  box-shadow: inset 0 1px 0 rgba(244, 239, 226, 0.045) !important;
+  backdrop-filter: none !important;
+}
+
+.language-switcher::before {
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(var(--theme-accent-rgb), 0.2), rgba(var(--theme-secondary-rgb), 0.08)),
+    rgba(var(--theme-accent-rgb), 0.12) !important;
+  box-shadow: 0 0 12px rgba(var(--theme-accent-rgb), 0.1) !important;
+}
+
+.language-button {
+  position: relative;
+  z-index: 1;
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.language-button:hover:not(.is-active),
+.language-button:focus-visible:not(.is-active) {
+  background: rgba(var(--theme-accent-rgb), 0.08) !important;
+}
+
+.language-button.is-active,
+.language-button.is-active:hover,
+.language-button.is-active:focus-visible {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--theme-text) !important;
+}
+
+.content-panel,
+.card,
+.stat-card,
+.progress-card,
+.overview-card,
+.day-card,
+.note-card,
+.essentials-card,
+.featured-cover,
+.journey-close,
+.budget-notes__settings-panel,
+.budget-notes__day-browser,
+.budget-day-card,
+.budget-source-card,
+.budget-summary-card,
+.budget-breakdown-card,
+.budget-status-card,
+.budget-source-meta-card,
+.booking-group,
+.booking-item,
+.route-map__surface,
+.route-map__detail-panel,
+.route-map__stops,
+.route-map__explorer,
+.notes-editor__input,
+#checklist .check-item {
+  border-color: var(--panel-border-accent) !important;
+  backdrop-filter: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.045),
+    0 10px 24px rgba(0, 0, 0, 0.22) !important;
+}
+
+html.enhanced-effects .card:hover,
+html.enhanced-effects .stat-card:hover,
+html.enhanced-effects .progress-card:hover,
+html.enhanced-effects .overview-card:hover,
+html.enhanced-effects .day-card:hover,
+html.enhanced-effects .note-card:hover,
+html.enhanced-effects .essentials-card:hover,
+html.enhanced-effects .booking-item:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.055),
+    0 12px 28px rgba(0, 0, 0, 0.24),
+    0 0 14px rgba(var(--theme-accent-rgb), 0.08) !important;
+}
+
+.progress-overview__bar-fill,
+.progress-item__meter-fill,
+.hero-panel__copy::after,
+.progress-card__heading::after,
+.section-heading::after {
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)) !important;
+}
+
+.travel-radio {
+  border-color: rgba(var(--theme-accent-rgb), 0.24) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(244, 239, 226, 0.055),
+    0 10px 26px rgba(0, 0, 0, 0.26),
+    0 0 14px rgba(var(--theme-accent-rgb), 0.08) !important;
+  backdrop-filter: none !important;
+}
+
+.travel-radio__signal {
+  background:
+    linear-gradient(135deg, rgba(var(--theme-accent-rgb), 0.09), rgba(var(--theme-secondary-rgb), 0.055)),
+    #020605 !important;
+}
+
+.travel-radio__youtube {
+  --radio-youtube-crop-scale: 410%;
+  --radio-youtube-crop-y: -25%;
+  background: #020605 !important;
+}
+
+.travel-radio__youtube iframe {
+  left: 50% !important;
+  top: 50% !important;
+  width: var(--radio-youtube-crop-scale) !important;
+  max-width: none !important;
+  height: var(--radio-youtube-crop-scale) !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  transform: translate3d(-50%, var(--radio-youtube-crop-y), 0) !important;
+  transform-origin: center center !important;
+  pointer-events: none !important;
+}
+
+.travel-radio[data-radio-state="idle"] .travel-radio__youtube,
+.travel-radio[data-radio-state="ready"] .travel-radio__youtube,
+.travel-radio[data-radio-state="loading"] .travel-radio__youtube,
+.travel-radio[data-radio-state="fallback"] .travel-radio__youtube,
+.travel-radio[data-radio-state="paused"] .travel-radio__youtube,
+.travel-radio[data-radio-state="playing"]:not([data-radio-video-visible="true"]) .travel-radio__youtube {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition-delay: 0s !important;
+}
+
+.travel-radio[data-radio-state="idle"] .travel-radio__artwork,
+.travel-radio[data-radio-state="ready"] .travel-radio__artwork,
+.travel-radio[data-radio-state="loading"] .travel-radio__artwork,
+.travel-radio[data-radio-state="fallback"] .travel-radio__artwork,
+.travel-radio[data-radio-state="paused"] .travel-radio__artwork,
+.travel-radio[data-radio-state="playing"]:not([data-radio-video-visible="true"]) .travel-radio__artwork {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.travel-radio[data-radio-state="playing"][data-radio-video-visible="true"] .travel-radio__youtube {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.travel-radio[data-radio-state="playing"][data-radio-video-visible="true"] .travel-radio__artwork {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.travel-radio__button:hover,
+.travel-radio__button:focus-visible,
+.travel-radio__edge-toggle:hover,
+.travel-radio__edge-toggle:focus-visible {
+  border-color: rgba(var(--theme-accent-rgb), 0.34) !important;
+  box-shadow: 0 0 12px rgba(var(--theme-accent-rgb), 0.1) !important;
+}
+
+.site-backdrop__slide {
+  will-change: auto !important;
+  transition-duration: 900ms !important;
+}
+
+@media (max-width: 720px), (pointer: coarse) and (max-width: 920px) {
+  :root {
+    --accent-glow: rgba(var(--theme-accent-rgb), 0.08);
+    --panel-border-accent: rgba(var(--theme-accent-rgb), 0.18);
+  }
+
+  .section-nav__indicator,
+  .language-switcher::before,
+  .travel-radio__button,
+  .travel-radio__edge-toggle,
+  .travel-radio__button--primary {
+    box-shadow: none !important;
+  }
+
+  .travel-radio__youtube {
+    --radio-youtube-crop-scale: 430%;
+    --radio-youtube-crop-y: -25%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-nav__indicator,
+  .language-switcher::before,
+  .site-backdrop__slide,
+  .travel-radio__youtube,
+  .travel-radio__artwork {
+    transition-duration: 1ms !important;
+  }
+}

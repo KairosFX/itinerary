@@ -104,13 +104,10 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-09-offline-v33";
+const offlineBundleVersion = "2026-05-09-offline-v34";
 const siteBackdropImages = [
   {
     src: "./assets/backgrounds/original/AdobeStock_133085779.jpeg"
-  },
-  {
-    src: "./assets/backgrounds/original/AdobeStock_240362026.jpeg"
   },
   {
     src: "./assets/backgrounds/original/AdobeStock_254432280.jpeg"
@@ -126,9 +123,6 @@ const siteBackdropImages = [
   },
   {
     src: "./assets/backgrounds/original/AdobeStock_498231018.jpeg"
-  },
-  {
-    src: "./assets/backgrounds/original/AdobeStock_537070829.jpeg"
   },
   {
     src: "./assets/backgrounds/original/AdobeStock_61109814.jpeg"
@@ -175,6 +169,8 @@ const kairosRadioFallbackTheme = {
   accent: [127, 183, 255],
   secondary: [255, 155, 74]
 };
+const radioArtworkThemeSampleSize = 48;
+const radioArtworkThemeMinColorSamples = 18;
 const radioDefaultVolume = 3;
 const radioMinVolume = 1;
 const radioMaxVolume = 100;
@@ -1352,12 +1348,14 @@ let radioCurrentTimeAnchorMs = 0;
 let radioCurrentVideoId = "";
 let radioCurrentTrackTitle = "";
 let radioCurrentArtworkUrl = "";
+let radioThemeExtractionToken = 0;
 let radioPendingPlaybackHistoryIndex = null;
 let radioPreviousActionUntilMs = 0;
 let radioPreviousActionTrackIndex = -1;
 let radioNeedsInitialRandomTrack = true;
 let radioShuffleQueue = [];
 let radioPlaylistTrackCountWaiters = [];
+const radioArtworkThemeCache = new Map();
 const radioPlaybackTrackHistory = [];
 let radioPlaybackHistoryCursor = -1;
 const radioState = {
@@ -2536,6 +2534,138 @@ function getRadioThemeSecondaryColor(secondaryRgb, accentRgb) {
   );
 }
 
+function getRadioArtworkThemeCacheKey(sourceUrl) {
+  return getResolvedDocumentUrl(sourceUrl || "");
+}
+
+function loadRadioArtworkThemeImage(sourceUrl) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.crossOrigin = "anonymous";
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Radio artwork could not be loaded for color extraction."));
+    image.src = getRadioArtworkThemeCacheKey(sourceUrl);
+  });
+}
+
+function getRadioThemeColorBucket(rgb) {
+  return rgb.map((channel) => Math.floor(clamp(channel, 0, 255) / 32)).join("-");
+}
+
+function getRadioThemePaletteFromPixels(pixelData) {
+  const buckets = new Map();
+
+  for (let index = 0; index < pixelData.length; index += 4) {
+    const alpha = pixelData[index + 3];
+    if (alpha < 200) {
+      continue;
+    }
+
+    const rgb = [pixelData[index], pixelData[index + 1], pixelData[index + 2]];
+    const hsl = rgbToHsl(rgb[0], rgb[1], rgb[2]);
+    if (hsl.l < 0.16 || hsl.l > 0.9 || hsl.s < 0.06) {
+      continue;
+    }
+
+    const key = getRadioThemeColorBucket(rgb);
+    const bucket = buckets.get(key) || {
+      rgb: [0, 0, 0],
+      count: 0,
+      score: 0
+    };
+    bucket.rgb[0] += rgb[0];
+    bucket.rgb[1] += rgb[1];
+    bucket.rgb[2] += rgb[2];
+    bucket.count += 1;
+    bucket.score += 1 + hsl.s * 1.6 + (1 - Math.abs(hsl.l - 0.56)) * 0.7;
+    buckets.set(key, bucket);
+  }
+
+  const rankedBuckets = Array.from(buckets.values())
+    .filter((bucket) => bucket.count >= 2)
+    .map((bucket) => ({
+      rgb: bucket.rgb.map((channel) => channel / bucket.count),
+      count: bucket.count,
+      score: bucket.score
+    }))
+    .sort((first, second) => second.score - first.score);
+
+  const sampleCount = rankedBuckets.reduce((total, bucket) => total + bucket.count, 0);
+  if (sampleCount < radioArtworkThemeMinColorSamples || !rankedBuckets.length) {
+    return null;
+  }
+
+  const accent = rankedBuckets[0].rgb;
+  const accentHue = rgbToHsl(accent[0], accent[1], accent[2]).h;
+  const secondaryBucket =
+    rankedBuckets.find((bucket) => {
+      const hsl = rgbToHsl(bucket.rgb[0], bucket.rgb[1], bucket.rgb[2]);
+      return getRadioThemeHueDistance(accentHue, hsl.h) >= 24;
+    }) || rankedBuckets[1] || rankedBuckets[0];
+
+  return {
+    accent,
+    secondary: secondaryBucket.rgb
+  };
+}
+
+async function extractRadioArtworkThemePalette(sourceUrl) {
+  const cacheKey = getRadioArtworkThemeCacheKey(sourceUrl);
+  if (!cacheKey) {
+    return null;
+  }
+
+  if (radioArtworkThemeCache.has(cacheKey)) {
+    return radioArtworkThemeCache.get(cacheKey);
+  }
+
+  try {
+    const image = await loadRadioArtworkThemeImage(sourceUrl);
+    const canvas = document.createElement("canvas");
+    canvas.width = radioArtworkThemeSampleSize;
+    canvas.height = radioArtworkThemeSampleSize;
+    const context = canvas.getContext("2d", {
+      alpha: false,
+      willReadFrequently: true
+    });
+    if (!context) {
+      radioArtworkThemeCache.set(cacheKey, null);
+      return null;
+    }
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    const palette = getRadioThemePaletteFromPixels(
+      context.getImageData(0, 0, canvas.width, canvas.height).data
+    );
+    radioArtworkThemeCache.set(cacheKey, palette);
+    return palette;
+  } catch {
+    radioArtworkThemeCache.set(cacheKey, null);
+    return null;
+  }
+}
+
+function scheduleRadioArtworkThemeExtraction(sourceUrl) {
+  const extractionToken = ++radioThemeExtractionToken;
+  const runExtraction = () => {
+    void extractRadioArtworkThemePalette(sourceUrl).then((palette) => {
+      if (extractionToken !== radioThemeExtractionToken || !palette) {
+        return;
+      }
+
+      setRadioThemePalette(palette, { source: "artwork" });
+    });
+  };
+
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(runExtraction, { timeout: 900 });
+    return;
+  }
+
+  window.setTimeout(runExtraction, 120);
+}
+
 function setRadioThemePalette(palette = kairosRadioFallbackTheme, { source = "fallback" } = {}) {
   const accent = normalizeRadioThemeColor(palette.accent, {
     fallback: kairosRadioFallbackTheme.accent
@@ -2553,12 +2683,21 @@ function setRadioThemePalette(palette = kairosRadioFallbackTheme, { source = "fa
   root.style.setProperty("--theme-accent", `rgb(${accentTuple})`);
   root.style.setProperty("--theme-secondary-rgb", secondaryTuple);
   root.style.setProperty("--theme-secondary", `rgb(${secondaryTuple})`);
+  root.style.setProperty("--accent-primary", `rgb(${accentTuple})`);
+  root.style.setProperty("--accent-secondary", `rgb(${secondaryTuple})`);
+  root.style.setProperty("--accent-glow", `rgba(${accentTuple}, 0.18)`);
+  root.style.setProperty("--radio-accent", `rgb(${accentTuple})`);
+  root.style.setProperty("--panel-border-accent", `rgba(${accentTuple}, 0.24)`);
+  root.style.setProperty("--border-soft", `rgba(${accentTuple}, 0.16)`);
+  root.style.setProperty("--line", `rgba(${accentTuple}, 0.16)`);
+  root.style.setProperty("--line-strong", `rgba(${accentTuple}, 0.3)`);
   root.style.setProperty("--accent-deep", `rgb(${getRadioThemeRgbTuple(accentDeep)})`);
   root.dataset.songTheme = source === "artwork" ? "artwork" : "fallback";
   radioPlayerNode?.setAttribute("data-radio-theme-source", root.dataset.songTheme);
 }
 
 function applyRadioFallbackTheme() {
+  radioThemeExtractionToken += 1;
   setRadioThemePalette(kairosRadioFallbackTheme, { source: "fallback" });
 }
 
@@ -2586,6 +2725,9 @@ function setRadioArtworkSource(sourceUrl, { kind = "track", title = "" } = {}) {
   radioCurrentArtworkUrl = sourceUrl;
   radioPlayerNode?.setAttribute("data-radio-artwork-state", kind);
   applyRadioFallbackTheme();
+  if (kind === "track") {
+    scheduleRadioArtworkThemeExtraction(sourceUrl);
+  }
   if (radioArtworkNode) {
     radioArtworkNode.dataset.radioArtworkSrc = sourceUrl;
     radioArtworkNode.dataset.radioArtworkKind = kind;
@@ -3426,7 +3568,7 @@ function handleRadioYoutubeMessage(event) {
     radioState.isPlaying = true;
     setRadioCurrentTime(getEstimatedRadioCurrentTime());
     setRadioState("playing");
-    scheduleRadioYoutubeVideoReveal(260);
+    scheduleRadioYoutubeVideoReveal(760);
     startRadioYoutubeInfoPolling();
   } else if (playerState === 0 && wasPlaying && radioState.canSkip) {
     clearRadioPlaybackConfirmation();
@@ -3437,6 +3579,9 @@ function handleRadioYoutubeMessage(event) {
     setRadioCurrentTime(getEstimatedRadioCurrentTime());
     radioState.isPlaying = false;
     setRadioState(radioState.isReady ? "paused" : "ready");
+    clearRadioYoutubeVideoReveal();
+    setRadioYoutubeVideoVisible(false);
+    ensureRadioArtworkImageLoaded();
     clearRadioYoutubeInfoPolling();
   }
 
@@ -3569,7 +3714,7 @@ function playRadio() {
       radioState.pendingPlay = false;
       radioState.isPlaying = true;
       setRadioState("playing");
-      setRadioYoutubeVideoVisible(true);
+      scheduleRadioYoutubeVideoReveal(760);
       startRadioYoutubeInfoPolling({ immediate: true });
       syncRadioControls();
       updateRadioMediaSessionPlaybackState();
@@ -3587,6 +3732,9 @@ function pauseRadio() {
   radioState.pendingPlay = false;
   clearRadioPlaybackConfirmation();
   clearRadioYoutubeInfoPolling();
+  clearRadioYoutubeVideoReveal();
+  setRadioYoutubeVideoVisible(false);
+  ensureRadioArtworkImageLoaded();
   try {
     radioYoutubePlayer?.pauseVideo?.();
   } catch {
@@ -12608,7 +12756,9 @@ function scrollToPanelStart(panelId, options = {}) {
       panel.querySelector("[data-panel-scroll-anchor]") || panel.querySelector(".section-heading") || panel;
     const releaseScrollHold = releasePendingScrollHold;
     releasePendingScrollHold = null;
-    setActivePanel(panelId, { syncContent: false, store: false });
+    if (getActivePanelId() !== panelId) {
+      setActivePanel(panelId, { syncContent: false, store: false });
+    }
     scheduleScrollToNode(anchor, {
       behavior: nextBehavior,
       extraOffset: 28,

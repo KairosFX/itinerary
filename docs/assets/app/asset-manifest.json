@@ -1,10 +1,10 @@
 {
-  "stylePath": "./assets/app/style.a5faed0425.css",
-  "styleHash": "a5faed0425",
+  "stylePath": "./assets/app/style.bfdc7ce108.css",
+  "styleHash": "bfdc7ce108",
   "routeStylePath": "./assets/app/routeStyle.e8b16ef297.css",
   "routeStyleHash": "e8b16ef297",
-  "scriptPath": "./assets/app/script.e598add62a.js",
-  "scriptHash": "e598add62a",
+  "scriptPath": "./assets/app/script.2bb5986457.js",
+  "scriptHash": "2bb5986457",
   "routeContentPath": "./assets/app/routeContent.0a456839b7.js",
   "routeContentHash": "0a456839b7",
   "budgetUiPath": "./assets/app/budgetUi.c9b56d76dd.js",
@@ -13,6 +13,6 @@
   "budgetContentHash": "8916d32a7f",
   "essentialsContentPath": "./assets/app/essentialsContent.558f559e08.js",
   "essentialsContentHash": "558f559e08",
-  "generatedAt": "2026-05-09T17:41:29.077Z",
-  "cacheVersion": "a5faed0425-e8b16ef297-e598add62a-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08"
+  "generatedAt": "2026-05-09T18:41:22.961Z",
+  "cacheVersion": "bfdc7ce108-e8b16ef297-2bb5986457-0a456839b7-c9b56d76dd-8916d32a7f-558f559e08"
 }

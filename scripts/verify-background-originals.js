@@ -8,8 +8,6 @@ const docsDir = path.join(repoRoot, "docs");
 const defaultDesktopDir = path.join(docsDir, "assets", "backgrounds", "original");
 const scriptPath = path.join(docsDir, "script.js");
 const minimumWidth = 5000;
-const minimumWideHeight = 2000;
-const wideImageAspectRatio = 1.4;
 const lowResolutionWidthMin = 1900;
 const lowResolutionWidthMax = 2300;
 
@@ -93,46 +91,51 @@ function isAroundLowResolutionDesktopWidth(width) {
   return width >= lowResolutionWidthMin && width <= lowResolutionWidthMax;
 }
 
-function isWideOrPanoramic(width, height) {
-  return height > 0 && width / height >= wideImageAspectRatio;
-}
-
-function getDesktopOriginalStatus(width, height) {
+function getDesktopOriginalStatus(width, used) {
   if (isAroundLowResolutionDesktopWidth(width)) {
-    return "FAIL too low-res around 2048px wide";
+    return used
+      ? "FAIL not acceptable for desktop slideshow around 2048px wide"
+      : "WARN not acceptable for desktop slideshow around 2048px wide";
   }
 
-  if (width >= minimumWidth || (height >= minimumWideHeight && isWideOrPanoramic(width, height))) {
+  if (width >= minimumWidth) {
     return "PASS true high-res original";
   }
 
-  return "FAIL too low-res for desktop original";
+  return used
+    ? "FAIL below 5000px desktop slideshow minimum"
+    : "WARN below 5000px minimum; keep out of desktop slideshow";
 }
 
-function isDesktopResolutionAcceptable(width, height) {
-  return getDesktopOriginalStatus(width, height).startsWith("PASS");
-}
-
-function printDirectoryReport(label, directoryPath, { failOnLowResolution = true } = {}) {
+function printDirectoryReport(label, directoryPath, { failOnLowResolution = true, usedFilenames = null } = {}) {
   const files = getJpegFiles(directoryPath);
   const failures = [];
+  const warnings = [];
 
   process.stdout.write(`\n${label}\n`);
   process.stdout.write(`Directory: ${directoryPath}\n`);
-  process.stdout.write("filename | width | height | file size | status\n");
+  process.stdout.write("filename | used | width | height | file size | status\n");
 
   files.forEach((filePath) => {
     const stats = fs.statSync(filePath);
     const { width, height } = readJpegDimensions(filePath);
-    const status = getDesktopOriginalStatus(width, height);
-    process.stdout.write(`${path.basename(filePath)} | ${width} | ${height} | ${formatBytes(stats.size)} | ${status}\n`);
+    const filename = path.basename(filePath);
+    const used = usedFilenames instanceof Set ? usedFilenames.has(filename) : true;
+    const status = getDesktopOriginalStatus(width, used);
+    process.stdout.write(`${filename} | ${used ? "yes" : "no"} | ${width} | ${height} | ${formatBytes(stats.size)} | ${status}\n`);
     if (!status.startsWith("PASS") && failOnLowResolution) {
-      failures.push(`${path.basename(filePath)} is ${width}x${height}: ${status}`);
+      const message = `${filename} is ${width}x${height}: ${status}`;
+      (used ? failures : warnings).push(message);
     }
   });
 
   if (!files.length) {
     failures.push("No JPEG files found.");
+  }
+
+  if (warnings.length) {
+    process.stdout.write("\nBackground original warnings:\n");
+    warnings.forEach((warning) => process.stdout.write(`- ${warning}\n`));
   }
 
   return failures;
@@ -174,9 +177,19 @@ function verifyOriginalBackdropReferences(desktopDir) {
   return failures;
 }
 
+function readUsedOriginalFilenames() {
+  const originalPrefix = "./assets/backgrounds/original/";
+  return new Set(
+    readOriginalBackdropReferences()
+      .filter((reference) => reference.startsWith(originalPrefix))
+      .map((reference) => path.basename(reference))
+  );
+}
+
 function main() {
   const desktopDir = path.resolve(getArgumentValue("--desktop") || defaultDesktopDir);
   const sourceDir = getArgumentValue("--source");
+  const usedOriginalFilenames = readUsedOriginalFilenames();
   const failures = [];
 
   if (sourceDir) {
@@ -187,7 +200,11 @@ function main() {
     );
   }
 
-  failures.push(...printDirectoryReport("Desktop original background report", desktopDir));
+  failures.push(
+    ...printDirectoryReport("Desktop original background report", desktopDir, {
+      usedFilenames: usedOriginalFilenames
+    })
+  );
   failures.push(...verifyOriginalBackdropReferences(desktopDir));
 
   if (failures.length) {
