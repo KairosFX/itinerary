@@ -17833,3 +17833,216 @@ html.reduce-effects .reveal-block.is-visible {
     overflow-wrap: break-word !important;
   }
 }
+
+/* May 2026 compact budget, nav spacing, Radio FM crop, and mobile floating stack */
+.header-actions,
+.site-header.is-condensed .header-actions {
+  gap: 0.5rem !important;
+}
+
+.section-nav,
+.site-header.is-condensed .section-nav {
+  padding: 0 !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.section-nav__viewport {
+  padding: 0 !important;
+}
+
+.section-nav__track {
+  gap: 0.2rem !important;
+}
+
+.section-tab,
+.site-header.is-condensed .section-tab {
+  min-height: 2.08rem !important;
+  padding: 0.38rem 0.58rem !important;
+  border-radius: 0.72rem !important;
+}
+
+.budget-notes__day-browser {
+  gap: 0.62rem !important;
+  width: min(100%, 56rem) !important;
+  padding: 0.74rem 0.78rem 0.82rem !important;
+  border-radius: 0.9rem !important;
+}
+
+.budget-notes__day-browser-head,
+.budget-notes__day-browser-copy {
+  gap: 0.2rem !important;
+}
+
+.budget-notes__day-browser-intro {
+  font-size: 0.8rem !important;
+  line-height: 1.42 !important;
+}
+
+.budget-notes__day-selector {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.2rem), 1fr)) !important;
+  gap: 0.38rem !important;
+  width: min(100%, 54.5rem) !important;
+}
+
+.budget-day-selector__button {
+  align-content: center !important;
+  gap: 0.08rem !important;
+  min-height: 3.05rem !important;
+  padding: 0.44rem 0.52rem !important;
+  border-radius: 0.72rem !important;
+  text-align: center !important;
+}
+
+.budget-day-selector__button-day,
+.budget-day-selector__button-title {
+  justify-self: center !important;
+  max-width: 100% !important;
+  text-align: center !important;
+  overflow-wrap: anywhere !important;
+}
+
+.budget-day-selector__button-day {
+  font-size: 0.64rem !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.08em !important;
+}
+
+.budget-day-selector__button-title {
+  font-size: 0.78rem !important;
+  line-height: 1.18 !important;
+}
+
+.travel-radio__youtube {
+  --radio-video-overscan: 320%;
+  --radio-video-shift-y: -21%;
+  inset: 0 !important;
+  overflow: hidden !important;
+  border-radius: inherit !important;
+  background: #020605 !important;
+}
+
+.travel-radio__youtube::before,
+.travel-radio__youtube::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.travel-radio__youtube::before {
+  top: 0;
+  height: 22%;
+  background: linear-gradient(180deg, rgba(2, 6, 5, 0.92), rgba(2, 6, 5, 0));
+}
+
+.travel-radio__youtube::after {
+  bottom: 0;
+  height: 24%;
+  background: linear-gradient(0deg, rgba(2, 6, 5, 0.92), rgba(2, 6, 5, 0));
+}
+
+.travel-radio__youtube iframe {
+  left: 50% !important;
+  top: 50% !important;
+  width: var(--radio-video-overscan) !important;
+  max-width: none !important;
+  height: var(--radio-video-overscan) !important;
+  max-height: none !important;
+  border: 0 !important;
+  object-fit: cover !important;
+  transform: translate3d(-50%, calc(-50% + var(--radio-video-shift-y)), 0) !important;
+  transform-origin: center center !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 720px) {
+  .header-actions,
+  .site-header.is-condensed .header-actions {
+    gap: 0.28rem !important;
+  }
+
+  .section-nav__track {
+    gap: 0.09rem !important;
+  }
+
+  .section-tab,
+  .site-header.is-condensed .section-tab {
+    min-height: 1.96rem !important;
+    padding: 0.3rem 0.08rem !important;
+    border-radius: 0.62rem !important;
+    font-size: 0.56rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .budget-notes__day-browser {
+    padding: 0.68rem !important;
+  }
+
+  .budget-notes__day-selector {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.36rem !important;
+  }
+
+  .budget-day-selector__button {
+    width: auto !important;
+    min-height: 3rem !important;
+    padding: 0.42rem 0.46rem !important;
+  }
+}
+
+@media (max-width: 920px) {
+  :root {
+    --floating-control-gap: 0.76rem;
+  }
+
+  html.radio-player-expanded {
+    --background-view-toggle-bottom: calc(
+      var(--floating-control-inset-y) + var(--radio-player-stack-height) +
+        var(--floating-control-button-size) + (var(--floating-control-gap) * 2)
+    );
+  }
+
+  .travel-radio:not([data-radio-collapsed="true"]) .travel-radio__edge-toggle {
+    position: fixed !important;
+    left: auto !important;
+    right: var(--floating-control-inset-x) !important;
+    top: auto !important;
+    bottom: calc(
+      var(--floating-control-inset-y) + var(--radio-player-stack-height) +
+        var(--floating-control-gap)
+    ) !important;
+    width: var(--floating-control-button-size) !important;
+    min-width: var(--floating-control-button-size) !important;
+    height: var(--floating-control-button-size) !important;
+    min-height: var(--floating-control-button-size) !important;
+    border-radius: 999px !important;
+    transform: none !important;
+  }
+
+  .travel-radio:not([data-radio-collapsed="true"]) .travel-radio__edge-toggle:hover,
+  .travel-radio:not([data-radio-collapsed="true"]) .travel-radio__edge-toggle:focus-visible {
+    transform: translateY(-1px) !important;
+  }
+
+  .travel-radio__youtube {
+    --radio-video-overscan: 340%;
+    --radio-video-shift-y: -22%;
+  }
+}
+
+@media (max-width: 380px) {
+  .budget-day-selector__button {
+    min-height: 3.08rem !important;
+    padding-inline: 0.4rem !important;
+  }
+
+  .budget-day-selector__button-title {
+    font-size: 0.74rem !important;
+  }
+}
