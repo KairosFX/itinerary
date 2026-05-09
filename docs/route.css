@@ -1364,3 +1364,49 @@ html[data-theme="dark"] .route-map-marker__dot {
       0 8px 18px rgba(0, 0, 0, 0.18);
   }
 }
+
+/* Static route card stability pass */
+.route-map,
+.route-map__surface,
+.route-map__map-shell,
+.route-map__loading-veil,
+.route-map__loading-copy,
+.route-map__status,
+.route-map__stops--top,
+.route-reference,
+.route-reference__day,
+.route-map__header-action,
+.route-map__day-nav,
+.route-reference__tool,
+.route-reference__day-button,
+.route-reference__day-trigger {
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+  will-change: auto !important;
+}
+
+.route-map:hover,
+.route-map:focus-within,
+.route-map__surface:hover,
+.route-map__surface:focus-within,
+.route-map__map-shell:hover,
+.route-map__map-shell:focus-within,
+.route-reference:hover,
+.route-reference:focus-within,
+.route-reference__day:hover,
+.route-reference__day:focus-within,
+.route-map__header-action:hover,
+.route-map__header-action:focus-visible,
+.route-map__day-nav:not(:disabled):hover,
+.route-map__day-nav:not(:disabled):focus-visible,
+.route-reference__tool:hover,
+.route-reference__tool:focus-visible,
+.route-reference__day-button:hover,
+.route-reference__day-button:focus-visible,
+.route-reference__day-trigger:hover,
+.route-reference__day-trigger:focus-visible {
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+}

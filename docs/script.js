@@ -13321,29 +13321,15 @@ function syncSectionNavIndicator(options = {}) {
 }
 
 function animateSectionTabHover(tab, isActive) {
-  if (!tab || reducedEffectsEnabled || coarsePointerQuery.matches) {
+  if (!tab) {
     return;
   }
 
-  tab.style.transform = isActive ? "translateY(-2px) scale(1.018)" : "";
+  tab.style.transform = "";
 }
 
 function pulseActiveSectionTab(tab) {
-  if (reducedEffectsEnabled || !tab || typeof tab.animate !== "function") {
-    return;
-  }
-
-  tab.animate(
-    [
-      { transform: "scale(0.985)" },
-      { transform: "scale(1.02)" },
-      { transform: "scale(1)" }
-    ],
-    {
-      duration: 360,
-      easing: "cubic-bezier(0.22, 1, 0.36, 1)"
-    }
-  );
+  return;
 }
 
 function bindSectionNavMotion() {
