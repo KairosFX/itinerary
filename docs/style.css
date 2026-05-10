@@ -18053,7 +18053,7 @@ html.reduce-effects .reveal-block.is-visible {
   justify-self: end !important;
   width: fit-content !important;
   max-width: min(100%, 42rem) !important;
-  padding: 0.1rem !important;
+  padding: 0.12rem !important;
   border: 1px solid rgba(244, 239, 226, 0.1) !important;
   border-radius: 999px !important;
   background:
@@ -18084,12 +18084,14 @@ html.reduce-effects .reveal-block.is-visible {
 
 .section-tab,
 .site-header.is-condensed .section-tab {
-  min-height: 2rem !important;
-  padding: 0.36rem 0.56rem !important;
+  min-height: 2.18rem !important;
+  padding: 0.44rem 0.68rem !important;
   border: 1px solid transparent !important;
-  border-radius: 0.72rem !important;
+  border-radius: 0.78rem !important;
   background: transparent !important;
   box-shadow: none !important;
+  font-size: 0.8rem !important;
+  line-height: 1.08 !important;
 }
 
 .section-tab:hover:not(.is-active):not([aria-selected="true"]),
@@ -18112,9 +18114,9 @@ html.reduce-effects .reveal-block.is-visible {
 
 .language-switcher,
 .site-header.is-condensed .language-switcher {
-  --language-highlight-width: calc((100% - 0.4rem) / 2);
-  column-gap: 0.16rem !important;
-  padding: 0.12rem !important;
+  --language-highlight-width: calc((100% - 0.44rem) / 2);
+  column-gap: 0.18rem !important;
+  padding: 0.13rem !important;
   background:
     linear-gradient(180deg, rgba(10, 17, 14, 0.62), rgba(2, 6, 5, 0.44)),
     rgba(2, 6, 5, 0.5) !important;
@@ -18122,14 +18124,16 @@ html.reduce-effects .reveal-block.is-visible {
 
 .language-switcher::before,
 html[lang="ja"] .language-switcher::before {
-  top: 0.12rem !important;
-  bottom: 0.12rem !important;
+  top: 0.13rem !important;
+  bottom: 0.13rem !important;
 }
 
 .language-button,
 .site-header.is-condensed .language-button {
-  min-height: 1.94rem !important;
-  padding: 0.34rem 0.62rem !important;
+  min-height: 2.08rem !important;
+  padding: 0.38rem 0.72rem !important;
+  font-size: 0.76rem !important;
+  line-height: 1.08 !important;
 }
 
 .travel-radio__body {
@@ -18147,8 +18151,14 @@ html[lang="ja"] .language-switcher::before {
   aspect-ratio: 16 / 9 !important;
 }
 
+.travel-radio__signal::before,
+.travel-radio__signal::after,
 .travel-radio__youtube,
 .travel-radio__artwork {
+  --radio-video-overscan: 100%;
+  --radio-video-shift-y: 0%;
+  --radio-youtube-crop-scale: 100%;
+  --radio-youtube-crop-y: 0;
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
@@ -18156,6 +18166,8 @@ html[lang="ja"] .language-switcher::before {
   background: #020605 !important;
 }
 
+.travel-radio__signal::before,
+.travel-radio__signal::after,
 .travel-radio__youtube::before,
 .travel-radio__youtube::after {
   content: none !important;
@@ -18173,6 +18185,7 @@ html[lang="ja"] .language-switcher::before {
   background: #020605 !important;
   object-fit: contain !important;
   transform: none !important;
+  transform-origin: center center !important;
   pointer-events: none !important;
 }
 
@@ -18182,6 +18195,7 @@ html[lang="ja"] .language-switcher::before {
 .travel-radio[data-radio-state="playing"][data-radio-video-visible="true"] .travel-radio__youtube {
   opacity: 1 !important;
   visibility: visible !important;
+  transition-delay: 0ms !important;
 }
 
 .travel-radio[data-radio-state="paused"][data-radio-video-visible="true"] .travel-radio__artwork,
@@ -18190,6 +18204,7 @@ html[lang="ja"] .language-switcher::before {
 .travel-radio[data-radio-state="playing"][data-radio-video-visible="true"] .travel-radio__artwork {
   opacity: 0 !important;
   visibility: hidden !important;
+  transition-delay: 0ms !important;
 }
 
 .travel-radio[data-radio-state="idle"] .travel-radio__youtube,
@@ -18214,7 +18229,7 @@ html[lang="ja"] .language-switcher::before {
     justify-self: stretch !important;
     width: 100% !important;
     max-width: 100% !important;
-    padding: 0.08rem !important;
+    padding: 0.1rem !important;
     border-radius: 0.82rem !important;
   }
 
@@ -18227,17 +18242,24 @@ html[lang="ja"] .language-switcher::before {
 
   .section-tab,
   .site-header.is-condensed .section-tab {
-    min-height: 1.92rem !important;
-    padding: 0.28rem 0.08rem !important;
+    min-height: 2.02rem !important;
+    padding: 0.32rem 0.08rem !important;
     border-radius: 0.62rem !important;
-    font-size: 0.56rem !important;
+    font-size: 0.59rem !important;
     letter-spacing: 0 !important;
   }
 
   .language-switcher,
   .site-header.is-condensed .language-switcher {
     column-gap: 0.14rem !important;
-    width: min(13rem, 100%) !important;
+    width: min(13.6rem, 100%) !important;
+  }
+
+  .language-button,
+  .site-header.is-condensed .language-button {
+    min-height: 2rem !important;
+    padding: 0.34rem 0.56rem !important;
+    font-size: 0.7rem !important;
   }
 }
 

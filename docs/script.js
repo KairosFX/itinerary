@@ -3015,6 +3015,7 @@ function getRadioYoutubeOrigin() {
 }
 
 function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
+  // These are the cleanest iframe options YouTube exposes; some YouTube-owned overlays may still appear.
   const params = new URLSearchParams({
     enablejsapi: "1",
     autoplay: autoplay ? "1" : "0",
