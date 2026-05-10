@@ -67,14 +67,12 @@ const budgetBucketDefinitions = [
 const budgetStayTypeDefinitions = [
   { id: "hotel", label: { en: "Hotel stay", ja: "ホテル泊" } },
   { id: "ryokan", label: { en: "Ryokan stay", ja: "旅館泊" } },
-  { id: "relative", label: { en: "Private stay", ja: "プライベート滞在" } },
   { id: "none", label: { en: "No hotel", ja: "ホテルなし" } }
 ];
 const budgetStayOptionOrder = {
   none: 0,
-  relative: 1,
-  hotel: 2,
-  ryokan: 2
+  hotel: 1,
+  ryokan: 1
 };
 
 const itineraryBudgetLabels = {
@@ -120,8 +118,8 @@ const itineraryBudgetLabels = {
     ja: "ホテルや旅館の1室見積りを何人で分けるかを設定します。"
   },
   stayHintFallback: {
-    en: "Switch between the listed stay and any private or no-hotel fallback you actually have.",
-    ja: "表示中の滞在と、実際に使えるプライベート滞在やホテルなしの代替を切り替えられます。"
+    en: "Choose No hotel by default, or add a listed paid stay when this night needs one.",
+    ja: "初期値はホテルなしです。必要な夜だけ、表示中の有料宿泊へ切り替えられます。"
   },
   statusLoading: {
     en: "Loading itinerary cost model...",
@@ -283,6 +281,7 @@ const itineraryBudgetLabels = {
     { id: "high", label: itineraryBudgetLabels.levelHigh, pillClass: "budget-pill--high" }
   ];
   let activeBudgetDay = null;
+  let budgetNotesStateNeedsMigration = false;
   const createBudgetRange = (lean = 0, expected = 0, high = 0) => ({
     lean: Number(lean) || 0,
     expected: Number(expected) || 0,
@@ -445,10 +444,15 @@ const itineraryBudgetLabels = {
       const normalizedDay = Number.parseInt(String(day), 10);
       const definition = getDayDefinition(normalizedDay);
       if (Number.isNaN(normalizedDay) || !definition) {
+        budgetNotesStateNeedsMigration = true;
         return nextState;
       }
 
       const normalizedEntry = normalizeDayEntry(definition, entry);
+      if (entry?.stayId && normalizedEntry.stayId !== entry.stayId) {
+        budgetNotesStateNeedsMigration = true;
+      }
+
       if (normalizedEntry.stayId && normalizedEntry.stayId !== definition.defaultStayId) {
         nextState[String(normalizedDay)] = normalizedEntry;
       }
@@ -490,6 +494,8 @@ const itineraryBudgetLabels = {
     if (!budgetNotesInitialized) {
       budgetNotesState = readState();
       budgetNotesInitialized = true;
+    } else {
+      budgetNotesState.days = normalizeDayEntries(budgetNotesState.days);
     }
 
     return budgetNotesState;
@@ -576,11 +582,13 @@ const itineraryBudgetLabels = {
       budgetNotesState.days && typeof budgetNotesState.days[String(day)] === "object"
         ? budgetNotesState.days[String(day)]
         : {};
-    const defaultStayId = getDefaultStayId(day);
+    const definition = getDayDefinition(day);
+    const defaultStayId = definition?.defaultStayId || null;
+    const allowedStayIds = new Set(Array.isArray(definition?.stayOptions) ? definition.stayOptions : []);
 
     return {
       note: "",
-      stayId: typeof entry.stayId === "string" ? entry.stayId : defaultStayId
+      stayId: allowedStayIds.has(entry.stayId) ? entry.stayId : defaultStayId
     };
   };
   const updateDayState = (day, nextState) => {
@@ -1423,6 +1431,10 @@ const itineraryBudgetLabels = {
     }
 
     hydrateState();
+    if (budgetNotesStateNeedsMigration) {
+      budgetNotesStateNeedsMigration = false;
+      storeState();
+    }
     bindUI();
     syncUI();
     return Promise.resolve();

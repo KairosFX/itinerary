@@ -38,8 +38,8 @@
         "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目の到着準備、海遊館の開館時間、ミナミの夜に合いやすく、無関係な地区のホテルより実用的です。"
       },
       "assumption": {
-        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. The saved amount tracks a low-end Minami-side baseline room quote, while the live Booking.com link opens area results so you can compare current options.",
-        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。保存金額はミナミ側の低め基準ルーム料金に合わせ、Booking.com リンクでは周辺候補を比較できる検索結果を開きます。"
+        "en": "Used only if you switch a no-hotel Osaka night to a paid hotel. The saved amount tracks a low-end Minami-side baseline room quote, while the live Booking.com link opens area results so you can compare current options.",
+        "ja": "大阪でホテルなしの日を有料ホテルへ切り替える時だけ使います。保存金額はミナミ側の低め基準ルーム料金に合わせ、Booking.com リンクでは周辺候補を比較できる検索結果を開きます。"
       },
       "source": {
         "label": {
@@ -172,8 +172,8 @@
         "ja": "宿泊予約導線"
       },
       "summary": {
-        "en": "The base stay plan is explicit: private/local or no-cost Osaka night on Day 1 unless switched, Kyoto hotel on Day 2, Mt. Fuji area nights on Days 3-4, Tokyo hotel nights on Days 5-6, and no paid stay by default on the Day 7 flight-home wrap-up. Saved hotel amounts stay stored as shared-room quotes before the travellers-per-room split, and the live links now open Booking.com results pages for each route-fit stay area.",
-        "ja": "基本の滞在計画を明示しています。1日目の大阪は、切り替えない限りローカル・プライベート滞在または宿泊費なし、2日目は京都ホテル、3日目と4日目は富士エリア宿泊、東京ホテルは5日目から6日目で、7日目は帰国日のため初期値では有料宿泊を入れていません。保存したホテル金額は1室を何人で分けるかの計算前の共有ルーム料金として扱い、ライブリンクは各滞在エリアの Booking.com 検索結果を開きます。"
+        "en": "The base stay plan now starts every day at No hotel, then lets you add a route-fit paid stay only when that night needs one. Saved hotel amounts stay stored as shared-room quotes before the travellers-per-room split, and the live links now open Booking.com results pages for each stay area.",
+        "ja": "基本の滞在計画は、すべての日を「ホテルなし」から始め、必要な夜だけ動線に合う有料宿泊へ切り替える形にしています。保存したホテル金額は1室を何人で分けるかの計算前の共有ルーム料金として扱い、ライブリンクは各滞在エリアの Booking.com 検索結果を開きます。"
       },
       "links": [
         {
@@ -447,36 +447,6 @@
         "sourceCostId": "tokyo-base-hotel"
       }
     },
-    "relative-stay": {
-      "id": "relative-stay",
-      "type": "relative",
-      "label": {
-        "en": "Private stay",
-        "ja": "プライベート滞在"
-      },
-      "bucket": "free",
-      "sourceGroup": "assumptions",
-      "area": {
-        "en": "Local/private base",
-        "ja": "ローカル・プライベート拠点"
-      },
-      "cost": {
-        "mode": "none",
-        "amount": 0
-      },
-      "formulaCopy": {
-        "en": "No room charge",
-        "ja": "宿泊費なし"
-      },
-      "routeReason": {
-        "en": "Use this for any private or local stay already arranged. The accommodation cost stays free and the route-based hotel logic does not override it unless you deliberately switch stay type.",
-        "ja": "すでに決まっているローカル・プライベート滞在に使います。滞在タイプを明示的に切り替えない限り宿泊費は0円のままで、動線ベースのホテルロジックも上書きしません。"
-      },
-      "assumption": {
-        "en": "Use this when a private or local stay is already arranged for that day.",
-        "ja": "その日にローカル・プライベート滞在がすでに決まっている時に使います。"
-      }
-    },
     "no-accommodation": {
       "id": "no-accommodation",
       "type": "none",
@@ -511,11 +481,10 @@
   "dayDefinitions": [
     {
       "day": 1,
-      "defaultStayId": "relative-stay",
+      "defaultStayId": "no-accommodation",
       "stayOptions": [
-        "relative-stay",
-        "osaka-compact-hotel",
-        "no-accommodation"
+        "no-accommodation",
+        "osaka-compact-hotel"
       ],
       "title": {
         "en": "Day 1 - Osaka",
@@ -600,11 +569,10 @@
     },
     {
       "day": 2,
-      "defaultStayId": "kyoto-midrange-hotel",
+      "defaultStayId": "no-accommodation",
       "stayOptions": [
-        "kyoto-midrange-hotel",
-        "relative-stay",
-        "no-accommodation"
+        "no-accommodation",
+        "kyoto-midrange-hotel"
       ],
       "title": {
         "en": "Day 2 - Kyoto",
@@ -715,11 +683,10 @@
     },
     {
       "day": 3,
-      "defaultStayId": "kawaguchiko-base-hotel",
+      "defaultStayId": "no-accommodation",
       "stayOptions": [
-        "kawaguchiko-base-hotel",
-        "relative-stay",
-        "no-accommodation"
+        "no-accommodation",
+        "kawaguchiko-base-hotel"
       ],
       "title": {
         "en": "Day 3 - Arashiyama to Fuji",
@@ -814,11 +781,10 @@
     },
     {
       "day": 4,
-      "defaultStayId": "kawaguchiko-base-hotel",
+      "defaultStayId": "no-accommodation",
       "stayOptions": [
-        "kawaguchiko-base-hotel",
-        "relative-stay",
-        "no-accommodation"
+        "no-accommodation",
+        "kawaguchiko-base-hotel"
       ],
       "title": {
         "en": "Day 4 - Mt. Fuji",
@@ -926,11 +892,10 @@
     },
     {
       "day": 5,
-      "defaultStayId": "tokyo-base-hotel",
+      "defaultStayId": "no-accommodation",
       "stayOptions": [
-        "tokyo-base-hotel",
-        "relative-stay",
-        "no-accommodation"
+        "no-accommodation",
+        "tokyo-base-hotel"
       ],
       "title": {
         "en": "Central Tokyo + Shibuya",
@@ -1038,11 +1003,10 @@
     },
     {
       "day": 6,
-      "defaultStayId": "tokyo-base-hotel",
+      "defaultStayId": "no-accommodation",
       "stayOptions": [
-        "tokyo-base-hotel",
-        "relative-stay",
-        "no-accommodation"
+        "no-accommodation",
+        "tokyo-base-hotel"
       ],
       "title": {
         "en": "East Tokyo + Shinjuku night",
@@ -1149,8 +1113,7 @@
       "defaultStayId": "no-accommodation",
       "stayOptions": [
         "no-accommodation",
-        "tokyo-base-hotel",
-        "relative-stay"
+        "tokyo-base-hotel"
       ],
       "title": {
         "en": "Final airport day",

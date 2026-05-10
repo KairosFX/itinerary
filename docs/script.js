@@ -4565,6 +4565,17 @@ function getDefaultBudgetNotesState() {
 let budgetNotesState = getDefaultBudgetNotesState();
 let budgetNotesInitialized = false;
 
+function normalizeStoredBudgetStayId(day, stayId) {
+  const definition = getBudgetDayDefinition(day);
+  if (!definition) {
+    return typeof stayId === "string" ? stayId : null;
+  }
+
+  const defaultStayId = definition.defaultStayId || null;
+  const allowedStayIds = new Set(Array.isArray(definition.stayOptions) ? definition.stayOptions : []);
+  return allowedStayIds.has(stayId) ? stayId : defaultStayId;
+}
+
 function readStoredBudgetNotesState() {
   const fallbackState = getDefaultBudgetNotesState();
 
@@ -4585,7 +4596,7 @@ function readStoredBudgetNotesState() {
 
             nextState[String(day)] = {
               note: typeof entry.note === "string" ? entry.note.slice(0, 280) : "",
-              stayId: typeof entry.stayId === "string" ? entry.stayId : null
+              stayId: normalizeStoredBudgetStayId(day, entry.stayId)
             };
             return nextState;
           }, {})
@@ -4629,9 +4640,14 @@ function getBudgetDayState(day) {
     budgetNotesState.days && typeof budgetNotesState.days[dayKey] === "object"
       ? budgetNotesState.days[dayKey]
       : null;
-  return entry || {
-    note: "",
-    stayId: getBudgetDayDefinition(day)?.defaultStayId || null
+  const definition = getBudgetDayDefinition(day);
+  const defaultStayId = definition?.defaultStayId || null;
+  const allowedStayIds = new Set(Array.isArray(definition?.stayOptions) ? definition.stayOptions : []);
+  const stayId = allowedStayIds.has(entry?.stayId) ? entry.stayId : defaultStayId;
+
+  return {
+    note: typeof entry?.note === "string" ? entry.note : "",
+    stayId
   };
 }
 
