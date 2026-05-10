@@ -23,7 +23,6 @@ const radioPreviousButton = document.querySelector("[data-radio-previous]");
 const radioNextButton = document.querySelector("[data-radio-next]");
 const radioVolumeInput = document.querySelector("[data-radio-volume]");
 const radioVolumeLabel = document.querySelector("[data-radio-volume-label]");
-const radioStatusNode = document.querySelector("[data-radio-status]");
 let radioYoutubeMountNode = document.querySelector("[data-radio-youtube-player]");
 const radioVisibilityToggleButton = document.querySelector("[data-radio-visibility-toggle]");
 const radioVisibilityIconNode = document.querySelector("[data-radio-visibility-icon]");
@@ -1362,6 +1361,7 @@ let radioThemeExtractionToken = 0;
 let radioPendingPlaybackHistoryIndex = null;
 let radioPreviousActionUntilMs = 0;
 let radioPreviousActionTrackIndex = -1;
+let radioHasStartedPlayback = false;
 let radioNeedsInitialRandomTrack = true;
 let radioShuffleQueue = [];
 let radioPlaylistTrackCountWaiters = [];
@@ -1912,11 +1912,7 @@ function getResolvedAppAssetManifest() {
 
 function getRadioLabels() {
   return {
-    idle: { en: "Quiet", ja: "待機中" },
     loading: { en: "Tuning...", ja: "チューニング中..." },
-    ready: { en: "Press play", ja: "再生できます" },
-    playing: { en: "On air", ja: "再生中" },
-    paused: { en: "Paused", ja: "一時停止" },
     fallback: { en: "Radio unavailable", ja: "ラジオを利用できません" },
     play: { en: "Play radio", ja: "ラジオを再生" },
     pause: { en: "Pause radio", ja: "ラジオを一時停止" },
@@ -1929,7 +1925,7 @@ function getRadioLabels() {
 }
 
 function getRadioLabel(key) {
-  const labels = getRadioLabels()[key] || getRadioLabels().idle;
+  const labels = getRadioLabels()[key] || getRadioLabels().play;
   return getLocalizedText(labels);
 }
 
@@ -2217,15 +2213,13 @@ function syncRadioVolumeUi() {
   }
 }
 
-function setRadioStatus(key) {
-  if (radioStatusNode) {
-    radioStatusNode.textContent = getRadioLabel(key);
-  }
-}
+function setRadioStatus() {}
 
 function setRadioState(nextState) {
   radioPlayerNode?.setAttribute("data-radio-state", nextState);
-  if (nextState !== "playing") {
+  if (radioHasStartedPlayback && nextState !== "fallback" && !radioState.loadFailed) {
+    setRadioYoutubeVideoVisible(true);
+  } else if (nextState !== "playing") {
     clearRadioYoutubeVideoReveal();
     setRadioYoutubeVideoVisible(false);
   }
@@ -2808,7 +2802,7 @@ function updateRadioArtworkFromInfo(info = {}) {
   const videoId = getRadioVideoIdFromInfo(info);
   if (videoId) {
     radioCurrentVideoId = videoId;
-    if (radioState.isPlaying) {
+    if (radioState.isPlaying || radioHasStartedPlayback) {
       setRadioArtworkSource(getRadioArtworkUrlForVideo(videoId), {
         kind: "track",
         title: radioCurrentTrackTitle || radioStationMeta.title
@@ -2817,12 +2811,16 @@ function updateRadioArtworkFromInfo(info = {}) {
     }
   }
 
-  if (!radioState.isPlaying && radioArtworkNode?.dataset.radioArtworkKind !== "playlist") {
+  if (
+    !radioState.isPlaying &&
+    !radioHasStartedPlayback &&
+    radioArtworkNode?.dataset.radioArtworkKind !== "playlist"
+  ) {
     setRadioDefaultArtwork();
     return;
   }
 
-  if (!radioCurrentArtworkUrl || (trackTitle && trackTitle !== previousTrackTitle)) {
+  if (!radioHasStartedPlayback && (!radioCurrentArtworkUrl || (trackTitle && trackTitle !== previousTrackTitle))) {
     setRadioDefaultArtwork();
     return;
   }
@@ -2894,13 +2892,24 @@ function clearRadioYoutubeVideoReveal() {
 }
 
 function setRadioYoutubeVideoVisible(isVisible) {
-  radioPlayerNode?.setAttribute("data-radio-video-visible", isVisible ? "true" : "false");
+  const shouldShowVideo = Boolean(isVisible) && !radioState.loadFailed && !radioYoutubeDisabled;
+  radioPlayerNode?.setAttribute("data-radio-video-visible", shouldShowVideo ? "true" : "false");
+}
+
+function revealRadioYoutubeVideo() {
+  if (radioState.loadFailed || radioYoutubeDisabled) {
+    return;
+  }
+
+  radioHasStartedPlayback = true;
+  clearRadioYoutubeVideoReveal();
+  setRadioYoutubeVideoVisible(true);
 }
 
 function scheduleRadioYoutubeVideoReveal(delay = radioYoutubeVideoRevealDelayMs) {
   clearRadioYoutubeVideoReveal();
-  if (delay <= 0) {
-    setRadioYoutubeVideoVisible(true);
+  if (radioHasStartedPlayback || delay <= 0) {
+    revealRadioYoutubeVideo();
     return;
   }
 
@@ -2908,7 +2917,7 @@ function scheduleRadioYoutubeVideoReveal(delay = radioYoutubeVideoRevealDelayMs)
   radioYoutubeVideoRevealTimer = window.setTimeout(() => {
     radioYoutubeVideoRevealTimer = 0;
     if (radioState.isPlaying && !radioState.loadFailed) {
-      setRadioYoutubeVideoVisible(true);
+      revealRadioYoutubeVideo();
     }
   }, Math.max(0, Number(delay) || 0));
 }
@@ -2932,6 +2941,7 @@ function disableRadioYoutubeEmbed() {
   radioYoutubePlayerReady = false;
   radioYoutubePlayer = null;
   radioYoutubePlayerReadyPromise = null;
+  radioHasStartedPlayback = false;
   clearRadioPlaybackConfirmation();
   clearRadioYoutubeVideoReveal();
   setRadioYoutubeVideoVisible(false);
@@ -3642,7 +3652,7 @@ function handleRadioYoutubeMessage(event) {
     radioState.isPlaying = true;
     setRadioCurrentTime(getEstimatedRadioCurrentTime());
     setRadioState("playing");
-    scheduleRadioYoutubeVideoReveal();
+    revealRadioYoutubeVideo();
     startRadioYoutubeInfoPolling();
   } else if (playerState === 0 && wasPlaying && radioState.canSkip) {
     clearRadioPlaybackConfirmation();
@@ -3654,8 +3664,12 @@ function handleRadioYoutubeMessage(event) {
     radioState.isPlaying = false;
     setRadioState(radioState.isReady ? "paused" : "ready");
     clearRadioYoutubeVideoReveal();
-    setRadioYoutubeVideoVisible(false);
-    ensureRadioArtworkImageLoaded();
+    if (radioHasStartedPlayback) {
+      setRadioYoutubeVideoVisible(true);
+    } else {
+      setRadioYoutubeVideoVisible(false);
+      ensureRadioArtworkImageLoaded();
+    }
     clearRadioYoutubeInfoPolling();
   }
 
@@ -3807,8 +3821,6 @@ function pauseRadio() {
   clearRadioPlaybackConfirmation();
   clearRadioYoutubeInfoPolling();
   clearRadioYoutubeVideoReveal();
-  setRadioYoutubeVideoVisible(false);
-  ensureRadioArtworkImageLoaded();
   try {
     radioYoutubePlayer?.pauseVideo?.();
   } catch {
@@ -3817,6 +3829,11 @@ function pauseRadio() {
   setRadioCurrentTime(getEstimatedRadioCurrentTime());
   radioState.isPlaying = false;
   setRadioState(radioState.loadFailed ? "fallback" : "paused");
+  if (radioHasStartedPlayback && !radioState.loadFailed) {
+    setRadioYoutubeVideoVisible(true);
+  } else {
+    ensureRadioArtworkImageLoaded();
+  }
   syncRadioControls();
   updateRadioMediaSessionPlaybackState();
 }
