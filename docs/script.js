@@ -103,7 +103,7 @@ const deferredGeometryReleaseDelayMs = 160;
 const deferredNonCriticalLayoutTimeoutMs = 700;
 const offlineSnapshotUrl = "./itinerary-offline.html";
 const serviceWorkerUrl = "./service-worker.js";
-const offlineBundleVersion = "2026-05-09-offline-v34";
+const offlineBundleVersion = "2026-05-19-offline-v35";
 const siteBackdropImages = [
   {
     src: "./assets/backgrounds/original/AdobeStock_133085779.jpeg"
@@ -3017,22 +3017,17 @@ function getRadioYoutubeOrigin() {
 function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
   // These are the cleanest iframe options YouTube exposes; some YouTube-owned overlays may still appear.
   const params = new URLSearchParams({
-    enablejsapi: "1",
     autoplay: autoplay ? "1" : "0",
-    autohide: "1",
-    cc_load_policy: "0",
-    color: "white",
     controls: "0",
+    modestbranding: "1",
+    rel: "0",
+    playsinline: "1",
+    enablejsapi: "1",
+    iv_load_policy: "3",
     disablekb: "1",
     fs: "0",
-    html5: "1",
-    iv_load_policy: "3",
     list: radioPlaylistId,
-    listType: "playlist",
-    modestbranding: "1",
-    playsinline: "1",
-    rel: "0",
-    showinfo: "0"
+    listType: "playlist"
   });
   const origin = getRadioYoutubeOrigin();
   if (origin) {
@@ -3077,6 +3072,23 @@ function syncRadioYoutubeIframeSource(iframe, { autoplay = false } = {}) {
 }
 
 function getRadioYoutubeMountNode() {
+  const existingMountNodes = Array.from(document.querySelectorAll("[data-radio-youtube-player]"));
+  const preferredMountNode =
+    radioYoutubeMountNode ||
+    existingMountNodes.find((node) => node.parentElement === radioFrameNode) ||
+    existingMountNodes[0] ||
+    null;
+
+  existingMountNodes.forEach((node) => {
+    if (node !== preferredMountNode) {
+      node.remove();
+    }
+  });
+
+  if (preferredMountNode) {
+    radioYoutubeMountNode = preferredMountNode;
+  }
+
   if (radioYoutubeMountNode) {
     if (radioFrameNode && radioYoutubeMountNode.parentElement !== radioFrameNode) {
       radioFrameNode.prepend(radioYoutubeMountNode);
@@ -3092,12 +3104,61 @@ function getRadioYoutubeMountNode() {
   return mountNode;
 }
 
+function normalizeRadioYoutubeIframeDom(mountNode, preferredIframe = null) {
+  if (!mountNode) {
+    return null;
+  }
+
+  const iframeNodes = Array.from(mountNode.querySelectorAll("iframe"));
+  const nextIframe =
+    preferredIframe instanceof HTMLIFrameElement
+      ? preferredIframe
+      : iframeNodes.find((iframe) => iframe.id === radioYoutubePlayerId) || iframeNodes[0] || null;
+
+  iframeNodes.forEach((iframe) => {
+    if (iframe !== nextIframe) {
+      iframe.remove();
+    }
+  });
+
+  Array.from(document.querySelectorAll(`iframe#${radioYoutubePlayerId}`)).forEach((iframe) => {
+    if (iframe !== nextIframe) {
+      iframe.remove();
+    }
+  });
+
+  return nextIframe;
+}
+
+function applyRadioYoutubeIframeAttributes(iframe) {
+  if (!(iframe instanceof HTMLIFrameElement)) {
+    return;
+  }
+
+  iframe.id = radioYoutubePlayerId;
+  iframe.title = "Kairos VIII playlist radio";
+  iframe.width = "320";
+  iframe.height = "180";
+  iframe.loading = "lazy";
+  iframe.allow = "autoplay; encrypted-media";
+  iframe.referrerPolicy = "strict-origin-when-cross-origin";
+  iframe.setAttribute("tabindex", "-1");
+  iframe.removeAttribute("allowfullscreen");
+  iframe.removeAttribute("aria-hidden");
+}
+
 function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   if (radioYoutubeDisabled) {
     return null;
   }
 
   if (radioYoutubeIframe) {
+    const mountNode = getRadioYoutubeMountNode();
+    if (mountNode && radioYoutubeIframe.parentElement !== mountNode) {
+      mountNode.replaceChildren(radioYoutubeIframe);
+    }
+    normalizeRadioYoutubeIframeDom(mountNode, radioYoutubeIframe);
+    applyRadioYoutubeIframeAttributes(radioYoutubeIframe);
     syncRadioYoutubeIframeSource(radioYoutubeIframe, {
       autoplay: autoplay || radioYoutubeIframe.dataset.radioAutoplay === "true"
     });
@@ -3109,20 +3170,9 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   }
 
   const mountNode = getRadioYoutubeMountNode();
-  const existingIframe = mountNode?.querySelector("iframe");
+  const existingIframe = normalizeRadioYoutubeIframeDom(mountNode, mountNode?.querySelector("iframe"));
   if (existingIframe instanceof HTMLIFrameElement) {
-    existingIframe.id = radioYoutubePlayerId;
-    existingIframe.title = "Kairos VIII playlist radio";
-    existingIframe.allow = "autoplay; encrypted-media; picture-in-picture";
-    existingIframe.referrerPolicy = "strict-origin-when-cross-origin";
-    existingIframe.loading = "lazy";
-    existingIframe.removeAttribute("allowfullscreen");
-    existingIframe.removeAttribute("aria-hidden");
-    mountNode.querySelectorAll("iframe").forEach((iframe) => {
-      if (iframe !== existingIframe) {
-        iframe.remove();
-      }
-    });
+    applyRadioYoutubeIframeAttributes(existingIframe);
     syncRadioYoutubeIframeSource(existingIframe, {
       autoplay: autoplay || existingIframe.dataset.radioAutoplay === "true"
     });
@@ -3135,17 +3185,9 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   }
 
   const iframe = document.createElement("iframe");
-  iframe.id = radioYoutubePlayerId;
-  iframe.title = "Kairos VIII playlist radio";
+  applyRadioYoutubeIframeAttributes(iframe);
   iframe.src = getRadioYoutubeEmbedUrl({ autoplay });
   iframe.dataset.radioAutoplay = autoplay ? "true" : "false";
-  iframe.width = "320";
-  iframe.height = "180";
-  iframe.loading = "lazy";
-  iframe.allow = "autoplay; encrypted-media; picture-in-picture";
-  iframe.referrerPolicy = "strict-origin-when-cross-origin";
-  iframe.setAttribute("tabindex", "-1");
-  iframe.removeAttribute("allowfullscreen");
   mountNode?.replaceChildren(iframe);
   radioYoutubeIframe = iframe;
   return radioYoutubeIframe;
