@@ -98,8 +98,8 @@
         "ja": "現在の富士エリアのグループ向け高コスパ客室"
       },
       "routeReason": {
-        "en": "This area keeps the Day 3 Mishima handoff plus the fuller Day 4 Chureito Shimoyoshida, Lake Kawaguchiko, Oishi Park, and optional ropeway block practical without paying for a remote resort that fights the actual route.",
-        "ja": "このエリアなら、3日目の三島ハンドオフに加え、4日目の忠霊塔・下吉田、河口湖、大石公園、任意のロープウェイのまとまりも進めやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
+        "en": "This area keeps the Day 3 Mishima handoff plus the fuller Day 4 Chureito Shimoyoshida, Lake Kawaguchiko, Oishi Park, and Mt. Fuji Panoramic Ropeway block practical without paying for a remote resort that fights the actual route.",
+        "ja": "このエリアなら、3日目の三島ハンドオフに加え、4日目の忠霊塔・下吉田、河口湖、大石公園、富士山パノラマロープウェイのまとまりも進めやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
         "en": "Day 3 keeps its saved amount anchored to the Kawaguchiko-side baseline shared-room quote, while the live Trip.com link opens a hotel page for comparing a station-to-lake base.",
@@ -225,8 +225,8 @@
         "ja": "主要移動の確認先"
       },
       "summary": {
-        "en": "Day 3 carries the full eastbound transfer into the Mt. Fuji base, Day 4 stays local for Chureito, Lake Kawaguchiko, Oishi Park, and the optional ropeway, and Day 5 handles the Central Tokyo transfer. The live transit links prioritize Trip.com train and transport search pages where appropriate.",
-        "ja": "3日目は富士エリア拠点までの東向き移動をまとめ、4日目は忠霊塔・下吉田、河口湖、大石公園、任意のロープウェイを現地で回し、5日目に東京中心部へ移動します。移動リンクは、必要に応じて Trip.com の鉄道・交通検索ページを優先しています。"
+        "en": "Day 3 carries the full eastbound transfer into the Mt. Fuji base, Day 4 stays local for Chureito, Lake Kawaguchiko, Oishi Park, and the Mt. Fuji Panoramic Ropeway, and Day 5 handles the Central Tokyo transfer. The live transit links prioritize Trip.com train and transport search pages where appropriate.",
+        "ja": "3日目は富士エリア拠点までの東向き移動をまとめ、4日目は忠霊塔・下吉田、河口湖、大石公園、富士山パノラマロープウェイを現地で回し、5日目に東京中心部へ移動します。移動リンクは、必要に応じて Trip.com の鉄道・交通検索ページを優先しています。"
       },
       "links": [
         {
@@ -411,8 +411,8 @@
         "ja": "富士ホテル"
       },
       "routeReason": {
-        "en": "This base keeps the Day 3 Mishima handoff, the hot-spring reset, and the fuller Day 4 Chureito, Kawaguchiko, Oishi Park, and optional ropeway block practical without paying for a remote resort location that fights the real station and bus flow.",
-        "ja": "この拠点なら、3日目の三島ハンドオフ、温泉での立て直し、4日目の忠霊塔、河口湖、大石公園、任意のロープウェイのまとまりを進めやすく、実際の駅・バス動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
+        "en": "This base keeps the Day 3 Mishima handoff, the hot-spring reset, and the fuller Day 4 Chureito, Kawaguchiko, Oishi Park, and Mt. Fuji Panoramic Ropeway block practical without paying for a remote resort location that fights the real station and bus flow.",
+        "ja": "この拠点なら、3日目の三島ハンドオフ、温泉での立て直し、4日目の忠霊塔、河口湖、大石公園、富士山パノラマロープウェイのまとまりを進めやすく、実際の駅・バス動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
       },
       "cost": {
         "mode": "perGroup",
@@ -693,7 +693,7 @@
         "ja": "3日目・嵐山から富士"
       },
       "subtitle": {
-        "en": "Arashiyama, 1 Bullet Train ride to Mishima, then the Fuji transfer night",
+        "en": "Arashiyama, Kyoto transfer, then the Fuji transfer night",
         "ja": "嵐山、三島へ移動、そして富士への移動で締める日"
       },
       "items": [
@@ -712,8 +712,8 @@
         },
         {
           "label": {
-            "en": "1 Bullet Train ride to Mishima",
-            "ja": "三島へ移動"
+            "en": "Kyoto",
+            "ja": "京都"
           },
           "category": "intercityTransit",
           "bucket": "booked",
@@ -791,8 +791,8 @@
         "ja": "4日目・富士山"
       },
       "subtitle": {
-        "en": "Chureito, Lake Kawaguchiko, Oishi Park, optional ropeway, and a second Fuji night",
-        "ja": "忠霊塔、河口湖、大石公園、任意のロープウェイ、富士エリア2泊目"
+        "en": "Chureito, Lake Kawaguchiko, Oishi Park, Mt. Fuji Panoramic Ropeway, and a second Fuji night",
+        "ja": "忠霊塔、河口湖、大石公園、富士山パノラマロープウェイ、富士エリア2泊目"
       },
       "items": [
         {
@@ -854,17 +854,17 @@
         },
         {
           "label": {
-            "en": "Optional Panoramic Ropeway",
-            "ja": "任意のパノラマロープウェイ"
+            "en": "Mt. Fuji Panoramic Ropeway",
+            "ja": "富士山パノラマロープウェイ"
           },
           "category": "ticketsAdmissions",
-          "bucket": "flexible",
+          "bucket": "booked",
           "sourceGroup": "assumptions",
           "cost": {
             "mode": "perPerson",
             "amount": 1000,
             "range": {
-              "lean": 0,
+              "lean": 1000,
               "expected": 1000,
               "high": 1500
             }

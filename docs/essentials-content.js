@@ -63,6 +63,68 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ]
     },
     {
+      "id": "osaka-stay",
+      "group": "accommodations",
+      "filters": [
+        "to-book"
+      ],
+      "kind": "booking",
+      "dayLabel": {
+        "en": "Days 1 or 3",
+        "ja": "1日目または3日目"
+      },
+      "typeLabel": {
+        "en": "Hotel / Accommodation",
+        "ja": "ホテル・宿泊"
+      },
+      "tone": {
+        "en": "Stay booking",
+        "ja": "宿泊予約"
+      },
+      "defaultStatus": {
+        "en": "Not booked",
+        "ja": "未予約"
+      },
+      "doneStatus": {
+        "en": "Booked",
+        "ja": "予約済み"
+      },
+      "toggleDefault": {
+        "en": "Mark booked",
+        "ja": "予約済みにする"
+      },
+      "toggleDone": {
+        "en": "Booked",
+        "ja": "予約済み"
+      },
+      "title": {
+        "en": "Osaka Hotel",
+        "ja": "大阪ホテル"
+      },
+      "summary": {
+        "en": "Use this as the Osaka booking reference for Day 1 or Day 3. The Minami side is chosen for route fit, not just because it is in Osaka.",
+        "ja": "1日目または3日目の大阪ホテル予約用に使います。大阪という広い括りではなく、ミナミ側の動線で選んでいます。"
+      },
+      "details": {
+        "en": "Nishi-Shinsaibashi / Minami keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical. Keep the Trip.com Hearton Hotel Shinsaibashi page here so the hotel booking flow is one tap away.",
+        "ja": "西心斎橋・ミナミなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすいです。Trip.com のハートンホテル心斎橋ページを残し、予約導線へすぐ進めるようにしています。"
+      },
+      "links": [
+        {
+          "href": "https://www.trip.com/hotels/osaka-hotel-detail-759843/hearton-hotel-shinsaibashi/",
+          "label": {
+            "en": "Trip.com hotel page",
+            "ja": "Trip.comホテルページ"
+          },
+          "note": {
+            "en": "Trip.com booking page for Hearton Hotel Shinsaibashi.",
+            "ja": "ハートンホテル心斎橋のTrip.com予約ページです。"
+          },
+          "kind": "primary"
+        }
+      ]
+    },
+    {
       "id": "kyoto-stay",
       "group": "accommodations",
       "filters": [
@@ -114,7 +176,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
       },
       "details": {
-        "en": "Use the Trip.com Kyoto hotel page to compare a route-fit stay around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Bullet Train ride to Mishima.",
+        "en": "Use the Trip.com Kyoto hotel page to compare a route-fit stay around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Kyoto transfer.",
         "ja": "Trip.com の京都ホテルページで、四条・烏丸・五条周辺の動線に合う宿を確認します。2日目の東山回遊と3日目の嵐山スタート、三島への移動をどちらも進めやすくするためです。"
       },
       "links": [
@@ -243,8 +305,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "河口湖ステイ"
       },
       "summary": {
-        "en": "The base is chosen for two Fuji-area nights so Day 3 arrival stays calm and Day 4 can carry Chureito, Kawaguchiko, Oishi Park, and the optional ropeway without rushing to Tokyo.",
-        "ja": "富士エリア2泊に合わせて拠点を選び、3日目の到着を落ち着かせ、4日目に忠霊塔、河口湖、大石公園、任意のロープウェイまで東京移動に追われず回せるようにします。"
+        "en": "The base is chosen for two Fuji-area nights so Day 3 arrival stays calm and Day 4 can carry Chureito, Kawaguchiko, Oishi Park, and the Mt. Fuji Panoramic Ropeway without rushing to Tokyo.",
+        "ja": "富士エリア2泊に合わせて拠点を選び、3日目の到着を落ち着かせ、4日目に忠霊塔、河口湖、大石公園、富士山パノラマロープウェイまで東京移動に追われず回せるようにします。"
       },
       "details": {
         "en": "Use the Trip.com Kawaguchiko hotel page to compare a practical station-to-lake base. Keeping two nights here makes the Day 4 Fuji plan weather-flexible and moves the Tokyo transfer cleanly to Day 5.",
@@ -374,15 +436,15 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "予約済み"
       },
       "title": {
-        "en": "1 Bullet Train ride to Mishima",
-        "ja": "三島へ新幹線移動"
+        "en": "Kyoto",
+        "ja": "京都"
       },
       "summary": {
-        "en": "Treat this as the fixed Bullet Train booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
-        "ja": "3日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
+        "en": "Treat this as the fixed Kyoto-side intercity booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
+        "ja": "3日目の京都側から三島ハンドオフ、河口湖へ入るための固定の都市間予約として扱います。"
       },
       "details": {
-        "en": "Use the Trip.com Kyoto-to-Mishima train page once Day 3 timing is fixed. Keep this card focused on the 1 Bullet Train ride to Mishima, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
+        "en": "Use the Trip.com Kyoto-to-Mishima train page once Day 3 timing is fixed. Keep this card focused on Kyoto, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
         "ja": "3日目の時刻が固まったら Trip.com の三島への移動ページを使います。このカードは三島への移動に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
       },
       "links": [
@@ -450,7 +512,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "3日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
       },
       "details": {
-        "en": "Use the Trip.com Mishima transport page once the Bullet Train ride to Mishima timing is locked. Keep the Mishima Station South Exit -> Kawaguchiko Station bus option saved as the practical lake-base handoff.",
+        "en": "Use the Trip.com Mishima transport page once the Kyoto-to-Mishima timing is locked. Keep the Mishima Station South Exit -> Kawaguchiko Station bus option saved as the practical lake-base handoff.",
         "ja": "三島への移動時刻が固まったら、Trip.com の三島交通ページを使います。三島駅南口 -> 河口湖駅のバス候補を、湖側拠点へ入る実用的な受け渡しとして保存しておきます。"
       },
       "links": [
@@ -592,6 +654,68 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
           "note": {
             "en": "Safer main-domain official pricing and e-ticket page",
             "ja": "より安全な公式メインドメインの料金・eチケットページ"
+          },
+          "kind": "primary"
+        }
+      ]
+    },
+    {
+      "id": "mt-fuji-panoramic-ropeway",
+      "group": "activities",
+      "filters": [
+        "to-book"
+      ],
+      "kind": "booking",
+      "dayLabel": {
+        "en": "Day 4",
+        "ja": "4日目"
+      },
+      "typeLabel": {
+        "en": "Activity",
+        "ja": "アクティビティ"
+      },
+      "tone": {
+        "en": "Reserve ahead",
+        "ja": "事前予約"
+      },
+      "defaultStatus": {
+        "en": "Not booked",
+        "ja": "未予約"
+      },
+      "doneStatus": {
+        "en": "Booked",
+        "ja": "予約済み"
+      },
+      "toggleDefault": {
+        "en": "Mark booked",
+        "ja": "予約済みにする"
+      },
+      "toggleDone": {
+        "en": "Booked",
+        "ja": "予約済み"
+      },
+      "title": {
+        "en": "Mt. Fuji Panoramic Ropeway",
+        "ja": "富士山パノラマロープウェイ"
+      },
+      "summary": {
+        "en": "Treat this as a planned Fuji-area activity for the Kawaguchiko block.",
+        "ja": "河口湖ブロックの富士エリア観光として予定に入れます。"
+      },
+      "details": {
+        "en": "Use the official ropeway site for current operating status, ticket details, and access notes before locking the Day 4 Fuji timing.",
+        "ja": "4日目の富士エリア時間を固める前に、公式ロープウェイサイトで運行状況、チケット情報、アクセスを確認します。"
+      },
+      "links": [
+        {
+          "href": "https://www.mtfujiropeway.jp/en/",
+          "label": {
+            "en": "Official ropeway site",
+            "ja": "公式ロープウェイサイト"
+          },
+          "note": {
+            "en": "Operating status, tickets, and access notes.",
+            "ja": "運行状況、チケット、アクセス案内です。"
           },
           "kind": "primary"
         }
@@ -810,12 +934,12 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     {
       "id": "kyoto-mishima-shinkansen",
       "tag": {
-        "en": "Day 3 Bullet Train ride",
-        "ja": "3日目の新幹線移動"
+        "en": "Day 3 Kyoto transfer",
+        "ja": "3日目の京都移動"
       },
       "title": {
-        "en": "1 Bullet Train ride: Kyoto -> Mishima",
-        "ja": "新幹線1本：京都 -> 三島"
+        "en": "Kyoto -> Mishima transfer",
+        "ja": "京都 -> 三島の移動"
       },
       "summary": {
         "en": "This is the fixed transfer that carries the route from Kyoto Station into the Mt. Fuji side.",
@@ -834,7 +958,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "三島駅"
       },
       "transport": {
-        "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 Bullet Train ride, then keep the Mishima-to-lake transfer saved separately.",
+        "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 Kyoto transfer, then keep the Mishima-to-lake transfer saved separately.",
         "ja": "3日目の固定移動には Trip.com の三島への移動ページを使い、三島から湖側への移動は別に保存しておきます。"
       },
       "why": {
@@ -857,7 +981,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "prepReminders": [
         {
-          "en": "Book on Trip.com once Day 3 is fixed rather than leaving the Bullet Train ride to Mishima to the last minute.",
+          "en": "Book on Trip.com once Day 3 is fixed rather than leaving the Kyoto transfer to the last minute.",
           "ja": "3日目が固まったら Trip.com で予約し、三島への移動を直前判断にしないようにします。"
         },
         {
@@ -933,7 +1057,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "prepReminders": [
         {
-          "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the Bullet Train ride to Mishima is fixed.",
+          "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the Kyoto transfer is fixed.",
           "ja": "前夜に三島発バスの時刻を確認し、三島への移動が固まったあとで当日の最終便を見直します。"
         },
         {
@@ -970,8 +1094,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "富士エリアの現地立ち寄り"
       },
       "summary": {
-        "en": "Use Day 4 as a fuller Fuji-area day: Chureito Shimoyoshida first, then Lake Kawaguchiko, Oishi Park, and the Panoramic Ropeway only if conditions fit.",
-        "ja": "4日目は富士エリアをしっかり回る日にし、忠霊塔・下吉田を先に、続けて河口湖、大石公園、条件が合えばパノラマロープウェイへ進みます。"
+        "en": "Use Day 4 as a fuller Fuji-area day: Chureito Shimoyoshida first, then Lake Kawaguchiko, Oishi Park, and the Mt. Fuji Panoramic Ropeway.",
+        "ja": "4日目は富士エリアをしっかり回る日にし、忠霊塔・下吉田を先に、続けて河口湖、大石公園、富士山パノラマロープウェイへ進みます。"
       },
       "segment": {
         "en": "Mt. Fuji area base -> Chureito Shimoyoshida -> Lake Kawaguchiko -> Oishi Park",
@@ -982,8 +1106,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "河口湖エリア"
       },
       "to": {
-        "en": "Lake-side Fuji stops, with ropeway optional",
-        "ja": "湖畔側の富士立ち寄り（ロープウェイは任意）"
+        "en": "Lake-side Fuji stops and Mt. Fuji Panoramic Ropeway",
+        "ja": "湖畔側の富士立ち寄りと富士山パノラマロープウェイ"
       },
       "transport": {
         "en": "Use Fujikyu rail or local buses for Chureito and the lake-side stops, with taxi only as a time-saving fallback when weather windows are short.",
@@ -1003,8 +1127,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
           "ja": "富士山の見え方が微妙な時は、河口湖と大石公園を確実な軸にします。"
         },
         {
-          "en": "Keep the Panoramic Ropeway optional because it depends on weather, energy, crowds, and time.",
-          "ja": "パノラマロープウェイは天気、体力、混雑、時間に左右されるため任意にします。"
+          "en": "Plan the Mt. Fuji Panoramic Ropeway after checking weather, energy, crowds, and time.",
+          "ja": "富士山パノラマロープウェイは天気、体力、混雑、時間を確認してから進めます。"
         }
       ],
       "prepReminders": [

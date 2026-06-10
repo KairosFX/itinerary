@@ -1,4 +1,4 @@
-const OFFLINE_CACHE_VERSION = "07063475d9-3f7963499b-bcec96916a-0a456839b7-afc8ce67ba-acd470b36e-2c1eabdb38-d7f675804f";
+const OFFLINE_CACHE_VERSION = "07063475d9-3f7963499b-daf9cc7646-478e337760-afc8ce67ba-b7c97eed69-fb1015d55a-4b2cd076f9";
 const CACHE_PREFIX = "japan-escape-itinerary-";
 const APP_SHELL_CACHE_NAME = `${CACHE_PREFIX}shell-${OFFLINE_CACHE_VERSION}`;
 const RUNTIME_CACHE_NAME = `${CACHE_PREFIX}runtime-${OFFLINE_CACHE_VERSION}`;
@@ -18,12 +18,12 @@ const APP_SHELL_PATHS = [
   "./assets/radio/playlist-thumbnail.jpg",
   "./assets/images/kairos-viii-magazine-cover-560.jpg",
   "./assets/app/style.07063475d9.css",
-  "./assets/app/script.bcec96916a.js",
+  "./assets/app/script.daf9cc7646.js",
   "./assets/app/routeStyle.3f7963499b.css",
-  "./assets/app/routeContent.0a456839b7.js",
+  "./assets/app/routeContent.478e337760.js",
   "./assets/app/budgetUi.afc8ce67ba.js",
-  "./assets/app/budgetContent.acd470b36e.js",
-  "./assets/app/essentialsContent.2c1eabdb38.js"
+  "./assets/app/budgetContent.b7c97eed69.js",
+  "./assets/app/essentialsContent.fb1015d55a.js"
 ];
 const NETWORK_FIRST_PATHS = [
   "./",

@@ -625,8 +625,8 @@ const checklistPrintLateCutGuidance = {
     ja: "遅れたら写真散策を短くし、清水寺→二年坂→八坂の塔→祇園の直線的な徒歩導線を守ります。"
   },
   "3": {
-    en: "If late, shorten Arashiyama before risking the Bullet Train ride to Mishima.",
-    ja: "遅れたら、三島への移動を崩す前に嵐山を短くします。"
+    en: "If late, shorten Arashiyama before risking the Kyoto transfer.",
+    ja: "遅れたら、京都からの移動を崩す前に嵐山を短くします。"
   },
   "4": {
     en: "If late or foggy, protect Chureito early if visible, keep Lake Kawaguchiko and Oishi Park, and skip the ropeway first.",
@@ -1227,7 +1227,7 @@ const budgetSectionDefinitions = [
   },
   {
     id: "bookings-transit",
-    label: { en: "Pre-Trip Bookings", ja: "予約と移動" },
+    label: { en: "Bookings", ja: "予約と移動" },
     meta: {
       en: "Only the Essentials-side bookings and transfer prep stay here.",
       ja: "Essentialsで事前に固める予約と移動準備だけをここへ残します。"
@@ -1743,7 +1743,7 @@ function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
       ja: "日本ルート全体"
     },
     summary: {
-      en: "View the full route with the Bullet Train ride to Mishima, Mt. Fuji, and the Tokyo finish.",
+      en: "View the full route with the Kyoto transfer, Mt. Fuji, and the Tokyo finish.",
       ja: "三島への移動、富士山エリア、東京での締めまで全体ルートを確認します。"
     },
     badges: [
@@ -6152,8 +6152,8 @@ function renderFujiForecastError() {
         ja: "予報を取得できません"
       })}</p>
       <p class="fuji-forecast__summary-text">${renderLocalizedContent({
-        en: "Forecast unavailable. Check the sky early and keep the ropeway optional.",
-        ja: "予報を取得できません。朝に空を確認し、ロープウェイは任意にします。"
+        en: "Forecast unavailable. Check the sky early and keep the ropeway flexible.",
+        ja: "予報を取得できません。朝に空を確認し、ロープウェイは柔軟に調整します。"
       })}</p>
     `;
     syncLocalizedNodes(summaryNode);

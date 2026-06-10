@@ -72,10 +72,10 @@
   },
   {
     "id": "kyoto-mishima-shinkansen",
-    "tag": { "en": "Day 3 Bullet Train ride", "ja": "3日目の新幹線移動" },
+    "tag": { "en": "Day 3 Kyoto transfer", "ja": "3日目の京都移動" },
     "title": {
-      "en": "1 Bullet Train ride: Kyoto -> Mishima",
-      "ja": "新幹線1本：京都 -> 三島"
+      "en": "Kyoto -> Mishima transfer",
+      "ja": "京都 -> 三島の移動"
     },
     "summary": {
       "en": "This is the fixed transfer that carries the route from Kyoto Station into the Mt. Fuji side.",
@@ -88,7 +88,7 @@
     "from": { "en": "Kyoto Station", "ja": "京都駅" },
     "to": { "en": "Mishima Station", "ja": "三島駅" },
     "transport": {
-      "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 Bullet Train ride, then keep the Mishima-to-lake transfer saved separately.",
+      "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 Kyoto transfer, then keep the Mishima-to-lake transfer saved separately.",
       "ja": "3日目の固定移動には Trip.com の三島への移動ページを使い、三島から湖側への移動は別に保存しておきます。"
     },
     "why": {
@@ -111,7 +111,7 @@
     ],
     "prepReminders": [
       {
-        "en": "Book on Trip.com once Day 3 is fixed rather than leaving the Bullet Train ride to Mishima to the last minute.",
+        "en": "Book on Trip.com once Day 3 is fixed rather than leaving the Kyoto transfer to the last minute.",
         "ja": "3日目が固まったら Trip.com で予約し、三島への移動を直前判断にしないようにします。"
       },
       {
@@ -175,7 +175,7 @@
     ],
     "prepReminders": [
       {
-        "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the Bullet Train ride to Mishima is fixed.",
+        "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the Kyoto transfer is fixed.",
         "ja": "前夜に三島発バスの時刻を確認し、三島への移動が固まったあとで当日の最終便を見直します。"
       },
       {
@@ -206,8 +206,8 @@
       "ja": "富士エリアの現地立ち寄り"
     },
     "summary": {
-      "en": "Use Day 4 as a fuller Fuji-area day: Chureito Shimoyoshida first, then Lake Kawaguchiko, Oishi Park, and the Panoramic Ropeway only if conditions fit.",
-      "ja": "4日目は富士エリアをしっかり回る日にし、忠霊塔・下吉田を先に、続けて河口湖、大石公園、条件が合えばパノラマロープウェイへ進みます。"
+      "en": "Use Day 4 as a fuller Fuji-area day: Chureito Shimoyoshida first, then Lake Kawaguchiko, Oishi Park, and the Mt. Fuji Panoramic Ropeway.",
+      "ja": "4日目は富士エリアをしっかり回る日にし、忠霊塔・下吉田を先に、続けて河口湖、大石公園、富士山パノラマロープウェイへ進みます。"
     },
     "segment": {
       "en": "Mt. Fuji area base -> Chureito Shimoyoshida -> Lake Kawaguchiko -> Oishi Park",
@@ -215,8 +215,8 @@
     },
     "from": { "en": "Kawaguchiko area", "ja": "河口湖エリア" },
     "to": {
-      "en": "Lake-side Fuji stops, with ropeway optional",
-      "ja": "湖畔側の富士立ち寄り（ロープウェイは任意）"
+      "en": "Lake-side Fuji stops and Mt. Fuji Panoramic Ropeway",
+      "ja": "湖畔側の富士立ち寄りと富士山パノラマロープウェイ"
     },
     "transport": {
       "en": "Use Fujikyu rail or local buses for Chureito and the lake-side stops, with taxi only as a time-saving fallback when weather windows are short.",
@@ -236,8 +236,8 @@
         "ja": "富士山の見え方が微妙な時は、河口湖と大石公園を確実な軸にします。"
       },
       {
-        "en": "Keep the Panoramic Ropeway optional because it depends on weather, energy, crowds, and time.",
-        "ja": "パノラマロープウェイは天気、体力、混雑、時間に左右されるため任意にします。"
+        "en": "Plan the Mt. Fuji Panoramic Ropeway after checking weather, energy, crowds, and time.",
+        "ja": "富士山パノラマロープウェイは天気、体力、混雑、時間を確認してから進めます。"
       }
     ],
     "prepReminders": [
