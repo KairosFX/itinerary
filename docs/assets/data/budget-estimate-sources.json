@@ -5,12 +5,12 @@
     "ja": "移動・チケット・予約リンクの基準は2026年4月18日更新"
   },
   "metaCopy": {
-    "en": "The route itself is fixed, but hotel prices remain the unstable part until exact travel dates are locked. This refresh keeps the route-fit stay baselines while sending accommodation links to Trip.com results pages for each stay area.",
-    "ja": "ルート自体は固定ですが、宿泊価格は正確な日程を入れない限り変動が大きい部分です。今回の更新では、動線に合う滞在基準額を残しつつ、宿泊リンクを各滞在エリアの Trip.com 検索結果へ変更しています。"
+    "en": "The route itself is fixed, but hotel prices remain the unstable part until exact travel dates are locked. This refresh keeps the route-fit stay baselines while sending accommodation links to Trip.com hotel pages for each stay area.",
+    "ja": "ルート自体は固定ですが、宿泊価格は正確な日程を入れない限り変動が大きい部分です。今回の更新では、動線に合う滞在基準額を残しつつ、宿泊リンクを各滞在エリアの Trip.com ホテルページへ変更しています。"
   },
   "helperCopy": {
-    "en": "Each day still keeps its own stay selector, and the accommodation split control still treats the saved hotel amounts as shared-room quotes for group math. Because no exact travel dates are locked, use the Trip.com results pages to compare options and verify the live checkout total before booking.",
-    "ja": "各日に滞在セレクターを残し、宿泊費の分け方コントロールでは保存したホテル金額を引き続き共有ルーム料金として扱います。正確な旅行日程が未確定のため、Trip.com の検索結果で候補を比較し、実際の予約前にライブの合計金額を必ず確認してください。"
+    "en": "Each day still keeps its own stay selector, and the accommodation split control still treats the saved hotel amounts as shared-room quotes for group math. Because no exact travel dates are locked, use the Trip.com hotel pages to compare options and verify the live checkout total before booking.",
+    "ja": "各日に滞在セレクターを残し、宿泊費の分け方コントロールでは保存したホテル金額を引き続き共有ルーム料金として扱います。正確な旅行日程が未確定のため、Trip.com のホテルページで候補を比較し、実際の予約前にライブの合計金額を必ず確認してください。"
   },
   "assumptionCopy": {
     "en": "The cost model matches one fixed 7-day Osaka -> Kyoto -> two Mt. Fuji area nights -> Central Tokyo route and treats hotel amounts as baseline quotes until your exact stay dates are chosen.",
@@ -38,13 +38,13 @@
         "ja": "大阪で有料宿が必要な時はこの立地を使います。四ツ橋・西心斎橋寄りなら、1日目の到着準備、海遊館の開館時間、ミナミの夜に合いやすく、無関係な地区のホテルより実用的です。"
       },
       "assumption": {
-        "en": "Used only if you switch a private/local or no-cost Osaka night to a paid hotel. Based on a current Trip.com quote around JPY 6,189 before taxes for 2 adults at Hearton Hotel Shinsaibashi.",
-        "ja": "大阪のローカル・プライベート滞在や宿泊費なしの夜を有料ホテルへ切り替える時だけ使います。ハートンホテル心斎橋の現在のTrip.com見積り（2名税別約6,189円）を基準にしています。"
+        "en": "Used only if you switch a no-hotel Osaka night to a paid hotel. The saved amount tracks a low-end Minami-side baseline room quote, while the live Trip.com link opens the saved hotel page so you can compare current options.",
+        "ja": "大阪でホテルなしの日を有料ホテルへ切り替える時だけ使います。保存金額はミナミ側の低め基準ルーム料金に合わせ、Trip.com リンクでは保存したホテルページを開いて候補を確認できます。"
       },
       "source": {
         "label": {
-          "en": "Trip.com: Osaka / Shinsaibashi options",
-          "ja": "Trip.com: 大阪・心斎橋周辺候補"
+          "en": "Trip.com: Osaka / Shinsaibashi hotel",
+          "ja": "Trip.com: 大阪・心斎橋ホテル"
         },
         "url": "https://www.trip.com/hotels/osaka-hotel-detail-759843/hearton-hotel-shinsaibashi/"
       }
@@ -70,13 +70,13 @@
         "ja": "四条烏丸は、2日目の京都東側へ出やすく、3日目の嵐山スタートにも地下鉄・阪急・JRの選択肢を取りやすいため、実際の動線に合います。"
       },
       "assumption": {
-        "en": "Day 2 uses Hotel Resol Kyoto Shijo Muromachi at the current Trip.com rate of JPY 13,152 before taxes for 2 adults.",
-        "ja": "2日目は Hotel Resol Kyoto Shijo Muromachi の現在のTrip.com料金（2名税別13,152円）を使っています。"
+        "en": "Day 2 keeps its saved amount anchored to the Shijo / Karasuma baseline shared-room quote, while the live Trip.com link opens a Kyoto hotel page for comparing a route-fit stay.",
+        "ja": "2日目の保存金額は四条烏丸の基準共有ルーム料金に合わせつつ、Trip.com リンクでは動線に合う京都ホテルページを確認できます。"
       },
       "source": {
         "label": {
-          "en": "Trip.com: Kyoto / Shijo-Karasuma options",
-          "ja": "Trip.com: 京都・四条烏丸周辺候補"
+          "en": "Trip.com: Kyoto / Shijo-Karasuma hotel",
+          "ja": "Trip.com: 京都・四条烏丸ホテル"
         },
         "url": "https://www.trip.com/hotels/v2/kyoto-hotel-detail-17514433/hotel-resol-kyoto-shijo-muromachi/"
       }
@@ -98,17 +98,17 @@
         "ja": "現在の富士エリアのグループ向け高コスパ客室"
       },
       "routeReason": {
-        "en": "This area keeps the Day 3 Mishima handoff plus the fuller Day 4 Chureito Shimoyoshida, Lake Kawaguchiko, Oishi Park, and Mt. Fuji Panoramic Ropeway block practical without paying for a remote resort that fights the actual route.",
-        "ja": "このエリアなら、3日目の三島ハンドオフに加え、4日目の忠霊塔・下吉田、河口湖、大石公園、富士山パノラマロープウェイのまとまりも進めやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
+        "en": "This area keeps the Day 3 Mishima handoff plus the fuller Day 4 Chureito Shimoyoshida, Lake Kawaguchiko, Oishi Park, and optional ropeway block practical without paying for a remote resort that fights the actual route.",
+        "ja": "このエリアなら、3日目の三島ハンドオフに加え、4日目の忠霊塔・下吉田、河口湖、大石公園、任意のロープウェイのまとまりも進めやすく、実際の動線に合いにくい遠いリゾート立地へ余計に払わずに済みます。"
       },
       "assumption": {
-        "en": "Day 3 keeps its saved amount anchored to the Kawaguchiko-side baseline shared-room quote, while the live Trip.com link opens results for comparing station-to-lake bases.",
-        "ja": "3日目の保存金額は河口湖側の基準共有ルーム料金に合わせつつ、Trip.com リンクでは駅から湖側へ動きやすい候補を比較できる検索結果を開きます。"
+        "en": "Day 3 keeps its saved amount anchored to the Kawaguchiko-side baseline shared-room quote, while the live Trip.com link opens a hotel page for comparing a station-to-lake base.",
+        "ja": "3日目の保存金額は河口湖側の基準共有ルーム料金に合わせつつ、Trip.com リンクでは駅から湖側へ動きやすいホテルページを確認できます。"
       },
       "source": {
         "label": {
-          "en": "Trip.com: Kawaguchiko options",
-          "ja": "Trip.com: 河口湖周辺候補"
+          "en": "Trip.com: Kawaguchiko hotel",
+          "ja": "Trip.com: 河口湖ホテル"
         },
         "url": "https://www.trip.com/hotels/fujikawaguchiko-hotel-detail-53867549/haostay/"
       }
@@ -134,13 +134,13 @@
         "ja": "今回のルートは5日目に東京中心部へ入り、東京ホテル泊は5日目と6日目に置くため、中心部の拠点なら渋谷、東京東側、新宿、7日目の空港移動を拠点変更なしで進めやすくなります。"
       },
       "assumption": {
-        "en": "Tokyo uses Shibuya Hotel En at the current Trip.com rate of JPY 19,820 before taxes for 2 adults. That same nightly quote is used for the fixed Tokyo nights on Days 5 and 6, while Day 7 defaults to no paid stay because it is the flight-home day.",
-        "ja": "東京は Shibuya Hotel En の現在のTrip.com料金（2名税別19,820円）を使っています。同じ1泊見積りを固定の東京泊である5日目と6日目に適用し、7日目は帰国日のため初期値では有料宿泊を入れていません。"
+        "en": "Tokyo now uses a nightly central Tokyo baseline room quote, so Days 5-6 add up to the intended two-night Tokyo stay. Use the Trip.com hotel page to compare current central Tokyo options before booking.",
+        "ja": "東京は中心部の1泊あたり基準ルーム料金として扱うため、5日目から6日目の2泊分が正しく積み上がります。予約前に Trip.com のホテルページで東京中心部の候補を比較してください。"
       },
       "source": {
         "label": {
-          "en": "Trip.com: Central Tokyo options",
-          "ja": "Trip.com: 東京中心部候補"
+          "en": "Trip.com: Central Tokyo hotel",
+          "ja": "Trip.com: 東京中心部ホテル"
         },
         "url": "https://www.trip.com/hotels/tokyo-hotel-detail-688139/shibuya-hotel-en/"
       }
@@ -172,35 +172,35 @@
         "ja": "宿泊予約導線"
       },
       "summary": {
-        "en": "The base stay plan now starts every day at No hotel, then lets you add a route-fit paid stay only when that night needs one. Saved hotel amounts stay stored as shared-room quotes before the travellers-per-room split, and the live links now open Trip.com results pages for each stay area.",
-        "ja": "基本の滞在計画は、すべての日を「ホテルなし」から始め、必要な夜だけ動線に合う有料宿泊へ切り替える形にしています。保存したホテル金額は1室を何人で分けるかの計算前の共有ルーム料金として扱い、ライブリンクは各滞在エリアの Trip.com 検索結果を開きます。"
+        "en": "The base stay plan now starts every day at No hotel, then lets you add a route-fit paid stay only when that night needs one. Saved hotel amounts stay stored as shared-room quotes before the travellers-per-room split, and the live links now open Trip.com hotel pages for each stay area.",
+        "ja": "基本の滞在計画は、すべての日を「ホテルなし」から始め、必要な夜だけ動線に合う有料宿泊へ切り替える形にしています。保存したホテル金額は1室を何人で分けるかの計算前の共有ルーム料金として扱い、ライブリンクは各滞在エリアの Trip.com ホテルページを開きます。"
       },
       "links": [
         {
           "label": {
-            "en": "Trip.com: Osaka / Shinsaibashi options",
-            "ja": "Trip.com: 大阪・心斎橋周辺候補"
+            "en": "Trip.com: Osaka / Shinsaibashi hotel",
+            "ja": "Trip.com: 大阪・心斎橋ホテル"
           },
           "url": "https://www.trip.com/hotels/osaka-hotel-detail-759843/hearton-hotel-shinsaibashi/"
         },
         {
           "label": {
-            "en": "Trip.com: Kyoto / Shijo-Karasuma options",
-            "ja": "Trip.com: 京都・四条烏丸周辺候補"
+            "en": "Trip.com: Kyoto / Shijo-Karasuma hotel",
+            "ja": "Trip.com: 京都・四条烏丸ホテル"
           },
           "url": "https://www.trip.com/hotels/v2/kyoto-hotel-detail-17514433/hotel-resol-kyoto-shijo-muromachi/"
         },
         {
           "label": {
-            "en": "Trip.com: Kawaguchiko options",
-            "ja": "Trip.com: 河口湖周辺候補"
+            "en": "Trip.com: Kawaguchiko hotel",
+            "ja": "Trip.com: 河口湖ホテル"
           },
           "url": "https://www.trip.com/hotels/fujikawaguchiko-hotel-detail-53867549/haostay/"
         },
         {
           "label": {
-            "en": "Trip.com: Central Tokyo options",
-            "ja": "Trip.com: 東京中心部候補"
+            "en": "Trip.com: Central Tokyo hotel",
+            "ja": "Trip.com: 東京中心部ホテル"
           },
           "url": "https://www.trip.com/hotels/tokyo-hotel-detail-688139/shibuya-hotel-en/"
         }
@@ -225,8 +225,8 @@
         "ja": "主要移動の確認先"
       },
       "summary": {
-        "en": "Day 3 carries the full eastbound transfer into the Mt. Fuji base, Day 4 stays local for Chureito, Lake Kawaguchiko, Oishi Park, and the Mt. Fuji Panoramic Ropeway, and Day 5 handles the Central Tokyo transfer. The live transit links prioritize Trip.com train and transport search pages where appropriate.",
-        "ja": "3日目は富士エリア拠点までの東向き移動をまとめ、4日目は忠霊塔・下吉田、河口湖、大石公園、富士山パノラマロープウェイを現地で回し、5日目に東京中心部へ移動します。移動リンクは、必要に応じて Trip.com の鉄道・交通検索ページを優先しています。"
+        "en": "Day 3 carries the full eastbound transfer into the Mt. Fuji base, Day 4 stays local for Chureito, Lake Kawaguchiko, Oishi Park, and the optional ropeway, and Day 5 handles the Central Tokyo transfer. The live transit links prioritize Trip.com train and transport search pages where appropriate.",
+        "ja": "3日目は富士エリア拠点までの東向き移動をまとめ、4日目は忠霊塔・下吉田、河口湖、大石公園、任意のロープウェイを現地で回し、5日目に東京中心部へ移動します。移動リンクは、必要に応じて Trip.com の鉄道・交通検索ページを優先しています。"
       },
       "links": [
         {
@@ -411,8 +411,8 @@
         "ja": "富士ホテル"
       },
       "routeReason": {
-        "en": "This base keeps the Day 3 Mishima handoff, the hot-spring reset, and the fuller Day 4 Chureito, Kawaguchiko, Oishi Park, and Mt. Fuji Panoramic Ropeway block practical without paying for a remote resort location that fights the real station and bus flow.",
-        "ja": "この拠点なら、3日目の三島ハンドオフ、温泉での立て直し、4日目の忠霊塔、河口湖、大石公園、富士山パノラマロープウェイのまとまりを進めやすく、実際の駅・バス動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
+        "en": "This base keeps the Day 3 Mishima handoff, the hot-spring reset, and the fuller Day 4 Chureito, Kawaguchiko, Oishi Park, and optional ropeway block practical without paying for a remote resort location that fights the real station and bus flow.",
+        "ja": "この拠点なら、3日目の三島ハンドオフ、温泉での立て直し、4日目の忠霊塔、河口湖、大石公園、任意のロープウェイのまとまりを進めやすく、実際の駅・バス動線と離れた遠いリゾート立地へ余計に払わずに済みます。"
       },
       "cost": {
         "mode": "perGroup",
@@ -693,7 +693,7 @@
         "ja": "3日目・嵐山から富士"
       },
       "subtitle": {
-        "en": "Arashiyama, Kyoto, then the Fuji transfer night",
+        "en": "Arashiyama, 1 Bullet Train ride to Mishima, then the Fuji transfer night",
         "ja": "嵐山、三島へ移動、そして富士への移動で締める日"
       },
       "items": [
@@ -712,7 +712,7 @@
         },
         {
           "label": {
-            "en": "Kyoto",
+            "en": "1 Bullet Train ride to Mishima",
             "ja": "三島へ移動"
           },
           "category": "intercityTransit",
@@ -791,8 +791,8 @@
         "ja": "4日目・富士山"
       },
       "subtitle": {
-        "en": "Chureito, Lake Kawaguchiko, Oishi Park, Mt. Fuji Panoramic Ropeway, and a second Fuji night",
-        "ja": "忠霊塔、河口湖、大石公園、富士山パノラマロープウェイ、富士エリア2泊目"
+        "en": "Chureito, Lake Kawaguchiko, Oishi Park, optional ropeway, and a second Fuji night",
+        "ja": "忠霊塔、河口湖、大石公園、任意のロープウェイ、富士エリア2泊目"
       },
       "items": [
         {
@@ -854,8 +854,8 @@
         },
         {
           "label": {
-            "en": "Mt. Fuji Panoramic Ropeway",
-            "ja": "富士山パノラマロープウェイ"
+            "en": "Optional Panoramic Ropeway",
+            "ja": "任意のパノラマロープウェイ"
           },
           "category": "ticketsAdmissions",
           "bucket": "flexible",

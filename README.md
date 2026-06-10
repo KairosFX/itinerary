@@ -1,4 +1,4 @@
-# Kairos Itinerary
+# Itinerary
 
 Live site: https://kairosfx.github.io/itinerary/
 
@@ -37,12 +37,13 @@ Generate the minified deploy assets used by `docs/index.html`:
 npm run build
 ```
 
-## Vercel
+## Credits
 
-Vercel is configured with `vercel.json`:
+- Radio source: Kairos YouTube playlist, embedded through the YouTube iframe player
+- Map tiles/style: OpenFreeMap Positron
+- Map renderer: MapLibre GL JS, with license retained at `docs/assets/vendor/maplibre/LICENSE.txt`
+- App icons and background media: local project assets under `docs/assets/`
 
-- Build command: `npm run build`
-- Output directory: `docs`
-- Production URL path: `/`
+## License
 
-The site keeps relative asset paths so the same build can work on Vercel at `/` and GitHub Pages at `/itinerary/`.
+All rights reserved. See `LICENSE`.

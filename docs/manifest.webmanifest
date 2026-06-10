@@ -1,7 +1,6 @@
 {
-  "name": "Kairos | Offline Guide",
-  "short_name": "Kairos",
-  "description": "Kairos is a bilingual Japan itinerary app with checklist, notes, essentials, transit details, and offline access.",
+  "name": "Kairos VIII Japan Itinerary",
+  "short_name": "Kairos VIII",
   "lang": "en",
   "start_url": "./",
   "scope": "./",
@@ -10,15 +9,15 @@
   "theme_color": "#020605",
   "icons": [
     {
-      "src": "./assets/icons/icon-192.png",
+      "src": "./assets/icons/kairos-icon-192.jpg",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "./assets/icons/icon-512.png",
+      "src": "./assets/icons/kairos-icon-512.jpg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     }
   ]

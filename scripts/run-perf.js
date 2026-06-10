@@ -374,24 +374,24 @@ function runStaticBuildChecks() {
   const assetManifest = JSON.parse(fs.readFileSync(path.join(repoRoot, "docs", "assets", "app", "asset-manifest.json"), "utf8"));
   const legacyMobileBackgroundPattern = new RegExp(["kairos-bg", "\\d{2}", "mobile"].join("-"), "i");
 
-  if (!indexHtml.includes("<title>Kairos</title>")) {
+  if (!indexHtml.includes("<title>Kairos VIII Japan Itinerary</title>")) {
     throw new Error("Document title check failed.");
   }
   if (
-    !indexHtml.includes('name="description"') ||
-    !indexHtml.includes('property="og:title" content="Kairos"') ||
-    !indexHtml.includes('property="og:description"') ||
-    !indexHtml.includes('name="twitter:card"')
+    !indexHtml.includes('<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">') ||
+    !indexHtml.includes('<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">')
   ) {
-    throw new Error("Public SEO/social metadata check failed.");
+    throw new Error("Noindex metadata check failed.");
   }
   if (
-    indexHtml.includes("noindex") ||
-    indexHtml.includes(["Kairos", "VIII"].join(" "))
+    indexHtml.includes('rel="canonical"') ||
+    indexHtml.includes('property="og:') ||
+    indexHtml.includes('name="twitter:') ||
+    indexHtml.includes('name="description"')
   ) {
-    throw new Error("Legacy private metadata/branding check failed.");
+    throw new Error("Public search/social metadata removal check failed.");
   }
-  if (!indexHtml.includes('href="./assets/icons/favicon-64.png"') || indexHtml.includes("1yegabjjbjp01.jpg")) {
+  if (!indexHtml.includes('href="./assets/icons/kairos-favicon-48.jpg"') || indexHtml.includes("1yegabjjbjp01.jpg")) {
     throw new Error("Optimized favicon check failed.");
   }
   if (
@@ -420,18 +420,19 @@ function runStaticBuildChecks() {
     throw new Error("Non-cacheable audio check failed.");
   }
   if (
-    !serviceWorker.includes("./assets/icons/icon-192.png") ||
-    !serviceWorker.includes("./assets/icons/icon-512.png")
+    !serviceWorker.includes("./assets/icons/kairos-icon-192.jpg") ||
+    !serviceWorker.includes("./assets/radio/playlist-thumbnail.jpg") ||
+    !serviceWorker.includes("./assets/images/kairos-viii-magazine-cover-560.jpg")
   ) {
     throw new Error("Core visual app-shell cache check failed.");
   }
   if (serviceWorker.includes("./assets/backgrounds/kairos-bg-01")) {
     throw new Error("Legacy background app-shell precache check failed.");
   }
-  if (webManifest.theme_color !== "#020605" || webManifest.background_color !== "#020605") {
+  if (webManifest.theme_color !== "#18261d" || webManifest.background_color !== "#050906") {
     throw new Error("Manifest Kairos color check failed.");
   }
-  if (!webManifest.icons?.some((icon) => icon.src === "./assets/icons/icon-192.png")) {
+  if (!webManifest.icons?.some((icon) => icon.src === "./assets/icons/kairos-icon-192.jpg")) {
     throw new Error("Optimized manifest icon check failed.");
   }
 
@@ -443,9 +444,7 @@ function runStaticBuildChecks() {
   assertFileExists(path.join("docs", "assets", "images", "kairos-viii-magazine-cover-560.jpg"));
   assertFileExists(path.join("docs", "assets", "images", "kairos-viii-magazine-cover-640.jpg"));
   assertFileExists(path.join("docs", "assets", "radio", "playlist-thumbnail.jpg"));
-  assertFileExists(path.join("docs", "assets", "icons", "favicon-64.png"));
-  assertFileExists(path.join("docs", "assets", "icons", "icon-192.png"));
-  assertFileExists(path.join("docs", "assets", "icons", "icon-512.png"));
+  assertFileExists(path.join("docs", "assets", "icons", "kairos-favicon-48.jpg"));
   assertFileExists(path.join("docs", "assets", "backgrounds", "original", "AdobeStock_133085779.jpeg"));
   process.stdout.write("Static SEO/PWA/build-output checks passed.\n");
 }

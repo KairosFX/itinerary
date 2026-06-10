@@ -80,8 +80,8 @@ const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const compactViewportQuery = window.matchMedia("(width <= 920px)");
 const originalBackdropAssetMode = "original";
 const pageTitles = {
-  en: "Kairos",
-  ja: "Kairos"
+  en: "Kairos VIII Japan Itinerary",
+  ja: "Kairos VIII Japan Itinerary"
 };
 const storageKey = "japan-trip-language";
 const itineraryStateVersion = "2026-04-09-checklist-shift-raf-v2";
@@ -148,7 +148,7 @@ const routeMapInitializeTimeoutMs = 12000;
 const radioPlaylistId = "PLEpbvoBwiArP7DiQUEmz3QZj6WyekILSa";
 const radioPlaylistArtworkUrl = "./assets/radio/playlist-thumbnail.jpg";
 const radioYoutubePlayerHost = "https://www.youtube-nocookie.com";
-const radioYoutubePlayerId = "kairos-radio-player";
+const radioYoutubePlayerId = "kairos-viii-radio-player";
 const radioYoutubeRequiredParams = [
   "controls",
   "modestbranding",
@@ -170,9 +170,9 @@ const radioYoutubeWarmupDelayMs = 650;
 const radioYoutubeVideoRevealDelayMs = 1200;
 const radioPlaylistInfoWaitTimeoutMs = 1400;
 const radioStationMeta = {
-  title: "Kairos FM",
-  artist: "Kairos",
-  album: "Kairos"
+  title: "Kairos VIII Radio",
+  artist: "Kairos playlist",
+  album: "Kairos VIII"
 };
 const kairosRadioFallbackTheme = {
   accent: [127, 183, 255],
@@ -1227,7 +1227,7 @@ const budgetSectionDefinitions = [
   },
   {
     id: "bookings-transit",
-    label: { en: "Bookings", ja: "予約と移動" },
+    label: { en: "Pre-Trip Bookings", ja: "予約と移動" },
     meta: {
       en: "Only the Essentials-side bookings and transfer prep stay here.",
       ja: "Essentialsで事前に固める予約と移動準備だけをここへ残します。"
@@ -2724,7 +2724,7 @@ function showRadioArtworkFallback({ showPlaylist = true } = {}) {
 
   radioArtworkNode.dataset.radioArtworkSrc = radioPlaylistArtworkUrl;
   radioArtworkNode.dataset.radioArtworkKind = "playlist";
-  radioArtworkNode.alt = "Kairos FM playlist artwork";
+  radioArtworkNode.alt = "Kairos VIII playlist artwork";
   if (radioState.isHidden && !radioState.isPlaying && !radioState.pendingPlay) {
     radioArtworkNode.hidden = true;
     radioArtworkNode.removeAttribute("src");
@@ -2778,7 +2778,7 @@ function setRadioDefaultArtwork() {
   radioCurrentTrackTitle = radioCurrentTrackTitle || radioStationMeta.title;
   setRadioArtworkSource(radioPlaylistArtworkUrl, {
     kind: "playlist",
-    title: "Kairos FM playlist"
+    title: "Kairos VIII playlist"
   });
 }
 
@@ -3112,12 +3112,12 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   const existingIframe = mountNode?.querySelector("iframe");
   if (existingIframe instanceof HTMLIFrameElement) {
     existingIframe.id = radioYoutubePlayerId;
-    existingIframe.title = "Kairos FM playlist radio";
+    existingIframe.title = "Kairos VIII playlist radio";
     existingIframe.allow = "autoplay; encrypted-media; picture-in-picture";
     existingIframe.referrerPolicy = "strict-origin-when-cross-origin";
     existingIframe.loading = "lazy";
     existingIframe.removeAttribute("allowfullscreen");
-    existingIframe.setAttribute("aria-hidden", "true");
+    existingIframe.removeAttribute("aria-hidden");
     mountNode.querySelectorAll("iframe").forEach((iframe) => {
       if (iframe !== existingIframe) {
         iframe.remove();
@@ -3136,7 +3136,7 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
 
   const iframe = document.createElement("iframe");
   iframe.id = radioYoutubePlayerId;
-  iframe.title = "Kairos FM playlist radio";
+  iframe.title = "Kairos VIII playlist radio";
   iframe.src = getRadioYoutubeEmbedUrl({ autoplay });
   iframe.dataset.radioAutoplay = autoplay ? "true" : "false";
   iframe.width = "320";
@@ -3144,7 +3144,6 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   iframe.loading = "lazy";
   iframe.allow = "autoplay; encrypted-media; picture-in-picture";
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
-  iframe.setAttribute("aria-hidden", "true");
   iframe.setAttribute("tabindex", "-1");
   iframe.removeAttribute("allowfullscreen");
   mountNode?.replaceChildren(iframe);
@@ -4068,18 +4067,18 @@ function syncRadioStationUi() {
   syncRadioControls();
 }
 
-function prepareRadioPlaylistPlayerOnIntent() {
+function warmRadioYoutubePlayer() {
   if (
     offlineSnapshotMode ||
     radioYoutubeDisabled ||
     radioState.loadFailed ||
-    radioYoutubeIframe
+    radioYoutubePlayerReady ||
+    radioYoutubePlayerReadyPromise
   ) {
     return;
   }
 
-  ensureRadioArtworkImageLoaded();
-  ensureRadioYoutubeIframe({ autoplay: false });
+  void ensureRadioYoutubePlayer().catch(() => null);
 }
 
 function initializeRadioStation() {
@@ -4104,32 +4103,9 @@ function initializeRadioStation() {
   radioNextButton?.addEventListener("click", nextRadioTrack);
   radioVolumeInput?.addEventListener("input", handleRadioVolumeInput);
   radioVisibilityToggleButton?.addEventListener("click", () => setRadioHidden(!radioState.isHidden));
-  radioPlayerNode.addEventListener("pointerenter", prepareRadioPlaylistPlayerOnIntent, { once: true, passive: true });
-  radioPlayerNode.addEventListener("focusin", prepareRadioPlaylistPlayerOnIntent, { once: true });
-  radioPlayerNode.addEventListener("touchstart", prepareRadioPlaylistPlayerOnIntent, { once: true, passive: true });
   setRadioDefaultArtwork();
   setRadioState("idle");
   syncRadioControls();
-}
-
-function scheduleDecorativeBackdrop() {
-  if (offlineSnapshotMode || root.classList.contains("backdrop-ready")) {
-    return;
-  }
-
-  const revealBackdrop = () => {
-    root.classList.add("backdrop-ready");
-  };
-  const delay = reducedEffectsEnabled ? 1800 : 3200;
-
-  if ("requestIdleCallback" in window) {
-    window.requestIdleCallback(() => window.setTimeout(revealBackdrop, delay), {
-      timeout: delay + 1200
-    });
-    return;
-  }
-
-  window.setTimeout(revealBackdrop, delay);
 }
 
 function shouldWarmDeferredAssets() {
@@ -13614,7 +13590,6 @@ async function bootApp() {
   });
 
   scheduleIdleSectionWarmup(initialPanelId);
-  scheduleDecorativeBackdrop();
   updateMaxScrollableY();
   window.requestAnimationFrame(() => {
     scheduleDeferredGeometryRelease();
