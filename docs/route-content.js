@@ -26,13 +26,13 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 3,
-      title: { en: "1 Bullet Train ride to Mishima", ja: "三島へ新幹線移動" },
+      title: { en: "Kyoto", ja: "三島へ新幹線移動" },
       note: {
         en: "Start Arashiyama early: use roughly 7:00–9:00 AM for Bamboo Grove, Togetsukyo Bridge, and quiet photos, then 9:00–11:30 AM for temples, shops, and food. After that, keep the route correct and simple: Kyoto -> Mishima by Shinkansen, then onward to Fujikawaguchiko.",
         ja: "嵐山は早めに始める。7:00～9:00頃を竹林、渡月橋、静かな写真時間に使い、9:00～11:30頃を寺社、店、食事に使う。その後は京都 -> 三島を新幹線で進み、富士河口湖へつなぐ。"
       },
       summary: {
-        en: "Early Arashiyama, 1 Bullet Train ride to Mishima, Fujikawaguchiko transfer, then the onsen reset.",
+        en: "Early Arashiyama, Kyoto, Fujikawaguchiko transfer, then the onsen reset.",
         ja: "早朝の嵐山、京都 -> 三島の新幹線、富士河口湖への移動、温泉宿でリセット。"
       }
     },
@@ -40,12 +40,12 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       day: 4,
       title: { en: "Fuller Fuji Day", ja: "富士エリアをしっかり回る日" },
       note: {
-        en: "Keep Chureito Shimoyoshida early for the best Fuji odds, with time for the 398 stairs, photos, and a rest. Then move through Lake Kawaguchiko and Oishi Park, leaving the Panoramic Ropeway optional for clear weather, energy, crowds, and time.",
+        en: "Keep Chureito Shimoyoshida early for the best Fuji odds, with time for the 398 stairs, photos, and a rest. Then move through Lake Kawaguchiko and Oishi Park, leaving the Panoramic Ropeway planned for clear weather, energy, crowds, and time.",
         ja: "富士山が見えやすい朝に忠霊塔・下吉田を置き、398段の階段、写真、休憩時間を入れる。その後は河口湖と大石公園へ回し、パノラマロープウェイは天気、体力、混雑、時間が合う場合だけにする。"
       },
       summary: {
-        en: "Chureito early, Lake Kawaguchiko, Oishi Park, optional ropeway, then a second Fuji-area night.",
-        ja: "朝の忠霊塔、河口湖、大石公園、任意のロープウェイ、その後は富士エリア2泊目。"
+        en: "Chureito early, Lake Kawaguchiko, Oishi Park, Mt. Fuji Panoramic Ropeway, then a second Fuji-area night.",
+        ja: "朝の忠霊塔、河口湖、大石公園、富士山パノラマロープウェイ、その後は富士エリア2泊目。"
       }
     },
     {
@@ -190,7 +190,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       id: "kyoto-mishima-shinkansen",
-      title: { en: "1 Bullet Train ride to Mishima", ja: "三島へ新幹線移動" },
+      title: { en: "Kyoto", ja: "三島へ新幹線移動" },
       summary: {
         en: "This is the clean Day 3 handoff from Kyoto Station into the Mt. Fuji side.",
         ja: "京都駅から富士側へ入るための、分かりやすい3日目の受け渡しです。"
@@ -375,8 +375,8 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       id: "fuji",
       title: { en: "Mt. Fuji area", ja: "富士エリア" },
       summary: {
-        en: "This stop groups the Day 3 Mishima handoff, two Fuji-area nights, and the fuller Day 4 Chureito, Kawaguchiko, Oishi Park, and optional ropeway block.",
-        ja: "この地点は、3日目の三島ハンドオフ、富士エリア2泊、そして4日目の忠霊塔、河口湖、大石公園、任意のロープウェイをまとめています。"
+        en: "This stop groups the Day 3 Mishima handoff, two Fuji-area nights, and the fuller Day 4 Chureito, Kawaguchiko, Oishi Park, and Mt. Fuji Panoramic Ropeway block.",
+        ja: "この地点は、3日目の三島ハンドオフ、富士エリア2泊、そして4日目の忠霊塔、河口湖、大石公園、富士山パノラマロープウェイをまとめています。"
       },
       badges: [
         { en: "Days 3-4", ja: "3日目-4日目" },
@@ -457,7 +457,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       stopIds: ["kyoto", "fuji-gateway", "fuji"],
       segmentIds: ["kyoto-mishima-shinkansen", "fuji-gateway-kawaguchiko"],
       badges: [
-        { en: "1 Bullet Train ride to Mishima", ja: "三島へ新幹線移動" },
+        { en: "Kyoto", ja: "三島へ新幹線移動" },
         { en: "Fuji transfer night", ja: "富士への移動日" }
       ],
       transitActions: [
@@ -537,14 +537,14 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     ],
     3: [
       { en: "Arashiyama", ja: "嵐山" },
-      { en: "1 Bullet Train ride to Mishima", ja: "三島へ新幹線移動" },
+      { en: "Kyoto", ja: "三島へ新幹線移動" },
       { en: "Kawaguchiko", ja: "河口湖" }
     ],
     4: [
       { en: "Chureito Shimoyoshida", ja: "忠霊塔・下吉田" },
       { en: "Lake Kawaguchiko", ja: "河口湖" },
       { en: "Oishi Park", ja: "大石公園" },
-      { en: "Optional Panoramic Ropeway", ja: "任意のパノラマロープウェイ" }
+      { en: "Mt. Fuji Panoramic Ropeway", ja: "富士山パノラマロープウェイ" }
     ],
     5: [
       { en: "Transfer to Central Tokyo", ja: "東京中心部へ移動" },

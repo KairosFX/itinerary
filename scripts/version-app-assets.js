@@ -45,7 +45,12 @@ const assetDefinitions = [
   }
 ];
 
-const staticAssetDefinitions = [];
+const staticAssetDefinitions = [
+  {
+    key: "pageBackdropImage",
+    sourcePath: path.join(docsDir, "assets", "background", "kairos-bamboo-backdrop.jpg")
+  }
+];
 
 function createAssetHash(buffer) {
   return crypto.createHash("sha256").update(buffer).digest("hex").slice(0, 10);
@@ -85,7 +90,17 @@ staticAssetDefinitions.forEach(({ key, sourcePath }) => {
 });
 
 assetDefinitions.forEach(({ key, sourcePath, extension }) => {
-  const assetBuffer = fs.readFileSync(sourcePath);
+  let assetBuffer = fs.readFileSync(sourcePath);
+
+  if (key === "style" && manifest.pageBackdropImageCssPath) {
+    const cssSource = assetBuffer.toString("utf8");
+    const rewrittenCss = cssSource.replace(
+      /\.\/assets\/background\/kairos-bamboo-backdrop\.jpg/g,
+      manifest.pageBackdropImageCssPath
+    );
+    assetBuffer = Buffer.from(rewrittenCss, "utf8");
+  }
+
   const assetHash = createAssetHash(assetBuffer);
   const fileName = `${key}.${assetHash}${extension}`;
   const destinationPath = path.join(appAssetsDir, fileName);

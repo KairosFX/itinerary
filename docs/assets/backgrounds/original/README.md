@@ -1,4 +1,4 @@
-# Kairos VIII Background Originals
+# Kairos Background Originals
 
 This folder is only for legally licensed full-size originals used as desktop-grade website backgrounds.
 

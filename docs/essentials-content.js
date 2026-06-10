@@ -49,14 +49,76 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       },
       "links": [
         {
-          "href": "https://www.westjr.co.jp/global/en/howto/icoca/",
+          "href": "https://www.jreast.co.jp/e/pass/suica.html",
           "label": {
-            "en": "ICOCA official guide",
-            "ja": "ICOCA公式案内"
+            "en": "Suica official guide",
+            "ja": "Suica公式案内"
           },
           "note": {
-            "en": "Official JR-West ICOCA purchase, Apple Pay, and usage guide",
-            "ja": "JR西日本の公式 ICOCA 購入・Apple Pay・利用案内"
+            "en": "Official setup and supported use",
+            "ja": "公式の設定方法と利用案内"
+          },
+          "kind": "primary"
+        }
+      ]
+    },
+    {
+      "id": "osaka-stay",
+      "group": "accommodations",
+      "filters": [
+        "to-book"
+      ],
+      "kind": "booking",
+      "dayLabel": {
+        "en": "Days 1 or 3",
+        "ja": "1日目または3日目"
+      },
+      "typeLabel": {
+        "en": "Hotel / Accommodation",
+        "ja": "ホテル・宿泊"
+      },
+      "tone": {
+        "en": "Stay booking",
+        "ja": "宿泊予約"
+      },
+      "defaultStatus": {
+        "en": "Not booked",
+        "ja": "未予約"
+      },
+      "doneStatus": {
+        "en": "Booked",
+        "ja": "予約済み"
+      },
+      "toggleDefault": {
+        "en": "Mark booked",
+        "ja": "予約済みにする"
+      },
+      "toggleDone": {
+        "en": "Booked",
+        "ja": "予約済み"
+      },
+      "title": {
+        "en": "Osaka Hotel",
+        "ja": "大阪ホテル"
+      },
+      "summary": {
+        "en": "Use this as the Osaka booking reference for Day 1 or Day 3. The Minami side is chosen for route fit, not just because it is in Osaka.",
+        "ja": "1日目または3日目の大阪ホテル予約用に使います。大阪という広い括りではなく、ミナミ側の動線で選んでいます。"
+      },
+      "details": {
+        "en": "Nishi-Shinsaibashi / Minami keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical. Keep the Trip.com Hearton Hotel Shinsaibashi page here so the hotel booking flow is one tap away.",
+        "ja": "西心斎橋・ミナミなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすいです。Trip.com のハートンホテル心斎橋ページを残し、予約導線へすぐ進めるようにしています。"
+      },
+      "links": [
+        {
+          "href": "https://www.trip.com/hotels/osaka-hotel-detail-759843/hearton-hotel-shinsaibashi/",
+          "label": {
+            "en": "Trip.com hotel page",
+            "ja": "Trip.comホテルページ"
+          },
+          "note": {
+            "en": "Trip.com booking page for Hearton Hotel Shinsaibashi",
+            "ja": "ハートンホテル心斎橋のTrip.com予約ページ"
           },
           "kind": "primary"
         }
@@ -114,82 +176,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
       },
       "details": {
-        "en": "Use the Booking.com Kyoto results page to compare route-fit stays around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Bullet Train ride to Mishima.",
-        "ja": "Booking.com の京都検索結果で、四条・烏丸・五条周辺の動線に合う宿を比較します。2日目の東山回遊と3日目の嵐山スタート、三島への移動をどちらも進めやすくするためです。"
+        "en": "Shijo / Karasuma still reaches Higashiyama cleanly on Day 2, but it sets up Day 3 Arashiyama and Osaka much better than staying deep in east Kyoto. Keep the Trip.com Hotel Resol Kyoto Shijo Muromachi page here for the hotel reference and booking entry point.",
+        "ja": "四条烏丸なら2日目の東山へ十分動きやすく、3日目の嵐山と大阪戻りも東側の奥へ泊まるより整います。Trip.com の HOTEL RESOL KYOTO SHIJO MUROMACHI ページを残し、施設確認と予約導線を一つにまとめています。"
       },
       "links": [
         {
-          "href": "https://www.booking.com/searchresults.html?ss=Shijo%20Karasuma%2C%20Kyoto%2C%20Japan",
+          "href": "https://www.trip.com/hotels/v2/kyoto-hotel-detail-17514433/hotel-resol-kyoto-shijo-muromachi/",
           "label": {
-            "en": "Kyoto Booking.com options",
-            "ja": "京都 Booking.com 候補"
+            "en": "Trip.com hotel page",
+            "ja": "Trip.comホテルページ"
           },
           "note": {
-            "en": "Booking.com results for Kyoto stays around Shijo / Karasuma / Gojo.",
-            "ja": "四条・烏丸・五条周辺の京都滞在候補を開く Booking.com 検索結果です。"
-          },
-          "kind": "primary"
-        }
-      ]
-    },
-    {
-      "id": "osaka-kyoto-transfer",
-      "transitDetailId": "osaka-kyoto-transfer",
-      "group": "transit",
-      "filters": [
-        "transit"
-      ],
-      "kind": "booking",
-      "dayLabel": {
-        "en": "Day 2",
-        "ja": "2日目"
-      },
-      "typeLabel": {
-        "en": "Transit",
-        "ja": "移動"
-      },
-      "tone": {
-        "en": "Transit booking",
-        "ja": "移動予約"
-      },
-      "defaultStatus": {
-        "en": "Not booked",
-        "ja": "未予約"
-      },
-      "doneStatus": {
-        "en": "Booked",
-        "ja": "予約済み"
-      },
-      "toggleDefault": {
-        "en": "Mark Booked",
-        "ja": "予約済みにする"
-      },
-      "toggleDone": {
-        "en": "Booked",
-        "ja": "予約済み"
-      },
-      "title": {
-        "en": "Osaka to Kyoto",
-        "ja": "大阪から京都"
-      },
-      "summary": {
-        "en": "Save the Day 2 Osaka-to-Kyoto handoff so the Kyoto East walking day starts cleanly instead of burning time on a messy station decision.",
-        "ja": "2日目の大阪から京都への受け渡しを保存しておくと、駅で迷わず京都東側の街歩きを素直に始められます。"
-      },
-      "details": {
-        "en": "Treat this as a light Kansai city-to-city move, not a luggage-heavy transfer day. Reach Kyoto Station or the Shijo / Karasuma side first, then keep the east-side route direct on foot: Kiyomizu-dera -> Ninenzaka -> Yasaka Pagoda -> Gion. Keep the Trip.com Osaka Station -> Kyoto Station transport page handy once your Osaka starting point for the morning is fixed.",
-        "ja": "この移動は、荷物中心の日ではなく、関西内の軽い都市間移動として扱います。まずは京都駅か四条烏丸側へ入り、そのあとは清水寺 -> 二年坂 -> 八坂の塔 -> 祇園を徒歩で素直につなぎます。朝の大阪側の出発地点が固まったら、Trip.com の大阪駅 -> 京都駅 交通ページをすぐ開けるようにしておきます。"
-      },
-      "links": [
-        {
-          "href": "https://www.trip.com/transport/osaka-station-to-kyoto-station/",
-          "label": {
-            "en": "Trip.com route guide",
-            "ja": "Trip.com経路ガイド"
-          },
-          "note": {
-            "en": "Trip.com Osaka Station -> Kyoto Station transport page",
-            "ja": "大阪駅 -> 京都駅の Trip.com 交通ページ"
+            "en": "Trip.com booking page for Hotel Resol Kyoto Shijo Muromachi",
+            "ja": "HOTEL RESOL KYOTO SHIJO MUROMACHI のTrip.com予約ページ"
           },
           "kind": "primary"
         }
@@ -243,23 +242,23 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "河口湖ステイ"
       },
       "summary": {
-        "en": "The base is chosen for two Fuji-area nights so Day 3 arrival stays calm and Day 4 can carry Chureito, Kawaguchiko, Oishi Park, and the optional ropeway without rushing to Tokyo.",
-        "ja": "富士エリア2泊に合わせて拠点を選び、3日目の到着を落ち着かせ、4日目に忠霊塔、河口湖、大石公園、任意のロープウェイまで東京移動に追われず回せるようにします。"
+        "en": "The base is chosen for two Fuji-area nights so Day 3 arrival stays calm and Day 4 can carry Chureito, Kawaguchiko, Oishi Park, and the Mt. Fuji Panoramic Ropeway without rushing to Tokyo.",
+        "ja": "富士エリア2泊に合わせて拠点を選び、3日目の到着を落ち着かせ、4日目に忠霊塔、河口湖、大石公園、富士山パノラマロープウェイまで東京移動に追われず回せるようにします。"
       },
       "details": {
-        "en": "Use the Booking.com Kawaguchiko results page to compare practical station-to-lake bases. Keeping two nights here makes the Day 4 Fuji plan weather-flexible and moves the Tokyo transfer cleanly to Day 5.",
-        "ja": "Booking.com の河口湖検索結果で、駅から湖側へ動きやすい実用的な拠点を比較します。ここを2泊にすると4日目の富士プランを天候に合わせやすく、東京移動も5日目へきれいに移せます。"
+        "en": "A Kawaguchiko-side base works better than a remote resort because it keeps the station handoff, Chureito option, lake stop, and the Day 5 Tokyo transfer aligned with the actual route. Keep the Trip.com HAOSTAY page here for the property reference and booking flow.",
+        "ja": "遠いリゾート立地より、河口湖側の拠点の方が駅からの受け渡し、忠霊塔の選択肢、河口湖の立ち寄り、5日目の東京移動までを実際の流れに合わせやすいです。Trip.com の HAOSTAY ページを施設確認と予約導線として残しています。"
       },
       "links": [
         {
-          "href": "https://www.booking.com/searchresults.html?ss=Kawaguchiko%2C%20Fujikawaguchiko%2C%20Yamanashi%2C%20Japan",
+          "href": "https://www.trip.com/hotels/fujikawaguchiko-hotel-detail-53867549/haostay/",
           "label": {
-            "en": "Kawaguchiko Booking.com options",
-            "ja": "河口湖 Booking.com 候補"
+            "en": "Trip.com hotel page",
+            "ja": "Trip.comホテルページ"
           },
           "note": {
-            "en": "Booking.com results for Kawaguchiko stays near station and lake access.",
-            "ja": "駅と湖側アクセスに合う河口湖滞在候補を開く Booking.com 検索結果です。"
+            "en": "Trip.com booking page for HAOSTAY",
+            "ja": "HAOSTAY のTrip.com予約ページ"
           },
           "kind": "primary"
         }
@@ -318,19 +317,19 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "東京ホテル泊は5日目と6日目に置き、渋谷、東京東側、新宿、7日目の空港移動を回りやすい中心部の拠点を選びます。"
       },
       "details": {
-        "en": "Use the Booking.com central Tokyo results page to compare bases around the Shibuya/Shinjuku/Tokyo rail core. Moving to a central hotel on Day 5 keeps the Tokyo days practical without changing bases again.",
-        "ja": "Booking.com の東京中心部検索結果で、渋谷・新宿・東京駅方面の鉄道軸に合う拠点を比較します。5日目に中心部ホテルへ移ると、東京日程を拠点変更なしで進めやすくなります。"
+        "en": "Shibuya access still fits the first Tokyo evening best, and keeping the same west-side base for Day 6 leaves Day 7 free for a lighter Imperial Palace/Shinjuku block instead of wasting time on a mid-route hotel switch before the airport. Keep the Trip.com Shibuya Hotel En page here for the hotel and reservation access.",
+        "ja": "最初の東京の夜には渋谷アクセスが最も合いやすく、6日目も同じ西側拠点のままなら、空港前にホテル移動で時間を削らず、7日目を皇居と新宿中心に軽く回せます。ホテル確認と予約導線のために、Trip.com の Shibuya Hotel En ページを残しています。"
       },
       "links": [
         {
-          "href": "https://www.booking.com/searchresults.html?ss=Central%20Tokyo%2C%20Tokyo%2C%20Japan",
+          "href": "https://www.trip.com/hotels/tokyo-hotel-detail-688139/shibuya-hotel-en/",
           "label": {
-            "en": "Central Tokyo Booking.com options",
-            "ja": "東京中心部 Booking.com 候補"
+            "en": "Trip.com hotel page",
+            "ja": "Trip.comホテルページ"
           },
           "note": {
-            "en": "Booking.com results for central Tokyo stays.",
-            "ja": "東京中心部の滞在候補を開く Booking.com 検索結果です。"
+            "en": "Trip.com booking page for Shibuya Hotel En",
+            "ja": "Shibuya Hotel En のTrip.com予約ページ"
           },
           "kind": "primary"
         }
@@ -346,8 +345,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "kind": "booking",
       "dayLabel": {
-        "en": "Day 3",
-        "ja": "3日目"
+        "en": "Day 4",
+        "ja": "4日目"
       },
       "typeLabel": {
         "en": "Transit",
@@ -374,15 +373,15 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "予約済み"
       },
       "title": {
-        "en": "1 Bullet Train ride to Mishima",
-        "ja": "三島へ新幹線移動"
+        "en": "Kyoto",
+        "ja": "京都"
       },
       "summary": {
-        "en": "Treat this as the fixed Bullet Train booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
-        "ja": "3日目の三島ハンドオフから河口湖へ入るための、固定の都市間予約として扱います。"
+        "en": "Treat this as the fixed Kyoto-side intercity booking that anchors the Day 4 Mishima handoff into Kawaguchiko.",
+        "ja": "4日目の京都側から三島ハンドオフ、河口湖へ入るための固定の都市間予約として扱います。"
       },
       "details": {
-        "en": "Use the Trip.com Kyoto-to-Mishima train page once Day 3 timing is fixed. Keep this card focused on the 1 Bullet Train ride to Mishima, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
+        "en": "Use the Trip.com Kyoto-to-Mishima train page once Day 3 timing is fixed. Keep this card focused on the Kyoto, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
         "ja": "3日目の時刻が固まったら Trip.com の三島への移動ページを使います。このカードは三島への移動に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
       },
       "links": [
@@ -592,6 +591,68 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
           "note": {
             "en": "Safer main-domain official pricing and e-ticket page",
             "ja": "より安全な公式メインドメインの料金・eチケットページ"
+          },
+          "kind": "primary"
+        }
+      ]
+    },
+    {
+      "id": "mt-fuji-panoramic-ropeway",
+      "group": "activities",
+      "filters": [
+        "to-book"
+      ],
+      "kind": "booking",
+      "dayLabel": {
+        "en": "Day 4",
+        "ja": "4日目"
+      },
+      "typeLabel": {
+        "en": "Activity",
+        "ja": "アクティビティ"
+      },
+      "tone": {
+        "en": "Reserve ahead",
+        "ja": "事前予約"
+      },
+      "defaultStatus": {
+        "en": "Not booked",
+        "ja": "未予約"
+      },
+      "doneStatus": {
+        "en": "Booked",
+        "ja": "予約済み"
+      },
+      "toggleDefault": {
+        "en": "Mark booked",
+        "ja": "予約済みにする"
+      },
+      "toggleDone": {
+        "en": "Booked",
+        "ja": "予約済み"
+      },
+      "title": {
+        "en": "Mt. Fuji Panoramic Ropeway",
+        "ja": "富士山パノラマロープウェイ"
+      },
+      "summary": {
+        "en": "Treat this as a planned Fuji-area activity for the Kawaguchiko block.",
+        "ja": "河口湖ブロックの富士エリア観光として予定に入れます。"
+      },
+      "details": {
+        "en": "Use the official ropeway site for current operating status, ticket details, and access notes before locking the Day 4 Fuji timing.",
+        "ja": "4日目の富士エリア時間を固める前に、公式ロープウェイサイトで運行状況、チケット情報、アクセスを確認します。"
+      },
+      "links": [
+        {
+          "href": "https://www.mtfujiropeway.jp/en/",
+          "label": {
+            "en": "Official ropeway site",
+            "ja": "公式ロープウェイサイト"
+          },
+          "note": {
+            "en": "Operating status, tickets, and access notes",
+            "ja": "運行状況、チケット、アクセス案内"
           },
           "kind": "primary"
         }
@@ -1003,7 +1064,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
           "ja": "富士山の見え方が微妙な時は、河口湖と大石公園を確実な軸にします。"
         },
         {
-          "en": "Keep the Panoramic Ropeway optional because it depends on weather, energy, crowds, and time.",
+          "en": "Keep the Panoramic Ropeway planned because it depends on weather, energy, crowds, and time.",
           "ja": "パノラマロープウェイは天気、体力、混雑、時間に左右されるため任意にします。"
         }
       ],
