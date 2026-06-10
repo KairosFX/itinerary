@@ -159,7 +159,7 @@ const radioYoutubeRequiredParams = [
   "disablekb",
   "fs"
 ];
-const radioGithubPagesOrigin = "https://kairosfx.github.io";
+const radioDefaultPublicOrigin = "https://japan-escape-itinerary-repo-work.vercel.app";
 const radioYoutubeReadyTimeoutMs = 9000;
 const radioYoutubeProbeDelayMs = 700;
 const radioYoutubeMaxProbeAttempts = 4;
@@ -3005,13 +3005,9 @@ function configureRadioMediaSession() {
 }
 
 function getRadioYoutubeOrigin() {
-  if (window.location.hostname === "kairosfx.github.io") {
-    return radioGithubPagesOrigin;
-  }
-
   return window.location.origin && window.location.origin !== "null"
     ? window.location.origin
-    : "";
+    : radioDefaultPublicOrigin;
 }
 
 function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {

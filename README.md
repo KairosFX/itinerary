@@ -1,6 +1,6 @@
 # Itinerary
 
-Live site: https://kairosfx.github.io/itinerary/
+Live site: https://japan-escape-itinerary-repo-work.vercel.app/
 
 ---
 
