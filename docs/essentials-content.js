@@ -2,9 +2,9 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
   "bookingTransitItems": [
     {
       "id": "ic-card",
-      "group": "transit",
+      "group": "references",
       "filters": [
-        "transit"
+        "reference"
       ],
       "kind": "prep",
       "dayLabel": {
@@ -12,8 +12,8 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "1日目までに"
       },
       "typeLabel": {
-        "en": "Transit",
-        "ja": "移動"
+        "en": "Important link",
+        "ja": "重要リンク"
       },
       "tone": {
         "en": "Setup prep",
@@ -70,12 +70,20 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "kind": "booking",
       "dayLabel": {
-        "en": "Days 1 or 3",
-        "ja": "1日目または3日目"
+        "en": "Day 1",
+        "ja": "1日目"
       },
       "typeLabel": {
         "en": "Hotel / Accommodation",
         "ja": "ホテル・宿泊"
+      },
+      "cityLabel": {
+        "en": "Osaka / Minami",
+        "ja": "大阪・ミナミ"
+      },
+      "stayTypeLabel": {
+        "en": "Hotel stay",
+        "ja": "ホテル泊"
       },
       "tone": {
         "en": "Stay booking",
@@ -102,25 +110,61 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "大阪ホテル"
       },
       "summary": {
-        "en": "Use this as the Osaka booking reference for Day 1 or Day 3. The Minami side is chosen for route fit, not just because it is in Osaka.",
-        "ja": "1日目または3日目の大阪ホテル予約用に使います。大阪という広い括りではなく、ミナミ側の動線で選んでいます。"
+        "en": "Day 1 starts in Osaka, so keep the stay close to Namba, Shinsaibashi, and Dotonbori for an easy first-night landing.",
+        "ja": "1日目は大阪スタートなので、初日の夜を楽にするため難波・心斎橋・道頓堀に寄せた宿を比較します。"
       },
       "details": {
-        "en": "Nishi-Shinsaibashi / Minami keeps Day 1 Dotonbori-Shinsaibashi walking and Day 3 Osaka-side movement practical. Keep the Trip.com Hearton Hotel Shinsaibashi page here so the hotel booking flow is one tap away.",
-        "ja": "西心斎橋・ミナミなら、1日目の道頓堀・心斎橋の徒歩動線と、3日目の大阪側の動きをまとめやすいです。Trip.com のハートンホテル心斎橋ページを残し、予約導線へすぐ進めるようにしています。"
+        "en": "Use Trip.com to compare a practical Minami-side base. Prioritize quick station access, simple luggage handling, and a walkable first evening over chasing the lowest room price.",
+        "ja": "Trip.com でミナミ側の実用的な拠点を比較します。最安値だけでなく、駅アクセス、荷物の扱いやすさ、初日の夜に歩きやすい位置を優先します。"
       },
       "links": [
         {
           "href": "https://www.trip.com/hotels/osaka-hotel-detail-759843/hearton-hotel-shinsaibashi/",
           "label": {
-            "en": "Trip.com hotel page",
-            "ja": "Trip.comホテルページ"
+            "en": "Best value option",
+            "ja": "コスパ候補"
           },
           "note": {
-            "en": "Trip.com booking page for Hearton Hotel Shinsaibashi.",
-            "ja": "ハートンホテル心斎橋のTrip.com予約ページです。"
+            "en": "Trip.com page for Hearton Hotel Shinsaibashi, kept as the saved route-fit baseline.",
+            "ja": "動線の基準候補として残す、ハートンホテル心斎橋のTrip.comページです。"
           },
           "kind": "primary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=219&searchWord=Osaka%20Shinsaibashi%20budget%20hotel",
+          "label": {
+            "en": "Budget option",
+            "ja": "予算重視"
+          },
+          "note": {
+            "en": "Compare lower-cost Shinsaibashi / Minami hotel options on Trip.com.",
+            "ja": "Trip.com で心斎橋・ミナミ周辺の低予算ホテルを比較します。"
+          },
+          "kind": "secondary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=219&searchWord=Osaka%20Namba%20Dotonbori%20hotel",
+          "label": {
+            "en": "Best location option",
+            "ja": "立地重視"
+          },
+          "note": {
+            "en": "Compare Namba / Dotonbori stays for the easiest Day 1 evening walk.",
+            "ja": "1日目の夜に歩きやすい、難波・道頓堀周辺の宿を比較します。"
+          },
+          "kind": "secondary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=219&searchWord=Osaka%20premium%20hotel%20Namba",
+          "label": {
+            "en": "Premium option",
+            "ja": "プレミアム候補"
+          },
+          "note": {
+            "en": "Compare higher-comfort Osaka rooms while staying on the same Trip.com domain.",
+            "ja": "同じTrip.com上で、大阪の快適性重視の部屋を比較します。"
+          },
+          "kind": "secondary"
         }
       ]
     },
@@ -132,12 +176,20 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "kind": "booking",
       "dayLabel": {
-        "en": "Day 1",
-        "ja": "1日目"
+        "en": "Day 2",
+        "ja": "2日目"
       },
       "typeLabel": {
         "en": "Hotel / Accommodation",
         "ja": "ホテル・宿泊"
+      },
+      "cityLabel": {
+        "en": "Kyoto / Shijo-Karasuma",
+        "ja": "京都・四条烏丸"
+      },
+      "stayTypeLabel": {
+        "en": "Hotel stay",
+        "ja": "ホテル泊"
       },
       "stayVisibility": {
         "days": [
@@ -172,25 +224,61 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "京都ホテル"
       },
       "summary": {
-        "en": "This stay is picked for Shijo / Karasuma route fit, not just because it is in Kyoto.",
-        "ja": "この宿は、京都という大枠ではなく、四条烏丸の動線適性で選んでいます。"
+        "en": "Use Day 2 as the Kyoto stay night, with Shijo / Karasuma or Gojo keeping the Higashiyama walk and Day 3 Arashiyama start practical.",
+        "ja": "2日目は京都泊。四条・烏丸・五条寄りにすると、東山の街歩きと3日目の嵐山スタートを両立しやすくなります。"
       },
       "details": {
-        "en": "Use the Trip.com Kyoto hotel page to compare a route-fit stay around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Kyoto transfer.",
+        "en": "Use the Trip.com Kyoto hotel page to compare a route-fit stay around Shijo / Karasuma / Gojo. This keeps the Day 2 Higashiyama sweep practical while still supporting the Day 3 Arashiyama start and Kyoto to Mishima transfer.",
         "ja": "Trip.com の京都ホテルページで、四条・烏丸・五条周辺の動線に合う宿を確認します。2日目の東山回遊と3日目の嵐山スタート、三島への移動をどちらも進めやすくするためです。"
       },
       "links": [
         {
           "href": "https://www.trip.com/hotels/v2/kyoto-hotel-detail-17514433/hotel-resol-kyoto-shijo-muromachi/",
           "label": {
-            "en": "Trip.com hotel page",
-            "ja": "Trip.comホテルページ"
+            "en": "Best value option",
+            "ja": "コスパ候補"
           },
           "note": {
-            "en": "Trip.com booking page for Hotel Resol Kyoto Shijo Muromachi.",
-            "ja": "HOTEL RESOL KYOTO SHIJO MUROMACHI のTrip.com予約ページです。"
+            "en": "Trip.com page for Hotel Resol Kyoto Shijo Muromachi, kept as the saved Shijo route-fit baseline.",
+            "ja": "四条周辺の基準候補として残す、HOTEL RESOL KYOTO SHIJO MUROMACHI のTrip.comページです。"
           },
           "kind": "primary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=734&searchWord=Kyoto%20Shijo%20Karasuma%20budget%20hotel",
+          "label": {
+            "en": "Budget option",
+            "ja": "予算重視"
+          },
+          "note": {
+            "en": "Compare lower-cost Kyoto rooms around Shijo / Karasuma on Trip.com.",
+            "ja": "Trip.com で四条・烏丸周辺の低予算ホテルを比較します。"
+          },
+          "kind": "secondary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=734&searchWord=Kyoto%20Gojo%20Shijo%20hotel",
+          "label": {
+            "en": "Best location option",
+            "ja": "立地重視"
+          },
+          "note": {
+            "en": "Compare central Kyoto stays that keep Higashiyama, Gion, and station access balanced.",
+            "ja": "東山・祇園・駅アクセスのバランスが良い京都中心部の宿を比較します。"
+          },
+          "kind": "secondary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=734&searchWord=Kyoto%20premium%20ryokan%20hotel",
+          "label": {
+            "en": "Premium option",
+            "ja": "プレミアム候補"
+          },
+          "note": {
+            "en": "Compare more comfortable Kyoto hotel and ryokan options on Trip.com.",
+            "ja": "Trip.com で京都の快適性重視ホテル・旅館候補を比較します。"
+          },
+          "kind": "secondary"
         }
       ]
     },
@@ -265,12 +353,20 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "kind": "booking",
       "dayLabel": {
-        "en": "Day 3",
-        "ja": "3日目"
+        "en": "Days 3-4",
+        "ja": "3日目-4日目"
       },
       "typeLabel": {
         "en": "Hotel / Accommodation",
         "ja": "ホテル・宿泊"
+      },
+      "cityLabel": {
+        "en": "Fuji / Kawaguchiko",
+        "ja": "富士・河口湖"
+      },
+      "stayTypeLabel": {
+        "en": "Onsen / lake-base stay",
+        "ja": "温泉・湖畔拠点"
       },
       "stayVisibility": {
         "days": [
@@ -316,14 +412,50 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         {
           "href": "https://www.trip.com/hotels/fujikawaguchiko-hotel-detail-53867549/haostay/",
           "label": {
-            "en": "Trip.com hotel page",
-            "ja": "Trip.comホテルページ"
+            "en": "Best value option",
+            "ja": "コスパ候補"
           },
           "note": {
-            "en": "Trip.com booking page for HAOSTAY.",
-            "ja": "HAOSTAY のTrip.com予約ページです。"
+            "en": "Trip.com page for HAOSTAY, kept as the saved station-to-lake baseline.",
+            "ja": "駅から湖側への基準候補として残す、HAOSTAY のTrip.comページです。"
           },
           "kind": "primary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=50160&searchWord=Kawaguchiko%20Station%20budget%20hotel",
+          "label": {
+            "en": "Budget option",
+            "ja": "予算重視"
+          },
+          "note": {
+            "en": "Compare practical lower-cost rooms near Kawaguchiko Station on Trip.com.",
+            "ja": "Trip.com で河口湖駅周辺の実用的な低予算宿を比較します。"
+          },
+          "kind": "secondary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=50160&searchWord=Lake%20Kawaguchiko%20hotel",
+          "label": {
+            "en": "Best location option",
+            "ja": "立地重視"
+          },
+          "note": {
+            "en": "Compare lake-side stays that make Day 4 Fuji views and local buses easier.",
+            "ja": "4日目の富士ビューと現地バスに合わせやすい湖側の宿を比較します。"
+          },
+          "kind": "secondary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=50160&searchWord=Kawaguchiko%20onsen%20ryokan",
+          "label": {
+            "en": "Premium option",
+            "ja": "プレミアム候補"
+          },
+          "note": {
+            "en": "Compare Kawaguchiko onsen and ryokan stays on the same Trip.com domain.",
+            "ja": "同じTrip.com上で、河口湖の温泉・旅館候補を比較します。"
+          },
+          "kind": "secondary"
         }
       ]
     },
@@ -341,6 +473,14 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       "typeLabel": {
         "en": "Hotel / Accommodation",
         "ja": "ホテル・宿泊"
+      },
+      "cityLabel": {
+        "en": "Tokyo / central rail core",
+        "ja": "東京・中心部"
+      },
+      "stayTypeLabel": {
+        "en": "Central hotel stay",
+        "ja": "中心部ホテル泊"
       },
       "stayVisibility": {
         "days": [
@@ -387,14 +527,50 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         {
           "href": "https://www.trip.com/hotels/tokyo-hotel-detail-688139/shibuya-hotel-en/",
           "label": {
-            "en": "Trip.com hotel page",
-            "ja": "Trip.comホテルページ"
+            "en": "Best location option",
+            "ja": "立地重視"
           },
           "note": {
-            "en": "Trip.com booking page for Shibuya Hotel En.",
-            "ja": "Shibuya Hotel En のTrip.com予約ページです。"
+            "en": "Trip.com page for Shibuya Hotel En, kept as the saved central Tokyo baseline.",
+            "ja": "東京中心部の基準候補として残す、Shibuya Hotel En のTrip.comページです。"
           },
           "kind": "primary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=228&searchWord=Tokyo%20Shinjuku%20budget%20hotel",
+          "label": {
+            "en": "Budget option",
+            "ja": "予算重視"
+          },
+          "note": {
+            "en": "Compare lower-cost Tokyo rooms while keeping rail access practical.",
+            "ja": "Trip.com で鉄道アクセスを保ちながら、東京の低予算ホテルを比較します。"
+          },
+          "kind": "secondary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=228&searchWord=Tokyo%20central%20hotel%20Shibuya%20Shinjuku",
+          "label": {
+            "en": "Best value option",
+            "ja": "コスパ候補"
+          },
+          "note": {
+            "en": "Compare central Tokyo stays around the Shibuya / Shinjuku / Tokyo rail core.",
+            "ja": "渋谷・新宿・東京駅方面の鉄道軸に合う中心部ホテルを比較します。"
+          },
+          "kind": "secondary"
+        },
+        {
+          "href": "https://www.trip.com/hotels/list?city=228&searchWord=Tokyo%20premium%20hotel%20Shibuya",
+          "label": {
+            "en": "Premium option",
+            "ja": "プレミアム候補"
+          },
+          "note": {
+            "en": "Compare higher-comfort Tokyo rooms for the last two nights on Trip.com.",
+            "ja": "Trip.com で最後の2泊向けの快適性重視ホテルを比較します。"
+          },
+          "kind": "secondary"
         }
       ]
     },
@@ -436,15 +612,15 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "予約済み"
       },
       "title": {
-        "en": "Kyoto",
-        "ja": "京都"
+        "en": "Kyoto to Mishima",
+        "ja": "京都から三島"
       },
       "summary": {
-        "en": "Treat this as the fixed Kyoto-side intercity booking that anchors the Day 3 Mishima handoff into Kawaguchiko.",
+        "en": "Treat Kyoto to Mishima as the fixed intercity booking that anchors the Day 3 handoff into Kawaguchiko.",
         "ja": "3日目の京都側から三島ハンドオフ、河口湖へ入るための固定の都市間予約として扱います。"
       },
       "details": {
-        "en": "Use the Trip.com Kyoto-to-Mishima train page once Day 3 timing is fixed. Keep this card focused on Kyoto, with a station buffer before the Mishima-to-Kawaguchiko handoff.",
+        "en": "Use the Trip.com Kyoto to Mishima train page once Day 3 timing is fixed. Keep a station buffer before the Mishima-to-Kawaguchiko handoff.",
         "ja": "3日目の時刻が固まったら Trip.com の三島への移動ページを使います。このカードは三島への移動に絞り、三島から河口湖への乗り継ぎ前に駅での余裕を見ておきます。"
       },
       "links": [
@@ -455,7 +631,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
             "ja": "Trip.com鉄道検索"
           },
           "note": {
-            "en": "Trip.com train route page for the Kyoto-to-Mishima transfer.",
+            "en": "Trip.com train route page for the Kyoto to Mishima transfer.",
             "ja": "三島への移動に使う Trip.com の鉄道路線ページです。"
           },
           "price": {
@@ -512,7 +688,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "3日目を最も素直に三島から湖側へ渡したいなら、このローカル移動を予約対象として扱います。"
       },
       "details": {
-        "en": "Use the Trip.com Mishima transport page once the Kyoto-to-Mishima timing is locked. Keep the Mishima Station South Exit -> Kawaguchiko Station bus option saved as the practical lake-base handoff.",
+        "en": "Use the Trip.com Mishima transport page once the Kyoto to Mishima timing is locked. Keep the Mishima Station South Exit -> Kawaguchiko Station bus option saved as the practical lake-base handoff.",
         "ja": "三島への移動時刻が固まったら、Trip.com の三島交通ページを使います。三島駅南口 -> 河口湖駅のバス候補を、湖側拠点へ入る実用的な受け渡しとして保存しておきます。"
       },
       "links": [
@@ -919,7 +1095,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
           "ja": "朝の余白が減ったら、まず京都ホテルか京都駅側へ入り、そこから東側の街歩きを始めます。"
         },
         {
-          "en": "If the final Kyoto transfer starts feeling fussy, use taxi only for the last uphill stretch rather than wasting the middle of the day on extra hops.",
+          "en": "If the final Osaka-to-Kyoto rail handoff starts feeling fussy, use taxi only for the last uphill stretch rather than wasting the middle of the day on extra hops.",
           "ja": "京都側の最後の移動が面倒になったら、日中の時間を削るより、最後の上り区間だけタクシーに切り替えます。"
         }
       ],
@@ -934,11 +1110,11 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
     {
       "id": "kyoto-mishima-shinkansen",
       "tag": {
-        "en": "Day 3 Kyoto transfer",
-        "ja": "3日目の京都移動"
+        "en": "Day 3 Kyoto to Mishima",
+        "ja": "3日目 京都から三島"
       },
       "title": {
-        "en": "Kyoto -> Mishima transfer",
+        "en": "Kyoto to Mishima transfer",
         "ja": "京都 -> 三島の移動"
       },
       "summary": {
@@ -946,7 +1122,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "京都駅から富士側へ入るための、固定の移動区間です。"
       },
       "segment": {
-        "en": "Kyoto Station → Mishima Station",
+        "en": "Kyoto Station to Mishima Station",
         "ja": "京都駅 → 三島駅"
       },
       "from": {
@@ -958,7 +1134,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
         "ja": "三島駅"
       },
       "transport": {
-        "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 Kyoto transfer, then keep the Mishima-to-lake transfer saved separately.",
+        "en": "Use the Trip.com Kyoto to Mishima train page for the fixed Day 3 transfer, then keep the Mishima-to-lake transfer saved separately.",
         "ja": "3日目の固定移動には Trip.com の三島への移動ページを使い、三島から湖側への移動は別に保存しておきます。"
       },
       "why": {
@@ -981,7 +1157,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "prepReminders": [
         {
-          "en": "Book on Trip.com once Day 3 is fixed rather than leaving the Kyoto transfer to the last minute.",
+          "en": "Book on Trip.com once Day 3 is fixed rather than leaving the Kyoto to Mishima transfer to the last minute.",
           "ja": "3日目が固まったら Trip.com で予約し、三島への移動を直前判断にしないようにします。"
         },
         {
@@ -1057,7 +1233,7 @@ window.__JAPAN_ESSENTIALS_CONTENT__ = {
       ],
       "prepReminders": [
         {
-          "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the Kyoto transfer is fixed.",
+          "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the Kyoto to Mishima transfer is fixed.",
           "ja": "前夜に三島発バスの時刻を確認し、三島への移動が固まったあとで当日の最終便を見直します。"
         },
         {

@@ -3770,6 +3770,13 @@ html.has-modal-open body {
   color: rgba(94, 103, 104, 0.92);
 }
 
+.booking-group__copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
 .booking-group__title::before {
   content: "";
   width: 0.52rem;
@@ -3794,6 +3801,11 @@ html.has-modal-open body {
   box-shadow: 0 0 0 0.18rem rgba(128, 104, 58, 0.1);
 }
 
+.booking-group[data-booking-group-section="references"] .booking-group__title::before {
+  background: rgba(91, 112, 140, 0.3);
+  box-shadow: 0 0 0 0.18rem rgba(91, 112, 140, 0.1);
+}
+
 .booking-group[data-booking-group-section="accommodations"] {
   background:
     linear-gradient(180deg, rgba(249, 253, 248, 0.86), rgba(241, 248, 240, 0.74)),
@@ -3810,6 +3822,12 @@ html.has-modal-open body {
   background:
     linear-gradient(180deg, rgba(253, 252, 248, 0.86), rgba(248, 245, 236, 0.74)),
     rgba(252, 249, 242, 0.66);
+}
+
+.booking-group[data-booking-group-section="references"] {
+  background:
+    linear-gradient(180deg, rgba(248, 250, 253, 0.86), rgba(240, 244, 250, 0.74)),
+    rgba(245, 248, 252, 0.66);
 }
 
 .booking-group__list > .booking-item {
@@ -3903,6 +3921,16 @@ html.has-modal-open body {
 .booking-item__tag--type {
   color: rgba(70, 81, 95, 0.92);
   background: rgba(111, 124, 137, 0.12);
+}
+
+.booking-item__tag--city {
+  color: rgba(89, 74, 38, 0.94);
+  background: rgba(184, 149, 100, 0.14);
+}
+
+.booking-item__tag--stay {
+  color: rgba(92, 68, 96, 0.92);
+  background: rgba(128, 104, 140, 0.12);
 }
 
 .booking-item__tone,
@@ -4014,6 +4042,30 @@ html.has-modal-open body {
 .booking-item__support {
   display: flex;
   justify-content: flex-start;
+}
+
+.booking-item__copy-block {
+  display: grid;
+  gap: 0.34rem;
+  padding: 0.62rem 0.7rem;
+  border: 1px solid rgba(31, 37, 39, 0.08);
+  border-radius: calc(var(--radius-sm) + 0.08rem);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(255, 250, 245, 0.48)),
+    rgba(255, 255, 255, 0.46);
+}
+
+.booking-item__summary,
+.booking-item__copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.48;
+}
+
+.booking-item__summary {
+  color: var(--text);
+  font-weight: 650;
 }
 
 .transit-trigger--booking {
@@ -18290,6 +18342,240 @@ html[lang="ja"] .language-switcher::before {
   }
 }
 
+/* June 2026 Radio FM custom video showcase */
+.travel-radio:not([data-radio-collapsed="true"]) {
+  grid-template-columns: minmax(12.4rem, 0.58fr) minmax(0, 1fr) !important;
+  width: min(38rem, calc(100vw - 1.5rem)) !important;
+  gap: 0.72rem !important;
+  padding: 0.64rem !important;
+  border-radius: 1.18rem !important;
+}
+
+.travel-radio__signal {
+  aspect-ratio: 16 / 9 !important;
+  min-height: 0 !important;
+  border-radius: 0.95rem !important;
+}
+
+.travel-radio__location {
+  position: absolute;
+  left: 0.58rem;
+  top: 0.58rem;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  max-width: calc(100% - 1.16rem);
+  min-height: 1.54rem;
+  padding: 0.22rem 0.54rem;
+  border: 1px solid rgba(244, 239, 226, 0.16);
+  border-radius: 999px;
+  background: rgba(3, 10, 9, 0.72);
+  color: rgba(244, 251, 245, 0.94);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  backdrop-filter: blur(10px);
+}
+
+.travel-radio__preview-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  display: inline-grid;
+  place-items: center;
+  width: 3.15rem;
+  min-width: 3.15rem;
+  height: 3.15rem;
+  min-height: 3.15rem;
+  padding: 0;
+  border: 1px solid rgba(244, 239, 226, 0.24);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 34% 24%, rgba(244, 239, 226, 0.18), rgba(244, 239, 226, 0) 48%),
+    linear-gradient(180deg, rgba(var(--theme-accent-rgb), 0.34), rgba(3, 10, 9, 0.82)),
+    rgba(3, 10, 9, 0.82);
+  color: var(--text-main);
+  font-size: 1.02rem;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 16px 34px rgba(0, 0, 0, 0.34),
+    0 0 24px var(--theme-glow-soft);
+  transform: translate(-50%, -50%);
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease;
+}
+
+.travel-radio__preview-play:hover,
+.travel-radio__preview-play:focus-visible {
+  border-color: rgba(var(--theme-accent-rgb), 0.46);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 18px 38px rgba(0, 0, 0, 0.38),
+    0 0 30px var(--theme-glow-soft);
+}
+
+.travel-radio[data-radio-state="playing"][data-radio-video-visible="true"] .travel-radio__preview-play {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.travel-radio__body {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-areas:
+    "copy"
+    "stations"
+    "controls" !important;
+  align-content: start !important;
+  gap: 0.52rem !important;
+}
+
+.travel-radio__copy {
+  gap: 0.16rem !important;
+}
+
+.travel-radio__title {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 0.96rem;
+  font-weight: 820;
+  line-height: 1.18;
+}
+
+.travel-radio__source {
+  color: var(--text-muted) !important;
+  font-size: 0.76rem !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  white-space: normal !important;
+  text-overflow: clip !important;
+}
+
+.travel-radio__stations {
+  grid-area: stations;
+  display: flex;
+  gap: 0.32rem;
+  min-width: 0;
+  overflow-x: auto;
+  padding-bottom: 0.06rem;
+  scrollbar-width: none;
+}
+
+.travel-radio__stations::-webkit-scrollbar {
+  display: none;
+}
+
+.travel-radio__station {
+  flex: 0 0 auto;
+  min-height: 2.04rem;
+  padding: 0.42rem 0.62rem;
+  border: 1px solid rgba(var(--theme-accent-rgb), 0.14);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(var(--theme-accent-rgb), 0.08), rgba(255, 155, 74, 0.035)),
+    rgba(3, 10, 9, 0.58);
+  color: rgba(244, 239, 226, 0.8);
+  font-size: 0.68rem;
+  font-weight: 780;
+  line-height: 1;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.travel-radio__station:hover,
+.travel-radio__station:focus-visible,
+.travel-radio__station.is-active,
+.travel-radio__station[aria-pressed="true"] {
+  border-color: rgba(var(--theme-accent-rgb), 0.34);
+  background:
+    linear-gradient(180deg, rgba(var(--theme-accent-rgb), 0.22), rgba(97, 244, 255, 0.08)),
+    rgba(3, 10, 9, 0.78);
+  color: var(--text-main);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 22px rgba(0, 0, 0, 0.22),
+    0 0 16px var(--theme-glow-soft);
+}
+
+.travel-radio__controls {
+  display: grid !important;
+  grid-template-columns: auto auto minmax(7.5rem, 1fr);
+  gap: 0.34rem !important;
+  align-items: center !important;
+}
+
+.travel-radio__open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.08rem;
+  padding: 0.42rem 0.72rem;
+  border: 1px solid rgba(var(--theme-accent-rgb), 0.16);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(var(--theme-accent-rgb), 0.11), rgba(255, 155, 74, 0.05)),
+    rgba(3, 10, 9, 0.72);
+  color: var(--text-main);
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+}
+
+.travel-radio__open:hover,
+.travel-radio__open:focus-visible {
+  border-color: rgba(var(--theme-accent-rgb), 0.32);
+  box-shadow:
+    0 0 0 1px rgba(var(--theme-accent-rgb), 0.08),
+    0 12px 28px rgba(0, 0, 0, 0.24),
+    0 0 18px var(--theme-glow-soft);
+}
+
+.travel-radio__volume {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 720px) {
+  .travel-radio:not([data-radio-collapsed="true"]) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "signal"
+      "body" !important;
+    width: min(29rem, calc(100vw - 1rem)) !important;
+    gap: 0.58rem !important;
+  }
+
+  .travel-radio__controls {
+    grid-template-columns: auto auto minmax(0, 1fr) !important;
+  }
+
+  .travel-radio__station {
+    min-height: 2rem;
+    padding-inline: 0.58rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .travel-radio:not([data-radio-collapsed="true"]) {
+    width: calc(100vw - 0.76rem) !important;
+    padding: 0.54rem !important;
+  }
+
+  .travel-radio__open {
+    padding-inline: 0.52rem;
+  }
+}
+
 /* May 2026 budget defaults and progress timeline polish */
 .progress-card {
   overflow: visible !important;
@@ -18526,5 +18812,49 @@ html[lang="ja"] .language-switcher::before {
 
   .progress-item__ratio {
     font-size: 0.68rem;
+  }
+}
+
+/* June 2026 Radio FM final layout lock */
+.travel-radio:not([data-radio-collapsed="true"]) .travel-radio__signal {
+  align-self: start !important;
+}
+
+.travel-radio__signal {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: 16 / 9 !important;
+}
+
+.travel-radio__youtube,
+.travel-radio__artwork {
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  border-radius: inherit !important;
+}
+
+.travel-radio__youtube iframe {
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  transform: none !important;
+}
+
+@media (max-width: 720px) {
+  .travel-radio:not([data-radio-collapsed="true"]) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "signal"
+      "body" !important;
+    width: min(29rem, calc(100vw - 1rem)) !important;
   }
 }

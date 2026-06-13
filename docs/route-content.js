@@ -26,13 +26,13 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       day: 3,
-      title: { en: "Kyoto transfer", ja: "京都移動" },
+      title: { en: "Kyoto to Mishima", ja: "京都から三島" },
       note: {
-        en: "Start Arashiyama early: use roughly 7:00–9:00 AM for Bamboo Grove, Togetsukyo Bridge, and quiet photos, then 9:00–11:30 AM for temples, shops, and food. After that, keep the route correct and simple: Kyoto -> Mishima by Shinkansen, then onward to Fujikawaguchiko.",
+        en: "Start Arashiyama early: use roughly 7:00–9:00 AM for Bamboo Grove, Togetsukyo Bridge, and quiet photos, then 9:00–11:30 AM for temples, shops, and food. After that, keep the route correct and simple: Kyoto to Mishima by Shinkansen, then onward to Fujikawaguchiko.",
         ja: "嵐山は早めに始める。7:00～9:00頃を竹林、渡月橋、静かな写真時間に使い、9:00～11:30頃を寺社、店、食事に使う。その後は京都 -> 三島を新幹線で進み、富士河口湖へつなぐ。"
       },
       summary: {
-        en: "Early Arashiyama, Kyoto transfer, Fujikawaguchiko transfer, then the onsen reset.",
+        en: "Early Arashiyama, Kyoto to Mishima transfer, Fujikawaguchiko transfer, then the onsen reset.",
         ja: "早朝の嵐山、京都からの移動、富士河口湖への移動、温泉宿でリセット。"
       }
     },
@@ -190,14 +190,14 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
     },
     {
       id: "kyoto-mishima-shinkansen",
-      title: { en: "Kyoto transfer", ja: "京都移動" },
+      title: { en: "Kyoto to Mishima", ja: "京都から三島" },
       summary: {
         en: "This is the clean Day 3 handoff from Kyoto Station into the Mt. Fuji side.",
         ja: "京都駅から富士側へ入るための、分かりやすい3日目の受け渡しです。"
       },
       badges: [
         { en: "Day 3", ja: "3日目" },
-        { en: "Kyoto transfer", ja: "京都移動" }
+        { en: "Kyoto to Mishima", ja: "京都から三島" }
       ],
       notes: [
         {
@@ -213,7 +213,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       transitActions: [
         {
           id: "kyoto-mishima-shinkansen",
-          label: { en: "Kyoto transfer detail", ja: "京都移動詳細" }
+          label: { en: "Kyoto to Mishima detail", ja: "京都から三島の詳細" }
         }
       ],
       stopIds: ["kyoto", "fuji-gateway"],
@@ -463,7 +463,7 @@ window.__JAPAN_ROUTE_CONTENT__ = (() => {
       transitActions: [
         {
           id: "kyoto-mishima-shinkansen",
-          label: { en: "Kyoto transfer detail", ja: "京都移動詳細" }
+          label: { en: "Kyoto to Mishima detail", ja: "京都から三島の詳細" }
         },
         {
           id: "fuji-gateway-kawaguchiko",

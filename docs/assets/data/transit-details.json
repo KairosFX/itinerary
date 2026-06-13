@@ -61,7 +61,7 @@
         "ja": "朝の余白が減ったら、まず京都ホテルか京都駅側へ入り、そこから東側の街歩きを始めます。"
       },
       {
-        "en": "If the final Kyoto transfer starts feeling fussy, use taxi only for the last uphill stretch rather than wasting the middle of the day on extra hops.",
+        "en": "If the final Osaka-to-Kyoto rail handoff starts feeling fussy, use taxi only for the last uphill stretch rather than wasting the middle of the day on extra hops.",
         "ja": "京都側の最後の移動が面倒になったら、日中の時間を削るより、最後の上り区間だけタクシーに切り替えます。"
       }
     ],
@@ -72,9 +72,9 @@
   },
   {
     "id": "kyoto-mishima-shinkansen",
-    "tag": { "en": "Day 3 Kyoto transfer", "ja": "3日目の京都移動" },
+    "tag": { "en": "Day 3 Kyoto to Mishima", "ja": "3日目 京都から三島" },
     "title": {
-      "en": "Kyoto -> Mishima transfer",
+      "en": "Kyoto to Mishima transfer",
       "ja": "京都 -> 三島の移動"
     },
     "summary": {
@@ -82,13 +82,13 @@
       "ja": "京都駅から富士側へ入るための、固定の移動区間です。"
     },
     "segment": {
-      "en": "Kyoto Station → Mishima Station",
+      "en": "Kyoto Station to Mishima Station",
       "ja": "京都駅 → 三島駅"
     },
     "from": { "en": "Kyoto Station", "ja": "京都駅" },
     "to": { "en": "Mishima Station", "ja": "三島駅" },
     "transport": {
-      "en": "Use the Trip.com Kyoto-to-Mishima train page for the fixed Day 3 Kyoto transfer, then keep the Mishima-to-lake transfer saved separately.",
+      "en": "Use the Trip.com Kyoto to Mishima train page for the fixed Day 3 transfer, then keep the Mishima-to-lake transfer saved separately.",
       "ja": "3日目の固定移動には Trip.com の三島への移動ページを使い、三島から湖側への移動は別に保存しておきます。"
     },
     "why": {
@@ -111,7 +111,7 @@
     ],
     "prepReminders": [
       {
-        "en": "Book on Trip.com once Day 3 is fixed rather than leaving the Kyoto transfer to the last minute.",
+        "en": "Book on Trip.com once Day 3 is fixed rather than leaving the Kyoto to Mishima transfer to the last minute.",
         "ja": "3日目が固まったら Trip.com で予約し、三島への移動を直前判断にしないようにします。"
       },
       {
@@ -175,7 +175,7 @@
     ],
     "prepReminders": [
       {
-        "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the Kyoto transfer is fixed.",
+        "en": "Check the Mishima bus timing the night before, then confirm the final departure on the day once the Kyoto to Mishima transfer is fixed.",
         "ja": "前夜に三島発バスの時刻を確認し、三島への移動が固まったあとで当日の最終便を見直します。"
       },
       {

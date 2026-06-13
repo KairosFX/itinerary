@@ -231,7 +231,7 @@ window.__JAPAN_BUDGET_CONTENT__ = {
       "links": [
         {
           "label": {
-            "en": "Trip.com Kyoto -> Mishima trains",
+            "en": "Trip.com Kyoto to Mishima trains",
             "ja": "Trip.com 京都 -> 三島の鉄道"
           },
           "url": "https://www.trip.com/trains/japan/route/kyoto-to-mishima/"
@@ -579,7 +579,7 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "2日目・京都"
       },
       "subtitle": {
-        "en": "Kyoto transfer, hotel bag drop, then the east-side walking cluster",
+        "en": "Osaka-to-Kyoto rail handoff, hotel bag drop, then the east-side walking cluster",
         "ja": "京都移動、ホテル荷物預け、東山エリアを歩く日"
       },
       "items": [
@@ -693,7 +693,7 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         "ja": "3日目・嵐山から富士"
       },
       "subtitle": {
-        "en": "Arashiyama, Kyoto transfer, then the Fuji transfer night",
+        "en": "Arashiyama, Kyoto to Mishima, then the Fuji transfer night",
         "ja": "嵐山、三島へ移動、そして富士への移動で締める日"
       },
       "items": [
@@ -712,8 +712,8 @@ window.__JAPAN_BUDGET_CONTENT__ = {
         },
         {
           "label": {
-            "en": "Kyoto",
-            "ja": "京都"
+            "en": "Kyoto to Mishima",
+            "ja": "京都から三島"
           },
           "category": "intercityTransit",
           "bucket": "booked",

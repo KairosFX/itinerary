@@ -17,10 +17,15 @@ const sequenceNotice = document.querySelector("[data-sequence-notice]");
 const radioPlayerNode = document.querySelector("[data-radio-player]");
 const radioFrameNode = document.querySelector("[data-radio-frame]");
 const radioArtworkNode = document.querySelector("[data-radio-artwork]");
+const radioTitleNode = document.querySelector("[data-radio-title]");
+const radioDescriptionNode = document.querySelector("[data-radio-description]");
+const radioLocationNode = document.querySelector("[data-radio-location]");
+const radioOpenYoutubeLink = document.querySelector("[data-radio-open-youtube]");
 const radioToggleButton = document.querySelector("[data-radio-toggle]");
 const radioToggleIconNode = document.querySelector("[data-radio-toggle-icon]");
 const radioPreviousButton = document.querySelector("[data-radio-previous]");
 const radioNextButton = document.querySelector("[data-radio-next]");
+const radioStationButtons = Array.from(document.querySelectorAll("[data-radio-station-button]"));
 const radioVolumeInput = document.querySelector("[data-radio-volume]");
 const radioVolumeLabel = document.querySelector("[data-radio-volume-label]");
 let radioYoutubeMountNode = document.querySelector("[data-radio-youtube-player]");
@@ -174,6 +179,63 @@ const radioStationMeta = {
   artist: "Kairos playlist",
   album: "Kairos VIII"
 };
+const radioStationOptions = [
+  {
+    id: "osaka-landing",
+    videoId: "0fWgraG8V2o",
+    buttonLabel: { en: "Osaka Landing", ja: "大阪到着" },
+    locationLabel: { en: "Day 1 / Osaka", ja: "1日目 / 大阪" },
+    title: { en: "Growth | Bliss", ja: "Growth | Bliss" },
+    description: {
+      en: "A calm first-night track for the Osaka landing, Dotonbori walk, and hotel reset.",
+      ja: "大阪到着、道頓堀の散策、ホテルでのリセットに合わせた穏やかな一曲。"
+    }
+  },
+  {
+    id: "kyoto-walk",
+    videoId: "hFkBG_c49OM",
+    buttonLabel: { en: "Kyoto Walk", ja: "京都散策" },
+    locationLabel: { en: "Day 2 / Kyoto", ja: "2日目 / 京都" },
+    title: { en: "AURORA - Runaway (Lyrics)", ja: "AURORA - Runaway (Lyrics)" },
+    description: {
+      en: "A softer mood for Kiyomizu-dera, Ninenzaka, Yasaka Pagoda, and the Gion evening.",
+      ja: "清水寺、二年坂、八坂の塔、祇園の夕方に合うやわらかいムード。"
+    }
+  },
+  {
+    id: "fuji-reset",
+    videoId: "HhS8eJES-C8",
+    buttonLabel: { en: "Fuji Road", ja: "富士ロード" },
+    locationLabel: { en: "Days 3-4 / Fuji", ja: "3-4日目 / 富士" },
+    title: { en: "Road Trips", ja: "Road Trips" },
+    description: {
+      en: "A road-trip cue for the Kyoto to Mishima move, Kawaguchiko arrival, and Fuji-area reset.",
+      ja: "京都から三島、河口湖到着、富士エリアでのリセットに合わせたロードトリップ感。"
+    }
+  },
+  {
+    id: "tokyo-night",
+    videoId: "wpQ_R85VfJc",
+    buttonLabel: { en: "Tokyo Night", ja: "東京夜景" },
+    locationLabel: { en: "Days 5-6 / Tokyo", ja: "5-6日目 / 東京" },
+    title: { en: "Zedd feat. Foxes - Clarity (Lyrics)", ja: "Zedd feat. Foxes - Clarity (Lyrics)" },
+    description: {
+      en: "A brighter Tokyo-night pick for Shibuya Sky, the crossing, and the final city stretch.",
+      ja: "渋谷スカイ、スクランブル交差点、旅後半の東京に合わせた明るい夜の一曲。"
+    }
+  },
+  {
+    id: "departure-light",
+    videoId: "S2oxFIsENgM",
+    buttonLabel: { en: "Departure", ja: "出発日" },
+    locationLabel: { en: "Day 7 / Tokyo exit", ja: "7日目 / 東京出発" },
+    title: { en: "Joel Adams - Please Don't Go (Official Music Video)", ja: "Joel Adams - Please Don't Go (Official Music Video)" },
+    description: {
+      en: "A final-day cue for the light Tokyo morning, bag pickup, and airport transfer.",
+      ja: "東京の軽い朝、荷物回収、空港移動に合わせる最終日のキュー。"
+    }
+  }
+];
 const kairosRadioFallbackTheme = {
   accent: [127, 183, 255],
   secondary: [255, 155, 74]
@@ -625,7 +687,7 @@ const checklistPrintLateCutGuidance = {
     ja: "遅れたら写真散策を短くし、清水寺→二年坂→八坂の塔→祇園の直線的な徒歩導線を守ります。"
   },
   "3": {
-    en: "If late, shorten Arashiyama before risking the Kyoto transfer.",
+    en: "If late, shorten Arashiyama before risking the Kyoto to Mishima transfer.",
     ja: "遅れたら、京都からの移動を崩す前に嵐山を短くします。"
   },
   "4": {
@@ -1008,17 +1070,34 @@ const bookingTransitGroupDefinitions = [
   {
     id: "accommodations",
     title: { en: "Hotels / Accommodations", ja: "ホテル・宿泊" },
-    copy: { en: "", ja: "" }
+    copy: {
+      en: "Compare each overnight stay by city, day, and comfort level before booking.",
+      ja: "各宿泊を都市、日付、快適さで比較してから予約します。"
+    }
   },
   {
     id: "transit",
     title: { en: "Transit", ja: "移動" },
-    copy: { en: "", ja: "" }
+    copy: {
+      en: "Save the intercity and local transfers that keep the route moving cleanly.",
+      ja: "旅程をスムーズにつなぐ都市間・現地移動を保存します。"
+    }
   },
   {
     id: "activities",
     title: { en: "Activities", ja: "アクティビティ" },
-    copy: { en: "", ja: "" }
+    copy: {
+      en: "Keep timed tickets and high-priority experience links in one place.",
+      ja: "時間指定チケットや優先度の高い体験リンクをまとめます。"
+    }
+  },
+  {
+    id: "references",
+    title: { en: "Important links / references", ja: "重要リンク・参考" },
+    copy: {
+      en: "Official guides and reference pages that support the trip without being a booking.",
+      ja: "予約ではないものの、旅を支える公式案内や参考ページです。"
+    }
   }
 ];
 const transitDetailLabels = {
@@ -1350,8 +1429,8 @@ let radioStationInitialized = false;
 let radioMediaSessionReady = false;
 let radioPlaybackConfirmTimeout = 0;
 let radioVolume = radioDefaultVolume;
-let radioPlaylistTrackCount = 0;
-let radioCurrentTrackIndex = -1;
+let radioPlaylistTrackCount = radioStationOptions.length;
+let radioCurrentTrackIndex = 0;
 let radioCurrentTime = 0;
 let radioCurrentTimeAnchorMs = 0;
 let radioCurrentVideoId = "";
@@ -1362,7 +1441,7 @@ let radioPendingPlaybackHistoryIndex = null;
 let radioPreviousActionUntilMs = 0;
 let radioPreviousActionTrackIndex = -1;
 let radioHasStartedPlayback = false;
-let radioNeedsInitialRandomTrack = true;
+let radioNeedsInitialRandomTrack = false;
 let radioShuffleQueue = [];
 let radioPlaylistTrackCountWaiters = [];
 const radioArtworkThemeCache = new Map();
@@ -1743,7 +1822,7 @@ function buildRouteExplorerViewDefinitions(viewDefinitions = []) {
       ja: "日本ルート全体"
     },
     summary: {
-      en: "View the full route with the Kyoto transfer, Mt. Fuji, and the Tokyo finish.",
+      en: "View the full route with the Kyoto to Mishima transfer, Mt. Fuji, and the Tokyo finish.",
       ja: "三島への移動、富士山エリア、東京での締めまで全体ルートを確認します。"
     },
     badges: [
@@ -1914,10 +1993,10 @@ function getRadioLabels() {
   return {
     loading: { en: "Tuning...", ja: "チューニング中..." },
     fallback: { en: "Radio unavailable", ja: "ラジオを利用できません" },
-    play: { en: "Play radio", ja: "ラジオを再生" },
-    pause: { en: "Pause radio", ja: "ラジオを一時停止" },
-    previous: { en: "Previous track", ja: "曲を先頭に戻す / 前の曲" },
-    next: { en: "Next track", ja: "次の曲" },
+    play: { en: "Play selected video", ja: "選択中の動画を再生" },
+    pause: { en: "Pause selected video", ja: "選択中の動画を一時停止" },
+    previous: { en: "Previous station", ja: "前のステーション" },
+    next: { en: "Next station", ja: "次のステーション" },
     hide: { en: "Hide music player", ja: "音楽プレイヤーを隠す" },
     show: { en: "Show music player", ja: "音楽プレイヤーを表示" },
     volume: { en: "Radio volume", ja: "ラジオ音量" }
@@ -1927,6 +2006,138 @@ function getRadioLabels() {
 function getRadioLabel(key) {
   const labels = getRadioLabels()[key] || getRadioLabels().play;
   return getLocalizedText(labels);
+}
+
+function getRadioStationIndex(value) {
+  const normalizedIndex = Number.parseInt(String(value), 10);
+  if (
+    !Number.isInteger(normalizedIndex) ||
+    normalizedIndex < 0 ||
+    normalizedIndex >= radioStationOptions.length
+  ) {
+    return 0;
+  }
+
+  return normalizedIndex;
+}
+
+function getSelectedRadioStation() {
+  return radioStationOptions[getRadioStationIndex(radioCurrentTrackIndex)] || radioStationOptions[0] || null;
+}
+
+function getRadioStationThumbnailUrl(station = getSelectedRadioStation()) {
+  return station?.thumbnail || getRadioArtworkUrlForVideo(station?.videoId || "");
+}
+
+function getRadioStationWatchUrl(station = getSelectedRadioStation()) {
+  if (!station?.videoId) {
+    return `https://www.youtube.com/playlist?list=${encodeURIComponent(radioPlaylistId)}`;
+  }
+
+  const params = new URLSearchParams({
+    v: station.videoId,
+    list: radioPlaylistId
+  });
+  return `https://www.youtube.com/watch?${params.toString()}`;
+}
+
+function syncRadioStationButtons() {
+  radioStationButtons.forEach((button) => {
+    const stationIndex = getRadioStationIndex(button.dataset.radioStationButton);
+    const isActive = stationIndex === getRadioStationIndex(radioCurrentTrackIndex);
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function syncRadioShowcaseContent() {
+  const station = getSelectedRadioStation();
+  if (!station) {
+    return;
+  }
+
+  setLocalizedNodeContent(radioTitleNode, station.title);
+  setLocalizedNodeContent(radioDescriptionNode, station.description);
+  setLocalizedNodeContent(radioLocationNode, station.locationLabel);
+
+  if (radioOpenYoutubeLink) {
+    radioOpenYoutubeLink.href = getRadioStationWatchUrl(station);
+  }
+
+  radioCurrentVideoId = station.videoId;
+  radioCurrentTrackTitle = station.title?.en || radioStationMeta.title;
+  syncRadioStationButtons();
+}
+
+function resetRadioYoutubeEmbed({ removeIframe = false } = {}) {
+  clearRadioPlaybackConfirmation();
+  clearRadioYoutubeInfoPolling();
+  clearRadioYoutubeVideoReveal();
+  clearRadioYoutubeReadinessTimers();
+  clearRadioYoutubeReadinessCallbacks();
+  radioYoutubePlayerReady = false;
+  radioYoutubePlayerReadyPromise = null;
+  radioYoutubePlayer = null;
+  radioYoutubeErrorSkipAttempts = 0;
+  radioState.isReady = false;
+
+  if (removeIframe && radioYoutubeMountNode) {
+    radioYoutubeMountNode.replaceChildren();
+    radioYoutubeIframe = null;
+    return;
+  }
+
+  if (radioYoutubeIframe) {
+    radioYoutubeIframe.dataset.radioReady = "false";
+  }
+}
+
+function selectRadioStation(trackIndex, { autoplay = false, force = false } = {}) {
+  const normalizedIndex = getRadioStationIndex(trackIndex);
+  const station = radioStationOptions[normalizedIndex];
+  if (!station) {
+    return false;
+  }
+
+  const wasCurrent = normalizedIndex === getRadioStationIndex(radioCurrentTrackIndex);
+  radioCurrentTrackIndex = normalizedIndex;
+  radioNeedsInitialRandomTrack = false;
+  radioState.canSkip = radioStationOptions.length > 1;
+  setRadioCurrentTime(0);
+  syncRadioShowcaseContent();
+  setRadioArtworkSource(getRadioStationThumbnailUrl(station), {
+    kind: "station",
+    title: station.title?.en || radioStationMeta.title
+  });
+
+  if (!autoplay) {
+    radioState.pendingPlay = false;
+    radioState.isPlaying = false;
+    if (!wasCurrent || force) {
+      radioHasStartedPlayback = false;
+    }
+    resetRadioYoutubeEmbed({ removeIframe: true });
+    setRadioState("idle");
+    syncRadioControls();
+    return true;
+  }
+
+  resetRadioYoutubeEmbed({ removeIframe: false });
+  radioState.pendingPlay = true;
+  radioState.isPlaying = false;
+  radioHasStartedPlayback = true;
+  setRadioState("loading");
+  syncRadioControls();
+  return true;
+}
+
+function getAdjacentRadioStationIndex(delta) {
+  if (!radioStationOptions.length) {
+    return 0;
+  }
+
+  return (getRadioStationIndex(radioCurrentTrackIndex) + delta + radioStationOptions.length) %
+    radioStationOptions.length;
 }
 
 function getUiVisibilityLabels() {
@@ -2261,8 +2472,8 @@ function syncRadioVisibilityUi() {
 
 function syncRadioControls() {
   const radioUnavailable = radioState.loadFailed || radioYoutubeDisabled;
-  const canControlPlaybackPosition =
-    radioState.isReady && !radioUnavailable && Boolean(radioYoutubePlayer);
+  const canSwitchStation =
+    radioStationOptions.length > 1 && !radioUnavailable && !radioState.pendingPlay;
 
   if (radioToggleButton) {
     const labelKey = radioUnavailable
@@ -2287,13 +2498,13 @@ function syncRadioControls() {
           : "▶";
   }
   if (radioPreviousButton) {
-    radioPreviousButton.disabled = !canControlPlaybackPosition;
+    radioPreviousButton.disabled = !canSwitchStation;
     radioPreviousButton.setAttribute("aria-label", getRadioLabel("previous"));
     radioPreviousButton.dataset.ariaLabelEn = getRadioLabels().previous.en;
     radioPreviousButton.dataset.ariaLabelJa = getRadioLabels().previous.ja;
   }
   if (radioNextButton) {
-    radioNextButton.disabled = !radioState.canSkip || radioUnavailable;
+    radioNextButton.disabled = !canSwitchStation;
     radioNextButton.setAttribute("aria-label", getRadioLabel("next"));
     radioNextButton.dataset.ariaLabelEn = getRadioLabels().next.en;
     radioNextButton.dataset.ariaLabelJa = getRadioLabels().next.ja;
@@ -2774,11 +2985,13 @@ function ensureRadioArtworkImageLoaded() {
 }
 
 function setRadioDefaultArtwork() {
-  radioCurrentVideoId = "";
-  radioCurrentTrackTitle = radioCurrentTrackTitle || radioStationMeta.title;
-  setRadioArtworkSource(radioPlaylistArtworkUrl, {
-    kind: "playlist",
-    title: "Kairos VIII playlist"
+  const station = getSelectedRadioStation();
+  radioCurrentVideoId = station?.videoId || "";
+  radioCurrentTrackTitle = station?.title?.en || radioStationMeta.title;
+  syncRadioShowcaseContent();
+  setRadioArtworkSource(getRadioStationThumbnailUrl(station), {
+    kind: "station",
+    title: radioCurrentTrackTitle
   });
 }
 
@@ -3012,6 +3225,8 @@ function getRadioYoutubeOrigin() {
 
 function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
   // These are the cleanest iframe options YouTube exposes; some YouTube-owned overlays may still appear.
+  const station = getSelectedRadioStation();
+  const videoId = station?.videoId || radioStationOptions[0]?.videoId || "videoseries";
   const params = new URLSearchParams({
     enablejsapi: "1",
     autoplay: autoplay ? "1" : "0",
@@ -3023,8 +3238,6 @@ function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
     fs: "0",
     html5: "1",
     iv_load_policy: "3",
-    list: radioPlaylistId,
-    listType: "playlist",
     modestbranding: "1",
     playsinline: "1",
     rel: "0",
@@ -3035,7 +3248,7 @@ function getRadioYoutubeEmbedUrl({ autoplay = false } = {}) {
     params.set("origin", origin);
     params.set("widget_referrer", origin);
   }
-  return `${radioYoutubePlayerHost}/embed/videoseries?${params.toString()}`;
+  return `${radioYoutubePlayerHost}/embed/${encodeURIComponent(videoId)}?${params.toString()}`;
 }
 
 function getRadioYoutubeUrlSignature(sourceUrl) {
@@ -3145,6 +3358,40 @@ function ensureRadioYoutubeIframe({ autoplay = false } = {}) {
   mountNode?.replaceChildren(iframe);
   radioYoutubeIframe = iframe;
   return radioYoutubeIframe;
+}
+
+function revealRadioYoutubeEmbedForUserPlay({ autoplay = true } = {}) {
+  const iframe = ensureRadioYoutubeIframe({ autoplay });
+  if (!iframe) {
+    return null;
+  }
+
+  radioHasStartedPlayback = true;
+  setRadioYoutubeVideoVisible(true);
+  return iframe;
+}
+
+function startRadioShowcasePlayback({ autoplay = true } = {}) {
+  const iframe = revealRadioYoutubeEmbedForUserPlay({ autoplay });
+  if (!iframe) {
+    markRadioFallback();
+    return false;
+  }
+
+  radioNeedsInitialRandomTrack = false;
+  radioYoutubePlayer = radioYoutubePlayer || createRadioYoutubePlayerProxy();
+  radioYoutubePlayerReady = true;
+  radioState.loadFailed = false;
+  radioState.pendingPlay = false;
+  radioState.isPlaying = true;
+  radioState.isReady = true;
+  radioState.canSkip = radioStationOptions.length > 1;
+  clearRadioPlaybackConfirmation();
+  applyRadioVolume();
+  setRadioState("playing");
+  syncRadioControls();
+  updateRadioMediaSessionPlaybackState();
+  return true;
 }
 
 function isRadioYoutubeIframePlaceholder(iframe) {
@@ -3302,7 +3549,10 @@ function resolveRadioPlaylistTrackCountWaiters() {
 }
 
 function setRadioPlaylistTrackCount(trackCount) {
-  const normalizedCount = Math.max(0, Number.parseInt(String(trackCount), 10) || 0);
+  const normalizedCount = Math.max(
+    radioStationOptions.length,
+    Number.parseInt(String(trackCount), 10) || 0
+  );
   if (!normalizedCount) {
     return;
   }
@@ -3321,7 +3571,7 @@ function setRadioPlaylistTrackCount(trackCount) {
 function getKnownRadioPlaylistTrackCount() {
   return Number.isInteger(radioPlaylistTrackCount) && radioPlaylistTrackCount > 0
     ? radioPlaylistTrackCount
-    : 0;
+    : radioStationOptions.length;
 }
 
 function waitForRadioPlaylistTrackCount(timeoutMs = radioPlaylistInfoWaitTimeoutMs) {
@@ -3345,7 +3595,7 @@ function waitForRadioPlaylistTrackCount(timeoutMs = radioPlaylistInfoWaitTimeout
 
 function normalizeRadioPlaylistTrackIndex(trackIndex) {
   const normalizedIndex = Number.parseInt(String(trackIndex), 10);
-  const playlistTrackCount = getKnownRadioPlaylistTrackCount();
+  const playlistTrackCount = radioStationOptions.length || getKnownRadioPlaylistTrackCount();
   if (!Number.isInteger(normalizedIndex) || normalizedIndex < 0) {
     return null;
   }
@@ -3769,6 +4019,10 @@ function playRadio() {
   }
 
   ensureRadioArtworkImageLoaded();
+  if (startRadioShowcasePlayback({ autoplay: true })) {
+    return;
+  }
+
   radioState.pendingPlay = true;
   setRadioState("loading");
   syncRadioControls();
@@ -3868,23 +4122,13 @@ function restartRadioCurrentTrackForPreviousAction() {
 }
 
 function playInitialRandomRadioTrack() {
-  const initialTrackIndex = chooseInitialRandomRadioTrackIndex();
-  if (initialTrackIndex === null || !commitInitialRadioShuffleStart(initialTrackIndex)) {
-    return false;
-  }
-
-  if (playRadioTrackAt(initialTrackIndex)) {
-    return true;
-  }
-
-  radioNeedsInitialRandomTrack = true;
-  refillRadioShuffleQueue();
-  return false;
+  radioNeedsInitialRandomTrack = false;
+  return playRadioTrackAt(radioCurrentTrackIndex, { autoplay: true });
 }
 
-function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
+function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false, autoplay = true } = {}) {
   const normalizedIndex = normalizeRadioPlaylistTrackIndex(trackIndex);
-  if (normalizedIndex === null || !radioYoutubePlayer) {
+  if (normalizedIndex === null) {
     return false;
   }
 
@@ -3892,30 +4136,50 @@ function playRadioTrackAt(trackIndex, { fromPlaybackHistory = false } = {}) {
     radioPendingPlaybackHistoryIndex = normalizedIndex;
   }
 
-  try {
-    if (typeof radioYoutubePlayer.playVideoAt === "function") {
-      rememberRadioTrackIndex(normalizedIndex, {
-        updatePlaybackHistory: !fromPlaybackHistory,
-        consumeShuffleQueue: !fromPlaybackHistory
-      });
-      setRadioCurrentTime(0);
-      radioYoutubePlayer.playVideoAt(normalizedIndex);
-      if (typeof radioYoutubePlayer.playVideo === "function") {
-        radioYoutubePlayer.playVideo();
-      }
-    } else {
-      return false;
-    }
-    radioState.pendingPlay = false;
-    radioState.isPlaying = true;
-    setRadioState("playing");
-    scheduleRadioYoutubeVideoReveal();
-    startRadioYoutubeInfoPolling({ immediate: true });
+  rememberRadioTrackIndex(normalizedIndex, {
+    updatePlaybackHistory: !fromPlaybackHistory,
+    consumeShuffleQueue: !fromPlaybackHistory
+  });
+
+  const shouldAutoplay = Boolean(autoplay || radioState.isPlaying || radioState.pendingPlay);
+  selectRadioStation(normalizedIndex, { autoplay: shouldAutoplay, force: true });
+  if (!shouldAutoplay) {
     return true;
-  } catch {
-    markRadioFallback();
-    return false;
   }
+
+  if (startRadioShowcasePlayback({ autoplay: true })) {
+    return true;
+  }
+
+  ensureRadioYoutubePlayer()
+    .then((player) => {
+      applyRadioVolume();
+      if (typeof player.playVideo === "function") {
+        player.playVideo();
+      }
+      if (player.usesPostMessage) {
+        scheduleRadioPlaybackConfirmation();
+        startRadioYoutubeInfoPolling({ immediate: true });
+        return;
+      }
+      clearRadioPlaybackConfirmation();
+      radioState.pendingPlay = false;
+      radioState.isPlaying = true;
+      setRadioState("playing");
+      scheduleRadioYoutubeVideoReveal(520);
+      startRadioYoutubeInfoPolling({ immediate: true });
+      syncRadioControls();
+      updateRadioMediaSessionPlaybackState();
+    })
+    .catch(() => {
+      clearRadioPlaybackConfirmation();
+      radioState.pendingPlay = false;
+      radioState.isPlaying = false;
+      syncRadioControls();
+      updateRadioMediaSessionPlaybackState();
+    });
+
+  return true;
 }
 
 function playPreviousRadioTrackFromHistory() {
@@ -3969,52 +4233,23 @@ function completeRadioTrackChangeUiSync() {
 }
 
 function playNextRadioTrack() {
-  if (!radioYoutubePlayer) {
-    return false;
-  }
-
-  try {
-    resetRadioPreviousDoubleAction();
-    if (playNextRadioTrackFromHistory() || playNextRadioTrackFromShuffleQueue()) {
-      completeRadioTrackChangeUiSync();
-      return true;
-    }
-  } catch {
-    markRadioFallback();
-    return false;
-  }
-
-  return false;
+  resetRadioPreviousDoubleAction();
+  return playRadioTrackAt(getAdjacentRadioStationIndex(1), {
+    autoplay: radioState.isPlaying || radioState.pendingPlay
+  });
 }
 
 function previousRadioTrack() {
-  if (!radioYoutubePlayer) {
-    return;
-  }
-
-  const now = getRadioClockNow();
-  const currentTime = getEstimatedRadioCurrentTime();
-  const shouldTryPreviousTrack =
-    now <= radioPreviousActionUntilMs &&
-    (radioPreviousActionTrackIndex < 0 || radioPreviousActionTrackIndex === radioCurrentTrackIndex);
-
-  if (shouldTryPreviousTrack) {
-    resetRadioPreviousDoubleAction();
-    if (!radioState.canSkip || !playPreviousRadioTrackFromHistory()) {
-      restartRadioCurrentTrackForPreviousAction();
-    }
-  } else if (currentTime < radioPreviousRestartThresholdSeconds && radioState.canSkip && playPreviousRadioTrackFromHistory()) {
-    resetRadioPreviousDoubleAction();
-  } else {
-    restartRadioCurrentTrackForPreviousAction();
-  }
-
+  resetRadioPreviousDoubleAction();
+  playRadioTrackAt(getAdjacentRadioStationIndex(-1), {
+    autoplay: radioState.isPlaying || radioState.pendingPlay
+  });
   syncRadioControls();
   updateRadioMediaSessionPlaybackState();
 }
 
 function nextRadioTrack() {
-  if (!radioState.canSkip || !radioYoutubePlayer) {
+  if (!radioState.canSkip) {
     return;
   }
 
@@ -4028,6 +4263,37 @@ function toggleRadioPlayback() {
   }
 
   playRadio();
+}
+
+function handleRadioToggleClick(event) {
+  if (event.__kairosRadioToggleHandled) {
+    return;
+  }
+
+  const toggle =
+    event.currentTarget instanceof Element &&
+    event.currentTarget.matches("[data-radio-toggle]")
+      ? event.currentTarget
+      : event.target.closest("[data-radio-toggle]");
+  if (!toggle || !radioPlayerNode?.contains(toggle)) {
+    return;
+  }
+
+  event.__kairosRadioToggleHandled = true;
+  event.preventDefault();
+  if (toggle instanceof HTMLButtonElement && toggle.disabled) {
+    return;
+  }
+
+  toggleRadioPlayback();
+}
+
+function handleRadioPlayerClick(event) {
+  if (!event.target.closest("[data-radio-toggle]")) {
+    return;
+  }
+
+  handleRadioToggleClick(event);
 }
 
 function setRadioHidden(nextHidden, { persist = true } = {}) {
@@ -4064,17 +4330,7 @@ function syncRadioStationUi() {
 }
 
 function warmRadioYoutubePlayer() {
-  if (
-    offlineSnapshotMode ||
-    radioYoutubeDisabled ||
-    radioState.loadFailed ||
-    radioYoutubePlayerReady ||
-    radioYoutubePlayerReadyPromise
-  ) {
-    return;
-  }
-
-  void ensureRadioYoutubePlayer().catch(() => null);
+  return;
 }
 
 function initializeRadioStation() {
@@ -4094,11 +4350,25 @@ function initializeRadioStation() {
   configureRadioMediaSession();
   window.addEventListener("message", handleRadioYoutubeMessage);
   radioArtworkNode?.addEventListener("error", handleRadioArtworkError);
-  radioToggleButton?.addEventListener("click", toggleRadioPlayback);
+  radioToggleButton?.addEventListener("click", handleRadioToggleClick);
+  radioPlayerNode.addEventListener("click", handleRadioPlayerClick);
   radioPreviousButton?.addEventListener("click", previousRadioTrack);
   radioNextButton?.addEventListener("click", nextRadioTrack);
+  radioStationButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const stationIndex = button.dataset.radioStationButton;
+      if (radioState.isPlaying || radioState.pendingPlay) {
+        playRadioTrackAt(stationIndex, { autoplay: true });
+        return;
+      }
+
+      selectRadioStation(stationIndex);
+    });
+  });
   radioVolumeInput?.addEventListener("input", handleRadioVolumeInput);
   radioVisibilityToggleButton?.addEventListener("click", () => setRadioHidden(!radioState.isHidden));
+  setRadioPlaylistTrackCount(radioStationOptions.length);
+  syncRadioShowcaseContent();
   setRadioDefaultArtwork();
   setRadioState("idle");
   syncRadioControls();
@@ -7605,6 +7875,10 @@ function getBudgetSelectedStayDefinition(day) {
 }
 
 function itemMatchesBookingTransitStayVisibility(itemConfig) {
+  if (itemConfig?.group === "accommodations") {
+    return true;
+  }
+
   const visibility = itemConfig?.stayVisibility;
   if (!visibility || typeof visibility !== "object" || Array.isArray(visibility)) {
     return true;
@@ -7684,6 +7958,10 @@ const bookingTransitPrimaryCtaLabel = {
   en: "Book now",
   ja: "Book now"
 };
+const bookingTransitDetailCtaLabel = {
+  en: "Route details",
+  ja: "ルート詳細"
+};
 const bookingTransitPriceLabel = {
   en: "Current linked price",
   ja: "現在のリンク料金"
@@ -7741,7 +8019,9 @@ function renderBookingTransitAccommodationLinks(item) {
   return orderedLinks
     .map((link) =>
       renderBookingTransitPrimaryLink(link, {
-        label: bookingTransitPrimaryCtaLabel
+        label: link.label || bookingTransitPrimaryCtaLabel,
+        vendorLabel: bookingTransitHotelVendorLabel,
+        note: link.note || null
       })
     )
     .join("");
@@ -7753,7 +8033,24 @@ function renderBookingTransitItem(item) {
   const isAccommodationItem = item.group === "accommodations";
   const dayTagMarkup = renderBookingTransitMetaTag(item.dayLabel, "booking-item__tag--day");
   const typeTagMarkup = renderBookingTransitMetaTag(item.typeLabel, "booking-item__tag--type");
-  const transitTriggerMarkup = "";
+  const cityTagMarkup = renderBookingTransitMetaTag(item.cityLabel || item.locationLabel, "booking-item__tag--city");
+  const stayTypeTagMarkup = renderBookingTransitMetaTag(item.stayTypeLabel, "booking-item__tag--stay");
+  const transitTriggerMarkup = !isAccommodationItem && item.transitDetailId
+    ? `
+          <button
+            class="transit-trigger transit-trigger--booking"
+            type="button"
+            data-transit-detail-trigger="${escapeHtml(item.transitDetailId)}">
+            ${renderLocalizedContent(bookingTransitDetailCtaLabel)}
+          </button>
+      `
+    : "";
+  const summaryMarkup = item.summary
+    ? `<p class="booking-item__summary">${renderLocalizedContent(item.summary)}</p>`
+    : "";
+  const detailsMarkup = item.details
+    ? `<p class="booking-item__copy">${renderLocalizedContent(item.details)}</p>`
+    : "";
   const priceMarkup = !isAccommodationItem && preferredLink?.price
     ? `
           <p class="booking-item__price" data-booking-price hidden>
@@ -7771,7 +8068,10 @@ function renderBookingTransitItem(item) {
   const linkMarkup = isAccommodationItem
     ? renderBookingTransitAccommodationLinks(item)
     : preferredLink
-    ? renderBookingTransitPrimaryLink(preferredLink)
+    ? renderBookingTransitPrimaryLink(preferredLink, {
+        label: preferredLink.label || bookingTransitPrimaryCtaLabel,
+        note: preferredLink.note || null
+      })
     : "";
 
   return `
@@ -7787,7 +8087,9 @@ function renderBookingTransitItem(item) {
         <span class="booking-item__meta">
           <span class="booking-item__meta-copy">
             ${dayTagMarkup}
+            ${cityTagMarkup}
             ${typeTagMarkup}
+            ${stayTypeTagMarkup}
           </span>
           <span class="booking-item__status" data-booking-status>
             <span data-language="en" data-booking-status-language="en"></span>
@@ -7801,6 +8103,10 @@ function renderBookingTransitItem(item) {
       </summary>
       <div class="booking-item__details">
         <div class="booking-item__details-inner">
+          <div class="booking-item__copy-block">
+            ${summaryMarkup}
+            ${detailsMarkup}
+          </div>
           ${transitTriggerMarkup}
           <div class="booking-item__actions">
             ${linkMarkup}
@@ -7832,12 +8138,16 @@ function renderBookingTransitBoard() {
         .filter((item) => item.group === group.id)
         .map((item) => renderBookingTransitItem(item))
         .join("");
+      const groupCopyMarkup = group.copy
+        ? `<p class="booking-group__copy">${renderLocalizedContent(group.copy)}</p>`
+        : "";
 
       return `
         <details class="booking-group" data-booking-group-section="${group.id}">
           <summary class="booking-group__summary">
             <div class="booking-group__header">
               <h5 class="booking-group__title">${renderLocalizedContent(group.title)}</h5>
+              ${groupCopyMarkup}
             </div>
             <span class="booking-group__caret" aria-hidden="true"></span>
           </summary>
